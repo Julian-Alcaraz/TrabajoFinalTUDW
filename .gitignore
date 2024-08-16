@@ -1,0 +1,29 @@
+
+# IDE - VSCode
+frontend/.vscode/*
+!frontend/.vscode/settings.json
+!frontend/.vscode/tasks.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/extensions.json
+
+# dotenv environment variable files
+frontend/.env
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.env.local
+
+backend/.env
+backend/.env.development.local
+backend/.env.test.local
+backend/.env.production.local
+backend/.env.local
+
+
+
+# Miscellaneous
+frontend/.angular/cache
+
+# nodemodules
+frontend/node_modules
+backend/node_modules
