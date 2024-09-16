@@ -1,0 +1,43 @@
+<div class="overflow-hidden">
+  <div class="sun animate-breathing"></div>
+</div>
+<section class="flex flex-col text-center justify-center items-center h-screen maxWidth">
+  <h1 class="text-4xl font-bold">Iniciar Sesión</h1>
+  <div class="w-7/12">
+    <form (ngSubmit)="iniciarSession()" [formGroup]="loginForm">
+      <div class="relative mb-1 mt-6">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <!-- se podria remplazar por una libreria -->
+          <svg class="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+            <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
+            <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
+          </svg>
+        </div>
+        <input id="email" type="email" formControlName="email" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="email@gmail.com" />
+      </div>
+      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) " class="text-red-600 text-sm ">
+        <div *ngIf="loginForm.get('email')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['minlength']">Minmio 7 caracteres.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+      </div>
+      <div class="relative mb-1 mt-6">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <!-- se podria remplazar por una libreria como fontawesome -->
+          <svg class="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm-2 4a2 2 0 0 1 4 0v2H10V6zm-4 8v4h12v-4H6z" />
+          </svg>
+        </div>
+        <input id="Contrasenia" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="Contraseña" />
+      </div>
+      <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm ">
+        <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minmio 7 caracteres.</div>
+        <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+        <div *ngIf="loginForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+      </div>
+      <a tabindex="0" (click)="verContrasenia()" (keydown.enter)="verContrasenia()" class="text-xs text-blue-600 underline">{{ mostrarContrasenia ? 'Ocultar Contraseña' : 'Mostrar Contraseña' }}</a><br>
+      <button type="submit" [disabled]="!loginForm.valid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-gray-700 disabled:hover:bg-gray-600 disabled:cursor-not-allowed hover:cursor-pointer">Iniciar Sesion</button>
+    </form>
+  </div>
+</section>

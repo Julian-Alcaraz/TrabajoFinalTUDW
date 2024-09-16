@@ -1,0 +1,30 @@
+.maxWidth {
+  max-width: 40vw;
+  width: 40vw;
+}
+.sun {
+  position: absolute;
+  top:0;
+  right: 0;
+  background-color: rgba(239, 239, 0, 0.739);
+  width: 25vh;
+  height: 25vh;
+  border-radius: 0 0 0 100%;
+  transform-origin: top right;
+}
+
+
+@keyframes breathing {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-breathing {
+  animation: breathing 4s ease-in-out infinite;
+}
