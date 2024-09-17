@@ -12,8 +12,8 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
   // Aquí puedes usar el router para navegar o realizar otras operaciones
-  const isLogged =  localStorage.getItem('isLogged') ;
-  console.log("IS LOGUED", isLogged)
+  const isLogged = localStorage.getItem('isLogged');
+  console.log('IS LOGUED', isLogged);
   if (isLogged) {
     if (state.url == '/login') _router.navigate(['/layout']);
     return true;

@@ -4,7 +4,7 @@
 }
 .sun {
   position: absolute;
-  top:0;
+  top: 0;
   right: 0;
   background-color: rgba(239, 239, 0, 0.739);
   width: 25vh;
@@ -12,7 +12,6 @@
   border-radius: 0 0 0 100%;
   transform-origin: top right;
 }
-
 
 @keyframes breathing {
   0% {

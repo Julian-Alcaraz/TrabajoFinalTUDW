@@ -15,7 +15,7 @@
         </div>
         <input id="email" type="email" formControlName="email" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="email@gmail.com" />
       </div>
-      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) " class="text-red-600 text-sm ">
+      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="loginForm.get('email')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['minlength']">Minmio 7 caracteres.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
@@ -30,13 +30,14 @@
         </div>
         <input id="Contrasenia" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="Contraseña" />
       </div>
-      <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm ">
+      <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minmio 7 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
-      <a tabindex="0" (click)="verContrasenia()" (keydown.enter)="verContrasenia()" class="text-xs text-blue-600 underline">{{ mostrarContrasenia ? 'Ocultar Contraseña' : 'Mostrar Contraseña' }}</a><br>
+      <a tabindex="0" (click)="verContrasenia()" (keydown.enter)="verContrasenia()" class="text-xs text-blue-600 underline">{{ mostrarContrasenia ? 'Ocultar Contraseña' : 'Mostrar Contraseña' }}</a
+      ><br />
       <button type="submit" [disabled]="!loginForm.valid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-gray-700 disabled:hover:bg-gray-600 disabled:cursor-not-allowed hover:cursor-pointer">Iniciar Sesion</button>
     </form>
   </div>

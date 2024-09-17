@@ -1,4 +1,4 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
@@ -20,7 +20,7 @@ export class SessionService {
     };
     let simulatedResponse;
     if (usuarios.email === email && usuarios.password === password) {
-      simulatedResponse= {
+      simulatedResponse = {
         success: true,
         data: {
           id: 1,
@@ -39,11 +39,11 @@ export class SessionService {
         },
         message: 'Ingreso exitosamente',
       };
-    }else {
-      simulatedResponse={
+    } else {
+      simulatedResponse = {
         success: false,
-        message: "Datos incorrectos"
-      }
+        message: 'Datos incorrectos',
+      };
     }
     return of(simulatedResponse).pipe(delay(1000));
     // cuando este el backend

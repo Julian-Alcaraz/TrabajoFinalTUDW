@@ -1,7 +1,4 @@
-import {
-  Component,
-   HostListener, OnInit
-} from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormularioComponent } from './components/formulario/formulario.component';
 
 @Component({
@@ -14,14 +11,14 @@ import { FormularioComponent } from './components/formulario/formulario.componen
 export class LoginComponent implements OnInit {
   // public imageWidth= 0 ;
   // public imageHeight= 0 ;
-  public windowWidth= 0 ;
-  public windowHeight= 0 ;
+  public windowWidth = 0;
+  public windowHeight = 0;
   ngOnInit(): void {
-  this.getWindowSize();
+    this.getWindowSize();
   }
   @HostListener('window:resize', ['$event'])
   onResize(): void {
-  this.getWindowSize();
+    this.getWindowSize();
   }
   getWindowSize(): void {
     // console.log( window.innerWidth)

@@ -1,2 +1,4 @@
-<app-nav-bar/>
-<p>layout works!</p>
+<app-side-bar (toggleSideNav)="toggleSideNav($event)" />
+<div class="body" [class]="getBodyClass()">
+  <router-outlet />
+</div>
