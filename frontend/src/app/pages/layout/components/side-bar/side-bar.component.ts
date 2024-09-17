@@ -3,6 +3,7 @@ import { navbarData } from './nav-data';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { INavbarData } from './helper';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -21,6 +22,7 @@ export class NavBarComponent implements OnInit {
   collapsed = false;
   navData = navbarData;
   screenWidth = 0;
+  multiple = false;
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.screenWidth = window.innerWidth;
@@ -39,5 +41,15 @@ export class NavBarComponent implements OnInit {
   closeSidenav() {
     this.collapsed = false;
     this.toggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+  }
+  handleClick(item: INavbarData) {
+    if (!this.multiple) {
+      for (const modelItem of this.navData) {
+        if (item !== modelItem && modelItem.expanded) {
+          modelItem.expanded = false;
+        }
+      }
+    }
+    item.expanded = !item.expanded;
   }
 }
