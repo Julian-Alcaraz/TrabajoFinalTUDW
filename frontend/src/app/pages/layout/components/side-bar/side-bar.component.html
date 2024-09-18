@@ -1,0 +1,101 @@
+<div class="sidenav" [class]="collapsed ? 'sidenav-collapsed' : ''">
+  <div class="logo-container">
+    <button class="logo" tabindex (click)="toggleCollapsed()" (keydown.control.enter)="toggleCollapsed()">LO</button>
+    <div class="logo-text" @fadeinOut *ngIf="collapsed">Angular</div>
+    <button class="btn-close" *ngIf="collapsed">
+      <i class="fa-solid fa-xmark fa-xl" @rotate (click)="closeSidenav()" tabindex (keydown.control.enter)="closeSidenav()"></i>
+    </button>
+  </div>
+  <ul class="sidenav-nav">
+    <li class="sidenav-nav-item" *ngFor="let data of navData">
+      <a class="sidenav-nav-link" [routerLink]="[data.routerLink]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="sidenav-link-icon" [class]="data.icon"></i>
+        <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">{{ data.label }}</span>
+      </a>
+      <app-sublevel-menu [data]="data" [collapsed]="collapsed" [multiple]="multiple" [expanded]="item.expanded" />
+    </li>
+    <!-- <li class="sidenav-nav-item">
+      <a href="#" class="sidenav-nav-link">
+        <i class="sidenav-link-icon"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed"></span>
+      </a>
+    </li> -->
+    <!-- <li class="sidenav-nav-item " *ngFor="let data of menuItems "></li>
+
+        <a *ngIf="data.href == ''" class="sidenav-nav-link position-relative " [routerLink]="[data.ruta]"
+          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+          (click)="this.screenWidth<=768 ? alternar() :'' ">
+          <i class="sidenav-link-icon  {{data.icono}}"></i>
+          <span class="sidenav-link-text" *ngIf="colapsar"> {{data.titulo}} </span>
+        </a>
+        <a *ngIf="data.href != ''" class="sidenav-nav-link collapsed position-relative" data-bs-toggle="collapse"
+          href="#{{data.href}}" aria-expanded="false" (click)="colapsar ? clickItem(data): alternar()">
+          <i class="sidenav-link-icon {{data.icono}} "></i>
+          <span class="sidenav-link-text " *ngIf="colapsar"> {{data.titulo }} </span>
+          <i *ngIf="data.submenu && colapsar" class="menu-collapse-icon"
+            [ngClass]="!data.expandido ? 'fa-solid fa-xs fa-chevron-down ': 'fa-solid fa-xs fa-chevron-up '"> </i>
+          @if(hayNotificaciones()){
+            <div class="position-absolute end-0 top-0  rounded bg-danger px-1 text "><small>!</small> </div>
+          }
+        </a>
+
+        <div *ngIf="colapsar && data.href != ''" class="collapse" id="{{data.href}}">
+          <ul class="sublevel-nav">
+            <li routerLinkActive="active" *ngFor="let item of data.submenu" class="sublevel-nav-item mt-1 ">
+              <a class="sublevel-nav-link position-relative" [routerLink]="[item.ruta]" (click)="this.screenWidth<=768 ? alternar() :'' "
+                [ngClass]="obtenerClaseSubItem(item)">
+                @switch (item.id) {
+                  @case (1){
+                    <i class="sublevel-link-icon pe-7s-settings"> </i>
+                  }
+                  @case (2){
+                    <i class="sublevel-link-icon pe-7s-tools"> </i>
+                  }
+                  @case (3){
+                    <i class="sublevel-link-icon pe-7s-credit"> </i>
+                  }
+                  @case (4){
+                    <i class="sublevel-link-icon pe-7s-note"> </i>
+                  }
+                  @default {
+                    <i class="sublevel-link-icon fa-solid  fa-circle fa-2xs"></i>
+                  }
+                }
+
+                @if(arrayNotificaciones[item.id]?.cantNot>0){
+                  <div class="position-absolute end-0 top-0  rounded bg-danger px-1 text ">
+                    <small>
+                      {{arrayNotificaciones[item.id].cantNot}}
+                    </small>
+                  </div>
+                }
+                <span class="sublevel-link-text" *ngIf="colapsar"> {{item.titulo | titlecase}} </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li> -->
+    <!-- <li class="sidenav-nav-item bordeArriba">
+        <a class="sidenav-nav-link my-2" (click)="cerrarSesion()">
+          <i class="sidenav-link-icon pe-7s-back"></i>
+          <span class="sidenav-link-text" *ngIf="colapsar"> Salir </span>
+        </a>
+      </li> -->
+  </ul>
+  <ul class="sidenav-nav">
+    <li class="sidenav-nav-item" *ngFor="let data of navData">
+      <a class="sidenav-nav-link" (click)="handleClick(data)" tabindex (keydown)="handleClick(data)" *ngIf="data.items && data.items.length > 0">
+        <i class="sidenav-link-icon" [class]="data.icon"></i>
+        <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">{{ data.label }}</span>
+        <i class="menu-collapsed-icon" *ngIf="data.items && collapsed" [ngClass]="!data.expanded ? 'fal fa-angle-right' : 'fal fa-angle-down'"></i>
+      </a>
+      <a class="sidenav-nav-link" *ngIf="!data.items || (data.items && data.items.length === 0)" [routerLink]="[data.routerLink]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="sidenav-link-icon" [class]="data.icon"></i>
+        <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">{{ data.label }}</span>
+      </a>
+      <div *ngIf="collasped && data.items && data.items.length > 0">
+        <app-sublevel-menu [data]="data" [collapsed]="collapsed" [multiple]="multiple" [expanded]="item.expanded" />
+      </div>
+    </li>
+  </ul>
+</div>

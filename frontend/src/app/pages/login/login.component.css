@@ -1,0 +1,22 @@
+.contenedor {
+  max-height: 100vh; /* especificar en toda la web no solo aca.*/
+}
+.rectangulo {
+  position: fixed;
+  top: -25%;
+  height: 150vh;
+  width: 60vw;
+  background-color: #54adfb;
+  border-radius: 0 30% 30% 0/ 0 50% 50% 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: 10px 1px 10px rgb(176, 176, 176);
+  z-index: -1;
+}
+.form-position {
+  height: 100vh;
+  width: 40vw;
+  max-width: 40vw;
+  /* border:solid 1px #000; */
+  float: right;
+}

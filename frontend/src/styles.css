@@ -2,3 +2,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  position: relative;
+  /* agregar font familyu */
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  margin: 1.25rem 1.25rem 0 #e6edef;
+  box-shadow: 0 0.25rem 0.5rem #e6edef;
+  .card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #edf1f7;
+  }
+  .card-body {
+    padding: 1rem 1.5rem;
+  }
+}
