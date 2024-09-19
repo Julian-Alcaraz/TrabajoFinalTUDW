@@ -1,0 +1,24 @@
+# Usar una imagen base de Node.js
+FROM node:22
+
+# Establecer el directorio de trabajo dentro del contenedor
+WORKDIR /home/app/frontend
+
+# Copiar solo package y package lock.json
+COPY package*.json ./
+
+# Instalar las dependencias del proyecto
+RUN npm ci
+
+# Instalar Angular CLI globalmente
+RUN npm install -g @angular/cli
+
+# Copiar los archivos del proyecto al contenedor
+COPY . .
+
+# Exponer el puerto 4200
+EXPOSE 4200
+
+# Ejecutar la aplicación en modo desarrollo
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
+

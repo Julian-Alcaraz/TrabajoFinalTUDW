@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+
+import { DatabaseModule } from './database/database.module';
+
+import { RolModule } from './rol/rol.module';
+import { MenuModule } from './menu/menu.module';
+import { MenuRolModule } from './menu-rol/menu-rol.module';
+import { UsuarioModule } from './usuario/usuario.module';
+import { UsuarioRolModule } from './usuario-rol/usuario-rol.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, RolModule, MenuModule, MenuRolModule, UsuarioModule, UsuarioRolModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
