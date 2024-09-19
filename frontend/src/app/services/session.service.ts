@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +11,14 @@ import { delay, Observable, of } from 'rxjs';
 export class SessionService {
   //constructor() {}
   private url: string;
-  constructor(private _http: HttpClient) {
+  private identidad: Usuario | null;
+
+  constructor(
+    private _http: HttpClient,
+    private _router: Router,
+  ) {
     this.url = GLOBAL.URL_BACKEND;
+    this.identidad = null;
   }
   iniciarSession(email: string, password: string): Observable<any> {
     // por mientras
@@ -48,5 +56,17 @@ export class SessionService {
     return of(simulatedResponse).pipe(delay(1000));
     // cuando este el backend
     return this._http.get(this.url + '/sesion/iniciarSesion/' + email + '/' + password);
+  }
+  cerrarSesion() {
+    localStorage.removeItem('isLogged');
+    this._router.navigate(['/login']);
+  }
+  setIdentidad(usuario: Usuario) {
+    // console.log("SET IDENDTIAD SESSION SERVICE",this.identidad, usuario)
+    this.identidad = usuario;
+  }
+  getIdentidad() {
+    // console.log("get IDENDTIAD SESSION SERVICE",this.identidad)
+    return this.identidad;
   }
 }

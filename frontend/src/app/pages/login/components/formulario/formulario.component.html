@@ -17,8 +17,9 @@
       </div>
       <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="loginForm.get('email')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="loginForm.get('email')?.errors?.['minlength']">Minmio 7 caracteres.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['email']">Formato de email incorrecto.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
       <div class="relative mb-1 mt-6">
@@ -32,7 +33,7 @@
       </div>
       <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minmio 7 caracteres.</div>
+        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>

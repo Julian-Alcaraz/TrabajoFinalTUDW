@@ -1,13 +1,18 @@
 export class Menu {
   constructor(
     public id: number,
-    public id_padre: string,
-    public path: string, //agregar a la bd
-    public nombre: string, //agregar a la bd
-    public descripcion: string,
+    public deshabilitado: boolean,
+    public url: string,
+    public label: string,
+    public sub_menu?: Menu[],
+    public id_padre?: number | undefined,
+    public icon?: string,
+    public created_at?: Date,
+    public update?: Date,
+    public expanded?: boolean,
   ) {}
 
   static overload_constructor() {
-    return new Menu(0, '', '', '', '');
+    return new Menu(0, false, '', '', [], undefined, undefined);
   }
 }

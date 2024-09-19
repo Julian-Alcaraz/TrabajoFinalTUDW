@@ -1,12 +1,15 @@
 .sidenav {
-  background: #0277bd;
+  /* background: #0277bd; */
+  /* background-color:#6ba3df; */
+  background-color: #3f77b4;
   transition: all 0.5s ease;
   position: fixed;
   z-index: 1;
   top: 0;
   width: 5rem;
   height: 100vh;
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+  max-height: 100vh;
+  box-shadow: 0.063rem 0 1.25rem 0 #000; /*8690a3*/
 
   /* margin: 0;
   padding: 0; */
@@ -63,7 +66,7 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  height: calc(100% - 3.65rem);
+  /* height: calc(100% - 3.65rem); */
 
   .sidenav-nav-item {
     width: 100%;
@@ -94,6 +97,9 @@
     .sidenav-nav-link:hover {
       background-color: #fff;
       color: #000;
+      .menu-collapse-icon {
+        color: #000;
+      }
     }
   }
 }
@@ -104,31 +110,16 @@
   .sidenav-link-text {
     color: #000;
   }
+  .menu-collapse-icon,
   .sublevel-link-text,
   .sublevel-link-icon {
     color: #000;
   }
 }
 
-/*
-
-.sidenav-nav-item:hover {
-  .sidenav-nav-link {
-    background-color: #fff;
-    color:#000
-  }
-  .menu-collapse-icon,
-  .sidenav-link-icon,
-  .sidenav-link-text {
-    color: #000;
-  }
-}
-
-
 .active-sublevel {
   color: #f3f3f3 !important;
 }
-
 .menu-collapse-icon {
   font-size: 18px;
   width: 2rem;
@@ -136,9 +127,6 @@
   margin: auto 0.5rem auto auto;
   text-align: center;
   color: #f3f3f3;
-}
-.menu-collapse-icon:hover {
-  color: #000;
 }
 
 .sublevel-nav {
@@ -154,9 +142,9 @@
       text-decoration: none;
       border-radius: 0.625rem;
       transition: all 0.3s ease;
-
+      margin-top: 5px; /* de propiedad mia */
       .sublevel-link-icon {
-        font-size: 22px;
+        font-size: 18px;
         width: 2rem;
         min-width: 2rem;
         margin: 0 0.5rem;
@@ -174,11 +162,13 @@
     }
   }
 }
+/* scrollwra */
 
 .scrollwrap {
   overflow-y: auto;
   visibility: hidden;
-  height: calc(100% - 3.65rem);
+  /* height: calc(100% - 3.65rem); como el de abajo por que es para el logou */
+  height: calc(100% - 7.3rem);
 }
 
 .sidenav-nav,
@@ -186,15 +176,14 @@
 .scrollwrap:focus {
   visibility: visible;
 }
-
 .scrollwrap_delayed {
   transition: visibility 0.5s 0.2s;
 }
-
 .scrollwrap_delayed:hover {
   transition: visibility 0.2s 0.2s;
 }
 
+/* work on crome edge and safari */
 .scrollwrap::-webkit-scrollbar {
   width: 10px;
 }
@@ -208,30 +197,34 @@
   border-radius: 20px;
 }
 
+/* workks on firefox */
 .scrollwrap {
   scrollbar-width: thin;
   scrollbar-color: #556268 transparent;
 }
-
-.bordeArribaAbajo {
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid #fff;
+.scrollwrap::-webkit-scrollbar {
+  width: 10px;
+}
+.scrollwrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollwrap::-webkit-scrollbar-thumb {
+  background-color: #556268;
+  border-radius: 20px;
 }
 
-.bordeArriba {
-  border-top: 1px solid #fff;
-}
-
-@media screen and (max-width: 768.1px) {
+/* @media screen and (max-width: 768.1px) {
   .sidenav {
     box-shadow: none;
-    width: auto;
+    width: 100%;
+    height: 10vh;
     .logo-container {
       padding: 0.5rem;
     }
   }
   .sidenav-nav {
     display: none;
-    height: 150vh;
+    max-height: 100vh;
+
   }
 } */
