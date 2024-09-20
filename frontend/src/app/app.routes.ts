@@ -8,7 +8,7 @@ import { NuevoUsuarioComponent } from './pages/usuarios/nuevo-usuario/nuevo-usua
 import { ListaUsuarioComponent } from './pages/usuarios/lista-usuario/lista-usuario.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full'  },
   { path: 'login', component: LoginComponent, canActivate: [authGuard] },
   {
     path: 'layout',

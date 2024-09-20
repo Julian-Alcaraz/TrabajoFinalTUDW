@@ -9,7 +9,7 @@ import { Usuario } from '../models/usuario.model';
   providedIn: 'root',
 })
 export class SessionService {
-  //constructor() {}
+
   private url: string;
   private identidad: Usuario | null;
 
@@ -20,55 +20,55 @@ export class SessionService {
     this.url = GLOBAL.URL_BACKEND;
     this.identidad = null;
   }
+
   iniciarSession(email: string, password: string): Observable<any> {
-    // // por mientras
-    // const usuarios = {
-    //   email: 'julianalcaraz4@gmail.com',
-    //   password: '1234567',
-    // };
-    // let simulatedResponse;
-    // if (usuarios.email === email && usuarios.password === password) {
-    //   simulatedResponse = {
-    //     success: true,
-    //     data: {
-    //       id: 1,
-    //       dni: 44671915,
-    //       nombre: 'Julian',
-    //       apellido: 'Alcaraz',
-    //       email: 'julianalcarz4@gmail.com',
-    //       especialidad: '',
-    //       contrasenia: '',
-    //       fechaNacimiento: '09/02/03',
-    //       roles: [
-    //         // esto es opcional podria  no estar
-    //         { id: 1, descipcion: 'administradorr' },
-    //         { id: 2, descipcion: 'medico' },
-    //       ],
-    //     },
-    //     message: 'Ingreso exitosamente',
-    //   };
-    // } else {
-    //   simulatedResponse = {
-    //     success: false,
-    //     message: 'Datos incorrectos',
-    //   };
-    // }
-    // return of(simulatedResponse).pipe(delay(1000));
-    // cuando este el backend
-    // return this._http.post(this.url + '/auth/login/' + email + '/' + password,{});
     return this._http.post(this.url + 'auth/login', { email, contrasenia: password }, { withCredentials: true });
   }
+
+  // eliminar la cookie
   cerrarSesion() {
-    localStorage.removeItem('isLogged');
-    // eliminar la cookie
-    this._router.navigate(['/login']);
+    this.eliminarCookie().subscribe({
+      next: (response:any)=>{
+        if(response.succes){
+          this._router.navigate(['/login']);
+        }else{
+          console.log("Fallo cerrar la sesion",response.message)
+        }
+      },
+      error: (err)=>{
+        console.log("Fallo cerrar la sesion",err)
+      }
+    })
   }
+
   setIdentidad(usuario: Usuario) {
     console.log('SET IDENDTIAD SESSION SERVICE', this.identidad, usuario);
     this.identidad = usuario;
   }
+
   getIdentidad() {
-    // console.log("get IDENDTIAD SESSION SERVICE",this.identidad)
     return this.identidad;
+  }
+
+  eliminarCookie():Observable<any>{
+    return this._http.post(this.url+'auth/logout',null,{withCredentials:true})
+  }
+
+  estaLogueado():Promise<boolean>{
+    return new Promise((resolve) => {
+      this._http.get(this.url + '/session/validarToken').subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        },
+        error: (error: any) => {
+          console.log(error)
+          resolve(false);
+        }
+      });
+    });
   }
 }

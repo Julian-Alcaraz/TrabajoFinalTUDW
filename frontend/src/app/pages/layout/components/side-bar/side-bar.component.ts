@@ -31,7 +31,10 @@ export class NavBarComponent implements OnInit {
   multiple = false;
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.screenWidth = window.innerWidth;
+    if (typeof window !== 'undefined') {
+      // El código que depende de window
+      this.screenWidth = window.innerWidth;
+    }
     if (this.screenWidth <= 768) {
       this.collapsed = false;
       this.toggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
@@ -43,7 +46,10 @@ export class NavBarComponent implements OnInit {
     private _menuService: MenuService,
   ) {}
   ngOnInit(): void {
-    this.screenWidth = window.innerWidth;
+    if (typeof window !== 'undefined') {
+      // El código que depende de window
+      this.screenWidth = window.innerWidth;
+    }
     this.identidad = this._sessionService.getIdentidad();
     console.log('IDENTIDAD', this.identidad);
     if (this.identidad != null) {

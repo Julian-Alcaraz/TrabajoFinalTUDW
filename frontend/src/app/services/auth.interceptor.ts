@@ -2,14 +2,18 @@ import { HttpErrorResponse, HttpHeaders, HttpInterceptorFn } from '@angular/comm
 import { SessionService } from './session.service';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { getCookie } from './cookies';
+import { CookieService } from 'ngx-cookie-service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // obtener token y agregarlo a la consulta authenticator para proteccion
 
   const _sessionService = inject(SessionService);
+  const _cookieService = inject(CookieService);
 
-  const cookieValue = getCookie('Authorization');
+
+  // const cookieValue = getCookie('Authorization');
+  const cookieValue = _cookieService.get('Authorization');
+  console.log("intercerptor token ", cookieValue)
   const token = cookieValue ? cookieValue : '';
   let headers = new HttpHeaders();
   if (req.method === 'POST') {
