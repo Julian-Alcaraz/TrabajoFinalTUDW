@@ -17,8 +17,6 @@ export class CreateUsuarioDto {
   @ApiProperty({ description: 'Dni del usuario' })
   @IsNotEmpty({ message: 'El dni no puede estar vacio' })
   @IsInt({ message: 'El dni debe ser un entero' })
-  //@Length(8, 8, { message: 'El DNI debe tener 8 digitos' })
-  //@Matches(/^\d{8}$/, { message: 'El dni debe tener 8 digitos' })
   @Min(10000000, { message: 'El dni debe tener 8 digitos' })
   @Max(99999999, { message: 'El dni debe tener 8 digitos' })
   dni: number;
@@ -39,7 +37,6 @@ export class CreateUsuarioDto {
   @IsDateString({}, { message: 'La fe_nacimiento debe ser una fecha válida (formato ISO)' })
   fe_nacimiento: string;
 
-  /* VER!!!!!!!!!!!!!!!!!!!*/
   @ApiProperty({ description: 'Especialidad del usuario medico' })
   @IsNotEmpty({ message: 'La especialidad no puede estar vacia' })
   @IsString({ message: 'La especialidad debe ser un string' })

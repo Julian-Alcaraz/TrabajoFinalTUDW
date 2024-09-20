@@ -7,9 +7,6 @@ import { CreateMenuRolDto } from './dto/create-menu-rol.dto';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
 
-/*
-  No esta hecho: borrado logico ni actualizar
-*/
 @Injectable()
 export class MenuRolService {
   constructor(
@@ -22,15 +19,11 @@ export class MenuRolService {
     // Rol
     const idRol = createMenuRolDto.id_rol;
     const rol = await this.rolORM.findOneBy({ id: idRol });
-    if (!rol) {
-      throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
-    }
+    if (!rol) throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
     // Menu
     const idMenu = createMenuRolDto.id_menu;
     const menu = await this.menuORM.findOneBy({ id: idMenu });
-    if (!menu) {
-      throw new NotFoundException(`Menu con id ${idMenu} no encontrado`);
-    }
+    if (!menu) throw new NotFoundException(`Menu con id ${idMenu} no encontrado`);
     // Crea un nuevo menuRol
     const nuevoMenuRol = this.menuRolORM.create({
       id_rol: rol.id,
@@ -52,17 +45,9 @@ export class MenuRolService {
       },
       relations: ['menu', 'rol'],
     });
-    if (!menuRol) {
-      throw new NotFoundException(`MenuRol con idMenu ${idMenu} e idRol ${idRol} no encontrado`);
-    }
+    if (!menuRol) throw new NotFoundException(`MenuRol con idMenu ${idMenu} e idRol ${idRol} no encontrado`);
     return menuRol;
   }
-
-  /*
-  update(id: number, updateMenuRolDto: UpdateMenuRolDto) {
-    return `This action updates a #${id} menuRol`;
-  }
-  */
 
   async remove(idMenu: number, idRol: number) {
     const menuRol = await this.menuRolORM.findOne({
@@ -72,10 +57,8 @@ export class MenuRolService {
       },
       relations: ['menu', 'rol'],
     });
-    if (!menuRol) {
-      throw new NotFoundException(`MenuRol con idMenu ${idMenu} e idRol ${idRol} no encontrado`);
-    }
-    this.menuRolORM.delete(menuRol);
+    if (!menuRol) throw new NotFoundException(`MenuRol con idMenu ${idMenu} e idRol ${idRol} no encontrado`);
+    return this.menuRolORM.delete(menuRol);
   }
 
   async buscarMenuRol(idRol: number) {
@@ -87,6 +70,12 @@ export class MenuRolService {
     });
     return menus;
   }
+
+  /*
+  update(id: number, updateMenuRolDto: UpdateMenuRolDto) {
+    return `This action updates a #${id} menuRol`;
+  }
+  */
 
   /*
   async borradoLogico(idMenu: number, idRol: number) {

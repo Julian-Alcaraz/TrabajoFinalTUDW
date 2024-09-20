@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Length, IsNotEmpty, IsString, IsInt, IsOptional, IsPositive } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMenuDto {
   @ApiProperty({ description: 'Label del menu' })

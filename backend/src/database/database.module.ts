@@ -8,12 +8,12 @@ import { ConfigService } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.getOrThrow('PG_HOST'),
-        port: configService.getOrThrow('PG_PORT'),
-        database: configService.getOrThrow('PG_DATABASE'),
-        username: configService.getOrThrow('PG_USERNAME'),
-        password: configService.getOrThrow('PG_PASSWORD'),
-        synchronize: configService.getOrThrow('PG_SYNCHRONIZE'),
+        host: configService.getOrThrow<string>('PG_HOST'),
+        port: +configService.getOrThrow<number>('PG_PORT'),
+        database: configService.getOrThrow<string>('PG_DATABASE'),
+        username: configService.getOrThrow<string>('PG_USERNAME'),
+        password: configService.getOrThrow<string>('PG_PASSWORD'),
+        synchronize: configService.getOrThrow<string>('PG_SYNCHRONIZE') === 'true', // Convierte a booleano
         autoLoadEntities: true,
         entities: ['src/**/*.entity.ts'], // CAMBIAR EN PRODUCION!!!!!!!!!!!
         seeds: [__dirname + '/seeds/**/*{.ts,.js}'],

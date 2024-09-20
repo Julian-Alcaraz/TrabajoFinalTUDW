@@ -25,8 +25,8 @@ export class Rol {
   deshabilitado: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  updatedAt: Date;
+  updated_at: Date;
 }

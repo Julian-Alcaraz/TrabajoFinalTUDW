@@ -12,16 +12,26 @@ export class UsuarioRolController {
   @Post()
   @ApiOperation({ summary: 'Crea un nuevo usuario-rol' })
   @ApiResponse({ status: 201, description: 'Usuario-rol creado con exito' })
-  create(@Body() createUsuarioRolDto: CreateUsuarioRolDto) {
-    return this.usuarioRolService.create(createUsuarioRolDto);
+  async create(@Body() createUsuarioRolDto: CreateUsuarioRolDto) {
+    const usuarioRol = await this.usuarioRolService.create(createUsuarioRolDto);
+    return {
+      success: usuarioRol ? true : false,
+      data: usuarioRol,
+      message: usuarioRol ? 'UsuarioRol creado con exito' : 'Error',
+    };
   }
 
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los usuario-rol habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todas los usuario-rol habilitados con exito' })
   @ApiResponse({ status: 403, description: 'No permitido' })
-  findAll() {
-    return this.usuarioRolService.findAll();
+  async findAll() {
+    const colUsuarioRol = await this.usuarioRolService.findAll();
+    return {
+      success: colUsuarioRol ? true : false,
+      data: colUsuarioRol,
+      message: colUsuarioRol ? 'UsuarioRol obtenidos con exito' : 'Error',
+    };
   }
 
   @Get(':idUsuario/:idRol')
@@ -29,7 +39,25 @@ export class UsuarioRolController {
   @ApiResponse({ status: 200, description: 'Retorna el usuario-rol buscado con exito' })
   @ApiResponse({ status: 404, description: 'Usuario-rol no encontrado' })
   async findOne(@Param('idUsuario', ParseIntPipe) idUsuario: number, @Param('idRol', ParseIntPipe) idRol: number) {
-    return this.usuarioRolService.findOne(idUsuario, idRol);
+    const usuarioRol = await this.usuarioRolService.findOne(idUsuario, idRol);
+    return {
+      success: usuarioRol ? true : false,
+      data: usuarioRol,
+      message: usuarioRol ? 'UsuarioRol obtenido con exito' : 'Error',
+    };
+  }
+
+  @Delete(':idUsuario/:idRol')
+  @ApiOperation({ summary: 'Borra un usuario-rol' })
+  @ApiResponse({ status: 200, description: 'Usuario-rol borrado con exito' })
+  @ApiResponse({ status: 404, description: 'Usuario-rol no encontrado' })
+  async remove(@Param('idUsuario', ParseIntPipe) idUsuario: number, @Param('idRol', ParseIntPipe) idRol: number) {
+    const usuarioRol = await this.usuarioRolService.remove(idUsuario, idRol);
+    return {
+      success: usuarioRol ? true : false,
+      data: usuarioRol,
+      message: usuarioRol ? 'UsuarioRol borrado con exito' : 'Error',
+    };
   }
 
   /*
@@ -38,12 +66,4 @@ export class UsuarioRolController {
     return this.usuarioRolService.update(+id, updateUsuarioRolDto);
   }
   */
-
-  @Delete(':idUsuario/:idRol')
-  @ApiOperation({ summary: 'Borra un usuario-rol' })
-  @ApiResponse({ status: 200, description: 'Usuario-rol borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Usuario-rol no encontrado' })
-  async remove(@Param('idUsuario', ParseIntPipe) idUsuario: number, @Param('idRol', ParseIntPipe) idRol: number) {
-    return this.usuarioRolService.remove(idUsuario, idRol);
-  }
 }
