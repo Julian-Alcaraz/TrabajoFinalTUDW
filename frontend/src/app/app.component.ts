@@ -11,4 +11,5 @@ import { NavBarComponent } from './pages/layout/components/side-bar/side-bar.com
 })
 export class AppComponent {
   title = 'frontend';
+  // validar si existe la session
 }

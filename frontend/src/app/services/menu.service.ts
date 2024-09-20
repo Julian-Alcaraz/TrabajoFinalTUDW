@@ -13,6 +13,6 @@ export class MenuService {
   traerUsuarioMenu(idUsuario: number) {
     console.log('ID USUARIO SERVICE MENU', idUsuario);
     console.log('EJECUTAR' + this.url + '/menu/' + idUsuario);
-    // return this._http.get(this.url + '/menu/' + idUsuario);
+    return this._http.get(this.url + 'menu/menusUsuario/' + idUsuario);
   }
 }

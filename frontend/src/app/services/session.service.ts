@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
 import { HttpClient } from '@angular/common/http';
-import { delay, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 
@@ -21,48 +21,50 @@ export class SessionService {
     this.identidad = null;
   }
   iniciarSession(email: string, password: string): Observable<any> {
-    // por mientras
-    const usuarios = {
-      email: 'julianalcaraz4@gmail.com',
-      password: '1234567',
-    };
-    let simulatedResponse;
-    if (usuarios.email === email && usuarios.password === password) {
-      simulatedResponse = {
-        success: true,
-        data: {
-          id: 1,
-          dni: 44671915,
-          nombre: 'Julian',
-          apellido: 'Alcaraz',
-          email: 'julianalcarz4@gmail.com',
-          especialidad: '',
-          contrasenia: '',
-          fechaNacimiento: '09/02/03',
-          roles: [
-            // esto es opcional podria  no estar
-            { id: 1, descipcion: 'administradorr' },
-            { id: 2, descipcion: 'medico' },
-          ],
-        },
-        message: 'Ingreso exitosamente',
-      };
-    } else {
-      simulatedResponse = {
-        success: false,
-        message: 'Datos incorrectos',
-      };
-    }
-    return of(simulatedResponse).pipe(delay(1000));
+    // // por mientras
+    // const usuarios = {
+    //   email: 'julianalcaraz4@gmail.com',
+    //   password: '1234567',
+    // };
+    // let simulatedResponse;
+    // if (usuarios.email === email && usuarios.password === password) {
+    //   simulatedResponse = {
+    //     success: true,
+    //     data: {
+    //       id: 1,
+    //       dni: 44671915,
+    //       nombre: 'Julian',
+    //       apellido: 'Alcaraz',
+    //       email: 'julianalcarz4@gmail.com',
+    //       especialidad: '',
+    //       contrasenia: '',
+    //       fechaNacimiento: '09/02/03',
+    //       roles: [
+    //         // esto es opcional podria  no estar
+    //         { id: 1, descipcion: 'administradorr' },
+    //         { id: 2, descipcion: 'medico' },
+    //       ],
+    //     },
+    //     message: 'Ingreso exitosamente',
+    //   };
+    // } else {
+    //   simulatedResponse = {
+    //     success: false,
+    //     message: 'Datos incorrectos',
+    //   };
+    // }
+    // return of(simulatedResponse).pipe(delay(1000));
     // cuando este el backend
-    return this._http.get(this.url + '/sesion/iniciarSesion/' + email + '/' + password);
+    // return this._http.post(this.url + '/auth/login/' + email + '/' + password,{});
+    return this._http.post(this.url + 'auth/login', { email, contrasenia: password }, { withCredentials: true });
   }
   cerrarSesion() {
     localStorage.removeItem('isLogged');
+    // eliminar la cookie
     this._router.navigate(['/login']);
   }
   setIdentidad(usuario: Usuario) {
-    // console.log("SET IDENDTIAD SESSION SERVICE",this.identidad, usuario)
+    console.log('SET IDENDTIAD SESSION SERVICE', this.identidad, usuario);
     this.identidad = usuario;
   }
   getIdentidad() {

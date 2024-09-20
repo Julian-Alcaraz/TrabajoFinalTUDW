@@ -14,15 +14,25 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalGuard) // Guard incluido en nestjs passport, le paso el nombre de la strategy y la invoca
   login(@Req() req: Request, @Res() res: Response) {
+    //
     const { token, usuario } = req.user as any;
     // Guardo token en cookie
     res.cookie('Authorization', token, {
-      secure: true,
-      httpOnly: true,
+      // secure: true,
+      // httpOnly: true,
       maxAge: 60 * 60 * 1000, // 1 hora
       // expires
+      httpOnly: false,
+      secure: false,
     });
-    return res.status(200).json(usuario);
+    let response;
+    if (usuario) {
+      response = { success: true, data: usuario, message: 'Inicio de sesion correcto' };
+    } else {
+      response = { success: false, message: 'Inicio de sesion Incorrecto' };
+    }
+    return res.status(200).send(response);
+    // return(usuario);
   }
 
   @Get('status')

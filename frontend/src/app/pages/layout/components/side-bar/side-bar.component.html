@@ -9,16 +9,16 @@
   <div class="scrollwrap scrollwrap_delayed">
     <ul class="sidenav-nav">
       <li class="sidenav-nav-item" *ngFor="let data of navData">
-        <a class="sidenav-nav-link" (click)="handleClick(data)" tabindex (keydown)="handleClick(data)" *ngIf="data.sub_menu && data.sub_menu.length > 0" [ngClass]="getActiveClass(data)">
+        <a class="sidenav-nav-link" (click)="handleClick(data)" tabindex (keydown)="handleClick(data)" *ngIf="data.sub_menus && data.sub_menus.length > 0" [ngClass]="getActiveClass(data)">
           <i class="sidenav-link-icon" [class]="data.icon"></i>
           <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">{{ data.label }}</span>
-          <i class="menu-collapse-icon" *ngIf="data.sub_menu && collapsed" [ngClass]="!data.expanded ? 'fa-solid fa-angle-right' : 'fa-solid fa-angle-down'"></i>
+          <i class="menu-collapse-icon" *ngIf="data.sub_menus && collapsed" [ngClass]="!data.expanded ? 'fa-solid fa-angle-right' : 'fa-solid fa-angle-down'"></i>
         </a>
-        <a class="sidenav-nav-link" *ngIf="!data.sub_menu || (data.sub_menu && data.sub_menu.length === 0)" [routerLink]="[data.url]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="sidenav-nav-link" *ngIf="!data.sub_menus || (data.sub_menus && data.sub_menus.length === 0)" [routerLink]="[data.url]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <i class="sidenav-link-icon" [class]="data.icon"></i>
           <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">{{ data.label }}</span>
         </a>
-        <div *ngIf="collapsed && data.sub_menu && data.sub_menu.length > 0">
+        <div *ngIf="collapsed && data.sub_menus && data.sub_menus.length > 0">
           <app-sublevel-menu [data]="data" [collapsed]="collapsed" [multiple]="multiple" [expanded]="data.expanded" />
         </div>
       </li>

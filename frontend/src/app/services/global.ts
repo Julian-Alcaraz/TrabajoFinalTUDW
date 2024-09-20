@@ -1,3 +1,3 @@
 export const GLOBAL = {
-  URL_BACKEND: 'http://localhost:xxx/api/v1',
+  URL_BACKEND: 'http://localhost:3000/',
 };

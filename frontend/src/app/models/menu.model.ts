@@ -4,12 +4,13 @@ export class Menu {
     public deshabilitado: boolean,
     public url: string,
     public label: string,
-    public sub_menu?: Menu[],
+    public sub_menus?: Menu[],
     public id_padre?: number | undefined,
     public icon?: string,
     public created_at?: Date,
-    public update?: Date,
+    public updated_at?: Date,
     public expanded?: boolean,
+    public orden?: number,
   ) {}
 
   static overload_constructor() {

@@ -17,7 +17,7 @@ export const navbarData: Menu[] = [
     icon: 'fa-solid fa-users',
     label: 'Usuarios',
     expanded: false,
-    sub_menu: [
+    sub_menus: [
       {
         id: 3,
         id_padre: 2,
@@ -44,6 +44,7 @@ export const navbarData: Menu[] = [
       },
     ],
   },
+
   /*
   {
     id: 4,

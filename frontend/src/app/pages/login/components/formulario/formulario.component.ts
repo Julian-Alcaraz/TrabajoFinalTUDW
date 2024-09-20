@@ -33,9 +33,10 @@ export class FormularioComponent {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
     this._sessionService.iniciarSession(email, password).subscribe((response) => {
+      console.log('response', response);
       if (response.success) {
         // console.log(data);
-        localStorage.setItem('isLogged', 'true');
+        // localStorage.setItem('isLogged', 'true');
         this._sessionService.setIdentidad(response.data);
         this._router.navigate(['/layout']);
       }
