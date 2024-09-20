@@ -11,61 +11,76 @@ import { Usuario } from './entities/usuario.entity';
 */
 @Injectable()
 export class UsuarioService {
-  constructor(@InjectRepository(Usuario) private usuarioRepo: Repository<Usuario>) {}
+  constructor(@InjectRepository(Usuario) private readonly usuarioORM: Repository<Usuario>) {}
 
+  /*
+    ACA FALTA VALIDAR QUE EL EMAIL NO COINCIDA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  */
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const usuarioEncontrado = await this.usuarioRepo.findOneBy({ dni: createUsuarioDto.dni });
+    const usuarioEncontrado = await this.usuarioORM.findOneBy({ dni: createUsuarioDto.dni });
     if (usuarioEncontrado) {
       throw new BadRequestException(`El usuario con dni ${createUsuarioDto.dni} ya está cargado en el sistema`);
     }
-    const nuevoUsuario = this.usuarioRepo.create(createUsuarioDto);
-    return this.usuarioRepo.save(nuevoUsuario);
+    const nuevoUsuario = this.usuarioORM.create(createUsuarioDto);
+    return this.usuarioORM.save(nuevoUsuario);
   }
 
-  // AGREGAR RELACIONES DESPUES
   findAll() {
-    return this.usuarioRepo.find({ where: { deshabilitado: false } });
+    return this.usuarioORM.find({ where: { deshabilitado: false } });
   }
 
   async findOne(id: number) {
-    const usuario = await this.usuarioRepo.findOneBy({ id });
+    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, id: id } });
     if (!usuario) {
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
     return usuario;
   }
 
+  /*
+    ACA FALTA VALIDAR SI QUIERE CAMBIAR EL EMAIL QUE EL EMAIL NO ESTE EN USO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  */
   async update(id: number, cambios: UpdateUsuarioDto) {
-    const usuario = await this.usuarioRepo.findOneBy({ id });
-    if (!usuario) {
-      throw new NotFoundException(`Usuario con id ${id} no encontrado`);
-    }
+    if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
+    const usuario = await this.usuarioORM.findOneBy({ id });
+    if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     if (cambios.dni) {
-      const usuarioEncontrado = await this.usuarioRepo.findOneBy({ dni: cambios.dni });
+      const usuarioEncontrado = await this.usuarioORM.findOneBy({ dni: cambios.dni });
       if (usuarioEncontrado) {
         throw new BadRequestException(`El dni ${cambios.dni} ya esta cargado en el sistema`);
       }
     }
-    this.usuarioRepo.merge(usuario, cambios);
-    return this.usuarioRepo.save(usuario);
+    this.usuarioORM.merge(usuario, cambios);
+    return this.usuarioORM.save(usuario);
   }
 
   async remove(id: number) {
-    const usuario = await this.usuarioRepo.findOneBy({ id });
+    const usuario = await this.usuarioORM.findOneBy({ id });
     if (!usuario) {
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
-    this.usuarioRepo.delete(id);
+    this.usuarioORM.delete(id);
   }
 
+  /**
+   * Hace un borrado logico de un item
+   */
   async borradoLogico(id: number) {
-    const usuario = await this.usuarioRepo.findOneBy({ id });
+    const usuario = await this.usuarioORM.findOneBy({ id });
     if (!usuario) {
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     } else if (usuario.deshabilitado) {
       throw new BadRequestException(`El usuario con id ${id} ya esta deshabilitado`);
     }
     usuario.deshabilitado = true;
-    return this.usuarioRepo.save(usuario);
+    return this.usuarioORM.save(usuario);
+  }
+
+  /**
+   * Busca un usuario por su email
+   */
+  async buscarUsuarioPorEmail(email: string) {
+    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, email: email } });
+    return usuario;
   }
 }

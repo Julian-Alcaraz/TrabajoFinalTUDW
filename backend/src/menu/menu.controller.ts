@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MenuService } from './menu.service';
@@ -14,15 +14,25 @@ export class MenuController {
   @ApiOperation({ summary: 'Crea un nuevo menu' })
   @ApiResponse({ status: 201, description: 'Menu creado con exito' })
   async create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
+    const menu = await this.menuService.create(createMenuDto);
+    return {
+      success: menu ? true : false,
+      data: menu,
+      message: menu ? 'Menu creado con exito' : 'Error',
+    };
   }
 
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los menus habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todos los menus habilitados con exito' })
   @ApiResponse({ status: 403, description: 'No permitido' })
-  findAll() {
-    return this.menuService.findAll();
+  async findAll() {
+    const colMenus = await this.menuService.findAll();
+    return {
+      success: colMenus ? true : false,
+      data: colMenus,
+      message: colMenus ? 'Menus obtenidos con exito' : 'Error',
+    };
   }
 
   @Get(':id')
@@ -30,7 +40,12 @@ export class MenuController {
   @ApiResponse({ status: 200, description: 'Retorna el menu buscado con exito' })
   @ApiResponse({ status: 404, description: 'Menu no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.menuService.findOne(id);
+    const menu = await this.menuService.findOne(id);
+    return {
+      success: menu ? true : false,
+      data: menu,
+      message: menu ? 'Menu obtenido con exito' : 'Error',
+    };
   }
 
   @Patch(':id')
@@ -38,9 +53,15 @@ export class MenuController {
   @ApiResponse({ status: 200, description: 'Menu actualizado con exito' })
   @ApiResponse({ status: 404, description: 'Menu no encontrado' })
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(id, updateMenuDto);
+    const menuModificado = await this.menuService.update(id, updateMenuDto);
+    return {
+      success: menuModificado ? true : false,
+      data: menuModificado,
+      message: menuModificado ? 'Menu modificado con exito' : 'Error',
+    };
   }
 
+  /*
   @Delete(':id')
   @ApiOperation({ summary: 'Borra un menu' })
   @ApiResponse({ status: 200, description: 'Menu borrado con exito' })
@@ -48,12 +69,26 @@ export class MenuController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.menuService.remove(id);
   }
+  */
 
-  @Patch(':id/eliminar')
+  @Patch('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un menu' })
   @ApiResponse({ status: 200, description: 'Menu borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Menu no encontrado' })
   async borradoLogico(@Param('id', ParseIntPipe) id: number) {
-    return this.menuService.borradoLogico(id);
+    const menuBorradoLogico = await this.menuService.borradoLogico(id);
+    return {
+      success: menuBorradoLogico ? true : false,
+      data: menuBorradoLogico,
+      message: menuBorradoLogico ? 'Menu borrado logicamente con exito' : 'Error',
+    };
+  }
+
+  @Get('menusUsuario/:id')
+  @ApiOperation({ summary: 'Devuelve todos los menus segun un id usuario' })
+  @ApiResponse({ status: 200, description: 'Menus devueltos con exito' })
+  @ApiResponse({ status: 404, description: 'Error...' })
+  async menusUsuario(@Param('id', ParseIntPipe) id: number) {
+    return await this.menuService.menusUsuario(id);
   }
 }

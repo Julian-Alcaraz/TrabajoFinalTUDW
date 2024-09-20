@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MenuRolService } from './menu-rol.service';
 import { CreateMenuRolDto } from './dto/create-menu-rol.dto';
-import { UpdateMenuRolDto } from './dto/update-menu-rol.dto';
 
 @Controller('menu-rol')
 @ApiTags('menu-rol')
@@ -14,7 +13,12 @@ export class MenuRolController {
   @ApiOperation({ summary: 'Crea un nuevo menu-rol' })
   @ApiResponse({ status: 201, description: 'Menu-rol creado con exito' })
   async create(@Body() createMenuRolDto: CreateMenuRolDto) {
-    return this.menuRolService.create(createMenuRolDto);
+    const menuRol = await this.menuRolService.create(createMenuRolDto);
+    return {
+      success: menuRol ? true : false,
+      data: menuRol,
+      message: menuRol ? 'Rol creado con exito' : 'Error',
+    };
   }
 
   @Get()

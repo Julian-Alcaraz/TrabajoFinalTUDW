@@ -11,19 +11,19 @@ import { UpdateRolDto } from './dto/update-rol.dto';
 */
 @Injectable()
 export class RolService {
-  constructor(@InjectRepository(Rol) private rolRepo: Repository<Rol>) {}
+  constructor(@InjectRepository(Rol) private readonly rolORM: Repository<Rol>) {}
 
   create(createRolDto: CreateRolDto) {
-    const nuevoRol = this.rolRepo.create(createRolDto);
-    return this.rolRepo.save(nuevoRol);
+    const nuevoRol = this.rolORM.create(createRolDto);
+    return this.rolORM.save(nuevoRol);
   }
 
   findAll() {
-    return this.rolRepo.find({ where: { deshabilitado: false } });
+    return this.rolORM.find({ where: { deshabilitado: false } });
   }
 
   async findOne(id: number) {
-    const rol = await this.rolRepo.findOneBy({ id });
+    const rol = await this.rolORM.findOneBy({ id });
     if (!rol) {
       throw new NotFoundException(`Rol con id ${id} no encontrado`);
     }
@@ -31,30 +31,33 @@ export class RolService {
   }
 
   async update(id: number, cambios: UpdateRolDto) {
-    const rol = await this.rolRepo.findOneBy({ id });
+    if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
+    const rol = await this.rolORM.findOneBy({ id });
     if (!rol) {
       throw new NotFoundException(`Rol con id ${id} no encontrado`);
     }
-    this.rolRepo.merge(rol, cambios);
-    return this.rolRepo.save(rol);
+    this.rolORM.merge(rol, cambios);
+    return this.rolORM.save(rol);
   }
 
+  /*
   async remove(id: number) {
-    const rol = await this.rolRepo.findOneBy({ id });
+    const rol = await this.rolORM.findOneBy({ id });
     if (!rol) {
       throw new NotFoundException(`Rol con id ${id} no encontrado`);
     }
-    this.rolRepo.delete(id);
+    return this.rolORM.delete(id);
   }
+  */
 
   async borradoLogico(id: number) {
-    const rol = await this.rolRepo.findOneBy({ id });
+    const rol = await this.rolORM.findOneBy({ id });
     if (!rol) {
       throw new NotFoundException(`Rol con id ${id} no encontrado`);
     } else if (rol.deshabilitado) {
-      throw new BadRequestException(`El rol con id ${id} ya está deshabilitado`);
+      throw new BadRequestException(`El rol con id ${id} ya esta deshabilitado`);
     }
     rol.deshabilitado = true;
-    this.rolRepo.save(rol);
+    return this.rolORM.save(rol);
   }
 }

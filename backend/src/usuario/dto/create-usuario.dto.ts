@@ -2,10 +2,6 @@ import { IsString, IsNotEmpty, Length, IsInt, IsEmail, IsDateString, Min, Max, I
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUsuarioDto {
-  
-
-
-
   @ApiProperty({ description: 'Nombre del usuario' })
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
@@ -29,7 +25,7 @@ export class CreateUsuarioDto {
 
   @ApiProperty({ description: 'Email del usuario' })
   @IsNotEmpty({ message: 'El email no puede estar vacio' })
-  @IsEmail({}, { message: 'El email debe ser un email' }) // Agregar lenght quiza
+  @IsEmail({}, { message: 'El email debe ser un email' })
   email: string;
 
   @ApiProperty({ description: 'Contrasenia del usuario' })

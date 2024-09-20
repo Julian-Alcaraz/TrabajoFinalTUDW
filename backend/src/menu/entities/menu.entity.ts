@@ -7,13 +7,16 @@ export class Menu {
   id: number;
 
   @Column({ type: 'varchar', length: 100 })
-  nombre: string;
+  label: string;
 
   @Column({ type: 'varchar', length: 100 })
   url: string;
 
   @Column({ type: 'integer' })
   orden: number;
+
+  @Column({ type: 'varchar', length: 100 })
+  icon: string;
 
   // Relaciones
 
