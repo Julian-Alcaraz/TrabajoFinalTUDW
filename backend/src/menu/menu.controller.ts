@@ -13,6 +13,7 @@ export class MenuController {
   @Post()
   @ApiOperation({ summary: 'Crea un nuevo menu' })
   @ApiResponse({ status: 201, description: 'Menu creado con exito' })
+  @ApiResponse({ status: 404, description: 'Padre del menu no encontrado' })
   async create(@Body() createMenuDto: CreateMenuDto) {
     const menu = await this.menuService.create(createMenuDto);
     return {
@@ -25,7 +26,6 @@ export class MenuController {
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los menus habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todos los menus habilitados con exito' })
-  @ApiResponse({ status: 403, description: 'No permitido' })
   async findAll() {
     const colMenus = await this.menuService.findAll();
     return {
@@ -50,8 +50,10 @@ export class MenuController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un menu' })
-  @ApiResponse({ status: 200, description: 'Menu actualizado con exito' })
+  @ApiResponse({ status: 200, description: 'Menu modificado con exito' })
   @ApiResponse({ status: 404, description: 'Menu no encontrado' })
+  @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
+  @ApiResponse({ status: 400, description: 'Un menu no puede ser su propio padre' })
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateMenuDto: UpdateMenuDto) {
     const menuModificado = await this.menuService.update(id, updateMenuDto);
     return {
@@ -60,16 +62,6 @@ export class MenuController {
       message: menuModificado ? 'Menu modificado con exito' : 'Error',
     };
   }
-
-  /*
-  @Delete(':id')
-  @ApiOperation({ summary: 'Borra un menu' })
-  @ApiResponse({ status: 200, description: 'Menu borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.menuService.remove(id);
-  }
-  */
 
   @Patch('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un menu' })
@@ -85,10 +77,24 @@ export class MenuController {
   }
 
   @Get('menusUsuario/:id')
-  @ApiOperation({ summary: 'Devuelve todos los menus segun un id usuario' })
+  @ApiOperation({ summary: 'Devuelve todos los menus segun el id de un usuario' })
   @ApiResponse({ status: 200, description: 'Menus devueltos con exito' })
-  @ApiResponse({ status: 404, description: 'Error...' })
   async menusUsuario(@Param('id', ParseIntPipe) id: number) {
-    return await this.menuService.menusUsuario(id);
+    const menusDelUsuario = await this.menuService.menusUsuario(id);
+    return {
+      success: menusDelUsuario ? true : false,
+      data: menusDelUsuario,
+      message: menusDelUsuario ? 'Menus del usuario retornados con exito' : 'Error',
+    };
   }
+
+  /*
+  @Delete(':id')
+  @ApiOperation({ summary: 'Borra un menu' })
+  @ApiResponse({ status: 200, description: 'Menu borrado con exito' })
+  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.menuService.remove(id);
+  }
+  */
 }

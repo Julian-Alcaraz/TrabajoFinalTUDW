@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RolService } from './rol.service';
@@ -25,7 +25,6 @@ export class RolController {
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los roles habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todas los roles habilitados con exito' })
-  @ApiResponse({ status: 403, description: 'No permitido' })
   async findAll() {
     const colRoles = await this.rolService.findAll();
     return {
@@ -51,6 +50,7 @@ export class RolController {
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un rol' })
   @ApiResponse({ status: 200, description: 'Rol actualizado con exito' })
+  @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
   @ApiResponse({ status: 404, description: 'Rol no encontrado' })
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateRolDto: UpdateRolDto) {
     const rolModificado = await this.rolService.update(id, updateRolDto);
@@ -58,6 +58,20 @@ export class RolController {
       success: rolModificado ? true : false,
       data: rolModificado,
       message: rolModificado ? 'Rol modificado con exito' : 'Error',
+    };
+  }
+
+  @Patch('eliminar/:id')
+  @ApiOperation({ summary: 'Borrado logico de un rol' })
+  @ApiResponse({ status: 200, description: 'Rol borrado logicamente con exito' })
+  @ApiResponse({ status: 400, description: 'El rol ya esta deshabilitado' })
+  @ApiResponse({ status: 404, description: 'Rol no encontrado' })
+  async borradoLogico(@Param('id', ParseIntPipe) id: number) {
+    const rolBorradoLogico = await this.rolService.borradoLogico(id);
+    return {
+      success: rolBorradoLogico ? true : false,
+      data: rolBorradoLogico,
+      message: rolBorradoLogico ? 'Rol borrado logicamente con exito' : 'Error',
     };
   }
 
@@ -75,17 +89,4 @@ export class RolController {
     };
   }
   */
-
-  @Patch(':id/eliminar')
-  @ApiOperation({ summary: 'Borrado logico de un rol' })
-  @ApiResponse({ status: 200, description: 'Rol borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Rol no encontrado' })
-  async borradoLogico(@Param('id', ParseIntPipe) id: number) {
-    const rolBorradoLogico = await this.rolService.borradoLogico(id);
-    return {
-      success: rolBorradoLogico ? true : false,
-      data: rolBorradoLogico,
-      message: rolBorradoLogico ? 'Rol borrado logicamente con exito' : 'Error',
-    };
-  }
 }

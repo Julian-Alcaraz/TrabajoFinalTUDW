@@ -1,5 +1,6 @@
-import { MenuRol } from '../../menu-rol/entities/menu-rol.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+
+import { MenuRol } from '../../menu-rol/entities/menu-rol.entity';
 
 @Entity({ name: 'menus' })
 export class Menu {
@@ -15,7 +16,7 @@ export class Menu {
   @Column({ type: 'integer' })
   orden: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   icon: string;
 
   // Relaciones
@@ -36,8 +37,8 @@ export class Menu {
   deshabilitado: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  updatedAt: Date;
+  updated_at: Date;
 }

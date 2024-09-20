@@ -17,16 +17,20 @@ export class MenuRolController {
     return {
       success: menuRol ? true : false,
       data: menuRol,
-      message: menuRol ? 'Rol creado con exito' : 'Error',
+      message: menuRol ? 'Menu-rol creado con exito' : 'Error',
     };
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los menu-rol habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todas los menu-rol habilitados con exito' })
-  @ApiResponse({ status: 403, description: 'No permitido' })
-  findAll() {
-    return this.menuRolService.findAll();
+  @ApiOperation({ summary: 'Devuelve todos los menu-rol' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los menu-rol con exito' })
+  async findAll() {
+    const menusRoles = await this.menuRolService.findAll();
+    return {
+      success: menusRoles ? true : false,
+      data: menusRoles,
+      message: menusRoles ? 'Menu-rol obtenidos con exito' : 'Error',
+    };
   }
 
   @Get(':idMenu/:idRol')
@@ -34,7 +38,25 @@ export class MenuRolController {
   @ApiResponse({ status: 200, description: 'Retorna el menu-rol buscado con exito' })
   @ApiResponse({ status: 404, description: 'Menu-rol no encontrado' })
   async findOne(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
-    return this.menuRolService.findOne(idMenu, idRol);
+    const menuRol = await this.menuRolService.findOne(idMenu, idRol);
+    return {
+      success: menuRol ? true : false,
+      data: menuRol,
+      message: menuRol ? 'Menu obtenido con exito' : 'Error',
+    };
+  }
+
+  @Delete(':idMenu/:idRol/')
+  @ApiOperation({ summary: 'Borra un menu-rol' })
+  @ApiResponse({ status: 200, description: 'Menu-rol borrado con exito' })
+  @ApiResponse({ status: 404, description: 'Menu-rol no encontrado' })
+  async remove(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
+    const menuRol = await this.menuRolService.remove(idMenu, idRol);
+    return {
+      success: menuRol ? true : false,
+      data: menuRol,
+      message: menuRol ? 'Menu borrado con exito' : 'Error',
+    };
   }
 
   /*
@@ -46,14 +68,6 @@ export class MenuRolController {
     return this.menuRolService.update(id, updateMenuRolDto);
   }
   */
-
-  @Delete(':idMenu/:idRol/')
-  @ApiOperation({ summary: 'Borra un menu-rol' })
-  @ApiResponse({ status: 200, description: 'Menu-rol borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Menu-rol no encontrado' })
-  async remove(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
-    return this.menuRolService.remove(idMenu, idRol);
-  }
 
   /*
   @Patch(':idMenu/:idRol/eliminar')

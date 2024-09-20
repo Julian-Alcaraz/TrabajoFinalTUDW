@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CreateUsuarioRolDto } from './dto/create-usuario-rol.dto';
-import { UpdateUsuarioRolDto } from './dto/update-usuario-rol.dto';
 import { UsuarioRol } from './entities/usuario-rol.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
@@ -20,15 +19,11 @@ export class UsuarioRolService {
     // Rol
     const idRol = createUsuarioRolDto.id_rol;
     const rol = await this.rolORM.findOneBy({ id: idRol });
-    if (!rol) {
-      throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
-    }
+    if (!rol) throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
     // Usuario
     const idUsuario = createUsuarioRolDto.id_usuario;
     const usuario = await this.usuarioORM.findOneBy({ id: idUsuario });
-    if (!usuario) {
-      throw new NotFoundException(`Usuario con id ${idUsuario} no encontrado`);
-    }
+    if (!usuario) throw new NotFoundException(`Usuario con id ${idUsuario} no encontrado`);
     // Crea un nuevo usuarioRol
     const nuevoUsuarioRol = this.usuarioRolORM.create({
       id_rol: rol.id,
@@ -43,24 +38,10 @@ export class UsuarioRolService {
   }
 
   async findOne(idUsuario: number, idRol: number) {
-    const usuarioRol = await this.usuarioRolORM.findOne({
-      where: {
-        id_usuario: idUsuario,
-        id_rol: idRol,
-      },
-      relations: ['usuario', 'rol'],
-    });
-    if (!usuarioRol) {
-      throw new NotFoundException(`UsuarioRol con idUsuario ${idUsuario} e idRol ${idRol} no encontrado`);
-    }
+    const usuarioRol = await this.usuarioRolORM.findOne({ where: { id_usuario: idUsuario, id_rol: idRol }, relations: ['usuario', 'rol'] });
+    if (!usuarioRol) throw new NotFoundException(`UsuarioRol con idUsuario ${idUsuario} e idRol ${idRol} no encontrado`);
     return usuarioRol;
   }
-
-  /*
-  update(id: number, updateUsuarioRolDto: UpdateUsuarioRolDto) {
-    return `This action updates a #${id} usuarioRol`;
-  }
-  */
 
   async remove(idUsuario: number, idRol: number) {
     const usuarioRol = await this.usuarioRolORM.findOne({
@@ -70,14 +51,18 @@ export class UsuarioRolService {
       },
       relations: ['usuario', 'rol'],
     });
-    if (!usuarioRol) {
-      throw new NotFoundException(`UsuarioRol con idUsuario ${idUsuario} e idRol ${idRol} no encontrado`);
-    }
-    this.usuarioRolORM.delete(usuarioRol);
+    if (!usuarioRol) throw new NotFoundException(`UsuarioRol con idUsuario ${idUsuario} e idRol ${idRol} no encontrado`);
+    return this.usuarioRolORM.delete(usuarioRol);
   }
 
   async devolverRoles(idUsuario: number) {
     const roles = await this.usuarioRolORM.find({ where: { id_usuario: idUsuario }, relations: ['rol'] });
     return roles;
   }
+
+  /*
+  update(id: number, updateUsuarioRolDto: UpdateUsuarioRolDto) {
+    return `This action updates a #${id} usuarioRol`;
+  }
+  */
 }

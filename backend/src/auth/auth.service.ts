@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthPayloadDto } from './dto/auth.dto';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { compararContrasenias } from 'src/utils/bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -16,14 +17,19 @@ export class AuthService {
     const emailIngresado = authPayloadDto.email;
     const contraseniaIngresada = authPayloadDto.contrasenia;
     // Validar que el email y contrasenia sean validos
-    const usuarioEncontrado: Usuario = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
-    if (!usuarioEncontrado || contraseniaIngresada !== usuarioEncontrado.contrasenia) return null;
+    const usuarioEncontrado: Usuario | null = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
+    if (!usuarioEncontrado) return null;
+    const contraseniaValida = compararContrasenias(contraseniaIngresada, usuarioEncontrado.contrasenia);
+    if (contraseniaValida) {
+      const { contrasenia, ...usuario } = usuarioEncontrado; // Saca la contraseña antes de mandar el usuario
+      return { token: this.jwtService.sign(usuario), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
+    } else {
+      return null;
+    }
     /*
     const resultado = { token: this.jwtService.sign(usuarioEncontrado), usuario: delete usuarioEncontrado.contrasenia };
     console.log(resultado)
     return resultado;
     */
-    const { contrasenia, ...usuario } = usuarioEncontrado; // Saca la contraseña antes de mandar el usuario
-    return { token: this.jwtService.sign(usuario), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
   }
 }
