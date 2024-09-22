@@ -1,19 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, OneToOne } from 'typeorm';
 
+import { EntidadBasica } from '../../database/EntidadBasica';
 import { MenuRol } from '../../menu-rol/entities/menu-rol.entity';
 
 @Entity({ name: 'menus' })
-export class Menu {
-  @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number;
-
+export class Menu extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
   label: string;
 
   @Column({ type: 'varchar', length: 100 })
   url: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   orden: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
@@ -24,21 +22,10 @@ export class Menu {
   @OneToMany(() => MenuRol, (menuRol) => menuRol.menu)
   menu_rol: MenuRol;
 
-  @ManyToOne(() => Menu, (menu) => menu.sub_menus, { nullable: true })
+  @ManyToOne(() => Menu, (menu) => menu.sub_menus, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'menu_padre_id' })
-  menu_padre: Menu | null;
+  menu_padre: Menu;
 
   @OneToMany(() => Menu, (menu) => menu.menu_padre)
   sub_menus: Menu[];
-
-  // Comunes:
-
-  @Column({ type: 'boolean', default: false })
-  deshabilitado: boolean;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
-
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  updated_at: Date;
 }

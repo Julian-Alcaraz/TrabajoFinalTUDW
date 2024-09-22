@@ -8,19 +8,19 @@ import { ConfigService } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.getOrThrow<string>('PG_HOST'),
-        port: +configService.getOrThrow<number>('PG_PORT'),
-        database: configService.getOrThrow<string>('PG_DATABASE'),
-        username: configService.getOrThrow<string>('PG_USERNAME'),
-        password: configService.getOrThrow<string>('PG_PASSWORD'),
-        synchronize: configService.getOrThrow<string>('PG_SYNCHRONIZE') === 'true', // Convierte a booleano
+        host: configService.getOrThrow<string>('TYPE_ORM_HOST'),
+        port: +configService.getOrThrow<number>('TYPE_ORM_PORT'),
+        database: configService.getOrThrow<string>('TYPE_ORM_DATABASE'),
+        username: configService.getOrThrow<string>('TYPE_ORM_USERNAME'),
+        password: configService.getOrThrow<string>('TYPE_ORM_PASSWORD'),
+        synchronize: configService.getOrThrow<string>('TYPE_ORM_SYNCHRONIZE') === 'true', // Convierte a booleano
+        entities: [configService.getOrThrow('TYPE_ORM_ENTITIES')], // CAMBIAR EN PRODUCION!!!!!!!!!!!
         autoLoadEntities: true,
-        entities: ['src/**/*.entity.ts'], // CAMBIAR EN PRODUCION!!!!!!!!!!!
-        seeds: [__dirname + '/seeds/**/*{.ts,.js}'],
-        factories: [__dirname + '/factories/**/*{.ts,.js}'],
-        cli: {
-          migrationsDir: __dirname + '/migrations/',
-        },
+        //seeds: [__dirname + '/seeds/**/*{.ts,.js}'],
+        //factories: [__dirname + '/factories/**/*{.ts,.js}'],
+        //cli: {
+        //  migrationsDir: __dirname + '/migrations/',
+        //},
       }),
       inject: [ConfigService],
     }),

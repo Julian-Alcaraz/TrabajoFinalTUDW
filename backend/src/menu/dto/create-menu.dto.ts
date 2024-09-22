@@ -15,17 +15,17 @@ export class CreateMenuDto {
   url: string;
 
   @ApiProperty({ description: 'Orden en el que se mostrará el menu' })
-  @IsNotEmpty({ message: 'El orden no puede estar vacío' })
-  @IsInt({ message: 'El orden debe ser un número entero' })
+  @IsNotEmpty({ message: 'El orden no puede estar vacio' })
+  @IsInt({ message: 'El orden debe ser un numero entero' })
+  @IsPositive({ message: 'El orden debe ser positivo' })
   orden: number;
 
   @ApiProperty({ description: 'Icon del menu' })
-  @IsNotEmpty({ message: 'El icon no puede estar vacío' })
-  @IsString({ message: 'La icon debe ser un string' })
+  @IsString({ message: 'El icon debe ser un string' })
   @IsOptional()
   icon?: string;
 
-  @ApiProperty({ description: 'ID del padre del menú' })
+  @ApiProperty({ description: 'ID del padre del menu' })
   @IsInt({ message: 'El ID del padre debe ser un número entero' })
   @IsPositive({ message: 'El ID del padre debe ser un número positivo' })
   @IsOptional()
