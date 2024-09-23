@@ -16,9 +16,9 @@ export class RolController {
   async create(@Body() createRolDto: CreateRolDto) {
     const rol = await this.rolService.create(createRolDto);
     return {
-      success: rol ? true : false,
+      success: true,
       data: rol,
-      message: rol ? 'Rol creado con exito' : 'Error',
+      message: 'Rol creado con exito',
     };
   }
 
@@ -28,9 +28,9 @@ export class RolController {
   async findAll() {
     const colRoles = await this.rolService.findAll();
     return {
-      success: colRoles ? true : false,
+      success: true,
       data: colRoles,
-      message: colRoles ? 'Roles obtenidos con exito' : 'Error',
+      message: 'Roles obtenidos con exito',
     };
   }
 
@@ -41,9 +41,9 @@ export class RolController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const rol = await this.rolService.findOne(id);
     return {
-      success: rol ? true : false,
+      success: true,
       data: rol,
-      message: rol ? 'Rol obtenido con exito' : 'Error',
+      message: 'Rol obtenido con exito',
     };
   }
 
@@ -55,9 +55,9 @@ export class RolController {
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateRolDto: UpdateRolDto) {
     const rolModificado = await this.rolService.update(id, updateRolDto);
     return {
-      success: rolModificado ? true : false,
+      success: true,
       data: rolModificado,
-      message: rolModificado ? 'Rol modificado con exito' : 'Error',
+      message: 'Rol modificado con exito',
     };
   }
 
@@ -69,9 +69,9 @@ export class RolController {
   async borradoLogico(@Param('id', ParseIntPipe) id: number) {
     const rolBorradoLogico = await this.rolService.borradoLogico(id);
     return {
-      success: rolBorradoLogico ? true : false,
+      success: true,
       data: rolBorradoLogico,
-      message: rolBorradoLogico ? 'Rol borrado logicamente con exito' : 'Error',
+      message: 'Rol borrado logicamente con exito',
     };
   }
 

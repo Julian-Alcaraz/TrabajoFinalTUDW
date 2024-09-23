@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, Delete, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MenuService } from './menu.service';
@@ -17,9 +17,9 @@ export class MenuController {
   async create(@Body() createMenuDto: CreateMenuDto) {
     const menu = await this.menuService.create(createMenuDto);
     return {
-      success: menu ? true : false,
+      success: true,
       data: menu,
-      message: menu ? 'Menu creado con exito' : 'Error',
+      message: 'Menu creado con exito',
     };
   }
 
@@ -29,9 +29,9 @@ export class MenuController {
   async findAll() {
     const colMenus = await this.menuService.findAll();
     return {
-      success: colMenus ? true : false,
+      success: true,
       data: colMenus,
-      message: colMenus ? 'Menus obtenidos con exito' : 'Error',
+      message: 'Menus obtenidos con exito',
     };
   }
 
@@ -42,9 +42,9 @@ export class MenuController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const menu = await this.menuService.findOne(id);
     return {
-      success: menu ? true : false,
+      success: true,
       data: menu,
-      message: menu ? 'Menu obtenido con exito' : 'Error',
+      message: 'Menu obtenido con exito',
     };
   }
 
@@ -57,34 +57,51 @@ export class MenuController {
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateMenuDto: UpdateMenuDto) {
     const menuModificado = await this.menuService.update(id, updateMenuDto);
     return {
-      success: menuModificado ? true : false,
+      success: true,
       data: menuModificado,
-      message: menuModificado ? 'Menu modificado con exito' : 'Error',
+      message: 'Menu modificado con exito',
     };
   }
 
-  @Patch('eliminar/:id')
+  @Delete('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un menu' })
   @ApiResponse({ status: 200, description: 'Menu borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Menu no encontrado' })
   async borradoLogico(@Param('id', ParseIntPipe) id: number) {
     const menuBorradoLogico = await this.menuService.borradoLogico(id);
     return {
-      success: menuBorradoLogico ? true : false,
+      success: true,
       data: menuBorradoLogico,
-      message: menuBorradoLogico ? 'Menu borrado logicamente con exito' : 'Error',
+      message: 'Menu borrado logicamente con exito',
+    };
+  }
+  
+  @Delete(':idMenu/rol/:idRol')
+  @ApiOperation({ summary: 'Borrado de un rol relacionado al menu' })
+  @ApiResponse({ status: 200, description: 'Rol relacionado al menu borrado con exito' })
+  @ApiResponse({ status: 404, description: 'Menu con no encontrado' })
+  @ApiResponse({ status: 404, description: 'El rol no esta asignado al menu' })
+  @ApiResponse({ status: 400, description: 'Un menu no puede quedarse sin roles' })
+  async eliminarRolDeMenu(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
+    const resultado = await this.menuService.eliminarRolDeMenu(idMenu, idRol);
+    return {
+      success: true,
+      data: resultado,
+      message: 'Rol del menu borrado con exito',
     };
   }
 
-  @Get('menusUsuario/:id')
-  @ApiOperation({ summary: 'Devuelve todos los menus segun el id de un usuario' })
-  @ApiResponse({ status: 200, description: 'Menus devueltos con exito' })
-  async menusUsuario(@Param('id', ParseIntPipe) id: number) {
-    const menusDelUsuario = await this.menuService.menusUsuario(id);
+  @Put(':idMenu/rol/:idRol')
+  @ApiOperation({ summary: 'Agregar un rol relacionado al menu' })
+  @ApiResponse({ status: 404, description: 'Menu con no encontrado' })
+  @ApiResponse({ status: 404, description: 'Rol con no encontrado' })
+  @ApiResponse({ status: 400, description: 'El menu ya tiene ese rol' })
+  async agregarRolDeMenu(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
+    const resultado = await this.menuService.agregarRolDeMenu(idMenu, idRol);
     return {
-      success: menusDelUsuario ? true : false,
-      data: menusDelUsuario,
-      message: menusDelUsuario ? 'Menus del usuario retornados con exito' : 'Error',
+      success: true,
+      data: resultado,
+      message: 'Rol del menu asignado con exito',
     };
   }
 

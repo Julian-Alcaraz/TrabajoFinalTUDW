@@ -1,8 +1,8 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToMany } from 'typeorm';
 
-import { EntidadBasica } from '../../database/EntidadBasica';
-import { MenuRol } from '../../menu-rol/entities/menu-rol.entity';
-import { UsuarioRol } from '../../usuario-rol/entities/usuario-rol.entity';
+import { EntidadBasica } from '../../database/entities/EntidadBasica';
+import { Menu } from '../../menu/entities/menu.entity';
+import { Usuario } from '../../usuario/entities/usuario.entity';
 
 @Entity({ name: 'roles' })
 export class Rol extends EntidadBasica {
@@ -11,9 +11,9 @@ export class Rol extends EntidadBasica {
 
   // Relaciones
 
-  @OneToMany(() => MenuRol, (menu_rol) => menu_rol.rol)
-  menu_rol: MenuRol[];
+  @ManyToMany(() => Menu, (menu) => menu.roles)
+  menus: Menu[];
 
-  @OneToMany(() => UsuarioRol, (usuario_rol) => usuario_rol.rol)
-  usuario_rol: UsuarioRol[];
+  @ManyToMany(() => Usuario, (usuario) => usuario.roles)
+  usuarios: Usuario[];
 }

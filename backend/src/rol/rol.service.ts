@@ -20,7 +20,7 @@ export class RolService {
   }
 
   async findOne(id: number) {
-    const rol = await this.rolORM.findOne({ where: { deshabilitado: false, id: id } });
+    const rol = await this.rolORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['menus'] });
     if (!rol) throw new NotFoundException(`Rol con id ${id} no encontrado`);
     return rol;
   }

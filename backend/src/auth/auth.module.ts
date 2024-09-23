@@ -10,10 +10,11 @@ import { UsuarioService } from '../usuario/usuario.service';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStragety } from './strategies/jwt.strategy';
+import { Rol } from 'src/rol/entities/rol.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Usuario]),
+    TypeOrmModule.forFeature([Usuario, Rol]), // No se porque pero nesecita el ROL aca
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

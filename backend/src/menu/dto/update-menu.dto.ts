@@ -7,5 +7,5 @@ export class UpdateMenuDto extends PartialType(CreateMenuDto) {
   @ApiProperty({ description: 'Indica si el menu esta deshabilitado' })
   @IsBoolean({ message: 'Deshabilitado debe ser un boolean' })
   @IsOptional()
-  deshabilitado?: boolean;
+  readonly deshabilitado?: boolean;
 }

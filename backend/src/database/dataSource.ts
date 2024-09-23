@@ -1,13 +1,13 @@
 import { DataSource } from 'typeorm';
-import * as dotenv from 'dotenv';
 import { ConfigService } from '@nestjs/config';
+import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno
 dotenv.config();
 
 const configService = new ConfigService();
-/* Imprimir valores de configuración
-
+// Imprimir valores de configuración
+/*
 console.log('TYPE_ORM_TYPE', configService.getOrThrow<any>('TYPE_ORM_TYPE'));
 console.log('TYPE_ORM_HOST:', configService.getOrThrow<string>('TYPE_ORM_HOST'));
 console.log('TYPE_ORM_PORT:', configService.getOrThrow<number>('TYPE_ORM_PORT'));
@@ -33,6 +33,6 @@ export default new DataSource({
   migrations: [configService.getOrThrow<string>('TYPE_ORM_MIGRATIONS')],
   migrationsTableName: configService.getOrThrow<string>('TYPE_ORM_MIGRATIONS_TABLE_NAME'),
   dropSchema: false,
-  logger: 'file',
+  // logger: 'file',
   subscribers: ['src/subscriber/**/*.ts'],
 });

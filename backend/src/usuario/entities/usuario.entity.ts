@@ -1,7 +1,7 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 
-import { EntidadBasica } from '../../database/EntidadBasica';
-import { UsuarioRol } from '../../usuario-rol/entities/usuario-rol.entity';
+import { EntidadBasica } from '../../database/entities/EntidadBasica';
+import { Rol } from '../../rol/entities/rol.entity';
 
 @Entity({ name: 'usuarios' })
 export class Usuario extends EntidadBasica {
@@ -28,6 +28,17 @@ export class Usuario extends EntidadBasica {
 
   // Relaciones
 
-  @OneToMany(() => UsuarioRol, (usuario_rol) => usuario_rol.usuario)
-  usuario_roles: UsuarioRol[];
+  @ManyToMany(() => Rol, (rol) => rol.usuarios)
+  @JoinTable({
+    name: 'usuarios-roles',
+    joinColumn: {
+      name: 'id_usuario',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'id_rol',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: Rol[];
 }
