@@ -92,8 +92,14 @@ export class UsuarioService {
   }
 
   async buscarUsuarioPorEmail(email: string) {
-    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, email: email } });
-    return usuario;
+    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, email: email }, relations: ['roles'] });
+    const colIdsRoles = usuario.roles.map((rol) => rol.id);
+    delete usuario.roles;
+    const usuarioConRolesIds = {
+      ...usuario,
+      roles_ids: colIdsRoles,
+    };
+    return usuarioConRolesIds;
   }
 
   async menusDeUsuario(id: number) {

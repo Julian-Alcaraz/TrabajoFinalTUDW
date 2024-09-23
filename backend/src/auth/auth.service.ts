@@ -16,18 +16,12 @@ export class AuthService {
   async validarUsuario(authPayloadDto: AuthPayloadDto) {
     const emailIngresado = authPayloadDto.email;
     const contraseniaIngresada = authPayloadDto.contrasenia;
-    // Validar que el email y contrasenia sean validos
-    const usuarioEncontrado: Usuario | null = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
-    if (!usuarioEncontrado) return null;
-    const contraseniaValida = compararContrasenias(contraseniaIngresada, usuarioEncontrado.contrasenia);
+    const usuario: Usuario | null = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
+    if (!usuario) return null; // Aca podria agregarse un mensaje diciendo que no se encontro el usuario 
+    const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
-      const { contrasenia, ...usuario } = usuarioEncontrado; // Saca la contraseña antes de mandar el usuario
+      delete usuario.contrasenia;
       return { token: this.jwtService.sign(usuario), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
     } else return null;
-    /*
-    const resultado = { token: this.jwtService.sign(usuarioEncontrado), usuario: delete usuarioEncontrado.contrasenia };
-    console.log(resultado)
-    return resultado;
-    */
   }
 }
