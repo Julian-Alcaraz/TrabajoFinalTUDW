@@ -5,12 +5,12 @@ import { GLOBAL } from './global';
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class RolesService {
   private url: string;
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.URL_BACKEND;
   }
-  traerUsuarioMenu(idUsuario: number) {
-    return this._http.get(this.url + 'usuario/menus/' + idUsuario);
+  obtenerRoles() {
+    return this._http.get(this.url + 'rol');
   }
 }

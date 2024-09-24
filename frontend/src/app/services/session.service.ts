@@ -9,7 +9,6 @@ import { Usuario } from '../models/usuario.model';
   providedIn: 'root',
 })
 export class SessionService {
-
   private url: string;
   private identidad: Usuario | null;
 
@@ -28,46 +27,47 @@ export class SessionService {
   // eliminar la cookie
   cerrarSesion() {
     this.eliminarCookie().subscribe({
-      next: (response:any)=>{
-        if(response.succes){
+      next: (response: any) => {
+        if (response.success) {
+          this.setIdentidad(null);
           this._router.navigate(['/login']);
-        }else{
-          console.log("Fallo cerrar la sesion",response.message)
+        } else {
+          console.log('Fallo cerrar la sesion', response.message);
         }
       },
-      error: (err)=>{
-        console.log("Fallo cerrar la sesion",err)
-      }
-    })
+      error: (err) => {
+        console.log('Fallo cerrar la sesion', err);
+      },
+    });
   }
 
-  setIdentidad(usuario: Usuario) {
-    console.log('SET IDENDTIAD SESSION SERVICE', this.identidad, usuario);
+  setIdentidad(usuario: Usuario | null) {
     this.identidad = usuario;
   }
 
   getIdentidad() {
     return this.identidad;
   }
-
-  eliminarCookie():Observable<any>{
-    return this._http.post(this.url+'auth/logout',null,{withCredentials:true})
+  eliminarCookie(): Observable<any> {
+    return this._http.post(this.url + 'auth/logout', null, { withCredentials: true });
   }
 
-  estaLogueado():Promise<boolean>{
+  estaLogueado(): Promise<boolean> {
     return new Promise((resolve) => {
-      this._http.get(this.url + '/session/validarToken').subscribe({
+      this._http.get(this.url + 'auth/status').subscribe({
         next: (res: any) => {
+          // console.log("Esta logueado",res)
           if (res.success) {
+            this.setIdentidad(res.user);
             resolve(true);
           } else {
             resolve(false);
           }
         },
-        error: (error: any) => {
-          console.log(error)
+        error: () => {
+          // console.log(error)
           resolve(false);
-        }
+        },
       });
     });
   }

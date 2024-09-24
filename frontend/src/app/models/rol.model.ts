@@ -1,7 +1,7 @@
 export class Rol {
   constructor(
     public id: number,
-    public descripcion: string,
+    public nombre: string,
   ) {}
 
   static overload_constructor() {

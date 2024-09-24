@@ -1,1 +1,109 @@
-<p>nuevo-usuario works!</p>
+<div class="card">
+  <div class="card-header">Nuevo usuario</div>
+  <div class="card-body">
+    <form (ngSubmit)="cargarUsuario()" [formGroup]="userForm">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+          <input formControlName="nombre" type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nombre" required />
+          <div *ngIf="userForm.get('nombre')?.errors && (userForm.get('nombre')?.dirty || userForm.get('nombre')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('nombre')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('nombre')?.errors?.['minlength']">Minimo 3 caracteres.</div>
+            <div *ngIf="userForm.get('nombre')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+            <div *ngIf="userForm.get('nombre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+          </div>
+        </div>
+        <div>
+          <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900">Apellido</label>
+          <input formControlName="apellido" type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Doe" required />
+          <div *ngIf="userForm.get('apellido')?.errors && (userForm.get('apellido')?.dirty || userForm.get('apellido')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('apellido')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('apellido')?.errors?.['minlength']">Minimo 3 caracteres.</div>
+            <div *ngIf="userForm.get('apellido')?.errors?.['maxlength']">Maximo 40 caracteres.</div>
+            <div *ngIf="userForm.get('apellido')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+          <input formControlName="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required />
+          <div *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('email')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+            <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+            <div *ngIf="userForm.get('email')?.errors?.['email']">Formato de email incorrecto.</div>
+            <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+          </div>
+        </div>
+        <div>
+          <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
+          <input formControlName="dni" type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="90210" required />
+          <div *ngIf="userForm.get('dni')?.errors && (userForm.get('dni')?.dirty || userForm.get('dni')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('dni')?.errors?.['min']">Minimo 7 caracteres.</div>
+            <div *ngIf="userForm.get('dni')?.errors?.['max']">Maximo 100 caracteres.</div>
+            <div *ngIf="userForm.get('dni')?.errors?.['email']">Formato de email incorrecto.</div>
+          </div>
+        </div>
+        <div>
+          <label for="" class="block mb-2 text-sm font-medium text-gray-900">Fecha nacimiento</label>
+          <mat-form-field class="">
+            <mat-label>Fecha Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fe_nacimiento" [max]="hoy" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <!-- <div *ngIf="userForm.get('fe_nacimiento')?.errors && (userForm.get('fe_nacimiento')?.dirty || userForm.get('fe_nacimiento')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('fe_nacimiento')?.errors?.['required']">El campo es requerido.</div>
+          </div> -->
+        </div>
+        <div>
+          <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
+          <div class="text-sm text-gray-400">*Debe seleccionar almenos uno.</div>
+          <div class="flex">
+            <div *ngFor="let rol of roles" class="flex items-center me-4">
+              <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
+            </div>
+          </div>
+          <!-- <div *ngIf="userForm.get('roles_ids')?.errors?.['required'] && (userForm.get('roles_ids')?.dirty || userForm.get('roles_ids')?.touched)" class="text-red-600 text-sm">Debe seleccionar al menos uno.</div> -->
+        </div>
+        <div class="">
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
+          <input [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required />
+          <div *ngIf="userForm.get('password')?.errors && (userForm.get('password')?.dirty || userForm.get('password')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('password')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+            <div *ngIf="userForm.get('password')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+          </div>
+          <div class="flex">
+            <a (click)="verContrasenia()" tabindex (keydown)="verContrasenia()" class="text-blue-600 text-sm underline ml-4 mr-4 cursor-pointer">{{ mostrarContrasenia ? 'Ocultar contraseña' : 'Mostrar contraseña' }}</a>
+            <div *ngIf="userForm.hasError('contraseñasNoCoinciden') && userForm.get('confirmPassword')?.touched" class="text-red-600 text-sm">Las contraseñas no coinciden</div>
+          </div>
+        </div>
+        <div class="">
+          <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900">Confirmar contraseña</label>
+          <input [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="confirmPassword" type="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required />
+          <div *ngIf="userForm.get('confirmPassword')?.errors && (userForm.get('password')?.dirty || userForm.get('password')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="userForm.get('confirmPassword')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="userForm.get('confirmPassword')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+            <div *ngIf="userForm.get('confirmPassword')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex my-auto">
+        <button type="submit" [disabled]="!userForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center -700 -800">Agregar</button>
+      </div>
+      <!-- <div>
+          <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+          <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a country</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+          </select>
+        </div> -->
+      <!-- <button type="submit" [disabled]="!userForm.valid" class="flex ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center -700 -800">Agregar</button> -->
+    </form>
+  </div>
+</div>

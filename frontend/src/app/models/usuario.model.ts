@@ -8,12 +8,13 @@ export class Usuario {
     public apellido: string,
     public email: string,
     public especialidad: string,
+    public roles_ids?: number[],
     public contrasenia?: string,
     public fechaNacimiento?: Date,
     public roles?: Rol[], // esto es opcional podria  no estar
   ) {}
 
   static overload_constructor() {
-    return new Usuario(0, 0, '', '', '', '', '', undefined);
+    return new Usuario(0, 0, '', '', '', '', [], '', undefined);
   }
 }

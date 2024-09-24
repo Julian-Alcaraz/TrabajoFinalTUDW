@@ -6,22 +6,20 @@ import { CookieService } from 'ngx-cookie-service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // obtener token y agregarlo a la consulta authenticator para proteccion
-
   const _sessionService = inject(SessionService);
   const _cookieService = inject(CookieService);
 
-
   // const cookieValue = getCookie('Authorization');
   const cookieValue = _cookieService.get('Authorization');
-  console.log("intercerptor token ", cookieValue)
-  const token = cookieValue ? cookieValue : '';
+  // console.log("intercerptor token ", cookieValue)
+  const token = cookieValue ? `Bearer ${cookieValue}` : '';
   let headers = new HttpHeaders();
   if (req.method === 'POST') {
     if (!(req.body instanceof FormData)) {
       headers = headers.set('Content-Type', 'application/json');
     }
   }
-  headers = headers.set('authorization', token);
+  headers = headers.set('Authorization', token);
 
   const authReq = req.clone({
     headers: headers,
@@ -33,7 +31,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401 || err.status === 403) {
           _sessionService.cerrarSesion();
-          // no se puede hacr por como esta planteado el sistema, redirigir a SSO
           // lugar para hacer un refresh token
         }
       } else {

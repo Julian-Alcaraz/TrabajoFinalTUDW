@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 /*
 export function ValidarEmail(control: AbstractControl) {
   const email = control?.value as string;
@@ -18,3 +18,11 @@ export function ValidarCadenaSinEspacios(control: AbstractControl) {
     return null;
   }
 }
+
+// Validador personalizado para verificar que dos campos sean iguales
+export const ContraseniasIguales: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+
+  return password && confirmPassword && password.value !== confirmPassword.value ? { contraseñasNoCoinciden: true } : null;
+};

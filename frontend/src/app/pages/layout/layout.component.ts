@@ -16,6 +16,8 @@ interface SideNavToggle {
 export class LayoutComponent {
   isSideNavCollapsed = false;
   screenWidth = 0;
+  loged: boolean | null = null;
+
   toggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
     this.isSideNavCollapsed = data.collapsed;

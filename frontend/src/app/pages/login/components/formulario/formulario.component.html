@@ -15,7 +15,7 @@
         </div>
         <input id="email" type="email" formControlName="email" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="email@gmail.com" />
       </div>
-      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-sm">
+      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-sm text-left ml-2">
         <div *ngIf="loginForm.get('email')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="loginForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
@@ -31,7 +31,7 @@
         </div>
         <input id="Contrasenia" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" placeholder="Contraseña" />
       </div>
-      <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm">
+      <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-sm text-left ml-2">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>

@@ -17,7 +17,7 @@ export class AuthService {
     const emailIngresado = authPayloadDto.email;
     const contraseniaIngresada = authPayloadDto.contrasenia;
     const usuario: Usuario | null = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
-    if (!usuario) return null; // Aca podria agregarse un mensaje diciendo que no se encontro el usuario 
+    if (!usuario) return null; // Aca podria agregarse un mensaje diciendo que no se encontro el usuario
     const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
       delete usuario.contrasenia;

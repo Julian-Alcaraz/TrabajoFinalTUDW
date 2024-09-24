@@ -15,8 +15,10 @@ export class LoginComponent implements OnInit {
   // public imageHeight= 0 ;
   public windowWidth = 0;
   public windowHeight = 0;
-  constructor(private _cookieService: CookieService,private _router: Router){
-  }
+  constructor(
+    private _cookieService: CookieService,
+    private _router: Router,
+  ) {}
   ngOnInit(): void {
     const token = this._cookieService.get('Authorization');
     if (token) {

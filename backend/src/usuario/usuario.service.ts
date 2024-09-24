@@ -114,7 +114,12 @@ export class UsuarioService {
       const objRol = await this.rolORM.findOne({ where: { id: rol.id }, relations: ['menus', 'menus.sub_menus', 'menus.menu_padre'] });
       const menusRol = objRol.menus;
       // console.log(menusRol);
-      for (const menu of menusRol) {
+      const menusNoFalsos = menusRol.filter((menu) => {
+        if (!menu.deshabilitado) {
+          return menu;
+        }
+      });
+      for (const menu of menusNoFalsos) {
         if (!menu.menu_padre) {
           // El Set solo agregará menús que no hayan sido agregados previamente
           colMenusSet.add(JSON.stringify(menu)); // Convertimos el objeto en string para poder usarlo en un Set

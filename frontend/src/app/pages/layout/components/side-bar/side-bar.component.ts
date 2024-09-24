@@ -51,19 +51,17 @@ export class NavBarComponent implements OnInit {
       this.screenWidth = window.innerWidth;
     }
     this.identidad = this._sessionService.getIdentidad();
-    console.log('IDENTIDAD', this.identidad);
     if (this.identidad != null) {
       this._menuService.traerUsuarioMenu(this.identidad.id).subscribe({
         next: (response: any) => {
-          console.log(response);
-          this.navData = response;
+          this.navData = response.data;
         },
         error: (err) => {
           console.log('ERROR', err);
         },
       });
     } else {
-      this._sessionService.cerrarSesion(); // esto esta de onda
+      // this._sessionService.cerrarSesion(); // esto esta de onda
     }
   }
   toggleCollapsed() {
