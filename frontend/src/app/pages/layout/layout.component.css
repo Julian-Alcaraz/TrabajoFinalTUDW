@@ -25,10 +25,10 @@
 
 @media screen and (max-width: 425px) {
   .body{
+    height: 92vh ;
     margin-top: 4rem;
     margin-left: 0px;
     width: 100%;
-    height: max-content;
   }
 
 }

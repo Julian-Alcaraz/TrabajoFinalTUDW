@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class SessionService {
   constructor(
     private _http: HttpClient,
     private _router: Router,
+    private _loadingService: LoadingService,
   ) {
     this.url = GLOBAL.URL_BACKEND;
     this.identidad = null;
@@ -30,6 +32,9 @@ export class SessionService {
       next: (response: any) => {
         if (response.success) {
           this.setIdentidad(null);
+          if(this.identidad!=null){
+            this._loadingService.startLoading()
+          }
           this._router.navigate(['/login']);
         } else {
           console.log('Fallo cerrar la sesion', response.message);
@@ -56,17 +61,17 @@ export class SessionService {
     return new Promise((resolve) => {
       this._http.get(this.url + 'auth/status').subscribe({
         next: (res: any) => {
-          // console.log("Esta logueado",res)
           if (res.success) {
             this.setIdentidad(res.user);
             resolve(true);
           } else {
+            // this._loadingService.stopLoading()
             resolve(false);
           }
         },
         error: () => {
-          // console.log(error)
-          resolve(false);
+            this._loadingService.stopLoading()
+            resolve(false);
         },
       });
     });

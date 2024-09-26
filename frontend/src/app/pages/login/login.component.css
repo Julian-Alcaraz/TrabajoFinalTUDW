@@ -40,3 +40,12 @@
     width: 100%;
   }
 }
+.loader {
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  color: #007bff; /* Puedes personalizar este estilo como desees */
+}

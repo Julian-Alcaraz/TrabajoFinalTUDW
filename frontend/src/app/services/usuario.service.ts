@@ -17,7 +17,6 @@ export class UsuarioService {
   }
 
   cargarUsuario(data: any): Observable<any> {
-    console.log(data);
     return this._http.post(this.url + 'usuario', data);
   }
 }

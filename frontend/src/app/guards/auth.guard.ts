@@ -1,12 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { Router } from '@angular/router';
-// import { getCookie } from '../services/cookies';
-// import { CookieService } from 'ngx-cookie-service';
 import { SessionService } from '../services/session.service';
-// import { SessionService } from '../services/session.service';
 export const authGuard: CanActivateFn = async (route, state) => {
-  // segunda version
   const _router = inject(Router);
   const _sessionService = inject(SessionService);
   let isLoged;

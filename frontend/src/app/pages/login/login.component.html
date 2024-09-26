@@ -1,15 +1,17 @@
-<!-- <img src="./../../assets/logoFundacionSinfondo.png" alt="Logo fundacion"  width="" [height]="imageHeight"> -->
-<!-- <div class="c-reversed">
+@if(!isLoading){
+<div class="loader">
+  Cargando..
+</div>
 
-</div> -->
-
+}@else{
 <div class="contenedor">
   <div class="rectangulo"></div>
-</div>
-<div class="absolute image">
-  <img src="./../../assets/logoFundacionSinfondo.png" alt="Logo fundacion" [width]="this.width" [height]="" />
-</div>
+  <div class="absolute image">
+    <img src="./../../assets/logoFundacionSinfondo.png" alt="Logo fundacion" [width]="this.width" [height]="" />
+  </div>
 
-<div class="form-position">
-  <app-formulario />
+  <div class="form-position">
+    <app-formulario />
+  </div>
 </div>
+}
