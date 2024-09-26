@@ -4,6 +4,9 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
 import { SessionService } from '../../../../services/session.service';
 import { Router } from '@angular/router';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-formulario',
   standalone: true,
@@ -23,6 +26,7 @@ export class FormularioComponent {
     private fb: FormBuilder,
     private _sessionService: SessionService,
     private _router: Router,
+    private snackBar:MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, ValidarCadenaSinEspacios]],
@@ -32,15 +36,19 @@ export class FormularioComponent {
   iniciarSession() {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
-    this._sessionService.iniciarSession(email, password).subscribe((response) => {
-      console.log('response', response);
-      if (response.success) {
-        // console.log(data);
-        // localStorage.setItem('isLogged', 'true');
-        this._sessionService.setIdentidad(response.data);
-        this._router.navigate(['/layout']);
-      }
-    });
+    this._sessionService.iniciarSession(email, password).subscribe(
+      (response) => {
+        if (response.success) {
+          this._sessionService.setIdentidad(response.data);
+          this._router.navigate(['/layout']);
+        } else {
+          MostrarNotificacion.mensajeError(this.snackBar, response.message);
+        }
+      },
+      (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    );
   }
   verContrasenia() {
     this.mostrarContrasenia = !this.mostrarContrasenia;

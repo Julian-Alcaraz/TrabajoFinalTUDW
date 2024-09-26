@@ -213,18 +213,17 @@
   border-radius: 20px;
 }
 
-/* @media screen and (max-width: 768.1px) {
+@media screen and (max-width: 425.1px) {
   .sidenav {
     box-shadow: none;
     width: 100%;
-    height: 10vh;
+    height: 7.5vh;
     .logo-container {
       padding: 0.5rem;
     }
   }
-  .sidenav-nav {
-    display: none;
-    max-height: 100vh;
-
+  .sidenav-collapsed{
+    width: 100%;
+    height: 100%;
   }
-} */
+}

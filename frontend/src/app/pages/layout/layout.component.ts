@@ -20,6 +20,7 @@ export class LayoutComponent {
 
   toggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
+    console.log(this.screenWidth)
     this.isSideNavCollapsed = data.collapsed;
     this.getBodyClass();
   }
@@ -29,9 +30,9 @@ export class LayoutComponent {
 
     if (this.isSideNavCollapsed && this.screenWidth > 768) {
       styleClass = 'body-trimed';
-    } else if (this.isSideNavCollapsed && this.screenWidth <= 768 && this.screenWidth > 320) {
+    } else if (this.isSideNavCollapsed && this.screenWidth <= 768 && this.screenWidth > 425) {
       styleClass = 'body-md-screen';
-    } else if (this.isSideNavCollapsed && this.screenWidth <= 320 && this.screenWidth > 0) {
+    } else if (this.isSideNavCollapsed && this.screenWidth <= 425 && this.screenWidth > 0) {
       styleClass = 'body-sm-screen';
     }
     return styleClass;
