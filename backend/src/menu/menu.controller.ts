@@ -75,7 +75,7 @@ export class MenuController {
       message: 'Menu borrado logicamente con exito',
     };
   }
-  
+
   @Delete(':idMenu/rol/:idRol')
   @ApiOperation({ summary: 'Borrado de un rol relacionado al menu' })
   @ApiResponse({ status: 200, description: 'Rol relacionado al menu borrado con exito' })

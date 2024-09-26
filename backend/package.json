@@ -27,7 +27,8 @@
     "migration:drop-db": "npm run typeorm -- schema:drop -d ./src/database/dataSource",
     "schema:sync": "npx typeorm-ts-node-commonjs schema:sync",
     "typeorm:cache": "npx typeorm-ts-node-commonjs cache:clear",
-    "schema:drop": "npx typeorm-ts-node-commonjs -d ./src/database/dataSource.ts"
+    "schema:drop": "npx typeorm-ts-node-commonjs -d ./src/database/dataSource.ts",
+    "seed": "ts-node src/database/seeders/seed.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.0.1",

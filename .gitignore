@@ -1,4 +1,3 @@
-
 # IDE - VSCode
 .vscode
 frontend/.vscode/*
@@ -6,6 +5,8 @@ frontend/.vscode/*
 !frontend/.vscode/tasks.json
 !frontend/.vscode/launch.json
 !frontend/.vscode/extensions.json
+.idea/
+.jetclient/
 
 # dotenv environment variable files
 frontend/.env
@@ -19,8 +20,6 @@ backend/.env.development.local
 backend/.env.test.local
 backend/.env.production.local
 backend/.env.local
-
-
 
 # Miscellaneous
 frontend/.angular/cache
