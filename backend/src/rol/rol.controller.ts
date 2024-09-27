@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, Delete } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RolService } from './rol.service';
@@ -61,7 +61,7 @@ export class RolController {
     };
   }
 
-  @Patch('eliminar/:id')
+  @Delete('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un rol' })
   @ApiResponse({ status: 200, description: 'Rol borrado logicamente con exito' })
   @ApiResponse({ status: 400, description: 'El rol ya esta deshabilitado' })
