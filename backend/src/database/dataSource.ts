@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno
-dotenv.config();
+dotenv.config({ path: './config/.env' });
 
 const configService = new ConfigService();
 // Imprimir valores de configuración
