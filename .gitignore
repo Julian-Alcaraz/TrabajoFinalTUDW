@@ -15,7 +15,7 @@ frontend/.env.test.local
 frontend/.env.production.local
 frontend/.env.local
 
-backend/.env
+backend/config/.env
 backend/.env.development.local
 backend/.env.test.local
 backend/.env.production.local
