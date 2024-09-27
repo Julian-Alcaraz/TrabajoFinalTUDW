@@ -9,7 +9,7 @@ export class LoadingService {
   obtenerValor() {
     return this.isLoading;
   }
-  
+
   startLoading() {
     this.isLoading = true;
   }

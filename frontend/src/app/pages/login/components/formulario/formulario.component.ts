@@ -26,7 +26,7 @@ export class FormularioComponent {
     private fb: FormBuilder,
     private _sessionService: SessionService,
     private _router: Router,
-    private snackBar:MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, ValidarCadenaSinEspacios]],

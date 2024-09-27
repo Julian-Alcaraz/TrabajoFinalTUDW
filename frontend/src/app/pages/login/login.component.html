@@ -1,17 +1,14 @@
-@if(!isLoading){
-<div class="loader">
-  Cargando..
-</div>
+@if (!isLoading) {
+  <div class="loader">Cargando..</div>
+} @else {
+  <div class="contenedor">
+    <div class="rectangulo"></div>
+    <div class="absolute image">
+      <img src="./../../assets/logoFundacionSinfondo.png" alt="Logo fundacion" [width]="this.width" [height]="" />
+    </div>
 
-}@else{
-<div class="contenedor">
-  <div class="rectangulo"></div>
-  <div class="absolute image">
-    <img src="./../../assets/logoFundacionSinfondo.png" alt="Logo fundacion" [width]="this.width" [height]="" />
+    <div class="form-position">
+      <app-formulario />
+    </div>
   </div>
-
-  <div class="form-position">
-    <app-formulario />
-  </div>
-</div>
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { RolesService } from '../../../../services/roles.service';
@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Usuario } from '../../../../models/usuario.model';
 
 @Component({
   selector: 'app-form-usuario',
@@ -17,9 +18,12 @@ import { MatInputModule } from '@angular/material/input';
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule],
 
   templateUrl: './form-usuario.component.html',
-  styleUrl: './form-usuario.component.css'
+  styleUrl: './form-usuario.component.css',
 })
-export class FormUsuarioComponent  implements OnInit{
+export class FormUsuarioComponent implements OnInit {
+  @Input() esFormulario = true;
+  @Input() usuario: Usuario | null = null;
+
   public userForm: FormGroup;
   public mostrarContrasenia = false;
   public hoy = new Date();
@@ -44,7 +48,6 @@ export class FormUsuarioComponent  implements OnInit{
         roles_ids: this.fb.array([], Validators.required), // FormArray para role
       },
       { validators: ContraseniasIguales },
-
     );
   }
   ngOnInit(): void {

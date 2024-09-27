@@ -32,8 +32,8 @@ export class SessionService {
       next: (response: any) => {
         if (response.success) {
           this.setIdentidad(null);
-          if(this.identidad!=null){
-            this._loadingService.startLoading()
+          if (this.identidad != null) {
+            this._loadingService.startLoading();
           }
           this._router.navigate(['/login']);
         } else {
@@ -70,8 +70,8 @@ export class SessionService {
           }
         },
         error: () => {
-            this._loadingService.stopLoading()
-            resolve(false);
+          this._loadingService.stopLoading();
+          resolve(false);
         },
       });
     });

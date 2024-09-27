@@ -13,11 +13,5 @@ import { FormUsuarioComponent } from '../components/form-usuario/form-usuario.co
   styleUrl: './nuevo-usuario.component.css',
 })
 export class NuevoUsuarioComponent {
-
-
-
-  constructor(
-    private snackBar: MatSnackBar,
-  ) {}
-
+  constructor(private snackBar: MatSnackBar) {}
 }
