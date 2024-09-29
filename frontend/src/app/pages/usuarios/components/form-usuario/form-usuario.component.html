@@ -27,7 +27,7 @@
         <div *ngIf="userForm.get('email')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="userForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['email']">Formato de email incorrecto.</div>
+        <div *ngIf="userForm.get('email')?.errors?.['ValidarEmail']">Formato de email incorrecto.</div>
         <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
     </div>
@@ -36,9 +36,7 @@
       <input formControlName="dni" type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="xxxxx" required />
       <div *ngIf="userForm.get('dni')?.errors && (userForm.get('dni')?.dirty || userForm.get('dni')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="userForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="userForm.get('dni')?.errors?.['minLength']">Minimo 8 caracteres.</div>
-        <div *ngIf="userForm.get('dni')?.errors?.['maxLength']">Maximo 8 caracteres.</div>
-        <div *ngIf="userForm.get('dni')?.errors?.['email']">Formato de email incorrecto.</div>
+        <div *ngIf="userForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 caracteres.</div>
       </div>
     </div>
     <div>

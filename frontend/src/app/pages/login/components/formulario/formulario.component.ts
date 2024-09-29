@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarEmail } from '../../../../utils/validadores';
 import { SessionService } from '../../../../services/session.service';
 import { Router } from '@angular/router';
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
@@ -29,7 +29,7 @@ export class FormularioComponent {
     private snackBar: MatSnackBar,
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email, ValidarCadenaSinEspacios]],
+      email: ['', [Validators.required, ValidarEmail, ValidarCadenaSinEspacios]],
       password: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }

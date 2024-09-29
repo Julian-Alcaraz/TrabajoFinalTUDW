@@ -55,6 +55,11 @@ export class NavBarComponent implements OnInit {
       this._menuService.traerUsuarioMenu(this.identidad.id).subscribe({
         next: (response: any) => {
           this.navData = response.data;
+          let ruta = '/' + response.data[0].url;
+          if (response.data[0].sub_menus.length != 0) {
+            ruta = '/' + response.data[0].sub_menus[0].url;
+          }
+          this._router.navigate(['layout' + ruta]);
         },
         error: (err) => {
           console.log('ERROR', err);

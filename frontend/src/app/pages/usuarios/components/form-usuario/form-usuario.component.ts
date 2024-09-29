@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { UsuarioService } from '../../../../services/usuario.service';
 import { RolesService } from '../../../../services/roles.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '../../../../utils/validadores';
 import { Rol } from '../../../../models/rol.model';
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -41,8 +41,8 @@ export class FormUsuarioComponent implements OnInit {
     this.userForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30), ValidarCadenaSinEspacios]],
       apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40), ValidarCadenaSinEspacios]],
-      dni: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
-      email: ['', [Validators.required, Validators.email, ValidarCadenaSinEspacios]],
+      dni: ['', [Validators.required, ValidarDni]],
+      email: ['', [Validators.required, ValidarEmail, ValidarCadenaSinEspacios]],
       fe_nacimiento: ['', [Validators.required]],
       roles_ids: this.fb.array([], Validators.required), // FormArray para role
     });
