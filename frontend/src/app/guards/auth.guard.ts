@@ -28,11 +28,9 @@ export const authGuard: CanActivateFn = async (route, state) => {
 };
 
 export const adminGuard: CanActivateFn = () => {
-  // console.log(state.url,route.url)
   const _sessionService = inject(SessionService);
   const identidad = _sessionService.getIdentidad();
   if (identidad) {
-    console.log(identidad);
     if (identidad.roles_ids?.includes(1)) {
       return true;
     }

@@ -10,7 +10,8 @@ export class Usuario {
     public especialidad: string,
     public roles_ids?: number[],
     public contrasenia?: string,
-    public fechaNacimiento?: Date,
+    public fe_nacimiento?: Date,
+    public deshahilitado?: boolean,
     public roles?: Rol[], // esto es opcional podria  no estar
   ) {}
 

@@ -1,4 +1,45 @@
 <div class="card">
   <div class="card-header">Mi usuario</div>
-  <div class="card-body"></div>
+  <div class="card-body">
+    <app-form-usuario [esFormulario]="false" [usuario]="identidad" />
+    <div class="flex mt-2">
+      <a class="mx-auto text-blue-600 underline hover:cursor-pointer" (keydown)="abrirModal()" tabindex (click)="abrirModal()">Cambiar contraseña</a>
+    </div>
+  </div>
 </div>
+
+<ng-template #cambiarContra>
+  <div class="p-4">
+    <div class="flex flex-row justify-between mb-3">
+      <h3>Cambiar Contraseña</h3>
+      <button class="btn-close border-none" (click)="cerraModal()"><i class="fa-solid fa-xmark fa-xl"></i></button>
+    </div>
+    <form (submit)="cambiarContrasenia()" [formGroup]="cambioForm">
+      <div class="border-t-2 p-4">
+        <div class="mb-3">
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
+          <input [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required />
+          <div *ngIf="cambioForm.get('password')?.errors && (cambioForm.get('password')?.dirty || cambioForm.get('password')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="cambioForm.get('password')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="cambioForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+            <div *ngIf="cambioForm.get('password')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+          </div>
+          <label for="confirm_password" class="block mt-2 mb-2 text-sm font-medium text-gray-900">Confirmar contraseña</label>
+          <input [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="confirmPassword" type="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required />
+          <div *ngIf="cambioForm.get('confirmPassword')?.errors && (cambioForm.get('password')?.dirty || cambioForm.get('password')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['required']">El campo es requerido.</div>
+            <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+            <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+          </div>
+          <div class="mt-2">
+            <div *ngIf="cambioForm.hasError('contraseñasNoCoinciden') && cambioForm.get('confirmPassword')?.touched" class="text-red-600 text-sm">Las contraseñas no coinciden</div>
+            <a (click)="verContrasenia()" tabindex (keydown)="verContrasenia()" class="text-blue-600 text-sm underline ml-4 mr-4 cursor-pointer">{{ mostrarContrasenia ? 'Ocultar contraseñas' : 'Mostrar contraseñas' }}</a>
+          </div>
+        </div>
+        <div class="flex my-auto">
+          <button type="submit" [disabled]="!cambioForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cambiar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

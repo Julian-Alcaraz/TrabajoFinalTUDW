@@ -1,6 +1,9 @@
 <div class="sidenav" [class]="collapsed ? 'sidenav-collapsed' : ''">
   <div class="logo-container">
-    <button class="logo" tabindex (click)="toggleCollapsed()" (keydown.control.enter)="toggleCollapsed()">FS</button>
+    <button class="logo" tabindex (click)="toggleCollapsed()" (keydown.control.enter)="toggleCollapsed()">
+      <i class="fa-solid fa-bars"></i>
+      <!-- FS -->
+    </button>
     <div class="logo-text" @fadeinOut *ngIf="collapsed">F.Sol</div>
     <button class="btn-close" *ngIf="collapsed">
       <i class="fa-solid fa-xmark fa-xl" @rotate (click)="closeSidenav()" tabindex (keydown.control.enter)="closeSidenav()"></i>

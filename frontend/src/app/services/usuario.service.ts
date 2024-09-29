@@ -19,4 +19,13 @@ export class UsuarioService {
   cargarUsuario(data: any): Observable<any> {
     return this._http.post(this.url + 'usuario', data);
   }
+  modificarUsuario(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'usuario/' + id, data);
+  }
+  obtenerUsuarioxId(id: number): Observable<any> {
+    return this._http.get(this.url + 'usuario/' + id);
+  }
+  obtenerUsuarios(): Observable<any> {
+    return this._http.get(this.url + 'usuario');
+  }
 }

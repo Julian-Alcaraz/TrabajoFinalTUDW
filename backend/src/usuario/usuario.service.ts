@@ -37,7 +37,8 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return this.usuarioORM.find({ where: { deshabilitado: false } });
+    return this.usuarioORM.find();
+    // { where: { deshabilitado: false } }
   }
 
   async findOne(id: number) {
@@ -93,7 +94,6 @@ export class UsuarioService {
 
   async buscarUsuarioPorEmail(email: string) {
     const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, email: email }, relations: ['roles'] });
-    console.log(usuario);
     const colIdsRoles = usuario.roles.map((rol) => rol.id);
     delete usuario.roles;
     const usuarioConRolesIds = {
@@ -114,17 +114,20 @@ export class UsuarioService {
     for (const rol of rolesUsuario) {
       const objRol = await this.rolORM.findOne({ where: { id: rol.id }, relations: ['menus', 'menus.sub_menus', 'menus.menu_padre'] });
       const menusRol = objRol.menus;
-      // console.log(menusRol);
       const menusNoFalsos = menusRol.filter((menu) => {
         if (!menu.deshabilitado) {
+          const submenusNoFalsos = menu.sub_menus.filter((subMenu) => {
+            if (!subMenu.deshabilitado) {
+              return subMenu;
+            }
+          });
+          menu.sub_menus = submenusNoFalsos;
           return menu;
         }
       });
       for (const menu of menusNoFalsos) {
         if (!menu.menu_padre) {
-          // El Set solo agregará menús que no hayan sido agregados previamente
           colMenusSet.add(JSON.stringify(menu)); // Convertimos el objeto en string para poder usarlo en un Set
-          // colMenus.push(menu);
         }
       }
     }
