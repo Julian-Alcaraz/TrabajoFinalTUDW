@@ -1,1 +1,79 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  position: relative;
+  /* agregar font familyu */
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 0.25rem 0.5rem #e6edef;
+  .card-header {
+    padding: 0.7rem 1.5rem;
+    font-size: large;
+    border-bottom: 1px solid #edf1f7;
+  }
+  .card-body {
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* Notificaciones */
+/* Estilo base para alertas */
+.alert {
+  padding: 0.25rem 0.25rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Alerta de éxito */
+.alert-success {
+  background-color: #079d02;
+  border: #155724 1px solid;
+}
+
+/* Alerta de información */
+.alert-info {
+  background-color: #1d99b0;
+  border: #037084 1px solid;
+}
+
+/* Alerta de advertencia */
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+/* Alerta de peligro */
+.alert-danger {
+  background-color: #d61424;
+  border: #6b0000 1px solid;
+  color: #721c24;
+}
+
+/* Alerta con icono (opcional) */
+.alert-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo para el icono */
+.alert-icon i {
+  margin-right: 0.5rem;
+}
+
+/* MatSnackBar */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}

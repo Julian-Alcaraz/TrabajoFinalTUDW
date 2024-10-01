@@ -7,7 +7,7 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=docker
+      - POSTGRES_DB=fundacion_sol
     volumes:
       - pg-data:/var/lib/postgresql/data
   # Contenedor pgadmin4
@@ -31,17 +31,17 @@ services:
       - ./backend:/home/app/backend
       - /home/app/backend/node_modules
   # Contenedor frontend (Angular)
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "127.0.0.1:4200:4200"
-    volumes:
-      - ./frontend:/home/app/frontend
-      - /home/app/frontend/node_modules
-    depends_on:
-      - backend
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "127.0.0.1:4200:4200"
+  #   volumes:
+  #     - ./frontend:/home/app/frontend
+  #     - /home/app/frontend/node_modules
+  #   depends_on:
+  #     - backend
 # Definir volumenes
 volumes:
   pg-data:

@@ -1,25 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 
-import { UsuarioRol } from '../../usuario-rol/entities/usuario-rol.entity';
+import { EntidadBasica } from '../../database/entities/EntidadBasica';
+import { Rol } from '../../rol/entities/rol.entity';
 
 @Entity({ name: 'usuarios' })
-export class Usuario {
-  @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number;
-
+export class Usuario extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
   nombre: string;
 
   @Column({ type: 'varchar', length: 100 })
   apellido: string;
 
-  @Column({ type: 'integer', unique: true })
+  @Column({ type: 'int', unique: true })
   dni: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 255 })
   contrasenia: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
@@ -30,17 +28,17 @@ export class Usuario {
 
   // Relaciones
 
-  @OneToMany(() => UsuarioRol, (usuario_rol) => usuario_rol.rol)
-  usuario_roles: UsuarioRol[];
-
-  // Comunes
-
-  @Column({ type: 'boolean', default: false })
-  deshabilitado: boolean;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  updatedAt: Date;
+  @ManyToMany(() => Rol, (rol) => rol.usuarios)
+  @JoinTable({
+    name: 'usuarios-roles',
+    joinColumn: {
+      name: 'id_usuario',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'id_rol',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: Rol[];
 }

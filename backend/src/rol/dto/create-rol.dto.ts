@@ -6,5 +6,5 @@ export class CreateRolDto {
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
   @Length(1, 100, { message: 'El nombre debe tener entre 1 y 100 caracteres' })
-  nombre: string;
+  readonly nombre: string;
 }

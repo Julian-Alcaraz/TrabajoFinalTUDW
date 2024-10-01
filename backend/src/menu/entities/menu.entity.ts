@@ -1,40 +1,42 @@
-import { MenuRol } from '../../menu-rol/entities/menu-rol.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+
+import { EntidadBasica } from '../../database/entities/EntidadBasica';
+import { Rol } from '../../rol/entities/rol.entity';
 
 @Entity({ name: 'menus' })
-export class Menu {
-  @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number;
-
+export class Menu extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
-  nombre: string;
+  label: string;
 
   @Column({ type: 'varchar', length: 100 })
   url: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   orden: number;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  icon: string;
 
   // Relaciones
 
-  @OneToMany(() => MenuRol, (menuRol) => menuRol.menu)
-  menu_rol: MenuRol;
+  @ManyToMany(() => Rol, (rol) => rol.menus)
+  @JoinTable({
+    name: 'menus-roles',
+    joinColumn: {
+      name: 'id_menu',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'id_rol',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: Rol[];
 
-  @ManyToOne(() => Menu, (menu) => menu.sub_menus, { nullable: true })
+  @ManyToOne(() => Menu, (menu) => menu.sub_menus, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'menu_padre_id' })
   menu_padre: Menu | null;
 
   @OneToMany(() => Menu, (menu) => menu.menu_padre)
   sub_menus: Menu[];
-
-  // Comunes:
-
-  @Column({ type: 'boolean', default: false })
-  deshabilitado: boolean;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  updatedAt: Date;
 }
