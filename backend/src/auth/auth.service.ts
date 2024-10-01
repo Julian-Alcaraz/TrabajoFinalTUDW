@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthPayloadDto } from './dto/auth.dto';
@@ -16,8 +16,7 @@ export class AuthService {
   async validarUsuario(authPayloadDto: AuthPayloadDto) {
     const emailIngresado = authPayloadDto.email;
     const contraseniaIngresada = authPayloadDto.contrasenia;
-    const usuario: Usuario | null = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
-    if (!usuario) return null; // Aca podria agregarse un mensaje diciendo que no se encontro el usuario
+    const usuario: Usuario = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
     const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
       delete usuario.contrasenia;

@@ -35,7 +35,7 @@ function mensajeErrorServicio(snackBar: MatSnackBar, error: any) {
   if (error_mje != null) {
     let mensaje = '';
     if (error_mje.statusText === 'Unknown Error') {
-      mensaje = 'Servidor desconectado. Comunicate con Desarrollo de Software.';
+      mensaje = 'Servidor desconectado.';
     } else {
       if (error_mje.error.message) {
         mensaje = error_mje.error.message;
