@@ -39,7 +39,7 @@ export class MainSeeder implements Seeder {
           nombre: 'Admin',
           apellido: 'Admin',
           email: 'Admin@Admin.com',
-          contrasenia: codificarContrasenia('123'),
+          contrasenia: codificarContrasenia('1234567'),
           dni: 12345678,
           fe_nacimiento: '2000-12-30',
           roles: [roles[0]], // Admin
@@ -48,7 +48,7 @@ export class MainSeeder implements Seeder {
           nombre: 'Medico',
           apellido: 'Medico',
           email: 'Medico@Medico.com',
-          contrasenia: codificarContrasenia('123'),
+          contrasenia: codificarContrasenia('1234567'),
           dni: 12345679,
           fe_nacimiento: '2000-12-30',
           roles: [roles[1]], // Medico
@@ -57,7 +57,7 @@ export class MainSeeder implements Seeder {
           nombre: 'MedicoYAdmin',
           apellido: 'MedicoYAdmin',
           email: 'MedicoYAdmin@MedicoYAdmin.com',
-          contrasenia: codificarContrasenia('123'),
+          contrasenia: codificarContrasenia('1234567'),
           dni: 12345670,
           fe_nacimiento: '2000-12-30',
           roles: [roles[0], roles[1]], // MedicoYAdmin
@@ -66,7 +66,7 @@ export class MainSeeder implements Seeder {
           nombre: 'usuarioDeshabilitado',
           apellido: 'usuarioDeshabilitado',
           email: 'deshabilitado@deshabilitado.com',
-          contrasenia: codificarContrasenia('123'),
+          contrasenia: codificarContrasenia('1234567'),
           dni: 10345670,
           fe_nacimiento: '2000-12-30',
           roles: [roles[0], roles[1]], // MedicoYAdmin
@@ -107,7 +107,7 @@ export class MainSeeder implements Seeder {
           url: 'dashboard',
           label: 'Dashboard',
           orden: 1,
-          icon: 'dashboard',
+          icon: 'fa-solid fa-chart-line',
           roles: [roles[0], roles[1]],
         },
         {
