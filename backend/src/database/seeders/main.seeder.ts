@@ -24,7 +24,10 @@ export class MainSeeder implements Seeder {
           nombre: 'Administrador',
         },
         {
-          nombre: 'Medico',
+          nombre: 'Profesional',
+        },
+        {
+          nombre: 'Acceso informacion',
         },
         {
           nombre: 'rolDeshabilitado',
@@ -51,7 +54,7 @@ export class MainSeeder implements Seeder {
           contrasenia: codificarContrasenia('1234567'),
           dni: 12345679,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[1]], // Medico
+          roles: [roles[1]], // Profesional
         },
         {
           nombre: 'MedicoYAdmin',
@@ -60,7 +63,7 @@ export class MainSeeder implements Seeder {
           contrasenia: codificarContrasenia('1234567'),
           dni: 12345670,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // MedicoYAdmin
+          roles: [roles[0], roles[1]], // ProfesionalYAdmin
         },
         {
           nombre: 'usuarioDeshabilitado',
@@ -134,7 +137,7 @@ export class MainSeeder implements Seeder {
           label: 'Mi Usuario',
           orden: 3,
           icon: 'fa-regular fa-user',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2], roles[3]],
           menu_padre: await menuORM.findOneBy({ id: 2 }),
         },
         {
