@@ -1,7 +1,8 @@
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Rol } from '../../rol/entities/rol.entity';
+import { Consulta } from '../../consulta/entities/consulta.entity';
 
 @Entity({ name: 'usuarios' })
 export class Usuario extends EntidadBasica {
@@ -41,4 +42,7 @@ export class Usuario extends EntidadBasica {
     },
   })
   roles: Rol[];
+
+  @OneToMany(() => Consulta, (consulta) => consulta.id)
+  consultas: Consulta[];
 }
