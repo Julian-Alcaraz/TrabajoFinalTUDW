@@ -7,9 +7,10 @@ import { MenuModule } from './menu/menu.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AuthModule } from './auth/auth.module';
 import { ConsultaModule } from './consulta/consulta.module';
+import { ChicoModule } from './chico/chico.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule],
   controllers: [],
   providers: [],
 })
