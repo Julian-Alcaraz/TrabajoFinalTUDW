@@ -12,6 +12,7 @@ export class Fonoaudiologia {
   consulta: Consulta;
 
   // datos de fonoaudiologia
+
   @Column()
   detalleFonudiologia: string; // Propiedad específica de ClinicaGeneral
 }

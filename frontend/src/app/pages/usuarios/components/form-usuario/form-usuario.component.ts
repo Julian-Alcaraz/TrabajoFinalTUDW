@@ -105,7 +105,6 @@ export class FormUsuarioComponent implements OnInit {
     if (this.userForm.valid) {
       const data = this.userForm.value;
       data.contrasenia = String(this.userForm.value.dni);
-      data.fe_nacimiento = data.fe_nacimiento.toISOString();
       data.roles_ids = data.roles_ids.map(Number);
       this._usuarioService.cargarUsuario(data).subscribe({
         next: (response: any) => {
