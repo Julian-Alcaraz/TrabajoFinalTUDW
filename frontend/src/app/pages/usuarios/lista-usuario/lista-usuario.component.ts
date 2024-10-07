@@ -95,4 +95,18 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
       },
     });
   }
+  resetarContrasenia(usuario:Usuario){
+    Swal.fire({
+      title: '¿Restablecer contraseña de  usuario?',
+      showDenyButton: true,
+      confirmButtonColor: '#3f77b4',
+      confirmButtonText: 'Confirmar',
+      denyButtonText: `Cancelar`,
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        const edit = { contrasenia: ""+usuario.dni };
+        this.modifcarUsuario(usuario.id, edit);
+      }
+    });
+  }
 }

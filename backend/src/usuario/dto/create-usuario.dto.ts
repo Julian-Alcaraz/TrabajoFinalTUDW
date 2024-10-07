@@ -32,7 +32,7 @@ export class CreateUsuarioDto {
   @IsNotEmpty({ message: 'La contrasenia no puede estar vacia' })
   @IsString({ message: 'La contrasenia debe ser un string' })
   @Length(1, 100, { message: 'La contrasenia debe tener entre 1 y 100 caracteres' })
-  readonly contrasenia: string;
+  contrasenia: string; // no la hago readonly para poder modificarla en el caso de editar contraseña asi puedo hashear el valor
 
   @ApiProperty({ description: 'Fecha nacimiento del chico.' })
   @IsNotEmpty({ message: 'La fecha de no puede estar vacia' })
