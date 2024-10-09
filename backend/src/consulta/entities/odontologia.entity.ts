@@ -13,5 +13,45 @@ export class Odontologia {
 
   // datos de Odontologia
   @Column()
-  detalleFonudiologia: string; // Propiedad específica de ClinicaGeneral
+  primera_vez: boolean;
+
+  @Column()
+  ulterior: boolean;z
+
+  @Column()
+  dientes_permanentes: number;
+
+  @Column()
+  dientes_temporales: number;
+
+  @Column()
+  sellador: number;
+
+  @Column()
+  topificacion: boolean;
+
+  @Column()
+  cepillado: boolean;
+
+  @Column()
+  derivacion: boolean;
+
+  @Column()
+  dientes_recuperables: number;
+
+  @Column()
+  dientes_norecuperables: number;
+
+  @Column()
+  cepillo: boolean;
+
+  @Column()
+  habitos: string;
+
+  @Column()
+  situacion_bucal: string;
+
+  // Clasificación calculada
+  @Column()
+  clasificacion: string;
 }

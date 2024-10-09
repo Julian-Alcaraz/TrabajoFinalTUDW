@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsPositive, IsString, Length } from 'class-validator';
+import { CreateClinicaDto } from './create-clinica.dto';
 
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
@@ -36,4 +37,14 @@ export class CreateConsultaDto {
   @IsInt({ message: 'El id del curso debe ser un número' })
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly cursoId: number;
+
+  @ApiProperty({ description: 'Observaciones de la consulta' })
+  // @IsNotEmpty({ message: 'El apellido no puede estar vacio' })
+  @IsString({ message: 'Las Observaciones debe ser un string' })
+  @Length(1, 1000, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
+  readonly observaciones: string;
+
+  readonly clinica?: CreateClinicaDto;
+  // readonly fonoudiologa?: CreateFonoudiologaDto;
+  // readonly oftalmologa?: CreateOftalmologaDto;
 }

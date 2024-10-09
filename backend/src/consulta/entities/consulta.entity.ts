@@ -20,6 +20,9 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'int', nullable: true })
   edad: number;
 
+  @Column({ type: 'text', nullable: true })
+  observaciones: string;
+  // relaciones de la consulta
   @ManyToOne(() => Usuario, (usuario) => usuario.id)
   usuario: Usuario;
 
@@ -45,5 +48,4 @@ export class Consulta extends EntidadBasica {
   @OneToOne(() => Curso)
   @JoinColumn()
   curso: Curso;
-  // datos de la consulta
 }
