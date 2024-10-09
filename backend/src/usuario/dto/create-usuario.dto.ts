@@ -1,5 +1,6 @@
-import { IsString, IsNotEmpty, Length, IsInt, IsEmail, IsDateString, Min, Max, IsOptional, IsPositive, IsArray, ArrayNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, Length, IsInt, IsEmail, Min, Max, IsOptional, IsPositive, IsArray, ArrayNotEmpty, IsNumber, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateUsuarioDto {
   @ApiProperty({ description: 'Nombre del usuario' })
@@ -31,12 +32,13 @@ export class CreateUsuarioDto {
   @IsNotEmpty({ message: 'La contrasenia no puede estar vacia' })
   @IsString({ message: 'La contrasenia debe ser un string' })
   @Length(1, 100, { message: 'La contrasenia debe tener entre 1 y 100 caracteres' })
-  readonly contrasenia: string;
+  contrasenia: string; // no la hago readonly para poder modificarla en el caso de editar contraseña asi puedo hashear el valor
 
-  @ApiProperty({ description: 'Fecha de nacimiento del usuario' })
-  @IsNotEmpty({ message: 'La fe_nacimiento no puede estar vacia' })
-  @IsDateString({}, { message: 'La fe_nacimiento debe ser una fecha válida (formato ISO)' })
-  readonly fe_nacimiento: string;
+  @ApiProperty({ description: 'Fecha nacimiento del chico.' })
+  @IsNotEmpty({ message: 'La fecha de no puede estar vacia' })
+  @Type(() => Date)
+  @IsDate({ message: 'La fecha de nacimiento no tiene formato correcto' })
+  readonly fe_nacimiento: Date;
 
   @ApiProperty({ description: 'IDS de los roles relacionados con el menu' })
   @IsArray({ message: 'Los roles_ids deben ser un arreglo' })

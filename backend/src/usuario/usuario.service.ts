@@ -56,6 +56,10 @@ export class UsuarioService {
       const usuarioEncontradoDni = await this.usuarioORM.findOneBy({ dni: cambios.dni });
       if (usuarioEncontradoDni) throw new BadRequestException(`El dni ${cambios.dni} ya esta cargado en el sistema`);
     }
+    if (cambios.contrasenia) {
+      const contrasenia = codificarContrasenia(cambios.contrasenia); // Hashea la contrasenia con bcrypt
+      cambios.contrasenia = contrasenia;
+    }
     if (cambios.email) {
       const usuarioEncontradoEmail = await this.usuarioORM.findOneBy({ email: cambios.email });
       if (usuarioEncontradoEmail) throw new BadRequestException(`El email ${cambios.email} ya esta cargado en el sistema`);
