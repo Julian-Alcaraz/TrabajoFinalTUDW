@@ -26,7 +26,7 @@ export class UsuarioController {
 
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los usuarios ' })
-  @ApiResponse({ status: 200, description: 'Retorna todas los usuarios habilitados con exito' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los usuarios habilitados con exito' })
   async findAll() {
     const colUsuarios = await this.usuarioService.findAll();
     return {
