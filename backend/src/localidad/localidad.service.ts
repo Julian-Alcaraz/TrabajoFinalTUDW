@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLocalidadDto } from './dto/create-localidad.dto';
 import { UpdateLocalidadDto } from './dto/update-localidad.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Localidad } from './entities/localidad.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LocalidadService {
-  create(createLocalidadDto: CreateLocalidadDto) {
-    return 'This action adds a new localidad';
+  constructor(@InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>) {}
+
+  async create(createLocalidadDto: CreateLocalidadDto) {
+    const localidad = await this.localidadORM.create(createLocalidadDto);
+    return this.localidadORM.save(localidad);
   }
 
   findAll() {
-    return `This action returns all localidad`;
+    return this.localidadORM.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} localidad`;
+  async findOne(id: number) {
+    const localidad = await this.localidadORM.findOne({ where: { id, deshabilitado: false } });
+    if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrado`);
+    return localidad;
   }
 
-  update(id: number, updateLocalidadDto: UpdateLocalidadDto) {
-    return `This action updates a #${id} localidad`;
+  async update(id: number, updateLocalidadDto: UpdateLocalidadDto) {
+    if (Object.keys(updateLocalidadDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
+    const localidad = await this.localidadORM.findOneBy({ id });
+    if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrado`);
+    this.localidadORM.merge(localidad, updateLocalidadDto);
+    return this.localidadORM.save(localidad);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} localidad`;
+  async remove(id: number) {
+    const localidad = await this.localidadORM.findOneBy({ id });
+    if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrado`);
+    localidad.deshabilitado = true;
+    return this.localidadORM.save(localidad);
   }
 }
