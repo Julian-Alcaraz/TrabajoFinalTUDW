@@ -6,6 +6,8 @@ import { Menu } from '../../menu/entities/menu.entity';
 import { Rol } from '../../rol/entities/rol.entity';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 import { codificarContrasenia } from '../../common/utils/bcrypt';
+import { Localidad } from '../../localidad/entities/localidad.entity';
+import { Barrio } from '../..//barrio/entities/barrio.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -14,6 +16,8 @@ export class MainSeeder implements Seeder {
       const rolORM = dataSource.getRepository(Rol);
       const usuarioORM = dataSource.getRepository(Usuario);
       const menuORM = dataSource.getRepository(Menu);
+      const localidadORM = dataSource.getRepository(Localidad);
+      const barrioORM = dataSource.getRepository(Barrio);
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
 
@@ -167,6 +171,44 @@ export class MainSeeder implements Seeder {
         },
       ]);
       await menuORM.save(menus2);
+
+      // Roles # 1
+      console.log('Seeding localidades...');
+      const localidades = await localidadORM.save([
+        {
+          nombre: 'Neuquen',
+        },
+        {
+          nombre: 'Cipolleti',
+        },
+      ]);
+      console.log('Seeding barrios...');
+      const barrios = await barrioORM.save([
+        {
+          nombre: 'El Treinta',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'La Lor.',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'María Elvira.',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Puente 83',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Norte (Río Negro)',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Puente de Madera.',
+          localidad: localidades[0],
+        },
+      ]);
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
     }

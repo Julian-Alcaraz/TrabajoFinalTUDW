@@ -12,46 +12,46 @@ export class Odontologia {
   consulta: Consulta;
 
   // datos de Odontologia
-  @Column()
+  @Column({ type: 'boolean' })
   primera_vez: boolean;
 
-  @Column()
-  ulterior: boolean;z
+  @Column({ type: 'boolean' })
+  ulterior: boolean;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   dientes_permanentes: number;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   dientes_temporales: number;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   sellador: number;
 
-  @Column()
+  @Column({ type: 'boolean' })
   topificacion: boolean;
 
-  @Column()
+  @Column({ type: 'boolean' })
   cepillado: boolean;
 
-  @Column()
+  @Column({ type: 'boolean' })
   derivacion: boolean;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   dientes_recuperables: number;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   dientes_norecuperables: number;
 
-  @Column()
+  @Column({ type: 'boolean' })
   cepillo: boolean;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   habitos: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   situacion_bucal: string;
 
   // Clasificación calculada
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   clasificacion: string;
 }

@@ -1,12 +1,13 @@
 import { Consulta } from '../../consulta/entities/consulta.entity';
 import { Barrio } from '../../barrio/entities/barrio.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { EntidadBasica } from '../../database/entities/EntidadBasica';
 
 export type sexoType = 'Femenino' | 'Masculino' | 'Otro';
 
 @Entity()
-export class Chico {
-  @PrimaryGeneratedColumn({ type: 'int' })
+export class Chico extends EntidadBasica {
+  @Column({ type: 'int', nullable: false, unique: true })
   dni: number;
   // datos niño
   @Column({ type: 'varchar', length: 100, nullable: true })
