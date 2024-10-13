@@ -1,22 +1,25 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Barrio } from './entities/barrio.entity';
 import { CreateBarrioDto } from './dto/create-barrio.dto';
 import { UpdateBarrioDto } from './dto/update-barrio.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Barrio } from './entities/barrio.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class BarrioService {
-  constructor(
-    @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
-    // @InjectRepository(Rol) private readonly rolORM: Repository<Rol>,
-  ) {}
+  constructor(@InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>) {}
 
-  async create(createBarrioDto: CreateBarrioDto) {
-    const barrio = await this.barrioORM.create(createBarrioDto);
+  create(createBarrioDto: CreateBarrioDto) {
+    const barrio = this.barrioORM.create(createBarrioDto);
     return this.barrioORM.save(barrio);
   }
 
+  findAll() {
+    return this.barrioORM.find({ where: { deshabilitado: false } });
+  }
+
+  /*
   findAll() {
     return this.barrioORM.find({
       where: {
@@ -25,12 +28,13 @@ export class BarrioService {
           id: 1,
         },
       },
-      relations: ['localidad'],
+      //relations: ['localidad'],
     });
   }
+*/
 
   async findOne(id: number) {
-    const barrio = await this.barrioORM.findOne({ where: { id, deshabilitado: false } });
+    const barrio = await this.barrioORM.findOne({ where: { id, deshabilitado: false } /*relations: ['localidad'] */ });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
     return barrio;
   }
@@ -48,21 +52,5 @@ export class BarrioService {
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
     barrio.deshabilitado = true;
     return this.barrioORM.save(barrio);
-  }
-  async findAllxLocalidad(id: number) {
-    return this.barrioORM.find({
-      where: {
-        deshabilitado: false,
-        localidad: {
-          id: id,
-        },
-      },
-      // select: {
-      //   localidad: {
-      //     id: true, // Solo seleccionamos el id de la localidad
-      //   },
-      // },
-      // relations: ['localidad'],
-    });
   }
 }

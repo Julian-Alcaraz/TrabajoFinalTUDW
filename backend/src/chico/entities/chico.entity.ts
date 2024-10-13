@@ -1,11 +1,12 @@
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+
 import { Consulta } from '../../consulta/entities/consulta.entity';
 import { Barrio } from '../../barrio/entities/barrio.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 
 export type sexoType = 'Femenino' | 'Masculino' | 'Otro';
 
-@Entity()
+@Entity({ name: 'chicos' })
 export class Chico extends EntidadBasica {
   @Column({ type: 'int', nullable: false, unique: true })
   dni: number;
@@ -36,9 +37,11 @@ export class Chico extends EntidadBasica {
   // no pondria turno
 
   // RELACIONES
+
   @ManyToOne(() => Barrio, (barrio) => barrio.chicos)
+  @JoinColumn({ name: 'id_barrio' })
   barrio: Barrio;
 
   @OneToMany(() => Consulta, (consulta) => consulta.chico)
-  consulta: Consulta[];
+  consultas: Consulta[];
 }

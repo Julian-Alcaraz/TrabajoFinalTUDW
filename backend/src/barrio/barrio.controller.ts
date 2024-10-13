@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { BarrioService } from './barrio.service';
 import { CreateBarrioDto } from './dto/create-barrio.dto';
 import { UpdateBarrioDto } from './dto/update-barrio.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('barrio')
+@ApiTags('barrio')
 export class BarrioController {
   constructor(private readonly barrioService: BarrioService) {}
 
@@ -21,23 +23,23 @@ export class BarrioController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los barrios ' })
+  @ApiOperation({ summary: 'Devuelve todos los barrios' })
   @ApiResponse({ status: 200, description: 'Retorna todos los barrios habilitados con exito' })
   async findAll() {
     const colBarrios = await this.barrioService.findAll();
     return {
       success: true,
       data: colBarrios,
-      message: 'Usuario obtenido con exito',
+      message: 'Barrios obtenidos con exito',
     };
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Devuelve todos los barrios ' })
+  @ApiOperation({ summary: 'Devuelve todos los barrios' })
   @ApiResponse({ status: 200, description: 'Retorna el barrio habilitado con exito' })
   @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
-  async findOne(@Param('id') id: string) {
-    const barrio = await this.barrioService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const barrio = await this.barrioService.findOne(id);
     return {
       success: true,
       data: barrio,
@@ -45,25 +47,13 @@ export class BarrioController {
     };
   }
 
-  @Get('localidad/:id')
-  @ApiOperation({ summary: 'Devuelve todos los barrios de una localidad ' })
-  @ApiResponse({ status: 200, description: 'Retorna todos los barrios habilitados con exito' })
-  @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
-  async findAllxLocalidad(@Param('id') id: string) {
-    const colBarrios = await this.barrioService.findAllxLocalidad(+id);
-    return {
-      succes: true,
-      data: colBarrios,
-      message: 'Barrios encontrados',
-    };
-  }
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un barrio' })
   @ApiResponse({ status: 200, description: 'Barrio actualizado con exito' })
   @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
   @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
-  async update(@Param('id') id: string, @Body() updateBarrioDto: UpdateBarrioDto) {
-    const barrio = await this.barrioService.update(+id, updateBarrioDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateBarrioDto: UpdateBarrioDto) {
+    const barrio = await this.barrioService.update(id, updateBarrioDto);
     return {
       succes: true,
       data: barrio,
@@ -75,8 +65,8 @@ export class BarrioController {
   @ApiOperation({ summary: 'Borrado logico de un barrio' })
   @ApiResponse({ status: 200, description: 'Barrio borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
-  async remove(@Param('id') id: string) {
-    const barrio = await this.barrioService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const barrio = await this.barrioService.remove(id);
     return {
       succes: true,
       data: barrio,

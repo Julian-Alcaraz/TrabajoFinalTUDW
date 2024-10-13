@@ -12,5 +12,5 @@ export class CreateBarrioDto {
   @IsNotEmpty({ message: 'El id de localidad no puede estar vacio' })
   @IsInt({ message: 'El id de localidad debe ser un number' })
   @IsPositive({ message: 'El id de la localidad debe ser un numero positivo' })
-  readonly localidad_id: number;
+  readonly id_localidad: number;
 }

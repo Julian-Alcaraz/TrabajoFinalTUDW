@@ -6,6 +6,9 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MiUsuarioComponent } from './pages/usuarios/mi-usuario/mi-usuario.component';
 import { NuevoUsuarioComponent } from './pages/usuarios/nuevo-usuario/nuevo-usuario.component';
 import { ListaUsuarioComponent } from './pages/usuarios/lista-usuario/lista-usuario.component';
+import { NuevoChicoComponent } from './pages/chicos/nuevo-chico/nuevo-chico.component';
+import { ListaChicoComponent } from './pages/chicos/lista-chico/lista-chico.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,6 +24,8 @@ export const routes: Routes = [
       { path: 'usuarios/miUsuario', component: MiUsuarioComponent, canActivate: [] },
       { path: 'usuarios/nuevo', component: NuevoUsuarioComponent, canActivate: [adminGuard] },
       { path: 'usuarios/list', component: ListaUsuarioComponent, canActivate: [adminGuard] },
+      { path: 'chicos/nuevo', component: NuevoChicoComponent, canActivate: [] }, // Esta ruta deberia ser accesible solo a los usuarios administradores o medicos, no para acceso-info
+      { path: 'chicos/list', component: ListaChicoComponent, canActivate: [] },
     ],
   },
 ];

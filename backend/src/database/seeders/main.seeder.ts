@@ -21,7 +21,7 @@ export class MainSeeder implements Seeder {
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
 
-      // Roles # 1
+      // Roles
       console.log('Seeding roles...');
       const roles = await rolORM.save([
         {
@@ -52,18 +52,18 @@ export class MainSeeder implements Seeder {
           roles: [roles[0]], // Admin
         },
         {
-          nombre: 'Medico',
-          apellido: 'Medico',
-          email: 'Medico@Medico.com',
+          nombre: 'Profesional',
+          apellido: 'Profesional',
+          email: 'Profesional@Profesional.com',
           contrasenia: codificarContrasenia('1234567'),
           dni: 12345679,
           fe_nacimiento: '2000-12-30',
           roles: [roles[1]], // Profesional
         },
         {
-          nombre: 'MedicoYAdmin',
-          apellido: 'MedicoYAdmin',
-          email: 'MedicoYAdmin@MedicoYAdmin.com',
+          nombre: 'ProfesionalYAdmin',
+          apellido: 'ProfesionalYAdmin',
+          email: 'ProfesionalYAdmin@ProfesionalYAdmin.com',
           contrasenia: codificarContrasenia('1234567'),
           dni: 12345670,
           fe_nacimiento: '2000-12-30',
@@ -76,11 +76,11 @@ export class MainSeeder implements Seeder {
           contrasenia: codificarContrasenia('1234567'),
           dni: 10345670,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // MedicoYAdmin
+          roles: [roles[0], roles[1]], // ProfesionalYAdmin
           deshabilitado: true,
         },
       ]);
-      // Crea 10 usuarios con 1 rol cada uno, puede ser medico o administrador pero no ambos
+      // Crea 10 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos
       const usuarios = await Promise.all(
         Array(5)
           .fill('')
@@ -125,6 +125,13 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
+          url: 'chicos',
+          label: 'Chicos',
+          orden: 3,
+          icon: 'fas fa-child',
+          roles: [roles[0], roles[1]],
+        },
+        {
           url: 'menuDeshabilitado',
           label: 'menuDeshabilitado',
           orden: 0,
@@ -161,6 +168,22 @@ export class MainSeeder implements Seeder {
           menu_padre: await menuORM.findOneBy({ id: 2 }),
         },
         {
+          url: 'chicos/nuevo',
+          label: 'Nuevo Chico',
+          orden: 6,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: await menuORM.findOneBy({ id: 3 }),
+        },
+        {
+          url: 'chicos/list',
+          label: 'Lista Chicos',
+          orden: 7,
+          icon: '',
+          roles: [roles[0], roles[1], roles[2]],
+          menu_padre: await menuORM.findOneBy({ id: 3 }),
+        },
+        {
           url: 'hijoDeshabilitado',
           label: 'hijoDeshabilitado',
           orden: 0,
@@ -172,7 +195,7 @@ export class MainSeeder implements Seeder {
       ]);
       await menuORM.save(menus2);
 
-      // Roles # 1
+      // Localidades
       console.log('Seeding localidades...');
       const localidades = await localidadORM.save([
         {
@@ -189,11 +212,11 @@ export class MainSeeder implements Seeder {
           localidad: localidades[0],
         },
         {
-          nombre: 'La Lor.',
+          nombre: 'La Lor',
           localidad: localidades[0],
         },
         {
-          nombre: 'María Elvira.',
+          nombre: 'María Elvira',
           localidad: localidades[0],
         },
         {
@@ -205,8 +228,12 @@ export class MainSeeder implements Seeder {
           localidad: localidades[0],
         },
         {
-          nombre: 'Puente de Madera.',
+          nombre: 'Puente de Madera',
           localidad: localidades[0],
+        },
+        {
+          nombre: 'Localidad Cipolletti',
+          localidad: localidades[1],
         },
       ]);
     } catch (error) {

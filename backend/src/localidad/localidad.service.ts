@@ -1,13 +1,18 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Localidad } from './entities/localidad.entity';
 import { CreateLocalidadDto } from './dto/create-localidad.dto';
 import { UpdateLocalidadDto } from './dto/update-localidad.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Localidad } from './entities/localidad.entity';
-import { Repository } from 'typeorm';
+import { Barrio } from 'src/barrio/entities/barrio.entity';
 
 @Injectable()
 export class LocalidadService {
-  constructor(@InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>) {}
+  constructor(
+    @InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>,
+    // @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
+  ) {}
 
   async create(createLocalidadDto: CreateLocalidadDto) {
     const localidad = await this.localidadORM.create(createLocalidadDto);
@@ -30,6 +35,13 @@ export class LocalidadService {
     if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrado`);
     this.localidadORM.merge(localidad, updateLocalidadDto);
     return this.localidadORM.save(localidad);
+  }
+
+  async findAllXLocalidad(id: number) {
+    const localidad = await this.localidadORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrios'] });
+    if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrada`);
+    const barrios = localidad.barrios;
+    return barrios;
   }
 
   async remove(id: number) {

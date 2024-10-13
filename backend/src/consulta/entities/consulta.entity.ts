@@ -22,9 +22,22 @@ export class Consulta extends EntidadBasica {
 
   @Column({ type: 'text', nullable: true })
   observaciones: string;
-  // relaciones de la consulta
+
+  // Relaciones
+
   @ManyToOne(() => Usuario, (usuario) => usuario.id)
   usuario: Usuario;
+
+  @ManyToOne(() => Chico, (chico) => chico.consultas)
+  chico: Chico;
+
+  @OneToOne(() => Institucion)
+  @JoinColumn()
+  institucion: Institucion;
+
+  @OneToOne(() => Curso)
+  @JoinColumn()
+  curso: Curso;
 
   @OneToOne(() => ClinicaGeneral)
   clinicaGeneral: ClinicaGeneral;
@@ -37,15 +50,4 @@ export class Consulta extends EntidadBasica {
 
   @OneToOne(() => Oftalmologia)
   oftalmologia: Oftalmologia;
-
-  @ManyToOne(() => Chico, (chico) => chico.consulta)
-  chico: Chico;
-
-  @OneToOne(() => Institucion)
-  @JoinColumn()
-  institucion: Institucion;
-
-  @OneToOne(() => Curso)
-  @JoinColumn()
-  curso: Curso;
 }

@@ -15,11 +15,12 @@ export class ChicoService {
 
   async create(createChicoDto: CreateChicoDto) {
     const chicoEncontradoDni = await this.chicoORM.findOneBy({ dni: createChicoDto.dni });
-    if (chicoEncontradoDni) throw new BadRequestException(`El usuario con dni ${createChicoDto.dni} ya esta cargado en el sistema`);
+    if (chicoEncontradoDni) throw new BadRequestException(`El chico con dni ${createChicoDto.dni} ya esta cargado en el sistema`);
     const nuevoChico = this.chicoORM.create({ ...createChicoDto });
-    if (createChicoDto.barrio_id) {
-      const barrio = await this.barrioORM.findBy({ id: createChicoDto.barrio_id, deshabilitado: false });
-      if (barrio.length == 0) throw new NotFoundException(`El id  de barrio ingresado no existe id: ${createChicoDto.barrio_id}`);
+    if (createChicoDto.id_barrio) {
+      // if redundante ? tiene que tener barrio si o si, en el update puede tener sentido pero en create no.
+      const barrio = await this.barrioORM.findBy({ id: createChicoDto.id_barrio, deshabilitado: false });
+      if (barrio.length == 0) throw new NotFoundException(`El id de barrio ingresado no existe id: ${createChicoDto.id_barrio}`);
       nuevoChico.barrio = barrio[0];
     }
     return this.chicoORM.save(nuevoChico);
@@ -30,7 +31,7 @@ export class ChicoService {
   }
 
   async findOne(id: number) {
-    const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio'] });
+    const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false } });
     if (!chico) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     return chico;
   }
@@ -40,8 +41,8 @@ export class ChicoService {
     const usuario = await this.chicoORM.findOneBy({ id });
     if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     if (updateChicoDto.dni) {
-      const usuarioEncontradoDni = await this.chicoORM.findOneBy({ dni: updateChicoDto.dni });
-      if (usuarioEncontradoDni && usuarioEncontradoDni.id != id) throw new BadRequestException(`El dni ${updateChicoDto.dni} ya esta cargado en el sistema`);
+      const chicoEncontradoDni = await this.chicoORM.findOneBy({ dni: updateChicoDto.dni });
+      if (chicoEncontradoDni && chicoEncontradoDni.id != id) throw new BadRequestException(`El dni ${updateChicoDto.dni} ya esta cargado en el sistema`);
     }
     this.chicoORM.merge(usuario, updateChicoDto);
     return this.chicoORM.save(usuario);

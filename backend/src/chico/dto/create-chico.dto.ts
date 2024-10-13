@@ -63,5 +63,5 @@ export class CreateChicoDto {
   @IsNotEmpty({ message: 'El id del barrio no puede estar vacio' })
   @IsInt({ message: 'El id del barrio debe ser un entero' })
   @IsPositive({ message: 'El id del barrio debe ser un numero positivo' })
-  readonly barrio_id: number;
+  readonly id_barrio: number;
 }

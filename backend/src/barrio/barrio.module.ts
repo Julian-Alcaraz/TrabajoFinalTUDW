@@ -1,8 +1,9 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+
+import { Barrio } from './entities/barrio.entity';
 import { BarrioService } from './barrio.service';
 import { BarrioController } from './barrio.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Barrio } from './entities/barrio.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Barrio])],

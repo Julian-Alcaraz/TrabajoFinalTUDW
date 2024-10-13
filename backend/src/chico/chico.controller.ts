@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+
 import { ChicoService } from './chico.service';
 import { CreateChicoDto } from './dto/create-chico.dto';
 import { UpdateChicoDto } from './dto/update-chico.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('chico')
+@ApiTags('chico')
 export class ChicoController {
   constructor(private readonly chicoService: ChicoService) {}
 
@@ -17,22 +19,36 @@ export class ChicoController {
   // @ApiResponse({ status: 400, description: 'El email del usuario ya esta cargado en el sistema' })
   async create(@Body() createChicoDto: CreateChicoDto) {
     const chico = await this.chicoService.create(createChicoDto);
-    return { succes: true, data: chico, message: 'Chico creado con exito' };
+    return {
+      success: true,
+      data: chico,
+      message: 'Chico creado con exito',
+    };
   }
 
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los chicos habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todas los chicos habilitados con exito' })
-  findAll() {
-    return this.chicoService.findAll();
+  async findAll() {
+    const chicos = await this.chicoService.findAll();
+    return {
+      success: true,
+      data: chicos,
+      message: 'Chico creado con exito',
+    };
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Devuelve el chico buscado' })
   @ApiResponse({ status: 200, description: 'Retorna el chico buscado con exito' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
-  findOne(@Param('id') id: string) {
-    return this.chicoService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    const chico = this.chicoService.findOne(id);
+    return {
+      success: true,
+      data: chico,
+      message: 'Chico encontrado con exito',
+    };
   }
 
   @Patch(':id')
@@ -41,8 +57,8 @@ export class ChicoController {
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
   @ApiResponse({ status: 400, description: 'El dni del chico ya esta cargado en el sistema' })
-  update(@Param('id') id: string, @Body() updateChicoDto: UpdateChicoDto) {
-    const chicoModificado = this.chicoService.update(+id, updateChicoDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateChicoDto: UpdateChicoDto) {
+    const chicoModificado = this.chicoService.update(id, updateChicoDto);
     return {
       success: true,
       data: chicoModificado,
@@ -54,7 +70,12 @@ export class ChicoController {
   @ApiOperation({ summary: 'Borrado logico de un chico' })
   @ApiResponse({ status: 200, description: 'Chico borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
-  remove(@Param('id') id: string) {
-    return this.chicoService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    const chicoEliminado = this.chicoService.remove(id);
+    return {
+      success: true,
+      data: chicoEliminado,
+      message: 'Chico eliminado con exito',
+    };
   }
 }

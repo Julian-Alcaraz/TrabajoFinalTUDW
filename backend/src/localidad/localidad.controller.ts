@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { LocalidadService } from './localidad.service';
 import { CreateLocalidadDto } from './dto/create-localidad.dto';
 import { UpdateLocalidadDto } from './dto/update-localidad.dto';
@@ -36,8 +36,8 @@ export class LocalidadController {
   @ApiOperation({ summary: 'Devuelve una localidad' })
   @ApiResponse({ status: 200, description: 'Retorna una localidad habilitada con exito' })
   @ApiResponse({ status: 404, description: 'Localidad no encontrada' })
-  async findOne(@Param('id') id: string) {
-    const localidad = await this.localidadService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const localidad = await this.localidadService.findOne(id);
     return {
       success: true,
       data: localidad,
@@ -50,8 +50,8 @@ export class LocalidadController {
   @ApiResponse({ status: 200, description: 'Localidad actualizada con exito' })
   @ApiResponse({ status: 404, description: 'Localidad no encontrada' })
   @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
-  async update(@Param('id') id: string, @Body() updateLocalidadDto: UpdateLocalidadDto) {
-    const localidad = await this.localidadService.update(+id, updateLocalidadDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateLocalidadDto: UpdateLocalidadDto) {
+    const localidad = await this.localidadService.update(id, updateLocalidadDto);
     return {
       success: true,
       data: localidad,
@@ -59,12 +59,26 @@ export class LocalidadController {
     };
   }
 
+  @Get('barrios/:id') // VER DE CAMBIAR!!!!!!!!!!!!!!!!!
+  @ApiOperation({ summary: 'Devuelve todos los barrios de una localidad' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los barrios de una localidad habilitados con exito' })
+  @ApiResponse({ status: 404, description: 'Localidad no encontrada' })
+  @ApiResponse({ status: 404, description: 'Esa localidad no tiene barrios' })
+  async findAllXLocalidad(@Param('id', ParseIntPipe) id: number) {
+    const colBarrios = await this.localidadService.findAllXLocalidad(id);
+    return {
+      succes: true,
+      data: colBarrios,
+      message: 'Barrios encontrados',
+    };
+  }
+
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de una localidad' })
   @ApiResponse({ status: 200, description: 'Localidad borrada logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Localidad no encontrada' })
-  async remove(@Param('id') id: string) {
-    const localidad = await this.localidadService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const localidad = await this.localidadService.remove(id);
     return {
       success: true,
       data: localidad,

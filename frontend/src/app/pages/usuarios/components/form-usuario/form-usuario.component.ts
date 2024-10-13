@@ -18,7 +18,6 @@ import Swal from 'sweetalert2';
   selector: 'app-form-usuario',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule],
-
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -63,7 +62,7 @@ export class FormUsuarioComponent implements OnInit {
       },
     });
   }
-  
+
   esCargaOedicion() {
     if (!this.esFormulario && this.usuario) {
       this._usuarioService.obtenerUsuarioxId(this.usuario.id).subscribe({
