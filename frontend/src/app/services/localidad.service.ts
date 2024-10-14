@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class LocalidadService {
   }
 
   obtenerBarriosXLocalidad(id: string) {
-    return this._http.get(this.url + 'localidad/barrios/' + id);
+    return this._http.get(this.url + `localidad/${id}/barrios`);
+  }
+
+  cargarLocalidad(data: any): Observable<any> {
+    return this._http.post(this.url + 'localidad', data);
   }
 }

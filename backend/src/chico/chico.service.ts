@@ -27,7 +27,7 @@ export class ChicoService {
   }
 
   findAll() {
-    return this.chicoORM.find({ where: { deshabilitado: false } });
+    return this.chicoORM.find();
   }
 
   async findOne(id: number) {

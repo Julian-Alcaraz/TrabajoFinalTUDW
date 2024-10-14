@@ -5,13 +5,20 @@ import { Repository } from 'typeorm';
 import { Barrio } from './entities/barrio.entity';
 import { CreateBarrioDto } from './dto/create-barrio.dto';
 import { UpdateBarrioDto } from './dto/update-barrio.dto';
+import { Localidad } from 'src/localidad/entities/localidad.entity';
 
 @Injectable()
 export class BarrioService {
-  constructor(@InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>) {}
+  constructor(
+    @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
+    @InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>,
+  ) {}
 
-  create(createBarrioDto: CreateBarrioDto) {
+  async create(createBarrioDto: CreateBarrioDto) {
     const barrio = this.barrioORM.create(createBarrioDto);
+    const localidad = await this.localidadORM.findOneBy({ id: createBarrioDto.id_localidad });
+    if (!localidad) throw new NotFoundException(`Localidad con id ${createBarrioDto.id_localidad} no encontrada`);
+    barrio.localidad = localidad;
     return this.barrioORM.save(barrio);
   }
 

@@ -59,7 +59,7 @@ export class LocalidadController {
     };
   }
 
-  @Get('barrios/:id') // VER DE CAMBIAR!!!!!!!!!!!!!!!!!
+  @Get(':id/barrios')
   @ApiOperation({ summary: 'Devuelve todos los barrios de una localidad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los barrios de una localidad habilitados con exito' })
   @ApiResponse({ status: 404, description: 'Localidad no encontrada' })

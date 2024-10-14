@@ -14,7 +14,10 @@ export class BarrioController {
   @ApiOperation({ summary: 'Crea un nuevo barrio' })
   @ApiResponse({ status: 201, description: 'Barrio creado con exito' })
   async create(@Body() createBarrioDto: CreateBarrioDto) {
+    console.log(createBarrioDto);
     const barrio = await this.barrioService.create(createBarrioDto);
+    console.log(barrio);
+
     return {
       success: true,
       data: barrio,

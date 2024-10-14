@@ -20,5 +20,9 @@ export class ChicoService {
   obtenerChicos(): Observable<any> {
     return this._http.get(this.url + 'chico');
   }
+
+  modificarChico(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'chico/' + id, data);
+  }
 }
 

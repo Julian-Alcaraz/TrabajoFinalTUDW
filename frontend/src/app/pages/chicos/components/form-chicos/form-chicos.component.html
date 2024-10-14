@@ -49,7 +49,7 @@
     </div>
     <!-- Fecha de Nacimiento -->
     <div>
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900">Fecha nacimiento</label>
+      <p class="block mb-2 text-sm font-medium text-gray-900">Fecha de nacimiento</p>
       <mat-form-field class="">
         <mat-label>Fecha Nacimiento</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="fe_nacimiento" [max]="hoy" />
@@ -60,30 +60,63 @@
           class="text-red-600">El campo es requerido. </mat-hint>
       </mat-form-field>
     </div>
+    <!--
+    <div>
+      <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
+      <ul class="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <div class="flex items-center ps-3">
+            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <label for="horizontal-list-sexoFemenino"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
+          </div>
+        </li>
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <div class="flex items-center ps-3">
+            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <label for="horizontal-list-sexoFemenino"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
+          </div>
+        </li>
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <div class="flex items-center ps-3">
+            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <label for="horizontal-list-sexoFemenino"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
+          </div>
+        </li>
+      </ul>
+    </div>
+    -->
     <!-- Sexo: -->
     <div>
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900">Sexo</label>
-
-      <div>
-        <input type="radio" id="sexoFemenino" formControlName="sexo" value="Femenino"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-        <label for="sexoFemenino" class="ms-2 text-sm font-medium text-gray-900">Femenino</label>
-      </div>
-      <div>
-        <input type="radio" id="sexoMasculino" formControlName="sexo" value="Masculino"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-        <label for="sexoMasculino" class="ms-2 text-sm font-medium text-gray-900">Masculino</label>
-      </div>
-      <div>
-        <input type="radio" id="sexoOtro" formControlName="sexo" value="Otro"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-        <label for="sexoOtro" class="ms-2 text-sm font-medium text-gray-900">Otro</label>
-      </div>
-
-      <div *ngIf="chicoForm.get('sexo')?.errors && (chicoForm.get('sexo')?.dirty || chicoForm.get('sexo')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="chicoForm.get('sexo')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
+      <ul class="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <label for="horizontal-list-sexoFemenino" class="w-full flex items-center ps-3 py-3 cursor-pointer">
+            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="sexo" formControlName="sexo"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <span class="ms-2 text-sm font-medium text-gray-900">Femenino</span>
+          </label>
+        </li>
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <label for="horizontal-list-sexoMasculino" class="w-full flex items-center ps-3 py-3 cursor-pointer">
+            <input id="horizontal-list-sexoMasculino" type="radio" value="Masculino" name="sexo" formControlName="sexo"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <span class="ms-2 text-sm font-medium text-gray-900">Masculino</span>
+          </label>
+        </li>
+        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+          <label for="horizontal-list-sexoOtro" class="w-full flex items-center ps-3 py-3 cursor-pointer">
+            <input id="horizontal-list-sexoOtro" type="radio" value="Otro" name="sexo" formControlName="sexo"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+            <span class="ms-2 text-sm font-medium text-gray-900">Otro</span>
+          </label>
+        </li>
+      </ul>
     </div>
     <!-- Direccion: -->
     <div>
@@ -116,9 +149,10 @@
   <!-- Localidad: -->
   <div>
     <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
-    <select formControlName="id_localidad" id="localidades"
+    <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="localidades"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
       <option value="" disabled selected>Selecciona una opción</option>
+      <option value="new">Cargar una localidad</option>
       <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
     </select>
     <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)"
@@ -126,18 +160,43 @@
       <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
     </div>
   </div>
+  <!-- Nueva localidad -->
+  <div *ngIf="chicoForm.get('id_localidad')?.value === 'new'" class="mt-4">
+    <label for="nueva_localidad" class="block mb-2 text-sm font-medium text-gray-900">Nueva Localidad</label>
+    <input type="text" id="nueva_localidad" formControlName="nueva_localidad"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="Ingresa la nueva localidad" required />
+    <button type="button" (click)="cargarLocalidad()"
+      class="mt-2 text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2">Agregar
+      Localidad</button>
+  </div>
   <!-- Barrio: -->
-  <div *ngIf="chicoForm.get('id_localidad')?.value">
+  <div *ngIf="chicoForm.get('id_localidad')?.value && chicoForm.get('id_localidad')?.value !== 'new'">
     <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
+    <!-- [disabled]="barrioDeshabilitado" -->
     <select formControlName="id_barrio" id="barrios"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" FormControlName.isDisabled>
       <option value="" disabled selected>Selecciona una opción</option>
+      <!-- [selected]="barrios.length === 0" No funciona -->
+      <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span>
+      </option>
       <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
     </select>
     <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)"
       class="text-red-600 text-sm">
       <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
     </div>
+  </div>
+  <!-- Nuevo barrio -->
+  <div *ngIf="chicoForm.get('id_barrio')?.value === 'new' && chicoForm.get('id_localidad')?.value !== 'new'"
+    class="mt-4">
+    <label for="nuevo_barrio" class="block mb-2 text-sm font-medium text-gray-900">Nuevo Barrio</label>
+    <input type="text" id="nuevo_barrio" formControlName="nuevo_barrio"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="Ingresa el nuevo barrio" required />
+    <button type="button" (click)="cargarBarrio()"
+      class="mt-2 text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2">Agregar
+      Barrio</button>
   </div>
   <!-- Nombre padre: -->
   <div>
@@ -175,7 +234,7 @@
       </div>
     </div>
   </div>
-  <!-- Boton enviar -->
+  <!-- Enviar -->
   <div class="flex my-auto">
     <button type="submit" [disabled]="!chicoForm.valid"
       class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
