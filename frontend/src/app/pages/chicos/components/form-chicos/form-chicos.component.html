@@ -173,7 +173,6 @@
   <!-- Barrio: -->
   <div *ngIf="chicoForm.get('id_localidad')?.value && chicoForm.get('id_localidad')?.value !== 'new'">
     <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
-    <!-- [disabled]="barrioDeshabilitado" -->
     <select formControlName="id_barrio" id="barrios"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" FormControlName.isDisabled>
       <option value="" disabled selected>Selecciona una opción</option>

@@ -65,6 +65,7 @@ export class FormChicosComponent {
     const idLocalidad = this.chicoForm.get('id_localidad')?.value;
     if (idLocalidad && idLocalidad !== 'new') {
       this.obtenerBarriosXLocalidad(idLocalidad);
+      this.chicoForm.get('id_barrio')?.enable();
     } else {
       this.barrios = [];
     }
