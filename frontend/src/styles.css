@@ -11,6 +11,7 @@
 body {
   position: relative;
   /* agregar font familyu */
+  background: #f4f7fa;
 }
 .card {
   display: flex;
