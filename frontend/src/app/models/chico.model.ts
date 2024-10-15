@@ -1,3 +1,5 @@
+import { Barrio } from "./barrio.model";
+
 export type Sexo = 'Femenino' | 'Masculino' | 'Otro';
 
 export class Chico {
@@ -11,6 +13,7 @@ export class Chico {
     public direccion: string,
     public nombre_padre: string,
     public nombre_madre: string,
+    public barrio?: Barrio,
     public deshabilitado?: boolean,
     public fe_nacimiento?: Date,
   ) {}

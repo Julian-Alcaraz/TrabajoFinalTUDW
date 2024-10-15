@@ -8,7 +8,7 @@ import { NuevoUsuarioComponent } from './pages/usuarios/nuevo-usuario/nuevo-usua
 import { ListaUsuarioComponent } from './pages/usuarios/lista-usuario/lista-usuario.component';
 import { NuevoChicoComponent } from './pages/chicos/nuevo-chico/nuevo-chico.component';
 import { ListaChicoComponent } from './pages/chicos/lista-chico/lista-chico.component';
-
+import { VerChicoComponent } from './pages/chicos/ver-chico/ver-chico.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,7 +26,9 @@ export const routes: Routes = [
       { path: 'usuarios/list', component: ListaUsuarioComponent, canActivate: [adminGuard] },
       { path: 'chicos/nuevo', component: NuevoChicoComponent, canActivate: [] }, // Esta ruta deberia ser accesible solo a los usuarios administradores o medicos, no para acceso-info
       { path: 'chicos/list', component: ListaChicoComponent, canActivate: [] },
+      { path: 'chicos/:id', component: VerChicoComponent, canActivate: [] },
     ],
+
   },
 ];
 // { esto yo creo que sirve par ahacer lazy loading y en component pones el modulo

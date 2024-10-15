@@ -11,10 +11,10 @@ export class Chico extends EntidadBasica {
   @Column({ type: 'int', nullable: false, unique: true })
   dni: number;
   // datos niño
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   apellido: string;
 
   @Column({ type: 'enum', enum: ['Femenino', 'Masculino', 'Otro'], nullable: false })
@@ -26,7 +26,7 @@ export class Chico extends EntidadBasica {
   @Column({ type: 'varchar', length: 255, nullable: true })
   direccion: string;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   telefono: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

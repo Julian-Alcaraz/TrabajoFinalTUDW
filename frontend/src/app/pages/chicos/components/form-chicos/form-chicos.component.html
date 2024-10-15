@@ -28,7 +28,7 @@
         class="text-red-600 text-sm">
         <div *ngIf="chicoForm.get('apellido')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="chicoForm.get('apellido')?.errors?.['minlength']">Minimo 3 caracteres.</div>
-        <div *ngIf="chicoForm.get('apellido')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+        <div *ngIf="chicoForm.get('apellido')?.errors?.['maxlength']">Maximo 50 caracteres.</div>
         <div *ngIf="chicoForm.get('apellido')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.</div>
         <div *ngIf="chicoForm.get('apellido')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.
         </div>
@@ -60,37 +60,6 @@
           class="text-red-600">El campo es requerido. </mat-hint>
       </mat-form-field>
     </div>
-    <!--
-    <div>
-      <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
-      <ul class="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <div class="flex items-center ps-3">
-            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <label for="horizontal-list-sexoFemenino"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <div class="flex items-center ps-3">
-            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <label for="horizontal-list-sexoFemenino"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <div class="flex items-center ps-3">
-            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="list-radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <label for="horizontal-list-sexoFemenino"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">Femenino</label>
-          </div>
-        </li>
-      </ul>
-    </div>
-    -->
     <!-- Sexo: -->
     <div>
       <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
@@ -128,6 +97,8 @@
         *ngIf="chicoForm.get('direccion')?.errors && (chicoForm.get('direccion')?.dirty || chicoForm.get('direccion')?.touched)"
         class="text-red-600 text-sm">
         <div *ngIf="chicoForm.get('direccion')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="chicoForm.get('apellido')?.errors?.['minlength']">Minimo 1 caracter.</div>
+        <div *ngIf="chicoForm.get('direccion')?.errors?.['required']">Maximo 255 caracteres.</div>
         <div *ngIf="chicoForm.get('direccion')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.
         </div>
       </div>
@@ -142,14 +113,17 @@
         *ngIf="chicoForm.get('telefono')?.errors && (chicoForm.get('telefono')?.dirty || chicoForm.get('telefono')?.touched)"
         class="text-red-600 text-sm">
         <div *ngIf="chicoForm.get('telefono')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="chicoForm.get('apellido')?.errors?.['minlength']">Minimo 1 caracter.</div>
+        <div *ngIf="chicoForm.get('direccion')?.errors?.['required']">Maximo 50 caracteres.</div>
         <div *ngIf="chicoForm.get('telefono')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
       </div>
     </div>
   </div>
   <!-- Localidad: -->
+  <!-- Si Pones nueva localidad, no la creas, y despues elegis una localidad, va a dar error y no va a dejar mandar el formulario, pasa lo mismo con barrios creo -->
   <div>
     <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
-    <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="localidades"
+    <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
       <option value="" disabled selected>Selecciona una opción</option>
       <option value="new">Cargar una localidad</option>
@@ -174,7 +148,8 @@
   <div *ngIf="chicoForm.get('id_localidad')?.value && chicoForm.get('id_localidad')?.value !== 'new'">
     <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
     <select formControlName="id_barrio" id="barrios"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" FormControlName.isDisabled>
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      FormControlName.isDisabled>
       <option value="" disabled selected>Selecciona una opción</option>
       <!-- [selected]="barrios.length === 0" No funciona -->
       <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span>
@@ -207,8 +182,8 @@
       *ngIf="chicoForm.get('nombre_padre')?.errors && (chicoForm.get('nombre_padre')?.dirty || chicoForm.get('nombre_padre')?.touched)"
       class="text-red-600 text-sm">
       <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['required']">El campo es requerido.</div>
-      <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['minlength']">Minimo 3 caracteres.</div>
-      <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+      <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['minlength']">Minimo 1 caracteres.</div>
+      <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
       <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.</div>
       <div *ngIf="chicoForm.get('nombre_padre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
         blanco.
@@ -225,8 +200,8 @@
       *ngIf="chicoForm.get('nombre_madre')?.errors && (chicoForm.get('nombre_madre')?.dirty || chicoForm.get('nombre_madre')?.touched)"
       class="text-red-600 text-sm">
       <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['required']">El campo es requerido.</div>
-      <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['minlength']">Minimo 3 caracteres.</div>
-      <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
+      <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['minlength']">Minimo 1 caracteres.</div>
+      <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
       <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.</div>
       <div *ngIf="chicoForm.get('nombre_madre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
         blanco.

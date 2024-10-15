@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,12 +22,11 @@ import { BarrioService } from '../../../../services/barrio.service';
   templateUrl: './form-chicos.component.html',
   styleUrl: './form-chicos.component.css',
 })
-export class FormChicosComponent {
+export class FormChicosComponent implements OnInit {
   public chicoForm: FormGroup;
   public hoy = new Date();
   public barrios: Barrio[] = [];
   public localidades: Localidad[] = [];
-  public showLocalidadInput = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,17 +40,17 @@ export class FormChicosComponent {
       Hacer un trim o algo, este es un string valido: "          a                Juan"
     */
     this.chicoForm = this.fb.group({
-      nombre: ['Juan', [Validators.required, Validators.minLength(3), Validators.maxLength(30), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      apellido: ['Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(40), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      nombre: ['Juan', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      apellido: ['Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       dni: [Math.floor(10000000 + Math.random() * 90000000), [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['Masculino', [Validators.required, ValidarSexo]],
-      fe_nacimiento: ['2000-07-07', Validators.required], // Podria validarse mejor la fecha!!!!!!!
-      telefono: ['123456789', [Validators.required, ValidarSoloNumeros]],
-      direccion: ['Calle Falsa 123', [Validators.required, ValidarCadenaSinEspacios]],
-      nombre_padre: ['Carlos Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(30), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      nombre_madre: ['Ana García', [Validators.required, Validators.minLength(3), Validators.maxLength(30), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      id_barrio: [{value:" ", disabled: true}, [Validators.required]], // Quiza falten validaciones
-      id_localidad: [[Validators.required]], // Quiza falten validaciones
+      fe_nacimiento: ['2000-07-07', Validators.required],
+      telefono: ['123456789', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
+      direccion: ['Calle Falsa 123', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
+      nombre_padre: ['Carlos Pérez', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      nombre_madre: ['Ana García', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      id_barrio: [{ value: '', disabled: true }, [Validators.required]],
+      id_localidad: ['', [Validators.required]],
       nueva_localidad: [''],
       nuevo_barrio: [''],
     });
@@ -71,79 +70,7 @@ export class FormChicosComponent {
     }
   }
 
-  cargarLocalidad() {
-    if (this.chicoForm.get('nueva_localidad')) {
-      Swal.fire({
-        title: '¿Cargar nueva localidad?',
-        showDenyButton: true,
-        confirmButtonColor: '#3f77b4',
-        confirmButtonText: 'Confirmar',
-        denyButtonText: `Cancelar`,
-      }).then((result: any) => {
-        if (result.isConfirmed) {
-          const data = {
-            nombre: this.chicoForm.value.nueva_localidad,
-          };
-          console.log(data);
-          this._localidadService.cargarLocalidad(data).subscribe({
-            next: (response: any) => {
-              if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.chicoForm.get('id_localidad')?.reset();
-                this.chicoForm.get('nueva_localidad')?.reset();
-                // Aca se podria poner en el input de localidad la localidad recien creada
-                this.obtenerLocalidades();
-              }
-            },
-            error: (err) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-              console.log('Error al cargar localidad');
-            },
-          });
-        }
-      });
-      console.log('agregar localidad..');
-      this.showLocalidadInput = false;
-    }
-  }
-
-  cargarBarrio() {
-    console.log('Cargar barrio');
-    if (this.chicoForm.get('nuevo_barrio')) {
-      Swal.fire({
-        title: '¿Cargar nuevo barrio?',
-        showDenyButton: true,
-        confirmButtonColor: '#3f77b4',
-        confirmButtonText: 'Confirmar',
-        denyButtonText: `Cancelar`,
-      }).then((result: any) => {
-        if (result.isConfirmed) {
-          const data = {
-            nombre: this.chicoForm.value.nuevo_barrio,
-            id_localidad: parseInt(this.chicoForm.value.id_localidad),
-          };
-          this._barrioService.cargarBarrio(data).subscribe({
-            next: (response: any) => {
-              if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.chicoForm.get('nuevo_barrio')?.reset();
-                this.chicoForm.get('id_barrio')?.reset();
-                // Aca se podria poner en el input de barrio el barrio recien creado
-                this.obtenerBarriosXLocalidad(this.chicoForm.value.id_localidad); // esto esta feo creo
-              }
-            },
-            error: (err) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-              console.log('Error al cargar localidad');
-            },
-          });
-        }
-      });
-      this.showLocalidadInput = false;
-    }
-  }
-
-  obtenerLocalidades() {
+  obtenerLocalidades(): any {
     this._localidadService.obtenerLocalidades().subscribe({
       next: (response: any) => {
         this.localidades = response.data;
@@ -165,6 +92,71 @@ export class FormChicosComponent {
     });
   }
 
+  cargarLocalidad() {
+    if (this.chicoForm.get('nueva_localidad')) {
+      Swal.fire({
+        title: '¿Cargar nueva localidad?',
+        showDenyButton: true,
+        confirmButtonColor: '#3f77b4',
+        confirmButtonText: 'Confirmar',
+        denyButtonText: `Cancelar`,
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          const data = {
+            nombre: this.chicoForm.value.nueva_localidad,
+          };
+          this._localidadService.cargarLocalidad(data).subscribe({
+            next: (response: any) => {
+              if (response.success) {
+                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                this.chicoForm.get('id_localidad')?.reset();
+                this.chicoForm.get('nueva_localidad')?.reset();
+                // Aca se podria poner la localidad recie creada como seleccionada
+                this.obtenerLocalidades();
+              }
+            },
+            error: (err) => {
+              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+            },
+          });
+        }
+      });
+    }
+  }
+
+  cargarBarrio() {
+    if (this.chicoForm.get('nuevo_barrio')) {
+      Swal.fire({
+        title: '¿Cargar nuevo barrio?',
+        showDenyButton: true,
+        confirmButtonColor: '#3f77b4',
+        confirmButtonText: 'Confirmar',
+        denyButtonText: `Cancelar`,
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          const data = {
+            nombre: this.chicoForm.value.nuevo_barrio,
+            id_localidad: parseInt(this.chicoForm.value.id_localidad),
+          };
+          this._barrioService.cargarBarrio(data).subscribe({
+            next: (response: any) => {
+              if (response.success) {
+                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                this.chicoForm.get('nuevo_barrio')?.reset();
+                this.chicoForm.get('id_barrio')?.reset();
+                // Aca se podria poner en el input de barrio el barrio recien creado
+                this.obtenerBarriosXLocalidad(this.chicoForm.value.id_localidad);
+              }
+            },
+            error: (err) => {
+              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+            },
+          });
+        }
+      });
+    }
+  }
+
   cargarChico() {
     console.log('Formulario válido:', this.chicoForm.valid);
     if (this.chicoForm.valid) {
@@ -179,14 +171,9 @@ export class FormChicosComponent {
         if (result.isConfirmed) {
           const data = this.chicoForm.value;
           data.id_barrio = parseInt(data.id_barrio);
-          /*
-          console.log("Sin trim:" , data.nombre);
-          const nombre = data.nombre;
-          const nombreTrim = nombre.trim();
-          data.nombre = nombreTrim;
-          console.log("Con trim:" , nombreTrim.trim());
-          */
-          delete data.nuevaLocalidad;
+          data.telefono = data.telefono.toString();
+          delete data.nuevo_barrio;
+          delete data.nueva_localidad;
           delete data.id_localidad;
           this._chicoService.cargarChico(data).subscribe({
             next: (response: any) => {
@@ -197,22 +184,10 @@ export class FormChicosComponent {
             },
             error: (err) => {
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-              console.log('Error al cargar chico');
             },
           });
         }
       });
     }
   }
-
-  /*
-  onLocalidadChange(idLocalidad: string) {
-    this.showLocalidadInput = idLocalidad === 'new';
-    if (idLocalidad && idLocalidad !== 'new') {
-      this.obtenerBarriosXLocalidad(idLocalidad);
-    } else {
-      this.barrios = [];
-    }
-  }
-  */
 }

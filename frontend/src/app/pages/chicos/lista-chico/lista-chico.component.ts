@@ -11,21 +11,21 @@ import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-noti
 import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe],
+  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaChicoComponent {
-  public chicos: MatTableDataSource<Chico>;
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
-  // @ViewChild(MatSort) sort: MatSort;
-
+  public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
+
 
   displayedColumns: string[] = ['nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
   constructor(
