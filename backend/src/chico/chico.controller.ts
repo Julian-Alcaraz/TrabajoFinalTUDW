@@ -28,13 +28,13 @@ export class ChicoController {
 
   @Get()
   @ApiOperation({ summary: 'Devuelve todos los chicos habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todas los chicos habilitados con exito' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los chicos habilitados con exito' })
   async findAll() {
     const chicos = await this.chicoService.findAll();
     return {
       success: true,
       data: chicos,
-      message: 'Chico creado con exito',
+      message: 'Chicos encontrados con exito',
     };
   }
 
@@ -42,8 +42,8 @@ export class ChicoController {
   @ApiOperation({ summary: 'Devuelve el chico buscado' })
   @ApiResponse({ status: 200, description: 'Retorna el chico buscado con exito' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    const chico = this.chicoService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const chico = await this.chicoService.findOne(id);
     return {
       success: true,
       data: chico,
@@ -57,8 +57,8 @@ export class ChicoController {
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
   @ApiResponse({ status: 400, description: 'El dni del chico ya esta cargado en el sistema' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateChicoDto: UpdateChicoDto) {
-    const chicoModificado = this.chicoService.update(id, updateChicoDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateChicoDto: UpdateChicoDto) {
+    const chicoModificado = await this.chicoService.update(id, updateChicoDto);
     return {
       success: true,
       data: chicoModificado,
@@ -70,8 +70,8 @@ export class ChicoController {
   @ApiOperation({ summary: 'Borrado logico de un chico' })
   @ApiResponse({ status: 200, description: 'Chico borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    const chicoEliminado = this.chicoService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const chicoEliminado = await this.chicoService.remove(id);
     return {
       success: true,
       data: chicoEliminado,

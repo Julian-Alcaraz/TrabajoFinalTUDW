@@ -36,7 +36,7 @@ export class CreateChicoDto {
   readonly fe_nacimiento: Date;
 
   @ApiProperty({ description: 'Direccion del chico' })
-  @IsNotEmpty({ message: 'La direccion no puede estar vacio' })
+  @IsNotEmpty({ message: 'La direccion no puede estar vacia' })
   @IsString({ message: 'La direccion debe ser un string' })
   @Length(1, 255, { message: 'La direccion debe tener entre 1 y 255 caracteres' })
   readonly direccion: string;
