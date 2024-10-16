@@ -11,7 +11,7 @@ export class CreateCursoDto {
 
   @ApiProperty({ description: 'Nivel del chico' })
   @IsNotEmpty({ message: 'El Nivel no puede estar vacio' })
-  @IsEnum(['Primaria', 'Secundario', 'Jardin', 'Terciario', 'Universitario'])
+  @IsEnum(['Primaria', 'Secundario', 'Jardin', 'Terciario', 'Universitario'], { message: 'No es un nivel valido. Primaria, Secundario, Jardin, Terciario, Universitario' })
   readonly nivel: nivelCurso;
 
   @ApiProperty({ description: 'Nombre del curso' })

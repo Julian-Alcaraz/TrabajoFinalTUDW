@@ -9,7 +9,8 @@ export class CreateInstitucionDto {
   @Length(1, 100, { message: 'El nombre debe tener entre 1 y 100 caracteres' })
   readonly nombre: string;
 
-  @IsEnum(['Jardin', 'Primario', 'Secundario', 'Terciario'])
+  @ApiProperty({ description: 'Tipo de insititucion' })
   @IsNotEmpty({ message: 'El tipo de institución no puede estar vacio' })
+  @IsEnum(['Jardin', 'Primario', 'Secundario', 'Terciario'], { message: 'No es un nivel valido. Primaria, Secundario, Jardin, Terciario, Universitario' })
   readonly tipo: tiposInstitucion;
 }

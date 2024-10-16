@@ -2,8 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Length, Matches } from 'class-validator';
 
 export class CreateClinicaDto {
-  // el id no lo verificp?
-
   @ApiProperty({ description: 'Tiene diabetes' })
   @IsNotEmpty({ message: 'La diabetes no puede estar vacia' })
   @IsBoolean({ message: 'La diabetes debe ser un boleano' })
@@ -170,7 +168,6 @@ export class CreateClinicaDto {
   @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
   readonly horas_suenio: string;
 
-  // enum control niño sano,  proyecto sol
   @ApiProperty({ description: 'Proyecto del niño que asiste' })
   @IsNotEmpty({ message: 'Proyecto no puede estar vacio' })
   @IsString({ message: 'Proyecto debe ser un string' })

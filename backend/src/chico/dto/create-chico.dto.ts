@@ -26,7 +26,7 @@ export class CreateChicoDto {
 
   @ApiProperty({ description: 'Sexo del chico' })
   @IsNotEmpty({ message: 'El sexo no puede estar vacio' })
-  @IsEnum(['Femenino', 'Masculino', 'Otro'])
+  @IsEnum(['Femenino', 'Masculino', 'Otro'], { message: 'El sexo no es valido. Femenino, Masculino, Otro' })
   readonly sexo: sexoType;
 
   @ApiProperty({ description: 'Fecha nacimiento del chico.' })

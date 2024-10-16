@@ -15,7 +15,7 @@ export class CreateOdontologiaDto {
   readonly ulterior: boolean;
 
   @ApiProperty({ description: 'Dientes permanentes del niño que asiste' })
-  @IsNotEmpty({ message: 'los Dientes permanentes no puede estar vacios' })
+  @IsNotEmpty({ message: 'Los Dientes permanentes no puede estar vacios' })
   @IsInt({ message: 'Los Dientes permanentes  debe ser un número' })
   @IsPositive({ message: 'Los Dientes permanentes debe ser un numero positivo' })
   readonly dientes_permanentes: number;
@@ -33,7 +33,7 @@ export class CreateOdontologiaDto {
   readonly sellador: number;
 
   @ApiProperty({ description: 'Topificacion del niño que asiste a la consulta' })
-  @IsNotEmpty({ message: ' Topificacion no puede estar vacia' })
+  @IsNotEmpty({ message: 'Topificacion no puede estar vacia' })
   @IsBoolean({ message: 'Topificacion debe ser un boleano' })
   readonly topificacion: boolean;
 
@@ -43,7 +43,7 @@ export class CreateOdontologiaDto {
   readonly cepillado: boolean;
 
   @ApiProperty({ description: 'Derivacion del niño que asiste a la consulta' })
-  @IsNotEmpty({ message: ' Derivacion no puede estar vacio' })
+  @IsNotEmpty({ message: 'Derivacion no puede estar vacio' })
   @IsBoolean({ message: 'Derivacion debe ser un boleano' })
   readonly derivacion: boolean;
 

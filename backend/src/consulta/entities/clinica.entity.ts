@@ -57,13 +57,13 @@ export class ClinicaGeneral {
   @Column({ type: 'varchar', length: 100 })
   estado_nutricional: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   tas: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   tad: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   pcta: number;
 
   @Column({ type: 'varchar', length: 100 })

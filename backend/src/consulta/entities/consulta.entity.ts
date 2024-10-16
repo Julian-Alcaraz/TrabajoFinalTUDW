@@ -9,15 +9,17 @@ import { Chico } from '../../chico/entities/chico.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 
+export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
+
 @Entity()
 export class Consulta extends EntidadBasica {
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  type: string;
+  @Column({ type: 'enum', length: 100, nullable: true })
+  type: Type;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   obra_social: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'int', nullable: false })
   edad: number;
 
   @Column({ type: 'text', nullable: true })
