@@ -11,8 +11,12 @@ export class Fonoaudiologia {
   @JoinColumn()
   consulta: Consulta;
 
-  // datos de fonoaudiologia
+  @Column({ type: 'boolean' })
+  asistencia: boolean;
 
-  @Column()
-  detalleFonudiologia: string; // Propiedad específica de ClinicaGeneral
+  @Column({ type: 'varchar', length: 100 })
+  diagnosticoPresuntivo: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  causas: string;
 }
