@@ -1,0 +1,70 @@
+<!-- AGREGAR ONSUBMIT!!!!! -->
+<form (ngSubmit)="1+1" [formGroup]="camposGeneralesForm">
+  <div class="grid gap-6 md:grid-cols-4">
+    <!-- Obra Social: -->
+    <div class="col-span-2">
+      <label for="obra_social" class="block mb-2 text-sm font-medium text-gray-900">Obra Social</label>
+      <input formControlName="obra_social" type="text" id="obra_social"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ej: Osde" required />
+      <div
+        *ngIf="camposGeneralesForm.get('obra_social')?.errors && (camposGeneralesForm.get('obra_social')?.dirty || camposGeneralesForm.get('obra_social')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['minlength']">Minimo 3 caracteres.</div>
+        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
+        </div>
+        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+          estar en blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Edad: -->
+    <div class="col-span-2">
+      <label for="edad" class="block mb-2 text-sm font-medium text-gray-900">Edad</label>
+      <input formControlName="edad" type="text" id="edad"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ej: 10" required />
+      <div
+        *ngIf="camposGeneralesForm.get('edad')?.errors && (camposGeneralesForm.get('edad')?.dirty || camposGeneralesForm.get('edad')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['ValidarSoloNumeros']">Solo puede tener números.</div>
+        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
+          blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Observaciones: -->
+    <div class="col-span-4">
+      <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-900">Observaciones</label>
+      <input formControlName="observaciones" type="text" id="observaciones"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="" required />
+      <div
+        *ngIf="camposGeneralesForm.get('observaciones')?.errors && (camposGeneralesForm.get('observaciones')?.dirty || camposGeneralesForm.get('observaciones')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['minlength']">Minimo 1 caracter.</div>
+        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['maxlength']">Maximo 1000 caracteres.</div>
+        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
+        </div>
+        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+          estar en blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Dni: -->
+    <div>
+      <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
+      <input formControlName="dni" type="number" id="dni" aria-describedby="helper-text-explanation"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="xxxxx" required />
+      <div *ngIf="camposGeneralesForm.get('dni')?.errors && (camposGeneralesForm.get('dni')?.dirty || camposGeneralesForm.get('dni')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
+        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 digitos.</div>
+      </div>
+    </div>
+  </div>
+</form>

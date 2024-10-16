@@ -1,4 +1,6 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { catchError, debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { ChicoService } from '../services/chico.service';
 
 export function ValidarEmail(control: AbstractControl) {
   const email = control?.value as string;
@@ -79,4 +81,15 @@ export function ValidarSoloLetras(control: AbstractControl): ValidationErrors | 
   } else {
     return null;
   }
+}
+
+export function ValidarCampoOpcional(...validators: ValidatorFn[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) {
+      // Campo vacío considerado válido
+      return null;
+    }
+    const composedValidator = Validators.compose(validators);
+    return composedValidator ? composedValidator(control) : null;
+  };
 }

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
@@ -21,11 +21,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class ListaChicoComponent {
+export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
-
 
   displayedColumns: string[] = ['nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
   constructor(

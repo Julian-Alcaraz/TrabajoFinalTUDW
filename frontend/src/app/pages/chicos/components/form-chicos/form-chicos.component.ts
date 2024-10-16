@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,12 +8,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarSexo, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarSexo, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '../../../../utils/validadores';
 import { ChicoService } from '../../../../services/chico.service';
 import { Barrio } from '../../../../models/barrio.model';
 import { Localidad } from '../../../../models/localidad.model';
 import { LocalidadService } from '../../../../services/localidad.service';
 import { BarrioService } from '../../../../services/barrio.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-form-chicos',
@@ -27,18 +28,23 @@ export class FormChicosComponent implements OnInit {
   public hoy = new Date();
   public barrios: Barrio[] = [];
   public localidades: Localidad[] = [];
+  public localidadForm: FormGroup;
+  public barrioForm: FormGroup;
+
+  @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
+  @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
+    private _dialog: MatDialog,
     private _chicoService: ChicoService,
     private _localidadService: LocalidadService,
     private _barrioService: BarrioService,
   ) {
     // Valores de prueba
-    /*
-      Hacer un trim o algo, este es un string valido: "          a                Juan"
-    */
+    // Hacer un trim o algo, este es un string valido: "          a                Juan"
+    // Formulario para crear un nuevo chico
     this.chicoForm = this.fb.group({
       nombre: ['Juan', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       apellido: ['Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
@@ -47,12 +53,21 @@ export class FormChicosComponent implements OnInit {
       fe_nacimiento: ['2000-07-07', Validators.required],
       telefono: ['123456789', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
       direccion: ['Calle Falsa 123', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
-      nombre_padre: ['Carlos Pérez', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      nombre_madre: ['Ana García', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
+      nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       id_barrio: [{ value: '', disabled: true }, [Validators.required]],
       id_localidad: ['', [Validators.required]],
-      nueva_localidad: [''],
-      nuevo_barrio: [''],
+    });
+
+    // Formulario para crear una nueva localidad
+    this.localidadForm = this.fb.group({
+      nueva_localidad: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+    });
+
+    // Formulario para crear un nuevo barrio
+    this.barrioForm = this.fb.group({
+      nuevo_barrio: ['', [Validators.required, ValidarCadenaSinEspacios]],
+      id_localidad: ['', [Validators.required]],
     });
   }
 
@@ -60,12 +75,21 @@ export class FormChicosComponent implements OnInit {
     this.obtenerLocalidades();
   }
 
+  onChangeBarrio() {
+    const idBarrio = this.chicoForm.get('id_barrio')?.value;
+    if (idBarrio === 'new') {
+      this.abrirModalBarrio();
+      this.barrioForm.get('id_localidad')?.setValue(this.chicoForm.get('id_localidad')?.value);
+    }
+  }
+
   onChangeLocalidad() {
     const idLocalidad = this.chicoForm.get('id_localidad')?.value;
-    if (idLocalidad && idLocalidad !== 'new') {
+    if (idLocalidad && idLocalidad !== 'new' && idLocalidad !== '') {
       this.obtenerBarriosXLocalidad(idLocalidad);
       this.chicoForm.get('id_barrio')?.enable();
-    } else {
+    } else if (idLocalidad === 'new') {
+      this.abrirModalLocalidad();
       this.barrios = [];
     }
   }
@@ -93,7 +117,7 @@ export class FormChicosComponent implements OnInit {
   }
 
   cargarLocalidad() {
-    if (this.chicoForm.get('nueva_localidad')) {
+    if (this.localidadForm.get('nueva_localidad')) {
       Swal.fire({
         title: '¿Cargar nueva localidad?',
         showDenyButton: true,
@@ -103,16 +127,16 @@ export class FormChicosComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const data = {
-            nombre: this.chicoForm.value.nueva_localidad,
+            nombre: this.localidadForm.value.nueva_localidad,
           };
           this._localidadService.cargarLocalidad(data).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.chicoForm.get('id_localidad')?.reset();
-                this.chicoForm.get('nueva_localidad')?.reset();
-                // Aca se podria poner la localidad recie creada como seleccionada
+                this.cerraModalLocalidad();
                 this.obtenerLocalidades();
+                this.localidadForm.get('id_localidad')?.reset();
+                // Aca se podria poner la localidad recien creada como seleccionada
               }
             },
             error: (err) => {
@@ -125,7 +149,7 @@ export class FormChicosComponent implements OnInit {
   }
 
   cargarBarrio() {
-    if (this.chicoForm.get('nuevo_barrio')) {
+    if (this.barrioForm.get('nuevo_barrio')) {
       Swal.fire({
         title: '¿Cargar nuevo barrio?',
         showDenyButton: true,
@@ -135,14 +159,15 @@ export class FormChicosComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const data = {
-            nombre: this.chicoForm.value.nuevo_barrio,
-            id_localidad: parseInt(this.chicoForm.value.id_localidad),
+            nombre: this.barrioForm.value.nuevo_barrio,
+            id_localidad: parseInt(this.barrioForm.value.id_localidad),
           };
           this._barrioService.cargarBarrio(data).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.chicoForm.get('nuevo_barrio')?.reset();
+                this.barrioForm.get('nuevo_barrio')?.reset();
+                this.barrioForm.get('id_localidad')?.reset();
                 this.chicoForm.get('id_barrio')?.reset();
                 // Aca se podria poner en el input de barrio el barrio recien creado
                 this.obtenerBarriosXLocalidad(this.chicoForm.value.id_localidad);
@@ -159,8 +184,11 @@ export class FormChicosComponent implements OnInit {
 
   cargarChico() {
     console.log('Formulario válido:', this.chicoForm.valid);
+    /*
+    console.log("Errores en nombre_padre:", this.chicoForm.get('nombre_padre')?.errors);
+    console.log("Errores en nombre_madre:", this.chicoForm.get('nombre_madre')?.errors);
+    */
     if (this.chicoForm.valid) {
-      console.log('Formulario valido, cargando chico...');
       Swal.fire({
         title: '¿Cargar nuevo chico?',
         showDenyButton: true,
@@ -172,8 +200,12 @@ export class FormChicosComponent implements OnInit {
           const data = this.chicoForm.value;
           data.id_barrio = parseInt(data.id_barrio);
           data.telefono = data.telefono.toString();
-          delete data.nuevo_barrio;
-          delete data.nueva_localidad;
+          if (!data.nombre_madre) {
+            data.nombre_madre = null;
+          }
+          if (!data.nombre_padre) {
+            data.nombre_padre = null;
+          }
           delete data.id_localidad;
           this._chicoService.cargarChico(data).subscribe({
             next: (response: any) => {
@@ -189,5 +221,33 @@ export class FormChicosComponent implements OnInit {
         }
       });
     }
+  }
+
+  // Modal Barrio
+
+  abrirModalBarrio() {
+    const dialogRef = this._dialog.open(this.barrioModal, { width: '40%' });
+    dialogRef.afterClosed().subscribe(() => {
+      this.barrioForm.reset();
+    });
+  }
+
+  cerraModalBarrio() {
+    this._dialog.closeAll();
+    this.chicoForm.get('id_barrio')?.setValue('');
+  }
+
+  // Modal localidad
+
+  abrirModalLocalidad() {
+    const dialogRef = this._dialog.open(this.localidadModal, { width: '40%' });
+    dialogRef.afterClosed().subscribe(() => {
+      this.localidadForm.reset();
+    });
+  }
+
+  cerraModalLocalidad() {
+    this._dialog.closeAll();
+    this.chicoForm.get('id_localidad')?.setValue('');
   }
 }

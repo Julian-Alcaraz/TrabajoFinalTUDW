@@ -13,7 +13,7 @@ export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia'
 
 @Entity()
 export class Consulta extends EntidadBasica {
-  @Column({ type: 'enum', length: 100, nullable: true })
+  @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], /*length: 100,*/ nullable: true })
   type: Type;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

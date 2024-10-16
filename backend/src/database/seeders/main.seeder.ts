@@ -132,6 +132,13 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
+          url: 'consultas',
+          label: 'Consultas',
+          orden: 4,
+          icon: 'fa-solid fa-laptop-medical',
+          roles: [roles[0], roles[1]],
+        },
+        {
           url: 'menuDeshabilitado',
           label: 'menuDeshabilitado',
           orden: 0,
@@ -190,6 +197,40 @@ export class MainSeeder implements Seeder {
           icon: '',
           roles: [roles[0], roles[1], roles[2]],
           menu_padre: await menuORM.findOneBy({ id: 3 }),
+        },
+        /*
+        {
+          url: 'consultas/nueva',
+          label: 'Nueva Consulta Fonoaudiologica',
+          orden: 4,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: await menuORM.findOneBy({ id: 4 }),
+        },
+        {
+          url: 'consultas/nueva',
+          label: 'Nueva Consulta Odontologica',
+          orden: 4,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: await menuORM.findOneBy({ id: 4 }),
+        },
+        {
+          url: 'consultas/nueva',
+          label: 'Nueva Consulta Oftalmologica',
+          orden: 4,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: await menuORM.findOneBy({ id: 4 }),
+        },
+        */
+        {
+          url: 'consultas/clinica/nueva',
+          label: 'Nueva Consulta Clinica',
+          orden: 4,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: await menuORM.findOneBy({ id: 4 }),
         },
         {
           url: 'hijoDeshabilitado',

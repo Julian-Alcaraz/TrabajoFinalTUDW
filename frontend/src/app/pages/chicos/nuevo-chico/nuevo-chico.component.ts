@@ -5,9 +5,9 @@ import { FormChicosComponent } from '../components/form-chicos/form-chicos.compo
 @Component({
   selector: 'app-nuevo-chico',
   standalone: true,
-  imports:  [FormChicosComponent],
+  imports: [FormChicosComponent],
   templateUrl: './nuevo-chico.component.html',
-  styleUrl: './nuevo-chico.component.css'
+  styleUrl: './nuevo-chico.component.css',
 })
 export class NuevoChicoComponent {
 
