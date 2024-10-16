@@ -58,7 +58,7 @@ export class LocalidadController {
     return {
       success: true,
       data: localidad,
-      message: 'Localidad modificads con exito',
+      message: 'Localidad modificada con exito',
     };
   }
 
@@ -72,7 +72,7 @@ export class LocalidadController {
     return {
       succes: true,
       data: colBarrios,
-      message: 'Barrios encontrados',
+      message: 'Barrios de una localidad encontrados',
     };
   }
 

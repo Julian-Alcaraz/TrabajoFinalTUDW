@@ -63,9 +63,9 @@ export class CursoController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Borrado logico de un chico' })
-  @ApiResponse({ status: 200, description: 'Chico borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Chico no encontrado' })
+  @ApiOperation({ summary: 'Borrado logico de un curso' })
+  @ApiResponse({ status: 200, description: 'Curso borrado logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'Curso no encontrado' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const cursoEliminado = await this.cursoService.remove(id);
     return {

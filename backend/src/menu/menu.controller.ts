@@ -81,7 +81,7 @@ export class MenuController {
   @Delete(':idMenu/rol/:idRol')
   @ApiOperation({ summary: 'Borrado de un rol relacionado al menu' })
   @ApiResponse({ status: 200, description: 'Rol relacionado al menu borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Menu con no encontrado' })
+  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
   @ApiResponse({ status: 404, description: 'El rol no esta asignado al menu' })
   @ApiResponse({ status: 400, description: 'Un menu no puede quedarse sin roles' })
   async eliminarRolDeMenu(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
@@ -95,8 +95,8 @@ export class MenuController {
 
   @Put(':idMenu/rol/:idRol')
   @ApiOperation({ summary: 'Agregar un rol relacionado al menu' })
-  @ApiResponse({ status: 404, description: 'Menu con no encontrado' })
-  @ApiResponse({ status: 404, description: 'Rol con no encontrado' })
+  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
+  @ApiResponse({ status: 404, description: 'Rol no encontrado' })
   @ApiResponse({ status: 400, description: 'El menu ya tiene ese rol' })
   async agregarRolDeMenu(@Param('idMenu', ParseIntPipe) idMenu: number, @Param('idRol', ParseIntPipe) idRol: number) {
     const resultado = await this.menuService.agregarRolDeMenu(idMenu, idRol);
