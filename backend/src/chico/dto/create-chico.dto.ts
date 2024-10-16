@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsInt, IsNotEmpty, IsPositive, IsString, Length, Max, Min } from 'class-validator';
+import { IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, Max, Min } from 'class-validator';
 import { sexoType } from '../entities/chico.entity';
 import { Type } from 'class-transformer';
 
@@ -48,16 +48,18 @@ export class CreateChicoDto {
   readonly telefono: string;
 
   @ApiProperty({ description: 'Nombre madre del chico' })
+  @IsOptional()
   @IsNotEmpty({ message: 'El nombre de la madre no puede estar vacio' })
   @IsString({ message: 'El nombre de la madre debe ser un string' })
   @Length(1, 100, { message: 'El nombre de la madre debe tener entre 1 y 100 caracteres' })
-  readonly nombre_madre: string;
+  readonly nombre_madre?: string;
 
   @ApiProperty({ description: 'Nombre padre del chico' })
+  @IsOptional()
   @IsNotEmpty({ message: 'El nombre del padre no puede estar vacio' })
   @IsString({ message: 'El nombre del padre debe ser un string' })
   @Length(1, 100, { message: 'El nombre del padre debe tener entre 1 y 100 caracteres' })
-  readonly nombre_padre: string;
+  readonly nombre_padre?: string;
 
   @ApiProperty({ description: 'Id del barrio' })
   @IsNotEmpty({ message: 'El id del barrio no puede estar vacio' })

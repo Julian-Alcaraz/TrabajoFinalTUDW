@@ -29,10 +29,10 @@ export class Chico extends EntidadBasica {
   @Column({ type: 'varchar', length: 50, nullable: true })
   telefono: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true, default: null })
   nombre_madre: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true, default: null })
   nombre_padre: string;
   // no pondria turno
 
