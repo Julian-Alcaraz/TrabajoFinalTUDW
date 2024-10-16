@@ -7,12 +7,12 @@ import { CreateChicoDto } from './dto/create-chico.dto';
 import { UpdateChicoDto } from './dto/update-chico.dto';
 
 @Controller('chico')
+@UseGuards(JwtAuthGuard)
 @ApiTags('chico')
 export class ChicoController {
   constructor(private readonly chicoService: ChicoService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Crea un nuevo chico' })
   @ApiResponse({ status: 201, description: 'Chico creado con exito' })
   // @ApiResponse({ status: 400, description: 'El dni del chico ya esta cargado en el sistema' })

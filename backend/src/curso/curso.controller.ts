@@ -2,15 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGua
 import { CursoService } from './curso.service';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('curso')
+@UseGuards(JwtAuthGuard)
+@ApiTags('curso')
 export class CursoController {
   constructor(private readonly cursoService: CursoService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Crea un nuevo curso' })
   @ApiResponse({ status: 201, description: 'Curso creado con exito' })
   async create(@Body() createCursoDto: CreateCursoDto) {
@@ -58,7 +59,8 @@ export class CursoController {
       success: true,
       data: cursoModificado,
       message: 'Curso modificado con exito',
-    };}
+    };
+  }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de un chico' })
