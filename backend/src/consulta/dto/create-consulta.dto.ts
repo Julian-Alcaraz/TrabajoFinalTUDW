@@ -2,6 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsNotEmpty, IsPositive, IsString, Length } from 'class-validator';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { Type } from '../entities/consulta.entity';
+import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
+import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
+import { CreateOdontologiaDto } from './create-odontologia.dto';
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
   @IsNotEmpty({ message: 'El tipo no puede estar vacio' })
@@ -46,6 +49,7 @@ export class CreateConsultaDto {
   readonly observaciones: string;
 
   readonly clinica?: CreateClinicaDto;
-  // readonly fonoudiologa?: CreateFonoudiologaDto;
-  // readonly oftalmologa?: CreateOftalmologaDto;
+  readonly fonoudiologa?: CreateFonoaudiologiaDto;
+  readonly oftalmologa?: CreateOftalmologiaDto;
+  readonly odontologia?: CreateOdontologiaDto;
 }
