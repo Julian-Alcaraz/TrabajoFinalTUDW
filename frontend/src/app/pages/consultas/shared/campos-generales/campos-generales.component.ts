@@ -1,17 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { /*ExisteDni,*/ ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
-/*
-<!-- !!!!!!!!!!!!! 1. type:  enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'] -->
-<!-- 2. obra_social: string length: 100, nullable: true -->
-<!-- 3. edad: number; type: 'int' -->
-<!-- 4. observaciones: string; type: 'text', nullable: true-->
-<!-- !!!!!!!!!!!!! 5. Relacion con usuario creo? -->
-<!-- !!!!!!!!!!!!! 6. Relacion con chico creo? -->
-<!-- !!!!!!!!!!!!! 7. Relacion con institucion creo? -->
-<!-- !!!!!!!!!!!!! 8. Relacion con curso creo?-->
-*/
+import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, /*Validators*/ } from '@angular/forms';
+//import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
+
 @Component({
   selector: 'app-campos-generales',
   standalone: true,
@@ -20,18 +11,19 @@ import { /*ExisteDni,*/ ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarD
   styleUrl: './campos-generales.component.css',
 })
 export class CamposGeneralesComponent {
-  public camposGeneralesForm: FormGroup;
+  @Input({ required: true }) form!: FormGroup;
+  @Input() errorDni: string | null = null;
 
   constructor(private fb: FormBuilder) {
-    this.camposGeneralesForm = this.fb.group({
-      obra_social: ['obra_social', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
-      edad: ['', [Validators.required, ValidarSoloNumeros, ValidarCadenaSinEspacios]],
-      observaciones: ['observaciones', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
-      dni: [/*Math.floor(10000000 + Math.random() * 90000000),*/ [Validators.required, ValidarDni, ValidarSoloNumeros]],
+    /*
+    this.form = this.fb.group({
+      camposGenerales: this.fb.group({
+        obra_social: ['Osde', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+        edad: ['', [Validators.required, ValidarSoloNumeros, ValidarCadenaSinEspacios]],
+        observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+        dni: ['', [Validators.required, ValidarSoloNumeros, ValidarDni]] //Math.floor(10000000 + Math.random() * 90000000),/,
+      }),
     });
-  }
-
-  onChangeDni() {
-    console.log('aca hay que verificar que exista...');
+    */
   }
 }

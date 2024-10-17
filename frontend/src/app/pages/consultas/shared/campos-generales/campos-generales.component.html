@@ -1,20 +1,21 @@
 <!-- AGREGAR ONSUBMIT!!!!! -->
-<form (ngSubmit)="1+1" [formGroup]="camposGeneralesForm">
-  <div class="grid gap-6 md:grid-cols-4">
+<div [formGroup]="form">
+  <div formGroupName="camposGenerales" class="grid gap-6 md:grid-cols-4">
+    <!-- Campos generales: -->
     <!-- Obra Social: -->
     <div class="col-span-2">
       <label for="obra_social" class="block mb-2 text-sm font-medium text-gray-900">Obra Social</label>
       <input formControlName="obra_social" type="text" id="obra_social"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: Osde" required />
+        placeholder="Ej: Osde" />
       <div
-        *ngIf="camposGeneralesForm.get('obra_social')?.errors && (camposGeneralesForm.get('obra_social')?.dirty || camposGeneralesForm.get('obra_social')?.touched)"
+        *ngIf="form?.get('camposGenerales.obra_social')?.errors && (form?.get('camposGenerales.obra_social')?.dirty || form?.get('camposGenerales.obra_social')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['minlength']">Minimo 3 caracteres.</div>
-        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
-        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
+        <div *ngIf="form?.get('camposGenerales.obra_social')?.errors?.['minlength']">Minimo 3 caracteres.</div>
+        <div *ngIf="form?.get('camposGenerales.obra_social')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+        <div *ngIf="form?.get('camposGenerales.obra_social')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
         </div>
-        <div *ngIf="camposGeneralesForm.get('obra_social')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+        <div *ngIf="form?.get('camposGenerales.obra_social')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
           estar en blanco.
         </div>
       </div>
@@ -22,15 +23,15 @@
     <!-- Edad: -->
     <div class="col-span-2">
       <label for="edad" class="block mb-2 text-sm font-medium text-gray-900">Edad</label>
-      <input formControlName="edad" type="text" id="edad"
+      <input formControlName="edad" type="number" id="edad"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="Ej: 10" required />
       <div
-        *ngIf="camposGeneralesForm.get('edad')?.errors && (camposGeneralesForm.get('edad')?.dirty || camposGeneralesForm.get('edad')?.touched)"
+        *ngIf="form?.get('camposGenerales.edad')?.errors && (form?.get('camposGenerales.edad')?.dirty || form?.get('camposGenerales.edad')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['ValidarSoloNumeros']">Solo puede tener números.</div>
-        <div *ngIf="camposGeneralesForm.get('edad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
+        <div *ngIf="form?.get('camposGenerales.edad')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="form?.get('camposGenerales.edad')?.errors?.['ValidarSoloNumeros']">Solo puede tener números.</div>
+        <div *ngIf="form?.get('camposGenerales.edad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
           blanco.
         </div>
       </div>
@@ -40,31 +41,51 @@
       <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-900">Observaciones</label>
       <input formControlName="observaciones" type="text" id="observaciones"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
+        placeholder="" />
       <div
-        *ngIf="camposGeneralesForm.get('observaciones')?.errors && (camposGeneralesForm.get('observaciones')?.dirty || camposGeneralesForm.get('observaciones')?.touched)"
+        *ngIf="form?.get('camposGenerales.observaciones')?.errors && (form?.get('camposGenerales.observaciones')?.dirty || form?.get('camposGenerales.observaciones')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['minlength']">Minimo 1 caracter.</div>
-        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['maxlength']">Maximo 1000 caracteres.</div>
-        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
+        <div *ngIf="form?.get('camposGenerales.observaciones')?.errors?.['minlength']">Minimo 1 caracter.</div>
+        <div *ngIf="form?.get('camposGenerales.observaciones')?.errors?.['maxlength']">Maximo 1000 caracteres.</div>
+        <div *ngIf="form?.get('camposGenerales.observaciones')?.errors?.['ValidarSoloLetras']">Solo puede tener letras.
         </div>
-        <div *ngIf="camposGeneralesForm.get('observaciones')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+        <div *ngIf="form?.get('camposGenerales.observaciones')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
           estar en blanco.
         </div>
       </div>
     </div>
     <!-- Dni: -->
-    <div>
+    <!-- !!!!!!!!!!!!! 6. Relacion con chico creo? -->
+    <div class="col-span-2">
       <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
       <input formControlName="dni" type="number" id="dni" aria-describedby="helper-text-explanation"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="xxxxx" required />
-      <div *ngIf="camposGeneralesForm.get('dni')?.errors && (camposGeneralesForm.get('dni')?.dirty || camposGeneralesForm.get('dni')?.touched)"
+      <div
+        *ngIf="form?.get('camposGenerales.dni')?.errors && (form?.get('camposGenerales.dni')?.dirty || form?.get('camposGenerales.dni')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
-        <div *ngIf="camposGeneralesForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 digitos.</div>
+        <div *ngIf="form?.get('camposGenerales.dni')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="form?.get('camposGenerales.dni')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
+        <div *ngIf="form?.get('camposGenerales.dni')?.errors?.['ValidarDni']">Debe tener 8 digitos.</div>
+        <div *ngIf="form?.get('camposGenerales.dni')?.errors?.['dniExistente']">Ese dni no esta cargado en el sistema.
+        </div>
       </div>
     </div>
+    <!-- Mensaje para cargar el chico si el DNI no existe -->
+    <div *ngIf="form?.get('camposGenerales.dni')?.errors?.['dniNoExistente']" class="text-blue-600 text-sm mt-2">
+      <!-- Agregar enlace despues -->
+      <a href="#" (click)="1+1">
+        Chico no cargado, haz clic aquí para cargarlo.
+      </a>
+    </div>
+
+
+    <!-- Dni: -->
+    <!-- !!!!!!!!!!!!! 7. Relacion con institucion creo? -->
+    <!-- Dni: -->
+    <!-- !!!!!!!!!!!!! 8. Relacion con curso creo?-->
+    <!-- Dni: -->
+
+
   </div>
-</form>
+</div>

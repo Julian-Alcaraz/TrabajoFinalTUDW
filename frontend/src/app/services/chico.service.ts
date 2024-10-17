@@ -13,6 +13,10 @@ export class ChicoService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  obtenerChicoxDni(dni: number): Observable<any> {
+    return this._http.get(this.url + 'chico/dni/' + dni);
+  }
+
   obtenerChicoxId(id: number): Observable<any> {
     return this._http.get(this.url + 'chico/' + id);
   }

@@ -93,3 +93,31 @@ export function ValidarCampoOpcional(...validators: ValidatorFn[]): ValidatorFn 
     return composedValidator ? composedValidator(control) : null;
   };
 }
+
+export function ExisteDniChico(_chicoService: ChicoService) {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    const dni = control.value;
+    // Si no tiene 8 digitos me voy
+    if (!dni || dni.toString().length !== 8) {
+      console.log('DNI no tiene 8 dígitos:', dni);
+      return of(null);
+    }
+    console.log('DNI con 8 dígitos, procediendo a verificar:', dni);
+    return of(dni).pipe(
+      debounceTime(300),
+      switchMap(dni => {
+        console.log('Llamando al servicio con DNI:', dni);
+        return _chicoService.obtenerChicoxDni(dni);
+      }),
+      map(response => {
+        console.log('Respuesta recibida:', response);
+        return response?.success ? null : { dniNoExistente: true };
+      }),
+      catchError((error) => {
+        console.error('Error en la validación asincrónica:', error);
+        return of(null);
+      })
+    );
+  };
+}
+
