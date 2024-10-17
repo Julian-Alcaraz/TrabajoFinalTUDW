@@ -4,7 +4,7 @@ import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Chico } from '../../chico/entities/chico.entity';
 import { Localidad } from '../../localidad/entities/localidad.entity';
 
-@Entity({ name: 'barrios' })
+@Entity({ name: 'barrio' })
 export class Barrio extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
   nombre: string;

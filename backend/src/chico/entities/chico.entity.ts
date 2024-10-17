@@ -6,7 +6,7 @@ import { EntidadBasica } from '../../database/entities/EntidadBasica';
 
 export type sexoType = 'Femenino' | 'Masculino' | 'Otro';
 
-@Entity({ name: 'chicos' })
+@Entity({ name: 'chico' })
 export class Chico extends EntidadBasica {
   @Column({ type: 'int', nullable: false, unique: true })
   dni: number;

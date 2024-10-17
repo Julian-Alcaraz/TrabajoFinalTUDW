@@ -10,7 +10,21 @@ export class Oftalmologia {
   @JoinColumn()
   consulta: Consulta;
 
-  // datos clinica general
-  @Column()
-  detalleClinico: string; // Propiedad específica de ClinicaGeneral
+  @Column({ type: 'varchar', length: 100, nullable: false })
+  demanda: string;
+
+  @Column({ type: 'boolean', nullable: false })
+  primera_vez: boolean;
+
+  @Column({ type: 'boolean', nullable: false })
+  control: boolean;
+
+  @Column({ type: 'boolean', nullable: false })
+  receta: boolean;
+
+  @Column({ type: 'date', nullable: false })
+  prox_control: Date;
+
+  @Column({ type: 'boolean', nullable: false })
+  anteojos: boolean;
 }

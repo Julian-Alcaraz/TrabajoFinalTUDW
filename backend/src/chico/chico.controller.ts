@@ -51,6 +51,27 @@ export class ChicoController {
     };
   }
 
+  @Get('dni/:dni')
+  @ApiOperation({ summary: 'Devuelve el chico buscado por dni' })
+  @ApiResponse({ status: 200, description: 'Retorna el chico buscado con exito' })
+  @ApiResponse({ status: 404, description: 'Chico no encontrado' })
+  async findOneByDni(@Param('dni', ParseIntPipe) dni: number) {
+    const chico = await this.chicoService.findOneByDni(dni);
+    if (chico) {
+      return {
+        success: true,
+        data: chico,
+        message: 'Chico encontrado con exito',
+      };
+    } else {
+      return {
+        success: false,
+        data: chico,
+        message: 'Chico no encontrado.',
+      };
+    }
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un chico' })
   @ApiResponse({ status: 200, description: 'Chico actualizado con exito' })
