@@ -28,17 +28,19 @@ export class Consulta extends EntidadBasica {
   // Relaciones
 
   @ManyToOne(() => Usuario, (usuario) => usuario.id)
+  @JoinColumn({ name: 'id_usuario' })
   usuario: Usuario;
 
   @ManyToOne(() => Chico, (chico) => chico.consultas)
+  @JoinColumn({ name: 'id_chico' })
   chico: Chico;
 
   @ManyToOne(() => Institucion)
-  @JoinColumn()
+  @JoinColumn({ name: 'id_institucion' })
   institucion: Institucion;
 
   @ManyToOne(() => Curso)
-  @JoinColumn()
+  @JoinColumn({ name: 'id_curso' })
   curso: Curso;
 
   @OneToOne(() => ClinicaGeneral)

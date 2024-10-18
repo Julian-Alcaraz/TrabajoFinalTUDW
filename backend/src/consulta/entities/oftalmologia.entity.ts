@@ -1,13 +1,13 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
 
 @Entity()
 export class Oftalmologia {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  consultaId: number;
+  @PrimaryColumn({ type: 'int' })
+  id_consulta: number;
 
   @OneToOne(() => Consulta)
-  @JoinColumn()
+  @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
   @Column({ type: 'varchar', length: 100, nullable: false })

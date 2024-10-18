@@ -3,7 +3,7 @@ import { Entity, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Rol } from '../../rol/entities/rol.entity';
 
-@Entity({ name: 'menus' })
+@Entity({ name: 'menu' })
 export class Menu extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
   label: string;
@@ -21,7 +21,7 @@ export class Menu extends EntidadBasica {
 
   @ManyToMany(() => Rol, (rol) => rol.menus)
   @JoinTable({
-    name: 'menus-roles',
+    name: 'menu-rol',
     joinColumn: {
       name: 'id_menu',
       referencedColumnName: 'id',

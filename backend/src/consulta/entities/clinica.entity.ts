@@ -5,10 +5,10 @@ import { Consulta } from './consulta.entity';
 export class ClinicaGeneral {
   // esto lo hago para usar el id de la consulta como primaria y foranea
   @PrimaryColumn({ type: 'int' })
-  consultaId: number;
+  id_consulta: number;
 
   @OneToOne(() => Consulta)
-  @JoinColumn({ name: 'consultaId' })
+  @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
   // datos clinica general

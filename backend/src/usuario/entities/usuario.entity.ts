@@ -4,7 +4,7 @@ import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Rol } from '../../rol/entities/rol.entity';
 import { Consulta } from '../../consulta/entities/consulta.entity';
 
-@Entity({ name: 'usuarios' })
+@Entity({ name: 'usuario' })
 export class Usuario extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 })
   nombre: string;
@@ -31,7 +31,7 @@ export class Usuario extends EntidadBasica {
 
   @ManyToMany(() => Rol, (rol) => rol.usuarios)
   @JoinTable({
-    name: 'usuarios-roles',
+    name: 'usuario-rol',
     joinColumn: {
       name: 'id_usuario',
       referencedColumnName: 'id',

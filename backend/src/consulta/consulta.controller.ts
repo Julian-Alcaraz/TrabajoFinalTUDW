@@ -18,15 +18,14 @@ export class ConsultaController {
     return {
       succes: true,
       data: consulta,
-      message: 'Consulta cargada con exito.',
+      message: `Consulta ${createConsultaDto.type} cargada con exito.`,
     };
   }
 
   @Get()
   @ApiOperation({ summary: 'Devuelte todas las consultas sin los datos por especialidad' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
-  async findAll(@Req() req: any) {
-    console.log(req.user);
+  async findAll() {
     const consultas = await this.consultaService.findAll();
     return {
       succes: true,

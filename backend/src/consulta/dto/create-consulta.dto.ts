@@ -63,15 +63,21 @@ export class CreateConsultaDto {
   // Validación condicional para "Fonoaudiologia"
   @ValidateIf((o) => o.type === 'Fonoaudiologia')
   @IsNotEmpty({ message: 'Los datos de fonoaudiología no pueden estar vacíos cuando el tipo es Fonoaudiología' })
+  @ValidateNested()
+  @Type(() => CreateFonoaudiologiaDto)
   public fonoaudiologia?: CreateFonoaudiologiaDto;
 
   // Validación condicional para "Oftalmologia"
   @ValidateIf((o) => o.type === 'Oftalmologia')
   @IsNotEmpty({ message: 'Los datos de oftalmología no pueden estar vacíos cuando el tipo es Oftalmología' })
+  @ValidateNested()
+  @Type(() => CreateOftalmologiaDto)
   public oftalmologia?: CreateOftalmologiaDto;
 
   // Validación condicional para "Odontologia"
   @ValidateIf((o) => o.type === 'Odontologia')
   @IsNotEmpty({ message: 'Los datos de odontología no pueden estar vacíos cuando el tipo es Odontología' })
+  @ValidateNested()
+  @Type(() => CreateOdontologiaDto)
   public odontologia?: CreateOdontologiaDto;
 }

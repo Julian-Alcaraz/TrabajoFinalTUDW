@@ -36,8 +36,6 @@ export class ConsultaService {
 
     return await this.consultaORM.manager.transaction(async (manager: EntityManager) => {
       const { clinica, oftalmologia, odontologia, fonoaudiologia, ...consultaCreate } = createConsultaDto;
-      // 1. Validar existencia de entidades relacionadas (chico, barrio, etc.) si es necesario
-      // usuario no lo valido por que es el que inicio la session
       const curso = await manager.findOne(Curso, { where: { id: consultaCreate.cursoId, deshabilitado: false } });
       if (!curso) throw new BadRequestException('El curso ingresado no existe');
       const institucion = await manager.findOne(Institucion, { where: { id: consultaCreate.institucionId, deshabilitado: false } });
@@ -48,7 +46,6 @@ export class ConsultaService {
       const consultaGuardada = await manager.save(nuevaConsulta);
       if (!consultaGuardada) throw new BadRequestException('La carga de la consulta falló');
 
-      // 3. Crear la consulta hija, según el tipo de consulta
       let nuevaConsultaHija = null;
       let consultaHijaGuardada = null;
 
@@ -56,30 +53,25 @@ export class ConsultaService {
         const imc = clinica.peso / (clinica.talla / 100);
         const estado_nutricional = estadoNutricional(clinica.pcimc);
         const tension_arterial = tensionArterial(clinica.pcta);
-        // cualquiera de las dos formas esta bien, nose cual es mejor!!!!!
+        // cualquiera de las dos formas esta bien, nose cual es mejor!!!!! segun chat la del objeto por como se gestiona orm
         nuevaConsultaHija = manager.create(ClinicaGeneral, { consulta: consultaGuardada, ...clinica, imc, estado_nutricional, tension_arterial });
         // nuevaConsultaHija = manager.create(ClinicaGeneral, { consultaId: consultaGuardada.id, ...clinica, imc, estado_nutricional, tension_arterial });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
       if (fonoaudiologia) {
-        // agregar campos que se tienen que calcular
-
-        nuevaConsultaHija = manager.create(Fonoaudiologia, { consultaId: consultaGuardada.id, ...fonoaudiologia });
+        nuevaConsultaHija = manager.create(Fonoaudiologia, { consulta: consultaGuardada, ...fonoaudiologia });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
-      if (createConsultaDto.oftalmologia) {
-        // agregar campos que se tienen que calcular
-
-        nuevaConsultaHija = manager.create(Oftalmologia, { consultaId: consultaGuardada.id, ...createConsultaDto.oftalmologia });
+      if (oftalmologia) {
+        nuevaConsultaHija = manager.create(Oftalmologia, { consulta: consultaGuardada, ...oftalmologia });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
-      if (createConsultaDto.odontologia) {
-        // agregar campos que se tienen que calcular
-
-        nuevaConsultaHija = manager.create(Odontologia, { consultaId: consultaGuardada.id, ...createConsultaDto.odontologia });
+      if (odontologia) {
+        const clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_norecuperables);
+        nuevaConsultaHija = manager.create(Odontologia, { consulta: consultaGuardada, ...odontologia, clasificacion });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
@@ -90,7 +82,12 @@ export class ConsultaService {
 
       // return consultaGuardada; //devuelve solo la consulta
       // return { ...consultaGuardada, ...consultaHijaGuardada }; // devuelve laconsulta join consultahija un solo objeto
-      return consultaHijaGuardada; // devuelve laconsulta join consultahija un solo objeto
+      // return consultaHijaGuardada; // devuelve la consulta hija con un objeto de la consulta
+
+      // de esta forma devuelve todo como si fuera el mismo registro, para mi la mejor forma
+      delete consultaHijaGuardada.consulta;
+      delete consultaHijaGuardada.id_consulta;
+      return { ...consultaGuardada, ...consultaHijaGuardada };
     });
   }
 
@@ -110,6 +107,7 @@ export class ConsultaService {
     return `This action removes a #${id} consulta`;
   }
 }
+
 function estadoNutricional(pcimc: number) {
   if (pcimc < 4) return 'B Bajo peso/Desnutrido';
   if (pcimc >= 4 && pcimc < 10) return 'A Riesgo Nutricional';
@@ -117,8 +115,23 @@ function estadoNutricional(pcimc: number) {
   if (pcimc >= 85 && pcimc < 98) return 'D Sobrepeso';
   if (pcimc >= 95) return 'E Obesidad';
 }
+
 function tensionArterial(pcta) {
   if (pcta < 90) return 'Normotenso';
   if (pcta >= 90 && pcta < 95) return 'Riesgo';
   if (pcta >= 95) return 'Hipertenso';
+}
+
+function clasificacionDental(dR, dIr) {
+  if (dR == 0 && dIr == 0) {
+    return 'BOCA SANA';
+  } else if (dR <= 4 && dIr == 0) {
+    return 'BAJO INDICE DE CARIES';
+  } else if (dIr == 1) {
+    return 'MODERADO INDICE DE CARIES';
+  } else if (dIr >= 1) {
+    return 'ALTO INDICE DE CARIES';
+  } else {
+    return 'SIN CLASIFICACIÓN';
+  }
 }
