@@ -22,7 +22,7 @@ export class ClinicaGeneral {
   obesidad: boolean;
 
   @Column({ type: 'boolean' })
-  consumo_alcohol: boolean;
+  consumo_alchol: boolean;
 
   @Column({ type: 'boolean' })
   consumo_drogas: boolean;
@@ -91,7 +91,7 @@ export class ClinicaGeneral {
   lacteos: boolean;
 
   @Column({ type: 'boolean' })
-  infusiones: boolean;
+  infuciones: boolean;
 
   @Column({ type: 'int' })
   numero_comidas: number;

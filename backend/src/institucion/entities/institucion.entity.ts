@@ -1,6 +1,6 @@
 import { Consulta } from '../../consulta/entities/consulta.entity';
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 export type tiposInstitucion = 'Jardin' | 'Primario' | 'Secundario' | 'Terciario';
 
 @Entity()
@@ -11,6 +11,7 @@ export class Institucion extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Jardin', 'Primario', 'Secundario', 'Terciario'], nullable: false })
   tipo: tiposInstitucion;
 
-  @OneToOne(() => Consulta)
-  consulta: Consulta;
+
+  @OneToMany(() => Consulta, (consulta) => consulta.chico)
+  consultas: Consulta[];
 }

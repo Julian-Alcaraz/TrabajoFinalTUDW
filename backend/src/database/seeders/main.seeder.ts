@@ -8,6 +8,9 @@ import { Usuario } from '../../usuario/entities/usuario.entity';
 import { codificarContrasenia } from '../../common/utils/bcrypt';
 import { Localidad } from '../../localidad/entities/localidad.entity';
 import { Barrio } from '../..//barrio/entities/barrio.entity';
+import { Institucion } from '../../institucion/entities/institucion.entity';
+import { Curso } from '../../curso/entities/curso.entity';
+import { Chico } from '../../chico/entities/chico.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -18,6 +21,11 @@ export class MainSeeder implements Seeder {
       const menuORM = dataSource.getRepository(Menu);
       const localidadORM = dataSource.getRepository(Localidad);
       const barrioORM = dataSource.getRepository(Barrio);
+      const cursoORM = dataSource.getRepository(Curso);
+      const institucionORM = dataSource.getRepository(Institucion);
+      const chicoORM = dataSource.getRepository(Chico);
+      // enums
+
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
 
@@ -283,6 +291,124 @@ export class MainSeeder implements Seeder {
         {
           nombre: 'Localidad Cipolletti',
           localidad: localidades[1],
+        },
+      ]);
+      console.log('Seeding cursos...');
+      const cursos = await cursoORM.save([
+        {
+          grado: 1,
+          nivel: 'Primaria',
+          nombre: 'Primer Grado',
+        },
+        {
+          grado: 2,
+          nivel: 'Primaria',
+          nombre: 'Segundo Grado',
+        },
+        {
+          grado: 3,
+          nivel: 'Primaria',
+          nombre: 'Tercer Grado',
+        },
+        {
+          grado: 4,
+          nivel: 'Primaria',
+          nombre: 'Cuarto Grado',
+        },
+        {
+          grado: 5,
+          nivel: 'Primaria',
+          nombre: 'Quinto Grado',
+        },
+        {
+          grado: 6,
+          nivel: 'Primaria',
+          nombre: 'Sexto Grado',
+        },
+        {
+          grado: 7,
+          nivel: 'Primaria',
+          nombre: 'Septimo Grado',
+        },
+        {
+          grado: 1,
+          nivel: 'Secundario',
+          nombre: 'Primer Año',
+        },
+        {
+          grado: 2,
+          nivel: 'Secundario',
+          nombre: 'Segundo Año',
+        },
+        {
+          grado: 3,
+          nivel: 'Secundario',
+          nombre: 'Tercer Año',
+        },
+        {
+          grado: 4,
+          nivel: 'Secundario',
+          nombre: 'Cuarto Año',
+        },
+        {
+          grado: 5,
+          nivel: 'Secundario',
+          nombre: 'Quinto Año',
+        },
+        {
+          grado: 6,
+          nivel: 'Secundario',
+          nombre: 'Sexto Año',
+        },
+        {
+          grado: 3,
+          nivel: 'Jardin',
+          nombre: 'Sala de 3 Años',
+        },
+        {
+          grado: 4,
+          nivel: 'Jardin',
+          nombre: 'Sala de 4 Años',
+        },
+        {
+          grado: 5,
+          nivel: 'Jardin',
+          nombre: 'Sala de 5 Años',
+        },
+      ]);
+      console.log('Seeding instituciones...');
+      const instituciones = await institucionORM.save([
+        {
+          nombre: 'Jardin N° 14',
+          tipo: 'Jardin',
+        },
+        {
+          nombre: 'Escuela N° 125',
+          tipo: 'Primario',
+        },
+        {
+          nombre: 'E.P.E.T N° 20',
+          tipo: 'Secundario',
+        },
+        {
+          nombre: 'Universidad nacional del comahue',
+          tipo: 'Terciario',
+        },
+      ]);
+      console.log('Seeding Chicos...');
+      const chicos = await chicoORM.save([
+        {
+          dni: 12345678,
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          sexo: 'Masculino',
+          fe_nacimiento: '2010-05-12',
+          // fe_nacimiento: '2010-05-12T00:00:00.000Z',
+          direccion: 'Calle Falsa 123',
+          telefono: '123456789',
+          nombre_madre: 'María López',
+          nombre_padre: 'Carlos Pérez',
+          barrio: barrios[0],
         },
       ]);
     } catch (error) {

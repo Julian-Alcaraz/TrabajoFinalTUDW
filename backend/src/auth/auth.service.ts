@@ -20,7 +20,7 @@ export class AuthService {
     const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
       delete usuario.contrasenia;
-      return { token: this.jwtService.sign(usuario), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
+      return { token: this.jwtService.sign(usuario, { expiresIn: '2h' }), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
     } else return null;
   }
 }

@@ -9,12 +9,12 @@ import { Chico } from '../../chico/entities/chico.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 
-export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
+export type consultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 
 @Entity()
 export class Consulta extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], /*length: 100,*/ nullable: true })
-  type: Type;
+  type: consultaType;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   obra_social: string;
@@ -33,11 +33,11 @@ export class Consulta extends EntidadBasica {
   @ManyToOne(() => Chico, (chico) => chico.consultas)
   chico: Chico;
 
-  @OneToOne(() => Institucion)
+  @ManyToOne(() => Institucion)
   @JoinColumn()
   institucion: Institucion;
 
-  @OneToOne(() => Curso)
+  @ManyToOne(() => Curso)
   @JoinColumn()
   curso: Curso;
 

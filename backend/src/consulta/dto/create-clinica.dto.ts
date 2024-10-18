@@ -70,7 +70,6 @@ export class CreateClinicaDto {
 
   // imc no lo agrego al dto por que lo calculamos en el back
 
-  // que hago con esto
   @ApiProperty({ description: 'El percentillo de imc del niño que asiste' })
   @IsNotEmpty({ message: 'El percentillo de imc no puede estar vacia' })
   @IsNumber({}, { message: 'El percentillo de imc debe ser un número' })
