@@ -20,7 +20,7 @@ export class CreateClinicaDto {
   @ApiProperty({ description: 'Consume alchol' })
   @IsNotEmpty({ message: 'Consumo de alchol no puede estar vacio' })
   @IsBoolean({ message: 'Consumo de alchol debe ser un boleano' })
-  readonly consumo_alchol: boolean;
+  readonly consumo_alcohol: boolean; // NO consumo_alchol ES consumo_alcohol
 
   @ApiProperty({ description: 'Consume drogas' })
   @IsNotEmpty({ message: 'Consumo de drogas no puede estar vacio' })
@@ -141,10 +141,10 @@ export class CreateClinicaDto {
   @IsBoolean({ message: 'Ingesta de lacteos debe ser un boleano' })
   readonly lacteos: boolean;
 
-  @ApiProperty({ description: 'Ingesta de infuciones del niño' })
-  @IsNotEmpty({ message: 'Ingesta de infuciones no puede estar vacio' })
-  @IsBoolean({ message: 'Ingesta de infuciones debe ser un boleano' })
-  readonly infuciones: boolean;
+  @ApiProperty({ description: 'Ingesta de infusiones del niño' })
+  @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
+  @IsBoolean({ message: 'Ingesta de infusiones debe ser un boleano' })
+  readonly infusiones: boolean; // NO infuciones, ES infusiones
 
   @ApiProperty({ description: 'Numero de comidas del niño que asiste' })
   @IsNotEmpty({ message: 'Numero de comidas  no puede estar vacio' })

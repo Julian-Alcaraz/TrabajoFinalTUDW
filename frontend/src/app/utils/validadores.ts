@@ -105,19 +105,34 @@ export function ExisteDniChico(_chicoService: ChicoService) {
     console.log('DNI con 8 dígitos, procediendo a verificar:', dni);
     return of(dni).pipe(
       debounceTime(300),
-      switchMap(dni => {
+      switchMap((dni) => {
         console.log('Llamando al servicio con DNI:', dni);
         return _chicoService.obtenerChicoxDni(dni);
       }),
-      map(response => {
+      map((response) => {
         console.log('Respuesta recibida:', response);
         return response?.success ? null : { dniNoExistente: true };
       }),
       catchError((error) => {
         console.error('Error en la validación asincrónica:', error);
         return of(null);
-      })
+      }),
     );
   };
 }
 
+export function ValidarNumerosFloat(control: AbstractControl): ValidationErrors | null {
+  const POSITIVE_FLOAT_REGEXP = /^(?!0)[0-9]+(\.[0-9]+)?$/;
+  if (control.value !== null && control.value !== '' && !POSITIVE_FLOAT_REGEXP.test(control.value)) {
+    return { ValidarNumerosFloat: 'Este campo solo debe contener números positivos válidos.' };
+  }
+  return null;
+}
+
+export function ValidarHora(control: AbstractControl): ValidationErrors | null {
+  const HORA_REGEXP = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  if (control.value && !HORA_REGEXP.test(control.value)) {
+    return { ValidarHora: true };
+  }
+  return null;
+}

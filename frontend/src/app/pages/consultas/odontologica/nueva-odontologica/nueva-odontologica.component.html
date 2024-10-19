@@ -1,0 +1,349 @@
+<form (ngSubmit)="enviarFormulario()" [formGroup]="odontologicaForm">
+  <div class="grid gap-6 md:grid-cols-4">
+    <!-- Campos generales: -->
+    <!-- Obra Social: -->
+    <div class="col-span-2">
+      <label for="obra_social" class="block mb-2 text-sm font-medium text-gray-900">Obra Social</label>
+      <input formControlName="obra_social" type="text" id="obra_social"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ej: Osde" />
+      <div
+        *ngIf="odontologicaForm.get('obra_social')?.errors && (odontologicaForm.get('obra_social')?.dirty || odontologicaForm.get('obra_social')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('obra_social')?.errors?.['minlength']">Minimo 3 caracteres.</div>
+        <div *ngIf="odontologicaForm.get('obra_social')?.errors?.['maxlength']">Maximo 100 caracteres.
+        </div>
+        <div *ngIf="odontologicaForm.get('obra_social')?.errors?.['ValidarSoloLetras']">Solo puede tener
+          letras.
+        </div>
+        <div *ngIf="odontologicaForm.get('obra_social')?.errors?.['ValidarCadenaSinEspacios']">El campo no
+          puede
+          estar en blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Edad: -->
+    <div class="col-span-2">
+      <label for="edad" class="block mb-2 text-sm font-medium text-gray-900">Edad</label>
+      <input formControlName="edad" type="number" id="edad"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ej: 10" required />
+      <div
+        *ngIf="odontologicaForm.get('edad')?.errors && (odontologicaForm.get('edad')?.dirty || odontologicaForm.get('edad')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('edad')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="odontologicaForm.get('edad')?.errors?.['ValidarSoloNumeros']">Solo puede tener
+          números.
+        </div>
+        <div *ngIf="odontologicaForm.get('edad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+          estar en
+          blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Observaciones: cambiar a textarea -->
+    <div class="col-span-4">
+      <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-900">Observaciones</label>
+      <input formControlName="observaciones" type="text" id="observaciones"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="" />
+      <div
+        *ngIf="odontologicaForm.get('observaciones')?.errors && (odontologicaForm.get('observaciones')?.dirty || odontologicaForm.get('observaciones')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('observaciones')?.errors?.['minlength']">Minimo 1 caracter.</div>
+        <div *ngIf="odontologicaForm.get('observaciones')?.errors?.['maxlength']">Maximo 1000 caracteres.
+        </div>
+        <div *ngIf="odontologicaForm.get('observaciones')?.errors?.['ValidarSoloLetras']">Solo puede tener
+          letras.
+        </div>
+        <div *ngIf="odontologicaForm.get('observaciones')?.errors?.['ValidarCadenaSinEspacios']">El campo
+          no
+          puede
+          estar en blanco.
+        </div>
+      </div>
+    </div>
+    <!-- Dni: -->
+    <div class="col-span-2">
+      <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
+      <input (change)="onChangeDni()" formControlName="dni" type="number" id="dni"
+        aria-describedby="helper-text-explanation"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="xxxxx" required />
+      <div
+        *ngIf="odontologicaForm.get('dni')?.errors && (odontologicaForm.get('dni')?.dirty || odontologicaForm.get('dni')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
+        <div *ngIf="odontologicaForm.get('dni')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.
+        </div>
+        <div *ngIf="odontologicaForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 digitos.</div>
+        <div *ngIf="odontologicaForm.get('dni')?.errors?.['dniExistente']">Ese dni no esta cargado en el
+          sistema.
+        </div>
+      </div>
+    </div>
+    <!-- Mensaje para cargar el chico si el DNI no existe -->
+    <div class="col-span-2">
+      <div *ngIf="odontologicaForm.get('dni')?.value !== null && odontologicaForm.get('dni')?.value !== ''">
+        <div *ngIf="chico === null && this.odontologicaForm.get('dni')?.value.toString().length === 8"
+          class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-2">
+          <div class="flex items-center">
+            <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
+            </svg>
+            <a href="#" (click)="1 + 1" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
+              aquí para cargarlo.</a>
+          </div>
+        </div>
+        <div *ngIf="chico !== null" class="mt-4 col-span-2">
+          <p class="text-green-600 font-bold">Chico Seleccionado</p>
+          <p>Nombre chico: <span class="font-semibold">{{ chico.nombre }}</span></p>
+          <p>Apellido chico: <span class="font-semibold">{{ chico.apellido }}</span></p>
+          <p>Podrian agregarse mas datos del chico aca...</p>
+        </div>
+      </div>
+    </div>
+    <!-- Institucion -->
+    <div class="col-span-2">
+      <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900">Institucion</label>
+      <select (change)="1+1" formControlName="id_institucion" id="id_institucion"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Selecciona una opción</option>
+        <option value="new">Cargar una institucion (no esta implementado)</option>
+        <option *ngFor="let institucion of instituciones" [value]="institucion.id">{{ institucion.nombre }}</option>
+      </select>
+      <div
+        *ngIf="odontologicaForm.get('id_institucion')?.errors && (odontologicaForm.get('id_institucion')?.dirty || odontologicaForm.get('id_institucion')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('id_institucion')?.errors?.['required']">Debe seleccionar una opción.</div>
+      </div>
+    </div>
+    <!-- Curso -->
+    <div class="col-span-2">
+      <label for="curso" class="block mb-2 text-sm font-medium text-gray-900">Institucion</label>
+      <select formControlName="id_curso" id="id_curso"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Selecciona una opción</option>
+        <option value="new">Cargar un curso (no esta implementado)</option>
+        <option *ngFor="let curso of cursos" [value]="curso.id">{{ curso.nombre }}</option>
+      </select>
+      <div
+        *ngIf="odontologicaForm.get('id_curso')?.errors && (odontologicaForm.get('id_curso')?.dirty || odontologicaForm.get('id_curso')?.touched)"
+        class="text-red-600 text-sm">
+        <div *ngIf="odontologicaForm.get('id_curso')?.errors?.['required']">Debe seleccionar una opción.</div>
+      </div>
+    </div>
+  </div>
+  <!-- primera_vez -->
+  <div class="mt-4 col-span-1">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="primera_vez" type="checkbox" formControlName="primera_vez"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="primera_vez" class="text-sm text-gray-700">Primera Vez</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('primera_vez')?.errors && (odontologicaForm.get('primera_vez')?.dirty || odontologicaForm.get('primera_vez')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('primera_vez')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Ulterior -->
+  <div class="mt-4 col-span-1">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="ulterior" type="checkbox" formControlName="ulterior"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="ulterior" class="text-sm text-gray-700">Ulterior</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('ulterior')?.errors && (odontologicaForm.get('ulterior')?.dirty || odontologicaForm.get('ulterior')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('ulterior')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Cepillo -->
+  <div class="mt-4 col-span-1">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="cepillo" type="checkbox" formControlName="cepillo"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="cepillo" class="text-sm text-gray-700">Cepillo</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('cepillo')?.errors && (odontologicaForm.get('cepillo')?.dirty || odontologicaForm.get('cepillo')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('cepillo')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Cepillado -->
+  <div class="mt-4 col-span-1">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="cepillado" type="checkbox" formControlName="cepillado"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="cepillado" class="text-sm text-gray-700">Cepillado</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('cepillado')?.errors && (odontologicaForm.get('cepillado')?.dirty || odontologicaForm.get('cepillado')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('cepillado')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Topificacion -->
+  <div class="mt-4 col-span-1">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="topificacion" type="checkbox" formControlName="topificacion"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="topificacion" class="text-sm text-gray-700">Topificacion</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('topificacion')?.errors && (odontologicaForm.get('topificacion')?.dirty || odontologicaForm.get('topificacion')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('topificacion')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Derivacion -->
+  <div class="col-span-2">
+    <div class="flex items-center">
+      <input (change)="onCheckboxChange($event)" id="derivacion" type="checkbox" formControlName="derivacion"
+        class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
+      <label for="derivacion" class="text-sm text-gray-700">Derivacion</label>
+    </div>
+    <div
+      *ngIf="odontologicaForm.get('derivacion')?.errors && (odontologicaForm.get('derivacion')?.dirty || odontologicaForm.get('derivacion')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('derivacion')?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
+  </div>
+  <!-- Dientes Permanentes -->
+  <div class="col-span-2">
+    <label for="dientes_permanentes" class="block mb-2 text-sm font-medium text-gray-900">Dientes Permanentes</label>
+    <input formControlName="dientes_permanentes" type="number" id="dientes_permanentes"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('dientes_permanentes')?.errors && (odontologicaForm.get('dientes_permanentes')?.dirty || odontologicaForm.get('dientes_permanentes')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('dientes_permanentes')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('dientes_permanentes')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.
+      </div>
+    </div>
+  </div>
+  <!-- Dientes Temporales -->
+  <div class="col-span-2">
+    <label for="dientes_temporales" class="block mb-2 text-sm font-medium text-gray-900">Dientes Temporales</label>
+    <input formControlName="dientes_temporales" type="number" id="dientes_temporales"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('dientes_temporales')?.errors && (odontologicaForm.get('dientes_temporales')?.dirty || odontologicaForm.get('dientes_temporales')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('dientes_temporales')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('dientes_temporales')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.
+      </div>
+    </div>
+  </div>
+  <!-- Sellador -->
+  <div class="col-span-2">
+    <label for="sellador" class="block mb-2 text-sm font-medium text-gray-900">Sellador</label>
+    <input formControlName="sellador" type="number" id="sellador"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('sellador')?.errors && (odontologicaForm.get('sellador')?.dirty || odontologicaForm.get('sellador')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('sellador')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('sellador')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
+    </div>
+  </div>
+  <!-- Dientes Recuperables -->
+  <div class="col-span-2">
+    <label for="dientes_recuperables" class="block mb-2 text-sm font-medium text-gray-900">Dientes Recuperables</label>
+    <input formControlName="dientes_recuperables" type="number" id="dientes_recuperables"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('dientes_recuperables')?.errors && (odontologicaForm.get('dientes_recuperables')?.dirty || odontologicaForm.get('dientes_recuperables')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('dientes_recuperables')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('dientes_recuperables')?.errors?.['ValidarSoloNumeros']">Solo se permiten
+        números.</div>
+    </div>
+  </div>
+  <!-- Dientes no Recuperables -->
+  <div class="col-span-2">
+    <label for="dientes_norecuperables" class="block mb-2 text-sm font-medium text-gray-900">Dientes no
+      Recuperables</label>
+    <input formControlName="dientes_norecuperables" type="number" id="dientes_norecuperables"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('dientes_norecuperables')?.errors && (odontologicaForm.get('dientes_norecuperables')?.dirty || odontologicaForm.get('dientes_norecuperables')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('dientes_norecuperables')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('dientes_norecuperables')?.errors?.['ValidarSoloNumeros']">Solo se permiten
+        números.</div>
+    </div>
+  </div>
+  <!-- Clasificacion
+  <div class="col-span-2">
+    <label for="clasificacion" class="block mb-2 text-sm font-medium text-gray-900">Alimentacion</label>
+    <input formControlName="clasificacion" type="text" id="clasificacion"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('clasificacion')?.errors && (odontologicaForm.get('clasificacion')?.dirty || odontologicaForm.get('clasificacion')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('clasificacion')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+        estar en blanco.
+      </div>
+      <div *ngIf="odontologicaForm.get('clasificacion')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('clasificacion')?.errors?.['maxlength']">Maximo 100 caracteres.
+      </div>
+      <div *ngIf="odontologicaForm.get('clasificacion')?.errors?.['minlength']">Mínimo 1 caracter.</div>
+    </div>
+  </div>
+   -->
+  <!-- Situacion Bucal -->
+  <div class="col-span-2">
+    <label for="situacion_bucal" class="block mb-2 text-sm font-medium text-gray-900">Situacion Bucal</label>
+    <input formControlName="situacion_bucal" type="text" id="situacion_bucal"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('situacion_bucal')?.errors && (odontologicaForm.get('situacion_bucal')?.dirty || odontologicaForm.get('situacion_bucal')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('situacion_bucal')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+        estar en blanco.
+      </div>
+      <div *ngIf="odontologicaForm.get('situacion_bucal')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('situacion_bucal')?.errors?.['maxlength']">Maximo 100 caracteres.
+      </div>
+      <div *ngIf="odontologicaForm.get('situacion_bucal')?.errors?.['minlength']">Mínimo 1 caracter.</div>
+    </div>
+  </div>
+  <!-- Habitos -->
+  <div class="col-span-2">
+    <label for="habitos" class="block mb-2 text-sm font-medium text-gray-900">Habitos</label>
+    <input formControlName="habitos" type="text" id="habitos"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      placeholder="" required />
+    <div
+      *ngIf="odontologicaForm.get('habitos')?.errors && (odontologicaForm.get('habitos')?.dirty || odontologicaForm.get('habitos')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="odontologicaForm.get('habitos')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
+        estar en blanco.
+      </div>
+      <div *ngIf="odontologicaForm.get('habitos')?.errors?.['required']">El campo es requerido.</div>
+      <div *ngIf="odontologicaForm.get('habitos')?.errors?.['maxlength']">Maximo 100 caracteres.
+      </div>
+      <div *ngIf="odontologicaForm.get('habitos')?.errors?.['minlength']">Mínimo 1 caracter.</div>
+    </div>
+  </div>
+  <!-- Enviar -->
+  <div class="flex my-auto p-10">
+    <!--  [disabled]="!odontologicaForm.valid" -->
+    <button type="submit"
+      class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
+    </button>
+  </div>
+</form>

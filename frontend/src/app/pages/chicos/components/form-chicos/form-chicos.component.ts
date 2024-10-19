@@ -200,6 +200,7 @@ export class FormChicosComponent implements OnInit {
           const data = this.chicoForm.value;
           data.id_barrio = parseInt(data.id_barrio);
           data.telefono = data.telefono.toString();
+          // Podria sacarse creo:
           if (!data.nombre_madre) {
             data.nombre_madre = null;
           }

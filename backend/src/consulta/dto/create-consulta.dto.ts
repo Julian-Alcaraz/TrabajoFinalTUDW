@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
+import { IsEmpty, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { consultaType } from '../entities/consulta.entity';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
@@ -49,13 +49,17 @@ export class CreateConsultaDto {
   readonly cursoId: number;
   // este dato podria ser opcional!!!!!!!!!!
   @ApiProperty({ description: 'Observaciones de la consulta' })
-  @IsNotEmpty({ message: 'Las observaciones no puede estar vacio' })
+  //@IsNotEmpty({ message: 'Las observaciones no puede estar vacio' })
+  // LO CAMBIE A OPCIONAL
+  @IsOptional()
   @IsString({ message: 'Las Observaciones debe ser un string' })
   @Length(1, 1000, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
-  readonly observaciones: string;
+  readonly observaciones?: string;
 
   @ValidateIf((o) => o.type === 'Clinica')
-  @IsNotEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
+  // @IsNotEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
+  // CAMBIE ESTO
+  @IsEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
   @ValidateNested()
   @Type(() => CreateClinicaDto)
   public clinica?: CreateClinicaDto;
