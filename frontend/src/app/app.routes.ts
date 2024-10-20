@@ -10,9 +10,11 @@ import { NuevoChicoComponent } from './pages/chicos/nuevo-chico/nuevo-chico.comp
 import { ListaChicoComponent } from './pages/chicos/lista-chico/lista-chico.component';
 import { VerChicoComponent } from './pages/chicos/ver-chico/ver-chico.component';
 import { NuevaClinicaComponent } from './pages/consultas/clinica/nueva-clinica/nueva-clinica.component';
-import { NuevaOftalmologicaComponent } from './pages/consultas/oftalmologica/nueva-oftalmologica/nueva-oftalmologica.component';
-import { NuevaOdontologicaComponent } from './pages/consultas/odontologica/nueva-odontologica/nueva-odontologica.component';
-import { NuevaFonoaudiologicaComponent } from './pages/consultas/fonoaudiologica/nueva-fonoaudiologica/nueva-fonoaudiologica.component';
+
+
+import { NuevaOftalmologiaComponent } from './pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
+import { NuevaFonoaudiologicaComponent } from './pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
+import { NuevaOdontologiaComponent } from './pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -32,9 +34,9 @@ export const routes: Routes = [
       { path: 'chicos/list', component: ListaChicoComponent, canActivate: [] },
       { path: 'chicos/:id', component: VerChicoComponent, canActivate: [] },
       { path: 'consultas/clinica/nueva', component: NuevaClinicaComponent, canActivate: [] },
-      { path: 'consultas/oftalmologica/nueva', component: NuevaOftalmologicaComponent, canActivate: [] },
-      { path: 'consultas/odontologica/nueva', component: NuevaOdontologicaComponent, canActivate: [] },
-      { path: 'consultas/fonoaudiologica/nueva', component: NuevaFonoaudiologicaComponent, canActivate: [] },
+      { path: 'consultas/oftalmologia/nueva', component: NuevaOftalmologiaComponent, canActivate: [] },
+      { path: 'consultas/odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [] },
+      { path: 'consultas/fonoaudiologia/nueva', component: NuevaFonoaudiologicaComponent, canActivate: [] },
     ],
 
   },

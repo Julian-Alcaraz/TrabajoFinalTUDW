@@ -13,7 +13,7 @@ import { Institucion } from '../../../../models/institucion.model';
 import { InstitucionService } from '../../../../services/institucion.service';
 import { Curso } from '../../../../models/curso.model';
 import { CursoService } from '../../../../services/curso.service';
-import { ClinicaService } from '../../../../services/consultas/clinica.service';
+import { ConsultaService } from '../../../../services/consulta.service';
 
 @Component({
   selector: 'app-nueva-clinica',
@@ -40,7 +40,7 @@ export class NuevaClinicaComponent implements OnInit {
     private _chicoService: ChicoService,
     private _institucionService: InstitucionService,
     private _cursoService: CursoService,
-    private _clinicaService: ClinicaService,
+    private _consultaService: ConsultaService,
   ) {
     this.clinicaForm = this.fb.group(
       {
@@ -286,7 +286,7 @@ export class NuevaClinicaComponent implements OnInit {
           };
           console.log('DATOS ENVIADOS');
           console.log(data);
-          this._clinicaService.cargarConsultaClinica(data).subscribe({
+          this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);

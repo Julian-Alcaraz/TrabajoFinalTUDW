@@ -12,17 +12,17 @@ import { catchError, debounceTime, map, of } from 'rxjs';
 import { InstitucionService } from '../../../../services/institucion.service';
 import { ChicoService } from '../../../../services/chico.service';
 import Swal from 'sweetalert2';
-import { ClinicaService } from '../../../../services/consultas/clinica.service';
+import { ConsultaService } from '../../../../services/consulta.service';
 
 @Component({
-  selector: 'app-nueva-odontologica',
+  selector: 'app-nueva-odontologia',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './nueva-odontologica.component.html',
-  styleUrl: './nueva-odontologica.component.css',
+  templateUrl: './nueva-odontologia.component.html',
+  styleUrl: './nueva-odontologia.component.css',
 })
-export class NuevaOdontologicaComponent implements OnInit {
-  public odontologicaForm: FormGroup;
+export class NuevaOdontologiaComponent implements OnInit {
+  public odontologiaForm: FormGroup;
   public chico: Chico | null = null;
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
@@ -33,9 +33,9 @@ export class NuevaOdontologicaComponent implements OnInit {
     private _cursoService: CursoService,
     private _chicoService: ChicoService,
     private _institucionService: InstitucionService,
-    private _clinicaService: ClinicaService, // CAMBIAR NOMBRE O CREAR UNA PARA ESTA
+    private _consultaService: ConsultaService,
   ) {
-    this.odontologicaForm = this.fb.group(
+    this.odontologiaForm = this.fb.group(
       {
         // Campos Generales
         type: ['Odontologia', [Validators.required, ValidarSoloLetras]],
@@ -47,9 +47,9 @@ export class NuevaOdontologicaComponent implements OnInit {
         primera_vez: [false, [Validators.required]],
         ulterior: [false, [Validators.required]],
         cepillo: [false, [Validators.required]],
-        cepillado: [false, [Validators.required, ValidarSoloNumeros]],
-        topificacion: [false, [Validators.required, ValidarSoloNumeros]],
-        derivacion: [false, [Validators.required, ValidarSoloNumeros]],
+        cepillado: [false, [Validators.required]],
+        topificacion: [false, [Validators.required]],
+        derivacion: [false, [Validators.required]],
         dientes_permanentes: [1, [Validators.required, ValidarSoloNumeros]],
         dientes_temporales: [1, [Validators.required, ValidarSoloNumeros]],
         sellador: [1, [Validators.required, ValidarSoloNumeros]],
@@ -68,7 +68,7 @@ export class NuevaOdontologicaComponent implements OnInit {
       },
     );
     // Deberia ser redundante esto pero no funciona bien si lo saco:
-    this.odontologicaForm.get('dni')?.valueChanges.subscribe(() => {
+    this.odontologiaForm.get('dni')?.valueChanges.subscribe(() => {
       this.onChangeDni();
     });
   }
@@ -101,7 +101,7 @@ export class NuevaOdontologicaComponent implements OnInit {
 
   // Podria ponerse en otro lado esto:
   onChangeDni() {
-    const dni = this.odontologicaForm.get('dni')?.value;
+    const dni = this.odontologiaForm.get('dni')?.value;
     if (!dni || dni.toString().length !== 8) {
       console.log('El DNI no tiene 8 dígitos');
       return;
@@ -115,17 +115,17 @@ export class NuevaOdontologicaComponent implements OnInit {
           console.log('Respuesta recibida:', response);
           if (response?.success) {
             this.chico = response.data;
-            this.odontologicaForm.get('chicoParam')?.setValue(response.data);
-            console.log('Chico encontrado: ', this.odontologicaForm.get('chicoParam')?.value);
+            this.odontologiaForm.get('chicoParam')?.setValue(response.data);
+            console.log('Chico encontrado: ', this.odontologiaForm.get('chicoParam')?.value);
           } else {
             this.chico = null;
-            this.odontologicaForm.get('chicoParam')?.setValue(null);
-            console.log('Chico no encontrado, esto deberia ser null: ', this.odontologicaForm.get('chicoParam')?.value);
+            this.odontologiaForm.get('chicoParam')?.setValue(null);
+            console.log('Chico no encontrado, esto deberia ser null: ', this.odontologiaForm.get('chicoParam')?.value);
           }
         }),
         catchError((error) => {
           this.chico = null;
-          this.odontologicaForm.get('chicoParam')?.setValue(null);
+          this.odontologiaForm.get('chicoParam')?.setValue(null);
           console.error('Error al verificar el DNI:', error);
           return of(null);
         }),
@@ -146,58 +146,58 @@ export class NuevaOdontologicaComponent implements OnInit {
     const checkbox = event.target as HTMLInputElement;
     const value = checkbox.checked;
     const controlName = checkbox.id;
-    this.odontologicaForm.get(controlName)?.setValue(value);
+    this.odontologiaForm.get(controlName)?.setValue(value);
   }
 
   enviarFormulario() {
     console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ');
-    console.log('FORMULARIO VALIDO:', this.odontologicaForm.valid);
+    console.log('FORMULARIO VALIDO:', this.odontologiaForm.valid);
     console.log('- - - - - - - - Valores Generales - - - - - - - -');
-    console.log('# 1 Valor de obra_social:', this.odontologicaForm.get('obra_social')?.value);
-    console.log('# 2 Valor de edad:', this.odontologicaForm.get('edad')?.value);
-    console.log('# 3 Valor de observaciones:', this.odontologicaForm.get('observaciones')?.value);
-    console.log('# 4 Valor de dni:', this.odontologicaForm.get('dni')?.value);
+    console.log('# 1 Valor de obra_social:', this.odontologiaForm.get('obra_social')?.value);
+    console.log('# 2 Valor de edad:', this.odontologiaForm.get('edad')?.value);
+    console.log('# 3 Valor de observaciones:', this.odontologiaForm.get('observaciones')?.value);
+    console.log('# 4 Valor de dni:', this.odontologiaForm.get('dni')?.value);
     console.log('- - - - - - - - Valores Odontología - - - - - - - -');
-    console.log('# 5 Valor de primera_vez:', this.odontologicaForm.get('primera_vez')?.value);
-    console.log('# 6 Valor de ulterior:', this.odontologicaForm.get('ulterior')?.value);
-    console.log('# 7 Valor de cepillo:', this.odontologicaForm.get('cepillo')?.value);
-    console.log('# 8 Valor de dientes_permanentes:', this.odontologicaForm.get('dientes_permanentes')?.value);
-    console.log('# 9 Valor de dientes_temporales:', this.odontologicaForm.get('dientes_temporales')?.value);
-    console.log('# 10 Valor de sellador:', this.odontologicaForm.get('sellador')?.value);
-    console.log('# 11 Valor de topificacion:', this.odontologicaForm.get('topificacion')?.value);
-    console.log('# 12 Valor de cepillado:', this.odontologicaForm.get('cepillado')?.value);
-    console.log('# 13 Valor de derivacion:', this.odontologicaForm.get('derivacion')?.value);
-    console.log('# 14 Valor de dientes_recuperables:', this.odontologicaForm.get('dientes_recuperables')?.value);
-    console.log('# 15 Valor de dientes_norecuperables:', this.odontologicaForm.get('dientes_norecuperables')?.value);
-    console.log('# 16 Valor de clasificacion:', this.odontologicaForm.get('clasificacion')?.value);
-    console.log('# 17 Valor de situacion_bucal:', this.odontologicaForm.get('situacion_bucal')?.value);
-    console.log('# 18 Valor de habitos:', this.odontologicaForm.get('habitos')?.value);
+    console.log('# 5 Valor de primera_vez:', this.odontologiaForm.get('primera_vez')?.value);
+    console.log('# 6 Valor de ulterior:', this.odontologiaForm.get('ulterior')?.value);
+    console.log('# 7 Valor de cepillo:', this.odontologiaForm.get('cepillo')?.value);
+    console.log('# 8 Valor de dientes_permanentes:', this.odontologiaForm.get('dientes_permanentes')?.value);
+    console.log('# 9 Valor de dientes_temporales:', this.odontologiaForm.get('dientes_temporales')?.value);
+    console.log('# 10 Valor de sellador:', this.odontologiaForm.get('sellador')?.value);
+    console.log('# 11 Valor de topificacion:', this.odontologiaForm.get('topificacion')?.value);
+    console.log('# 12 Valor de cepillado:', this.odontologiaForm.get('cepillado')?.value);
+    console.log('# 13 Valor de derivacion:', this.odontologiaForm.get('derivacion')?.value);
+    console.log('# 14 Valor de dientes_recuperables:', this.odontologiaForm.get('dientes_recuperables')?.value);
+    console.log('# 15 Valor de dientes_norecuperables:', this.odontologiaForm.get('dientes_norecuperables')?.value);
+    console.log('# 16 Valor de clasificacion:', this.odontologiaForm.get('clasificacion')?.value);
+    console.log('# 17 Valor de situacion_bucal:', this.odontologiaForm.get('situacion_bucal')?.value);
+    console.log('# 18 Valor de habitos:', this.odontologiaForm.get('habitos')?.value);
     console.log('- - - - - - - - Relaciones - - - - - - - -');
-    console.log('# 36 ChicoParam: ', this.odontologicaForm.get('chicoParam')?.value);
-    console.log('# 37 Valor de id_institucion:', this.odontologicaForm.get('id_institucion')?.value);
-    console.log('# 38 Valor de id_curso:', this.odontologicaForm.get('id_curso')?.value);
+    console.log('# 36 ChicoParam: ', this.odontologiaForm.get('chicoParam')?.value);
+    console.log('# 37 Valor de id_institucion:', this.odontologiaForm.get('id_institucion')?.value);
+    console.log('# 38 Valor de id_curso:', this.odontologiaForm.get('id_curso')?.value);
     console.log('- - - - - - - - Errores Generales - - - - - - - -');
-    console.log('# 1 Errores en dni:', this.odontologicaForm.get('dni')?.errors);
-    console.log('# 2 Errores en edad:', this.odontologicaForm.get('edad')?.errors);
-    console.log('# 3 Errores en obra_social:', this.odontologicaForm.get('obra_social')?.errors);
-    console.log('# 4 Errores en observaciones:', this.odontologicaForm.get('observaciones')?.errors);
+    console.log('# 1 Errores en dni:', this.odontologiaForm.get('dni')?.errors);
+    console.log('# 2 Errores en edad:', this.odontologiaForm.get('edad')?.errors);
+    console.log('# 3 Errores en obra_social:', this.odontologiaForm.get('obra_social')?.errors);
+    console.log('# 4 Errores en observaciones:', this.odontologiaForm.get('observaciones')?.errors);
     console.log('- - - - - - - - Errores Odontología - - - - - - - -');
-    console.log('# 5 Errores en primera_vez:', this.odontologicaForm.get('primera_vez')?.errors);
-    console.log('# 6 Errores en ulterior:', this.odontologicaForm.get('ulterior')?.errors);
-    console.log('# 7 Errores en cepillo:', this.odontologicaForm.get('cepillo')?.errors);
-    console.log('# 8 Errores en dientes_permanentes:', this.odontologicaForm.get('dientes_permanentes')?.errors);
-    console.log('# 9 Errores en dientes_temporales:', this.odontologicaForm.get('dientes_temporales')?.errors);
-    console.log('# 10 Errores en sellador:', this.odontologicaForm.get('sellador')?.errors);
-    console.log('# 11 Errores en topificacion:', this.odontologicaForm.get('topificacion')?.errors);
-    console.log('# 12 Errores en cepillado:', this.odontologicaForm.get('cepillado')?.errors);
-    console.log('# 13 Errores en derivacion:', this.odontologicaForm.get('derivacion')?.errors);
-    console.log('# 14 Errores en dientes_recuperables:', this.odontologicaForm.get('dientes_recuperables')?.errors);
-    console.log('# 15 Errores en dientes_norecuperables:', this.odontologicaForm.get('dientes_norecuperables')?.errors);
-    console.log('# 16 Errores en clasificacion:', this.odontologicaForm.get('clasificacion')?.errors);
-    console.log('# 17 Errores en situacion_bucal:', this.odontologicaForm.get('situacion_bucal')?.errors);
-    console.log('# 18 Errores en habitos:', this.odontologicaForm.get('habitos')?.errors);
+    console.log('# 5 Errores en primera_vez:', this.odontologiaForm.get('primera_vez')?.errors);
+    console.log('# 6 Errores en ulterior:', this.odontologiaForm.get('ulterior')?.errors);
+    console.log('# 7 Errores en cepillo:', this.odontologiaForm.get('cepillo')?.errors);
+    console.log('# 8 Errores en dientes_permanentes:', this.odontologiaForm.get('dientes_permanentes')?.errors);
+    console.log('# 9 Errores en dientes_temporales:', this.odontologiaForm.get('dientes_temporales')?.errors);
+    console.log('# 10 Errores en sellador:', this.odontologiaForm.get('sellador')?.errors);
+    console.log('# 11 Errores en topificacion:', this.odontologiaForm.get('topificacion')?.errors);
+    console.log('# 12 Errores en cepillado:', this.odontologiaForm.get('cepillado')?.errors);
+    console.log('# 13 Errores en derivacion:', this.odontologiaForm.get('derivacion')?.errors);
+    console.log('# 14 Errores en dientes_recuperables:', this.odontologiaForm.get('dientes_recuperables')?.errors);
+    console.log('# 15 Errores en dientes_norecuperables:', this.odontologiaForm.get('dientes_norecuperables')?.errors);
+    console.log('# 16 Errores en clasificacion:', this.odontologiaForm.get('clasificacion')?.errors);
+    console.log('# 17 Errores en situacion_bucal:', this.odontologiaForm.get('situacion_bucal')?.errors);
+    console.log('# 18 Errores en habitos:', this.odontologiaForm.get('habitos')?.errors);
 
-    if (this.odontologicaForm.valid || 1 + 1 == 2) {
+    if (this.odontologiaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta odontologica?',
         showDenyButton: true,
@@ -207,7 +207,7 @@ export class NuevaOdontologicaComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           console.log('valido');
-          const formValues = this.odontologicaForm.value;
+          const formValues = this.odontologiaForm.value;
           // delete formValues.chicoParam;
           delete formValues.dni;
           const { type, obra_social, edad, id_institucion, id_curso, observaciones, chicoParam, ...odontologicaValues } = formValues;
@@ -224,11 +224,11 @@ export class NuevaOdontologicaComponent implements OnInit {
             },
           };
           console.log(data);
-          this._clinicaService.cargarConsultaClinica(data).subscribe({
+          this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.odontologicaForm.reset();
+                this.odontologiaForm.reset();
               }
             },
             error: (err) => {

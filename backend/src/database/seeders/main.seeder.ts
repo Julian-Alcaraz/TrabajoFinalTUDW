@@ -233,7 +233,7 @@ export class MainSeeder implements Seeder {
           menu_padre: await menuORM.findOneBy({ id: 4 }),
         },
         {
-          url: 'consultas/odontologica/nueva',
+          url: 'consultas/odontologia/nueva',
           label: 'Nueva Consulta Odontologica',
           orden: 4,
           icon: '',
@@ -241,7 +241,7 @@ export class MainSeeder implements Seeder {
           menu_padre: await menuORM.findOneBy({ id: 4 }),
         },
         {
-          url: 'consultas/oftalmologica/nueva',
+          url: 'consultas/oftalmologia/nueva',
           label: 'Nueva Consulta Oftalmologica',
           orden: 4,
           icon: '',
@@ -249,7 +249,7 @@ export class MainSeeder implements Seeder {
           menu_padre: await menuORM.findOneBy({ id: 4 }),
         },
         {
-          url: 'consultas/fonoaudiologica/nueva',
+          url: 'consultas/fonoaudiologia/nueva',
           label: 'Nueva Consulta Fonoaudiologica',
           orden: 4,
           icon: '',
