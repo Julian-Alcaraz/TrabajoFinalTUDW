@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateFonoaudiologiaDto {
-  @ApiProperty({ description: 'Asistencia ' })
+  @ApiProperty({ description: 'Asistencia' })
   @IsNotEmpty({ message: 'La asistencia no puede estar vacia' })
   @IsBoolean({ message: 'La asistencia debe ser un boleano' })
   readonly asistencia: boolean;

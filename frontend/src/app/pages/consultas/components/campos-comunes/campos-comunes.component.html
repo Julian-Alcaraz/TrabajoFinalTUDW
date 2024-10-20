@@ -1,0 +1,55 @@
+<!-- Campos generales: -->
+<!-- Obra Social: -->
+<div class="grid gap-6 md:grid-cols-4">
+  <div class="col-span-2">
+    <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
+      idInput="obra_social" />
+  </div>
+  <!-- Edad: -->
+  <div class="col-span-2">
+    <app-input-number label="Edad" [control]="controlDeInput('edad')" placeholder="Ej: 12" idInput="edad" />
+  </div>
+  <!-- Observaciones: cambiar a textarea -->
+  <div class="col-span-4">
+    <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
+      idInput="observaciones" />
+  </div>
+  <!-- Dni: -->
+  <div class="col-span-2">
+    <app-input-number (change)="onChangeDni()" label="Documento" [control]="controlDeInput('dni')" placeholder="xxxxx"
+      idInput="dni" />
+  </div>
+  <!-- Mensaje para cargar el chico si el DNI no existe -->
+  <div class="col-span-2">
+    <div *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
+      <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
+        class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-2">
+        <div class="flex items-center">
+          <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
+          </svg>
+          <a href="#" (click)="1 + 1" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
+            aquí para cargarlo.</a>
+        </div>
+      </div>
+      <div *ngIf="chico !== null" class="mt-4 col-span-2">
+        <p class="text-green-600 font-bold">Chico Seleccionado</p>
+        <p>Nombre chico: <span class="font-semibold">{{ chico.nombre }}</span></p>
+        <p>Apellido chico: <span class="font-semibold">{{ chico.apellido }}</span></p>
+        <p>Podrian agregarse mas datos del chico aca...</p>
+      </div>
+    </div>
+  </div>
+  <!-- Institucion -->
+  <div class="col-span-2 mb-3">
+    <app-input-select (change)="1+1" label="Institucion" [control]="controlDeInput('id_institucion')"
+      idInput="id_institucion" [opciones]="instituciones" />
+  </div>
+  <!-- Curso -->
+  <div class="col-span-2 mb-3 ">
+    <app-input-select (change)="1+1" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso"
+      [opciones]="cursos" />
+  </div>
+</div>

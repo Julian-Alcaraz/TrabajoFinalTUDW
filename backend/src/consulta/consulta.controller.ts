@@ -14,6 +14,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Crea una nueva consulta' })
   @ApiResponse({ status: 201, description: 'Consulta creada con exito' })
   async create(@Body() createConsultaDto: CreateConsultaDto, @Req() req: any) {
+    console.log('Me llego: ', createConsultaDto);
     const consulta = await this.consultaService.create(createConsultaDto, req.user);
     return {
       succes: true,

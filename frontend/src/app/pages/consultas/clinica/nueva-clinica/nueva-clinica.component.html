@@ -1,583 +1,200 @@
 <form (ngSubmit)="enviarFormulario()" [formGroup]="clinicaForm">
-  <!-- <div><app-campos-generales [form]="clinicaForm" [errorDni]="errorDni"></app-campos-generales></div>-->
+  <app-campos-comunes [form]="clinicaForm" />
   <div class="grid gap-6 md:grid-cols-4">
-    <!-- Campos generales: -->
-    <!-- Obra Social: -->
-    <div class="col-span-2">
-      <label for="obra_social" class="block mb-2 text-sm font-medium text-gray-900">Obra Social</label>
-      <input formControlName="obra_social" type="text" id="obra_social"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: Osde" />
-      <div
-        *ngIf="clinicaForm.get('obra_social')?.errors && (clinicaForm.get('obra_social')?.dirty || clinicaForm.get('obra_social')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('obra_social')?.errors?.['minlength']">Minimo 3 caracteres.</div>
-        <div *ngIf="clinicaForm.get('obra_social')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('obra_social')?.errors?.['ValidarSoloLetras']">Solo puede tener
-          letras.
-        </div>
-        <div *ngIf="clinicaForm.get('obra_social')?.errors?.['ValidarCadenaSinEspacios']">El campo no
-          puede
-          estar en blanco.
-        </div>
-      </div>
-    </div>
-    <!-- Edad: -->
-    <div class="col-span-2">
-      <label for="edad" class="block mb-2 text-sm font-medium text-gray-900">Edad</label>
-      <input formControlName="edad" type="number" id="edad"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: 10" required />
-      <div
-        *ngIf="clinicaForm.get('edad')?.errors && (clinicaForm.get('edad')?.dirty || clinicaForm.get('edad')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('edad')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('edad')?.errors?.['ValidarSoloNumeros']">Solo puede tener
-          números.
-        </div>
-        <div *ngIf="clinicaForm.get('edad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en
-          blanco.
-        </div>
-      </div>
-    </div>
-    <!-- Observaciones: cambiar a textarea -->
-    <div class="col-span-4">
-      <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-900">Observaciones</label>
-      <input formControlName="observaciones" type="text" id="observaciones"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" />
-      <div
-        *ngIf="clinicaForm.get('observaciones')?.errors && (clinicaForm.get('observaciones')?.dirty || clinicaForm.get('observaciones')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('observaciones')?.errors?.['minlength']">Minimo 1 caracter.</div>
-        <div *ngIf="clinicaForm.get('observaciones')?.errors?.['maxlength']">Maximo 1000 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('observaciones')?.errors?.['ValidarSoloLetras']">Solo puede tener
-          letras.
-        </div>
-        <div *ngIf="clinicaForm.get('observaciones')?.errors?.['ValidarCadenaSinEspacios']">El campo
-          no
-          puede
-          estar en blanco.
-        </div>
-      </div>
-    </div>
-    <!-- Dni: -->
-    <div class="col-span-2">
-      <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
-      <input (change)="onChangeDni()" formControlName="dni" type="number" id="dni"
-        aria-describedby="helper-text-explanation"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="xxxxx" required />
-      <div
-        *ngIf="clinicaForm.get('dni')?.errors && (clinicaForm.get('dni')?.dirty || clinicaForm.get('dni')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('dni')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.
-        </div>
-        <div *ngIf="clinicaForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 digitos.</div>
-        <div *ngIf="clinicaForm.get('dni')?.errors?.['dniExistente']">Ese dni no esta cargado en el
-          sistema.
-        </div>
-      </div>
-    </div>
-    <!-- Mensaje para cargar el chico si el DNI no existe -->
-    <div class="col-span-2">
-      <div
-        *ngIf="clinicaForm.get('dni')?.value !== null && clinicaForm.get('dni')?.value !== ''">
-        <div *ngIf="chico === null && this.clinicaForm.get('dni')?.value.toString().length === 8"
-          class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-2">
-          <div class="flex items-center">
-            <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
-            </svg>
-            <a href="#" (click)="1 + 1" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
-              aquí para cargarlo.</a>
-          </div>
-        </div>
-        <div *ngIf="chico !== null" class="mt-4 col-span-2">
-          <p class="text-green-600 font-bold">Chico Seleccionado</p>
-          <p>Nombre chico: <span class="font-semibold">{{ chico.nombre }}</span></p>
-          <p>Apellido chico: <span class="font-semibold">{{ chico.apellido }}</span></p>
-          <p>Podrian agregarse mas datos del chico aca...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- !!!!!!!!!!!!! 7. Relacion con institucion creo? -->
-  <!-- !!!!!!!!!!!!! 8. Relacion con curso creo?-->
-  <!-- Campos medica clinica -->
-  <div class="grid gap-6 md:grid-cols-4">
-    <!-- Institucion -->
-    <div class="col-span-2">
-      <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900">Institucion</label>
-      <select (change)="1+1" formControlName="id_institucion" id="id_institucion"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="new">Cargar una institucion (no esta implementado)</option>
-        <option *ngFor="let institucion of instituciones" [value]="institucion.id">{{ institucion.nombre }}</option>
-      </select>
-      <div
-        *ngIf="clinicaForm.get('id_institucion')?.errors && (clinicaForm.get('id_institucion')?.dirty || clinicaForm.get('id_institucion')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('id_institucion')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
-    </div>
-    <!-- Curso -->
-    <div class="col-span-2">
-      <label for="curso" class="block mb-2 text-sm font-medium text-gray-900">Institucion</label>
-      <select formControlName="id_curso" id="id_curso"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="new">Cargar un curso (no esta implementado)</option>
-        <option *ngFor="let curso of cursos" [value]="curso.id">{{ curso.nombre }}</option>
-      </select>
-      <div
-        *ngIf="clinicaForm.get('id_curso')?.errors && (clinicaForm.get('id_curso')?.dirty || clinicaForm.get('id_curso')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('id_curso')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
-    </div>
     <!-- Peso -->
     <div class="mt-4 col-span-4">
-      <label for="peso" class="block mb-2 text-sm font-medium text-gray-900">Peso</label>
-      <input formControlName="peso" type="number" id="peso"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: 50" required />
-      <div
-        *ngIf="clinicaForm.get('peso')?.errors && (clinicaForm.get('peso')?.dirty || clinicaForm.get('peso')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('peso')?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
-        <div *ngIf="clinicaForm.get('peso')?.errors?.['required']">El campo es requerido.</div>
-      </div>
-      <h3>Indica si el chico tiene:</h3>
+      <app-input-text label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="Ej: 45" idInput="peso" />
     </div>
-    <!-- diabetes: boolean; -->
+    <!-- Diabetes -->
+    <h3 class="mt-4 col-span-4">Indica si el chico tiene:</h3>
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="diabetes" type="checkbox" formControlName="diabetes"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="diabetes" class="text-sm text-gray-700">Diabetes</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('diabetes')?.errors && (clinicaForm.get('diabetes')?.dirty || clinicaForm.get('diabetes')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('diabetes')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!--hta: boolean;-->
+    <!--Hipertension Arterial (hta) -->
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="hta" type="checkbox" formControlName="hta"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="hta" class="text-sm text-gray-700">Hipertension Arterial.</label>
-      </div>
-      <div *ngIf="clinicaForm.get('hta')?.errors && (clinicaForm.get('hta')?.dirty || clinicaForm.get('hta')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('hta')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- obesidad: boolean; -->
+    <!-- Obesidad -->
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="obesidad" type="checkbox" formControlName="obesidad"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="obesidad" class="text-sm text-gray-700">Obesidad</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('obesidad')?.errors && (clinicaForm.get('obesidad')?.dirty || clinicaForm.get('obesidad')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('obesidad')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- consumo_alcohol: boolean; -->
+    <!-- Antecedentes Perinatales -->
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="consumo_alcohol" type="checkbox"
-          formControlName="consumo_alcohol" class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="consumo_alcohol" class="text-sm text-gray-700">Consumo Alcohol</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('consumo_alcohol')?.errors && (clinicaForm.get('consumo_alcohol')?.dirty || clinicaForm.get('consumo_alcohol')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('consumo_alcohol')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Antecedentes Perinatales" [control]="controlDeInput('antecedentes_perinatal')"
+        idInput="antecedentes_perinatal" (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- consumo_drogas: boolean; -->
+    <!-- Enfermedades Previas -->
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="consumo_drogas" type="checkbox" formControlName="consumo_drogas"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="consumo_drogas" class="text-sm text-gray-700">Consumo Drogas</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('consumo_drogas')?.errors && (clinicaForm.get('consumo_drogas')?.dirty || clinicaForm.get('consumo_drogas')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('consumo_drogas')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')"
+        idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- antecedentes_perinatal: boolean; -->
-    <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="antecedentes_perinatal" type="checkbox"
-          formControlName="antecedentes_perinatal" class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="antecedentes_perinatal" class="text-sm text-gray-700">Antecedentes Perinatales</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('antecedentes_perinatal')?.errors && (clinicaForm.get('antecedentes_perinatal')?.dirty || clinicaForm.get('antecedentes_perinatal')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('antecedentes_perinatal')?.errors?.['required']">Debe seleccionar una opción.
-        </div>
-      </div>
+    <h3 class="mt-4 col-span-4">Indica si el chico tiene consumos problematicos de:</h3>
+    <!-- Consume Alcohol -->
+    <div class="mt-4 col-span-2">
+      <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')" idInput="consumo_alcohol"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- enfermedades_previas: boolean; -->
-    <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="enfermedades_previas" type="checkbox"
-          formControlName="enfermedades_previas" class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="enfermedades_previas" class="text-sm text-gray-700">Enfermedades Previas</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('enfermedades_previas')?.errors && (clinicaForm.get('enfermedades_previas')?.dirty || clinicaForm.get('enfermedades_previas')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('enfermedades_previas')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+    <!-- Consume Drogas -->
+    <div class="mt-4 col-span-2">
+      <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) vacunas: string; -->
-    <div class="col-span-2">
+    <!-- Vacunas -->
+    <div class="mt-4 col-span-2">
+      <!-- Forma texto -->
+      <app-input-text label="Vacunas" [control]="controlDeInput('vacunas')" placeholder="" idInput="vacunas" />
+      <!-- Forma select -->
       <label for="vacunas" class="block mb-2 text-sm font-medium text-gray-900">Vacunas</label>
-      <input formControlName="vacunas" type="text" id="vacunas"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
+      <select formControlName="vacunas" id="vacunas"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="completo">Completo</option>
+        <option value="incompleto">Incompleto</option>
+        <option value="desconocido">Desconocido</option>
+        <!-- <option value="new">Cargar {{ label }}</option> -->
+      </select>
       <div
         *ngIf="clinicaForm.get('vacunas')?.errors && (clinicaForm.get('vacunas')?.dirty || clinicaForm.get('vacunas')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('vacunas')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('vacunas')?.errors?.['ValidarCadenaSinEspacios']">El campo no
-          puede estar en blanco. </div>
-        <div *ngIf="clinicaForm.get('vacunas')?.errors?.['minLength']">Mínimo 1 caracter.
-        </div>
-        <div *ngIf="clinicaForm.get('vacunas')?.errors?.['maxLength']">Maximo 100 caracteres.
-        </div>
+        <div *ngIf="clinicaForm.get('vacunas')?.errors?.['required']">Debe seleccionar una opción.</div>
       </div>
     </div>
-    <!-- talla: number;   -->
-    <div class="col-span-2">
-      <label for="talla" class="block mb-2 text-sm font-medium text-gray-900">Altura (talla)</label>
-      <input formControlName="talla" type="number" id="talla"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('talla')?.errors && (clinicaForm.get('talla')?.dirty || clinicaForm.get('talla')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('talla')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('talla')?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
-      </div>
+    <!-- Altura (talla)   -->
+    <div class="mt-4 col-span-2">
+      <app-input-number label="Altura - talla (cm)" [control]="controlDeInput('talla')" placeholder=""
+        idInput="talla" />
     </div>
-    <!-- @Column({ type: 'float' }) cc: number; -->
-    <div class="col-span-2">
-      <label for="cc" class="block mb-2 text-sm font-medium text-gray-900">Circunferencia de la cintura</label>
-      <input formControlName="cc" type="number" id="cc"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div *ngIf="clinicaForm.get('cc')?.errors && (clinicaForm.get('cc')?.dirty || clinicaForm.get('cc')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('cc')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('cc')?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
-      </div>
+    <!-- Circunferencia de la cintura (cc)-->
+    <div class="mt-4 col-span-2">
+      <app-input-number label="Circunferencia de la Cintura" [control]="controlDeInput('cc')" placeholder=""
+        idInput="cc" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) estado_nutricional: string;
-    <div class="col-span-2">
-      <label for="estado_nutricional" class="block mb-2 text-sm font-medium text-gray-900">Estado Nutricional</label>
-      <input formControlName="estado_nutricional" type="text" id="estado_nutricional"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('estado_nutricional')?.errors && (clinicaForm.get('estado_nutricional')?.dirty || clinicaForm.get('estado_nutricional')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('estado_nutricional')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('estado_nutricional')?.errors?.['required']">El campo es requerido.</div>
-      </div>
-    </div> -->
-    <!-- @Column({ type: 'float' }) tas: number; -->
-    <div class="col-span-2">
-      <label for="tas" class="block mb-2 text-sm font-medium text-gray-900">Tensión Arterial Sistolica</label>
-      <input formControlName="tas" type="number" id="tas"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div *ngIf="clinicaForm.get('tas')?.errors && (clinicaForm.get('tas')?.dirty || clinicaForm.get('tas')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('tas')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('tas')?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
-      </div>
+    <!-- Tensión Arterial Sistolica (tas) -->
+    <div class="mt-4 col-span-2">
+      <app-input-number label="Tensión Arterial Sistolica" [control]="controlDeInput('tas')" placeholder=""
+        idInput="tas" />
     </div>
-    <!-- @Column({ type: 'float' }) tad: number; -->
-    <div class="col-span-2">
-      <label for="tad" class="block mb-2 text-sm font-medium text-gray-900">Tensión Arterial Diastolica</label>
-      <input formControlName="tad" type="number" id="tad"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div *ngIf="clinicaForm.get('tad')?.errors && (clinicaForm.get('tad')?.dirty || clinicaForm.get('tad')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('tad')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('tad')?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
-      </div>
+    <!-- Tensión Arterial Diastolica (tad) -->
+    <div class="mt-4 col-span-2">
+      <app-input-number label="Tensión Arterial Diastolica" [control]="controlDeInput('tad')" placeholder=""
+        idInput="tad" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) tension_arterial: string;
-    <div class="col-span-2">
-      <label for="tension_arterial" class="block mb-2 text-sm font-medium text-gray-900">Tension Arterial</label>
-      <input formControlName="tension_arterial" type="text" id="tension_arterial"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('tension_arterial')?.errors && (clinicaForm.get('tension_arterial')?.dirty || clinicaForm.get('tension_arterial')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('tension_arterial')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('tension_arterial')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('tension_arterial')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-      </div>
-    </div>-->
-    <!-- @Column({ type: 'varchar', length: 100 }) examen_visual: string; -->
-    <div class="col-span-2">
+    <!-- Examen Visual -->
+    <div class="mt-4 col-span-2">
+      <!-- Forma texto -->
+      <app-input-text label="Examen Visual" [control]="controlDeInput('examen_visual')" placeholder=""
+        idInput="examen_visual" />
+      <!-- Forma select -->
       <label for="examen_visual" class="block mb-2 text-sm font-medium text-gray-900">Examen Visual</label>
-      <input formControlName="examen_visual" type="text" id="examen_visual"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
+      <select formControlName="examen_visual" id="examen_visual"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="normal">Normal</option>
+        <option value="anormal">Anormal</option>
+        <!-- <option value="new">Cargar {{ label }}</option> -->
+      </select>
       <div
         *ngIf="clinicaForm.get('examen_visual')?.errors && (clinicaForm.get('examen_visual')?.dirty || clinicaForm.get('examen_visual')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('examen_visual')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('examen_visual')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('examen_visual')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-        <div *ngIf="clinicaForm.get('examen_visual')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
+        <div *ngIf="clinicaForm.get('examen_visual')?.errors?.['required']">Debe seleccionar una opción.</div>
       </div>
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) ortopedia_traumatologia: string; -->
-    <div class="col-span-2">
-      <label for="ortopedia_traumatologia" class="block mb-2 text-sm font-medium text-gray-900">Ortopedia
+    <!-- Ortopedia Traumatologia -->
+    <div class="mt-4 col-span-2">
+      <!-- Forma texto -->
+      <app-input-text label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')"
+        placeholder="" idInput="ortopedia_traumatologia" />
+      <!-- Forma select -->
+      <label for="ortopedia_traumatologia" class="block mb-2 text-sm font-medium text-gray-900">Ortopedia y
         Traumatologia</label>
-      <input formControlName="ortopedia_traumatologia" type="text" id="ortopedia_traumatologia"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
+      <select formControlName="ortopedia_traumatologia" id="ortopedia_traumatologia"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="normal">Normal</option>
+        <option value="escoliosis">Escoliosis</option>
+        <option value="piePlano">Pie Plano</option>
+        <option value="otras">Otras (deberia habilitar un input para cargar otra esta opcion)</option>
+      </select>
       <div
         *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors && (clinicaForm.get('ortopedia_traumatologia')?.dirty || clinicaForm.get('ortopedia_traumatologia')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-        <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
+        <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['required']">Debe seleccionar una opción.</div>
       </div>
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) lenguaje: string; -->
-    <div class="col-span-2">
+    <!-- Lenguaje -->
+    <div class="mt-4 col-span-2">
+      <!-- Forma texto -->
+      <app-input-text label="Lenguaje" [control]="controlDeInput('lenguaje')" placeholder="" idInput="lenguaje" />
+      <!-- Forma select -->
       <label for="lenguaje" class="block mb-2 text-sm font-medium text-gray-900">Lenguaje</label>
-      <input formControlName="lenguaje" type="text" id="lenguaje"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
+      <select formControlName="lenguaje" id="lenguaje"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value="" disabled selected>Seleccione una opción</option>
+        <option value="adecuado">Adecuado</option>
+        <option value="inadecuado">Inadecuado</option>
+      </select>
       <div
         *ngIf="clinicaForm.get('lenguaje')?.errors && (clinicaForm.get('lenguaje')?.dirty || clinicaForm.get('lenguaje')?.touched)"
         class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['minlength']">Mínimo 1 caracter.</div>
+        <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['required']">Debe seleccionar una opción.</div>
       </div>
     </div>
-    <!-- segto: boolean; -->
+    <!-- Seguimiento (segto) -->
     <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input (change)="onCheckboxChange($event)" id="segto" type="checkbox" formControlName="segto"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="segto" class="text-sm text-gray-700">Seguimiento</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('segto')?.errors && (clinicaForm.get('segto')?.dirty || clinicaForm.get('segto')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('segto')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+      <app-input-checkbox label="Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- lacteos: boolean; -->
-    <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input id="lacteos" type="checkbox" formControlName="lacteos"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="lacteos" class="text-sm text-gray-700">Lacteos</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('lacteos')?.errors && (clinicaForm.get('lacteos')?.dirty || clinicaForm.get('lacteos')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('lacteos')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+    <!-- Lacteos -->
+    <h3 class="mt-4 col-span-4">Indica si el chico toma:</h3>
+    <div class="mt-4 col-span-2">
+      <app-input-checkbox label="Lacteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- infusiones: boolean; -->
-    <div class="mt-4 col-span-1">
-      <div class="flex items-center">
-        <input id="infusiones" type="checkbox" formControlName="infusiones"
-          class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-        <label for="infusiones" class="text-sm text-gray-700">Infusiones</label>
-      </div>
-      <div
-        *ngIf="clinicaForm.get('infusiones')?.errors && (clinicaForm.get('infusiones')?.dirty || clinicaForm.get('infusiones')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('infusiones')?.errors?.['required']">Debe seleccionar una opción.</div>
-      </div>
+    <!-- Infusiones -->
+    <div class="mt-4 col-span-2">
+      <app-input-checkbox label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
+        (change)="onChangeCheckbox($event)" />
     </div>
-    <!-- numero_comidas: number; -->
-    <div class="col-span-2">
-      <label for="numero_comidas" class="block mb-2 text-sm font-medium text-gray-900">Numero de comidas</label>
-      <input formControlName="numero_comidas" type="number" id="numero_comidas"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('numero_comidas')?.errors && (clinicaForm.get('numero_comidas')?.dirty || clinicaForm.get('numero_comidas')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('numero_comidas')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('numero_comidas')?.errors?.['ValidarSoloNumeros']">Solo se permiten números.</div>
-      </div>
+    <!-- Numero de Comidas -->
+    <div class="mt-4 col-span-2">
+      <app-input-number label="Número de Comidas" [control]="controlDeInput('numero_comidas')" placeholder=""
+        idInput="numero_comidas" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) alimentacion: string; -->
-    <div class="col-span-2">
-      <label for="alimentacion" class="block mb-2 text-sm font-medium text-gray-900">Alimentacion</label>
-      <input formControlName="alimentacion" type="text" id="alimentacion"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('alimentacion')?.errors && (clinicaForm.get('alimentacion')?.dirty || clinicaForm.get('alimentacion')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('alimentacion')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('alimentacion')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('alimentacion')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('alimentacion')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Alimentacion -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Alimentacion" [control]="controlDeInput('alimentacion')" placeholder=""
+        idInput="alimentacion" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) hidratacion: string; -->
-    <div class="col-span-2">
-      <label for="hidratacion" class="block mb-2 text-sm font-medium text-gray-900">Alimentacion</label>
-      <input formControlName="hidratacion" type="text" id="hidratacion"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('hidratacion')?.errors && (clinicaForm.get('hidratacion')?.dirty || clinicaForm.get('hidratacion')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('hidratacion')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('hidratacion')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('hidratacion')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('hidratacion')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Hidratacion -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Hidratacion" [control]="controlDeInput('hidratacion')" placeholder=""
+        idInput="hidratacion" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 5 }) horas_pantalla: string; -->
-    <div class="col-span-2">
-      <label for="horas_pantalla" class="block mb-2 text-sm font-medium text-gray-900">Horas de Pantalla(es
-        String)</label>
-      <input formControlName="horas_pantalla" type="text" id="horas_pantalla"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('horas_pantalla')?.errors && (clinicaForm.get('horas_pantalla')?.dirty || clinicaForm.get('horas_pantalla')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('horas_pantalla')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_pantalla')?.errors?.['ValidarHora']">La hora debe estar en formato HH:mm. La
-          hora debe ser valida(pasar esto a otro mensaje de error)</div>
-        <div *ngIf="clinicaForm.get('horas_pantalla')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('horas_pantalla')?.errors?.['maxlength']">Maximo 5 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_pantalla')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Horas de Pantalla -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Horas de Pantalla Diarias" [control]="controlDeInput('horas_pantalla')" placeholder="hh:mm"
+        idInput="horas_pantalla" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 5 }) horas_juego_airelibre: string; -->
-    <div class="col-span-2">
-      <label for="horas_juego_airelibre" class="block mb-2 text-sm font-medium text-gray-900">Horas de Juego al aire
-        libre(es
-        String)</label>
-      <input formControlName="horas_juego_airelibre" type="text" id="horas_juego_airelibre"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors && (clinicaForm.get('horas_juego_airelibre')?.dirty || clinicaForm.get('horas_juego_airelibre')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors?.['ValidarHora']">La hora debe estar en formato
-          HH:mm. La hora debe ser valida(pasar esto a otro mensaje de error)</div>
-        <div *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors?.['maxlength']">Maximo 5 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_juego_airelibre')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Horas de Juego al aire libre -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Horas de Juego al aire libre Diarias" [control]="controlDeInput('horas_juego_airelibre')"
+        placeholder="hh:mm" idInput="horas_juego_airelibre" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 5 }) horas_suenio: string; -->
-    <div class="col-span-2">
-      <label for="horas_suenio" class="block mb-2 text-sm font-medium text-gray-900">Horas de sueño(es
-        String)</label>
-      <input formControlName="horas_suenio" type="text" id="horas_suenio"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('horas_suenio')?.errors && (clinicaForm.get('horas_suenio')?.dirty || clinicaForm.get('horas_suenio')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('horas_suenio')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_suenio')?.errors?.['ValidarHora']">La hora debe estar en formato HH:mm. La
-          hora debe ser valida(pasar esto a otro mensaje de error)</div>
-        <div *ngIf="clinicaForm.get('horas_suenio')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('horas_suenio')?.errors?.['maxlength']">Maximo 5 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('horas_suenio')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Horas de sueño -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Horas de sueño Diarias" [control]="controlDeInput('horas_suenio')" placeholder="hh:mm"
+        idInput="horas_suenio" />
     </div>
-    <!-- @Column({ type: 'varchar', length: 100 }) proyecto: string; -->
-    <div class="col-span-2">
-      <label for="proyecto" class="block mb-2 text-sm font-medium text-gray-900">Proyecto (no se si deberia
-        estar)</label>
-      <input formControlName="proyecto" type="text" id="proyecto"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div
-        *ngIf="clinicaForm.get('proyecto')?.errors && (clinicaForm.get('proyecto')?.dirty || clinicaForm.get('proyecto')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('proyecto')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-          estar en blanco.
-        </div>
-        <div *ngIf="clinicaForm.get('proyecto')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('proyecto')?.errors?.['maxlength']">Maximo 100 caracteres.
-        </div>
-        <div *ngIf="clinicaForm.get('proyecto')?.errors?.['minlength']">Mínimo 1 caracter.</div>
-      </div>
+    <!-- Proyecto -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
     </div>
-    <!-- @Column({ type: 'float' }) pcta: number;
-     PERCENTILO TENSION ARTERIAL
-    -->
-    <div class="col-span-2">
-      <label for="pcta" class="block mb-2 text-sm font-medium text-gray-900">pcta: LO TIENE QUE CALCULAR EL SISTEMA.
-        Esta
-        aca para pruebas</label>
+    <!-- Percentil de Tension Arterial (pcta) -->
+    <div class="mt-4 col-span-2">
+      <label for="pcta" class="block mb-2 text-sm font-medium text-gray-900">Percentil de Tension Arterial (pcta)</label>
       <input formControlName="pcta" type="text" id="pcta"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="" required />
@@ -592,14 +209,14 @@
       </div>
     </div>
     <!-- @Column({ type: 'float' }) pcimc: number;
-     PCIMC es percentil de Índice de Masa Corporal.
-     El valor lo obtiene el médico de tablas o de una aplicación.
-     Entiendo que no puede ser mayor que cien.
-     -->
-    <div class="col-span-2">
-      <label for="pcimc" class="block mb-2 text-sm font-medium text-gray-900">pcimc: LO TIENE QUE CALCULAR EL SISTEMA.
-        Esta
-        aca para pruebas</label>
+   PCIMC es percentil de Índice de Masa Corporal.
+   El valor lo obtiene el médico de tablas o de una aplicación.
+   Entiendo que no puede ser mayor que cien.
+
+   Percentil de Índice de Masa Corporal (pcimc)
+   -->
+    <div class="mt-4 col-span-2">
+      <label for="pcimc" class="block mb-2 text-sm font-medium text-gray-900">Percentil de Índice de Masa Corporal</label>
       <input formControlName="pcimc" type="text" id="pcimc"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="" required />
@@ -612,25 +229,9 @@
         </div>
       </div>
     </div>
-    <!-- @Column({ type: 'float' }) imc: number;
-    <div class="col-span-2">
-      <label for="imc" class="block mb-2 text-sm font-medium text-gray-900">imc: LO TIENE QUE CALCULAR EL SISTEMA. Esta
-        aca para pruebas</label>
-      <input formControlName="imc" type="text" id="imc"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="" required />
-      <div *ngIf="clinicaForm.get('imc')?.errors && (clinicaForm.get('imc')?.dirty || clinicaForm.get('imc')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="clinicaForm.get('imc')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="clinicaForm.get('imc')?.errors?.['ValidarSoloNumeros']">Solo puede tener
-          números.
-        </div>
-      </div>
-    </div>-->
-    <!-- pct: number; ESTO LO TIENE QUE CALCULAR EL SISTEMA -->
-    <div class="col-span-2">
-      <label for="pct" class="block mb-2 text-sm font-medium text-gray-900">pct: LO TIENE QUE CALCULAR EL SISTEMA. Esta
-        aca para pruebas</label>
+    <!-- Percentillo de Talla - altura (PCT) -->
+    <div class="mt-4 col-span-2">
+      <label for="pct" class="block mb-2 text-sm font-medium text-gray-900">Percentillo de Talla - altura (T/E)</label>
       <input formControlName="pct" type="text" id="pct"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="" required />

@@ -1,1 +1,26 @@
-<p>nueva-fonoaudiologica works!</p>
+<form (ngSubmit)="enviarFormulario()" [formGroup]="fonoaudiologiaForm">
+  <app-campos-comunes [form]="fonoaudiologiaForm" />
+  <!-- Campos fonoaudiologia -->
+  <div class="grid gap-6 md:grid-cols-4">
+    <!-- Diagnostico Presuntivo -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Diagnostico Presuntivo" [control]="controlDeInput('diagnosticoPresuntivo')" placeholder=""
+        idInput="diagnosticoPresuntivo" />
+    </div>
+    <!-- Causas -->
+    <div class="mt-4 col-span-2">
+      <app-input-text label="Causas" [control]="controlDeInput('causas')" placeholder="" idInput="causas" />
+    </div>
+    <!-- Asistencia -->
+    <div class="mt-4 col-span-2">
+      <app-input-checkbox (change)="onChangeCheckbox($event)" label="Asistencia"
+        [control]="controlDeInput('asistencia')" idInput="asistencia" />
+    </div>
+  </div>
+  <!-- Enviar -->
+  <div class="flex my-auto p-10">
+    <button type="submit" [disabled]="!fonoaudiologiaForm.valid"
+      class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
+    </button>
+  </div>
+</form>

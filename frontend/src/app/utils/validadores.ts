@@ -43,7 +43,14 @@ export function ValidarSoloNumeros(control: AbstractControl) {
   const NUMERIC_REGEXP = /^\d+$/;
 
   if (!NUMERIC_REGEXP.test(control.value)) {
-    return { ValidarSoloNumeros: 'Este campo solo debe contener números.' };
+    return { ValidarSoloNumeros: { message: 'Este campo solo debe contener números.' } };
+    /*
+    Otra forma mas limpia:
+    return { ValidarSoloNumeros: { message: 'Este campo solo debe contener números.' } };
+
+    y en el html:
+    <div *ngIf="control?.errors?.['ValidarSoloNumeros']?.message">{{ control.errors['ValidarSoloNumeros'].message }}</div>
+    */
   } else {
     return null;
   }

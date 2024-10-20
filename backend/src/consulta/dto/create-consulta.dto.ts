@@ -15,8 +15,9 @@ export class CreateConsultaDto {
   @ApiProperty({ description: 'Obra social de la consulta' })
   @IsNotEmpty({ message: 'La obra social no puede estar vacio' })
   @IsString({ message: 'La obra social debe ser un string' })
+  @IsOptional()
   @Length(1, 100, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
-  readonly obra_social: string;
+  readonly obra_social?: string;
 
   @ApiProperty({ description: 'Edad del niño que asiste' })
   @IsNotEmpty({ message: 'La edad no puede estar vacia' })
@@ -47,13 +48,12 @@ export class CreateConsultaDto {
   @IsInt({ message: 'El id del curso debe ser un número' })
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly cursoId: number;
-  // este dato podria ser opcional!!!!!!!!!!
-  @ApiProperty({ description: 'Observaciones de la consulta' })
-  //@IsNotEmpty({ message: 'Las observaciones no puede estar vacio' })
+
   // LO CAMBIE A OPCIONAL
+  @ApiProperty({ description: 'Observaciones de la consulta' })
   @IsOptional()
   @IsString({ message: 'Las Observaciones debe ser un string' })
-  @Length(1, 1000, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
+  @Length(1, 1000, { message: 'Las Observaciones deben tener entre 0 y 1000 caracteres' })
   readonly observaciones?: string;
 
   @ValidateIf((o) => o.type === 'Clinica')
