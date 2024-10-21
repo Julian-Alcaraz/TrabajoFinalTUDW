@@ -15,6 +15,7 @@ import { Curso } from '../../../../models/curso.model';
 import { CursoService } from '../../../../services/curso.service';
 import { InstitucionService } from '../../../../services/institucion.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-campos-comunes',
@@ -31,6 +32,7 @@ export class CamposComunesComponent implements OnInit {
   public cursos: Curso[] = [];
 
   constructor(
+    private _router: Router,
     private snackBar: MatSnackBar,
     private _cursoService: CursoService,
     private _chicoService: ChicoService,
@@ -44,7 +46,7 @@ export class CamposComunesComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerInstituciones();
     this.obtenerCursos();
-    
+
     this.form.addControl('edad', new FormControl(1, [Validators.required, ValidarSoloNumeros]));
     this.form.addControl('dni', new FormControl(12345678, [Validators.required, ValidarSoloNumeros, ValidarDni]));
     this.form.addControl('obra_social', new FormControl('', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]));
@@ -111,5 +113,8 @@ export class CamposComunesComponent implements OnInit {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });
+  }
+  cargarChico(){
+    this._router.navigate(['/layout/chicos/nuevo'])
   }
 }

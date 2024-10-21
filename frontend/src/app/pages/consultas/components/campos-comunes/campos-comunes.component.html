@@ -30,8 +30,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
           </svg>
-          <a href="#" (click)="1 + 1" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
-            aquí para cargarlo.</a>
+          <button type="button"  (click)="cargarChico()" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
+            aquí para cargarlo.</button>
         </div>
       </div>
       <div *ngIf="chico !== null" class="mt-4 col-span-2">
