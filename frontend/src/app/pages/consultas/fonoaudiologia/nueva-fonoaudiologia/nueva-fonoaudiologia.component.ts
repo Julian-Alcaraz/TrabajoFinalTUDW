@@ -1,20 +1,22 @@
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidarCadenaSinEspacios, ValidarSoloLetras } from '../../../../utils/validadores';
-import { ConsultaService } from '../../../../services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
+
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras } from '../../../../utils/validadores';
+import { ConsultaService } from '../../../../services/consulta.service';
 import { InputTextComponent } from '../../components/input-text/input-text.component';
 import { InputCheckboxComponent } from '../../components/input-checkbox/input-checkbox.component';
+import { InputTextareaComponent } from '../../components/input-textarea/input-textarea.component';
+import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent],
+  imports: [ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
-  styleUrl: './nueva-fonoaudiologia.component.css'
+  styleUrl: './nueva-fonoaudiologia.component.css',
 })
 export class NuevaFonoaudiologicaComponent {
   public fonoaudiologiaForm: FormGroup;
@@ -26,13 +28,18 @@ export class NuevaFonoaudiologicaComponent {
     private _consultaService: ConsultaService,
   ) {
     this.fonoaudiologiaForm = this.fb.group({
+      // Campos comunes
+
       type: ['Fonoaudiologia', [Validators.required, ValidarSoloLetras]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+
+      // Campos Fonoaudiologica
       diagnosticoPresuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       causas: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       asistencia: [false, [Validators.required]],
     });
   }
-  
+
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.fonoaudiologiaForm.get(input) as FormControl;
   }
@@ -56,15 +63,16 @@ export class NuevaFonoaudiologicaComponent {
         if (result.isConfirmed) {
           const formValues = this.fonoaudiologiaForm.value;
           delete formValues.dni;
-          const { type, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...fonoaudiologiaValues } = formValues;
+          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...fonoaudiologiaValues } = formValues;
           const data = {
             type,
+            turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
-            chicoId: chicoParam.id,
-            institucionId: parseInt(id_institucion),
-            cursoId: parseInt(id_curso),
+            id_chico: chicoParam.id,
+            id_institucion: parseInt(id_institucion),
+            id_curso: parseInt(id_curso),
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },

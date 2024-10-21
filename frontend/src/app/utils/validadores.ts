@@ -69,6 +69,17 @@ export function ValidarSexo(control: AbstractControl) {
   }
 }
 
+export function ValidarTurno(control: AbstractControl) {
+  const valor = control.value;
+  const valoresPermitidos: string[] = ['Mañana', 'Tarde', 'Noche'];
+
+  if (valor && !valoresPermitidos.includes(valor)) {
+    return { ValidarTurno: 'El turno debe ser "Mañana", "Tarde" o "Noche".' };
+  } else {
+    return null;
+  }
+}
+
 // No se usa actualmente:
 export function ValidarSinNumeros(control: AbstractControl): ValidationErrors | null {
   const SIN_NUMEROS_REGEXP = /^[^\d]*$/; // Coincide con cualquier cadena que no contenga dígitos

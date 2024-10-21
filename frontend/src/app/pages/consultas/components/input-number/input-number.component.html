@@ -8,4 +8,5 @@
   <div *ngIf="control?.errors?.['ValidarNumerosFloat']">Solo se permiten números positivos.</div>
   <div *ngIf="control?.errors?.['minlength']">Mínimo {{ control.errors?.['minlength']?.requiredLength }} caracteres.</div>
   <div *ngIf="control?.errors?.['maxlength']">Máximo {{ control.errors?.['maxlength']?.requiredLength }} caracteres.</div>
+  <div *ngIf="control?.errors?.['ValidarDni']">Debe tener 8 dígitos.</div>
 </div>

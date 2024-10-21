@@ -1,26 +1,13 @@
 <!-- Campos generales: -->
-<!-- Obra Social: -->
+<h2 class="mb-4">Campos comunes</h2>
+<!-- Dni -->
 <div class="grid gap-6 md:grid-cols-4">
-  <div class="col-span-2">
-    <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
-      idInput="obra_social" />
-  </div>
-  <!-- Edad: -->
-  <div class="col-span-2">
-    <app-input-number label="Edad" [control]="controlDeInput('edad')" placeholder="Ej: 12" idInput="edad" />
-  </div>
-  <!-- Observaciones: cambiar a textarea -->
-  <div class="col-span-4">
-    <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
-      idInput="observaciones" />
-  </div>
-  <!-- Dni: -->
   <div class="col-span-2">
     <app-input-number (change)="onChangeDni()" label="Documento" [control]="controlDeInput('dni')" placeholder="xxxxx"
       idInput="dni" />
   </div>
   <!-- Mensaje para cargar el chico si el DNI no existe -->
-  <div class="col-span-2">
+  <div class="col-span-2 mt-4 ">
     <div *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
       <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
         class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-2">
@@ -30,16 +17,19 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
           </svg>
-          <button type="button"  (click)="cargarChico()" class="font-semibold underline hover:text-blue-800">Chico no cargado, haz clic
-            aquí para cargarlo.</button>
+          <button type="button" (click)="cargarChico()" class="font-semibold underline hover:text-blue-800">Chico no
+            cargado, haz click aquí para cargarlo.</button>
         </div>
       </div>
-      <div *ngIf="chico !== null" class="mt-4 col-span-2">
+      <div *ngIf="chico !== null && this.form.get('dni')?.value.toString().length === 8" class="mt-4 col-span-2">
         <p class="text-green-600 font-bold">Chico Seleccionado</p>
         <p>Nombre chico: <span class="font-semibold">{{ chico.nombre }}</span></p>
         <p>Apellido chico: <span class="font-semibold">{{ chico.apellido }}</span></p>
         <p>Podrian agregarse mas datos del chico aca...</p>
       </div>
+    </div>
+    <div *ngIf="errorDni" class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg mt-2">
+      {{ errorDni }}
     </div>
   </div>
   <!-- Institucion -->
@@ -51,5 +41,30 @@
   <div class="col-span-2 mb-3 ">
     <app-input-select (change)="1+1" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso"
       [opciones]="cursos" />
+  </div>
+  <!-- Turno -->
+  <div class="col-span-2">
+    <label for="turno" class="block mb-2 text-sm font-medium text-gray-900">Turno</label>
+    <select [formControl]="controlDeInput('turno')" id="turno"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <option value="" disabled selected>Seleccione una opción</option>
+      <option value="Mañana">Mañana</option>
+      <option value="Tarde">Tarde</option>
+      <option value="Noche">Noche</option>
+    </select>
+    <div *ngIf="form.get('turno')?.errors && (form.get('turno')?.dirty || form.get('turno')?.touched)"
+      class="text-red-600 text-sm">
+      <div *ngIf="form.get('turno')?.errors?.['required']">Debe seleccionar una opción.</div>
+      <div *ngIf="form.get('turno')?.errors?.['ValidarTurno']">El turno debe ser "Mañana", "Tarde" o "Noche".</div>
+    </div>
+  </div>
+  <!-- Obra Social -->
+  <div class="col-span-2">
+    <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
+      idInput="obra_social" />
+  </div>
+  <!-- Edad -->
+  <div class="col-span-4">
+    <app-input-number label="Edad" [control]="controlDeInput('edad')" placeholder="Ej: 12" idInput="edad" />
   </div>
 </div>

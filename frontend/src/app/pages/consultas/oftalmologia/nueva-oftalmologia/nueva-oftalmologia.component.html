@@ -1,51 +1,60 @@
-<form (ngSubmit)="enviarFormulario()" [formGroup]="oftalmologiaForm">
-  <app-campos-comunes [form]="oftalmologiaForm" />
-  <!-- Campos oftalmologica -->
-  <div class="grid gap-6 md:grid-cols-4">
-    <!-- Demanda -->
-    <div>
-      <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')"
-        placeholder="Ej: Padre" idInput="demanda" />
-    </div>
-    <!-- Primera Vez -->
-    <div class="mt-4 col-span-1">
-      <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Es la primera vez?"
-        [control]="controlDeInput('primera_vez')" idInput="primera_vez" />
-    </div>
-    <!-- Control -->
-    <div class="mt-4 col-span-1">
-      <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Es un control?"
-        [control]="controlDeInput('control')" idInput="control" />
-    </div>
-    <!-- Receta -->
-    <div class="mt-4 col-span-1">
-      <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Nesecita receta?"
-        [control]="controlDeInput('receta')" idInput="receta" />
-    </div>
-    <!-- Anteojos -->
-    <div class="mt-4 col-span-1">
-      <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Nesecita/Usa anteojos?"
-        [control]="controlDeInput('anteojos')" idInput="anteojos" />
-    </div>
-    <!-- Proximo Control -->
-    <div class="mt-4 col-span-4">
-      <p class="block mb-2 text-sm font-medium text-gray-900">Próximo Control</p>
-      <mat-form-field class="col-span-2">
-        <mat-label>Proximo Control</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="prox_control" [min]="fechaManana" />
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-hint
-          *ngIf="oftalmologiaForm.get('prox_control')?.errors && (oftalmologiaForm.get('prox_control')?.dirty || oftalmologiaForm.get('prox_control')?.touched) && oftalmologiaForm.get('prox_control')?.errors?.['required']"
-          class="text-red-600">El campo es requerido. </mat-hint>
-      </mat-form-field>
-    </div>
+<div class="card">
+  <span class="card-header">Cargar una nueva consulta de oftalmologia</span>
+  <div class="card-body">
+    <form (ngSubmit)="enviarFormulario()" [formGroup]="oftalmologiaForm">
+      <app-campos-comunes [form]="oftalmologiaForm" />
+      <div class="grid gap-6 md:grid-cols-4">
+        <!-- Demanda -->
+        <div>
+          <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')"
+            placeholder="Ej: Padre" idInput="demanda" />
+        </div>
+        <!-- Primera Vez -->
+        <div class="mt-4 col-span-1">
+          <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Es la primera vez?"
+            [control]="controlDeInput('primera_vez')" idInput="primera_vez" />
+        </div>
+        <!-- Control -->
+        <div class="mt-4 col-span-1">
+          <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Es un control?"
+            [control]="controlDeInput('control')" idInput="control" />
+        </div>
+        <!-- Receta -->
+        <div class="mt-4 col-span-1">
+          <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Nesecita receta?"
+            [control]="controlDeInput('receta')" idInput="receta" />
+        </div>
+        <!-- Anteojos -->
+        <div class="mt-4 col-span-1">
+          <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Nesecita/Usa anteojos?"
+            [control]="controlDeInput('anteojos')" idInput="anteojos" />
+        </div>
+        <!-- Proximo Control -->
+        <div class="mt-4 col-span-4">
+          <p class="block mb-2 text-sm font-medium text-gray-900">Próximo Control</p>
+          <mat-form-field class="col-span-2">
+            <mat-label>Proximo Control</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="prox_control" [min]="fechaManana" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-hint
+              *ngIf="oftalmologiaForm.get('prox_control')?.errors && (oftalmologiaForm.get('prox_control')?.dirty || oftalmologiaForm.get('prox_control')?.touched) && oftalmologiaForm.get('prox_control')?.errors?.['required']"
+              class="text-red-600">El campo es requerido. </mat-hint>
+          </mat-form-field>
+        </div>
+        <!-- Observaciones -->
+        <div class="col-span-4">
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
+            idInput="observaciones" />
+        </div>
+      </div>
+      <!-- Enviar -->
+      <div class="flex mt-4">
+        <!--  [disabled]="!oftalmologiaForm.valid" -->
+        <button type="submit"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
+        </button>
+      </div>
+    </form>
   </div>
-  <!-- Enviar -->
-  <div class="flex my-auto p-10">
-    <!--  [disabled]="!oftalmologiaForm.valid" -->
-    <button type="submit"
-      class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-    </button>
-  </div>
-</form>
+</div>
