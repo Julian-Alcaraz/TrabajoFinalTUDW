@@ -36,11 +36,11 @@ export class ConsultaService {
 
     return await this.consultaORM.manager.transaction(async (manager: EntityManager) => {
       const { clinica, oftalmologia, odontologia, fonoaudiologia, ...consultaCreate } = createConsultaDto;
-      const curso = await manager.findOne(Curso, { where: { id: consultaCreate.cursoId, deshabilitado: false } });
+      const curso = await manager.findOne(Curso, { where: { id: consultaCreate.id_curso, deshabilitado: false } });
       if (!curso) throw new BadRequestException('El curso ingresado no existe');
-      const institucion = await manager.findOne(Institucion, { where: { id: consultaCreate.institucionId, deshabilitado: false } });
+      const institucion = await manager.findOne(Institucion, { where: { id: consultaCreate.id_institucion, deshabilitado: false } });
       if (!institucion) throw new BadRequestException('La institucion ingresada no existe');
-      const chico = await manager.findOne(Chico, { where: { id: consultaCreate.chicoId, deshabilitado: false } });
+      const chico = await manager.findOne(Chico, { where: { id: consultaCreate.id_chico, deshabilitado: false } });
       if (!chico) throw new BadRequestException('El chico ingresado no existe');
       const nuevaConsulta = manager.create(Consulta, { ...consultaCreate, usuario, chico, institucion, curso });
       const consultaGuardada = await manager.save(nuevaConsulta);

@@ -1,22 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmpty, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
 import { CreateClinicaDto } from './create-clinica.dto';
-import { consultaType } from '../entities/consulta.entity';
+import { consultaType, Turno } from '../entities/consulta.entity';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
 import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
   @IsNotEmpty({ message: 'El tipo no puede estar vacio' })
   @IsEnum(['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], { message: 'El tipo no es una opcion valida. Clinica, Fonoaudiologia, Oftalmologia, Odontologia' })
   readonly type: consultaType;
 
+  @ApiProperty({ description: 'Turno al que va el chico que asiste a la consulta' })
+  @IsNotEmpty({ message: 'El turno no puede estar vacio' })
+  @IsEnum(['Mañana', 'Tarde', 'Noche'], { message: 'El turno no es una opcion valida. Mañana, Tarde, Noche' })
+  readonly turno: Turno;
+
   @ApiProperty({ description: 'Obra social de la consulta' })
+  @IsOptional()
   @IsNotEmpty({ message: 'La obra social no puede estar vacio' })
   @IsString({ message: 'La obra social debe ser un string' })
-  @IsOptional()
   @Length(1, 100, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly obra_social?: string;
 
   @ApiProperty({ description: 'Edad del niño que asiste' })
@@ -25,41 +31,34 @@ export class CreateConsultaDto {
   @IsPositive({ message: 'La edad debe ser un numero positivo' })
   readonly edad: number;
 
-  // este dato lo pueden mandar desde el front o lo podemos obtener del token de la consulta!!!!!!!
-  // @ApiProperty({ description: 'El usuario que realiza la consulta' })
-  // @IsNotEmpty({ message: 'El id del usuario no puede estar vacio' })
-  // @IsInt({ message: 'El id del usuario debe ser un número' })
-  // @IsPositive({ message: 'El id del usuario debe ser un numero positivo' })
-  // readonly usuarioId: number;
   @ApiProperty({ description: 'El id del niño que va a la consulta' })
   @IsNotEmpty({ message: 'El id del niño no puede estar vacio' })
   @IsInt({ message: 'El id del niño debe ser un número' })
   @IsPositive({ message: 'El id del niño debe ser un numero positivo' })
-  readonly chicoId: number;
+  readonly id_chico: number;
 
   @ApiProperty({ description: 'La institucion a la que va el niño' })
   @IsNotEmpty({ message: 'El id de la institucion no puede estar vacio' })
   @IsInt({ message: 'El id de la institucion debe ser un número' })
   @IsPositive({ message: 'El id de la institucion debe ser un numero positivo' })
-  readonly institucionId: number;
+  readonly id_institucion: number;
 
   @ApiProperty({ description: 'El curso al que va el niño' })
   @IsNotEmpty({ message: 'El id del curso no puede estar vacio' })
   @IsInt({ message: 'El id del curso debe ser un número' })
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
-  readonly cursoId: number;
+  readonly id_curso: number;
 
   // LO CAMBIE A OPCIONAL
   @ApiProperty({ description: 'Observaciones de la consulta' })
   @IsOptional()
   @IsString({ message: 'Las Observaciones debe ser un string' })
   @Length(1, 1000, { message: 'Las Observaciones deben tener entre 0 y 1000 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly observaciones?: string;
 
   @ValidateIf((o) => o.type === 'Clinica')
-  // @IsNotEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
-  // CAMBIE ESTO
-  @IsEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
+  @IsNotEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
   @ValidateNested()
   @Type(() => CreateClinicaDto)
   public clinica?: CreateClinicaDto;

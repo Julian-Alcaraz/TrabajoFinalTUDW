@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateFonoaudiologiaDto {
@@ -11,11 +12,13 @@ export class CreateFonoaudiologiaDto {
   @IsNotEmpty({ message: 'El diagnostico presuntivo no puede estar vacio' })
   @IsString({ message: 'El diagnostico presuntivo debe ser un string' })
   @Length(1, 100, { message: 'El diagnostico presuntivo debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly diagnosticoPresuntivo: string;
 
   @ApiProperty({ description: 'Causas del niño que asiste' })
   @IsNotEmpty({ message: 'Causas no puede estar vacio' })
   @IsString({ message: 'Causas debe ser un string' })
   @Length(1, 100, { message: 'Causas debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly causas: string;
 }

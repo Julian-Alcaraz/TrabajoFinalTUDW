@@ -10,12 +10,14 @@ import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 
 export type consultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
+export type Turno = 'Mañana' | 'Tarde' | 'Noche';
 
 @Entity()
 export class Consulta extends EntidadBasica {
-  @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], /*length: 100,*/ nullable: true })
+  @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], nullable: true })
   type: consultaType;
-
+  @Column({ type: 'enum', enum: ['Mañana', 'Tarde', 'Noche'], nullable: true })
+  turno: Turno;
   @Column({ type: 'varchar', length: 100, nullable: true })
   obra_social: string;
 

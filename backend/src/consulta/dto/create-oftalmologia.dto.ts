@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateOftalmologiaDto {
@@ -7,6 +7,7 @@ export class CreateOftalmologiaDto {
   @IsNotEmpty({ message: 'La demanda no puede estar vacia' })
   @IsString({ message: 'La demanda debe ser un string' })
   @Length(1, 100, { message: 'La demanda debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly demanda: string;
 
   @ApiProperty({ description: 'Primera vez' })

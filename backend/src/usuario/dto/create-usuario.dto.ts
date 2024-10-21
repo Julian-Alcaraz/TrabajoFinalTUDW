@@ -1,18 +1,20 @@
 import { IsString, IsNotEmpty, Length, IsInt, IsEmail, Min, Max, IsOptional, IsPositive, IsArray, ArrayNotEmpty, IsNumber, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateUsuarioDto {
   @ApiProperty({ description: 'Nombre del usuario' })
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
   @Length(1, 100, { message: 'El nombre debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly nombre: string;
 
   @ApiProperty({ description: 'Apellido del usuario' })
   @IsNotEmpty({ message: 'El apellido no puede estar vacio' })
   @IsString({ message: 'El apellido debe ser un string' })
   @Length(1, 100, { message: 'El apellido debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly apellido: string;
 
   @ApiProperty({ description: 'Dni del usuario' })
@@ -32,6 +34,7 @@ export class CreateUsuarioDto {
   @IsNotEmpty({ message: 'La contrasenia no puede estar vacia' })
   @IsString({ message: 'La contrasenia debe ser un string' })
   @Length(1, 100, { message: 'La contrasenia debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   contrasenia: string; // no la hago readonly para poder modificarla en el caso de editar contraseña asi puedo hashear el valor
 
   @ApiProperty({ description: 'Fecha nacimiento del chico.' })
@@ -49,9 +52,10 @@ export class CreateUsuarioDto {
   readonly roles_ids: number[];
 
   @ApiProperty({ description: 'Especialidad del usuario medico' })
+  @IsOptional()
   @IsNotEmpty({ message: 'La especialidad no puede estar vacia' })
   @IsString({ message: 'La especialidad debe ser un string' })
   @Length(1, 100, { message: 'La especialidad debe tener entre 1 y 100 caracteres' })
-  @IsOptional()
+  @Transform(({ value }) => value.trim())
   readonly especialidad?: string;
 }

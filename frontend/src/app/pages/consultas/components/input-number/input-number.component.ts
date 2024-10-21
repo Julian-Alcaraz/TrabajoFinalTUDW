@@ -1,7 +1,6 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-input-number',

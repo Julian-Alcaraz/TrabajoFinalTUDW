@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Length, Matches } from 'class-validator';
 
 export class CreateClinicaDto {
@@ -42,6 +43,7 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'Las vacunas no pueden estar vacias' })
   @IsString({ message: 'Vacunas debe ser un string' })
   @Length(1, 100, { message: 'Las vacunas social debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly vacunas: string;
 
   @ApiProperty({ description: 'Peso del niño que asiste' })
@@ -80,19 +82,19 @@ export class CreateClinicaDto {
 
   @ApiProperty({ description: 'La tension arterial sistolica del niño que asiste' })
   @IsNotEmpty({ message: 'La tension arterial sistolica no puede estar vacia' })
-  @IsInt({ message: 'La tension arterial sistolica debe ser un número' })
+  @IsNumber({}, { message: 'La tension arterial sistolica debe ser un número' })
   @IsPositive({ message: 'La tension arterial sistolica debe ser un numero positivo' })
   readonly tas: number;
 
   @ApiProperty({ description: 'La tension arterial diastolica del niño que asiste' })
   @IsNotEmpty({ message: 'La tension arterial diastolica no puede estar vacia' })
-  @IsInt({ message: 'La tension arterial diastolica debe ser un número' })
+  @IsNumber({}, { message: 'La tension arterial diastolica debe ser un número' })
   @IsPositive({ message: 'La tension arterial diastolica debe ser un numero positivo' })
   readonly tad: number;
 
   @ApiProperty({ description: 'El percentillo de la tension arterial del niño que asiste' })
   @IsNotEmpty({ message: 'El percentillo de la tension arterial no puede estar vacio' })
-  @IsInt({ message: 'El percentillo de la tension arterial debe ser un número' })
+  @IsNumber({}, { message: 'El percentillo de la tension arterial debe ser un número' })
   @IsPositive({ message: 'El percentillo de la tension arterial debe ser un numero positivo' })
   readonly pcta: number;
 
@@ -103,6 +105,7 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'El examen visual no puede estar vacio' })
   @IsString({ message: 'El examen visual debe ser un string' })
   @Length(1, 100, { message: 'El examen visual debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly examen_visual: string;
 
   // ENUM normal anormal
@@ -110,6 +113,7 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'Ortopedia y traumatologia no puede estar vacio' })
   @IsString({ message: 'Ortopedia y traumatologia debe ser un string' })
   @Length(1, 100, { message: 'Ortopedia y traumatologia debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly ortopedia_traumatologia: string;
 
   // ENUM adecuado inadecuado
@@ -117,6 +121,7 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'Lenguaje no puede estar vacio' })
   @IsString({ message: 'Lenguaje debe ser un string' })
   @Length(1, 100, { message: 'Lenguaje debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly lenguaje: string;
 
   @ApiProperty({ description: 'SEGTO del niño' })
@@ -128,12 +133,14 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'Alimentacion no puede estar vacio' })
   @IsString({ message: 'Alimentacion debe ser un string' })
   @Length(1, 100, { message: 'Alimentacion debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly alimentacion: string;
 
   @ApiProperty({ description: 'Hidratacion del niño que asiste' })
   @IsNotEmpty({ message: 'Hidratacion no puede estar vacio' })
   @IsString({ message: 'Hidratacion debe ser un string' })
   @Length(1, 100, { message: 'Hidratacion debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly hidratacion: string;
 
   @ApiProperty({ description: 'Ingesta de lacteos del niño' })
@@ -171,5 +178,6 @@ export class CreateClinicaDto {
   @IsNotEmpty({ message: 'Proyecto no puede estar vacio' })
   @IsString({ message: 'Proyecto debe ser un string' })
   @Length(1, 100, { message: 'Proyecto debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly proyecto: string;
 }

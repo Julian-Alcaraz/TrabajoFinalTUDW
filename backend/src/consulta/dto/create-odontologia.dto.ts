@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString, Length } from 'class-validator';
 
 export class CreateOdontologiaDto {
-  // el id no lo verificp?
 
   @ApiProperty({ description: 'Primera vez del niño que asiste a la consulta' })
   @IsNotEmpty({ message: 'El campo primera vez no puede estar vacia' })
@@ -68,12 +68,14 @@ export class CreateOdontologiaDto {
   @IsNotEmpty({ message: 'Habitos no puede estar vacio' })
   @IsString({ message: 'Habitos debe ser un string' })
   @Length(1, 100, { message: 'Habitos debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly habitos: string;
 
   @ApiProperty({ description: 'Estado situacional bucal del niño que asiste' })
   @IsNotEmpty({ message: 'Estado situacional bucal no puede estar vacio' })
   @IsString({ message: 'Estado situacional bucal debe ser un string' })
   @Length(1, 100, { message: 'Estado situacional bucal debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly situacion_bucal: string;
 
   // CLASIFICACION SE CALCULA Y ES STRING este tambien incluir en entidad
