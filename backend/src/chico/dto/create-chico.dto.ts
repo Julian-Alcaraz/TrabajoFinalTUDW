@@ -16,7 +16,20 @@ export class CreateChicoDto {
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
   @Length(3, 50, { message: 'El nombre debe tener entre 3 y 50 caracteres' })
-  @Transform(({ value }) => value.trim())
+  /*
+ TypeError: value.trim is not a function
+backend-1      |     at Object.transformFn (/home/app/backend/src/chico/dto/create-chico.dto.ts:69:35)
+backend-1      |     at /home/app/backend/node_modules/src/TransformOperationExecutor.ts:412:24
+backend-1      |     at Array.forEach (<anonymous>)
+backend-1      |     at TransformOperationExecutor.applyCustomTransformations (/home/app/backend/node_modules/src/TransformOperationExecutor.ts:411:15)
+backend-1      |     at TransformOperationExecutor.transform (/home/app/backend/node_modules/src/TransformOperationExecutor.ts:334:33)
+backend-1      |     at ClassTransformer.plainToInstance (/home/app/backend/node_modules/src/ClassTransformer.ts:77:21)
+backend-1      |     at Object.plainToClass (/home/app/backend/node_modules/src/index.ts:71:27)
+backend-1      |     at ValidationPipe.transform (/home/app/backend/node_modules/@nestjs/common/pipes/validation.pipe.js:60:39)
+backend-1      |     at /home/app/backend/node_modules/@nestjs/core/pipes/pipes-consumer.js:16:33
+backend-1      |     at processTicksAndRejections (node:internal/process/task_queues:105:5)
+  */
+   @Transform(({ value }) => value.trim())
   readonly nombre: string;
 
   @ApiProperty({ description: 'Apellido del chico' })
@@ -56,7 +69,8 @@ export class CreateChicoDto {
   @IsNotEmpty({ message: 'El nombre de la madre no puede estar vacio' })
   @IsString({ message: 'El nombre de la madre debe ser un string' })
   @Length(1, 100, { message: 'El nombre de la madre debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
+  // Este transform da error cuando no se envia este dato opcional
+  // @Transform(({ value }) => value.trim())
   readonly nombre_madre?: string;
 
   @ApiProperty({ description: 'Nombre padre del chico' })
@@ -64,7 +78,8 @@ export class CreateChicoDto {
   @IsNotEmpty({ message: 'El nombre del padre no puede estar vacio' })
   @IsString({ message: 'El nombre del padre debe ser un string' })
   @Length(1, 100, { message: 'El nombre del padre debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
+  // Este transform da error cuando no se envia este dato opcional
+  // @Transform(({ value }) => value.trim())
   readonly nombre_padre?: string;
 
   @ApiProperty({ description: 'Id del barrio' })

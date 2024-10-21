@@ -135,7 +135,7 @@ export class FormChicosComponent implements OnInit {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.cerraModalLocalidad();
                 this.obtenerLocalidades();
-                this.localidadForm.get('id_localidad')?.reset();
+                this.localidadForm.get('id_localidad')?.setValue('');
                 // Aca se podria poner la localidad recien creada como seleccionada
               }
             },
@@ -150,6 +150,7 @@ export class FormChicosComponent implements OnInit {
 
   cargarBarrio() {
     if (this.barrioForm.get('nuevo_barrio')) {
+      // Cambiar a valid form....!!!!!!!!!!!!!!!!!!!!!
       Swal.fire({
         title: '¿Cargar nuevo barrio?',
         showDenyButton: true,
@@ -184,10 +185,6 @@ export class FormChicosComponent implements OnInit {
 
   cargarChico() {
     console.log('Formulario válido:', this.chicoForm.valid);
-    /*
-    console.log("Errores en nombre_padre:", this.chicoForm.get('nombre_padre')?.errors);
-    console.log("Errores en nombre_madre:", this.chicoForm.get('nombre_madre')?.errors);
-    */
     if (this.chicoForm.valid) {
       Swal.fire({
         title: '¿Cargar nuevo chico?',
@@ -233,7 +230,7 @@ export class FormChicosComponent implements OnInit {
     });
   }
 
-  cerraModalBarrio() {
+  cerraModalBarrio() { // cerrarModalBarrio
     this._dialog.closeAll();
     this.chicoForm.get('id_barrio')?.setValue('');
   }

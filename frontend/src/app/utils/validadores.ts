@@ -154,3 +154,14 @@ export function ValidarHora(control: AbstractControl): ValidationErrors | null {
   }
   return null;
 }
+
+export function ValidarTipoInstitucion(control: AbstractControl) {
+  const valor = control.value;
+  const valoresPermitidos: string[] = ['Jardin', 'Primario', 'Secundario', 'Terciario'];
+
+  if (valor && !valoresPermitidos.includes(valor)) {
+    return { ValidarTurno: 'El turno debe ser "Mañana", "Tarde" o "Noche".' };
+  } else {
+    return null;
+  }
+}

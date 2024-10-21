@@ -38,10 +38,10 @@ export class NuevaOftalmologiaComponent {
 
       // Campos Oftalmologia
       demanda: ['Padre', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      primera_vez: [false, [Validators.required]],
-      control: [false, [Validators.required]],
-      receta: [false, [Validators.required]],
-      anteojos: [false, [Validators.required]],
+      primera_vez: ['', [Validators.required]],
+      control: ['', [Validators.required]],
+      receta: ['', [Validators.required]],
+      anteojos: ['', [Validators.required]],
       prox_control: [this.fechaManana, Validators.required],
     });
   }
@@ -71,6 +71,10 @@ export class NuevaOftalmologiaComponent {
         if (result.isConfirmed) {
           const formValues = this.oftalmologiaForm.value;
           delete formValues.dni;
+          formValues.primera_vez = formValues.primera_vez === 'true';
+          formValues.control = formValues.control === 'true';
+          formValues.receta = formValues.receta === 'true';
+          formValues.anteojos = formValues.anteojos === 'true';
           const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...oftalmologiaValues } = formValues;
           const data = {
             type,

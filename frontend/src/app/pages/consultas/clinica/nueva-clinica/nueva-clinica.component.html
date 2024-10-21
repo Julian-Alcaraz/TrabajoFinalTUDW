@@ -19,56 +19,54 @@
           <app-input-number label="Circunferencia de la Cintura" [control]="controlDeInput('cc')" placeholder=""
             idInput="cc" />
         </div>
-        <!-- Diabetes -->
-        <h3 class="mt-4 col-span-6">Indica si el chico tiene alguna de las siguientes condiciones:</h3>
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
-            (change)="onChangeCheckbox($event)" />
+        <div class="col-span-6">
+          <div class="grid gap-0 md:grid-cols-2">
+            <!-- Grupo de condiciones -->
+            <div>
+              <h3 class="mt-4">Indica si el chico tiene alguna de las siguientes condiciones:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de antecedentes -->
+            <div>
+              <h3 class="mt-4">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Antecedentes Perinatales"
+                  [control]="controlDeInput('antecedentes_perinatal')" idInput="antecedentes_perinatal"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')"
+                  idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de consumos problemáticos -->
+            <div>
+              <h3 class="mt-4">Indica si el chico tiene consumos problemáticos de:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')"
+                  idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de lácteos e infusiones -->
+            <div>
+              <h3 class="mt-4">Indica si el chico toma:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Lácteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+          </div>
+
         </div>
-        <!--Hipertension Arterial (hta) -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <!-- Obesidad -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <h3 class="mt-4 col-span-6">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
-        <!-- Antecedentes Perinatales -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Antecedentes Perinatales" [control]="controlDeInput('antecedentes_perinatal')"
-            idInput="antecedentes_perinatal" (change)="onChangeCheckbox($event)" />
-        </div>
-        <!-- Enfermedades Previas -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')"
-            idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
-        </div>
-        <h3 class="mt-4 col-span-6">Indica si el chico tiene consumos problematicos de:</h3>
-        <!-- Consume Alcohol -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')" idInput="consumo_alcohol"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <!-- Consume Drogas -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <!-- Lacteos -->
-        <h3 class="mt-4 col-span-6">Indica si el chico toma:</h3>
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Lacteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <!-- Infusiones -->
-        <div class="mt-4 col-span-2">
-          <app-input-checkbox label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
-            (change)="onChangeCheckbox($event)" />
-        </div>
-        <span class="col-span-6"></span> <!-- Para que vacunas quede abajo -->
         <!-- Vacunas -->
         <div class="mt-4 col-span-2">
           <label for="vacunas" class="block mb-2 text-sm font-medium text-gray-900">Vacunas</label>
@@ -146,7 +144,6 @@
             <div *ngIf="clinicaForm.get('lenguaje')?.errors?.['required']">Debe seleccionar una opción.</div>
           </div>
         </div>
-        <span class="col-span-6"></span>
         <!-- Alimentacion -->
         <div class="mt-4 col-span-2">
           <app-input-text label="Alimentacion" [control]="controlDeInput('alimentacion')" placeholder=""
@@ -178,12 +175,11 @@
           <app-input-text label="Horas de sueño" [control]="controlDeInput('horas_suenio')" placeholder="hh:mm"
             idInput="horas_suenio" />
         </div>
-        <span class="col-span-6"></span> <!-- Para que pcta quede abajo -->
         <!-- Percentil de Tension Arterial (pcta) -->
         <div class="mt-4 col-span-2">
           <label for="pcta" class="block mb-2 text-sm font-medium text-gray-900">Percentil de Tension Arterial
             (pcta)</label>
-          <input formControlName="pcta" type="text" id="pcta"
+          <input formControlName="pcta" type="number" id="pcta"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="" required />
           <div
@@ -206,7 +202,7 @@
         <div class="mt-4 col-span-2">
           <label for="pcimc" class="block mb-2 text-sm font-medium text-gray-900">Percentil de Índice de Masa
             Corporal</label>
-          <input formControlName="pcimc" type="text" id="pcimc"
+          <input formControlName="pcimc" type="number" id="pcimc"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="" required />
           <div
@@ -222,7 +218,7 @@
         <div class="mt-4 col-span-2">
           <label for="pct" class="block mb-2 text-sm font-medium text-gray-900">Percentil de Talla - altura
             (T/E)</label>
-          <input formControlName="pct" type="text" id="pct"
+          <input formControlName="pct" type="number" id="pct"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="" required />
           <div
@@ -263,8 +259,8 @@
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <!-- [disabled]="!clinicaForm.valid" -->
-        <button type="submit"
+        <!--  -->
+        <button type="submit" [disabled]="!clinicaForm.valid"
           class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
         </button>
       </div>

@@ -11,7 +11,7 @@ import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-noti
 import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-chico',
@@ -29,6 +29,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
   constructor(
     private _chicoService: ChicoService,
+    private _router: Router,
     private snackBar: MatSnackBar,
   ) {
     this.chicos = new MatTableDataSource<Chico>([]);
@@ -102,4 +103,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.chicos.filter = filterValue.trim().toLowerCase();
   }
+
+  verDetallesChico(id: number) {
+    this._router.navigate(['/layout/chicos' , id]);
+  }
+
 }

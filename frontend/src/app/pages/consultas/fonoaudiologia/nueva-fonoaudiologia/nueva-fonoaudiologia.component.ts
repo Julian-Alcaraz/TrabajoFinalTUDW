@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,7 +15,7 @@ import { CamposComunesComponent } from '../../components/campos-comunes/campos-c
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent],
+  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
   styleUrl: './nueva-fonoaudiologia.component.css',
 })
@@ -36,7 +37,7 @@ export class NuevaFonoaudiologicaComponent {
       // Campos Fonoaudiologica
       diagnosticoPresuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       causas: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      asistencia: [false, [Validators.required]],
+      asistencia: ['', [Validators.required]],
     });
   }
 
@@ -62,6 +63,7 @@ export class NuevaFonoaudiologicaComponent {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const formValues = this.fonoaudiologiaForm.value;
+          formValues.asistencia = formValues.asistencia === 'true';
           delete formValues.dni;
           const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...fonoaudiologiaValues } = formValues;
           const data = {
