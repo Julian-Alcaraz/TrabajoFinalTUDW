@@ -64,13 +64,9 @@ export class ChicoService {
   async findChicosConsultas(id: number) {
     const chico = await this.chicoORM.findOne({
       where: { id },
-      relations: ['consultas'],
+      relations: ['consultas', 'consultas.usuario', 'consultas.institucion', 'consultas.curso'],
     });
-
-    if (!chico) {
-      throw new NotFoundException(`Chico con id ${id} no encontrado`);
-    }
-
+    if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     return chico.consultas;
   }
 }

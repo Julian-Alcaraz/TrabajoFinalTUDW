@@ -17,6 +17,10 @@ export class ChicoService {
     return this._http.get(this.url + 'chico/dni/' + dni);
   }
 
+  obtenerConsultasDeChico(id: number): Observable<any> {
+    return this._http.get(this.url + 'chico/' + id + '/consultas');
+  }
+
   obtenerChicoxId(id: number): Observable<any> {
     return this._http.get(this.url + 'chico/' + id);
   }

@@ -17,7 +17,7 @@ export class ConsultaController {
     console.log('Me llego: ', createConsultaDto);
     const consulta = await this.consultaService.create(createConsultaDto, req.user);
     return {
-      succes: true,
+      success: true, // DOBLE S
       data: consulta,
       message: `Consulta ${createConsultaDto.type} cargada con exito.`,
     };
@@ -29,7 +29,7 @@ export class ConsultaController {
   async findAll() {
     const consultas = await this.consultaService.findAll();
     return {
-      succes: true,
+      success: true, // DOBLE S
       data: consultas,
       message: 'Consultas obtenidas con exito.',
     };
@@ -39,7 +39,12 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelte una consulta con todos sus datos' })
   @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.consultaService.findOne(id);
+    const consulta = await this.consultaService.findOne(id);
+    return {
+      success: true, // DOBLE S
+      data: consulta,
+      message: 'Consulta obtenida con exito.',
+    };
   }
 
   @Patch(':id')

@@ -4,7 +4,6 @@
     <form (ngSubmit)="enviarFormulario()" [formGroup]="clinicaForm">
       <app-campos-comunes [form]="clinicaForm" />
       <div class="grid gap-6 md:grid-cols-6">
-        <h2 class="mt-4 col-span-6">Campos de Medica Clinica</h2>
         <!-- Peso -->
         <div class="mt-4 col-span-2">
           <app-input-number label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="Ej: 45" idInput="peso" />

@@ -15,4 +15,8 @@ export class ConsultaService {
   cargarConsulta(data: any): Observable<any> {
     return this._http.post(this.url + 'consulta', data);
   }
+
+  obtenerConsultaxId(id: number): Observable<any> {
+    return this._http.get(this.url + 'consulta/' + id);
+  }
 }

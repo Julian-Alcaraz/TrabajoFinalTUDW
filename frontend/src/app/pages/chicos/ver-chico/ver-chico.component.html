@@ -1,53 +1,54 @@
 <!-- Aca faltaria un mensaje de errro en el caso de que el id del chico no este en la bd pero sea valido -->
-<div *ngIf="chico; else elseBlock"
-  class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-sans">
+
+<!--  *ngIf="chico; else elseBlock" -->
+<div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-sans">
   <div class="layout-container flex h-full grow flex-col">
     <div class="px-10 flex flex-1 justify-center py-5">
       <div class="layout-content-container flex flex-col w-full flex-1">
         <div class="flex flex-wrap justify-between gap-3 p-4">
           <h3 class="text-black text-xl font-bold leading-tight tracking-tight min-w-72">Datos personales de {{
-            chico.apellido }}
-            {{ chico.nombre }}</h3>
+            chico?.apellido }}
+            {{ chico?.nombre }}</h3>
         </div>
         <div class="flex flex-wrap gap-3 px-4 py-3">
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Nombre</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.apellido }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.apellido }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Apellido</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.dni }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.dni }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">DNI</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.fe_nacimiento }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.fe_nacimiento }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Fecha de Nacimiento</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.sexo }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.sexo }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Sexo</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.telefono }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.telefono }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Teléfono</p>
             </div>
@@ -55,28 +56,28 @@
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
             <p class="text-black tracking-light text-2xl font-medium leading-tight">{{
-              chico.barrio?.localidad?.nombre }}</p>
+              chico?.barrio?.localidad?.nombre }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Localidad</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.barrio?.nombre }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.barrio?.nombre }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Barrio</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_madre }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre_madre }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Madre</p>
             </div>
           </div>
           <div
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_padre }}</p>
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre_padre }}</p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Padre</p>
             </div>
@@ -94,92 +95,515 @@
         <h3 class="text-black text-xl font-bold leading-tight tracking-tight px-4 pb-2 pt-4">Historial de
           consultas</h3>
         <div class="px-4 py-3">
-          <!-- <div class="flex overflow-hidden rounded-xl border border-gray-300"> -->
-          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                  <th scope="col" class="px-6 py-3">#</th>
-                  <th scope="col" class="px-6 py-3">
-                    <div class="flex items-center">
-                      Profesional
-                      <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor" viewBox="0 0 24 24">
-                          <path
-                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                        </svg></a>
-                    </div>
-                  </th>
-                  <th scope="col" class="px-6 py-3">
-                    <div class="flex items-center">
-                      Tipo
-                      <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor" viewBox="0 0 24 24">
-                          <path
-                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                        </svg></a>
-                    </div>
-                  </th>
-                  <th scope="col" class="px-6 py-3">
-                    <div class="flex items-center">
-                      Fecha
-                      <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor" viewBox="0 0 24 24">
-                          <path
-                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                        </svg></a>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="bg-white border-b cursor-pointer" (click)="mostrarDetallesConsulta()">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">1</th>
-                  <td class="px-6 py-4">Ana Garcia</td>
-                  <td class="px-6 py-4">Consulta Medica Clinica</td>
-                  <td class="px-6 py-4">15-12-2024</td>
-                </tr>
-                <!-- Inicio detalles -->
-                <tr *ngIf="mostrarDetalles">
-                  <td colspan="4" class="border-t border-t-gray-300">
-                    <div class="mt-4 px-4 py-3">
-                      <p class="font-bold">Detalles de la Consulta</p>
-                      <div class="flex overflow-hidden rounded-xl border border-gray-300 mt-2">
-                        <table class="flex-1">
-                          <thead>
-                            <tr>
-                              <th class="border px-4 py-2">Campo</th>
-                              <th class="border px-4 py-2">Valor</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td class="border px-4 py-2">Detalle 1</td>
-                              <td class="border px-4 py-2">Datos detalle 1</td>
-                            </tr>
-                            <tr>
-                              <td class="border px-4 py-2">Detalle 2</td>
-                              <td class="border px-4 py-2">Datos detalle 2</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Fin detalles -->
-                <tr class="bg-white border-b">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">1</th>
-                  <td class="px-6 py-4">Ana Garcia</td>
-                  <td class="px-6 py-4">Consulta de Oftolmologia</td>
-                  <td class="px-6 py-4">13-02-2024</td>
-                </tr>
-              </tbody>
+          <div class="scroll">
+            <table mat-table [dataSource]="consultas" class="mat-elevation-z8 table-auto scroll">
+              <!-- # -->
+              <ng-container matColumnDef="numero">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let consulta; let i = index">{{ i + 1 }}</td>
+              </ng-container>
+              <!-- Position Column -->
+              <ng-container matColumnDef="profesional">
+                <th mat-header-cell *matHeaderCellDef>Profesional</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.usuario.apellido+', '+consulta.usuario.nombre }}
+                </td>
+              </ng-container>
+              <!-- Name Column -->
+              <ng-container matColumnDef="tipo">
+                <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.type }}</td>
+              </ng-container>
+              <!-- Weight Column   -->
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.created_at }}</td>
+              </ng-container>
+              <!-- edad -->
+              <ng-container matColumnDef="edad">
+                <th mat-header-cell *matHeaderCellDef>Edad</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.edad }}</td>
+              </ng-container>
+              <!-- Turno -->
+              <ng-container matColumnDef="turno">
+                <th mat-header-cell *matHeaderCellDef>Turno</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.turno }}</td>
+              </ng-container>
+              <!-- Obra Social -->
+              <ng-container matColumnDef="obra_social">
+                <th mat-header-cell *matHeaderCellDef>Obra Social</th>
+                <td mat-cell *matCellDef="let consulta">
+                  <p *ngIf="!consulta.obra_social; else tieneObraSocial">-</p>
+                  <ng-template #tieneObraSocial>{{ consulta.obra_social }}</ng-template>
+                </td>
+              </ng-container>
+              <!-- Curso-->
+              <ng-container matColumnDef="curso">
+                <th mat-header-cell *matHeaderCellDef>Curso</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.curso.nombre }}</td>
+              </ng-container>
+              <!-- Institucion -->
+              <ng-container matColumnDef="institucion">
+                <th mat-header-cell *matHeaderCellDef>Institucion</th>
+                <td mat-cell *matCellDef="let consulta">{{ consulta.institucion.tipo +' '+
+                  consulta.institucion.nombre }}</td>
+              </ng-container>
+              <!-- Observaciones -->
+              <ng-container matColumnDef="observaciones">
+                <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+                <td mat-cell *matCellDef="let consulta">
+                  <p *ngIf="!consulta.observaciones; else tieneObservaciones">-</p>
+                  <ng-template #tieneObservaciones>{{ consulta.observaciones }}</ng-template>
+                </td>
+              </ng-container>
+              <!-- Row for details
+              <ng-container matColumnDef="detalle">
+                <th mat-header-cell *matHeaderCellDef>Detalle</th>
+                <td mat-cell *matCellDef="let consulta">
+                  <div *ngIf="hayConsulta">
+                    <table mat-table [dataSource]="consulta.detalles" class="mat-elevation-z8 table-auto">
+                      <ng-container matColumnDef="asistencia">
+                        <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+                        <td mat-cell *matCellDef="let item">{{ item.asistencia ? 'Sí' : 'No' }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="diagnostico_presuntivo">
+                        <th mat-header-cell *matHeaderCellDef>Diagnostico Presuntivo</th>
+                        <td mat-cell *matCellDef="let item">{{ item.diagnostico_presuntivo }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="causas">
+                        <th mat-header-cell *matHeaderCellDef>Causas</th>
+                        <td mat-cell *matCellDef="let item">{{ item.causas }}</td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="['asistencia', 'diagnostico_presuntivo', 'causas']"></tr>
+                      <tr mat-row *matRowDef="let row; columns: ['asistencia', 'diagnostico_presuntivo', 'causas']"></tr>
+                    </table>
+                  </div>
+                </td>
+              </ng-container>
+            -->
+              <tr mat-header-row *matHeaderRowDef="consultasColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: consultasColumns" (click)="obtenerConsulta(row.id)"
+                class="cursor-pointer hover:bg-gray-300"></tr>
+              <!-- Row shown when there is no matching data.
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No encontro informacion "{{ input.value }}"</td>
+              </tr>
+              -->
             </table>
-          </div>
+            <!-- Detalles -->
+            <div *ngIf="hayConsulta" class="">
+              <p class="font-bold">Detalles de la Consulta</p>
+              <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <!--  -->
+                <table mat-table [dataSource]="consulta" class="flex-1 mat-elevation-z8 table-auto scroll">
+                  <!-- Odontologia -->
+                  <!-- Cepillado -->
+                  <ng-container matColumnDef="cepillado">
+                    <th mat-header-cell *matHeaderCellDef>Cepillado</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.cepillado; else noCepillado">Si</p>
+                      <ng-template #noCepillado>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Cepillo -->
+                  <ng-container matColumnDef="cepillo">
+                    <th mat-header-cell *matHeaderCellDef>Tiene cepillo</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.cepillo; else noCepillo">Si</p>
+                      <ng-template #noCepillo>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Clasificacion -->
+                  <ng-container matColumnDef="clasificacion">
+                    <th mat-header-cell *matHeaderCellDef>Clasificacion</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.clasificacion }}</td>
+                  </ng-container>
+                  <!-- Derivacion -->
+                  <ng-container matColumnDef="derivacion">
+                    <th mat-header-cell *matHeaderCellDef>Derivacion</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.derivacion; else noDerivacion">Si</p>
+                      <ng-template #noDerivacion>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Dientes Recuperables -->
+                  <ng-container matColumnDef="dientes_recuperables">
+                    <th mat-header-cell *matHeaderCellDef>Dientes Recuperables</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_recuperables }}</td>
+                  </ng-container>
+                  <!-- Dientes no recuperables -->
+                  <ng-container matColumnDef="dientes_norecuperables">
+                    <th mat-header-cell *matHeaderCellDef>Dientes no recuperables</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_norecuperables }}</td>
+                  </ng-container>
+                  <!-- Dientes permanentes -->
+                  <ng-container matColumnDef="dientes_permanentes">
+                    <th mat-header-cell *matHeaderCellDef>Dientes permanentes</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_permanentes }}</td>
+                  </ng-container>
+                  <!-- Dientes Temporales -->
+                  <ng-container matColumnDef="dientes_temporales">
+                    <th mat-header-cell *matHeaderCellDef>Dientes Temporales</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_temporales }}</td>
+                  </ng-container>
+                  <!-- Habitos -->
+                  <ng-container matColumnDef="habitos">
+                    <th mat-header-cell *matHeaderCellDef>Habitos</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.habitos }}</td>
+                  </ng-container>
+                  <!-- Primera Vez -->
+                  <ng-container matColumnDef="primera_vez">
+                    <th mat-header-cell *matHeaderCellDef>Primera Vez</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.primera_vez; else noPrimeraVez">Si</p>
+                      <ng-template #noPrimeraVez>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Sellador -->
+                  <ng-container matColumnDef="sellador">
+                    <th mat-header-cell *matHeaderCellDef>Dientes con sellador</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.sellador }}</td>
+                  </ng-container>
+                  <!-- Situacion Bucal -->
+                  <ng-container matColumnDef="situacion_bucal">
+                    <th mat-header-cell *matHeaderCellDef>Situacion Bucal</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.situacion_bucal }}</td>
+                  </ng-container>
+                  <!-- Topificacion -->
+                  <ng-container matColumnDef="topificacion">
+                    <th mat-header-cell *matHeaderCellDef>Topificacion</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.topificacion; else noTopificacion">Si</p>
+                      <ng-template #noTopificacion>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Ulterior -->
+                  <ng-container matColumnDef="ulterior">
+                    <th mat-header-cell *matHeaderCellDef>Ulterior</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.ulterior; else noUlterior">Si</p>
+                      <ng-template #noUlterior>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Clinica -->
+                  <!-- Diabetes -->
+                  <ng-container matColumnDef="diabetes">
+                    <th mat-header-cell *matHeaderCellDef>Diabetes</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.diabetes ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Hipertension Arterial -->
+                  <ng-container matColumnDef="hta">
+                    <th mat-header-cell *matHeaderCellDef>HTA</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.hta ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Obesidad -->
+                  <ng-container matColumnDef="obesidad">
+                    <th mat-header-cell *matHeaderCellDef>Obesidad</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.obesidad ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Consumo de Alcohol -->
+                  <ng-container matColumnDef="consumo_alcohol">
+                    <th mat-header-cell *matHeaderCellDef>Consumo Alcohol</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.consumo_alcohol ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Consumo de Drogas -->
+                  <ng-container matColumnDef="consumo_drogas">
+                    <th mat-header-cell *matHeaderCellDef>Consumo Drogas</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.consumo_drogas ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Antecedentes Perinatales -->
+                  <ng-container matColumnDef="antecedentes_perinatal">
+                    <th mat-header-cell *matHeaderCellDef>Antecedentes Perinatales</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.antecedentes_perinatal ? 'Sí' : 'No' }}</td>
+                  </ng-container>
 
+                  <ng-container matColumnDef="enfermedades_previas">
+                    <th mat-header-cell *matHeaderCellDef>Enfermedades Previas</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.enfermedades_previas ? 'Sí' : 'No' }}</td>
+                  </ng-container>
 
-          <!--
+                  <ng-container matColumnDef="vacunas">
+                    <th mat-header-cell *matHeaderCellDef>Vacunas</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.vacunas }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="peso">
+                    <th mat-header-cell *matHeaderCellDef>Peso</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.peso }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="talla">
+                    <th mat-header-cell *matHeaderCellDef>Talla</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.talla }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="pct">
+                    <th mat-header-cell *matHeaderCellDef>PCT</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.pct }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cc">
+                    <th mat-header-cell *matHeaderCellDef>CC</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.cc }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="pcimc">
+                    <th mat-header-cell *matHeaderCellDef>PCIMC</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.pcimc }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="tas">
+                    <th mat-header-cell *matHeaderCellDef>TAS</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.tas }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="tad">
+                    <th mat-header-cell *matHeaderCellDef>TAD</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.tad }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="pcta">
+                    <th mat-header-cell *matHeaderCellDef>PCTA</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.pcta }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="examen_visual">
+                    <th mat-header-cell *matHeaderCellDef>Examen Visual</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.examen_visual }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ortopedia_traumatologia">
+                    <th mat-header-cell *matHeaderCellDef>Ortopedia / Traumatología</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.ortopedia_traumatologia }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="lenguaje">
+                    <th mat-header-cell *matHeaderCellDef>Lenguaje</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.lenguaje }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="segto">
+                    <th mat-header-cell *matHeaderCellDef>Segto</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.segto ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="alimentacion">
+                    <th mat-header-cell *matHeaderCellDef>Alimentación</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.alimentacion }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="hidratacion">
+                    <th mat-header-cell *matHeaderCellDef>Hidratación</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.hidratacion }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="lacteos">
+                    <th mat-header-cell *matHeaderCellDef>Lácteos</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.lacteos ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="infusiones">
+                    <th mat-header-cell *matHeaderCellDef>Infusiones</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.infusiones ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="numero_comidas">
+                    <th mat-header-cell *matHeaderCellDef>Número de Comidas</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.numero_comidas }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="horas_pantalla">
+                    <th mat-header-cell *matHeaderCellDef>Horas de Pantalla</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.horas_pantalla }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="horas_juego_airelibre">
+                    <th mat-header-cell *matHeaderCellDef>Horas de Juego al Aire Libre</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.horas_juego_airelibre }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="horas_suenio">
+                    <th mat-header-cell *matHeaderCellDef>Horas de Sueño</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.horas_suenio }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="proyecto">
+                    <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.proyecto }}</td>
+                  </ng-container>
+                  <!-- Fonoaduilogia -->
+                  <!-- Asistencia -->
+                  <ng-container matColumnDef="asistencia">
+                    <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.asistencia ? 'Sí' : 'No' }}</td>
+                  </ng-container>
+                  <!-- Diagnostico presuntivo -->
+                  <ng-container matColumnDef="diagnostico_presuntivo">
+                    <th mat-header-cell *matHeaderCellDef>Diagnostico Presuntivo</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.diagnosticoPresuntivo }}</td>
+                  </ng-container>
+                  <!-- Causas -->
+                  <ng-container matColumnDef="causas">
+                    <th mat-header-cell *matHeaderCellDef>Causas</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.causas }}</td>
+                  </ng-container>
+                  <!-- Oftalmologia -->
+                  <!-- Demanda -->
+                  <ng-container matColumnDef="demanda">
+                    <th mat-header-cell *matHeaderCellDef>Demanda</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.demanda }}</td>
+                  </ng-container>
+                  <!-- Primera Vez
+                  <ng-container matColumnDef="primera_vez">
+                    <th mat-header-cell *matHeaderCellDef>Primera Vez</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.primera_vez; else noPrimeraVez">Sí</p>
+                      <ng-template #noPrimeraVez>No</ng-template>
+                    </td>
+                  </ng-container>
+                  -->
+                  <!-- Control -->
+                  <ng-container matColumnDef="control">
+                    <th mat-header-cell *matHeaderCellDef>Control</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.control; else noControl">Sí</p>
+                      <ng-template #noControl>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Receta -->
+                  <ng-container matColumnDef="receta">
+                    <th mat-header-cell *matHeaderCellDef>Receta</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.receta; else noReceta">Sí</p>
+                      <ng-template #noReceta>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Anteojos -->
+                  <ng-container matColumnDef="anteojos">
+                    <th mat-header-cell *matHeaderCellDef>Anteojos</th>
+                    <td mat-cell *matCellDef="let consulta">
+                      <p *ngIf="consulta.anteojos; else noAnteojos">Sí</p>
+                      <ng-template #noAnteojos>No</ng-template>
+                    </td>
+                  </ng-container>
+                  <!-- Próximo Control -->
+                  <ng-container matColumnDef="prox_control">
+                    <th mat-header-cell *matHeaderCellDef>Próximo Control</th>
+                    <td mat-cell *matCellDef="let consulta">{{ consulta.prox_control | date: 'shortDate' }}</td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="consultaColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: consultaColumns" class="hover:bg-gray-300"></tr>
+                </table>
+              </div>
+            </div>
+            <!--
+                <ng-container matColumnDef="habilitado">
+                  <th mat-header-cell *matHeaderCellDef>Habilitado</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.deshabilitado ? 'Inhabilitado' : 'habilitado' }}
+                  </td>
+                </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Acción</th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex flex-row">
+                    <button (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id); $event.stopPropagation()"
+                      [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+                      @if (element.deshabilitado) {
+                      <i class="fa-solid fa-check"></i>
+                      } @else {
+                      <i class="fa-solid fa-xmark"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+              -->
+            <!--(click)="mostrarDetallesConsulta(row.id)"" -->
+            <!-- <div class="flex overflow-hidden rounded-xl border border-gray-300"> -->
+
+            ESTILOS:
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">#</th>
+                    <th scope="col" class="px-6 py-3">
+                      <div class="flex items-center">
+                        Profesional
+                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                              d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                          </svg></a>
+                      </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      <div class="flex items-center">
+                        Tipo
+                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                              d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                          </svg></a>
+                      </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      <div class="flex items-center">
+                        Fecha
+                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                              d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                          </svg></a>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-white border-b cursor-pointer" (click)="1+1">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">1</th>
+                    <td class="px-6 py-4">Ana Garcia</td>
+                    <td class="px-6 py-4">Consulta Medica Clinica</td>
+                    <td class="px-6 py-4">15-12-2024</td>
+                  </tr>
+                  <tr *ngIf="mostrarDetalles">
+                    <td colspan="4" class="border-t border-t-gray-300">
+                      <div class="mt-4 px-4 py-3">
+                        <p class="font-bold">Detalles de la Consulta</p>
+                        <div class="flex overflow-hidden rounded-xl border border-gray-300 mt-2">
+                          <table class="flex-1">
+                            <thead>
+                              <tr>
+                                <th class="border px-4 py-2">Campo</th>
+                                <th class="border px-4 py-2">Valor</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td class="border px-4 py-2">Detalle 1</td>
+                                <td class="border px-4 py-2">Datos detalle 1</td>
+                              </tr>
+                              <tr>
+                                <td class="border px-4 py-2">Detalle 2</td>
+                                <td class="border px-4 py-2">Datos detalle 2</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="bg-white border-b">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">1</th>
+                    <td class="px-6 py-4">Ana Garcia</td>
+                    <td class="px-6 py-4">Consulta de Oftolmologia</td>
+                    <td class="px-6 py-4">13-02-2024</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!--
             <table class="flex-1">
               <thead>
                 <tr>
@@ -243,12 +667,13 @@
               </tbody>
             </table>
           -->
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- </div> -->
-<ng-template #elseBlock>
-  <p>Error, ID no valido.</p>
-</ng-template>
+  <!-- </div>
+  <ng-template #elseBlock>
+    <p>Error, ID no valido.</p>
+  </ng-template>
+-->

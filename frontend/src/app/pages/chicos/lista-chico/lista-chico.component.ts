@@ -105,7 +105,6 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   verDetallesChico(id: number) {
-    this._router.navigate(['/layout/chicos' , id]);
+    this._router.navigate(['/layout/chicos', id]);
   }
-
 }
