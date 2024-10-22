@@ -99,4 +99,18 @@ export class ChicoController {
       message: 'Chico eliminado con exito',
     };
   }
+
+  @Get(':id/consultas')
+  @ApiOperation({ summary: 'Devuelve las consultas a las que asistio el niño' })
+  @ApiResponse({ status: 200, description: 'Retorna las consultas del chhico' })
+  @ApiResponse({ status: 404, description: 'Chico no encontrado' })
+  async findChicosConsultas(@Param('id', ParseIntPipe) id: number) {
+    const consultas = await this.chicoService.findChicosConsultas(id);
+    return {
+      success: true,
+      data: consultas,
+      message: 'Consultas encontradas por chico con exito',
+    };
+  }
+
 }

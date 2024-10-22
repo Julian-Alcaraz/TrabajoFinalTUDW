@@ -95,8 +95,29 @@ export class ConsultaService {
     return `This action returns all consulta`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} consulta`;
+  async findOne(id: number) {
+    const consulta = await this.consultaORM.findOne({ where: { id }, relations: ['curso', 'institucion', 'usuario'] });
+    if (!consulta) throw new NotFoundException(`Consulta con id ${id} no encontrada`);
+    let consultaHija;
+    switch (consulta.type) {
+      case 'Clinica':
+        consultaHija = await this.clinicaORM.findOne({ where: { id_consulta: id } });
+        break;
+      case 'Oftalmologia':
+        consultaHija = await this.oftalmologiaORM.findOne({ where: { id_consulta: id } });
+        break;
+      case 'Fonoaudiologia':
+        consultaHija = await this.fonoaudiologiaORM.findOne({ where: { id_consulta: id } });
+        break;
+      case 'Odontologia':
+        consultaHija = await this.odontologiaORM.findOne({ where: { id_consulta: id } });
+        break;
+      default:
+        throw new NotFoundException(`Consulta sin tipo especificado.`);
+        break;
+    }
+    delete consultaHija.id_consulta;
+    return { ...consulta, ...consultaHija };
   }
 
   update(id: number, updateConsultaDto: UpdateConsultaDto) {

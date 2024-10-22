@@ -45,7 +45,7 @@ export class ChicoService {
   async update(id: number, updateChicoDto: UpdateChicoDto) {
     if (Object.keys(updateChicoDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
     const usuario = await this.chicoORM.findOneBy({ id });
-    if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+    if (!usuario) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     if (updateChicoDto.dni) {
       const chicoEncontradoDni = await this.chicoORM.findOneBy({ dni: updateChicoDto.dni });
       if (chicoEncontradoDni && chicoEncontradoDni.id != id) throw new BadRequestException(`El dni ${updateChicoDto.dni} ya esta cargado en el sistema`);
@@ -56,9 +56,21 @@ export class ChicoService {
 
   async remove(id: number) {
     const chico = await this.chicoORM.findOneBy({ id });
-    if (!chico) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
-    else if (chico.deshabilitado) throw new BadRequestException(`El usuario con id ${id} ya esta deshabilitado`);
+    if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
+    else if (chico.deshabilitado) throw new BadRequestException(`El chico con id ${id} ya esta deshabilitado`);
     chico.deshabilitado = true;
     return this.chicoORM.save(chico);
+  }
+  async findChicosConsultas(id: number) {
+    const chico = await this.chicoORM.findOne({
+      where: { id },
+      relations: ['consultas'],
+    });
+
+    if (!chico) {
+      throw new NotFoundException(`Chico con id ${id} no encontrado`);
+    }
+
+    return chico.consultas;
   }
 }

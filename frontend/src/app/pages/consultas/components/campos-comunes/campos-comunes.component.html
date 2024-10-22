@@ -1,5 +1,4 @@
 <!-- Campos generales: -->
-<h2 class="mb-4">Campos comunes</h2>
 <!-- Dni -->
 <div class="grid gap-6 md:grid-cols-6">
   <div class="col-span-3">
@@ -7,10 +6,10 @@
       idInput="dni" />
   </div>
   <!-- Mensaje para cargar el chico si el DNI no existe -->
-  <div class="col-span-3 mt-4 ">
+  <div class="col-span-3 ">
     <div *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
       <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
-        class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-2">
+        class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-3">
         <div class="flex items-center">
           <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
