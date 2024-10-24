@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-notificacion',
+  standalone: true,
+  imports: [CommonModule],
   template: `
-    @if (data[0].length && data[0].length !== 0) {
+    @if (!isString) {
       @for (item of data[0]; track $index) {
         <h5 style="text-align:center;" [innerHTML]="item"></h5>
       }
@@ -14,5 +17,8 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
   `,
 })
 export class NotificacionComponent {
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
+  isString = false;
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
+    this.isString = typeof data[0] === 'string' ? true : false;
+  }
 }
