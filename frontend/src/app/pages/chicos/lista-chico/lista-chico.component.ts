@@ -26,7 +26,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
   constructor(
     private _chicoService: ChicoService,
     private _router: Router,

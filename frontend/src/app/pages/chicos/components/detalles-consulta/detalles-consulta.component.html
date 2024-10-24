@@ -1,0 +1,267 @@
+<div *ngIf="hayConsulta && idConsulta" class="mt-10">
+  <p class="font-bold">Detalles de la Consulta</p>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table mat-table [dataSource]="consulta" class="flex-1 mat-elevation-z8 table-auto scroll">
+      <!-- Odontologia -->
+      <!-- Cepillado -->
+      <ng-container matColumnDef="cepillado">
+        <th mat-header-cell *matHeaderCellDef>Cepillado</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.cepillado ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Cepillo -->
+      <ng-container matColumnDef="cepillo">
+        <th mat-header-cell *matHeaderCellDef>Tiene cepillo</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.cepillo ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Clasificacion -->
+      <ng-container matColumnDef="clasificacion">
+        <th mat-header-cell *matHeaderCellDef>Clasificacion</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.clasificacion }}</td>
+      </ng-container>
+      <!-- Derivacion -->
+      <ng-container matColumnDef="derivacion">
+        <th mat-header-cell *matHeaderCellDef>Derivacion</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.derivacion ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Dientes Recuperables -->
+      <ng-container matColumnDef="dientes_recuperables">
+        <th mat-header-cell *matHeaderCellDef>Dientes Recuperables</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_recuperables }}</td>
+      </ng-container>
+      <!-- Dientes no recuperables -->
+      <ng-container matColumnDef="dientes_norecuperables">
+        <th mat-header-cell *matHeaderCellDef>Dientes no recuperables</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_norecuperables }}</td>
+      </ng-container>
+      <!-- Dientes permanentes -->
+      <ng-container matColumnDef="dientes_permanentes">
+        <th mat-header-cell *matHeaderCellDef>Dientes permanentes</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_permanentes }}</td>
+      </ng-container>
+      <!-- Dientes Temporales -->
+      <ng-container matColumnDef="dientes_temporales">
+        <th mat-header-cell *matHeaderCellDef>Dientes Temporales</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.dientes_temporales }}</td>
+      </ng-container>
+      <!-- Habitos -->
+      <ng-container matColumnDef="habitos">
+        <th mat-header-cell *matHeaderCellDef>Habitos</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.habitos }}</td>
+      </ng-container>
+      <!-- Primera Vez -->
+      <ng-container matColumnDef="primera_vez">
+        <th mat-header-cell *matHeaderCellDef>Primera Vez</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.primera_vez ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Sellador -->
+      <ng-container matColumnDef="sellador">
+        <th mat-header-cell *matHeaderCellDef>Dientes con sellador</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.sellador }}</td>
+      </ng-container>
+      <!-- Situacion Bucal -->
+      <ng-container matColumnDef="situacion_bucal">
+        <th mat-header-cell *matHeaderCellDef>Situacion Bucal</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.situacion_bucal }}</td>
+      </ng-container>
+      <!-- Topificacion -->
+      <ng-container matColumnDef="topificacion">
+        <th mat-header-cell *matHeaderCellDef>Topificacion</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.topificacion ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Ulterior -->
+      <ng-container matColumnDef="ulterior">
+        <th mat-header-cell *matHeaderCellDef>Ulterior</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.ulterior ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Clinica -->
+      <!-- Diabetes -->
+      <ng-container matColumnDef="diabetes">
+        <th mat-header-cell *matHeaderCellDef>Diabetes</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.diabetes ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Hipertension Arterial -->
+      <ng-container matColumnDef="hta">
+        <th mat-header-cell *matHeaderCellDef>HTA</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.hta ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Obesidad -->
+      <ng-container matColumnDef="obesidad">
+        <th mat-header-cell *matHeaderCellDef>Obesidad</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.obesidad ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Consumo de Alcohol -->
+      <ng-container matColumnDef="consumo_alcohol">
+        <th mat-header-cell *matHeaderCellDef>Consumo Alcohol</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.consumo_alcohol ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Consumo de Drogas -->
+      <ng-container matColumnDef="consumo_drogas">
+        <th mat-header-cell *matHeaderCellDef>Consumo Drogas</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.consumo_drogas ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Antecedentes Perinatales -->
+      <ng-container matColumnDef="antecedentes_perinatal">
+        <th mat-header-cell *matHeaderCellDef>Antecedentes Perinatales</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.antecedentes_perinatal ? 'Sí' : 'No' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="enfermedades_previas">
+        <th mat-header-cell *matHeaderCellDef>Enfermedades Previas</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.enfermedades_previas ? 'Sí' : 'No' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="vacunas">
+        <th mat-header-cell *matHeaderCellDef>Vacunas</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.vacunas }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="peso">
+        <th mat-header-cell *matHeaderCellDef>Peso</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.peso }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="talla">
+        <th mat-header-cell *matHeaderCellDef>Talla</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.talla }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pct">
+        <th mat-header-cell *matHeaderCellDef>PCT</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.pct }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cc">
+        <th mat-header-cell *matHeaderCellDef>CC</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.cc }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pcimc">
+        <th mat-header-cell *matHeaderCellDef>PCIMC</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.pcimc }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tas">
+        <th mat-header-cell *matHeaderCellDef>TAS</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.tas }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tad">
+        <th mat-header-cell *matHeaderCellDef>TAD</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.tad }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pcta">
+        <th mat-header-cell *matHeaderCellDef>PCTA</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.pcta }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="examen_visual">
+        <th mat-header-cell *matHeaderCellDef>Examen Visual</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.examen_visual }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ortopedia_traumatologia">
+        <th mat-header-cell *matHeaderCellDef>Ortopedia / Traumatología</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.ortopedia_traumatologia }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lenguaje">
+        <th mat-header-cell *matHeaderCellDef>Lenguaje</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.lenguaje }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="segto">
+        <th mat-header-cell *matHeaderCellDef>Segto</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.segto ? 'Sí' : 'No' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="alimentacion">
+        <th mat-header-cell *matHeaderCellDef>Alimentación</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.alimentacion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="hidratacion">
+        <th mat-header-cell *matHeaderCellDef>Hidratación</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.hidratacion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lacteos">
+        <th mat-header-cell *matHeaderCellDef>Lácteos</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.lacteos ? 'Sí' : 'No' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="infusiones">
+        <th mat-header-cell *matHeaderCellDef>Infusiones</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.infusiones ? 'Sí' : 'No' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numero_comidas">
+        <th mat-header-cell *matHeaderCellDef>Número de Comidas</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.numero_comidas }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="horas_pantalla">
+        <th mat-header-cell *matHeaderCellDef>Horas de Pantalla</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.horas_pantalla }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="horas_juego_airelibre">
+        <th mat-header-cell *matHeaderCellDef>Horas de Juego al Aire Libre</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.horas_juego_airelibre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="horas_suenio">
+        <th mat-header-cell *matHeaderCellDef>Horas de Sueño</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.horas_suenio }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="proyecto">
+        <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.proyecto }}</td>
+      </ng-container>
+      <!-- Fonoaduilogia -->
+      <!-- Asistencia -->
+      <ng-container matColumnDef="asistencia">
+        <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.asistencia ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Diagnostico presuntivo -->
+      <ng-container matColumnDef="diagnostico_presuntivo">
+        <th mat-header-cell *matHeaderCellDef>Diagnostico Presuntivo</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.diagnosticoPresuntivo }}</td>
+      </ng-container>
+      <!-- Causas -->
+      <ng-container matColumnDef="causas">
+        <th mat-header-cell *matHeaderCellDef>Causas</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.causas }}</td>
+      </ng-container>
+      <!-- Oftalmologia -->
+      <!-- Demanda -->
+      <ng-container matColumnDef="demanda">
+        <th mat-header-cell *matHeaderCellDef>Demanda</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.demanda }}</td>
+      </ng-container>
+      <!-- Control -->
+      <ng-container matColumnDef="control">
+        <th mat-header-cell *matHeaderCellDef>Control</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.control ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Receta -->
+      <ng-container matColumnDef="receta">
+        <th mat-header-cell *matHeaderCellDef>Receta</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.receta ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Anteojos -->
+      <ng-container matColumnDef="anteojos">
+        <th mat-header-cell *matHeaderCellDef>Anteojos</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.anteojos ? 'Sí' : 'No' }}</td>
+      </ng-container>
+      <!-- Próximo Control -->
+      <ng-container matColumnDef="prox_control">
+        <th mat-header-cell *matHeaderCellDef>Próximo Control</th>
+        <td mat-cell *matCellDef="let consulta">{{ consulta.prox_control | date: 'shortDate' }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="consultaColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: consultaColumns" class="hover:bg-gray-300"></tr>
+    </table>
+  </div>

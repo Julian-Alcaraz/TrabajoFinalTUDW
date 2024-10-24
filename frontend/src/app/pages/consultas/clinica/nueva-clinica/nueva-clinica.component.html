@@ -19,9 +19,9 @@
             idInput="cc" />
         </div>
         <div class="col-span-6">
-          <div class="grid gap-0 md:grid-cols-2">
+          <div class="grid gap-0 md:grid-cols-6">
             <!-- Grupo de condiciones -->
-            <div>
+            <div class="col-span-3">
               <h3 class="mt-4">Indica si el chico tiene alguna de las siguientes condiciones:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
@@ -33,7 +33,7 @@
               </div>
             </div>
             <!-- Grupo de antecedentes -->
-            <div>
+            <div class="col-span-3">
               <h3 class="mt-4">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Antecedentes Perinatales"
@@ -44,7 +44,7 @@
               </div>
             </div>
             <!-- Grupo de consumos problemáticos -->
-            <div>
+            <div class="col-span-3">
               <h3 class="mt-4">Indica si el chico tiene consumos problemáticos de:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')"
@@ -54,7 +54,7 @@
               </div>
             </div>
             <!-- Grupo de lácteos e infusiones -->
-            <div>
+            <div class="col-span-3">
               <h3 class="mt-4">Indica si el chico toma:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Lácteos" [control]="controlDeInput('lacteos')" idInput="lacteos"

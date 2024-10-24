@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarSexo, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '../../../../utils/validadores';
 import { ChicoService } from '../../../../services/chico.service';
 import { Barrio } from '../../../../models/barrio.model';
 import { Localidad } from '../../../../models/localidad.model';
@@ -49,7 +49,7 @@ export class FormChicosComponent implements OnInit {
       nombre: ['Juan', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       apellido: ['Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       dni: [Math.floor(10000000 + Math.random() * 90000000), [Validators.required, ValidarDni, ValidarSoloNumeros]],
-      sexo: ['Masculino', [Validators.required, ValidarSexo]],
+      sexo: ['Masculino', [Validators.required]],
       fe_nacimiento: ['2000-07-07', Validators.required],
       telefono: ['123456789', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
       direccion: ['Calle Falsa 123', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],

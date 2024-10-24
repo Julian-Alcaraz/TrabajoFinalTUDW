@@ -6,7 +6,7 @@ import { InputTextComponent } from '../input-text/input-text.component';
 import { InputSelectComponent } from '../input-select/input-select.component';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextareaComponent } from '../input-textarea/input-textarea.component';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarTipoInstitucion, ValidarTurno } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ChicoService } from '../../../../services/chico.service';
 import { catchError, debounceTime, map, of } from 'rxjs';
 import { Chico } from '../../../../models/chico.model';
@@ -34,7 +34,8 @@ export class CamposComunesComponent implements OnInit {
   public cursos: Curso[] = [];
   public institucionForm: FormGroup;
   public cursoForm: FormGroup;
-  // public errorDni: string | null = null;
+  public edadAnios: number | null = null;
+  public edadMeses: number | null = null;
 
   @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
   @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
@@ -51,20 +52,13 @@ export class CamposComunesComponent implements OnInit {
     // Formulario para crear una nueva institucion
     this.institucionForm = this.fb.group({
       nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      tipo: ['', [Validators.required, ValidarCadenaSinEspacios, ValidarTipoInstitucion]], // ValidarTipoInstitucion no funciona
+      tipo: ['', [Validators.required, ValidarCadenaSinEspacios]],
     });
 
     // Formulario para crear un nuevo curso
     this.cursoForm = this.fb.group({
       nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      // Validar que grado sea positivo
       grado: ['', [Validators.required, ValidarSoloNumeros]],
-      /*
-        HACER VALIDADOR ENUM GLOBAL.
-
-        @IsEnum(['Primaria', 'Secundario', 'Jardin', 'Terciario', 'Universitario'], { message: 'No es un nivel valido. Primaria, Secundario, Jardin, Terciario, Universitario' })
-        readonly nivel: nivelCurso;
-      */
       nivel: ['', [Validators.required, ValidarCadenaSinEspacios]],
     });
   }
@@ -73,6 +67,7 @@ export class CamposComunesComponent implements OnInit {
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;
   }
+
   get controlDeInputInstitucion(): (input: string) => FormControl {
     return (input: string) => this.institucionForm.get(input) as FormControl;
   }
@@ -85,14 +80,13 @@ export class CamposComunesComponent implements OnInit {
     this.obtenerInstituciones();
     this.obtenerCursos();
 
-    this.form.addControl('edad', new FormControl(1, [Validators.required, ValidarSoloNumeros]));
+    this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
     this.form.addControl('dni', new FormControl(12345678, [Validators.required, ValidarSoloNumeros, ValidarDni]));
     this.form.addControl('obra_social', new FormControl('', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]));
     this.form.addControl('chicoParam', new FormControl(null, [Validators.required]));
     this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
     this.form.addControl('id_curso', new FormControl('', [Validators.required]));
-    this.form.addControl('turno', new FormControl('', [Validators.required, ValidarTurno]));
-    //this.form.addControl('observaciones', new FormControl('', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]));
+    this.form.addControl('turno', new FormControl('', [Validators.required]));
 
     this.form.get('dni')?.valueChanges.subscribe(() => {
       this.onChangeDni();
@@ -101,33 +95,37 @@ export class CamposComunesComponent implements OnInit {
 
   onChangeDni() {
     const dni = this.form.get('dni')?.value;
-    // this.errorDni = null;
     if (!dni || dni.toString().length !== 8) {
-      console.log('El DNI no tiene 8 dígitos');
+      // console.log('El DNI no tiene 8 dígitos');
       return;
     }
-    console.log('El DNI tiene 8 dígitos, procediendo a verificar');
+    // console.log('El DNI tiene 8 dígitos, procediendo a verificar');
     this._chicoService
       .obtenerChicoxDni(dni)
       .pipe(
         debounceTime(300),
         map((response) => {
-          console.log('Respuesta recibida:', response);
           if (response?.success) {
             this.chico = response.data;
             this.form.get('chicoParam')?.setValue(response.data);
-            // this.errorDni = null;
-            console.log('Chico encontrado: ', this.form.get('chicoParam')?.value);
+            this.calcularEdad();
+            // console.log('Chico encontrado: ', this.form.get('chicoParam')?.value);
           } else {
             this.chico = null;
             this.form.get('chicoParam')?.setValue(null);
+            this.form.get('edad')?.setValue(null);
+            this.edadMeses = null;
+            this.edadAnios = null;
             // this.errorDni = 'No hay chico con ese DNI.';
-            console.log('Chico no encontrado, esto deberia ser null: ', this.form.get('chicoParam')?.value);
+            // console.log('Chico no encontrado, esto deberia ser null: ', this.form.get('chicoParam')?.value);
           }
         }),
         catchError((error) => {
           this.chico = null;
           this.form.get('chicoParam')?.setValue(null);
+          this.form.get('edad')?.setValue(null);
+          this.edadMeses = null;
+          this.edadAnios = null;
           console.error('Error al verificar el DNI:', error);
           return of(null);
         }),
@@ -135,7 +133,7 @@ export class CamposComunesComponent implements OnInit {
       .subscribe();
   }
 
-  obtenerInstituciones(): any {
+  obtenerCursos(): any {
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
         this.cursos = response.data;
@@ -146,7 +144,7 @@ export class CamposComunesComponent implements OnInit {
     });
   }
 
-  obtenerCursos(): any {
+  obtenerInstituciones(): any {
     this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
         this.instituciones = response.data;
@@ -155,6 +153,20 @@ export class CamposComunesComponent implements OnInit {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });
+  }
+
+  calcularEdad() {
+    if (this.chico && this.chico.fe_nacimiento) {
+      const nacimiento = new Date(this.chico.fe_nacimiento);
+      const hoy = new Date();
+      this.edadAnios = hoy.getFullYear() - nacimiento.getFullYear();
+      this.edadMeses = hoy.getMonth() - nacimiento.getMonth();
+      if (this.edadMeses < 0) {
+        this.edadAnios--;
+        this.edadMeses += 12;
+      }
+      this.form.get('edad')?.setValue(this.edadAnios);
+    }
   }
 
   // Modal institucion

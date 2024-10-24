@@ -1,72 +1,71 @@
-<!-- Campos generales: -->
 <!-- Dni -->
 <div class="grid gap-6 md:grid-cols-6">
   <div class="col-span-3">
-    <app-input-number (change)="onChangeDni()" label="Documento" [control]="controlDeInput('dni')" placeholder="xxxxx"
-      idInput="dni" />
+    <app-input-number (change)="onChangeDni()" label="Documento" [control]="controlDeInput('dni')"
+      placeholder="xxxxxxxx" idInput="dni" />
   </div>
   <!-- Mensaje para cargar el chico si el DNI no existe -->
-  <div class="col-span-3 ">
+  <div class="col-span-3 m-2">
     <div *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
-      <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
-        class="bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg mt-3">
-        <div class="flex items-center">
-          <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
-          </svg>
-          <button type="button" (click)="cargarChico()" class="font-semibold underline hover:text-blue-800">Chico no
-            cargado, haz click aquí para cargarlo.</button>
+      <div class="h-32">
+        <!-- Mensaje cuando no hay chico cargado -->
+        <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
+          class="h-full bg-blue-100 border border-blue-300 text-blue-600 text-sm p-4 rounded-lg flex items-center">
+          <div class="flex items-center">
+            <svg class="w-10 h-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4.5m0 3.75h.008v.008H12v-.008zm0 0H8.25A2.25 2.25 0 016 13.5v-3a2.25 2.25 0 012.25-2.25H12m0 0h3.75A2.25 2.25 0 0118 10.5v3a2.25 2.25 0 01-2.25 2.25H12" />
+            </svg>
+            <button type="button" (click)="cargarChico()" class="font-semibold underline hover:text-blue-800">
+              Chico no cargado, haz click aquí para cargarlo.
+            </button>
+          </div>
+        </div>
+        <!-- Mensaje cuando hay chico cargado -->
+        <div *ngIf="chico !== null && this.form.get('dni')?.value.toString().length === 8"
+          class="h-full bg-green-100 border border-green-300 text-green-600 text-sm p-4 rounded-lg flex flex-col justify-center">
+          <p class="text-green-600 font-bold">Chico Seleccionado</p>
+          <p>Nombre: <span class="font-semibold">{{ chico.nombre }}</span></p>
+          <p>Apellido: <span class="font-semibold">{{ chico.apellido }}</span></p>
+          <p>Edad: <span class="font-semibold">El chico tiene {{ edadAnios }} años y {{edadMeses}} meses</span></p>
         </div>
       </div>
-      <div *ngIf="chico !== null && this.form.get('dni')?.value.toString().length === 8" class="mt-4 col-span-2">
-        <p class="text-green-600 font-bold">Chico Seleccionado</p>
-        <p>Nombre chico: <span class="font-semibold">{{ chico.nombre }}</span></p>
-        <p>Apellido chico: <span class="font-semibold">{{ chico.apellido }}</span></p>
-        <p>Podrian agregarse mas datos del chico aca...</p>
-      </div>
     </div>
-    <!-- <div *ngIf="errorDni" class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg mt-2">
-      {{ errorDni }}
-    </div> -->
-  </div>
-  <!-- Institucion -->
-  <div class="col-span-2 mb-3">
-    <app-input-select (change)="onChangeInstitucion()" label="Institucion" [control]="controlDeInput('id_institucion')"
-      idInput="id_institucion" [opciones]="instituciones" />
-  </div>
-  <!-- Curso -->
-  <div class="col-span-2 mb-3 ">
-    <app-input-select (change)="onChangeCurso()" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso"
-      [opciones]="cursos" />
-  </div>
-  <!-- Turno -->
-  <div class="col-span-2 mb-3">
-    <label for="turno" class="block mb-2 text-sm font-medium text-gray-900">Turno</label>
-    <select [formControl]="controlDeInput('turno')" id="turno"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-      <option value="" disabled selected>Seleccione una opción</option>
-      <option value="Mañana">Mañana</option>
-      <option value="Tarde">Tarde</option>
-      <option value="Noche">Noche</option>
-    </select>
-    <div *ngIf="form.get('turno')?.errors && (form.get('turno')?.dirty || form.get('turno')?.touched)"
-      class="text-red-600 text-sm">
-      <div *ngIf="form.get('turno')?.errors?.['required']">Debe seleccionar una opción.</div>
-      <div *ngIf="form.get('turno')?.errors?.['ValidarTurno']">El turno debe ser "Mañana", "Tarde" o "Noche".</div>
-    </div>
-  </div>
-  <!-- Edad -->
-  <div class="col-span-3 mb-3">
-    <app-input-number label="Edad" [control]="controlDeInput('edad')" placeholder="Ej: 12" idInput="edad" />
-  </div>
-  <!-- Obra Social -->
-  <div class="col-span-3 mb-3">
-    <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
-      idInput="obra_social" />
   </div>
 </div>
+<!-- Institucion -->
+<div class="col-span-2 mb-3">
+  <app-input-select (change)="onChangeInstitucion()" label="Institucion" [control]="controlDeInput('id_institucion')"
+    idInput="id_institucion" [opciones]="instituciones" />
+</div>
+<!-- Curso -->
+<div class="col-span-2 mb-3">
+  <app-input-select (change)="onChangeCurso()" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso"
+    [opciones]="cursos" />
+</div>
+<!-- Turno -->
+<div class="col-span-2 mb-3">
+  <label for="turno" class="block mb-2 text-sm font-medium text-gray-900">Turno</label>
+  <select [formControl]="controlDeInput('turno')" id="turno"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+    <option value="" disabled selected>Seleccione una opción</option>
+    <option value="Mañana">Mañana</option>
+    <option value="Tarde">Tarde</option>
+    <option value="Noche">Noche</option>
+  </select>
+  <div *ngIf="form.get('turno')?.errors && (form.get('turno')?.dirty || form.get('turno')?.touched)"
+    class="text-red-600 text-sm">
+    <div *ngIf="form.get('turno')?.errors?.['required']">Debe seleccionar una opción.</div>
+    <div *ngIf="form.get('turno')?.errors?.['ValidarTurno']">El turno debe ser "Mañana", "Tarde" o "Noche".</div>
+  </div>
+</div>
+<!-- Obra Social -->
+<div class="col-span-6 mb-3">
+  <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
+    idInput="obra_social" />
+</div>
+
 
 <!-- Institucion Modal -->
 <ng-template #institucionModal>
@@ -96,14 +95,14 @@
               *ngIf="institucionForm.get('tipo')?.errors && (institucionForm.get('tipo')?.dirty || institucionForm.get('tipo')?.touched)"
               class="text-red-600 text-sm">
               <div *ngIf="institucionForm.get('tipo')?.errors?.['required']">Debe seleccionar una opción.</div>
-              <!-- <div *ngIf="institucionForm.get('tipo')?.errors?.['ValidarTipoInstitucion']">El tipo de institucion debe
-                ser "Jardin", "Primario", "Secundario" o "Terciario".</div> -->
             </div>
           </div>
           <div class="flex my-auto">
             <button type="submit" [disabled]="!institucionForm.valid"
-              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-              institucion</button>
+              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              Agregar
+              institucion
+            </button>
           </div>
         </div>
       </div>
@@ -144,8 +143,10 @@
           </div>
           <div class="flex my-auto">
             <button type="submit" [disabled]="!cursoForm.valid"
-              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-              curso</button>
+              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              Agregar
+              curso
+            </button>
           </div>
         </div>
       </div>
