@@ -41,7 +41,7 @@
       <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900">Dirección</label>
       <input formControlName="direccion" type="text" id="direccion"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: Av. Argentina 452" required />
+        placeholder="" required />
       <div
         *ngIf="chicoForm.get('direccion')?.errors && (chicoForm.get('direccion')?.dirty || chicoForm.get('direccion')?.touched)"
         class="text-red-600 text-sm">
@@ -53,11 +53,11 @@
       </div>
     </div>
     <!-- Dni -->
-    <div>
+    <div class="col-span-1">
       <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
       <input formControlName="dni" type="number" id="dni" aria-describedby="helper-text-explanation"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="xxxxx" required />
+        placeholder="xxxxxxxx" required />
       <div *ngIf="chicoForm.get('dni')?.errors && (chicoForm.get('dni')?.dirty || chicoForm.get('dni')?.touched)"
         class="text-red-600 text-sm">
         <div *ngIf="chicoForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
@@ -66,7 +66,7 @@
       </div>
     </div>
     <!-- Telefono: -->
-    <div>
+    <div class="col-span-1">
       <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900">Telefono</label>
       <input formControlName="telefono" type="number" id="telefono"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -154,7 +154,7 @@
     <!-- Nombre padre: -->
     <div class="col-span-2">
       <label for="nombre_padre" class="block mb-2 text-sm font-medium text-gray-900">Nombre y apellido del padre</label>
-      <input  formControlName="nombre_padre" type="text" id="nombre_padre"
+      <input formControlName="nombre_padre" type="text" id="nombre_padre"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="Ej: Roberto Perez" />
       <div

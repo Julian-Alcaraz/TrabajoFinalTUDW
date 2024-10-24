@@ -81,8 +81,7 @@
           </div>
           <div *ngIf="resultsLength > 0"
             class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-            <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas en el año
-              (podria ponerse abajo o en otro lado)
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño
             </p>
             <div class="flex items-center gap-2">
               <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
@@ -160,8 +159,8 @@
                   class="cursor-pointer hover:bg-gray-300"></tr>
               </table>
               <!-- Detalles -->
-              <app-detalles-consulta [idConsulta]="idConsulta" />
             </div>
+            <app-detalles-consulta [idConsulta]="idConsulta" />
           </div>
         </div>
       </div>

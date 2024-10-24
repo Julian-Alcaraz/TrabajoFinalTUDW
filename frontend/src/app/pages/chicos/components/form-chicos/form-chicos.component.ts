@@ -46,13 +46,13 @@ export class FormChicosComponent implements OnInit {
     // Hacer un trim o algo, este es un string valido: "          a                Juan"
     // Formulario para crear un nuevo chico
     this.chicoForm = this.fb.group({
-      nombre: ['Juan', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      apellido: ['Pérez', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      dni: [Math.floor(10000000 + Math.random() * 90000000), [Validators.required, ValidarDni, ValidarSoloNumeros]],
-      sexo: ['Masculino', [Validators.required]],
-      fe_nacimiento: ['2000-07-07', Validators.required],
-      telefono: ['123456789', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
-      direccion: ['Calle Falsa 123', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      dni: ['' /*Math.floor(10000000 + Math.random() * 90000000)*/, [Validators.required, ValidarDni, ValidarSoloNumeros]],
+      sexo: ['', [Validators.required]],
+      fe_nacimiento: ['', Validators.required],
+      telefono: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
+      direccion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       id_barrio: [{ value: '', disabled: true }, [Validators.required]],
@@ -230,7 +230,8 @@ export class FormChicosComponent implements OnInit {
     });
   }
 
-  cerraModalBarrio() { // cerrarModalBarrio
+  cerraModalBarrio() {
+    // cerrarModalBarrio
     this._dialog.closeAll();
     this.chicoForm.get('id_barrio')?.setValue('');
   }

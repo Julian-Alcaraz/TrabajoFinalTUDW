@@ -65,14 +65,14 @@ export class NuevaFonoaudiologicaComponent {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
           delete formValues.dni;
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...fonoaudiologiaValues } = formValues;
+          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
           const data = {
             type,
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
-            id_chico: chicoParam.id,
+            id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
             fonoaudiologia: {

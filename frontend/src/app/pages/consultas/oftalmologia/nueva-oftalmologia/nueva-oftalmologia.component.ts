@@ -37,12 +37,12 @@ export class NuevaOftalmologiaComponent {
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
 
       // Campos Oftalmologia
-      demanda: ['Padre', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      demanda: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       primera_vez: ['', [Validators.required]],
       control: ['', [Validators.required]],
       receta: ['', [Validators.required]],
       anteojos: ['', [Validators.required]],
-      prox_control: [this.fechaManana, Validators.required],
+      prox_control: ['', Validators.required],
     });
   }
 
@@ -75,14 +75,14 @@ export class NuevaOftalmologiaComponent {
           formValues.control = formValues.control === 'true';
           formValues.receta = formValues.receta === 'true';
           formValues.anteojos = formValues.anteojos === 'true';
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...oftalmologiaValues } = formValues;
+          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
           const data = {
             type,
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
-            id_chico: chicoParam.id,
+            id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
             oftalmologia: {

@@ -81,9 +81,9 @@ export class CamposComunesComponent implements OnInit {
     this.obtenerCursos();
 
     this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
-    this.form.addControl('dni', new FormControl(12345678, [Validators.required, ValidarSoloNumeros, ValidarDni]));
+    this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
     this.form.addControl('obra_social', new FormControl('', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]));
-    this.form.addControl('chicoParam', new FormControl(null, [Validators.required]));
+    this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
     this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
     this.form.addControl('id_curso', new FormControl('', [Validators.required]));
     this.form.addControl('turno', new FormControl('', [Validators.required]));
@@ -107,12 +107,12 @@ export class CamposComunesComponent implements OnInit {
         map((response) => {
           if (response?.success) {
             this.chico = response.data;
-            this.form.get('chicoParam')?.setValue(response.data);
+            this.form.get('id_chico')?.setValue(response.data.id);
             this.calcularEdad();
             // console.log('Chico encontrado: ', this.form.get('chicoParam')?.value);
           } else {
             this.chico = null;
-            this.form.get('chicoParam')?.setValue(null);
+            this.form.get('id_chico')?.setValue(null);
             this.form.get('edad')?.setValue(null);
             this.edadMeses = null;
             this.edadAnios = null;
@@ -122,7 +122,7 @@ export class CamposComunesComponent implements OnInit {
         }),
         catchError((error) => {
           this.chico = null;
-          this.form.get('chicoParam')?.setValue(null);
+          this.form.get('id_chico')?.setValue(null);
           this.form.get('edad')?.setValue(null);
           this.edadMeses = null;
           this.edadAnios = null;
@@ -290,17 +290,4 @@ export class CamposComunesComponent implements OnInit {
   cargarChico() {
     this._router.navigate(['/layout/chicos/nuevo']);
   }
-
-  /*
-  onSubmit() {
-    // Verificar si hay un chico cargado
-    if (!this.chico) {
-      this.errorDni = 'No hay chico con ese DNI. Debes buscar uno antes de enviar el formulario.';
-      return; // No enviar el formulario si no hay chico
-    }
-
-    // Lógica para enviar el formulario
-    console.log('Formulario enviado', this.form.value);
-  }
-    */
 }

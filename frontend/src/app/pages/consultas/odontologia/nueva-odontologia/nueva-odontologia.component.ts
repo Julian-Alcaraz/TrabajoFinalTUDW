@@ -35,20 +35,20 @@ export class NuevaOdontologiaComponent {
       type: ['Odontologia', [Validators.required, ValidarSoloLetras]],
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
       // Campos odontologia
-      
+
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
       cepillo: ['', [Validators.required]],
       cepillado: ['', [Validators.required]],
       topificacion: ['', [Validators.required]],
       derivacion: ['', [Validators.required]],
-      dientes_permanentes: [1, [Validators.required, ValidarSoloNumeros]],
-      dientes_temporales: [1, [Validators.required, ValidarSoloNumeros]],
-      sellador: [1, [Validators.required, ValidarSoloNumeros]],
-      dientes_recuperables: [1, [Validators.required, ValidarSoloNumeros]],
-      dientes_norecuperables: [1, [Validators.required, ValidarSoloNumeros]],
-      situacion_bucal: ['Buena', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      habitos: ['Buena', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
+      sellador: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_norecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
 
@@ -83,14 +83,14 @@ export class NuevaOdontologiaComponent {
           formValues.ulterior = formValues.ulterior === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.derivacion = formValues.derivacion === 'true';
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...odontologicaValues } = formValues;
+          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
             type,
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
-            id_chico: chicoParam.id,
+            id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
             odontologia: {

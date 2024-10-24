@@ -38,7 +38,7 @@ export class NuevaClinicaComponent {
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
       // Campos Medica Clinica
 
-      peso: [45.1, [Validators.required, ValidarNumerosFloat]],
+      peso: ['', [Validators.required, ValidarNumerosFloat]],
       diabetes: [false, [Validators.required]],
       hta: [false, [Validators.required]],
       obesidad: [false, [Validators.required]],
@@ -48,27 +48,27 @@ export class NuevaClinicaComponent {
       enfermedades_previas: [false, [Validators.required]],
       vacunas: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // vacunas: ["", [Validators.required, ValidarCadenaSinEspacios]] AGREGAR ENUM SI LO HAGO DE FORMA DE SELECT
-      talla: [1.11, [Validators.required, ValidarNumerosFloat]],
-      cc: [2.22, [Validators.required, ValidarNumerosFloat]],
-      tas: [120.7, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      tad: [70.2, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      talla: ['', [Validators.required, ValidarNumerosFloat]],
+      cc: ['', [Validators.required, ValidarNumerosFloat]],
+      tas: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      tad: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
       examen_visual: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       ortopedia_traumatologia: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       lenguaje: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       segto: [false, [Validators.required]],
       lacteos: [false, [Validators.required]],
       infusiones: [false, [Validators.required]],
-      numero_comidas: [4, [Validators.required, ValidarSoloNumeros]],
-      alimentacion: ['Buena', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      hidratacion: ['Buena', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      horas_pantalla: ['01:28', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      horas_juego_airelibre: ['00:01', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      horas_suenio: ['23:59', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      proyecto: ['Control Niño Sano', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      numero_comidas: ['', [Validators.required, ValidarSoloNumeros]],
+      alimentacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      horas_pantalla: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
+      horas_juego_airelibre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
+      horas_suenio: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
+      proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // Usar ValidarNumerosFloat? y ver maximos y minimos de estos valores:
-      pcta: [7, [Validators.required, ValidarSoloNumeros]],
-      pcimc: [2, [Validators.required, ValidarSoloNumeros]],
-      pct: [4, [Validators.required, ValidarSoloNumeros]],
+      pcta: ['', [Validators.required, ValidarSoloNumeros]],
+      pcimc: ['', [Validators.required, ValidarSoloNumeros]],
+      pct: ['', [Validators.required, ValidarSoloNumeros]],
     });
   }
 
@@ -113,14 +113,14 @@ export class NuevaClinicaComponent {
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
           delete formValues.dni;
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, chicoParam, ...clinicaValues } = formValues;
+          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
           const data = {
             type,
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
-            id_chico: chicoParam.id,
+            id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
             clinica: {
