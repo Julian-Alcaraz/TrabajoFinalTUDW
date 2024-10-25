@@ -58,6 +58,7 @@ export class DetallesConsultaComponent implements OnChanges, OnInit {
     if (this.idConsulta) {
       this._consultaService.obtenerConsultaxId(this.idConsulta).subscribe({
         next: (response: any) => {
+          console.log(response)
           if (response.success) {
             this.consulta = new MatTableDataSource<Consulta>([response.data]);
             this.consultaDataSource = this.consulta.data[0];

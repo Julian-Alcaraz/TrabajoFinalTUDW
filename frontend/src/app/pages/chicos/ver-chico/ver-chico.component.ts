@@ -25,7 +25,9 @@ export class VerChicoComponent implements OnInit {
   public chico: Chico | null = null;
   public consultas: MatTableDataSource<Consulta>;
   public resultsLength = 0;
-  public consultasColumns: string[] = ['numero', 'tipo', 'fecha', 'profesional', 'obra_social', 'edad', 'institucion', 'curso', 'turno', 'observaciones'];
+  public consultasColumns: string[] = ['numero', 'tipo', 'fecha', 'profesional', 'obra_social', 'edad',
+    //  'institucion', 'curso', 'turno',
+     'observaciones'];
 
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
 

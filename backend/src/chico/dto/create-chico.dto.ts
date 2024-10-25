@@ -29,7 +29,7 @@ backend-1      |     at ValidationPipe.transform (/home/app/backend/node_modules
 backend-1      |     at /home/app/backend/node_modules/@nestjs/core/pipes/pipes-consumer.js:16:33
 backend-1      |     at processTicksAndRejections (node:internal/process/task_queues:105:5)
   */
-   @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value.trim())
   readonly nombre: string;
 
   @ApiProperty({ description: 'Apellido del chico' })
