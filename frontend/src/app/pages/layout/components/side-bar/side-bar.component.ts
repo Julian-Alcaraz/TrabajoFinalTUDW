@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { navbarData } from './nav-data';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { fadeInOut } from './helper';
 import { SublevelMenuComponent } from './sublevel-menu.component';
@@ -42,6 +42,7 @@ export class NavBarComponent implements OnInit {
   }
   constructor(
     private _router: Router,
+    private _route: ActivatedRoute,
     private _sessionService: SessionService,
     private _menuService: MenuService,
   ) {}
@@ -52,14 +53,22 @@ export class NavBarComponent implements OnInit {
     }
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad != null) {
+
       this._menuService.traerUsuarioMenu(this.identidad.id).subscribe({
         next: (response: any) => {
+          this._route.queryParams.subscribe(params => {
+            if (params['from'] === 'login') {
+              console.log('Vengo desde login');
+              // Lógica para manejar si viene desde login
+              this.navData = response.data;
+              let ruta = '/' + response.data[0].url;
+              if (response.data[0].sub_menus.length != 0) {
+                ruta = '/' + response.data[0].sub_menus[0].url;
+              }
+              this._router.navigate(['layout' + ruta]);
+            }
+          });
           this.navData = response.data;
-          let ruta = '/' + response.data[0].url;
-          if (response.data[0].sub_menus.length != 0) {
-            ruta = '/' + response.data[0].sub_menus[0].url;
-          }
-          this._router.navigate(['layout' + ruta]);
         },
         error: (err) => {
           console.log('ERROR', err);

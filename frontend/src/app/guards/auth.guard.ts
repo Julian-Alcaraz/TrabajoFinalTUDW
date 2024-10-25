@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { Router } from '@angular/router';
 import { SessionService } from '../services/session.service';
+import { CookieService } from 'ngx-cookie-service';
 export const authGuard: CanActivateFn = async (route, state) => {
   const _router = inject(Router);
   const _sessionService = inject(SessionService);
@@ -37,5 +38,17 @@ export const adminGuard: CanActivateFn = () => {
     return false;
   } else {
     return false;
+  }
+};
+
+export const loginGuard: CanActivateFn = () => {
+  const _cookieService = inject(CookieService);
+  const token = _cookieService.get('Authorization');
+  const _router = inject(Router);
+  if (token) {
+    _router.navigate(['/layout']);
+    return false;
+  } else {
+    return true;
   }
 };

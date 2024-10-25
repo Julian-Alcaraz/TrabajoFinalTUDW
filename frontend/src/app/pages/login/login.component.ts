@@ -25,11 +25,13 @@ export class LoginComponent implements OnInit {
     public _sessionService: SessionService,
   ) {}
   ngOnInit(): void {
-    const token = this._cookieService.get('Authorization');
-    if (token) {
-      // Redirigir al layout si ya tiene un token
-      this._router.navigate(['/layout']);
-    }
+    console.log("OnInnit login")
+    // const token = this._cookieService.get('Authorization');
+    // const token = this.getCookie('Authorization');
+    // if (token) {
+    //   // Redirigir al layout si ya tiene un token
+    //   this._router.navigate(['/layout']);
+    // }
     this.getWindowSize();
     this.isLoading = this._loadingService.obtenerValor();
   }
