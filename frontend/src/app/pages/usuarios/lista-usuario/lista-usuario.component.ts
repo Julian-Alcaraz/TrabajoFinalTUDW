@@ -24,6 +24,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   // @ViewChild(MatSort) sort: MatSort;
 
   public resultsLength = 0;
+  public searching = false;
 
   displayedColumns: string[] = ['nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
   constructor(

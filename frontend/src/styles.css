@@ -78,3 +78,16 @@ body {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
+/* headers para tablas */
+[mat-header-cell] {
+  background-color: #02204c !important;
+  color: #f4f7fa;
+}
+[mat-header-cell]:first-child {
+  border-top-left-radius: 10px; /* Radio de borde superior izquierdo */
+}
+
+[mat-header-cell]:last-child {
+  border-top-right-radius: 10px; /* Radio de borde superior derecho */
+}

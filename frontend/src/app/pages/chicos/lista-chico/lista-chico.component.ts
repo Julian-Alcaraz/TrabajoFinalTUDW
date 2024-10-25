@@ -25,8 +25,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
+  public searching = false;
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
 
-  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
   constructor(
     private _chicoService: ChicoService,
     private _router: Router,
@@ -36,21 +37,36 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getChicos();
+    this.activateTableFilter();
+  }
+
+  ngAfterViewInit() {
+    this.chicos.paginator = this.paginador;
+  }
+
+  getChicos() {
+    this.searching = true;
     this._chicoService.obtenerChicos().subscribe({
       next: (response: any) => {
         if (response.success) {
           this.chicos.data = response.data;
           this.resultsLength = response.data.length;
         }
+        this.searching = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.searching = false;
       },
     });
   }
 
-  ngAfterViewInit() {
-    this.chicos.paginator = this.paginador;
+  activateTableFilter() {
+    this.chicos.filterPredicate = (data: Chico, filter: string) => {
+      const searchTerms = JSON.parse(filter);
+      return searchTerms.dni ? String(data.dni).startsWith(searchTerms.dni) : true
+    };
   }
 
   habilitar(id: number) {
@@ -99,9 +115,20 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter(event: Event) {
+  applyFilterToAllRow(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.chicos.filter = filterValue.trim().toLowerCase();
+  }
+  applyFilter(event: Event) {
+    const dniValue = (event.target as HTMLInputElement).value; // esto lo dejo por que por el momento es solo por dni
+    const searchTerms = {
+      ...(dniValue && { dni: dniValue }),
+    };
+
+    this.chicos.filter = JSON.stringify(searchTerms);
+    if (this.chicos.paginator) {
+      this.chicos.paginator.firstPage();
+    }
   }
 
   verDetallesChico(id: number) {
