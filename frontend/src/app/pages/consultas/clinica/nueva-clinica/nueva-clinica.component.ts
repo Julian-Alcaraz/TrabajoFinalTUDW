@@ -8,16 +8,17 @@ import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-n
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarHora, ValidarNumerosFloat, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputNumberComponent } from '../../components/input-number/input-number.component';
-import { InputTextComponent } from '../../components/input-text/input-text.component';
-import { InputCheckboxComponent } from '../../components/input-checkbox/input-checkbox.component';
-import { InputSelectComponent } from '../../components/input-select/input-select.component';
-import { InputTextareaComponent } from '../../components/input-textarea/input-textarea.component';
+import { InputNumberComponent } from '../../components/inputs/input-number.component';
+import { InputTextComponent } from '../../components/inputs/input-text.component';
+import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
+import { InputSelectComponent } from '../../components/inputs/input-select.component';
+import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
+import { InputSelectEnumComponent } from "../../components/inputs/input-select-enum.component";
 
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputTextComponent, InputCheckboxComponent, InputSelectComponent, InputTextareaComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputTextComponent, InputCheckboxComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
   styleUrl: './nueva-clinica.component.css',
 })
@@ -33,11 +34,8 @@ export class NuevaClinicaComponent {
   ) {
     this.clinicaForm = this.fb.group({
       // Campos comunes
-
-      type: ['Clinica', [Validators.required, ValidarSoloLetras]],
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
       // Campos Medica Clinica
-
       peso: ['', [Validators.required, ValidarNumerosFloat]],
       diabetes: [false, [Validators.required]],
       hta: [false, [Validators.required]],
@@ -113,9 +111,9 @@ export class NuevaClinicaComponent {
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
           delete formValues.dni;
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
           const data = {
-            type,
+            type: 'Clinica',
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),

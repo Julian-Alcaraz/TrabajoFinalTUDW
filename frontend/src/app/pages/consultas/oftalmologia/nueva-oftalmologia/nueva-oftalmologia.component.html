@@ -3,11 +3,12 @@
   <div class="card-body">
     <form (ngSubmit)="enviarFormulario()" [formGroup]="oftalmologiaForm">
       <app-campos-comunes [form]="oftalmologiaForm" />
-      <div class="grid gap-6 md:grid-cols-4">
+      <div class="grid gap-6 md:grid-cols-4 sm:grid-cols-2">
         <!-- Primera Vez -->
-        <div class="mt-4 col-span-1">
+        <div class="mt-4 md:col-span-1">
           <!-- PODRIA CALCULARESE -->
-          <label for="primera_vez" class="block mb-2 text-sm font-medium text-gray-900">¿Es la primera vez?</label>
+          <label for="primera_vez" class="block mb-2 text-sm font-medium text-gray-900">¿Es la primera vez?
+            <strong>Podria calcularse</strong></label>
           <select formControlName="primera_vez" id="primera_vez"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
             <option value="" disabled selected>Seleccione una opción</option>
@@ -21,9 +22,10 @@
           </div>
         </div>
         <!-- Control -->
-        <div class="mt-4 col-span-1">
+        <div class="mt-4 md:col-span-1">
           <!-- PODRIA CALCULARSE SI ES QUE SI NO ES PRIMERA VEZ ES CONTROL -->
-          <label for="control" class="block mb-2 text-sm font-medium text-gray-900">¿Es un control?</label>
+          <label for="control" class="block mb-2 text-sm font-medium text-gray-900">¿Es un control? <strong>Podria
+              calcularse</strong></label>
           <select formControlName="control" id="control"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
             <option value="" disabled selected>Seleccione una opción</option>
@@ -37,9 +39,7 @@
           </div>
         </div>
         <!-- Receta -->
-        <div class="mt-4 col-span-1">
-          <!-- <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Necesita receta?"
-            [control]="controlDeInput('receta')" idInput="receta" /> -->
+        <div class="mt-4 md:col-span-1">
           <label for="receta" class="block mb-2 text-sm font-medium text-gray-900">¿Necesita receta?</label>
           <select formControlName="receta" id="receta"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -54,31 +54,19 @@
           </div>
         </div>
         <!-- Anteojos -->
-        <div class="mt-4 col-span-1">
-          <!-- <app-input-checkbox (change)="onChangeCheckbox($event)" label="¿Necesita/Usa anteojos?"
-            [control]="controlDeInput('anteojos')" idInput="anteojos" /> -->
-          <label for="anteojos" class="block mb-2 text-sm font-medium text-gray-900">¿Necesita/Usa anteojos?</label>
-          <select formControlName="anteojos" id="anteojos"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="oftalmologiaForm.get('anteojos')?.errors && (oftalmologiaForm.get('anteojos')?.dirty || oftalmologiaForm.get('anteojos')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="oftalmologiaForm.get('anteojos')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <div class="mt-4 md:col-span-1">
+          <app-input-select-enum label="¿Necesita/Usa anteojos?" [control]="controlDeInput('anteojos')"
+            idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Demanda -->
-        <div class="mt-4 col-span-3">
+        <div class="mt-4 md:col-span-3">
           <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')"
             placeholder="Ej: Padre" idInput="demanda" />
         </div>
         <!-- Proximo Control -->
-        <div class="mt-4 col-span-1">
+        <div class="mt-4 md:col-span-1">
           <p class="block mb-2 text-sm font-medium text-gray-900">Fecha del próximo control</p>
-          <mat-form-field class="col-span-2">
+          <mat-form-field class="md:col-span-2">
             <!-- <mat-label>Próximo Control</mat-label> -->
             <input matInput [matDatepicker]="picker" formControlName="prox_control" [min]="fechaManana" />
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -89,14 +77,13 @@
           </mat-form-field>
         </div>
         <!-- Observaciones -->
-        <div class="col-span-6">
+        <div class="md:col-span-6">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
             idInput="observaciones" />
         </div>
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <!--   -->
         <button type="submit" [disabled]="!oftalmologiaForm.valid"
           class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
         </button>

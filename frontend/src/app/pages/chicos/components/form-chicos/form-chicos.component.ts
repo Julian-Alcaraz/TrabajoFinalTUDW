@@ -224,7 +224,7 @@ export class FormChicosComponent implements OnInit {
   // Modal Barrio
 
   abrirModalBarrio() {
-    const dialogRef = this._dialog.open(this.barrioModal, { width: '40%' });
+    const dialogRef = this._dialog.open(this.barrioModal, { minWidth: '40%' });
     dialogRef.afterClosed().subscribe(() => {
       this.barrioForm.reset();
     });

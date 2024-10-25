@@ -3,137 +3,76 @@
   <div class="card-body">
     <form (ngSubmit)="enviarFormulario()" [formGroup]="odontologiaForm">
       <app-campos-comunes [form]="odontologiaForm" />
-      <div class="grid gap-6 md:grid-cols-6">
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Cepillo -->
-        <div class="mt-4 col-span-2">
-          <label for="cepillo" class="block mb-2 text-sm font-medium text-gray-900">¿Tiene cepillo?</label>
-          <select formControlName="cepillo" id="cepillo"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('cepillo')?.errors && (odontologiaForm.get('cepillo')?.dirty || odontologiaForm.get('cepillo')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('cepillo')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Tiene cepillo?" [control]="controlDeInput('cepillo')" idInput="cepillo"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Cepillado -->
-        <div class="mt-4 col-span-2">
-          <label for="cepillado" class="block mb-2 text-sm font-medium text-gray-900">¿Se cepilla los dientes?</label>
-          <select formControlName="cepillado" id="cepillado"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('cepillado')?.errors && (odontologiaForm.get('cepillado')?.dirty || odontologiaForm.get('cepillado')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('cepillado')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Se cepilla los dientes?" [control]="controlDeInput('cepillado')"
+            idInput="cepillado" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
-        <!-- primera_vez CAMBIAR A SELECT -->
-        <div class="mt-4 col-span-2">
-          <label for="primera_vez" class="block mb-2 text-sm font-medium text-gray-900">¿Es la primera vez?</label>
-          <select formControlName="primera_vez" id="primera_vez"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('primera_vez')?.errors && (odontologiaForm.get('primera_vez')?.dirty || odontologiaForm.get('primera_vez')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('primera_vez')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <!-- primera_vez -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Es la primera vez? (podria calcularse)"
+            [control]="controlDeInput('primera_vez')" idInput="primera_vez" [opciones]="['Si', 'No']"
+            [valores]="['true', 'false']" />
         </div>
-        <!-- Ulterior CAMBIAR A SELECT -->
-        <div class="mt-4 col-span-2">
-          <label for="ulterior" class="block mb-2 text-sm font-medium text-gray-900">¿Es un tratamiento
-            ulterior?</label>
-          <select formControlName="ulterior" id="ulterior"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('ulterior')?.errors && (odontologiaForm.get('ulterior')?.dirty || odontologiaForm.get('ulterior')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('ulterior')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <!-- Ulterior -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Es un tratamiento ulterior?" [control]="controlDeInput('ulterior')"
+            idInput="ulterior" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
-        <!-- Topificacion CAMBIAR A SELECT -->
-        <div class="mt-4 col-span-2">
-          <label for="topificacion" class="block mb-2 text-sm font-medium text-gray-900">¿Se aplica
-            topificación?</label>
-          <select formControlName="topificacion" id="topificacion"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('topificacion')?.errors && (odontologiaForm.get('topificacion')?.dirty || odontologiaForm.get('topificacion')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('topificacion')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <!-- Topificacion -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')"
+            idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Derivacion -->
-        <div class="mt-4 col-span-2">
-          <label for="derivacion" class="block mb-2 text-sm font-medium text-gray-900">¿Derivacion?</label>
-          <select formControlName="derivacion" id="derivacion"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="odontologiaForm.get('derivacion')?.errors && (odontologiaForm.get('derivacion')?.dirty || odontologiaForm.get('derivacion')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="odontologiaForm.get('derivacion')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Derivacion?" [control]="controlDeInput('derivacion')" idInput="derivacion"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
-        <h3 class="mt-4 col-span-6">Estado de sus dientes:</h3>
+        <h3 class="mt-4 md:col-span-6">Estado de sus dientes:</h3>
         <!-- Dientes Permanentes -->
-        <div class="mt-4 col-span-2">
+        <div class="mt-4 md:col-span-2">
           <app-input-number label="Dientes Permanentes" [control]="controlDeInput('dientes_permanentes')"
             placeholder="Ej: 2" idInput="dientes_permanentes" />
         </div>
         <!-- Dientes Temporales -->
-        <div class="mt-4 col-span-2">
+        <div class="mt-4 md:col-span-2">
           <app-input-number label="Dientes Temporales" [control]="controlDeInput('dientes_temporales')"
             placeholder="Ej: 10" idInput="dientes_temporales" />
         </div>
         <!-- Sellador -->
-        <div class="mt-4 col-span-2">
+        <div class="mt-4 md:col-span-2">
           <app-input-number label="Dientes con Sellador" [control]="controlDeInput('sellador')" placeholder="Ej: 1"
             idInput="sellador" />
         </div>
         <!-- Dientes Recuperables -->
-        <div class="mt-4 col-span-3">
+        <div class="mt-4 md:col-span-3">
           <app-input-number label="Dientes Recuperables" [control]="controlDeInput('dientes_recuperables')"
             placeholder="Ej: 5" idInput="dientes_recuperables" />
         </div>
         <!-- Dientes no Recuperables -->
-        <div class="mt-4 col-span-3">
+        <div class="mt-4 md:col-span-3">
           <app-input-number label="Dientes no Recuperables" [control]="controlDeInput('dientes_norecuperables')"
             placeholder="Ej: 3" idInput="dientes_norecuperables" />
         </div>
         <!-- Situacion Bucal -->
-        <div class="mt-4 col-span-3">
+        <div class="mt-4 md:col-span-3">
           <app-input-text label="Situacion Bucal" [control]="controlDeInput('situacion_bucal')" placeholder="Ej: Buena"
             idInput="situacion_bucal" />
         </div>
         <!-- Habitos -->
-        <div class="mt-4 col-span-3">
+        <div class="mt-4 md:col-span-3">
           <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante"
             idInput="habitos" />
         </div>
         <!-- Observaciones -->
-        <div class="mt-4 col-span-6">
+        <div class="mt-4 md:col-span-6">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
             idInput="observaciones" />
         </div>

@@ -1,8 +1,0 @@
-<div class="flex items-center">
-  <input (change)="handleChange($event)" [formControl]="control" [id]="idInput" [placeholder]="placeholder"
-    type="checkbox" class="mr-2 rounded text-blue-600 focus:ring-blue-500" />
-  <label [for]="idInput" class="text-sm font-medium text-gray-900">{{ label }}</label>
-</div>
-<div *ngIf="control?.errors && (control?.dirty || control?.touched)" class="text-red-600 text-sm">
-  <div *ngIf="control?.errors?.['required']">Debe seleccionar una opción.</div>
-</div>

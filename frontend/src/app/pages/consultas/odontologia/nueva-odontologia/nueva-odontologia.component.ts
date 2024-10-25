@@ -7,17 +7,18 @@ import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../components/input-text/input-text.component';
-import { InputNumberComponent } from '../../components/input-number/input-number.component';
-import { InputCheckboxComponent } from '../../components/input-checkbox/input-checkbox.component';
-import { InputSelectComponent } from '../../components/input-select/input-select.component';
-import { InputTextareaComponent } from '../../components/input-textarea/input-textarea.component';
+import { InputTextComponent } from '../../components/inputs/input-text.component';
+import { InputNumberComponent } from '../../components/inputs/input-number.component';
+import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
+import { InputSelectComponent } from '../../components/inputs/input-select.component';
+import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
+import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextComponent, InputNumberComponent, InputCheckboxComponent, InputSelectComponent, InputTextareaComponent, CamposComunesComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputCheckboxComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
@@ -31,11 +32,8 @@ export class NuevaOdontologiaComponent {
   ) {
     this.odontologiaForm = this.fb.group({
       // Campos comunes
-
-      type: ['Odontologia', [Validators.required, ValidarSoloLetras]],
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
       // Campos odontologia
-
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
       cepillo: ['', [Validators.required]],
@@ -83,9 +81,9 @@ export class NuevaOdontologiaComponent {
           formValues.ulterior = formValues.ulterior === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.derivacion = formValues.derivacion === 'true';
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
-            type,
+            type: 'Odontologia',
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),

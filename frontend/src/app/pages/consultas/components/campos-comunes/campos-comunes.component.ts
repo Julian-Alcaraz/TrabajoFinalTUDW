@@ -1,11 +1,11 @@
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { InputNumberComponent } from '../input-number/input-number.component';
-import { InputTextComponent } from '../input-text/input-text.component';
-import { InputSelectComponent } from '../input-select/input-select.component';
+import { InputNumberComponent } from '../inputs/input-number.component';
+import { InputTextComponent } from '../inputs/input-text.component';
+import { InputSelectComponent } from '../inputs/input-select.component';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputTextareaComponent } from '../input-textarea/input-textarea.component';
+import { InputTextareaComponent } from '../inputs/input-textarea.component';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ChicoService } from '../../../../services/chico.service';
 import { catchError, debounceTime, map, of } from 'rxjs';
@@ -18,11 +18,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { InputSelectEnumComponent } from '../inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-campos-comunes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputTextareaComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './campos-comunes.component.html',
   styleUrl: './campos-comunes.component.css',
 })

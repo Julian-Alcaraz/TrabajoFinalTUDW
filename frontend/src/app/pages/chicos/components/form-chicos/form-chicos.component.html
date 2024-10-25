@@ -1,9 +1,9 @@
 <!-- Cuando creas una localidad y despues queres agregar un barrio el modal no se abre solo!!!!!!!!!!!!!!! -->
 
 <form (ngSubmit)="cargarChico()" [formGroup]="chicoForm">
-  <div class="grid gap-6 md:grid-cols-4">
+  <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
     <!-- Nombre: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
       <input formControlName="nombre" type="text" id="nombre"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- Apellido: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="apellido_chico" class="block mb-2 text-sm font-medium text-gray-900">Apellido</label>
       <input formControlName="apellido" type="text" id="apellido_chico"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -37,7 +37,7 @@
       </div>
     </div>
     <!-- Direccion: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900">Dirección</label>
       <input formControlName="direccion" type="text" id="direccion"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -53,7 +53,7 @@
       </div>
     </div>
     <!-- Dni -->
-    <div class="col-span-1">
+    <div class="sm:col-span-2 md:col-span-1">
       <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
       <input formControlName="dni" type="number" id="dni" aria-describedby="helper-text-explanation"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -66,7 +66,7 @@
       </div>
     </div>
     <!-- Telefono: -->
-    <div class="col-span-1">
+    <div class="sm:col-span-2 md:col-span-1">
       <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900">Telefono</label>
       <input formControlName="telefono" type="number" id="telefono"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -81,7 +81,7 @@
       </div>
     </div>
     <!-- Localidad: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
       <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -96,7 +96,7 @@
       </div>
     </div>
     <!-- Barrio: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
       <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -112,7 +112,7 @@
       </div>
     </div>
     <!-- Sexo: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
       <ul class="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
         <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
@@ -139,7 +139,7 @@
       </ul>
     </div>
     <!-- Fecha de Nacimiento -->
-    <div>
+    <div class="md:col-span-2">
       <p class="block mb-2 text-sm font-medium text-gray-900">Fecha de nacimiento</p>
       <mat-form-field class="col-span-2">
         <mat-label>Fecha Nacimiento</mat-label>
@@ -152,7 +152,7 @@
       </mat-form-field>
     </div>
     <!-- Nombre padre: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="nombre_padre" class="block mb-2 text-sm font-medium text-gray-900">Nombre y apellido del padre</label>
       <input formControlName="nombre_padre" type="text" id="nombre_padre"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -169,7 +169,7 @@
       </div>
     </div>
     <!-- Nombre madre: -->
-    <div class="col-span-2">
+    <div class="md:col-span-2">
       <label for="nombre_madre" class="block mb-2 text-sm font-medium text-gray-900">Nombre y apellido de la
         madre</label>
       <input formControlName="nombre_madre" type="text" id="nombre_madre"

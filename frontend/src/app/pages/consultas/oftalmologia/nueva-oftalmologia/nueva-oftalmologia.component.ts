@@ -11,14 +11,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputTextComponent } from '../../components/input-text/input-text.component';
-import { InputCheckboxComponent } from '../../components/input-checkbox/input-checkbox.component';
-import { InputTextareaComponent } from '../../components/input-textarea/input-textarea.component';
+import { InputTextComponent } from '../../components/inputs/input-text.component';
+import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
+import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
+import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-oftalmologia.component.html',
   styleUrl: './nueva-oftalmologia.component.css',
 })
@@ -33,9 +34,7 @@ export class NuevaOftalmologiaComponent {
   ) {
     this.oftalmologiaForm = this.fb.group({
       // Campos comunes
-      type: ['Oftalmologia', [Validators.required, ValidarSoloLetras]],
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
-
       // Campos Oftalmologia
       demanda: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       primera_vez: ['', [Validators.required]],
@@ -75,9 +74,9 @@ export class NuevaOftalmologiaComponent {
           formValues.control = formValues.control === 'true';
           formValues.receta = formValues.receta === 'true';
           formValues.anteojos = formValues.anteojos === 'true';
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
           const data = {
-            type,
+            type: 'Oftalmologia',
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),

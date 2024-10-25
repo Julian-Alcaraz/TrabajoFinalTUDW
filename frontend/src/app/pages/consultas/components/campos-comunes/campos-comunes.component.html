@@ -1,11 +1,11 @@
 <!-- Dni -->
-<div class="grid gap-6 md:grid-cols-6">
-  <div class="col-span-6">
+<div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+  <div class="md:col-span-6 sm:col-span-3">
     <app-input-number (change)="onChangeDni()" label="Documento" [control]="controlDeInput('dni')"
       placeholder="xxxxxxxx" idInput="dni" />
   </div>
   <ng-container *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
-    <div class="col-span-6">
+    <div class="md:col-span-6 sm:col-span-3">
       <!-- Mensaje cuando no hay chico cargado -->
       <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8"
         class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
@@ -23,52 +23,43 @@
       </div>
       <!-- Mensaje cuando hay chico cargado -->
       <div *ngIf="chico !== null && this.form.get('dni')?.value.toString().length === 8"
-        class="bg-green-100 border border-green-300 text-green-600 text-sm p-4 rounded-lg w-full">
+        class="bg-green-100 border border-green-300  text-sm p-4 rounded-lg w-full">
         <div class="flex items-center">
-          <svg class="w-11 h-11 mr-2" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <div class="text-green-600">
+            <svg class="w-11 h-11 mr-2" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
           <p class="text-green-600 font-bold">Chico Seleccionado</p>
         </div>
-        <div class="ml-12">
+        <div class="ml-14">
           <p>Nombre: <span class="font-semibold">{{ chico.nombre }}</span></p>
           <p>Apellido: <span class="font-semibold">{{ chico.apellido }}</span></p>
           <p>Edad: <span class="font-semibold">El chico tiene {{ edadAnios }} años y {{edadMeses}} meses</span></p>
-          <p>Aca podrian agregarse mas datos del chico...</p>
+          <strong>Aca podrian agregarse mas datos del chico...</strong>
         </div>
       </div>
     </div>
   </ng-container>
   <!-- Institucion -->
-  <div class="col-span-2 mb-3">
+  <div class="md:col-span-2 mb-3 sm:col-span-3">
     <app-input-select (change)="onChangeInstitucion()" label="Institucion" [control]="controlDeInput('id_institucion')"
       idInput="id_institucion" [opciones]="instituciones" />
   </div>
   <!-- Curso -->
-  <div class="col-span-2 mb-3">
+  <div class="md:col-span-2 mb-3 sm:col-span-3">
     <app-input-select (change)="onChangeCurso()" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso"
       [opciones]="cursos" />
   </div>
   <!-- Turno -->
-  <div class="col-span-2 mb-3">
-    <label for="turno" class="block mb-2 text-sm font-medium text-gray-900">Turno</label>
-    <select [formControl]="controlDeInput('turno')" id="turno"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-      <option value="" disabled selected>Seleccione una opción</option>
-      <option value="Mañana">Mañana</option>
-      <option value="Tarde">Tarde</option>
-      <option value="Noche">Noche</option>
-    </select>
-    <div *ngIf="form.get('turno')?.errors && (form.get('turno')?.dirty || form.get('turno')?.touched)"
-      class="text-red-600 text-sm">
-      <div *ngIf="form.get('turno')?.errors?.['required']">Debe seleccionar una opción.</div>
-      <div *ngIf="form.get('turno')?.errors?.['ValidarTurno']">El turno debe ser "Mañana", "Tarde" o "Noche".</div>
-    </div>
+  <div class="md:col-span-2 mb-4 sm:col-span-3">
+    <app-input-select-enum label="Turno" [control]="controlDeInput('turno')" idInput="turno"
+      [opciones]="['Mañana', 'Tarde', 'Noche']" [valores]="['Mañana', 'Tarde', 'Noche']" />
   </div>
   <!-- Obra Social -->
-  <div class="col-span-6 mb-3">
+  <div class="md:col-span-6 mb-3 sm:col-span-3">
     <app-input-text label="Obra Social" [control]="controlDeInput('obra_social')" placeholder="Ej: Osde"
       idInput="obra_social" />
   </div>
@@ -88,20 +79,11 @@
           <h3>Nueva Institucion</h3>
           <app-input-text label="Nombre" [control]="controlDeInputInstitucion('nombre')" placeholder=""
             idInput="nombre" />
-          <div class="col-span-2 mb-3">
-            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900">Tipo</label>
-            <select formControlName="tipo" id="tipo"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="Jardin">Jardin</option>
-              <option value="Primario">Primario</option>
-              <option value="Secundario">Secundario</option>
-              <option value="Terciario">Terciario</option>
-            </select>
-            <div
-              *ngIf="institucionForm.get('tipo')?.errors && (institucionForm.get('tipo')?.dirty || institucionForm.get('tipo')?.touched)"
-              class="text-red-600 text-sm">
-              <div *ngIf="institucionForm.get('tipo')?.errors?.['required']">Debe seleccionar una opción.</div>
+          <div class="md:col-span-2 mb-3">
+            <div class="md:col-span-2 mb-4 sm:col-span-3">
+              <app-input-select-enum label="tipo" [control]="controlDeInputInstitucion('tipo')" idInput="tipo"
+                [opciones]="['Jardin', 'Primario', 'Secundario', 'Terciario']"
+                [valores]="['Jardin', 'Primario', 'Secundario', 'Terciario']" />
             </div>
           </div>
           <div class="flex my-auto">
@@ -131,21 +113,11 @@
           <h3>Nuevo curso</h3>
           <app-input-text label="Nombre" [control]="controlDeInputCurso('nombre')" placeholder="" idInput="nombre" />
           <app-input-number label="Grado" [control]="controlDeInputCurso('grado')" placeholder="" idInput="grado" />
-          <div class="col-span-2 mb-3">
-            <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900">Nivel</label>
-            <select formControlName="nivel" id="nivel"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="Jardin">Jardin</option>
-              <option value="Primaria">Primaria</option>
-              <option value="Secundario">Secundario</option>
-              <option value="Terciario">Terciario</option>
-              <option value="Universitario">Universitario</option>
-            </select>
-            <div
-              *ngIf="cursoForm.get('nivel')?.errors && (cursoForm.get('nivel')?.dirty || cursoForm.get('nivel')?.touched)"
-              class="text-red-600 text-sm">
-              <div *ngIf="cursoForm.get('nivel')?.errors?.['required']">Debe seleccionar una opción.</div>
+          <div class="md:col-span-2 mb-3">
+            <div class="md:col-span-2 mb-4 sm:col-span-3">
+              <app-input-select-enum label="nivel" [control]="controlDeInputCurso('nivel')" idInput="nivel"
+                [opciones]="['Jardin', 'Primaria', 'Secundario', 'Terciario', 'Universitario']"
+                [valores]="['Jardin', 'Primaria', 'Secundario', 'Terciario', 'Universitario']" />
             </div>
           </div>
           <div class="flex my-auto">

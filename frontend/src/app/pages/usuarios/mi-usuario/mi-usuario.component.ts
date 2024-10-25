@@ -44,7 +44,7 @@ export class MiUsuarioComponent implements OnInit {
     this.identidad = this._sessionService.getIdentidad();
   }
   abrirModal() {
-    const dialogRef = this._dialog.open(this.cambiarContra, { width: '40%' });
+    const dialogRef = this._dialog.open(this.cambiarContra, { minWidth: '40%' });
 
     dialogRef.afterClosed().subscribe(() => {
       this.cambioForm.reset();

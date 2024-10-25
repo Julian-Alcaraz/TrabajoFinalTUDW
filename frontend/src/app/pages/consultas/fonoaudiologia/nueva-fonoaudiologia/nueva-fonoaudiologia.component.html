@@ -4,35 +4,23 @@
     <form (ngSubmit)="enviarFormulario()" [formGroup]="fonoaudiologiaForm">
       <app-campos-comunes [form]="fonoaudiologiaForm" />
       <!-- Campos fonoaudiologia -->
-      <div class="grid gap-6 md:grid-cols-6">
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Diagnostico Presuntivo -->
-        <div class="mt-4 col-span-2">
+        <div class="mt-4 md:col-span-2">
           <app-input-text label="Diagnostico Presuntivo" [control]="controlDeInput('diagnosticoPresuntivo')"
             placeholder="" idInput="diagnosticoPresuntivo" />
         </div>
         <!-- Causas -->
-        <div class="mt-4 col-span-2">
+        <div class="mt-4 md:col-span-2">
           <app-input-text label="Causas" [control]="controlDeInput('causas')" placeholder="" idInput="causas" />
         </div>
         <!-- Asistencia -->
-        <div class="mt-4 col-span-2">
-          <!-- <app-input-checkbox (change)="onChangeCheckbox($event)" label="Asistencia"
-            [control]="controlDeInput('asistencia')" idInput="asistencia" /> -->
-          <label for="asistencia" class="block mb-2 text-sm font-medium text-gray-900">¿Asistió?</label>
-          <select formControlName="asistencia" id="asistencia"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="fonoaudiologiaForm.get('asistencia')?.errors && (fonoaudiologiaForm.get('asistencia')?.dirty || fonoaudiologiaForm.get('asistencia')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="fonoaudiologiaForm.get('asistencia')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Observaciones -->
-        <div class="col-span-6">
+        <div class="md:col-span-6">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
             idInput="observaciones" />
         </div>

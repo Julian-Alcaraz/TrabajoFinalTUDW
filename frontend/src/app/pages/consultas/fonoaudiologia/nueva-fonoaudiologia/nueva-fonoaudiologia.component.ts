@@ -7,15 +7,16 @@ import Swal from 'sweetalert2';
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../components/input-text/input-text.component';
-import { InputCheckboxComponent } from '../../components/input-checkbox/input-checkbox.component';
-import { InputTextareaComponent } from '../../components/input-textarea/input-textarea.component';
+import { InputTextComponent } from '../../components/inputs/input-text.component';
+import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
+import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
+import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent],
+  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
   styleUrl: './nueva-fonoaudiologia.component.css',
 })
@@ -30,10 +31,7 @@ export class NuevaFonoaudiologicaComponent {
   ) {
     this.fonoaudiologiaForm = this.fb.group({
       // Campos comunes
-
-      type: ['Fonoaudiologia', [Validators.required, ValidarSoloLetras]],
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
-
       // Campos Fonoaudiologica
       diagnosticoPresuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       causas: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
@@ -65,9 +63,9 @@ export class NuevaFonoaudiologicaComponent {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
           delete formValues.dni;
-          const { type, turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
           const data = {
-            type,
+            type: 'Fonoaudiologia',
             turno,
             ...(obra_social && { obra_social }),
             ...(observaciones && { observaciones }),
