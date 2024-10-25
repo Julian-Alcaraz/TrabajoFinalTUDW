@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { fadeInOut } from './helper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Router, RouterModule } from '@angular/router';
@@ -17,7 +17,7 @@ import { Menu } from '../../../../models/menu.model';
           <span class="sublevel-link-text" @fadeinOut *ngIf="collapsed">{{ item.label }}</span>
           <i class="menu-collapse-icon" *ngIf="item.sub_menus && collapsed" [ngClass]="!item.expanded ? 'fa-solid fa-angle-right' : 'fa-solid fa-angle-down'"></i>
         </a>
-        <a class="sublevel-nav-link" *ngIf="!item.sub_menus || (item.sub_menus && item.sub_menus.length === 0)" [routerLink]="[item.url]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="sublevel-nav-link" (click)="cerraElSideBar()" *ngIf="!item.sub_menus || (item.sub_menus && item.sub_menus.length === 0)" [routerLink]="[item.url]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <i class="sublevel-link-icon " [ngClass]="item.icon ? item.icon : 'fa fa-circle'"></i>
           <span class="sublevel-link-text" @fadeinOut *ngIf="collapsed">{{ item.label }}</span>
         </a>
@@ -62,7 +62,20 @@ export class SublevelMenuComponent {
   @Input() animating: boolean | undefined;
   @Input() expanded: boolean | undefined;
   @Input() multiple = false;
-  constructor(private _router: Router) {}
+  @Output() llamarPadre = new EventEmitter<any>();
+  screenWidth = 0;
+
+  constructor(private _router: Router) {
+    if (typeof window !== 'undefined') {
+      this.screenWidth = window.innerWidth;
+    }
+  }
+
+  cerraElSideBar() {
+    if (this.screenWidth < 426) {
+      this.llamarPadre.emit();
+    }
+  }
 
   handleClick(item: any): void {
     if (!this.multiple) {
@@ -76,6 +89,7 @@ export class SublevelMenuComponent {
     }
     item.expanded = !item.expanded;
   }
+
   getActiveClass(item: Menu): string {
     return item.expanded && this._router.url.includes(item.url) ? 'active-sublevel' : '';
   }

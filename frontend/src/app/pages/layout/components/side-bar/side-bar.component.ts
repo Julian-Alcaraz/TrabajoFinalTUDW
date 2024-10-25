@@ -46,19 +46,21 @@ export class NavBarComponent implements OnInit {
     private _sessionService: SessionService,
     private _menuService: MenuService,
   ) {}
+
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
-      // El código que depende de window
       this.screenWidth = window.innerWidth;
     }
     this.identidad = this._sessionService.getIdentidad();
-    if (this.identidad != null) {
+    this.getMenus();
+  }
 
+  getMenus() {
+    if (this.identidad != null) {
       this._menuService.traerUsuarioMenu(this.identidad.id).subscribe({
         next: (response: any) => {
-          this._route.queryParams.subscribe(params => {
+          this._route.queryParams.subscribe((params) => {
             if (params['from'] === 'login') {
-              console.log('Vengo desde login');
               // Lógica para manejar si viene desde login
               this.navData = response.data;
               let ruta = '/' + response.data[0].url;
@@ -74,10 +76,9 @@ export class NavBarComponent implements OnInit {
           console.log('ERROR', err);
         },
       });
-    } else {
-      // this._sessionService.cerrarSesion(); // esto esta de onda
     }
   }
+
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
     this.toggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
@@ -99,9 +100,17 @@ export class NavBarComponent implements OnInit {
     }
     item.expanded = !item.expanded;
   }
+
+  cerraElSideBar() {
+    if (this.screenWidth < 426) {
+      this.toggleCollapsed();
+    }
+  }
+
   getActiveClass(data: Menu): string {
     return this._router.url.includes(data.url) ? 'active' : '';
   }
+
   logout() {
     Swal.fire({
       title: '¿Cerrar sesión?',
@@ -114,5 +123,9 @@ export class NavBarComponent implements OnInit {
         this._sessionService.cerrarSesion();
       }
     });
+  }
+
+  eventoHijo() {
+    this.toggleCollapsed();
   }
 }

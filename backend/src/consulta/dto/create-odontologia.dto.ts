@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString, Length } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString, Length, Min } from 'class-validator';
 
 export class CreateOdontologiaDto {
 
@@ -17,19 +17,19 @@ export class CreateOdontologiaDto {
   @ApiProperty({ description: 'Dientes permanentes del niño que asiste' })
   @IsNotEmpty({ message: 'Los Dientes permanentes no puede estar vacios' })
   @IsInt({ message: 'Los Dientes permanentes  debe ser un número' })
-  @IsPositive({ message: 'Los Dientes permanentes debe ser un numero positivo' })
+  @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
   readonly dientes_permanentes: number;
 
   @ApiProperty({ description: 'Dientes temporales del niño que asiste' })
   @IsNotEmpty({ message: 'los Dientes temporales no puede estar vacios' })
   @IsInt({ message: 'Los Dientes temporales  debe ser un número' })
-  @IsPositive({ message: 'Los Dientes temporales debe ser un numero positivo' })
+  @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
   readonly dientes_temporales: number;
 
   @ApiProperty({ description: 'Sellador del niño que asiste' })
   @IsNotEmpty({ message: 'Sellador no puede estar vacios' })
   @IsInt({ message: 'Sellador debe ser un número' })
-  @IsPositive({ message: 'Sellador debe ser un numero positivo' })
+  @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
   readonly sellador: number;
 
   @ApiProperty({ description: 'Topificacion del niño que asiste a la consulta' })
@@ -50,13 +50,13 @@ export class CreateOdontologiaDto {
   @ApiProperty({ description: 'Dientes recuperables del niño que asiste' })
   @IsNotEmpty({ message: 'Dientes recuperables no puede estar vacio' })
   @IsInt({ message: 'Dientes recuperables debe ser un número' })
-  @IsPositive({ message: 'Dientes recuperables debe ser un numero positivo' })
+  @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
   readonly dientes_recuperables: number;
 
   @ApiProperty({ description: 'Dientes no recuperables del niño que asiste' })
   @IsNotEmpty({ message: 'Dientes no recuperables no puede estar vacio' })
   @IsInt({ message: 'Dientes no recuperables debe ser un número' })
-  @IsPositive({ message: 'Dientes no recuperables debe ser un numero positivo' })
+  @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
   readonly dientes_norecuperables: number;
 
   @ApiProperty({ description: 'Cepillo del niño que asiste a la consulta' })
