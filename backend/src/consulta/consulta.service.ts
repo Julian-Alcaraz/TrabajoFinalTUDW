@@ -50,7 +50,8 @@ export class ConsultaService {
       let consultaHijaGuardada = null;
 
       if (clinica) {
-        const imc = clinica.peso / (clinica.talla / 100);
+        const imc = clinica.peso / ((clinica.talla / 100) * (clinica.talla / 100));
+        // const imc = clinica.peso / (clinica.talla / 100);
         const estado_nutricional = estadoNutricional(clinica.pcimc);
         const tension_arterial = tensionArterial(clinica.pcta);
         // cualquiera de las dos formas esta bien, nose cual es mejor!!!!! segun chat la del objeto por como se gestiona orm
@@ -133,6 +134,7 @@ function estadoNutricional(pcimc: number) {
   if (pcimc < 4) return 'B Bajo peso/Desnutrido';
   if (pcimc >= 4 && pcimc < 10) return 'A Riesgo Nutricional';
   if (pcimc >= 10 && pcimc < 85) return 'C Eutrófico';
+  // if (pcimc >= 85 && pcimc < 95) no deberia ser 95???
   if (pcimc >= 85 && pcimc < 98) return 'D Sobrepeso';
   if (pcimc >= 95) return 'E Obesidad';
 }

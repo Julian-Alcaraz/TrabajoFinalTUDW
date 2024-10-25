@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarHora, ValidarNumerosFloat, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarHora, ValidarNumerosFloat, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputNumberComponent } from '../../components/inputs/input-number.component';
@@ -34,7 +34,7 @@ export class NuevaClinicaComponent {
   ) {
     this.clinicaForm = this.fb.group({
       // Campos comunes
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Medica Clinica
       peso: ['', [Validators.required, ValidarNumerosFloat]],
       diabetes: [false, [Validators.required]],
@@ -64,9 +64,9 @@ export class NuevaClinicaComponent {
       horas_suenio: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
       proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // Usar ValidarNumerosFloat? y ver maximos y minimos de estos valores:
-      pcta: ['', [Validators.required, ValidarSoloNumeros]],
-      pcimc: ['', [Validators.required, ValidarSoloNumeros]],
-      pct: ['', [Validators.required, ValidarSoloNumeros]],
+      pcta: ['', [Validators.required, ValidarNumerosFloat]],
+      pcimc: ['', [Validators.required, ValidarNumerosFloat]],
+      pct: ['', [Validators.required, ValidarNumerosFloat]],
     });
   }
 

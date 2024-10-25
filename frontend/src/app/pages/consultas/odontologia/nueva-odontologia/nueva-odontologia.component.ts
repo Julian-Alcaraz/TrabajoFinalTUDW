@@ -1,5 +1,5 @@
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -32,7 +32,7 @@ export class NuevaOdontologiaComponent {
   ) {
     this.odontologiaForm = this.fb.group({
       // Campos comunes
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos odontologia
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],

@@ -11,6 +11,7 @@ import { Barrio } from '../..//barrio/entities/barrio.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { Chico } from '../../chico/entities/chico.entity';
+import { Consulta } from '../../consulta/entities/consulta.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -24,6 +25,7 @@ export class MainSeeder implements Seeder {
       const cursoORM = dataSource.getRepository(Curso);
       const institucionORM = dataSource.getRepository(Institucion);
       const chicoORM = dataSource.getRepository(Chico);
+      const consultaORM = dataSource.getRepository(Consulta);
       // enums
 
       // Factories
@@ -250,7 +252,6 @@ export class MainSeeder implements Seeder {
         },
       ]);
       await menuORM.save(menus2);
-
       // Localidades
       console.log('Seeding localidades...');
       const localidades = await localidadORM.save([
@@ -394,6 +395,7 @@ export class MainSeeder implements Seeder {
           tipo: 'Terciario',
         },
       ]);
+      // Chicos
       console.log('Seeding Chicos...');
       const chicos = await chicoORM.save([
         {
@@ -402,12 +404,150 @@ export class MainSeeder implements Seeder {
           apellido: 'Pérez',
           sexo: 'Masculino',
           fe_nacimiento: '2010-05-12',
-          // fe_nacimiento: '2010-05-12T00:00:00.000Z',
           direccion: 'Calle Falsa 123',
           telefono: '123456789',
           nombre_madre: 'María López',
           nombre_padre: 'Carlos Pérez',
           barrio: barrios[0],
+        },
+        {
+          dni: 12345679,
+          nombre: 'Deshabilitado',
+          apellido: 'Deshabilitado',
+          sexo: 'Masculino',
+          fe_nacimiento: '9999-05-12',
+          direccion: 'Deshabilitado',
+          telefono: '123456789',
+          nombre_madre: 'Deshabilitado',
+          nombre_padre: 'Deshabilitado',
+          barrio: barrios[0],
+          deshabilitado: true,
+        },
+      ]);
+      // Consultas
+      console.log('Seeding consultas clinicas...');
+      const consultasClinicas = await consultaORM.save([
+        {
+          type: 'Clinica',
+          edad: 14,
+          usuario: usuarios[0],
+          chico: chicos[0],
+          curso: cursos[13],
+          institucion: instituciones[0],
+          turno: 'Mañana',
+          clinica: {
+            alimentacion: 'Buena',
+            antecedentes_perinatal: true,
+            cc: 30,
+            consumo_alcohol: false,
+            consumo_drogas: false,
+            diabetes: false,
+            edad: 14,
+            enfermedades_previas: false,
+            examen_visual: 'normal',
+            hidratacion: 'Buena',
+            horas_juego_airelibre: '03:00',
+            horas_pantalla: '01:00',
+            horas_suenio: '09:00',
+            hta: false,
+            infusiones: true,
+            lacteos: true,
+            lenguaje: 'adecuado',
+            numero_comidas: 3,
+            obesidad: false,
+            ortopedia_traumatologia: 'normal',
+            pcimc: 8.3,
+            pct: 8.1,
+            pcta: 6.4,
+            peso: 45,
+            proyecto: 'Control Niño Sano',
+            segto: false,
+            tad: 120,
+            talla: 150,
+            tas: 70,
+            vacunas: 'Completo',
+          },
+        },
+      ]);
+      console.log('Seeding consultas oftalmologicas...');
+      const consultasOftalmologicas = await consultaORM.save([
+        {
+          type: 'Oftalmologia',
+          edad: 14,
+          usuario: usuarios[0],
+          chico: chicos[0],
+          curso: cursos[13],
+          institucion: instituciones[0],
+          turno: 'Tarde',
+          oftalmologia: {
+            obra_social: 'Osde',
+            anteojos: false,
+            control: false,
+            demanda: 'Miopia',
+            primera_vez: true,
+            prox_control: '2024-11-30',
+            receta: true,
+          },
+        },
+      ]);
+      console.log('Seeding consultas odontologicas...');
+      const consultasOdontologicas = await consultaORM.save([
+        {
+          type: 'Odontologia',
+          edad: 14,
+          usuario: usuarios[0],
+          chico: chicos[0],
+          curso: cursos[13],
+          institucion: instituciones[0],
+          turno: 'Tarde',
+          odontologia: {
+            cepillado: true,
+            cepillo: true,
+            derivacion: false,
+            dientes_norecuperables: 6,
+            dientes_permanentes: 3,
+            dientes_recuperables: 5,
+            dientes_temporales: 10,
+            sellador: 9,
+            habitos: 'Cepillado constante',
+            primera_vez: false,
+            situacion_bucal: 'Buena',
+            topificacion: false,
+            ulterior: true,
+          },
+        },
+      ]);
+      console.log('Seeding consultas fonoaudiologicas...');
+      const consultasFonoaudiologicas = await consultaORM.save([
+        {
+          type: 'Fonoaudiologia',
+          edad: 14,
+          usuario: usuarios[0],
+          chico: chicos[0],
+          curso: cursos[13],
+          institucion: instituciones[0],
+          turno: 'Mañana',
+          fonoaudiologia: {
+            diagnosticoPresuntivo: 'Dificultades de comprensión auditiva',
+            causas: 'Factores genéticos',
+            asistencia: true,
+          },
+        },
+        {
+          type: 'Fonoaudiologia',
+          edad: 1444444444,
+          usuario: usuarios[0],
+          chico: chicos[0],
+          curso: cursos[13],
+          institucion: instituciones[0],
+          turno: 'Mañana',
+          fonoaudiologia: {
+            diagnosticoPresuntivo: 'Consulta deshabilitada',
+            causas: 'Consulta deshabilitada',
+            asistencia: true,
+          },
+          deshabilitado: true,
+          created_at: '9999-12-31',
         },
       ]);
     } catch (error) {

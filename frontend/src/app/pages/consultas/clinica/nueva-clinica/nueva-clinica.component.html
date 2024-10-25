@@ -18,6 +18,13 @@
           <app-input-number label="Circunferencia de la Cintura" [control]="controlDeInput('cc')" placeholder=""
             idInput="cc" />
         </div>
+        <ng-container
+          *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
+          <div class="md:col-span-6 sm:col-span-3">
+            <span>Indice de Masa Corporal: {{ clinicaForm.get('peso')?.value / ( (clinicaForm.get('talla')?.value
+              / 100) * (clinicaForm.get('talla')?.value / 100)) | number: '1.2-2' }}</span>
+          </div>
+        </ng-container>
         <div class="md:col-span-6 sm:col-span-3">
           <div class="grid gap-0 md:grid-cols-6">
             <!-- Grupo de condiciones -->

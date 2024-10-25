@@ -19,7 +19,11 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { InputSelectEnumComponent } from '../inputs/input-select-enum.component';
-
+/*
+  para todas las consultas: cuando se ingresa el dni completo,
+  en el momento que esta buscando agregar un sppiner como el de las tablas,
+  en vez de que se muestre no encontrado, el mensaje que se muestre una vez se ejecuta la consulta!
+*/
 @Component({
   selector: 'app-campos-comunes',
   standalone: true,
@@ -38,6 +42,8 @@ export class CamposComunesComponent implements OnInit {
   public edadAnios: number | null = null;
   public edadMeses: number | null = null;
 
+  public searching = false;
+
   @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
   @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
 
@@ -50,13 +56,12 @@ export class CamposComunesComponent implements OnInit {
     private _institucionService: InstitucionService,
     private _dialog: MatDialog,
   ) {
-    // Formulario para crear una nueva institucion
+    // Nueva institucion
     this.institucionForm = this.fb.group({
       nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       tipo: ['', [Validators.required, ValidarCadenaSinEspacios]],
     });
-
-    // Formulario para crear un nuevo curso
+    // Nuevo curso
     this.cursoForm = this.fb.group({
       nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       grado: ['', [Validators.required, ValidarSoloNumeros]],
@@ -101,6 +106,7 @@ export class CamposComunesComponent implements OnInit {
       return;
     }
     // console.log('El DNI tiene 8 dígitos, procediendo a verificar');
+    this.searching = true;
     this._chicoService
       .obtenerChicoxDni(dni)
       .pipe(
@@ -120,6 +126,7 @@ export class CamposComunesComponent implements OnInit {
             // this.errorDni = 'No hay chico con ese DNI.';
             // console.log('Chico no encontrado, esto deberia ser null: ', this.form.get('chicoParam')?.value);
           }
+          this.searching = false;
         }),
         catchError((error) => {
           this.chico = null;
@@ -127,6 +134,7 @@ export class CamposComunesComponent implements OnInit {
           this.form.get('edad')?.setValue(null);
           this.edadMeses = null;
           this.edadAnios = null;
+          this.searching = false;
           console.error('Error al verificar el DNI:', error);
           return of(null);
         }),

@@ -26,7 +26,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   public resultsLength = 0;
   public searching = false;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
   constructor(
     private _usuarioService: UsuarioService,
     private snackBar: MatSnackBar,

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -34,7 +34,7 @@ export class NuevaOftalmologiaComponent {
   ) {
     this.oftalmologiaForm = this.fb.group({
       // Campos comunes
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios, ValidarSoloLetras)]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Oftalmologia
       demanda: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       primera_vez: ['', [Validators.required]],
