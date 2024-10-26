@@ -13,7 +13,7 @@ export class CreateFonoaudiologiaDto {
   @IsString({ message: 'El diagnostico presuntivo debe ser un string' })
   @Length(1, 100, { message: 'El diagnostico presuntivo debe tener entre 1 y 100 caracteres' })
   @Transform(({ value }) => value.trim())
-  readonly diagnosticoPresuntivo: string;
+  readonly diagnostico_presuntivo: string;
 
   @ApiProperty({ description: 'Causas del niño que asiste' })
   @IsNotEmpty({ message: 'Causas no puede estar vacio' })

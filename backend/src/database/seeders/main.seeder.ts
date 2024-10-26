@@ -12,6 +12,10 @@ import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { Chico } from '../../chico/entities/chico.entity';
 import { Consulta } from '../../consulta/entities/consulta.entity';
+import { ClinicaGeneral } from '../../consulta/entities/clinica.entity';
+import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
+import { Odontologia } from '../../consulta/entities/odontologia.entity';
+import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -26,6 +30,11 @@ export class MainSeeder implements Seeder {
       const institucionORM = dataSource.getRepository(Institucion);
       const chicoORM = dataSource.getRepository(Chico);
       const consultaORM = dataSource.getRepository(Consulta);
+      const clinicaGeneralORM = dataSource.getRepository(ClinicaGeneral);
+      const oftalmologiaORM = dataSource.getRepository(Oftalmologia);
+      const odontologiaORM = dataSource.getRepository(Odontologia);
+      const fonoaudiologiaORM = dataSource.getRepository(Fonoaudiologia);
+
       // enums
 
       // Factories
@@ -425,8 +434,8 @@ export class MainSeeder implements Seeder {
         },
       ]);
       // Consultas
-      console.log('Seeding consultas clinicas...');
-      const consultasClinicas = await consultaORM.save([
+      console.log('Seeding consultas');
+      const consultas = await consultaORM.save([
         {
           type: 'Clinica',
           edad: 14,
@@ -435,42 +444,7 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Mañana',
-          clinica: {
-            alimentacion: 'Buena',
-            antecedentes_perinatal: true,
-            cc: 30,
-            consumo_alcohol: false,
-            consumo_drogas: false,
-            diabetes: false,
-            edad: 14,
-            enfermedades_previas: false,
-            examen_visual: 'normal',
-            hidratacion: 'Buena',
-            horas_juego_airelibre: '03:00',
-            horas_pantalla: '01:00',
-            horas_suenio: '09:00',
-            hta: false,
-            infusiones: true,
-            lacteos: true,
-            lenguaje: 'adecuado',
-            numero_comidas: 3,
-            obesidad: false,
-            ortopedia_traumatologia: 'normal',
-            pcimc: 8.3,
-            pct: 8.1,
-            pcta: 6.4,
-            peso: 45,
-            proyecto: 'Control Niño Sano',
-            segto: false,
-            tad: 120,
-            talla: 150,
-            tas: 70,
-            vacunas: 'Completo',
-          },
         },
-      ]);
-      console.log('Seeding consultas oftalmologicas...');
-      const consultasOftalmologicas = await consultaORM.save([
         {
           type: 'Oftalmologia',
           edad: 14,
@@ -479,19 +453,8 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Tarde',
-          oftalmologia: {
-            obra_social: 'Osde',
-            anteojos: false,
-            control: false,
-            demanda: 'Miopia',
-            primera_vez: true,
-            prox_control: '2024-11-30',
-            receta: true,
-          },
+          obra_social: 'Osde',
         },
-      ]);
-      console.log('Seeding consultas odontologicas...');
-      const consultasOdontologicas = await consultaORM.save([
         {
           type: 'Odontologia',
           edad: 14,
@@ -500,25 +463,8 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Tarde',
-          odontologia: {
-            cepillado: true,
-            cepillo: true,
-            derivacion: false,
-            dientes_norecuperables: 6,
-            dientes_permanentes: 3,
-            dientes_recuperables: 5,
-            dientes_temporales: 10,
-            sellador: 9,
-            habitos: 'Cepillado constante',
-            primera_vez: false,
-            situacion_bucal: 'Buena',
-            topificacion: false,
-            ulterior: true,
-          },
+          obra_social: 'ISSN',
         },
-      ]);
-      console.log('Seeding consultas fonoaudiologicas...');
-      const consultasFonoaudiologicas = await consultaORM.save([
         {
           type: 'Fonoaudiologia',
           edad: 14,
@@ -527,26 +473,101 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Mañana',
-          fonoaudiologia: {
-            diagnosticoPresuntivo: 'Dificultades de comprensión auditiva',
-            causas: 'Factores genéticos',
-            asistencia: true,
-          },
         },
         {
           type: 'Fonoaudiologia',
-          edad: 1444444444,
+          edad: 14,
           usuario: usuarios[0],
           chico: chicos[0],
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Mañana',
-          fonoaudiologia: {
-            diagnosticoPresuntivo: 'Consulta deshabilitada',
-            causas: 'Consulta deshabilitada',
-            asistencia: true,
-          },
           deshabilitado: true,
+        },
+      ]);
+      console.log('Seeding consultas clinicas...');
+      const consultasClinicas = await clinicaGeneralORM.save([
+        {
+          consulta: consultas[0],
+          alimentacion: 'Buena',
+          antecedentes_perinatal: true,
+          cc: 30,
+          consumo_alcohol: false,
+          consumo_drogas: false,
+          diabetes: false,
+          enfermedades_previas: false,
+          examen_visual: 'normal',
+          hidratacion: 'Buena',
+          horas_juego_airelibre: '03:00',
+          horas_pantalla: '01:00',
+          horas_suenio: '09:00',
+          hta: false,
+          infusiones: true,
+          lacteos: true,
+          lenguaje: 'adecuado',
+          numero_comidas: 3,
+          obesidad: false,
+          ortopedia_traumatologia: 'normal',
+          estado_nutricional: 'D Sobrepeso',
+          imc: 28.9,
+          pcimc: 8.3,
+          pct: 8.1,
+          pcta: 85,
+          tension_arterial: 'Normotenso',
+          peso: 65,
+          proyecto: 'Control Niño Sano',
+          segto: false,
+          tad: 120,
+          talla: 150,
+          tas: 70,
+          vacunas: 'Completo',
+        },
+      ]);
+      console.log('Seeding consultas oftalmologicas...');
+      const consultasOftalmologicas = await oftalmologiaORM.save([
+        {
+          consulta: consultas[1],
+          anteojos: false,
+          control: false,
+          demanda: 'Miopia',
+          primera_vez: true,
+          prox_control: '2024-11-30',
+          receta: true,
+        },
+      ]);
+      console.log('Seeding consultas odontologicas...');
+      const consultasOdontologicas = await odontologiaORM.save([
+        {
+          consulta: consultas[2],
+          cepillado: true,
+          cepillo: true,
+          derivacion: false,
+          dientes_norecuperables: 0,
+          dientes_recuperables: 3,
+          dientes_temporales: 10,
+          dientes_permanentes: 2,
+          sellador: 9,
+          clasificacion: 'BAJO INDICE DE CARIES',
+          habitos: 'Cepillado constante',
+          primera_vez: false,
+          situacion_bucal: 'Buena',
+          topificacion: false,
+          ulterior: true,
+        },
+      ]);
+      console.log('Seeding consultas fonoaudiologicas...');
+      const consultasFonoaudiologicas = await fonoaudiologiaORM.save([
+        {
+          consulta: consultas[3],
+          diagnostico_presuntivo: 'Dificultades de comprensión auditiva',
+          causas: 'Factores genéticos',
+          asistencia: true,
+        },
+        {
+          consulta: consultas[4],
+          diagnostico_presuntivo: 'DESHABILITADO',
+          causas: 'DESHABILITADO',
+          asistencia: true,
           created_at: '9999-12-31',
         },
       ]);

@@ -67,6 +67,7 @@ export class ChicoService {
       relations: ['consultas', 'consultas.usuario', 'consultas.institucion', 'consultas.curso'],
     });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
+    chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
     return chico.consultas;
   }
 }

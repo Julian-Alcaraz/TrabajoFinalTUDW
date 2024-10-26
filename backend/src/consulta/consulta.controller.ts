@@ -14,10 +14,9 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Crea una nueva consulta' })
   @ApiResponse({ status: 201, description: 'Consulta creada con exito' })
   async create(@Body() createConsultaDto: CreateConsultaDto, @Req() req: any) {
-    console.log('Me llego: ', createConsultaDto);
     const consulta = await this.consultaService.create(createConsultaDto, req.user);
     return {
-      success: true, // DOBLE S
+      success: true,
       data: consulta,
       message: `Consulta ${createConsultaDto.type} cargada con exito.`,
     };
@@ -29,7 +28,7 @@ export class ConsultaController {
   async findAll() {
     const consultas = await this.consultaService.findAll();
     return {
-      success: true, // DOBLE S
+      success: true,
       data: consultas,
       message: 'Consultas obtenidas con exito.',
     };
@@ -41,7 +40,7 @@ export class ConsultaController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const consulta = await this.consultaService.findOne(id);
     return {
-      success: true, // DOBLE S
+      success: true,
       data: consulta,
       message: 'Consulta obtenida con exito.',
     };

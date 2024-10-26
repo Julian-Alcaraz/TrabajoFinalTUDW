@@ -65,17 +65,34 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   activateTableFilter() {
     this.chicos.filterPredicate = (data: Chico, filter: string) => {
       const searchTerms = JSON.parse(filter);
-      return searchTerms.dni ? String(data.dni).startsWith(searchTerms.dni) : true
+      return searchTerms.dni ? String(data.dni).startsWith(searchTerms.dni) : true;
     };
   }
 
-  habilitar(id: number) {
+  notificar(id: number) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Para poder ver sus consultas usted debe habilitar al chico',
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#3f77b4',
+      confirmButtonText: 'Habilitar chico',
+      denyButtonText: 'Cancelar',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.habilitar(id);
+      }
+    });
+  }
+
+  habilitar(id: number, mostrarTexto = false) {
     Swal.fire({
       title: '¿Habilitar chico?',
+      text: mostrarTexto ? 'Para poder ver sus consultas debe habilitar al chico' : '',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
-      denyButtonText: `Cancelar`,
+      denyButtonText: 'Cancelar',
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: false };

@@ -15,7 +15,7 @@ export class Fonoaudiologia {
   asistencia: boolean;
 
   @Column({ type: 'varchar', length: 100 })
-  diagnosticoPresuntivo: string;
+  diagnostico_presuntivo: string;
 
   @Column({ type: 'varchar', length: 100 })
   causas: string;

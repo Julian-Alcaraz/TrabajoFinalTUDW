@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
 
 @Entity()
+// Cambiar a Clinica o cambiar nombre archivo
 export class ClinicaGeneral {
   // esto lo hago para usar el id de la consulta como primaria y foranea
   @PrimaryColumn({ type: 'int' })

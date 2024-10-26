@@ -33,7 +33,7 @@ export class NuevaFonoaudiologicaComponent {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Fonoaudiologica
-      diagnosticoPresuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
+      diagnostico_presuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       causas: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
       asistencia: ['', [Validators.required]],
     });
