@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +16,7 @@ import { RouterModule, Router } from '@angular/router';
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -72,7 +72,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder ver sus consultas usted debe habilitar al chico',
+      text: 'Para poder ver sus consultas o editar los datos personales del chico, usted debe habilitar al chico',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
@@ -85,10 +85,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  habilitar(id: number, mostrarTexto = false) {
+  habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar chico?',
-      text: mostrarTexto ? 'Para poder ver sus consultas debe habilitar al chico' : '',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -136,6 +135,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.chicos.filter = filterValue.trim().toLowerCase();
   }
+
   applyFilter(event: Event) {
     const dniValue = (event.target as HTMLInputElement).value; // esto lo dejo por que por el momento es solo por dni
     const searchTerms = {
@@ -146,6 +146,10 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (this.chicos.paginator) {
       this.chicos.paginator.firstPage();
     }
+  }
+
+  editarChico(id: number) {
+    this._router.navigate(['/layout/chicos/'+id+'/editar']);
   }
 
   verDetallesChico(id: number) {
