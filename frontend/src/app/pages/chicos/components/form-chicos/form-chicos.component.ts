@@ -16,6 +16,7 @@ import { LocalidadService } from '../../../../services/localidad.service';
 import { BarrioService } from '../../../../services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '../../../../models/chico.model';
+import { ApiGeorefService } from '../../../../services/api-georef.service';
 
 @Component({
   selector: 'app-form-chicos',
@@ -47,6 +48,7 @@ export class FormChicosComponent implements OnInit {
     private _dialog: MatDialog,
     private _chicoService: ChicoService,
     private _localidadService: LocalidadService,
+    private _apiGeorefService : ApiGeorefService,
     private _barrioService: BarrioService,
   ) {
     // Hacer un trim o algo, este es un string valido: "          a                Juan"
@@ -99,9 +101,9 @@ export class FormChicosComponent implements OnInit {
   }
 
   obtenerLocalidades(): any {
-    this._localidadService.obtenerLocalidades().subscribe({
+    this._apiGeorefService.obtenerLocalidades().subscribe({
       next: (response: any) => {
-        this.localidades = response.data;
+        this.localidades = response.localidades;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);

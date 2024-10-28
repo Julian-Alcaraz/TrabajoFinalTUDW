@@ -12,9 +12,10 @@ import { BarrioModule } from './barrio/barrio.module';
 import { LocalidadModule } from './localidad/localidad.module';
 import { CursoModule } from './curso/curso.module';
 import { InstitucionModule } from './institucion/institucion.module';
+import { ApiGeorefModule } from './api-georef/api-georef.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule, ApiGeorefModule],
   controllers: [],
   providers: [],
 })
