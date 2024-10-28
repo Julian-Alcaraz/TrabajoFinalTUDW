@@ -32,8 +32,8 @@ export const routes: Routes = [
       { path: 'usuarios/list', component: ListaUsuarioComponent, canActivate: [adminGuard] },
       { path: 'chicos/nuevo', component: NuevoChicoComponent, canActivate: [] }, // Esta ruta deberia ser accesible solo a los usuarios administradores o medicos, no para acceso-info
       { path: 'chicos/list', component: ListaChicoComponent, canActivate: [] },
-      { path: 'chicos/:id', component: VerChicoComponent, canActivate: [] },
-      { path: 'chicos/:id/editar', component: EditarChicoComponent, canActivate: [adminGuard] },
+      { path: 'chicos/ver/:id', component: VerChicoComponent, canActivate: [] },
+      { path: 'chicos/editar/:id', component: EditarChicoComponent, canActivate: [adminGuard] },
       { path: 'consultas/clinica/nueva', component: NuevaClinicaComponent, canActivate: [] },
       { path: 'consultas/oftalmologia/nueva', component: NuevaOftalmologiaComponent, canActivate: [] },
       { path: 'consultas/odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [] },

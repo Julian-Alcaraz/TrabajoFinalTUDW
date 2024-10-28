@@ -149,10 +149,10 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   editarChico(id: number) {
-    this._router.navigate(['/layout/chicos/'+id+'/editar']);
+    this._router.navigate(['/layout/chicos/editar/'+id]);
   }
 
   verDetallesChico(id: number) {
-    this._router.navigate(['/layout/chicos', id]);
+    this._router.navigate(['/layout/chicos/ver', id]);
   }
 }

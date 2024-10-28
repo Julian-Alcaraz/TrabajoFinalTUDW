@@ -1,3 +1,6 @@
 .scroll {
   overflow-x: scroll;
 }
+.selected {
+  background-color: #b9c9ff !important;
+}

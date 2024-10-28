@@ -118,7 +118,7 @@ export class ConsultaService {
         break;
     }
     delete consultaHija.id_consulta;
-    return { ...consulta, ...consultaHija };
+    return { ...consulta, consultaHija };
   }
 
   update(id: number, updateConsultaDto: UpdateConsultaDto) {

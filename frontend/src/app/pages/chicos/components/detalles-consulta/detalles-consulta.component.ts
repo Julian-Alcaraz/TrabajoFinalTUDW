@@ -1,48 +1,46 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { TitleCasePipe } from '@angular/common';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { Consulta } from '../../../../models/consulta.model';
 import { ConsultaService } from '../../../../services/consulta.service';
+import { DataConsultaPipe } from '../../../../utils/pipes/data-consulta.pipe';
+import { KeyDataConsultaPipe } from '../../../../utils/pipes/key-data-consulta.pipe';
 
 @Component({
   selector: 'app-detalles-consulta',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule],
+  imports: [CommonModule, MatPaginatorModule, DataConsultaPipe, KeyDataConsultaPipe, TitleCasePipe],
   templateUrl: './detalles-consulta.component.html',
   styleUrl: './detalles-consulta.component.css',
 })
-export class DetallesConsultaComponent implements OnChanges, OnInit {
+export class DetallesConsultaComponent implements OnInit, OnChanges {
   @Input() idConsulta: number | null = null;
 
-  public consulta: MatTableDataSource<Consulta>;
-  public consultaDataSource!: Consulta;
   public consultaColumns: string[] = [];
   public hayConsulta = false;
+  public consulta: any;
+  public datosTipoConsulta: any;
+  public usuarioCreador: any;
+  public institucion: any;
+  public curso: any;
 
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
-  ) {
-    this.consulta = new MatTableDataSource<Consulta>([]);
-  }
+  ) {}
 
   ngOnInit() {
     if (this.idConsulta) {
       this._consultaService.obtenerConsultaxId(this.idConsulta).subscribe({
-        next: (response: any) => {
+        next: async (response: any) => {
           if (response.success) {
-            this.consulta = new MatTableDataSource<Consulta>([response.data]);
-            this.consultaDataSource = this.consulta.data[0];
             this.hayConsulta = true;
-            console.log('DATASOURCE:');
-            console.log(this.consultaDataSource);
-            this.obtenerColumnas();
+            this.convertirData(response.data);
+          } else {
+            this.hayConsulta = false;
           }
         },
         error: (err) => {
@@ -58,14 +56,12 @@ export class DetallesConsultaComponent implements OnChanges, OnInit {
     if (this.idConsulta) {
       this._consultaService.obtenerConsultaxId(this.idConsulta).subscribe({
         next: (response: any) => {
-          console.log(response)
+          console.log(response);
           if (response.success) {
-            this.consulta = new MatTableDataSource<Consulta>([response.data]);
-            this.consultaDataSource = this.consulta.data[0];
             this.hayConsulta = true;
-            console.log('DATASOURCE:');
-            console.log(this.consultaDataSource);
-            this.obtenerColumnas();
+            this.convertirData(response.data);
+          } else {
+            this.hayConsulta = false;
           }
         },
         error: (err) => {
@@ -76,90 +72,33 @@ export class DetallesConsultaComponent implements OnChanges, OnInit {
       this.hayConsulta = false;
     }
   }
+  convertirData(consultaDataSource: any) {
+    const { usuario, institucion, curso, consultaHija, ...consulta } = consultaDataSource;
+    this.datosTipoConsulta = consultaHija;
 
-  /*
-  obtenerConsulta(idConsulta: number) {
-    this._consultaService.obtenerConsultaxId(idConsulta).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.consulta = new MatTableDataSource<Consulta>([response.data]);
-          this.consultaDataSource = this.consulta.data[0];
-          this.hayConsulta = true;
-          console.log("DATASOURCE:");
-          console.log(this.consultaDataSource);
-        }
-      },
-      error: (err) => {
-        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        this.hayConsulta = false;
-      },
-    });
-    this.hayConsulta = false;
-  }
-  */
-  obtenerColumnas() {
-    this.consultaColumns = [];
-    switch (this.consultaDataSource.type) {
-      case 'Odontologia':
-        this.consultaColumns.push('cepillado');
-        this.consultaColumns.push('cepillo');
-        this.consultaColumns.push('clasificacion');
-        this.consultaColumns.push('derivacion');
-        this.consultaColumns.push('dientes_norecuperables');
-        this.consultaColumns.push('dientes_permanentes');
-        this.consultaColumns.push('dientes_recuperables');
-        this.consultaColumns.push('dientes_temporales');
-        this.consultaColumns.push('habitos');
-        this.consultaColumns.push('primera_vez');
-        this.consultaColumns.push('sellador');
-        this.consultaColumns.push('situacion_bucal');
-        this.consultaColumns.push('topificacion');
-        this.consultaColumns.push('ulterior');
-        break;
-      case 'Clinica':
-        this.consultaColumns.push('diabetes');
-        this.consultaColumns.push('hta');
-        this.consultaColumns.push('obesidad');
-        this.consultaColumns.push('consumo_alcohol');
-        this.consultaColumns.push('consumo_drogas');
-        this.consultaColumns.push('antecedentes_perinatal');
-        this.consultaColumns.push('enfermedades_previas');
-        this.consultaColumns.push('vacunas');
-        this.consultaColumns.push('peso');
-        this.consultaColumns.push('talla');
-        this.consultaColumns.push('pct');
-        this.consultaColumns.push('cc');
-        this.consultaColumns.push('pcimc');
-        this.consultaColumns.push('tas');
-        this.consultaColumns.push('tad');
-        this.consultaColumns.push('pcta');
-        this.consultaColumns.push('examen_visual');
-        this.consultaColumns.push('ortopedia_traumatologia');
-        this.consultaColumns.push('lenguaje');
-        this.consultaColumns.push('segto');
-        this.consultaColumns.push('alimentacion');
-        this.consultaColumns.push('hidratacion');
-        this.consultaColumns.push('lacteos');
-        this.consultaColumns.push('infusiones');
-        this.consultaColumns.push('numero_comidas');
-        this.consultaColumns.push('horas_pantalla');
-        this.consultaColumns.push('horas_juego_airelibre');
-        this.consultaColumns.push('horas_suenio');
-        this.consultaColumns.push('proyecto');
-        break;
-      case 'Fonoaudiologia':
-        this.consultaColumns.push('asistencia');
-        this.consultaColumns.push('diagnostico_presuntivo');
-        this.consultaColumns.push('causas');
-        break;
-      case 'Oftalmologia':
-        this.consultaColumns.push('demanda');
-        this.consultaColumns.push('primera_vez');
-        this.consultaColumns.push('control');
-        this.consultaColumns.push('receta');
-        this.consultaColumns.push('anteojos');
-        this.consultaColumns.push('prox_control');
-        break;
-    }
+    delete usuario.id;
+    delete usuario.updated_at;
+    delete usuario.created_at;
+    delete usuario.deshabilitado;
+    delete usuario.contrasenia;
+    this.usuarioCreador = usuario;
+
+    delete institucion.id;
+    delete institucion.updated_at;
+    delete institucion.created_at;
+    delete institucion.deshabilitado;
+    this.institucion = institucion;
+
+    delete curso.id;
+    delete curso.updated_at;
+    delete curso.created_at;
+    delete curso.deshabilitado;
+    this.curso = curso;
+
+    delete consulta.updated_at;
+    delete consulta.deshabilitado;
+    delete consulta.id;
+
+    this.consulta = consulta;
   }
 }

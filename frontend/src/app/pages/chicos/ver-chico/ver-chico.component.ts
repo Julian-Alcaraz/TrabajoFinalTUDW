@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,9 +25,18 @@ export class VerChicoComponent implements OnInit {
   public chico: Chico | null = null;
   public consultas: MatTableDataSource<Consulta>;
   public resultsLength = 0;
-  public consultasColumns: string[] = ['numero', 'tipo', 'fecha', 'profesional', 'obra_social', 'edad',
+  public consultasColumns: string[] = [
+    'numero',
+    'tipo',
+    'fecha',
+    'profesional',
+    'obra_social',
+    // 'edad',
     //  'institucion', 'curso', 'turno',
-     'observaciones'];
+    'observaciones',
+  ];
+  public searchingChico = false;
+  public searchingConsultas = false;
 
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
 
@@ -35,28 +44,25 @@ export class VerChicoComponent implements OnInit {
     private _chicoService: ChicoService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private location: Location
   ) {
     this.consultas = new MatTableDataSource<Consulta>([]);
   }
 
   ngOnInit(): void {
+    this.obtenerConsultasxChico();
+  }
+
+  obtenerConsultasxChico() {
+    this.searchingChico = true;
+    this.searchingConsultas = true;
     this.route.paramMap.subscribe((params) => {
       const idChicoString = params.get('id');
       if (idChicoString) {
         const idChico = parseInt(idChicoString);
         if (!isNaN(idChico)) {
           this.obtenerChico(idChico);
-          this._chicoService.obtenerConsultasDeChico(idChico).subscribe({
-            next: (response: any) => {
-              if (response.success) {
-                this.consultas.data = response.data;
-                this.resultsLength = response.data.length;
-              }
-            },
-            error: (err: any) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-            },
-          });
+          this.obtenerConsultas(idChico);
         } else {
           console.log('El ID proporcionado no es un número válido.');
           // Manejar el caso en que el ID no es un número
@@ -68,15 +74,33 @@ export class VerChicoComponent implements OnInit {
     });
   }
 
+  obtenerConsultas(idChico: number) {
+    this._chicoService.obtenerConsultasDeChico(idChico).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.consultas.data = response.data;
+          this.resultsLength = response.data.length;
+        }
+        this.searchingConsultas = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.searchingConsultas = false;
+      },
+    });
+  }
+
   obtenerChico(id: number) {
     this._chicoService.obtenerChicoxId(id).subscribe({
       next: (response: any) => {
         if (response.data) {
           this.chico = response.data;
         }
+        this.searchingChico = false;
       },
       error: (err) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.searchingChico = false;
       },
     });
   }
@@ -84,5 +108,9 @@ export class VerChicoComponent implements OnInit {
   // Podria haber una mejor solucion
   obtenerConsulta(id: number) {
     this.idConsulta = id;
+  }
+
+  volver(){
+    this.location.back()
   }
 }
