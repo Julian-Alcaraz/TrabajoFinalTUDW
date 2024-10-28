@@ -53,17 +53,19 @@
     @if (this.usuario && !this.esFormulario) {
       <div>
         <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-        @for (rol of this.roles; track $index) {
-          @if (this.usuario.roles_ids?.includes(rol.id)) {
-            {{ rol.nombre | titlecase }}
+        <div class="flex flex-wrap">
+          @for (rol of this.roles; track $index) {
+            @if (this.usuario.roles_ids?.includes(rol.id)) {
+              {{ rol.nombre | titlecase }}
+            }
           }
-        }
+        </div>
       </div>
     } @else {
       <div class="flex flex-col">
         <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-        <div class="flex">
-          <div *ngFor="let rol of roles" class="flex items-center me-4">
+        <div class="flex flex-wrap">
+          <div *ngFor="let rol of roles" class="flex items-center me-4 mb-3">
             <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id" [checked]="this.usuario && this.usuario.roles_ids?.includes(rol.id)" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
             <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
           </div>

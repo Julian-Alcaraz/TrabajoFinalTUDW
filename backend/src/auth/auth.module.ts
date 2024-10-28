@@ -14,7 +14,7 @@ import { Rol } from 'src/rol/entities/rol.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Usuario, Rol]), // No se porque pero nesecita el ROL aca
+    TypeOrmModule.forFeature([Usuario, Rol]), // No se porque pero necesita el ROL aca
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

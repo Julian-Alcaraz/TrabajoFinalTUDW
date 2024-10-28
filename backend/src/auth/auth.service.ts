@@ -5,12 +5,14 @@ import { AuthPayloadDto } from './dto/auth.dto';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { compararContrasenias } from '../common/utils/bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usuarioService: UsuarioService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validarUsuario(authPayloadDto: AuthPayloadDto) {
@@ -20,7 +22,7 @@ export class AuthService {
     const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
       delete usuario.contrasenia;
-      return { token: this.jwtService.sign(usuario), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
+      return { token: this.jwtService.sign(usuario, { expiresIn: this.configService.getOrThrow('JWT_EXPIRES') }), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
     } else return null;
   }
 }

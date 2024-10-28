@@ -6,9 +6,15 @@ import { RolModule } from './rol/rol.module';
 import { MenuModule } from './menu/menu.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AuthModule } from './auth/auth.module';
+import { ConsultaModule } from './consulta/consulta.module';
+import { ChicoModule } from './chico/chico.module';
+import { BarrioModule } from './barrio/barrio.module';
+import { LocalidadModule } from './localidad/localidad.module';
+import { CursoModule } from './curso/curso.module';
+import { InstitucionModule } from './institucion/institucion.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule],
   controllers: [],
   providers: [],
 })

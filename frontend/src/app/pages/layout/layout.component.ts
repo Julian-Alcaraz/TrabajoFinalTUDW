@@ -20,7 +20,6 @@ export class LayoutComponent {
 
   toggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
-    console.log(this.screenWidth);
     this.isSideNavCollapsed = data.collapsed;
     this.getBodyClass();
   }

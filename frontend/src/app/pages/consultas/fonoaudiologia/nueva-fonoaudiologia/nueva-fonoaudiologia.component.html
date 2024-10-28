@@ -1,0 +1,36 @@
+<div class="card">
+  <span class="card-header">Cargar una nueva consulta de fonoaudiologia</span>
+  <div class="card-body">
+    <form (ngSubmit)="enviarFormulario()" [formGroup]="fonoaudiologiaForm">
+      <app-campos-comunes [form]="fonoaudiologiaForm" />
+      <!-- Campos fonoaudiologia -->
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- Diagnostico Presuntivo -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Diagnostico Presuntivo" [control]="controlDeInput('diagnostico_presuntivo')" placeholder=""
+            idInput="diagnostico_presuntivo" />
+        </div>
+        <!-- Causas -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Causas" [control]="controlDeInput('causas')" placeholder="" idInput="causas" />
+        </div>
+        <!-- Asistencia -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Observaciones -->
+        <div class="md:col-span-6">
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
+            idInput="observaciones" />
+        </div>
+      </div>
+      <!-- Enviar -->
+      <div class="flex mt-4">
+        <button type="submit" [disabled]="!fonoaudiologiaForm.valid"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<div class="card">
+  <span class="card-header">Cargar una nueva consulta medica clinica</span>
+  <div class="card-body">
+    <form (ngSubmit)="enviarFormulario()" [formGroup]="clinicaForm">
+      <app-campos-comunes [form]="clinicaForm" />
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- Peso -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="Ej: 45" idInput="peso" />
+        </div>
+        <!-- Altura (talla)   -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Altura - talla (cm)" [control]="controlDeInput('talla')" placeholder=""
+            idInput="talla" />
+        </div>
+        <!-- Circunferencia de la cintura (cc)-->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Circunferencia de la Cintura" [control]="controlDeInput('cc')" placeholder=""
+            idInput="cc" />
+        </div>
+        <ng-container
+          *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
+          <div class="md:col-span-6 sm:col-span-3">
+            <span>Indice de Masa Corporal: {{ clinicaForm.get('peso')?.value / ( (clinicaForm.get('talla')?.value
+              / 100) * (clinicaForm.get('talla')?.value / 100)) | number: '1.2-2' }}</span>
+          </div>
+        </ng-container>
+        <div class="md:col-span-6 sm:col-span-3">
+          <div class="grid gap-0 md:grid-cols-6">
+            <!-- Grupo de condiciones -->
+            <div class="md:col-span-3">
+              <h3 class="mt-4">Indica si el chico tiene alguna de las siguientes condiciones:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de antecedentes -->
+            <div class="md:col-span-3">
+              <h3 class="mt-4">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Antecedentes Perinatales"
+                  [control]="controlDeInput('antecedentes_perinatal')" idInput="antecedentes_perinatal"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')"
+                  idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de consumos problemáticos -->
+            <div class="md:col-span-3">
+              <h3 class="mt-4">Indica si el chico tiene consumos problemáticos de:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')"
+                  idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+            <!-- Grupo de lácteos e infusiones -->
+            <div class="md:col-span-3">
+              <h3 class="mt-4">Indica si el chico toma:</h3>
+              <div class="flex flex-col mt-2">
+                <app-input-checkbox label="Lácteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
+                  (change)="onChangeCheckbox($event)" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Vacunas -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="Vacunas" [control]="controlDeInput('vacunas')" idInput="vacunas"
+            [opciones]="['Completo', 'Incompleto', 'Desconocido']"
+            [valores]="['Completo', 'Incompleto', 'Desconocido']" />
+        </div>
+        <!-- Tensión Arterial Sistolica (tas) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Tensión Arterial Sistolica" [control]="controlDeInput('tas')" placeholder=""
+            idInput="tas" />
+        </div>
+        <!-- Tensión Arterial Diastolica (tad) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Tensión Arterial Diastolica" [control]="controlDeInput('tad')" placeholder=""
+            idInput="tad" />
+        </div>
+        <!-- Examen Visual -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="Examen Visual" [control]="controlDeInput('examen_visual')"
+            idInput="examen_visual" [opciones]="['Normal', 'Anormal']" [valores]="['normal', 'anormal']" />
+        </div>
+        <!-- Ortopedia Traumatologia -->
+        <div class="mt-4 md:col-span-2">
+          <label for="ortopedia_traumatologia" class="block mb-4 text-sm font-medium text-gray-900">Ortopedia y
+            Traumatologia <strong>¿Cambiar a text?</strong></label>
+          <select formControlName="ortopedia_traumatologia" id="ortopedia_traumatologia"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="normal">Normal</option>
+            <option value="escoliosis">Escoliosis</option>
+            <option value="piePlano">Pie Plano</option>
+            <option value="otras">Otras</option>
+          </select>
+          <div
+            *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors && (clinicaForm.get('ortopedia_traumatologia')?.dirty || clinicaForm.get('ortopedia_traumatologia')?.touched)"
+            class="text-red-600 text-sm">
+            <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['required']">Debe seleccionar una opción.
+            </div>
+          </div>
+        </div>
+        <!-- Lenguaje -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-select-enum label="Lenguaje" [control]="controlDeInput('lenguaje')" idInput="lenguaje"
+            [opciones]="['Adecuado', 'Inadecuado']" [valores]="['adecuado', 'inadecuado']" />
+        </div>
+        <!-- Alimentacion -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Alimentacion" [control]="controlDeInput('alimentacion')" placeholder=""
+            idInput="alimentacion" />
+        </div>
+        <!-- Numero de Comidas -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Número de Comidas" [control]="controlDeInput('numero_comidas')" placeholder=""
+            idInput="numero_comidas" />
+        </div>
+        <!-- Hidratacion -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Hidratacion" [control]="controlDeInput('hidratacion')" placeholder=""
+            idInput="hidratacion" />
+        </div>
+        <h3 class="mt-4 md:col-span-6">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
+        <!-- Horas de Pantalla -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Horas de Pantalla" [control]="controlDeInput('horas_pantalla')" placeholder="hh:mm"
+            idInput="horas_pantalla" />
+        </div>
+        <!-- Horas de Juego al aire libre -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Horas de Juego al aire libre" [control]="controlDeInput('horas_juego_airelibre')"
+            placeholder="hh:mm" idInput="horas_juego_airelibre" />
+        </div>
+        <!-- Horas de sueño -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-text label="Horas de sueño" [control]="controlDeInput('horas_suenio')" placeholder="hh:mm"
+            idInput="horas_suenio" />
+        </div>
+        <!-- Percentil de Tension Arterial (pcta) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Tension Arterial(pcta)" [control]="controlDeInput('pcta')"
+            placeholder="" idInput="pcta" />
+        </div>
+        <!-- Percentil de Índice de Masa Corporal (pcimc) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Índice de Masa Corporal(pcimc)" [control]="controlDeInput('pcimc')"
+            placeholder="" idInput="pcimc" />
+        </div>
+        <!-- Percentillo de Talla - altura (PCT) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Talla (pct) - altura (T/E)" [control]="controlDeInput('pct')"
+            placeholder="" idInput="pct" />
+        </div>
+        <!-- Proyecto -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
+        </div>
+        <!-- Seguimiento (segto) -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Observaciones -->
+        <div class="md:col-span-6">
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
+            idInput="observaciones" />
+        </div>
+      </div>
+      <!-- Enviar -->
+      <div class="flex mt-4">
+        <button type="submit" [disabled]="!clinicaForm.valid"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

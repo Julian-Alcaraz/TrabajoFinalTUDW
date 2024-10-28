@@ -24,8 +24,9 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   // @ViewChild(MatSort) sort: MatSort;
 
   public resultsLength = 0;
+  public searching = false;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
   constructor(
     private _usuarioService: UsuarioService,
     private snackBar: MatSnackBar,
@@ -33,15 +34,21 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     this.usuarios = new MatTableDataSource<Usuario>([]);
   }
   ngOnInit(): void {
+    this.getUsuarios();
+  }
+  getUsuarios() {
+    this.searching = true;
     this._usuarioService.obtenerUsuarios().subscribe({
       next: (response: any) => {
         if (response.success) {
           this.usuarios.data = response.data;
           this.resultsLength = response.data.length;
         }
+        this.searching = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.searching = false;
       },
     });
   }
@@ -93,6 +100,20 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
+    });
+  }
+  resetarContrasenia(usuario: Usuario) {
+    Swal.fire({
+      title: '¿Restablecer contraseña de  usuario?',
+      showDenyButton: true,
+      confirmButtonColor: '#3f77b4',
+      confirmButtonText: 'Confirmar',
+      denyButtonText: `Cancelar`,
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        const edit = { contrasenia: '' + usuario.dni };
+        this.modifcarUsuario(usuario.id, edit);
+      }
     });
   }
 }

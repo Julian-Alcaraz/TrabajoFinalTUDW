@@ -1,0 +1,194 @@
+<!-- Aca faltaria un mensaje de errro en el caso de que el id del chico no este en la bd pero sea valido -->
+<div class="card">
+  @if (chico) {
+    <div class="card-header">Datos personales de {{ chico.apellido + ' ' + chico.nombre }}</div>
+    <div class="card-body">
+      <!-- <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-sans"> -->
+      <div class="layout-container flex h-full grow flex-col">
+        <div class="layout-content-container flex flex-col w-full flex-1">
+          <div class="flex flex-wrap gap-3">
+            <div class="flex min-w-28 flex-1 basis-auto md:basis-1/4 flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Nombre</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.apellido }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Apellido</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.dni }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">DNI</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.fe_nacimiento }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Fecha de Nacimiento</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.sexo }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Sexo</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.telefono }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Teléfono</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.barrio?.localidad?.nombre }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Localidad</p>
+              </div>
+            </div>
+            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.barrio?.nombre }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Barrio</p>
+              </div>
+            </div>
+            <div *ngIf="chico?.nombre_madre" class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_madre }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Madre</p>
+              </div>
+            </div>
+            <div *ngIf="chico?.nombre_padre" class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_padre }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Padre</p>
+              </div>
+            </div>
+            @if (resultsLength > 0) {
+              <div class="flex min-w-28 w-full flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+                <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño</p>
+                <div class="flex items-center gap-2">
+                  <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
+                </div>
+              </div>
+            } @else {
+              @if (searchingConsultas) {
+                <div role="status " class="my-2 flex justify-center">
+                  <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                  </svg>
+                </div>
+              } @else {
+                <div class="flex min-w-28 w-full flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+                  <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistio a ninguna consulta</p>
+                </div>
+              }
+            }
+          </div>
+          @if (resultsLength > 0) {
+            <h3 class="text-black text-lg sm:text-xl font-bold leading-tight tracking-tight break-words max-w-full px-2 sm:px-4 pb-2 pt-4">Historial de consultas</h3>
+            <div class="scroll">
+              <table mat-table [dataSource]="consultas" class="mat-elevation-z8 table-auto scroll">
+                <!-- # -->
+                <ng-container matColumnDef="numero">
+                  <th mat-header-cell *matHeaderCellDef>#</th>
+                  <td mat-cell *matCellDef="let consulta; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+                <!-- Profesional -->
+                <ng-container matColumnDef="profesional">
+                  <th mat-header-cell *matHeaderCellDef>Profesional</th>
+                  <td mat-cell *matCellDef="let consulta">{{ consulta.usuario.nombre + ' ' + consulta.usuario.apellido }}</td>
+                </ng-container>
+                <!-- Tipo -->
+                <ng-container matColumnDef="tipo">
+                  <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                  <td mat-cell *matCellDef="let consulta">{{ consulta.type }}</td>
+                </ng-container>
+                <!-- Fecha -->
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let consulta">{{ consulta.created_at | date: 'dd-MM-yyyy' }}</td>
+                </ng-container>
+                <!-- Edad -->
+                <!-- <ng-container matColumnDef="edad">
+                  <th mat-header-cell *matHeaderCellDef>Edad</th>
+                  <td mat-cell *matCellDef="let consulta">{{ consulta.edad }}</td>
+                </ng-container> -->
+                <!-- Turno -->
+                <!-- <ng-container matColumnDef="turno">
+                      <th mat-header-cell *matHeaderCellDef>Turno</th>
+                      <td mat-cell *matCellDef="let consulta">{{ consulta.turno }}</td>
+                    </ng-container> -->
+                <!-- Obra Social -->
+                <ng-container matColumnDef="obra_social">
+                  <th mat-header-cell *matHeaderCellDef>Obra Social</th>
+                  <td mat-cell *matCellDef="let consulta">
+                    <p *ngIf="!consulta.obra_social; else tieneObraSocial">-</p>
+                    <ng-template #tieneObraSocial>{{ consulta.obra_social }}</ng-template>
+                  </td>
+                </ng-container>
+                <!-- Curso-->
+                <!-- <ng-container matColumnDef="curso">
+                      <th mat-header-cell *matHeaderCellDef>Curso</th>
+                      <td mat-cell *matCellDef="let consulta">{{ consulta.curso.nombre }}</td>
+                    </ng-container> -->
+                <!-- Institucion -->
+                <!-- <ng-container matColumnDef="institucion">
+                      <th mat-header-cell *matHeaderCellDef>Institucion</th>
+                      <td mat-cell *matCellDef="let consulta">{{ consulta.institucion.tipo + ' ' + consulta.institucion.nombre }}</td>
+                    </ng-container> -->
+                <!-- Observaciones -->
+                <ng-container matColumnDef="observaciones">
+                  <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+                  <td mat-cell *matCellDef="let consulta">
+                    <p *ngIf="!consulta.observaciones; else tieneObservaciones">-</p>
+                    <ng-template #tieneObservaciones>{{ consulta.observaciones }}</ng-template>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="consultasColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: consultasColumns" (click)="obtenerConsulta(row.id)" class="cursor-pointer hover:bg-gray-300" [ngClass]="{ selected: row.id === idConsulta }"></tr>
+              </table>
+              <!-- Detalles -->
+            </div>
+            @if (idConsulta) {
+              <app-detalles-consulta [idConsulta]="idConsulta" />
+            }
+            <div class="flex mx-auto mt-3">
+              <button type="button" (click)="volver()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Volver</button>
+            </div>
+          } @else {
+            @if (searchingConsultas) {
+              <div role="status " class="my-2 flex justify-center">
+                <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                </svg>
+              </div>
+            }
+            <!-- <div class="text-center">
+                <h3 class="text-black text-xl font-bold leading-tight tracking-tight px-4 pb-2 p-4">Historial de consultas</h3>
+                <span>Este chico no tiene consultas cargadas</span>
+              </div> -->
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    @if (searchingChico) {
+      <div role="status " class="my-2 flex justify-center">
+        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+        </svg>
+      </div>
+    } @else {
+      <div class="text-center">
+        <h2 class="text-black text-2xl font-bold leading-tight tracking-tight p-6 m-5">El chico buscado no existe.</h2>
+      </div>
+    }
+  }
+</div>

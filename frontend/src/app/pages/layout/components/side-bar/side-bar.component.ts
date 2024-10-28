@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { navbarData } from './nav-data';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { fadeInOut } from './helper';
 import { SublevelMenuComponent } from './sublevel-menu.component';
@@ -42,33 +42,43 @@ export class NavBarComponent implements OnInit {
   }
   constructor(
     private _router: Router,
+    private _route: ActivatedRoute,
     private _sessionService: SessionService,
     private _menuService: MenuService,
   ) {}
+
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
-      // El código que depende de window
       this.screenWidth = window.innerWidth;
     }
     this.identidad = this._sessionService.getIdentidad();
+    this.getMenus();
+  }
+
+  getMenus() {
     if (this.identidad != null) {
       this._menuService.traerUsuarioMenu(this.identidad.id).subscribe({
         next: (response: any) => {
+          this._route.queryParams.subscribe((params) => {
+            if (params['from'] === 'login') {
+              // Lógica para manejar si viene desde login
+              this.navData = response.data;
+              let ruta = '/' + response.data[0].url;
+              if (response.data[0].sub_menus.length != 0) {
+                ruta = '/' + response.data[0].sub_menus[0].url;
+              }
+              this._router.navigate(['layout' + ruta]);
+            }
+          });
           this.navData = response.data;
-          let ruta = '/' + response.data[0].url;
-          if (response.data[0].sub_menus.length != 0) {
-            ruta = '/' + response.data[0].sub_menus[0].url;
-          }
-          this._router.navigate(['layout' + ruta]);
         },
         error: (err) => {
           console.log('ERROR', err);
         },
       });
-    } else {
-      // this._sessionService.cerrarSesion(); // esto esta de onda
     }
   }
+
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
     this.toggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
@@ -90,9 +100,17 @@ export class NavBarComponent implements OnInit {
     }
     item.expanded = !item.expanded;
   }
+
+  cerraElSideBar() {
+    if (this.screenWidth < 426) {
+      this.toggleCollapsed();
+    }
+  }
+
   getActiveClass(data: Menu): string {
     return this._router.url.includes(data.url) ? 'active' : '';
   }
+
   logout() {
     Swal.fire({
       title: '¿Cerrar sesión?',
@@ -105,5 +123,9 @@ export class NavBarComponent implements OnInit {
         this._sessionService.cerrarSesion();
       }
     });
+  }
+
+  eventoHijo() {
+    this.toggleCollapsed();
   }
 }

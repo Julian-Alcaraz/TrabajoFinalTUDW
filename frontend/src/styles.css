@@ -11,6 +11,7 @@
 body {
   position: relative;
   /* agregar font familyu */
+  background: #f4f7fa;
 }
 .card {
   display: flex;
@@ -20,7 +21,9 @@ body {
   box-shadow: 0 0.25rem 0.5rem #e6edef;
   .card-header {
     padding: 0.7rem 1.5rem;
-    font-size: large;
+    font-size: larger;
+    font-weight: bold;
+    color: black;
     border-bottom: 1px solid #edf1f7;
   }
   .card-body {
@@ -76,4 +79,17 @@ body {
 .mat-mdc-snack-bar-container .mdc-snackbar__surface {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+
+/* headers para tablas */
+[mat-header-cell] {
+  background-color: #02204c !important;
+  color: #f4f7fa;
+}
+[mat-header-cell]:first-child {
+  border-top-left-radius: 10px; /* Radio de borde superior izquierdo */
+}
+
+[mat-header-cell]:last-child {
+  border-top-right-radius: 10px; /* Radio de borde superior derecho */
 }

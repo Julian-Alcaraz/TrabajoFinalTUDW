@@ -4,7 +4,7 @@ import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Menu } from '../../menu/entities/menu.entity';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 
-@Entity({ name: 'roles' })
+@Entity({ name: 'rol' })
 export class Rol extends EntidadBasica {
   @Column({ type: 'varchar', length: 100 }) // , unique: true
   nombre: string;

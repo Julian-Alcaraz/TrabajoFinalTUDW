@@ -1,17 +1,20 @@
 import { Length, IsNotEmpty, IsString, IsInt, IsOptional, IsPositive, IsArray, IsNumber, ArrayNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateMenuDto {
   @ApiProperty({ description: 'Label del menu' })
   @IsNotEmpty({ message: 'El label no puede estar vacio' })
   @IsString({ message: 'El label debe ser un string' })
   @Length(1, 100, { message: 'El label debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly label: string;
 
   @ApiProperty({ description: 'URL del menu' })
   @IsNotEmpty({ message: 'La URL no puede estar vacía' })
   @IsString({ message: 'La URL debe ser un string' })
   @Length(1, 100, { message: 'La URL debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
   readonly url: string;
 
   @ApiProperty({ description: 'Orden en el que se mostrará el menu' })
@@ -31,6 +34,7 @@ export class CreateMenuDto {
   @ApiProperty({ description: 'Icon del menu' })
   @IsString({ message: 'El icon debe ser un string' })
   @IsOptional()
+  @Transform(({ value }) => value.trim())
   readonly icon?: string;
 
   @ApiProperty({ description: 'ID del padre del menu' })

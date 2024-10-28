@@ -12,12 +12,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Usuario } from '../../../../models/usuario.model';
 import { SessionService } from '../../../../services/session.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule],
-
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -48,6 +48,11 @@ export class FormUsuarioComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.obtenerRoles();
+    this.esCargaOedicion();
+  }
+
+  obtenerRoles() {
     this._rolesService.obtenerRoles().subscribe({
       next: (response: any) => {
         this.roles = response.data;
@@ -56,6 +61,9 @@ export class FormUsuarioComponent implements OnInit {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });
+  }
+
+  esCargaOedicion() {
     if (!this.esFormulario && this.usuario) {
       this._usuarioService.obtenerUsuarioxId(this.usuario.id).subscribe({
         next: (response: any) => {
@@ -78,7 +86,6 @@ export class FormUsuarioComponent implements OnInit {
       });
     }
   }
-
   onCheckboxChange(e: any) {
     const rolesArray: FormArray = this.userForm.get('roles_ids') as FormArray;
     if (e.target.checked) {
@@ -103,52 +110,71 @@ export class FormUsuarioComponent implements OnInit {
   }
   cargarUsuario() {
     if (this.userForm.valid) {
-      const data = this.userForm.value;
-      data.contrasenia = String(this.userForm.value.dni);
-      data.fe_nacimiento = data.fe_nacimiento.toISOString();
-      data.roles_ids = data.roles_ids.map(Number);
-      this._usuarioService.cargarUsuario(data).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            this.userForm.reset();
-          }
-        },
-        error: (err) => {
-          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        },
+      Swal.fire({
+        title: '¿Cargar nuevo usuario?',
+        showDenyButton: true,
+        confirmButtonColor: '#3f77b4',
+        confirmButtonText: 'Confirmar',
+        denyButtonText: `Cancelar`,
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          const data = this.userForm.value;
+          data.contrasenia = String(this.userForm.value.dni);
+          data.roles_ids = data.roles_ids.map(Number);
+          this._usuarioService.cargarUsuario(data).subscribe({
+            next: (response: any) => {
+              if (response.success) {
+                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                this.userForm.reset();
+              }
+            },
+            error: (err) => {
+              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+            },
+          });
+        }
       });
     }
   }
 
   editarUsuario() {
     if (this.usuario) {
-      const stringFechaActual = String(new Date(String(this.usuarioActual?.fe_nacimiento) + 'T12:00:00'));
-      const stringFechaMod = String(this.userForm.value.fe_nacimiento);
-      const valorFecha = this.userForm.value.fe_nacimiento.toISOString();
-      const data = {
-        ...(this.usuarioActual?.dni !== this.userForm.value.dni && { dni: this.userForm.value.dni }),
-        ...(this.usuarioActual?.nombre !== this.userForm.value.nombre && { nombre: this.userForm.value.nombre }),
-        ...(this.usuarioActual?.apellido !== this.userForm.value.apellido && { apellido: this.userForm.value.apellido }),
-        ...(this.usuarioActual?.email !== this.userForm.value.email && { email: this.userForm.value.email }),
-        ...(stringFechaActual !== stringFechaMod && { fe_nacimiento: valorFecha }),
-      };
-      this._usuarioService.modificarUsuario(this.usuario.id, data).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            const identidadN = {
-              ...response.data,
-              roles_ids: this.usuario?.roles_ids,
-            };
-            this._sessionService.setIdentidad(identidadN);
-            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-          } else {
-            MostrarNotificacion.mensajeError(this.snackBar, response.message);
-          }
-        },
-        error: (err: any) => {
-          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        },
+      Swal.fire({
+        title: '¿Modificar tu usuario?',
+        showDenyButton: true,
+        confirmButtonColor: '#3f77b4',
+        confirmButtonText: 'Confirmar',
+        denyButtonText: `Cancelar`,
+      }).then((result: any) => {
+        if (result.isConfirmed && this.usuario) {
+          const stringFechaActual = String(new Date(String(this.usuarioActual?.fe_nacimiento) + 'T12:00:00'));
+          const stringFechaMod = String(this.userForm.value.fe_nacimiento);
+          const valorFecha = this.userForm.value.fe_nacimiento.toISOString();
+          const data = {
+            ...(this.usuarioActual?.dni !== this.userForm.value.dni && { dni: this.userForm.value.dni }),
+            ...(this.usuarioActual?.nombre !== this.userForm.value.nombre && { nombre: this.userForm.value.nombre }),
+            ...(this.usuarioActual?.apellido !== this.userForm.value.apellido && { apellido: this.userForm.value.apellido }),
+            ...(this.usuarioActual?.email !== this.userForm.value.email && { email: this.userForm.value.email }),
+            ...(stringFechaActual !== stringFechaMod && { fe_nacimiento: valorFecha }),
+          };
+          this._usuarioService.modificarUsuario(this.usuario.id, data).subscribe({
+            next: (response: any) => {
+              if (response.success) {
+                const identidadN = {
+                  ...response.data,
+                  roles_ids: this.usuario?.roles_ids,
+                };
+                this._sessionService.setIdentidad(identidadN);
+                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+              } else {
+                MostrarNotificacion.mensajeError(this.snackBar, response.message);
+              }
+            },
+            error: (err: any) => {
+              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+            },
+          });
+        }
       });
     } else {
       MostrarNotificacion.mensajeError(this.snackBar, 'No se esta editando ningun usuario.');
