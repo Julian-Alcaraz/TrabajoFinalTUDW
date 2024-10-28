@@ -134,8 +134,7 @@ function estadoNutricional(pcimc: number) {
   if (pcimc < 4) return 'B Bajo peso/Desnutrido';
   if (pcimc >= 4 && pcimc < 10) return 'A Riesgo Nutricional';
   if (pcimc >= 10 && pcimc < 85) return 'C Eutrófico';
-  // if (pcimc >= 85 && pcimc < 95) no deberia ser 95???
-  if (pcimc >= 85 && pcimc < 98) return 'D Sobrepeso';
+  if (pcimc >= 85 && pcimc < 95) return 'D Sobrepeso';
   if (pcimc >= 95) return 'E Obesidad';
 }
 
@@ -152,7 +151,7 @@ function clasificacionDental(dR, dIr) {
     return 'BAJO INDICE DE CARIES';
   } else if (dIr == 1) {
     return 'MODERADO INDICE DE CARIES';
-  } else if (dIr >= 1) {
+  } else if (dIr > 1) {
     return 'ALTO INDICE DE CARIES';
   } else {
     return 'SIN CLASIFICACIÓN';

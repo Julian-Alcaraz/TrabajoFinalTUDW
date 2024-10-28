@@ -219,6 +219,15 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
         {
+          url: 'chicos/:id/editar',
+          label: 'Editar Chico',
+          orden: 4,
+          icon: '',
+          roles: [roles[0], roles[1], roles[2]],
+          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          deshabilitado: true,
+        },
+        {
           url: 'consultas/clinica/nueva',
           label: 'Clinica',
           orden: 4,
