@@ -1,0 +1,16 @@
+{
+  "routes": [
+    "/layout",
+    "/layout/chicos/list",
+    "/layout/chicos/nuevo",
+    "/layout/consultas/clinica/nueva",
+    "/layout/consultas/fonoaudiologia/nueva",
+    "/layout/consultas/odontologia/nueva",
+    "/layout/consultas/oftalmologia/nueva",
+    "/layout/dashboard",
+    "/layout/usuarios/list",
+    "/layout/usuarios/miUsuario",
+    "/layout/usuarios/nuevo",
+    "/login"
+  ]
+}
