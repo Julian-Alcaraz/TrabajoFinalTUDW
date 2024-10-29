@@ -16,7 +16,7 @@ export class ApiEmailsService {
     // PRUEBAS:
     // return { status: 'invalid' };
 
-    // FUNCIONANDO: 
+    // FUNCIONANDO:
     // try {
     //   const response = await lastValueFrom(this.httpService.get(url));
     //   console.log('RESPONSE DATA DE LA APLI MAILS:');

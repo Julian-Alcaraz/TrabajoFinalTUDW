@@ -131,7 +131,8 @@ export class FormChicosComponent implements OnInit {
     this.loadingLocalidades = true;
     this._apiGeorefService.obtenerLocalidades(provincia).subscribe({
       next: (response: any) => {
-        this.localidades = response.localidades;
+        console.log(response);
+        this.localidades = response.data.localidades;
         this.loadingLocalidades = false;
       },
       error: (err: any) => {
