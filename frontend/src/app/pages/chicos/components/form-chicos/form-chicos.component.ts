@@ -360,16 +360,27 @@ export class FormChicosComponent implements OnInit {
     this._dialog.closeAll();
     this.chicoForm.get('id_localidad')?.setValue('');
   }
-  public provinciasxpais:[{nombre:string}] |null =null;
+
+
+  public provinciasxpais: [{ countryCode: string; countryName: string; name: string; toponymName: string }] | null = null;
+  public loadingProvinces = false;
   onChangePais() {
-    console.log('cambio de pais');
+    this.loadingProvinces = true;
     const codigo = this.chicoForm.get('pais')?.value;
     this._localidadService.buscarProvinciasxPais(codigo).subscribe({
       next: (response) => {
-        console.log(response)
-        this.provinciasxpais = response;
+        console.log(response);
+        if(response.success){
+          this.loadingProvinces = false;
+          this.provinciasxpais = response.data.provinces;
+          MostrarNotificacion.mensajeExito(this.snackBar,response.message)
+        }else{
+          this.loadingProvinces = false;
+          MostrarNotificacion.mensajeError(this.snackBar,response.message)
+        }
       },
       error: (err) => {
+        this.loadingProvinces = false;
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });

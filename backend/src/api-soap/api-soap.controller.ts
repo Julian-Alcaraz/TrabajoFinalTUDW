@@ -13,8 +13,20 @@ export class ApiSoapController {
   }
 
   @Post('provinces')
-  findAll(@Body() body: { pais: string }) {
-    return this.apiSoapService.findAll(body.pais);
+  async findAll(@Body() body: { pais: string }) {
+    const response = await this.apiSoapService.findAll(body.pais);
+    if (response.total > 0) {
+      return {
+        success: true,
+        data: response,
+        message: 'Provincias encontradas',
+      };
+    } else {
+      return {
+        success: false,
+        data: response,
+        message: 'Provincias no encontradas',
+      };
+    }
   }
-
 }

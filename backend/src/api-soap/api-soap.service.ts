@@ -10,7 +10,7 @@ export class ApiSoapService {
     return 'This action adds a new apiSoap';
   }
   // la idea es que venga el codigo pais
-  async findAll(codigoPais = 'AR'): Promise<any> {
+  async findAll(codigoPais = 'AR'): Promise<{ total: number; provinces: object }> {
     try {
       // const codigoPais = 'AR' | 'CL';
       console.log(codigoPais);
@@ -48,5 +48,4 @@ export class ApiSoapService {
       throw new Error(`ERORR TRAYENDO LA DATA XML: ${error.message}`);
     }
   }
-
 }
