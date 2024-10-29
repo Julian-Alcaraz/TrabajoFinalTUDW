@@ -5,13 +5,13 @@ import { GLOBAL } from './global';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiGeorefService {
+export class ApiEmailsService {
   private url: string;
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  obtenerLocalidades(provincia: string) {
-    return this._http.get(this.url + 'api-georef/'+provincia);
+  validarEmail(email: string) {
+    return this._http.get(this.url + 'api-emails/'+email);
   }
 }

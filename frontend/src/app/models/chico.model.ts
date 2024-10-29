@@ -15,7 +15,7 @@ export class Chico {
     public nombre_madre: string,
     public barrio?: Barrio,
     public deshabilitado?: boolean,
-    public fe_nacimiento?: Date,
+    public fe_nacimiento?: Date, // POR QUE ES OPCIONAL ?
   ) {}
 
   static overload_constructor() {

@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Usuario } from '../../../../models/usuario.model';
 import { SessionService } from '../../../../services/session.service';
 import Swal from 'sweetalert2';
+import { ApiEmailsService } from '../../../../services/api-emails.service';
+import { ApiEmails } from '../../../../models/api-emails.model';
 
 @Component({
   selector: 'app-form-usuario',
@@ -31,10 +33,14 @@ export class FormUsuarioComponent implements OnInit {
   public selectCheckbox = true;
   public estaEditando = false;
   public usuarioActual: Usuario | null = null;
+  public apiEmail: ApiEmails | null = null;
+  public verifyingEmail = false;
+
   constructor(
     private fb: FormBuilder,
     private _usuarioService: UsuarioService,
     private _rolesService: RolesService,
+    private _apiEmailService: ApiEmailsService,
     private snackBar: MatSnackBar,
     private _sessionService: SessionService,
   ) {
@@ -50,6 +56,27 @@ export class FormUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerRoles();
     this.esCargaOedicion();
+  }
+
+  onChangeEmail() {
+    this.userForm.get('email')?.updateValueAndValidity();
+    if (this.userForm.get('email')?.valid) {
+      this.validarEmail(this.userForm.get('email')?.value);
+    }
+  }
+
+  validarEmail(email: string) {
+    this.verifyingEmail = true;
+    this._apiEmailService.validarEmail(email).subscribe({
+      next: (response: any) => {
+        this.apiEmail = response.data;
+        this.verifyingEmail = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.verifyingEmail = false;
+      },
+    });
   }
 
   obtenerRoles() {

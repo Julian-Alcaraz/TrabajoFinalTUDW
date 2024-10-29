@@ -86,7 +86,7 @@ export class FormChicosComponent implements OnInit {
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       id_barrio: [{ value: '', disabled: this.esFormulario ? false : true }, [Validators.required]],
-      id_localidad: ['', [Validators.required]],
+      id_localidad: [{ value: '', disabled: true }, [Validators.required]],
       pais: ['', [Validators.required]],
       provincia: ['', [Validators.required]],
     });
@@ -102,7 +102,7 @@ export class FormChicosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obtenerLocalidades();
+    // this.obtenerLocalidades();
     this.esCargaOedicion();
   }
 
@@ -125,12 +125,17 @@ export class FormChicosComponent implements OnInit {
     }
   }
 
-  obtenerLocalidades(): any {
-    this._apiGeorefService.obtenerLocalidades().subscribe({
+  public loadingLocalidades = false;
+
+  obtenerLocalidades(provincia: string): any {
+    this.loadingLocalidades = true;
+    this._apiGeorefService.obtenerLocalidades(provincia).subscribe({
       next: (response: any) => {
         this.localidades = response.localidades;
+        this.loadingLocalidades = false;
       },
       error: (err: any) => {
+        this.loadingLocalidades = false;
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });
@@ -195,7 +200,7 @@ export class FormChicosComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.cerraModalLocalidad();
-                this.obtenerLocalidades();
+                // this.obtenerLocalidades();
                 this.localidadForm.get('id_localidad')?.setValue('');
                 // Aca se podria poner la localidad recien creada como seleccionada
               }
@@ -361,22 +366,38 @@ export class FormChicosComponent implements OnInit {
     this.chicoForm.get('id_localidad')?.setValue('');
   }
 
-
   public provinciasxpais: [{ countryCode: string; countryName: string; name: string; toponymName: string }] | null = null;
   public loadingProvinces = false;
+
+  onChangeProvincia() {
+    const codigo = this.chicoForm.get('pais')?.value;
+    if (codigo === 'AR') {
+      this.chicoForm.get('id_localidad')?.enable();
+      this.obtenerLocalidades(this.chicoForm.get('provincia')?.value);
+    } else {
+      this.chicoForm.get('id_localidad')?.disable();
+    }
+  }
+
   onChangePais() {
     this.loadingProvinces = true;
     const codigo = this.chicoForm.get('pais')?.value;
+    if (codigo === 'AR' && this.chicoForm.get('provincia')?.value) {
+      this.chicoForm.get('id_localidad')?.enable();
+    } else {
+      this.chicoForm.get('id_localidad')?.disable();
+    }
     this._localidadService.buscarProvinciasxPais(codigo).subscribe({
       next: (response) => {
         console.log(response);
-        if(response.success){
+        if (response.success) {
           this.loadingProvinces = false;
           this.provinciasxpais = response.data.provinces;
-          MostrarNotificacion.mensajeExito(this.snackBar,response.message)
-        }else{
+          console.log(this.provinciasxpais);
+          MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+        } else {
           this.loadingProvinces = false;
-          MostrarNotificacion.mensajeError(this.snackBar,response.message)
+          MostrarNotificacion.mensajeError(this.snackBar, response.message);
         }
       },
       error: (err) => {
