@@ -4,7 +4,7 @@ import { GLOBAL } from './global';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalidadService {
   private url: string;
@@ -22,5 +22,10 @@ export class LocalidadService {
 
   cargarLocalidad(data: any): Observable<any> {
     return this._http.post(this.url + 'localidad', data);
+  }
+
+  buscarProvinciasxPais(data: any): Observable<any> {
+    const params = { pais: data };
+    return this._http.post(this.url + 'api-soap/provinces', params);
   }
 }

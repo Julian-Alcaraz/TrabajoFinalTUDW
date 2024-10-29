@@ -29,6 +29,29 @@ export class FormChicosComponent implements OnInit {
   @Input() esFormulario = true;
   @Input() id_chico: number | null = null;
 
+  public paisesLatinoamerica = [
+    { nombre: 'Argentina', codigo: 'AR' },
+    { nombre: 'Bolivia', codigo: 'BO' },
+    { nombre: 'Brasil', codigo: 'BR' },
+    { nombre: 'Chile', codigo: 'CL' },
+    { nombre: 'Colombia', codigo: 'CO' },
+    { nombre: 'Costa Rica', codigo: 'CR' },
+    { nombre: 'Cuba', codigo: 'CU' },
+    { nombre: 'República Dominicana', codigo: 'DO' },
+    { nombre: 'Ecuador', codigo: 'EC' },
+    { nombre: 'El Salvador', codigo: 'SV' },
+    { nombre: 'Guatemala', codigo: 'GT' },
+    { nombre: 'Honduras', codigo: 'HN' },
+    { nombre: 'México', codigo: 'MX' },
+    { nombre: 'Nicaragua', codigo: 'NI' },
+    { nombre: 'Panamá', codigo: 'PA' },
+    { nombre: 'Paraguay', codigo: 'PY' },
+    { nombre: 'Perú', codigo: 'PE' },
+    { nombre: 'Puerto Rico', codigo: 'PR' },
+    { nombre: 'Uruguay', codigo: 'UY' },
+    { nombre: 'Venezuela', codigo: 'VE' },
+  ];
+
   public searching = false;
   public chicoForm: FormGroup;
   public hoy = new Date();
@@ -48,7 +71,7 @@ export class FormChicosComponent implements OnInit {
     private _dialog: MatDialog,
     private _chicoService: ChicoService,
     private _localidadService: LocalidadService,
-    private _apiGeorefService : ApiGeorefService,
+    private _apiGeorefService: ApiGeorefService,
     private _barrioService: BarrioService,
   ) {
     // Hacer un trim o algo, este es un string valido: "          a                Juan"
@@ -64,6 +87,8 @@ export class FormChicosComponent implements OnInit {
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       id_barrio: [{ value: '', disabled: this.esFormulario ? false : true }, [Validators.required]],
       id_localidad: ['', [Validators.required]],
+      pais: ['', [Validators.required]],
+      provincia: ['', [Validators.required]],
     });
     // Nueva localidad
     this.localidadForm = this.fb.group({
@@ -334,5 +359,19 @@ export class FormChicosComponent implements OnInit {
   cerraModalLocalidad() {
     this._dialog.closeAll();
     this.chicoForm.get('id_localidad')?.setValue('');
+  }
+  public provinciasxpais:[{nombre:string}] |null =null;
+  onChangePais() {
+    console.log('cambio de pais');
+    const codigo = this.chicoForm.get('pais')?.value;
+    this._localidadService.buscarProvinciasxPais(codigo).subscribe({
+      next: (response) => {
+        console.log(response)
+        this.provinciasxpais = response;
+      },
+      error: (err) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 }
