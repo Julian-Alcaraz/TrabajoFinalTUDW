@@ -1,27 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateApiSoapDto } from './dto/create-api-soap.dto';
-import { UpdateApiSoapDto } from './dto/update-api-soap.dto';
-import axios from 'axios';
+import { HttpService } from '@nestjs/axios';
 
 import { parseStringPromise } from 'xml2js';
+import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ApiSoapService {
-  create(createApiSoapDto: CreateApiSoapDto) {
-    return 'This action adds a new apiSoap';
-  }
+  constructor(private readonly httpService: HttpService) {}
   // la idea es que venga el codigo pais
   async findAll(codigoPais = 'AR'): Promise<{ total: number; provinces: object }> {
     try {
       // const codigoPais = 'AR' | 'CL';
-      console.log(codigoPais);
-      // &maxRows=24
       const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`;
+      const headers = { Accept: 'application/xml' };
+      const timeout = 60000;
+      const response = await lastValueFrom(this.httpService.get(url, { headers, timeout }));
 
-      // Hacemos una solicitud GET al microservicio que devuelve XML
-      const response = await axios.get(url, {
-        headers: { Accept: 'application/xml' },
-        timeout: 60000, // Tiempo de espera en milisegundos (aquí, 10 segundos)
-      });
       // Parseamos el XML de respuesta a JSON
       const result = await parseStringPromise(response.data);
       const total = result.geonames.totalResultsCount[0];
