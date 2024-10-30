@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { consultaType, Turno } from '../entities/consulta.entity';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
@@ -18,12 +18,10 @@ export class CreateConsultaDto {
   readonly turno: Turno;
 
   @ApiProperty({ description: 'Obra social de la consulta' })
-  @IsOptional()
   @IsNotEmpty({ message: 'La obra social no puede estar vacio' })
-  @IsString({ message: 'La obra social debe ser un string' })
-  @Length(1, 100, { message: 'La obra social debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly obra_social?: string;
+  @IsBoolean({ message: 'La obra social debe ser un boolean' })
+  // @Transform(({ value }) => value.trim())
+  readonly obra_social: boolean;
 
   @ApiProperty({ description: 'Edad del niño que asiste' })
   @IsNotEmpty({ message: 'La edad no puede estar vacia' })
@@ -49,7 +47,6 @@ export class CreateConsultaDto {
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly id_curso: number;
 
-  // LO CAMBIE A OPCIONAL
   @ApiProperty({ description: 'Observaciones de la consulta' })
   @IsOptional()
   @IsString({ message: 'Las Observaciones debe ser un string' })
@@ -57,6 +54,7 @@ export class CreateConsultaDto {
   @Transform(({ value }) => value.trim())
   readonly observaciones?: string;
 
+  // Validación condicional para "Clinica"
   @ValidateIf((o) => o.type === 'Clinica')
   @IsNotEmpty({ message: 'Los datos de la clínica no pueden estar vacíos cuando el tipo es Clínica' })
   @ValidateNested()

@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+
 import { ConsultaService } from './consulta.service';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('consulta')
 @UseGuards(JwtAuthGuard)
@@ -47,12 +48,12 @@ export class ConsultaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConsultaDto: UpdateConsultaDto) {
-    return this.consultaService.update(+id, updateConsultaDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
+    return this.consultaService.update(id, updateConsultaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.consultaService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.consultaService.remove(id);
   }
 }

@@ -62,6 +62,7 @@ export class NuevaFonoaudiologicaComponent {
         if (result.isConfirmed) {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
+          formValues.obra_social = formValues.obra_social === 'true';
           delete formValues.dni;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
           const data = {

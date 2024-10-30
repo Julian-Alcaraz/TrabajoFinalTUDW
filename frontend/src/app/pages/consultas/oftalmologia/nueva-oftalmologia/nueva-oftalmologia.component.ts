@@ -74,6 +74,7 @@ export class NuevaOftalmologiaComponent {
           formValues.control = formValues.control === 'true';
           formValues.receta = formValues.receta === 'true';
           formValues.anteojos = formValues.anteojos === 'true';
+          formValues.obra_social = formValues.obra_social === 'true';
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
           const data = {
             type: 'Oftalmologia',

@@ -3,7 +3,6 @@ import { Consulta } from './consulta.entity';
 
 @Entity()
 export class Odontologia {
-  // esto lo hago para usar el id de la consulta como primaria y foranea
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 
@@ -11,7 +10,8 @@ export class Odontologia {
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
-  // datos de Odontologia
+  // Datos de Odontologia
+
   @Column({ type: 'boolean' })
   primera_vez: boolean;
 

@@ -13,7 +13,7 @@ import { InputTextComponent } from '../../components/inputs/input-text.component
 import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
 import { InputSelectComponent } from '../../components/inputs/input-select.component';
 import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
-import { InputSelectEnumComponent } from "../../components/inputs/input-select-enum.component";
+import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-clinica',
@@ -22,7 +22,6 @@ import { InputSelectEnumComponent } from "../../components/inputs/input-select-e
   templateUrl: './nueva-clinica.component.html',
   styleUrl: './nueva-clinica.component.css',
 })
-
 export class NuevaClinicaComponent {
   public clinicaForm: FormGroup;
   public opcionesVacunas: string[] = ['Completo', 'Incompleto', 'Se desconoce'];
@@ -42,6 +41,7 @@ export class NuevaClinicaComponent {
       obesidad: [false, [Validators.required]],
       consumo_alcohol: [false, [Validators.required]],
       consumo_drogas: [false, [Validators.required]],
+      consumo_tabaco: [false, [Validators.required]],
       antecedentes_perinatal: [false, [Validators.required]],
       enfermedades_previas: [false, [Validators.required]],
       vacunas: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
@@ -55,15 +55,15 @@ export class NuevaClinicaComponent {
       lenguaje: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       segto: [false, [Validators.required]],
       lacteos: [false, [Validators.required]],
-      infusiones: [false, [Validators.required]],
+      infusiones: ['', [Validators.required]],
       numero_comidas: ['', [Validators.required, ValidarSoloNumeros]],
-      alimentacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      alimentacion: ['', [Validators.required]],
       hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       horas_pantalla: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
       horas_juego_airelibre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
       horas_suenio: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      // Usar ValidarNumerosFloat? y ver maximos y minimos de estos valores:
+      // proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      // Ver maximos y minimos de estos valores:
       pcta: ['', [Validators.required, ValidarNumerosFloat]],
       pcimc: ['', [Validators.required, ValidarNumerosFloat]],
       pct: ['', [Validators.required, ValidarNumerosFloat]],
@@ -110,6 +110,8 @@ export class NuevaClinicaComponent {
           console.log(this.clinicaForm.value);
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
+          formValues.lacteos = formValues.lacteos === 'true';
+          formValues.obra_social = formValues.obra_social === 'true';
           delete formValues.dni;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
           const data = {
@@ -141,4 +143,25 @@ export class NuevaClinicaComponent {
       });
     }
   }
+
+  calcularImc(peso: number, talla: number) {
+    return peso / ((talla / 100) * (talla / 100));
+  }
+
+  calcularEstadoNutricional(pcimc: number) {
+    if (pcimc < 4) return 'B Bajo peso/Desnutrido';
+    if (pcimc >= 4 && pcimc < 10) return 'A Riesgo Nutricional';
+    if (pcimc >= 10 && pcimc < 85) return 'C Eutrófico';
+    if (pcimc >= 85 && pcimc < 95) return 'D Sobrepeso';
+    if (pcimc >= 95) return 'E Obesidad';
+    else return 'Sin clasificacion';
+  }
+
+  calcularTensionArterial(pcta: number) {
+    if (pcta < 90) return 'Normotenso';
+    if (pcta >= 90 && pcta < 95) return 'Riesgo';
+    if (pcta >= 95) return 'Hipertenso';
+    else return 'Sin clasificacion';
+  }
+
 }

@@ -1,10 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+
 import { Consulta } from './consulta.entity';
 
-@Entity()
-// Cambiar a Clinica o cambiar nombre archivo
-export class ClinicaGeneral {
-  // esto lo hago para usar el id de la consulta como primaria y foranea
+@Entity('Clinica')
+export class Clinica {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 
@@ -12,7 +11,8 @@ export class ClinicaGeneral {
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
-  // datos clinica general
+  // Datos clinica general
+
   @Column({ type: 'boolean' })
   diabetes: boolean;
 
@@ -27,6 +27,9 @@ export class ClinicaGeneral {
 
   @Column({ type: 'boolean' })
   consumo_drogas: boolean;
+
+  @Column({ type: 'boolean' })
+  consumo_tabaco: boolean;
 
   @Column({ type: 'boolean' })
   antecedentes_perinatal: boolean;
@@ -91,8 +94,8 @@ export class ClinicaGeneral {
   @Column({ type: 'boolean' })
   lacteos: boolean;
 
-  @Column({ type: 'boolean' })
-  infusiones: boolean; // NO infuciones, ES infusiones
+  @Column({ type: 'varchar', length: 100 })
+  infusiones: string;
 
   @Column({ type: 'int' })
   numero_comidas: number;
@@ -106,6 +109,6 @@ export class ClinicaGeneral {
   @Column({ type: 'varchar', length: 5 })
   horas_suenio: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  proyecto: string;
+  // @Column({ type: 'varchar', length: 100 })
+  // proyecto: string;
 }

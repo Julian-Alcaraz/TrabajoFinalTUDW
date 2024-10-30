@@ -28,6 +28,11 @@ export class CreateClinicaDto {
   @IsBoolean({ message: 'Consumo de drogas debe ser un boleano' })
   readonly consumo_drogas: boolean;
 
+  @ApiProperty({ description: 'Consume tabaco' })
+  @IsNotEmpty({ message: 'Consumo de tabaco no puede estar vacio' })
+  @IsBoolean({ message: 'Consumo de tabaco debe ser un boleano' })
+  readonly consumo_tabaco: boolean;
+
   @ApiProperty({ description: 'Tiene antecedentes perinatal' })
   @IsNotEmpty({ message: 'Antecedente perinatal de drogas no puede estar vacio' })
   @IsBoolean({ message: 'Antecedente perinatal de drogas debe ser un boleano' })
@@ -150,8 +155,10 @@ export class CreateClinicaDto {
 
   @ApiProperty({ description: 'Ingesta de infusiones del niño' })
   @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
-  @IsBoolean({ message: 'Ingesta de infusiones debe ser un boleano' })
-  readonly infusiones: boolean; // NO infuciones, ES infusiones
+  @IsString({ message: 'Ingesta de infusiones debe ser un string' })
+  @Length(1, 100, { message: 'Ingesta de infusiones debe tener entre 1 y 100 caracteres' })
+  @Transform(({ value }) => value.trim())
+  readonly infusiones: string;
 
   @ApiProperty({ description: 'Numero de comidas del niño que asiste' })
   @IsNotEmpty({ message: 'Numero de comidas  no puede estar vacio' })
@@ -174,10 +181,10 @@ export class CreateClinicaDto {
   @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
   readonly horas_suenio: string;
 
-  @ApiProperty({ description: 'Proyecto del niño que asiste' })
-  @IsNotEmpty({ message: 'Proyecto no puede estar vacio' })
-  @IsString({ message: 'Proyecto debe ser un string' })
-  @Length(1, 100, { message: 'Proyecto debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly proyecto: string;
+  // @ApiProperty({ description: 'Proyecto del niño que asiste' })
+  // @IsNotEmpty({ message: 'Proyecto no puede estar vacio' })
+  // @IsString({ message: 'Proyecto debe ser un string' })
+  // @Length(1, 100, { message: 'Proyecto debe tener entre 1 y 100 caracteres' })
+  // @Transform(({ value }) => value.trim())
+  // readonly proyecto: string;
 }

@@ -81,6 +81,7 @@ export class NuevaOdontologiaComponent {
           formValues.ulterior = formValues.ulterior === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.derivacion = formValues.derivacion === 'true';
+          formValues.obra_social = formValues.obra_social === 'true';
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',

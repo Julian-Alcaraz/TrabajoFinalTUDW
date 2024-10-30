@@ -6,30 +6,69 @@
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Peso -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="Ej: 45" idInput="peso" />
+          <app-input-number label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="" idInput="peso" />
         </div>
-        <!-- Altura (talla)   -->
+        <!-- Talla -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Altura - talla (cm)" [control]="controlDeInput('talla')" placeholder=""
-            idInput="talla" />
+          <app-input-number label="Talla (cm)" [control]="controlDeInput('talla')" placeholder="" idInput="talla" />
         </div>
         <!-- Circunferencia de la cintura (cc)-->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Circunferencia de la Cintura" [control]="controlDeInput('cc')" placeholder=""
+          <app-input-number label="Circunferencia de la cintura" [control]="controlDeInput('cc')" placeholder=""
             idInput="cc" />
         </div>
-        <ng-container
-          *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
-          <div class="md:col-span-6 sm:col-span-3">
-            <span>Indice de Masa Corporal: {{ clinicaForm.get('peso')?.value / ( (clinicaForm.get('talla')?.value
-              / 100) * (clinicaForm.get('talla')?.value / 100)) | number: '1.2-2' }}</span>
+        <!-- Percentil de Tension Arterial (PCTA) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Tension Arterial" [control]="controlDeInput('pcta')" placeholder=""
+            idInput="pcta" />
+        </div>
+        <!-- Percentil de Talla (PCT) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Talla (T/E)" [control]="controlDeInput('pct')" placeholder=""
+            idInput="pct" />
+        </div>
+        <!-- Percentil de Índice de Masa Corporal (PCIMC) -->
+        <div class="mt-4 md:col-span-2">
+          <app-input-number label="Percentil de Índice de Masa Corporal" [control]="controlDeInput('pcimc')"
+            placeholder="" idInput="pcimc" />
+        </div>
+        <!-- Calculos -->
+        <ng-container class="mt-4">
+          <div
+            *ngIf="(clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value > 0) || clinicaForm.get('pcimc')?.value > 0 || clinicaForm.get('pcta')?.value > 0"
+            class="bg-yellow-100 border border-yellow-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+            <!-- Calculo IMC (TALLA y PESO) -->
+            <ng-container
+              *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
+              <div class="md:col-span-6 sm:col-span-3">
+                <span class="font-bold">IMC: </span>{{ calcularImc(clinicaForm.get('peso')?.value,
+                clinicaForm.get('talla')?.value) | number: '1.2-2' }}
+              </div>
+            </ng-container>
+            <!-- Calculo estado nutricional (PCIMC)-->
+            <ng-container
+              *ngIf="clinicaForm.get('pcimc')?.value !== null && clinicaForm.get('pcimc')?.value !== '' && clinicaForm.get('pcimc')?.value > 0">
+              <div class="md:col-span-6 sm:col-span-3">
+                <span class="font-bold">Estado nutricional:
+                </span><span>{{ calcularEstadoNutricional(clinicaForm.get('pcimc')?.value) }}</span>
+              </div>
+            </ng-container>
+            <!-- Calculo tension arterial (PCTA) -->
+            <ng-container
+              *ngIf="clinicaForm.get('pcta')?.value !== null && clinicaForm.get('pcta')?.value !== '' && clinicaForm.get('pcta')?.value > 0">
+              <div class="md:col-span-6 sm:col-span-3">
+                <span class="font-bold">Tension arterial:
+                </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
+              </div>
+            </ng-container>
           </div>
         </ng-container>
+        <!-- Grupos de checkbox -->
         <div class="md:col-span-6 sm:col-span-3">
           <div class="grid gap-0 md:grid-cols-6">
-            <!-- Grupo de condiciones -->
+            <!-- Grupo de antecedentes familiares -->
             <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico tiene alguna de las siguientes condiciones:</h3>
+              <h3 class="mt-4">Indica si el chico presenta alguno de los siguientes antecedentes familiares:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes"
                   (change)="onChangeCheckbox($event)" />
@@ -37,9 +76,16 @@
                   (change)="onChangeCheckbox($event)" />
                 <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad"
                   (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Consumo problematico de alcohol"
+                  [control]="controlDeInput('consumo_alcohol')" idInput="consumo_alcohol"
+                  (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Consumo problematico de drogas" [control]="controlDeInput('consumo_drogas')"
+                  idInput="consumo_drogas" (change)="onChangeCheckbox($event)" />
+                <app-input-checkbox label="Consumo problematico de tabaco" [control]="controlDeInput('consumo_tabaco')"
+                  idInput="consumo_tabaco" (change)="onChangeCheckbox($event)" />
               </div>
             </div>
-            <!-- Grupo de antecedentes -->
+            <!-- Grupo de antecedentes del chico -->
             <div class="md:col-span-3">
               <h3 class="mt-4">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
               <div class="flex flex-col mt-2">
@@ -50,27 +96,31 @@
                   idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
               </div>
             </div>
-            <!-- Grupo de consumos problemáticos -->
+            <!-- Grupo de consumos problemáticos
             <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico tiene consumos problemáticos de:</h3>
+              <h3 class="mt-4">Indica si el chico tiene antecedentes familiares de consumos problemáticos de:</h3>
               <div class="flex flex-col mt-2">
                 <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')"
                   idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
                 <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
                   (change)="onChangeCheckbox($event)" />
-              </div>
-            </div>
-            <!-- Grupo de lácteos e infusiones -->
-            <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico toma:</h3>
-              <div class="flex flex-col mt-2">
-                <app-input-checkbox label="Lácteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
-                  (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
+                <app-input-checkbox label="Tabaco" [control]="controlDeInput('consumo_tabaco')" idInput="consumo_tabaco"
                   (change)="onChangeCheckbox($event)" />
               </div>
-            </div>
+            </div>-->
+            <!-- Grupo de lácteos -->
           </div>
+        </div>
+        <!-- Lacteos -->
+        <h3 class="mt-4 md:col-span-6">Indica si el chico toma:</h3>
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Lacteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Infusiones -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
+            [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" [valores]="['Té', 'Mate Cocido', 'Otras']" />
         </div>
         <!-- Vacunas -->
         <div class="mt-4 md:col-span-2">
@@ -96,14 +146,14 @@
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
           <label for="ortopedia_traumatologia" class="block mb-4 text-sm font-medium text-gray-900">Ortopedia y
-            Traumatologia <strong>¿Cambiar a text?</strong></label>
+            Traumatologia</label>
           <select formControlName="ortopedia_traumatologia" id="ortopedia_traumatologia"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
             <option value="" disabled selected>Seleccione una opción</option>
             <option value="normal">Normal</option>
             <option value="escoliosis">Escoliosis</option>
             <option value="piePlano">Pie Plano</option>
-            <option value="otras">Otras</option>
+            <option value="otras">Otras(VER!!!!!!!!!!!!!!!)</option>
           </select>
           <div
             *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors && (clinicaForm.get('ortopedia_traumatologia')?.dirty || clinicaForm.get('ortopedia_traumatologia')?.touched)"
@@ -119,8 +169,9 @@
         </div>
         <!-- Alimentacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-text label="Alimentacion" [control]="controlDeInput('alimentacion')" placeholder=""
-            idInput="alimentacion" />
+          <app-input-select-enum label="Alimentacion" [control]="controlDeInput('alimentacion')" idInput="alimentacion"
+            [opciones]="['Mixta y variada', 'Rica en HdC', 'Pobre en fibras','Fiambres',' Frituras']"
+            [valores]="['Mixta y variada', 'Rica en HdC','Pobre en fibras','Fiambres','Frituras']" />
         </div>
         <!-- Numero de Comidas -->
         <div class="mt-4 md:col-span-2">
@@ -129,8 +180,8 @@
         </div>
         <!-- Hidratacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-text label="Hidratacion" [control]="controlDeInput('hidratacion')" placeholder=""
-            idInput="hidratacion" />
+          <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion"
+            [opciones]="['Agua', 'Bebidas edulcoradas']" [valores]="['Agua', 'Bebidas edulcoradas']" />
         </div>
         <h3 class="mt-4 md:col-span-6">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
@@ -148,25 +199,10 @@
           <app-input-text label="Horas de sueño" [control]="controlDeInput('horas_suenio')" placeholder="hh:mm"
             idInput="horas_suenio" />
         </div>
-        <!-- Percentil de Tension Arterial (pcta) -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-number label="Percentil de Tension Arterial(pcta)" [control]="controlDeInput('pcta')"
-            placeholder="" idInput="pcta" />
-        </div>
-        <!-- Percentil de Índice de Masa Corporal (pcimc) -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-number label="Percentil de Índice de Masa Corporal(pcimc)" [control]="controlDeInput('pcimc')"
-            placeholder="" idInput="pcimc" />
-        </div>
-        <!-- Percentillo de Talla - altura (PCT) -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-number label="Percentil de Talla (pct) - altura (T/E)" [control]="controlDeInput('pct')"
-            placeholder="" idInput="pct" />
-        </div>
-        <!-- Proyecto -->
+        <!-- Proyecto
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
-        </div>
+        </div> -->
         <!-- Seguimiento (segto) -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"

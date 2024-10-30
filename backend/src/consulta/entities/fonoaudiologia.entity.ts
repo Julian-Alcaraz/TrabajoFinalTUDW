@@ -3,7 +3,6 @@ import { Consulta } from './consulta.entity';
 
 @Entity()
 export class Fonoaudiologia {
-  // esto lo hago para usar el id de la consulta como primaria y foranea
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 

@@ -1,7 +1,7 @@
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
-import { ClinicaGeneral } from './clinica.entity';
+import { Clinica } from './clinica.entity';
 import { Fonoaudiologia } from './fonoaudiologia.entity';
 import { Odontologia } from './odontologia.entity';
 import { Oftalmologia } from './oftalmologia.entity';
@@ -16,10 +16,12 @@ export type Turno = 'Mañana' | 'Tarde' | 'Noche';
 export class Consulta extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], nullable: true })
   type: consultaType;
+
   @Column({ type: 'enum', enum: ['Mañana', 'Tarde', 'Noche'], nullable: true })
   turno: Turno;
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  obra_social: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  obra_social: boolean;
 
   @Column({ type: 'int', nullable: false })
   edad: number;
@@ -45,8 +47,8 @@ export class Consulta extends EntidadBasica {
   @JoinColumn({ name: 'id_curso' })
   curso: Curso;
 
-  @OneToOne(() => ClinicaGeneral)
-  clinicaGeneral: ClinicaGeneral;
+  @OneToOne(() => Clinica)
+  clinica: Clinica;
 
   @OneToOne(() => Fonoaudiologia)
   fonoaudiologia: Fonoaudiologia;

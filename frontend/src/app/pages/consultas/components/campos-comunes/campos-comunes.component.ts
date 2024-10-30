@@ -6,7 +6,7 @@ import { InputTextComponent } from '../inputs/input-text.component';
 import { InputSelectComponent } from '../inputs/input-select.component';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextareaComponent } from '../inputs/input-textarea.component';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ChicoService } from '../../../../services/chico.service';
 import { catchError, debounceTime, map, of } from 'rxjs';
 import { Chico } from '../../../../models/chico.model';
@@ -88,7 +88,7 @@ export class CamposComunesComponent implements OnInit {
 
     this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
     this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
-    this.form.addControl('obra_social', new FormControl('', [ValidarCampoOpcional(Validators.minLength(3), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)]));
+    this.form.addControl('obra_social', new FormControl('', [Validators.required]));
     this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
     this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
     this.form.addControl('id_curso', new FormControl('', [Validators.required]));

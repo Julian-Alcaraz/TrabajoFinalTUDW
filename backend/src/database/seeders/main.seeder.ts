@@ -12,7 +12,7 @@ import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { Chico } from '../../chico/entities/chico.entity';
 import { Consulta } from '../../consulta/entities/consulta.entity';
-import { ClinicaGeneral } from '../../consulta/entities/clinica.entity';
+import { Clinica } from '../../consulta/entities/clinica.entity';
 import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 import { Odontologia } from '../../consulta/entities/odontologia.entity';
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
@@ -30,7 +30,7 @@ export class MainSeeder implements Seeder {
       const institucionORM = dataSource.getRepository(Institucion);
       const chicoORM = dataSource.getRepository(Chico);
       const consultaORM = dataSource.getRepository(Consulta);
-      const clinicaGeneralORM = dataSource.getRepository(ClinicaGeneral);
+      const clinicaORM = dataSource.getRepository(Clinica);
       const oftalmologiaORM = dataSource.getRepository(Oftalmologia);
       const odontologiaORM = dataSource.getRepository(Odontologia);
       const fonoaudiologiaORM = dataSource.getRepository(Fonoaudiologia);
@@ -462,7 +462,7 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Tarde',
-          obra_social: 'Osde',
+          obra_social: true,
         },
         {
           type: 'Odontologia',
@@ -472,7 +472,7 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Tarde',
-          obra_social: 'ISSN',
+          obra_social: false,
         },
         {
           type: 'Fonoaudiologia',
@@ -495,23 +495,24 @@ export class MainSeeder implements Seeder {
         },
       ]);
       console.log('Seeding consultas clinicas...');
-      const consultasClinicas = await clinicaGeneralORM.save([
+      const consultasClinicas = await clinicaORM.save([
         {
           consulta: consultas[0],
-          alimentacion: 'Buena',
+          alimentacion: 'Mixta y variada',
           antecedentes_perinatal: true,
           cc: 30,
           consumo_alcohol: false,
           consumo_drogas: false,
+          consumo_tabaco: false,
           diabetes: false,
           enfermedades_previas: false,
           examen_visual: 'normal',
-          hidratacion: 'Buena',
+          hidratacion: 'Agua',
           horas_juego_airelibre: '03:00',
           horas_pantalla: '01:00',
           horas_suenio: '09:00',
           hta: false,
-          infusiones: true,
+          infusiones: 'Té',
           lacteos: true,
           lenguaje: 'adecuado',
           numero_comidas: 3,
@@ -524,7 +525,7 @@ export class MainSeeder implements Seeder {
           pcta: 85,
           tension_arterial: 'Normotenso',
           peso: 65,
-          proyecto: 'Control Niño Sano',
+          //proyecto: 'Control Niño Sano',
           segto: false,
           tad: 120,
           talla: 150,
