@@ -148,10 +148,10 @@ export class CreateClinicaDto {
   @Transform(({ value }) => value.trim())
   readonly hidratacion: string;
 
-  @ApiProperty({ description: 'Ingesta de lacteos del niño' })
-  @IsNotEmpty({ message: 'Ingesta de lacteos no puede estar vacio' })
-  @IsBoolean({ message: 'Ingesta de lacteos debe ser un boleano' })
-  readonly lacteos: boolean;
+  @ApiProperty({ description: 'Ingesta de leche del niño' })
+  @IsNotEmpty({ message: 'Ingesta de leche no puede estar vacio' })
+  @IsBoolean({ message: 'Ingesta de leche debe ser un boleano' })
+  readonly leche: boolean;
 
   @ApiProperty({ description: 'Ingesta de infusiones del niño' })
   @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
@@ -160,25 +160,31 @@ export class CreateClinicaDto {
   @Transform(({ value }) => value.trim())
   readonly infusiones: string;
 
-  @ApiProperty({ description: 'Numero de comidas del niño que asiste' })
-  @IsNotEmpty({ message: 'Numero de comidas  no puede estar vacio' })
-  @IsInt({ message: 'Numero de comidas  debe ser un número' })
-  @IsPositive({ message: 'Numero de comidas debe ser un numero positivo' })
-  readonly numero_comidas: number;
+  @ApiProperty({ description: 'Cantidad de comidas del niño que asiste' })
+  @IsNotEmpty({ message: 'Cantidad de comidas  no puede estar vacio' })
+  @IsString({ message: 'Numero de comidas debe ser un string' })
+  @Length(1, 100, { message: 'Numero de comidas debe tener entre 1 y 100 caracteres' })
+  readonly cantidad_comidas: string;
 
   @ApiProperty({ description: 'Horas de pantallas diarias' })
   @IsNotEmpty({ message: 'La hora no puede estar vacía' })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
+  @IsString({ message: 'Horas de pantallas debe ser un string' })
+  @Length(1, 100, { message: 'Horas de pantallas debe tener entre 1 y 100 caracteres' })
+  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
   readonly horas_pantalla: string;
 
-  @ApiProperty({ description: 'Horas de juegeo aire libre' })
-  @IsNotEmpty({ message: 'La hora no puede estar vacía' })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
-  readonly horas_juego_airelibre: string;
+  @ApiProperty({ description: 'Horas de juego al aire libre' })
+  @IsNotEmpty({ message: 'Las horas de juego al aire libre no puede estar vacía' })
+  @IsString({ message: 'Horas de juego al aire libre debe ser un string' })
+  @Length(1, 100, { message: 'Horas de juego al aire libre debe tener entre 1 y 100 caracteres' })
+  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
+  readonly horas_juego_aire_libre: string;
 
-  @ApiProperty({ description: 'Horas de sueño diarias' })
-  @IsNotEmpty({ message: 'La hora no puede estar vacía' })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
+  @ApiProperty({ description: 'Horas de sueño' })
+  @IsNotEmpty({ message: 'Las horas de sueño no puede estar vacía' })
+  @IsString({ message: 'Horas de sueño debe ser un string' })
+  @Length(1, 100, { message: 'Horas de sueño debe tener entre 1 y 100 caracteres' })
+  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
   readonly horas_suenio: string;
 
   // @ApiProperty({ description: 'Proyecto del niño que asiste' })

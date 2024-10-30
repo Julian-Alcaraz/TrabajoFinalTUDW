@@ -92,21 +92,21 @@ export class Clinica {
   hidratacion: string;
 
   @Column({ type: 'boolean' })
-  lacteos: boolean;
+  leche: boolean;
 
   @Column({ type: 'varchar', length: 100 })
   infusiones: string;
 
-  @Column({ type: 'int' })
-  numero_comidas: number;
+  @Column({ type: 'varchar', length: 100 })
+  cantidad_comidas: string;
 
-  @Column({ type: 'varchar', length: 5 })
+  @Column({ type: 'varchar', length: 100 })
   horas_pantalla: string;
 
-  @Column({ type: 'varchar', length: 5 })
-  horas_juego_airelibre: string;
+  @Column({ type: 'varchar', length: 100 })
+  horas_juego_aire_libre: string;
 
-  @Column({ type: 'varchar', length: 5 })
+  @Column({ type: 'varchar', length: 100 })
   horas_suenio: string;
 
   // @Column({ type: 'varchar', length: 100 })

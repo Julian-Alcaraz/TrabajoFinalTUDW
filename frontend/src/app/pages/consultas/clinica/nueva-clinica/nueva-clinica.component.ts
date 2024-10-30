@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarHora, ValidarNumerosFloat, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarNumerosFloat, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputNumberComponent } from '../../components/inputs/input-number.component';
@@ -44,24 +44,23 @@ export class NuevaClinicaComponent {
       consumo_tabaco: [false, [Validators.required]],
       antecedentes_perinatal: [false, [Validators.required]],
       enfermedades_previas: [false, [Validators.required]],
-      vacunas: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      // vacunas: ["", [Validators.required, ValidarCadenaSinEspacios]] AGREGAR ENUM SI LO HAGO DE FORMA DE SELECT
+      vacunas: ['', [Validators.required]],
       talla: ['', [Validators.required, ValidarNumerosFloat]],
       cc: ['', [Validators.required, ValidarNumerosFloat]],
       tas: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
       tad: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      examen_visual: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      ortopedia_traumatologia: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      lenguaje: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      examen_visual: ['', [Validators.required]],
+      ortopedia_traumatologia: ['', [Validators.required]],
+      lenguaje: ['', [Validators.required]],
       segto: [false, [Validators.required]],
-      lacteos: [false, [Validators.required]],
+      leche: ['', [Validators.required]],
       infusiones: ['', [Validators.required]],
-      numero_comidas: ['', [Validators.required, ValidarSoloNumeros]],
+      cantidad_comidas: ['', [Validators.required, ValidarSoloNumeros]],
       alimentacion: ['', [Validators.required]],
       hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      horas_pantalla: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      horas_juego_airelibre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
-      horas_suenio: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarCadenaSinEspacios, ValidarHora]],
+      horas_pantalla: ['', [Validators.required]],
+      horas_juego_aire_libre: ['', [Validators.required]],
+      horas_suenio: ['', [Validators.required]],
       // proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // Ver maximos y minimos de estos valores:
       pcta: ['', [Validators.required, ValidarNumerosFloat]],
@@ -81,23 +80,10 @@ export class NuevaClinicaComponent {
     this.clinicaForm.get(controlName)?.setValue(value);
   }
 
-  verErroresFormulario() {
-    const formErrors: any = {};
-    Object.keys(this.clinicaForm.controls).forEach((controlName) => {
-      const control = this.clinicaForm.get(controlName);
-      if (control && control.errors) {
-        formErrors[controlName] = control.errors;
-      }
-    });
-    console.log('Errores del formulario:', formErrors);
-    return formErrors;
-  }
-
   enviarFormulario() {
     // console.log('FORMULARIO VALIDO:', this.clinicaForm.valid);
     // this.verErroresFormulario();
     // console.log(this.clinicaForm.value);
-    // console.log(this.clinicaForm.value.turno);
     if (this.clinicaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta medica clinica?',
@@ -110,7 +96,7 @@ export class NuevaClinicaComponent {
           console.log(this.clinicaForm.value);
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
-          formValues.lacteos = formValues.lacteos === 'true';
+          formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
           delete formValues.dni;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
@@ -164,4 +150,15 @@ export class NuevaClinicaComponent {
     else return 'Sin clasificacion';
   }
 
+  verErroresFormulario() {
+    const formErrors: any = {};
+    Object.keys(this.clinicaForm.controls).forEach((controlName) => {
+      const control = this.clinicaForm.get(controlName);
+      if (control && control.errors) {
+        formErrors[controlName] = control.errors;
+      }
+    });
+    console.log('Errores del formulario:', formErrors);
+    return formErrors;
+  }
 }

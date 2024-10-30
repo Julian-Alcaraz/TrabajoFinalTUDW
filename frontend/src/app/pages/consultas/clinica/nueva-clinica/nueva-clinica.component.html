@@ -36,7 +36,7 @@
         <ng-container class="mt-4">
           <div
             *ngIf="(clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value > 0) || clinicaForm.get('pcimc')?.value > 0 || clinicaForm.get('pcta')?.value > 0"
-            class="bg-yellow-100 border border-yellow-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+            class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
             <!-- Calculo IMC (TALLA y PESO) -->
             <ng-container
               *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
@@ -114,13 +114,13 @@
         <!-- Lacteos -->
         <h3 class="mt-4 md:col-span-6">Indica si el chico toma:</h3>
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Lacteos" [control]="controlDeInput('lacteos')" idInput="lacteos"
+          <app-input-select-enum label="Leche" [control]="controlDeInput('leche')" idInput="leche"
             [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Infusiones -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
-            [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" [valores]="['Té', 'Mate Cocido', 'Otras']" />
+            [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" [valores]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" />
         </div>
         <!-- Vacunas -->
         <div class="mt-4 md:col-span-2">
@@ -141,7 +141,7 @@
         <!-- Examen Visual -->
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="Examen Visual" [control]="controlDeInput('examen_visual')"
-            idInput="examen_visual" [opciones]="['Normal', 'Anormal']" [valores]="['normal', 'anormal']" />
+            idInput="examen_visual" [opciones]="['Normal', 'Anormal']" [valores]="['Normal', 'Anormal']" />
         </div>
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
@@ -153,7 +153,7 @@
             <option value="normal">Normal</option>
             <option value="escoliosis">Escoliosis</option>
             <option value="piePlano">Pie Plano</option>
-            <option value="otras">Otras(VER!!!!!!!!!!!!!!!)</option>
+            <option value="Otras(VER!!!!!!!)">Otras(VER!!!!!!!)</option>
           </select>
           <div
             *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors && (clinicaForm.get('ortopedia_traumatologia')?.dirty || clinicaForm.get('ortopedia_traumatologia')?.touched)"
@@ -165,7 +165,7 @@
         <!-- Lenguaje -->
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="Lenguaje" [control]="controlDeInput('lenguaje')" idInput="lenguaje"
-            [opciones]="['Adecuado', 'Inadecuado']" [valores]="['adecuado', 'inadecuado']" />
+            [opciones]="['Adecuado', 'Inadecuado']" [valores]="['Adecuado', 'Inadecuado']" />
         </div>
         <!-- Alimentacion -->
         <div class="mt-4 md:col-span-2">
@@ -173,10 +173,11 @@
             [opciones]="['Mixta y variada', 'Rica en HdC', 'Pobre en fibras','Fiambres',' Frituras']"
             [valores]="['Mixta y variada', 'Rica en HdC','Pobre en fibras','Fiambres','Frituras']" />
         </div>
-        <!-- Numero de Comidas -->
+        <!-- Cantidad de Comidas -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Número de Comidas" [control]="controlDeInput('numero_comidas')" placeholder=""
-            idInput="numero_comidas" />
+          <app-input-select-enum label="Cantidad de comidas" [control]="controlDeInput('cantidad_comidas')"
+            idInput="cantidad_comidas" [opciones]="['4','Mayor a 4', 'Menor a 4', 'Picoteo']"
+            [valores]="['4','Mayor a 4', 'Menor a 4', 'Picoteo']" />
         </div>
         <!-- Hidratacion -->
         <div class="mt-4 md:col-span-2">
@@ -186,23 +187,37 @@
         <h3 class="mt-4 md:col-span-6">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
         <div class="mt-4 md:col-span-2">
-          <app-input-text label="Horas de Pantalla" [control]="controlDeInput('horas_pantalla')" placeholder="hh:mm"
-            idInput="horas_pantalla" />
+          <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')"
+            idInput="horas_pantalla" [opciones]="['Menor a 2hs','Entre 2hs y 4hs', 'Más de 6hs']"
+            [valores]="['Menor a 2hs','Entre 2hs y 4hs', 'Mas de 6hs']" />
         </div>
-        <!-- Horas de Juego al aire libre -->
+        <!-- Horas de juego al aire libre -->
         <div class="mt-4 md:col-span-2">
-          <app-input-text label="Horas de Juego al aire libre" [control]="controlDeInput('horas_juego_airelibre')"
-            placeholder="hh:mm" idInput="horas_juego_airelibre" />
+          <app-input-select-enum label="Horas de juego al aire libre"
+            [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre"
+            [opciones]="['Menos de 1h','1h','Más de 1h']" [valores]="['Menos de 1h','1h','Mas de 1h']" />
         </div>
         <!-- Horas de sueño -->
         <div class="mt-4 md:col-span-2">
-          <app-input-text label="Horas de sueño" [control]="controlDeInput('horas_suenio')" placeholder="hh:mm"
-            idInput="horas_suenio" />
+          <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')"
+            idInput="horas_suenio" [opciones]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']"
+            [valores]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Mas de 13hs']" />
         </div>
         <!-- Proyecto
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
         </div> -->
+        <!-- Derivaciones -->
+        <div class="md:col-span-3">
+          <h3 class="mt-4">Indica si hace falta derivar el chico a:</h3>
+          <div class="flex flex-row mt-2">
+            <!-- <app-input-checkbox label="Odontologia"/>
+            <app-input-checkbox label="Oftalmologia"  />
+            <app-input-checkbox label="Fonoaudiologia" />
+            <app-input-checkbox label="Trabajo Social ??? VER!!!"  /> -->
+          </div>
+        </div>
+
         <!-- Seguimiento (segto) -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
