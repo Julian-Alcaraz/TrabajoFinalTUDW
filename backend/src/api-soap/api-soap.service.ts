@@ -12,7 +12,7 @@ export class ApiSoapService {
       // const codigoPais = 'AR' | 'CL';
       const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`;
       const headers = { Accept: 'application/xml' };
-      const timeout = 60000;
+      const timeout = 10000;
       const response = await lastValueFrom(this.httpService.get(url, { headers, timeout }));
 
       // Parseamos el XML de respuesta a JSON

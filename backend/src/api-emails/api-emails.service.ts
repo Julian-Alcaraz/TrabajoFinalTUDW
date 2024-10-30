@@ -14,16 +14,16 @@ export class ApiEmailsService {
     const apiKey = this.configService.getOrThrow('API_EMAILS');
     const url = `https://api.zerobounce.net/v2/validate?api_key=${apiKey}&email=${email}`;
     // PRUEBAS:
-    // return { status: 'invalid' };
+    return { status: 'invalid' };
 
     // FUNCIONANDO:
-    // try {
-    //   const response = await lastValueFrom(this.httpService.get(url));
-    //   console.log('RESPONSE DATA DE LA APLI MAILS:');
-    //   console.log(response.data);
-    //   return response.data;
-    // } catch (error) {
-    //   throw new Error(`Error al validar el mail localidades: ${error.message}`);
-    // }
+        // try {
+        //   const response = await lastValueFrom(this.httpService.get(url));
+        //   console.log('RESPONSE API EMAILS:');
+        //   console.log(response.data);
+        //   return response.data;
+        // } catch (error) {
+        //   throw new Error(`Error al validar el mail: ${error.message}`);
+        // }
   }
 }
