@@ -2,7 +2,7 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,13 +12,16 @@ import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { Consulta } from '../../../models/consulta.model';
 import { DetallesConsultaComponent } from '../components/detalles-consulta/detalles-consulta.component';
+import { InputCheckboxComponent } from '../../consultas/components/inputs/input-checkbox.component';
+import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 
 @Component({
   selector: 'app-ver-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, DetallesConsultaComponent],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, DetallesConsultaComponent, InputCheckboxComponent],
   templateUrl: './ver-chico.component.html',
   styleUrl: './ver-chico.component.css',
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class VerChicoComponent implements OnInit {
   public idConsulta: number | null = null;
@@ -44,15 +47,21 @@ export class VerChicoComponent implements OnInit {
     private _chicoService: ChicoService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private location: Location
+    private location: Location,
   ) {
     this.consultas = new MatTableDataSource<Consulta>([]);
   }
 
   ngOnInit(): void {
     this.obtenerConsultasxChico();
+    this.activateTableFilter();
   }
-
+  activateTableFilter() {
+    this.consultas.filterPredicate = (data: Consulta, filter: string) => {
+      const searchTerms = JSON.parse(filter);
+      return searchTerms.type ? searchTerms.type.includes(data.type) : true;
+    };
+  }
   obtenerConsultasxChico() {
     this.searchingChico = true;
     this.searchingConsultas = true;
@@ -110,7 +119,25 @@ export class VerChicoComponent implements OnInit {
     this.idConsulta = id;
   }
 
-  volver(){
-    this.location.back()
+  volver() {
+    this.location.back();
+  }
+  public typeFiltered:string[] =[];
+
+  onChangeCheckbox(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox?.checked) {
+      this.typeFiltered.push(checkbox.value)
+    } else {
+      this.typeFiltered = this.typeFiltered.filter(item => item !== checkbox.value);
+    }
+    const searchTerms = {
+      ...(this.typeFiltered.length>0 && { type:this.typeFiltered }),
+
+    };
+    this.consultas.filter = JSON.stringify(searchTerms);
+    if (this.consultas.paginator) {
+      this.consultas.paginator.firstPage();
+    }
   }
 }

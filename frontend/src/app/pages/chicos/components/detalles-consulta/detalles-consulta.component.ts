@@ -56,7 +56,6 @@ export class DetallesConsultaComponent implements OnInit, OnChanges {
     if (this.idConsulta) {
       this._consultaService.obtenerConsultaxId(this.idConsulta).subscribe({
         next: (response: any) => {
-          console.log(response);
           if (response.success) {
             this.hayConsulta = true;
             this.convertirData(response.data);

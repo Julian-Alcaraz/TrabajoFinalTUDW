@@ -91,6 +91,26 @@
           </div>
           @if (resultsLength > 0) {
             <h3 class="text-black text-lg sm:text-xl font-bold leading-tight tracking-tight break-words max-w-full px-2 sm:px-4 pb-2 pt-4">Historial de consultas</h3>
+
+            <h4 class="text-black font-bold leading-tight tracking-tight break-words max-w-full px-2 pb-2 pt-2">Filtrar por Tipo</h4>
+            <div class="flex flex-row my-2">
+              <div class="flex items-center">
+                <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Clinica" class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
+                <label for="clinica" class="text-sm font-medium text-gray-900">Clinica</label>
+              </div>
+              <div class="flex items-center">
+                <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Odontologia" class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
+                <label for="clinica" class="text-sm font-medium text-gray-900">Odontologia</label>
+              </div>
+              <div class="flex items-center">
+                <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Fonoaudiologia" class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
+                <label for="clinica" class="text-sm font-medium text-gray-900">Fonoaudiologia</label>
+              </div>
+              <div class="flex items-center">
+                <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Oftalmologia" class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
+                <label for="clinica" class="text-sm font-medium text-gray-900">Oftalmologia</label>
+              </div>
+            </div>
             <div class="scroll">
               <table mat-table [dataSource]="consultas" class="mat-elevation-z8 table-auto scroll">
                 <!-- # -->
@@ -152,6 +172,7 @@
                 <tr mat-header-row *matHeaderRowDef="consultasColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: consultasColumns" (click)="obtenerConsulta(row.id)" class="cursor-pointer hover:bg-gray-300" [ngClass]="{ selected: row.id === idConsulta }"></tr>
               </table>
+              <mat-paginator [length]="consultas.data.length" [pageSize]="5" [pageSizeOptions]="[5,10]"></mat-paginator>
               <!-- Detalles -->
             </div>
             @if (idConsulta) {
