@@ -18,6 +18,7 @@ export class ApiEmails {
     public city: string,
     public zipcode: number,
     public processed_at: Date,
+    public error?: string,
   ) {}
 
   static overload_constructor() {

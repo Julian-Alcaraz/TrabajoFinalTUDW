@@ -61,6 +61,7 @@ export class FormUsuarioComponent implements OnInit {
   onChangeEmail() {
     this.userForm.get('email')?.updateValueAndValidity();
     if (this.userForm.get('email')?.valid) {
+      console.log('Voy a validar');
       this.validarEmail(this.userForm.get('email')?.value);
     }
   }
@@ -70,6 +71,7 @@ export class FormUsuarioComponent implements OnInit {
     this._apiEmailService.validarEmail(email).subscribe({
       next: (response: any) => {
         this.apiEmail = response.data;
+        console.log('FRONTEND: ', this.apiEmail?.error);
         this.verifyingEmail = false;
       },
       error: (err: any) => {

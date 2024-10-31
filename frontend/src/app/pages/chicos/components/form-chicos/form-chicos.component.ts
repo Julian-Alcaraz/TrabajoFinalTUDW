@@ -17,6 +17,7 @@ import { BarrioService } from '../../../../services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '../../../../models/chico.model';
 import { ApiGeorefService } from '../../../../services/api-georef.service';
+import { ApiSoapGeoNamesService } from '../../../../services/api-soap-geonames.service';
 
 @Component({
   selector: 'app-form-chicos',
@@ -73,6 +74,7 @@ export class FormChicosComponent implements OnInit {
     private _localidadService: LocalidadService,
     private _apiGeorefService: ApiGeorefService,
     private _barrioService: BarrioService,
+    private _apiSoapGeoNamesService: ApiSoapGeoNamesService,
   ) {
     // Hacer un trim o algo, este es un string valido: "          a                Juan"
     this.chicoForm = this.fb.group({
@@ -388,7 +390,7 @@ export class FormChicosComponent implements OnInit {
     } else {
       this.chicoForm.get('id_localidad')?.disable();
     }
-    this._localidadService.buscarProvinciasxPais(codigo).subscribe({
+    this._apiSoapGeoNamesService.buscarProvinciasxPais(codigo).subscribe({
       next: (response) => {
         console.log(response);
         if (response.success) {

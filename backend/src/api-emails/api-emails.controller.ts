@@ -10,37 +10,17 @@ export class ApiEmailsController {
   @Get(':email')
   async validarEmail(@Param('email') email: string) {
     const response = await this.apiEmailsService.validarEmail(email);
+    if (response.error) {
+      return {
+        success: false,
+        data: response,
+        message: 'Error al validar',
+      };
+    }
     return {
       success: true,
       data: response,
       message: 'Email validado con exito',
     };
   }
-
-  /*
-  @Post()
-  create(@Body() createApiEmailDto: CreateApiEmailDto) {
-    return this.apiEmailsService.create(createApiEmailDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.apiEmailsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.apiEmailsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateApiEmailDto: UpdateApiEmailDto) {
-    return this.apiEmailsService.update(+id, updateApiEmailDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.apiEmailsService.remove(+id);
-  }
-    */
 }

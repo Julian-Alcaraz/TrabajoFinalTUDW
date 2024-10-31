@@ -79,7 +79,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
             </svg>
-            <span class="font-semibold ">Error, email no valido</span>
+            <span class="font-semibold ">Error, el email no existe.</span>
           </div>
         </div>
       </div>
@@ -93,11 +93,24 @@
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p class="text-green-600">Email valido</p>
+          <p class="text-green-600">Email valido.</p>
         </div>
       </div>
     </ng-container>
-
+    <ng-container *ngIf="apiEmail?.error">
+      <div class="md:col-span-1 sm:col-span-1">
+        <div class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
+          <div class="flex items-center md:gap-2 sm:gap-2">
+            <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+            </svg>
+            <span class="font-semibold ">Error de api de validacion de emails: {{ apiEmail?.error }}.</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
     <div>
       <label for="" class="block mb-2 text-sm font-medium text-gray-900">Fecha nacimiento</label>
       <mat-form-field class="">

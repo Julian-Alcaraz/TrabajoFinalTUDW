@@ -23,9 +23,4 @@ export class LocalidadService {
   cargarLocalidad(data: any): Observable<any> {
     return this._http.post(this.url + 'localidad', data);
   }
-
-  buscarProvinciasxPais(data: any): Observable<any> {
-    const params = { pais: data };
-    return this._http.post(this.url + 'api-soap/provinces', params);
-  }
 }
