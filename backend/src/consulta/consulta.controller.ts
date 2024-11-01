@@ -47,6 +47,18 @@ export class ConsultaController {
     };
   }
 
+  @Get('primeraVezChico/:id/:tipoConsulta')
+  @ApiOperation({ summary: 'Devuelte si es la primera vez del chico en una consulta o no' })
+  @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
+  async esPrimeraVez(@Param('id', ParseIntPipe) id: number, @Param('tipoConsulta') tipoConsulta: string) {
+    const respuesta = await this.consultaService.esPrimeraVez(id, tipoConsulta);
+    return {
+      success: true,
+      data: respuesta,
+      message: 'Primera vez obtenida con exito.',
+    };
+  }
+
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
     return this.consultaService.update(id, updateConsultaDto);

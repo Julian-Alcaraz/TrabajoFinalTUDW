@@ -11,10 +11,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputTextComponent } from '../../components/inputs/input-text.component';
-import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
-import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
-import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
+import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
+import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
@@ -79,7 +79,7 @@ export class NuevaOftalmologiaComponent {
           const data = {
             type: 'Oftalmologia',
             turno,
-            ...(obra_social && { obra_social }),
+            obra_social,
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
             id_chico: id_chico,

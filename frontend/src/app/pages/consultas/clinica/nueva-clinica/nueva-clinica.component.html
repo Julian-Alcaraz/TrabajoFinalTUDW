@@ -39,23 +39,21 @@
             class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
             <!-- Calculo IMC (TALLA y PESO) -->
             <ng-container
-              *ngIf="clinicaForm.get('talla')?.value !== null && clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value !== null && clinicaForm.get('peso')?.value > 0">
+              *ngIf="clinicaForm.get('talla')?.value !== '' && clinicaForm.get('talla')?.value > 0 && clinicaForm.get('peso')?.value !== '' && clinicaForm.get('peso')?.value > 0">
               <div class="md:col-span-6 sm:col-span-3">
                 <span class="font-bold">IMC: </span>{{ calcularImc(clinicaForm.get('peso')?.value,
                 clinicaForm.get('talla')?.value) | number: '1.2-2' }}
               </div>
             </ng-container>
             <!-- Calculo estado nutricional (PCIMC)-->
-            <ng-container
-              *ngIf="clinicaForm.get('pcimc')?.value !== null && clinicaForm.get('pcimc')?.value !== '' && clinicaForm.get('pcimc')?.value > 0">
+            <ng-container *ngIf="clinicaForm.get('pcimc')?.value !== '' && clinicaForm.get('pcimc')?.value > 0">
               <div class="md:col-span-6 sm:col-span-3">
                 <span class="font-bold">Estado nutricional:
                 </span><span>{{ calcularEstadoNutricional(clinicaForm.get('pcimc')?.value) }}</span>
               </div>
             </ng-container>
             <!-- Calculo tension arterial (PCTA) -->
-            <ng-container
-              *ngIf="clinicaForm.get('pcta')?.value !== null && clinicaForm.get('pcta')?.value !== '' && clinicaForm.get('pcta')?.value > 0">
+            <ng-container *ngIf="clinicaForm.get('pcta')?.value !== '' && clinicaForm.get('pcta')?.value > 0">
               <div class="md:col-span-6 sm:col-span-3">
                 <span class="font-bold">Tension arterial:
                 </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
@@ -120,7 +118,8 @@
         <!-- Infusiones -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones"
-            [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" [valores]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" />
+            [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']"
+            [valores]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" />
         </div>
         <!-- Vacunas -->
         <div class="mt-4 md:col-span-2">
@@ -145,7 +144,7 @@
         </div>
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
-          <label for="ortopedia_traumatologia" class="block mb-4 text-sm font-medium text-gray-900">Ortopedia y
+          <!-- <label for="ortopedia_traumatologia" class="block mb-4 text-sm font-medium text-gray-900">Ortopedia y
             Traumatologia</label>
           <select formControlName="ortopedia_traumatologia" id="ortopedia_traumatologia"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -160,7 +159,10 @@
             class="text-red-600 text-sm">
             <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['required']">Debe seleccionar una opción.
             </div>
-          </div>
+          </div> -->
+          <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')"
+            idInput="ortopedia_traumatologia" [opciones]="['Normal', 'Escoliosis', 'Pie Plano','Otras(VER!!!!!!!)']"
+            [valores]="['Normal', 'Escoliosis', 'Pie Plano','Otras(VER!!!!!!!)']" />
         </div>
         <!-- Lenguaje -->
         <div class="mt-4 md:col-span-2">
@@ -211,13 +213,16 @@
         <div class="md:col-span-3">
           <h3 class="mt-4">Indica si hace falta derivar el chico a:</h3>
           <div class="flex flex-row mt-2">
-            <!-- <app-input-checkbox label="Odontologia"/>
-            <app-input-checkbox label="Oftalmologia"  />
-            <app-input-checkbox label="Fonoaudiologia" />
-            <app-input-checkbox label="Trabajo Social ??? VER!!!"  /> -->
+            <app-input-checkbox label="Odontologia" [control]="controlDeInput('derivacion_odontologia')"
+              idInput="derivacion_odontologia" (change)="onChangeCheckbox($event)" />
+            <app-input-checkbox label="Oftalmologia" [control]="controlDeInput('derivacion_oftalmologia')"
+              idInput="derivacion_oftalmologia" (change)="onChangeCheckbox($event)" />
+            <app-input-checkbox label="Fonoaudiologia" [control]="controlDeInput('derivacion_fonoaudiologia')"
+              idInput="derivacion_fonoaudiologia" (change)="onChangeCheckbox($event)" />
+            <app-input-checkbox label="Externa" [control]="controlDeInput('derivacion_externa')"
+              idInput="derivacion_externa" (change)="onChangeCheckbox($event)" />
           </div>
         </div>
-
         <!-- Seguimiento (segto) -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
@@ -231,7 +236,8 @@
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!clinicaForm.valid"
+        <!-- [disabled]="!clinicaForm.valid" -->
+        <button type="submit"
           class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
         </button>
       </div>

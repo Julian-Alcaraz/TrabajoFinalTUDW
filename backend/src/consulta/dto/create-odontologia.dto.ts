@@ -57,7 +57,7 @@ export class CreateOdontologiaDto {
   @IsNotEmpty({ message: 'Dientes no recuperables no puede estar vacio' })
   @IsInt({ message: 'Dientes no recuperables debe ser un número' })
   @Min(0, { message: 'Dientes no recuperables debe ser un número positivo o cero' })
-  readonly dientes_norecuperables: number;
+  readonly dientes_irecuperables: number;
 
   @ApiProperty({ description: 'Cepillo del niño que asiste a la consulta' })
   @IsNotEmpty({ message: ' Cepillo no puede estar vacio' })
@@ -71,12 +71,12 @@ export class CreateOdontologiaDto {
   @Transform(({ value }) => value.trim())
   readonly habitos: string;
 
-  @ApiProperty({ description: 'Estado situacional bucal del niño que asiste' })
-  @IsNotEmpty({ message: 'Estado situacional bucal no puede estar vacio' })
-  @IsString({ message: 'Estado situacional bucal debe ser un string' })
-  @Length(1, 100, { message: 'Estado situacional bucal debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly situacion_bucal: string;
+  // @ApiProperty({ description: 'Estado situacional bucal del niño que asiste' })
+  // @IsNotEmpty({ message: 'Estado situacional bucal no puede estar vacio' })
+  // @IsString({ message: 'Estado situacional bucal debe ser un string' })
+  // @Length(1, 100, { message: 'Estado situacional bucal debe tener entre 1 y 100 caracteres' })
+  // @Transform(({ value }) => value.trim())
+  // readonly situacion_bucal: string;
 
   // CLASIFICACION SE CALCULA Y ES STRING este tambien incluir en entidad
 }

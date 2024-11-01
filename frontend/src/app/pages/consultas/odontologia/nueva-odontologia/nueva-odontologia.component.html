@@ -2,8 +2,16 @@
   <span class="card-header">Cargar una nueva consulta de odontologia</span>
   <div class="card-body">
     <form (ngSubmit)="enviarFormulario()" [formGroup]="odontologiaForm">
-      <app-campos-comunes [form]="odontologiaForm" />
+      <app-campos-comunes [form]="odontologiaForm" (chicoChange)="this.recibirChico($event)" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- Calculos -->
+        <ng-container class="mt-4">
+          <div *ngIf="chico !== null"
+            class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+              <p>Es su primera consulta: <span class="font-bold">{{ this.odontologiaForm.get('primera_vez')?.value ? "Si" : "No" }}</span></p>
+              <p>Es una consulta ulterior: <span class="font-bold">{{ this.odontologiaForm.get('ulterior')?.value ? "Si" : "No" }}</span></p>
+          </div>
+        </ng-container>
         <!-- Cepillo -->
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="¿Tiene cepillo?" [control]="controlDeInput('cepillo')" idInput="cepillo"
@@ -13,17 +21,6 @@
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="¿Se cepilla los dientes?" [control]="controlDeInput('cepillado')"
             idInput="cepillado" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
-        <!-- primera_vez -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Es la primera vez? (podria calcularse)"
-            [control]="controlDeInput('primera_vez')" idInput="primera_vez" [opciones]="['Si', 'No']"
-            [valores]="['true', 'false']" />
-        </div>
-        <!-- Ulterior -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Es un tratamiento ulterior?" [control]="controlDeInput('ulterior')"
-            idInput="ulterior" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Topificacion -->
         <div class="mt-4 md:col-span-2">
@@ -58,14 +55,19 @@
         </div>
         <!-- Dientes no Recuperables -->
         <div class="mt-4 md:col-span-3">
-          <app-input-number label="Dientes no Recuperables" [control]="controlDeInput('dientes_norecuperables')"
-            placeholder="Ej: 3" idInput="dientes_norecuperables" />
+          <app-input-number label="Dientes no Recuperables" [control]="controlDeInput('dientes_irecuperables')"
+            placeholder="Ej: 3" idInput="dientes_irecuperables" />
         </div>
-        <!-- Situacion Bucal -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-text label="Situacion Bucal" [control]="controlDeInput('situacion_bucal')" placeholder="Ej: Buena"
-            idInput="situacion_bucal" />
-        </div>
+        <!-- Calculo estado bucal -->
+        <ng-container
+          *ngIf="odontologiaForm.get('dientes_recuperables')?.value !== '' && odontologiaForm.get('dientes_irecuperables')?.value !== '' && odontologiaForm.get('dientes_recuperables')?.value >= 0 && odontologiaForm.get('dientes_irecuperables')?.value >= 0">
+          <div class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-4">
+            <span class="font-bold"> Clasificacion dental: </span>
+            <span>{{clasificacionDental(odontologiaForm.get('dientes_recuperables')?.value ,
+              odontologiaForm.get('dientes_irecuperables')?.value) }}
+            </span>
+          </div>
+        </ng-container>
         <!-- Habitos -->
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante"
@@ -79,7 +81,8 @@
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!odontologiaForm.valid"
+        <!-- [disabled]="!odontologiaForm.valid" -->
+        <button type="submit"
           class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
         </button>
       </div>

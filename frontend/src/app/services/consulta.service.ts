@@ -19,4 +19,8 @@ export class ConsultaService {
   obtenerConsultaxId(id: number): Observable<any> {
     return this._http.get(this.url + 'consulta/' + id);
   }
+
+  esPrimeraVez(id: number, tipoConsulta: string) {
+    return this._http.get(this.url + 'consulta/primeraVezChico/' + id + '/' + tipoConsulta);
+  }
 }

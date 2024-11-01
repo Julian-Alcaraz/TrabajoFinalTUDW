@@ -1,19 +1,22 @@
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { UsuarioService } from '../../../services/usuario.service';
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Usuario } from '../../../models/usuario.model';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
+
+import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import { UsuarioService } from '../../../services/usuario.service';
+import { Usuario } from '../../../models/usuario.model';
+import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '../../../components/loading/input-loading.component';
+
 @Component({
   selector: 'app-lista-usuario',
   standalone: true,
-  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe],
+  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, LoadingComponent],
   templateUrl: './lista-usuario.component.html',
   styleUrl: './lista-usuario.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

@@ -12,13 +12,14 @@ import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { Consulta } from '../../../models/consulta.model';
 import { DetallesConsultaComponent } from '../components/detalles-consulta/detalles-consulta.component';
-import { InputCheckboxComponent } from '../../consultas/components/inputs/input-checkbox.component';
+import { InputCheckboxComponent } from '../../../components/inputs/input-checkbox.component';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '../../../components/loading/input-loading.component';
 
 @Component({
   selector: 'app-ver-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, DetallesConsultaComponent, InputCheckboxComponent],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, DetallesConsultaComponent, InputCheckboxComponent, LoadingComponent],
   templateUrl: './ver-chico.component.html',
   styleUrl: './ver-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -122,18 +123,17 @@ export class VerChicoComponent implements OnInit {
   volver() {
     this.location.back();
   }
-  public typeFiltered:string[] =[];
+  public typeFiltered: string[] = [];
 
   onChangeCheckbox(event: Event) {
     const checkbox = event.target as HTMLInputElement;
     if (checkbox?.checked) {
-      this.typeFiltered.push(checkbox.value)
+      this.typeFiltered.push(checkbox.value);
     } else {
-      this.typeFiltered = this.typeFiltered.filter(item => item !== checkbox.value);
+      this.typeFiltered = this.typeFiltered.filter((item) => item !== checkbox.value);
     }
     const searchTerms = {
-      ...(this.typeFiltered.length>0 && { type:this.typeFiltered }),
-
+      ...(this.typeFiltered.length > 0 && { type: this.typeFiltered }),
     };
     this.consultas.filter = JSON.stringify(searchTerms);
     if (this.consultas.paginator) {

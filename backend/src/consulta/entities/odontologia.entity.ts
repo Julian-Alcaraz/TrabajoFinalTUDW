@@ -40,7 +40,7 @@ export class Odontologia {
   dientes_recuperables: number;
 
   @Column({ type: 'int', nullable: true })
-  dientes_norecuperables: number;
+  dientes_irecuperables: number;
 
   @Column({ type: 'boolean' })
   cepillo: boolean;
@@ -48,8 +48,8 @@ export class Odontologia {
   @Column({ type: 'varchar', length: 100 })
   habitos: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  situacion_bucal: string;
+  // @Column({ type: 'varchar', length: 100 })
+  // situacion_bucal: string;
 
   // Clasificación calculada
   @Column({ type: 'varchar', length: 100 })

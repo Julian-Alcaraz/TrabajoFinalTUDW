@@ -7,11 +7,11 @@ import Swal from 'sweetalert2';
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../components/inputs/input-text.component';
-import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
-import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
+import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
+import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
@@ -68,7 +68,7 @@ export class NuevaFonoaudiologicaComponent {
           const data = {
             type: 'Fonoaudiologia',
             turno,
-            ...(obra_social && { obra_social }),
+            obra_social,
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
             id_chico: id_chico,

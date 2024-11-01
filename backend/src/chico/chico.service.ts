@@ -61,6 +61,7 @@ export class ChicoService {
     chico.deshabilitado = true;
     return this.chicoORM.save(chico);
   }
+  
   async findChicosConsultas(id: number) {
     const chico = await this.chicoORM.findOne({
       where: { id },

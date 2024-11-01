@@ -71,7 +71,7 @@ export class ConsultaService {
       }
 
       if (odontologia) {
-        const clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_norecuperables);
+        const clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables);
         nuevaConsultaHija = manager.create(Odontologia, { consulta: consultaGuardada, ...odontologia, clasificacion });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
@@ -115,6 +115,17 @@ export class ConsultaService {
     }
     delete consultaHija.id_consulta;
     return { ...consulta, consultaHija };
+  }
+
+  async esPrimeraVez(id: number, tipoConsulta: any) {
+    const chico = await this.chicoORM.findOneBy({ id, deshabilitado: false });
+    if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
+    const consulta = this.consultaORM.findOne({
+      where: { chico: { id: id }, type: tipoConsulta, deshabilitado: false },
+      relations: ['chico'],
+    });
+    if (consulta) return { primera_vez: false, ulterior: true };
+    else return { primera_vez: false, ulterior: true };
   }
 
   findAll() {

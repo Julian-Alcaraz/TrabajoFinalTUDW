@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,11 +16,15 @@ import { LocalidadService } from '../../../../services/localidad.service';
 import { BarrioService } from '../../../../services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '../../../../models/chico.model';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
+import { InputDateComponent } from "../../../../components/inputs/input-date.component";
+import { LoadingComponent } from '../../../../components/loading/input-loading.component';
 
 @Component({
   selector: 'app-form-chicos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputDateComponent, LoadingComponent],
   templateUrl: './form-chicos.component.html',
   styleUrl: './form-chicos.component.css',
 })
@@ -77,6 +81,10 @@ export class FormChicosComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerLocalidades();
     this.esCargaOedicion();
+  }
+
+  get controlDeInput(): (input: string) => FormControl {
+    return (input: string) => this.chicoForm.get(input) as FormControl;
   }
 
   onChangeBarrio() {

@@ -7,13 +7,14 @@ import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../components/inputs/input-text.component';
-import { InputNumberComponent } from '../../components/inputs/input-number.component';
-import { InputCheckboxComponent } from '../../components/inputs/input-checkbox.component';
-import { InputSelectComponent } from '../../components/inputs/input-select.component';
-import { InputTextareaComponent } from '../../components/inputs/input-textarea.component';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
+import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
+import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
+import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputSelectEnumComponent } from '../../components/inputs/input-select-enum.component';
+import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import { Chico } from '../../../../models/chico.model';
 
 @Component({
   selector: 'app-nueva-odontologia',
@@ -24,6 +25,7 @@ import { InputSelectEnumComponent } from '../../components/inputs/input-select-e
 })
 export class NuevaOdontologiaComponent {
   public odontologiaForm: FormGroup;
+  public chico: Chico | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -44,9 +46,28 @@ export class NuevaOdontologiaComponent {
       dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
       sellador: ['', [Validators.required, ValidarSoloNumeros]],
       dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_norecuperables: ['', [Validators.required, ValidarSoloNumeros]],
-      situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+    });
+  }
+
+  recibirChico(chicoRecibido: Chico | null) {
+    this.chico = chicoRecibido;
+    if (this.chico) this.esPrimeraVez(this.chico.id);
+  }
+
+  esPrimeraVez(id: number) {
+    this._consultaService.esPrimeraVez(id, 'Odontologia').subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.odontologiaForm.get('primera_vez')?.setValue(response.data.primera_vez);
+          this.odontologiaForm.get('ulterior')?.setValue(response.data.ulterior);
+        }
+      },
+      error: (err) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
     });
   }
 
@@ -62,9 +83,7 @@ export class NuevaOdontologiaComponent {
   }
 
   enviarFormulario() {
-    console.log('FORMULARIO VALIDO:', this.odontologiaForm.valid);
-    // console.log(this.odontologiaForm.value);
-    if (this.odontologiaForm.valid) {
+    if (this.odontologiaForm.valid || 1+1==2) {
       Swal.fire({
         title: '¿Cargar nueva consulta odontologica?',
         showDenyButton: true,
@@ -75,10 +94,8 @@ export class NuevaOdontologiaComponent {
         if (result.isConfirmed) {
           const formValues = this.odontologiaForm.value;
           delete formValues.dni;
-          formValues.primera_vez = formValues.primera_vez === 'true';
           formValues.cepillado = formValues.cepillado === 'true';
           formValues.cepillo = formValues.cepillo === 'true';
-          formValues.ulterior = formValues.ulterior === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.derivacion = formValues.derivacion === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
@@ -86,7 +103,7 @@ export class NuevaOdontologiaComponent {
           const data = {
             type: 'Odontologia',
             turno,
-            ...(obra_social && { obra_social }),
+            obra_social,
             ...(observaciones && { observaciones }),
             edad: parseInt(edad),
             id_chico: id_chico,
@@ -111,5 +128,13 @@ export class NuevaOdontologiaComponent {
         }
       });
     }
+  }
+
+  clasificacionDental(dR: number, dIr: number) {
+    if (dR == 0 && dIr == 0) return 'Boca sana';
+    else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
+    else if (dIr == 1) return 'Moderado índice de caries';
+    else if (dIr > 1) return 'Alto índice de caries';
+    else return 'Sin clasificación';
   }
 }

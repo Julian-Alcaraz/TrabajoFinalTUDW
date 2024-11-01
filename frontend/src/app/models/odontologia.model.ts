@@ -10,13 +10,13 @@ export class Odontologia {
     public cepillado: boolean,
     public derivacion: boolean,
     public dientes_recuperables: number,
-    public dientes_norecuperables: number,
+    public dientes_irecuperables: number,
     public cepillo: boolean,
     public habitos: string,
-    public situacion_bucal: string,
+    // public situacion_bucal: string,
   ) {}
 
   static overload_constructor() {
-    return new Odontologia(0, false, false, 0, 0, 0, 0, false, false, 0, 0, false, '', '');
+    return new Odontologia(0, false, false, 0, 0, 0, 0, false, false, 0, 0, false, '');
   }
 }

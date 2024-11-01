@@ -1,23 +1,27 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '../../../../utils/validadores';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { RolesService } from '../../../../services/roles.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '../../../../utils/validadores';
 import { Rol } from '../../../../models/rol.model';
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { Usuario } from '../../../../models/usuario.model';
 import { SessionService } from '../../../../services/session.service';
-import Swal from 'sweetalert2';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
+import { InputDateComponent } from '../../../../components/inputs/input-date.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -47,9 +51,14 @@ export class FormUsuarioComponent implements OnInit {
       roles_ids: this.fb.array([], Validators.required), // FormArray para role
     });
   }
+
   ngOnInit(): void {
     this.obtenerRoles();
     this.esCargaOedicion();
+  }
+
+  get controlDeInput(): (input: string) => FormControl {
+    return (input: string) => this.userForm.get(input) as FormControl;
   }
 
   obtenerRoles() {
@@ -86,6 +95,7 @@ export class FormUsuarioComponent implements OnInit {
       });
     }
   }
+
   onCheckboxChange(e: any) {
     const rolesArray: FormArray = this.userForm.get('roles_ids') as FormArray;
     if (e.target.checked) {
@@ -100,14 +110,17 @@ export class FormUsuarioComponent implements OnInit {
       this.selectCheckbox = false;
     }
   }
+
   activarFormulario() {
     this.userForm.enable();
     this.estaEditando = true;
   }
+
   desactivarFormulario() {
     this.userForm.disable();
     this.estaEditando = false;
   }
+
   cargarUsuario() {
     if (this.userForm.valid) {
       Swal.fire({

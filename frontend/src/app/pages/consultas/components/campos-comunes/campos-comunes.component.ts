@@ -1,33 +1,31 @@
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { InputNumberComponent } from '../inputs/input-number.component';
-import { InputTextComponent } from '../inputs/input-text.component';
-import { InputSelectComponent } from '../inputs/input-select.component';
+import { Component, Input, OnInit, Output, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputTextareaComponent } from '../inputs/input-textarea.component';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
-import { ChicoService } from '../../../../services/chico.service';
 import { catchError, debounceTime, map, of } from 'rxjs';
-import { Chico } from '../../../../models/chico.model';
-import { Institucion } from '../../../../models/institucion.model';
-import { Curso } from '../../../../models/curso.model';
-import { CursoService } from '../../../../services/curso.service';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { InputSelectEnumComponent } from '../inputs/input-select-enum.component';
-/*
-  para todas las consultas: cuando se ingresa el dni completo,
-  en el momento que esta buscando agregar un sppiner como el de las tablas,
-  en vez de que se muestre no encontrado, el mensaje que se muestre una vez se ejecuta la consulta!
-*/
+
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
+import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
+import { Chico } from '../../../../models/chico.model';
+import { ChicoService } from '../../../../services/chico.service';
+import { Institucion } from '../../../../models/institucion.model';
+import { InstitucionService } from '../../../../services/institucion.service';
+import { Curso } from '../../../../models/curso.model';
+import { CursoService } from '../../../../services/curso.service';
+import { LoadingComponent } from '../../../../components/loading/input-loading.component';
+
 @Component({
   selector: 'app-campos-comunes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './campos-comunes.component.html',
   styleUrl: './campos-comunes.component.css',
 })
@@ -46,6 +44,8 @@ export class CamposComunesComponent implements OnInit {
 
   @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
   @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
+
+  @Output() chicoChange = new EventEmitter<Chico | null>();
 
   constructor(
     private fb: FormBuilder,
@@ -69,6 +69,11 @@ export class CamposComunesComponent implements OnInit {
     });
   }
 
+  actualizarChico(nuevoChico: Chico | null) {
+    this.chico = nuevoChico;
+    this.chicoChange.emit(this.chico);
+  }
+
   // HACER UNO DE ESTOS PARA TODOS LOS FORM, NO USAR 3
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;
@@ -87,12 +92,12 @@ export class CamposComunesComponent implements OnInit {
     this.obtenerCursos();
 
     this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
-    this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
-    this.form.addControl('obra_social', new FormControl('', [Validators.required]));
+    this.form.addControl('dni', new FormControl(1234567, [Validators.required, ValidarSoloNumeros, ValidarDni]));
+    this.form.addControl('obra_social', new FormControl(true, [Validators.required]));
     this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
-    this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
-    this.form.addControl('id_curso', new FormControl('', [Validators.required]));
-    this.form.addControl('turno', new FormControl('', [Validators.required]));
+    this.form.addControl('id_institucion', new FormControl(1, [Validators.required]));
+    this.form.addControl('id_curso', new FormControl(1, [Validators.required]));
+    this.form.addControl('turno', new FormControl('Mañana', [Validators.required]));
 
     this.form.get('dni')?.valueChanges.subscribe(() => {
       this.onChangeDni();
@@ -114,11 +119,13 @@ export class CamposComunesComponent implements OnInit {
         map((response) => {
           if (response?.success) {
             this.chico = response.data;
+            this.actualizarChico(this.chico);
             this.form.get('id_chico')?.setValue(response.data.id);
             this.calcularEdad();
             // console.log('Chico encontrado: ', this.form.get('chicoParam')?.value);
           } else {
             this.chico = null;
+            this.actualizarChico(this.chico);
             this.form.get('id_chico')?.setValue(null);
             this.form.get('edad')?.setValue(null);
             this.edadMeses = null;
@@ -300,3 +307,13 @@ export class CamposComunesComponent implements OnInit {
     this._router.navigate(['/layout/chicos/nuevo']);
   }
 }
+
+/* FORMULARIO LIMPIO
+    this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
+    this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
+    this.form.addControl('obra_social', new FormControl('', [Validators.required]));
+    this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
+    this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
+    this.form.addControl('id_curso', new FormControl('', [Validators.required]));
+    this.form.addControl('turno', new FormControl('', [Validators.required]));
+*/

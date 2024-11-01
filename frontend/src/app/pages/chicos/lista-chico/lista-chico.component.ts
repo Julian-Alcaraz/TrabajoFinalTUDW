@@ -12,11 +12,12 @@ import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { RouterModule, Router } from '@angular/router';
+import { LoadingComponent } from '../../../components/loading/input-loading.component';
 
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -26,7 +27,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
   public searching = false;
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'nombrePadre', 'nombreMadre', 'action'];
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'action'];
 
   constructor(
     private _chicoService: ChicoService,

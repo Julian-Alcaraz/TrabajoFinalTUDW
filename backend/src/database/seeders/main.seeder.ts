@@ -453,6 +453,11 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Mañana',
+          derivaciones: {
+            Fonoaudiologia: true,
+            Odontologia: true,
+            Externa: false,
+          },
         },
         {
           type: 'Oftalmologia',
@@ -463,6 +468,9 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Tarde',
           obra_social: true,
+          derivaciones: {
+            Externa: true,
+          },
         },
         {
           type: 'Odontologia',
@@ -473,6 +481,9 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Tarde',
           obra_social: false,
+          derivaciones: {
+            Externa: false,
+          },
         },
         {
           type: 'Fonoaudiologia',
@@ -482,6 +493,9 @@ export class MainSeeder implements Seeder {
           curso: cursos[13],
           institucion: instituciones[0],
           turno: 'Mañana',
+          derivaciones: {
+            Externa: true,
+          },
         },
         {
           type: 'Fonoaudiologia',
@@ -492,6 +506,9 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Mañana',
           deshabilitado: true,
+          derivaciones: {
+            Externa: false,
+          },
         },
       ]);
       console.log('Seeding consultas clinicas...');
@@ -552,7 +569,7 @@ export class MainSeeder implements Seeder {
           cepillado: true,
           cepillo: true,
           derivacion: false,
-          dientes_norecuperables: 0,
+          dientes_irecuperables: 0,
           dientes_recuperables: 3,
           dientes_temporales: 10,
           dientes_permanentes: 2,
@@ -560,7 +577,7 @@ export class MainSeeder implements Seeder {
           clasificacion: 'BAJO INDICE DE CARIES',
           habitos: 'Cepillado constante',
           primera_vez: false,
-          situacion_bucal: 'Buena',
+          // situacion_bucal: 'Buena',
           topificacion: false,
           ulterior: true,
         },
