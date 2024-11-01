@@ -12,13 +12,13 @@ export class ApiSoapController {
       return {
         success: true,
         data: response,
-        message: 'Provincias encontradas',
+        message: 'Provincias encontradas.',
       };
     } else {
       return {
         success: false,
         data: response,
-        message: 'Provincias no encontradas',
+        message: 'No se encontraron provincias en el pais selecionado.',
       };
     }
   }

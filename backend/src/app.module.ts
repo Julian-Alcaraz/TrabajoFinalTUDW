@@ -15,9 +15,10 @@ import { InstitucionModule } from './institucion/institucion.module';
 import { ApiGeorefModule } from './api-georef/api-georef.module';
 import { ApiSoapModule } from './api-soap/api-soap.module';
 import { ApiEmailsModule } from './api-emails/api-emails.module';
+import { ApiSoap2Module } from './api-soap2/api-soap2.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule, ApiGeorefModule, ApiSoapModule, ApiEmailsModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule, ApiGeorefModule, ApiSoapModule, ApiEmailsModule, ApiSoap2Module],
   controllers: [],
   providers: [],
 })

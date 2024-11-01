@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, RequestTimeoutException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
 import { parseStringPromise } from 'xml2js';
@@ -10,15 +10,22 @@ export class ApiSoapService {
   async findAll(codigoPais = 'AR'): Promise<{ total: number; provinces: object }> {
     try {
       // const codigoPais = 'AR' | 'CL';
-      const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`;
+      const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`; //z
       const headers = { Accept: 'application/xml' };
-      const timeout = 10000;
-      const response = await lastValueFrom(this.httpService.get(url, { headers, timeout }));
-
+      const timeout = 1;
+      const response = await lastValueFrom(this.httpService.post(url, { headers, timeout }));
       // Parseamos el XML de respuesta a JSON
       const result = await parseStringPromise(response.data);
+      if (result.geonames.status) {
+        const error = new Error('Error de conexión con el servidor externo. Usuario invalido');
+        (error as any).request = true;
+        throw error;
+      }
       const total = result.geonames.totalResultsCount[0];
-
+      if (total == 0) {
+        const provinces = [];
+        return { total, provinces };
+      }
       const provinces = result.geonames.geoname.filter((prov) => {
         if (prov.fcode[0] === 'ADM1' && prov.countryCode[0] === codigoPais) {
           delete prov.lat;
@@ -30,15 +37,26 @@ export class ApiSoapService {
           prov.name = prov.name[0];
           prov.countryCode = prov.countryCode[0];
           prov.countryName = prov.countryName[0];
-          return true; // Solo devuelve el objeto si cumple la condición
+          return true;
         }
-        return false; // Filtra los que no cumplen
+        return false;
       });
-      return { total, provinces }; // Devolvemos el JSON resultante
+      return { total, provinces };
     } catch (error) {
-      // console.log('EROROROROROR', error.cause);
-      // throw new Error(`Error fetching data from XML service: ${error.message}`);
-      throw new Error(`ERORR TRAYENDO LA DATA XML: ${error.message}`);
+      if (error.code === 'ECONNABORTED') {
+        throw new RequestTimeoutException('La solicitud tomó demasiado tiempo y fue cancelada.');
+      } else if (error.response) {
+        const statusCode = error.response.status;
+        if (statusCode >= 400 && statusCode < 500) {
+          throw new BadRequestException(`Error en la solicitud. Verifica los datos.`);
+        } else if (statusCode >= 500) {
+          throw new InternalServerErrorException(`Error en el servidor externo.`);
+        }
+      } else if (error.request) {
+        throw new InternalServerErrorException('Error de conexión con el servidor externo.');
+      } else {
+        throw new InternalServerErrorException(`Error inesperado.`);
+      }
     }
   }
 }

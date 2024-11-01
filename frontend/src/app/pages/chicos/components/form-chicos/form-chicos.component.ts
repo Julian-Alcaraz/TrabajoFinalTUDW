@@ -397,13 +397,18 @@ export class FormChicosComponent implements OnInit {
           this.loadingProvinces = false;
           this.provinciasxpais = response.data.provinces;
           console.log(this.provinciasxpais);
-          MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+          if (   this.provinciasxpais && this.provinciasxpais?.length > 0) {
+            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+          }else{
+            MostrarNotificacion.mensajeAtencion(this.snackBar, 'No se encontraron provincias en el pais selecionado.');
+          }
         } else {
           this.loadingProvinces = false;
-          MostrarNotificacion.mensajeError(this.snackBar, response.message);
+          MostrarNotificacion.mensajeAtencion(this.snackBar, response.message);
         }
       },
       error: (err) => {
+        console.log('ERROR BUSCAR PROVINCIAS', err);
         this.loadingProvinces = false;
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
