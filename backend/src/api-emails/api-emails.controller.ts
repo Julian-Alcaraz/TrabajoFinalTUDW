@@ -1,7 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiEmailsService } from './api-emails.service';
-import { CreateApiEmailDto } from './dto/create-api-email.dto';
-import { UpdateApiEmailDto } from './dto/update-api-email.dto';
 
 @Controller('api-emails')
 export class ApiEmailsController {

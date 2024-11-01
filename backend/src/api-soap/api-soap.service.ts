@@ -6,17 +6,17 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ApiSoapService {
   constructor(private readonly httpService: HttpService) {}
-  // la idea es que venga el codigo pais
+
   async findAll(codigoPais = 'AR'): Promise<{ total: number; provinces: object }> {
     try {
-      // const codigoPais = 'AR' | 'CL';
-      const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`; //z
+      const url = `http://api.geonames.org/search?country=${codigoPais}&featureCode=ADM1&username=julianalcaraz`;
       const headers = { Accept: 'application/xml' };
-      const timeout = 1;
+      const timeout = 3000; // limite de espera 3 segundos
       const response = await lastValueFrom(this.httpService.post(url, { headers, timeout }));
       // Parseamos el XML de respuesta a JSON
-      const result = await parseStringPromise(response.data);
+      const result = await parseStringPromise(response.data); // libreria externa instalada
       if (result.geonames.status) {
+        // en caso que exista un error en la url o usuario
         const error = new Error('Error de conexión con el servidor externo. Usuario invalido');
         (error as any).request = true;
         throw error;
