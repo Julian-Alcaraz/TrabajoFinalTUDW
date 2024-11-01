@@ -2,69 +2,52 @@
   <span class="card-header">Cargar una nueva consulta de oftalmologia</span>
   <div class="card-body">
     <form (ngSubmit)="enviarFormulario()" [formGroup]="oftalmologiaForm">
-      <app-campos-comunes [form]="oftalmologiaForm" />
-      <div class="grid gap-6 md:grid-cols-4 sm:grid-cols-2">
-        <!-- Primera Vez -->
+      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" />
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- Primera Vez
         <div class="mt-4 md:col-span-1">
-          <!-- PODRIA CALCULARESE -->
-          <label for="primera_vez" class="block mb-2 text-sm font-medium text-gray-900">¿Es la primera vez?
-            <strong>Podria calcularse</strong></label>
-          <select formControlName="primera_vez" id="primera_vez"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="oftalmologiaForm.get('primera_vez')?.errors && (oftalmologiaForm.get('primera_vez')?.dirty || oftalmologiaForm.get('primera_vez')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="oftalmologiaForm.get('primera_vez')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
-        </div>
-        <!-- Control -->
+          <app-input-select-enum label="¿Es la primera vez?" [control]="controlDeInput('primera_vez')"
+            idInput="primera_vez" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div> -->
+        <!-- Control
         <div class="mt-4 md:col-span-1">
-          <!-- PODRIA CALCULARSE SI ES QUE SI NO ES PRIMERA VEZ ES CONTROL -->
-          <label for="control" class="block mb-2 text-sm font-medium text-gray-900">¿Es un control? <strong>Podria
-              calcularse</strong></label>
-          <select formControlName="control" id="control"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="oftalmologiaForm.get('control')?.errors && (oftalmologiaForm.get('control')?.dirty || oftalmologiaForm.get('control')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="oftalmologiaForm.get('control')?.errors?.['required']">Debe seleccionar una opción.</div>
+          <app-input-select-enum label="¿Es un control?" [control]="controlDeInput('control')"
+          idInput="control" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div> -->
+        <!-- Calculos primera_vez y control -->
+        <ng-container class="mt-4">
+          <div *ngIf="chico !== null"
+            class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+            <p><span class="font-bold">Es su primera vez: </span><span>{{
+                this.oftalmologiaForm.get('primera_vez')?.value ? "Si": "No" }}</span></p>
+            <p><span class="font-bold">Es control: </span><span>{{ this.oftalmologiaForm.get('control')?.value
+                ?"Si": "No" }}</span></p>
           </div>
-        </div>
+        </ng-container>
         <!-- Receta -->
-        <div class="mt-4 md:col-span-1">
-          <label for="receta" class="block mb-2 text-sm font-medium text-gray-900">¿Necesita receta?</label>
-          <select formControlName="receta" id="receta"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="true">Si</option>
-            <option value="false">No</option>
-          </select>
-          <div
-            *ngIf="oftalmologiaForm.get('receta')?.errors && (oftalmologiaForm.get('receta')?.dirty || oftalmologiaForm.get('receta')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="oftalmologiaForm.get('receta')?.errors?.['required']">Debe seleccionar una opción.</div>
-          </div>
-        </div>
-        <!-- Anteojos -->
-        <div class="mt-4 md:col-span-1">
-          <app-input-select-enum label="¿Necesita/Usa anteojos?" [control]="controlDeInput('anteojos')"
-            idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="¿Necesita receta?" [control]="controlDeInput('receta')" idInput="receta"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Demanda -->
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')"
             placeholder="Ej: Padre" idInput="demanda" />
         </div>
+        <!-- Derivacion -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
+            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Anteojos -->
+        <ng-container>
+          <div *ngIf="this.oftalmologiaForm.get('control')?.value" class="mt-4 md:col-span-3">
+            <app-input-select-enum label="¿Se le entregaron los anteojos?" [control]="controlDeInput('anteojos')"
+              idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          </div>
+        </ng-container>
         <!-- Proximo Control -->
-        <div class="mt-4 md:col-span-1">
+        <div class="mt-4 md:col-span-3">
           <p class="block mb-2 text-sm font-medium text-gray-900">Fecha del próximo control</p>
           <mat-form-field class="md:col-span-2">
             <mat-label>Próximo Control</mat-label>

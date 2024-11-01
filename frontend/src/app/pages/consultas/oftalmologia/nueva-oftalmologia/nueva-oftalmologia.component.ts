@@ -15,6 +15,7 @@ import { InputTextComponent } from '../../../../components/inputs/input-text.com
 import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import { Chico } from '../../../../models/chico.model';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
@@ -26,6 +27,7 @@ import { InputSelectEnumComponent } from '../../../../components/inputs/input-se
 export class NuevaOftalmologiaComponent {
   public oftalmologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
+  public chico: Chico | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -40,13 +42,45 @@ export class NuevaOftalmologiaComponent {
       primera_vez: ['', [Validators.required]],
       control: ['', [Validators.required]],
       receta: ['', [Validators.required]],
-      anteojos: ['', [Validators.required]],
+      anteojos: [''],
       prox_control: ['', Validators.required],
+      derivacion_externa: ['', [Validators.required]],
     });
   }
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.oftalmologiaForm.get(input) as FormControl;
+  }
+
+  recibirChico(chicoRecibido: Chico | null) {
+    this.chico = chicoRecibido;
+    if (this.chico) this.esPrimeraVez(this.chico.id);
+  }
+
+  esPrimeraVez(id: number) {
+    this._consultaService.esPrimeraVez(id, 'Oftalmologia').subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          const primeraVez = response.data.primera_vez;
+          this.oftalmologiaForm.get('primera_vez')?.setValue(primeraVez);
+          this.oftalmologiaForm.get('control')?.setValue(!primeraVez);
+
+          const anteojosControl = this.oftalmologiaForm.get('anteojos');
+          if (primeraVez) {
+            anteojosControl?.clearValidators();
+            anteojosControl?.setValue(null);
+          } else {
+            anteojosControl?.setValidators([Validators.required]);
+          }
+          anteojosControl?.updateValueAndValidity();
+          console.log('VALOR ANTEOJOS:');
+          console.log(anteojosControl?.value);
+        }
+      },
+      error: (err) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 
   onChangeCheckbox(event: Event) {
@@ -57,8 +91,6 @@ export class NuevaOftalmologiaComponent {
   }
 
   enviarFormulario() {
-    console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ');
-    console.log('FORMULARIO VALIDO:', this.oftalmologiaForm.valid);
     if (this.oftalmologiaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta oftalmologica?',
@@ -69,12 +101,16 @@ export class NuevaOftalmologiaComponent {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const formValues = this.oftalmologiaForm.value;
-          delete formValues.dni;
           formValues.primera_vez = formValues.primera_vez === 'true';
           formValues.control = formValues.control === 'true';
           formValues.receta = formValues.receta === 'true';
-          formValues.anteojos = formValues.anteojos === 'true';
+          if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
+          const derivaciones = {
+            externa: formValues.derivacion_externa === 'true',
+          };
+          delete formValues.dni;
+          delete formValues.derivacion_externa;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
           const data = {
             type: 'Oftalmologia',
@@ -85,10 +121,12 @@ export class NuevaOftalmologiaComponent {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
+            ...(derivaciones.externa && { derivaciones }),
             oftalmologia: {
               ...oftalmologiaValues,
             },
           };
+          console.log('DATA:');
           console.log(data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {

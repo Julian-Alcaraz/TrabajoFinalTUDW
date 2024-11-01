@@ -105,6 +105,14 @@ export class CamposComunesComponent implements OnInit {
   }
 
   onChangeDni() {
+
+    this.chico = null;
+    this.actualizarChico(this.chico);
+    this.form.get('id_chico')?.setValue(null);
+    this.form.get('edad')?.setValue(null);
+    this.edadMeses = null;
+    this.edadAnios = null;
+
     const dni = this.form.get('dni')?.value;
     if (!dni || dni.toString().length !== 8) {
       // console.log('El DNI no tiene 8 dígitos');
@@ -113,10 +121,10 @@ export class CamposComunesComponent implements OnInit {
     // console.log('El DNI tiene 8 dígitos, procediendo a verificar');
     this.searching = true;
     this._chicoService
-      .obtenerChicoxDni(dni)
-      .pipe(
-        debounceTime(300),
-        map((response) => {
+    .obtenerChicoxDni(dni)
+    .pipe(
+      debounceTime(300),
+      map((response) => {
           if (response?.success) {
             this.chico = response.data;
             this.actualizarChico(this.chico);

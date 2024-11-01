@@ -11,9 +11,9 @@ import { Curso } from '../../curso/entities/curso.entity';
 
 export type ConsultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type TurnoType = 'Mañana' | 'Tarde' | 'Noche';
-export type DerivacionesType = { /*'Clinica' | */ Odontologia: boolean; Oftalmologia: boolean; Fonoaudiologia: boolean; Externa: boolean };
+export type DerivacionesType = { /*'Clinica' | */ odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
 
-@Entity('Consulta')
+@Entity('consulta')
 export class Consulta extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], nullable: true })
   type: ConsultaType;
@@ -30,13 +30,13 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'text', nullable: true })
   observaciones: string;
 
-  @Column({ type: 'simple-json' })
+  @Column({ type: 'simple-json', nullable: true })
   derivaciones: {
     //Clinica: boolean;
-    Odontologia: boolean
-    Oftalmologia: boolean;
-    Fonoaudiologia: boolean;
-    Externa: boolean;
+    odontologia: boolean;
+    oftalmologia: boolean;
+    fonoaudiologia: boolean;
+    externa: boolean;
   };
 
   // Relaciones

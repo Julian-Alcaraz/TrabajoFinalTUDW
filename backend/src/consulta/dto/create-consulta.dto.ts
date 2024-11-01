@@ -58,11 +58,11 @@ export class CreateConsultaDto {
   readonly observaciones?: string;
 
   @ApiProperty({ description: 'Derivaciones de la consulta' })
-  @IsNotEmpty({ message: 'Las Derivaciones no pueden estar vacias' })
+  @IsOptional()
   @IsObject({ message: 'Las derivaciones deben ser un objeto' })
   @ValidateNested()
   @Type(() => DerivacionesDto)
-  readonly derivaciones: DerivacionesType;
+  readonly derivaciones?: DerivacionesType;
 
   // Validación condicional para "Clinica"
   @ValidateIf((o) => o.type === 'Clinica')

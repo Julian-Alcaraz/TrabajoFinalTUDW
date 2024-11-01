@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateOftalmologiaDto {
   @ApiProperty({ description: 'Demanada de la consulta' })
@@ -31,8 +31,8 @@ export class CreateOftalmologiaDto {
   @IsDate({ message: 'La fecha del proximo control no tiene formato correcto' })
   readonly prox_control: Date;
 
-  @ApiProperty({ description: 'Anteojos' })
-  @IsNotEmpty({ message: 'Anteojos no puede estar vacio' })
+  @ApiProperty({ description: 'Indica si se le entregaron los anteojos al chico o no' })
   @IsBoolean({ message: 'Anteojos debe ser un boleano' })
-  readonly anteojos: boolean;
+  @IsOptional()
+  readonly anteojos?: boolean;
 }

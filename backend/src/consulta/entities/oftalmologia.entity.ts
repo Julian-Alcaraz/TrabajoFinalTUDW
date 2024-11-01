@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
 
-@Entity()
+@Entity('oftalmologia')
 export class Oftalmologia {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
@@ -25,6 +25,6 @@ export class Oftalmologia {
   @Column({ type: 'date', nullable: false })
   prox_control: Date;
 
-  @Column({ type: 'boolean', nullable: false })
-  anteojos: boolean;
+  @Column({ type: 'boolean', nullable: true })
+  anteojos?: boolean;
 }

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloLetras } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '../../../../utils/validadores';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
@@ -33,8 +33,9 @@ export class NuevaFonoaudiologicaComponent {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Fonoaudiologica
-      diagnostico_presuntivo: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      causas: ['', [Validators.required, ValidarSoloLetras, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
+      derivacion_externa: ['', [Validators.required]],
+      diagnostico_presuntivo: ['', [Validators.required]],
+      causas: ['', [Validators.required]],
       asistencia: ['', [Validators.required]],
     });
   }
@@ -63,6 +64,10 @@ export class NuevaFonoaudiologicaComponent {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
+          const derivaciones = {
+            externa: formValues.derivacion_externa === 'true',
+          };
+          delete formValues.derivacion_externa;
           delete formValues.dni;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
           const data = {
@@ -74,6 +79,7 @@ export class NuevaFonoaudiologicaComponent {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
+            ...(derivaciones.externa && { derivaciones }),
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },

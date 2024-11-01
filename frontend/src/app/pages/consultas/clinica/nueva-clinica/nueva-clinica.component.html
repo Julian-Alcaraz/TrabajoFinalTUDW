@@ -209,6 +209,11 @@
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
         </div> -->
+        <!-- Seguimiento (segto) -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
         <!-- Derivaciones -->
         <div class="md:col-span-3">
           <h3 class="mt-4">Indica si hace falta derivar el chico a:</h3>
@@ -223,11 +228,7 @@
               idInput="derivacion_externa" (change)="onChangeCheckbox($event)" />
           </div>
         </div>
-        <!-- Seguimiento (segto) -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto"
-            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
+
         <!-- Observaciones -->
         <div class="md:col-span-6">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""

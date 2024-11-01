@@ -27,5 +27,5 @@ export class InputDateComponent {
   @Input() control!: FormControl;
   @Input() placeholder = '';
   @Input() idInput = '';
-  @Input() hoy = new Date();
+  public hoy = new Date();
 }

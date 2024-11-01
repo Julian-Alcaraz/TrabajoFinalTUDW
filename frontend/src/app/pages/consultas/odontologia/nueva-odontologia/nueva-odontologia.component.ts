@@ -34,21 +34,21 @@ export class NuevaOdontologiaComponent {
   ) {
     this.odontologiaForm = this.fb.group({
       // Campos comunes
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
+      observaciones: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet justo ut posuere faucibus. Donec augue nisi, mollis et consequat nec, dignissim in ipsum. Phasellus auctor metus at leo tristique pretium. Nulla lacus magna, scelerisque pulvinar lacus ac, blandit lacinia tellus. Mauris mattis diam nec ullamcorper lobortis. Proin ut velit finibus, sagittis odio at, gravida dui. Maecenas malesuada ultrices lectus malesuada ullamcorper. Praesent massa libero, maximus at urna hendrerit, iaculis malesuada velit. Nunc odio quam, suscipit a feugiat vel, viverra sed nisi. Curabitur eleifend sapien eu lacus euismod vestibulum. Integer volutpat, leo at laoreet euismod, purus odio hendrerit velit, vitae viverra magna magna eu nulla. Quisque eget ex vitae elit tristique facilisis nec ac arcu. Mauris ut leo sem. ', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos odontologia
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
-      cepillo: ['', [Validators.required]],
-      cepillado: ['', [Validators.required]],
-      topificacion: ['', [Validators.required]],
-      derivacion: ['', [Validators.required]],
-      dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
-      sellador: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      cepillo: [true, [Validators.required]],
+      cepillado: [true, [Validators.required]],
+      topificacion: [false, [Validators.required]],
+      derivacion_externa: ['', [Validators.required]],
+      dientes_permanentes: [10, [Validators.required, ValidarSoloNumeros]],
+      dientes_temporales: [2, [Validators.required, ValidarSoloNumeros]],
+      sellador: [1, [Validators.required, ValidarSoloNumeros]],
+      dientes_recuperables: [1, [Validators.required, ValidarSoloNumeros]],
+      dientes_irecuperables: [2, [Validators.required, ValidarSoloNumeros]],
+      habitos: ['Buen cepillado', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
 
@@ -62,7 +62,7 @@ export class NuevaOdontologiaComponent {
       next: (response: any) => {
         if (response.success) {
           this.odontologiaForm.get('primera_vez')?.setValue(response.data.primera_vez);
-          this.odontologiaForm.get('ulterior')?.setValue(response.data.ulterior);
+          this.odontologiaForm.get('ulterior')?.setValue(!response.data.primera_vez);
         }
       },
       error: (err) => {
@@ -83,7 +83,7 @@ export class NuevaOdontologiaComponent {
   }
 
   enviarFormulario() {
-    if (this.odontologiaForm.valid || 1+1==2) {
+    if (this.odontologiaForm.valid || 1 + 1 == 2) {
       Swal.fire({
         title: '¿Cargar nueva consulta odontologica?',
         showDenyButton: true,
@@ -97,8 +97,11 @@ export class NuevaOdontologiaComponent {
           formValues.cepillado = formValues.cepillado === 'true';
           formValues.cepillo = formValues.cepillo === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
-          formValues.derivacion = formValues.derivacion === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
+          const derivaciones = {
+            externa: formValues.derivacion_externa === 'true',
+          };
+          delete formValues.derivacion_externa;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',
@@ -109,10 +112,13 @@ export class NuevaOdontologiaComponent {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
+            ...(derivaciones.externa && { derivaciones }),
             odontologia: {
               ...odontologicaValues,
             },
           };
+          console.log('DERIVACIONES: ' + derivaciones);
+          console.log('DATA:');
           console.log(data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
@@ -138,3 +144,22 @@ export class NuevaOdontologiaComponent {
     else return 'Sin clasificación';
   }
 }
+
+/* FORMULARIO LIMPIO
+  // Campos comunes
+  observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
+  // Campos odontologia
+  primera_vez: ['', [Validators.required]],
+  ulterior: ['', [Validators.required]],
+  cepillo: ['', [Validators.required]],
+  cepillado: ['', [Validators.required]],
+  topificacion: ['', [Validators.required]],
+  derivacion_externa: ['', [Validators.required]],
+  dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
+  dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
+  sellador: ['', [Validators.required, ValidarSoloNumeros]],
+  dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
+  dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+  // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+  habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+*/

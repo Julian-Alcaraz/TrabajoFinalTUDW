@@ -454,9 +454,9 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Mañana',
           derivaciones: {
-            Fonoaudiologia: true,
-            Odontologia: true,
-            Externa: false,
+            fonoaudiologia: true,
+            odontologia: true,
+            externa: false,
           },
         },
         {
@@ -468,9 +468,6 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Tarde',
           obra_social: true,
-          derivaciones: {
-            Externa: true,
-          },
         },
         {
           type: 'Odontologia',
@@ -482,7 +479,7 @@ export class MainSeeder implements Seeder {
           turno: 'Tarde',
           obra_social: false,
           derivaciones: {
-            Externa: false,
+            externa: false,
           },
         },
         {
@@ -494,7 +491,7 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Mañana',
           derivaciones: {
-            Externa: true,
+            externa: true,
           },
         },
         {
@@ -507,7 +504,7 @@ export class MainSeeder implements Seeder {
           turno: 'Mañana',
           deshabilitado: true,
           derivaciones: {
-            Externa: false,
+            externa: false,
           },
         },
       ]);
@@ -554,7 +551,7 @@ export class MainSeeder implements Seeder {
       const consultasOftalmologicas = await oftalmologiaORM.save([
         {
           consulta: consultas[1],
-          anteojos: false,
+          anteojos: null,
           control: false,
           demanda: 'Miopia',
           primera_vez: true,
@@ -568,7 +565,7 @@ export class MainSeeder implements Seeder {
           consulta: consultas[2],
           cepillado: true,
           cepillo: true,
-          derivacion: false,
+          // derivacion: false,
           dientes_irecuperables: 0,
           dientes_recuperables: 3,
           dientes_temporales: 10,

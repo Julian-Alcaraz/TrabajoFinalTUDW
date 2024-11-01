@@ -4,12 +4,14 @@
     <form (ngSubmit)="enviarFormulario()" [formGroup]="odontologiaForm">
       <app-campos-comunes [form]="odontologiaForm" (chicoChange)="this.recibirChico($event)" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
-        <!-- Calculos -->
+        <!-- Calculos primera_vez y ulterior -->
         <ng-container class="mt-4">
           <div *ngIf="chico !== null"
             class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
-              <p>Es su primera consulta: <span class="font-bold">{{ this.odontologiaForm.get('primera_vez')?.value ? "Si" : "No" }}</span></p>
-              <p>Es una consulta ulterior: <span class="font-bold">{{ this.odontologiaForm.get('ulterior')?.value ? "Si" : "No" }}</span></p>
+            <p><span class="font-bold">Es su primera vez: </span><span>{{
+                this.odontologiaForm.get('primera_vez')?.value ? "Si": "No" }}</span></p>
+            <p><span class="font-bold">Es ulterior: </span><span>{{ this.odontologiaForm.get('ulterior')?.value
+                ?"Si": "No" }}</span></p>
           </div>
         </ng-container>
         <!-- Cepillo -->
@@ -26,11 +28,6 @@
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')"
             idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
-        <!-- Derivacion -->
-        <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Derivacion?" [control]="controlDeInput('derivacion')" idInput="derivacion"
-            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <h3 class="mt-4 md:col-span-6">Estado de sus dientes:</h3>
         <!-- Dientes Permanentes -->
@@ -72,6 +69,11 @@
         <div class="mt-4 md:col-span-3">
           <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante"
             idInput="habitos" />
+        </div>
+        <!-- Derivacion -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
+            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Observaciones -->
         <div class="mt-4 md:col-span-6">

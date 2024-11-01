@@ -3,7 +3,6 @@ import { Transform } from 'class-transformer';
 import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString, Length, Min } from 'class-validator';
 
 export class CreateOdontologiaDto {
-
   @ApiProperty({ description: 'Primera vez del niño que asiste a la consulta' })
   @IsNotEmpty({ message: 'El campo primera vez no puede estar vacia' })
   @IsBoolean({ message: 'El campo primera vez debe ser un boleano' })
@@ -42,10 +41,10 @@ export class CreateOdontologiaDto {
   @IsBoolean({ message: 'Cepillado debe ser un boleano' })
   readonly cepillado: boolean;
 
-  @ApiProperty({ description: 'Derivacion del niño que asiste a la consulta' })
-  @IsNotEmpty({ message: 'Derivacion no puede estar vacio' })
-  @IsBoolean({ message: 'Derivacion debe ser un boleano' })
-  readonly derivacion: boolean;
+  // @ApiProperty({ description: 'Derivacion del niño que asiste a la consulta' })
+  // @IsNotEmpty({ message: 'Derivacion no puede estar vacio' })
+  // @IsBoolean({ message: 'Derivacion debe ser un boleano' })
+  // readonly derivacion: boolean;
 
   @ApiProperty({ description: 'Dientes recuperables del niño que asiste' })
   @IsNotEmpty({ message: 'Dientes recuperables no puede estar vacio' })

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
 
-@Entity()
+@Entity('fonoaudiologia')
 export class Fonoaudiologia {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;

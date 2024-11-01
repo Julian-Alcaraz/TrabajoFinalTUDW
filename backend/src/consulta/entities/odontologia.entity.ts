@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
 
-@Entity()
+@Entity('odontologia')
 export class Odontologia {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
@@ -33,8 +33,8 @@ export class Odontologia {
   @Column({ type: 'boolean' })
   cepillado: boolean;
 
-  @Column({ type: 'boolean' })
-  derivacion: boolean;
+  // @Column({ type: 'boolean' })
+  // derivacion: boolean;
 
   @Column({ type: 'int', nullable: true })
   dientes_recuperables: number;

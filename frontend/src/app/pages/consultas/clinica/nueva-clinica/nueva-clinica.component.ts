@@ -116,27 +116,18 @@ export class NuevaClinicaComponent {
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          delete formValues.dni;
-
           const derivacionesSinFiltrar = {
-            Odontologia: formValues.derivacion_odontologia,
-            Oftalmologia: formValues.derivacion_oftalmologia,
-            Fonoaudiologia: formValues.derivacion_fonoaudiologia,
-            Externa: formValues.derivacion_externa,
+            odontologia: formValues.derivacion_odontologia,
+            oftalmologia: formValues.derivacion_oftalmologia,
+            fonoaudiologia: formValues.derivacion_fonoaudiologia,
+            externa: formValues.derivacion_externa,
           };
-
           const derivaciones = Object.fromEntries(Object.entries(derivacionesSinFiltrar).filter(([, value]) => value === true));
-
-          if (Object.keys(derivaciones).length === 0 && derivaciones.constructor === Object) {
-            // si pasa esto no hay derivaciones
-            console.log('no hay derivaciones');
-          }
-
           delete formValues.derivacion_externa;
           delete formValues.derivacion_fonoaudiologia;
           delete formValues.derivacion_odontologia;
           delete formValues.derivacion_oftalmologia;
-
+          delete formValues.dni;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
           const data = {
             type: 'Clinica',
@@ -147,7 +138,7 @@ export class NuevaClinicaComponent {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            ...(Object.keys(derivaciones).length > 0 && derivaciones.constructor === Object && { derivaciones }),
             clinica: {
               ...clinicaValues,
             },

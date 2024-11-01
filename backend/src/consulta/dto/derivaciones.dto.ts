@@ -6,17 +6,17 @@ export class DerivacionesDto {
 
   @IsBoolean({ message: 'La derivación Odontologia debe ser booleana' })
   @IsOptional()
-  Odontologia?: boolean;
+  odontologia?: boolean;
 
   @IsBoolean({ message: 'La derivación Oftalmologia debe ser booleana' })
   @IsOptional()
-  Oftalmologia?: boolean;
+  oftalmologia?: boolean;
 
   @IsBoolean({ message: 'La derivación Fonoaudiologia debe ser booleana' })
   @IsOptional()
-  Fonoaudiologia?: boolean;
+  fonoaudiologia?: boolean;
 
   @IsBoolean({ message: 'La derivación Externa debe ser booleana' })
   @IsOptional()
-  Externa?: boolean;
+  externa?: boolean;
 }
