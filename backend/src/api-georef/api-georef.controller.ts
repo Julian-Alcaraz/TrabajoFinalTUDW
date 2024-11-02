@@ -6,11 +6,19 @@ export class ApiGeorefController {
 
   @Get(':provincia')
   async obtenerLocalidades(@Param('provincia') provincia: string) {
-    const localidades = await this.apiGeorefService.obtenerLocalidades(provincia);
-    return {
-      success: true,
-      data: localidades.data,
-      message: 'Localidades obtenidas con exito',
-    };
+    const data = await this.apiGeorefService.obtenerLocalidades(provincia);
+    if (data.localidades.length > 0) {
+      return {
+        success: true,
+        data: data,
+        message: 'Localidades obtenidas con exito',
+      };
+    } else {
+      return {
+        success: false,
+        data: data,
+        message: 'No se obtuvieron localidades',
+      };
+    }
   }
 }

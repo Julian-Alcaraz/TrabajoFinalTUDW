@@ -8,11 +8,11 @@ export class ApiEmailsController {
   @Get(':email')
   async validarEmail(@Param('email') email: string) {
     const response = await this.apiEmailsService.validarEmail(email);
-    if (response.error) {
+    if (response.status !== 'valid') {
       return {
         success: false,
         data: response,
-        message: 'Error al validar',
+        message: 'Email no valido',
       };
     }
     return {

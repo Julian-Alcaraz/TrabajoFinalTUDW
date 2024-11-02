@@ -119,7 +119,7 @@ export class FormChicosComponent implements OnInit {
   onChangeLocalidad() {
     const idLocalidad = this.chicoForm.get('id_localidad')?.value;
     if (idLocalidad && idLocalidad !== 'new' && idLocalidad !== '') {
-      this.obtenerBarriosXLocalidad(idLocalidad);
+      // this.obtenerBarriosXLocalidad(idLocalidad);
       this.chicoForm.get('id_barrio')?.enable();
     } else if (idLocalidad === 'new') {
       this.abrirModalLocalidad();
@@ -127,22 +127,7 @@ export class FormChicosComponent implements OnInit {
     }
   }
 
-  public loadingLocalidades = false;
 
-  obtenerLocalidades(provincia: string): any {
-    this.loadingLocalidades = true;
-    this._apiGeorefService.obtenerLocalidades(provincia).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.localidades = response.data.localidades;
-        this.loadingLocalidades = false;
-      },
-      error: (err: any) => {
-        this.loadingLocalidades = false;
-        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-      },
-    });
-  }
 
   esCargaOedicion() {
     this.searching = true;
@@ -381,6 +366,27 @@ export class FormChicosComponent implements OnInit {
       this.chicoForm.get('id_localidad')?.disable();
     }
   }
+  public loadingLocalidades = false;
+
+  obtenerLocalidades(provincia: string): any {
+    this.loadingLocalidades = true;
+    this._apiGeorefService.obtenerLocalidades(provincia).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.loadingLocalidades = false;
+        this.localidades = response.data.localidades;
+        if(response.success){
+          MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+        }else{
+          MostrarNotificacion.mensajeAtencion(this.snackBar, response.message);
+        }
+      },
+      error: (err: any) => {
+        this.loadingLocalidades = false;
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
+  }
 
   onChangePais() {
     this.loadingProvinces = true;
@@ -392,15 +398,13 @@ export class FormChicosComponent implements OnInit {
     }
     this._apiSoapGeoNamesService.buscarProvinciasxPais(codigo).subscribe({
       next: (response) => {
-        console.log(response);
         if (response.success) {
           this.loadingProvinces = false;
           this.provinciasxpais = response.data.provinces;
-          console.log(this.provinciasxpais);
-          if (   this.provinciasxpais && this.provinciasxpais?.length > 0) {
+          if ( this.provinciasxpais && this.provinciasxpais?.length > 0) {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
           }else{
-            MostrarNotificacion.mensajeAtencion(this.snackBar, 'No se encontraron provincias en el pais selecionado.');
+            MostrarNotificacion.mensajeAtencion(this.snackBar, response.message);
           }
         } else {
           this.loadingProvinces = false;
@@ -408,7 +412,6 @@ export class FormChicosComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.log('ERROR BUSCAR PROVINCIAS', err);
         this.loadingProvinces = false;
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },

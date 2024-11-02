@@ -19,6 +19,10 @@ export class ApiSoap2Service {
         if (err) return reject(err);
         resolve(result);
       });
+      // this.soapClient.Multiply(args, (err, result) => {
+      //   if (err) return reject(err);
+      //   resolve(result);
+      // });
     });
   }
 }

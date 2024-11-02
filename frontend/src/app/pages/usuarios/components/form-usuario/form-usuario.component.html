@@ -2,98 +2,72 @@
   <div class="grid gap-6 md:grid-cols-2">
     <div>
       <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
-      <input formControlName="nombre" type="text" id="first_name"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: Pedro" required />
-      <div *ngIf="userForm.get('nombre')?.errors && (userForm.get('nombre')?.dirty || userForm.get('nombre')?.touched)"
-        class="text-red-600 text-sm">
+      <input formControlName="nombre" type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ej: Pedro" required />
+      <div *ngIf="userForm.get('nombre')?.errors && (userForm.get('nombre')?.dirty || userForm.get('nombre')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="userForm.get('nombre')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="userForm.get('nombre')?.errors?.['minlength']">Minimo 3 caracteres.</div>
         <div *ngIf="userForm.get('nombre')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
-        <div *ngIf="userForm.get('nombre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.
-        </div>
+        <div *ngIf="userForm.get('nombre')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
     </div>
     <div>
       <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900">Apellido</label>
-      <input formControlName="apellido" type="text" id="last_name"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: Gonzales" required />
-      <div
-        *ngIf="userForm.get('apellido')?.errors && (userForm.get('apellido')?.dirty || userForm.get('apellido')?.touched)"
-        class="text-red-600 text-sm">
+      <input formControlName="apellido" type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ej: Gonzales" required />
+      <div *ngIf="userForm.get('apellido')?.errors && (userForm.get('apellido')?.dirty || userForm.get('apellido')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="userForm.get('apellido')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="userForm.get('apellido')?.errors?.['minlength']">Minimo 3 caracteres.</div>
         <div *ngIf="userForm.get('apellido')?.errors?.['maxlength']">Maximo 40 caracteres.</div>
-        <div *ngIf="userForm.get('apellido')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.
-        </div>
+        <div *ngIf="userForm.get('apellido')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
     </div>
     <div>
       <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-      <input (change)="onChangeEmail()" formControlName="email" type="email" id="email"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ej: gonzales@email.com" required />
-      <div *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.dirty || userForm.get('email')?.touched)"
-        class="text-red-600 text-sm">
+      <input (change)="onChangeEmail()" formControlName="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ej: gonzales@email.com" required />
+      <div *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="userForm.get('email')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="userForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
         <div *ngIf="userForm.get('email')?.errors?.['ValidarEmail']">Formato de email incorrecto.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.
-        </div>
+        <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
     </div>
     <div>
       <label for="dni" class="block mb-2 text-sm font-medium text-gray-900">Documento</label>
-      <input formControlName="dni" type="number" id="number-input" aria-describedby="helper-text-explanation"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="xxxxx" required />
-      <div *ngIf="userForm.get('dni')?.errors && (userForm.get('dni')?.dirty || userForm.get('dni')?.touched)"
-        class="text-red-600 text-sm">
+      <input formControlName="dni" type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="xxxxx" required />
+      <div *ngIf="userForm.get('dni')?.errors && (userForm.get('dni')?.dirty || userForm.get('dni')?.touched)" class="text-red-600 text-sm">
         <div *ngIf="userForm.get('dni')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="userForm.get('dni')?.errors?.['ValidarDni']">Debe tener 8 caracteres.</div>
       </div>
     </div>
     <ng-container *ngIf="verifyingEmail">
-      <div class="md:col-span-6 sm:col-span-3">
+      <div class="md:col-span-1 sm:col-span-1">
         <div role="status " class="my-2 flex justify-center">
-          <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9. 08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor" />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1. 94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191   9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421   39.6781 93.9676 39.0409Z"
-              fill="currentFill" />
+          <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9. 08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1. 94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191   9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421   39.6781 93.9676 39.0409Z" fill="currentFill" />
           </svg>
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="apiEmail?.status">
-      <div *ngIf="apiEmail?.status === 'invalid'" class="md:col-span-1 sm:col-span-1">
+    <ng-container *ngIf="apiEmail?.status ">
+      <div *ngIf="apiEmail?.status !== 'valid'" class="md:col-span-1 sm:col-span-1">
         <div class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
           <div class="flex items-center md:gap-2 sm:gap-2">
-            <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+            <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
             </svg>
-            <span class="font-semibold ">Error, el email no existe.</span>
+            <span class="font-semibold">Error, el email no es valido.</span>
           </div>
         </div>
       </div>
-      <div *ngIf="apiEmail?.status === 'valid'"
-        class="bg-green-100 border border-green-300 text-sm p-4 rounded-lg w-full">
-        <div class="flex items-center">
-          <div class="text-green-600">
-            <svg class="w-11 h-11 mr-2" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div *ngIf="apiEmail?.status === 'valid'" class="md:col-span-1 sm:col-span-1">
+        <div class="bg-green-100 border border-green-300 text-green-600 text-sm p-4 rounded-lg w-full">
+          <div class="flex items-center md:gap-2 sm:gap-2">
+            <svg class="w-11 h-11 mr-2" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
+            <span class="text-green-600">Email valido.</span>
           </div>
-          <p class="text-green-600">Email valido.</p>
         </div>
       </div>
     </ng-container>
@@ -101,12 +75,10 @@
       <div class="md:col-span-1 sm:col-span-1">
         <div class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
           <div class="flex items-center md:gap-2 sm:gap-2">
-            <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+            <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
             </svg>
-            <span class="font-semibold ">Error de api de validacion de emails: {{ apiEmail?.error }}.</span>
+            <span class="font-semibold">Error de api de validacion de emails: {{ apiEmail?.error }}.</span>
           </div>
         </div>
       </div>
@@ -118,59 +90,49 @@
         <input matInput [matDatepicker]="picker" formControlName="fe_nacimiento" [max]="hoy" />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-hint
-          *ngIf="userForm.get('fe_nacimiento')?.errors && (userForm.get('fe_nacimiento')?.dirty || userForm.get('fe_nacimiento')?.touched) && userForm.get('fe_nacimiento')?.errors?.['required']"
-          class="text-red-600">El campo es requerido. </mat-hint>
+        <mat-hint *ngIf="userForm.get('fe_nacimiento')?.errors && (userForm.get('fe_nacimiento')?.dirty || userForm.get('fe_nacimiento')?.touched) && userForm.get('fe_nacimiento')?.errors?.['required']" class="text-red-600">El campo es requerido. </mat-hint>
       </mat-form-field>
     </div>
 
     @if (this.usuario && !this.esFormulario) {
-    <div>
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-      <div class="flex flex-wrap">
-        @for (rol of this.roles; track $index) {
-        @if (this.usuario.roles_ids?.includes(rol.id)) {
-        {{ rol.nombre | titlecase }}
-        }
-        }
-      </div>
-    </div>
-    } @else {
-    <div class="flex flex-col">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-      <div class="flex flex-wrap">
-        <div *ngFor="let rol of roles" class="flex items-center me-4 mb-3">
-          <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id"
-            [checked]="this.usuario && this.usuario.roles_ids?.includes(rol.id)" (change)="onCheckboxChange($event)"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-          <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre
-            }}</label>
+      <div>
+        <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
+        <div class="flex flex-wrap">
+          @for (rol of this.roles; track $index) {
+            @if (this.usuario.roles_ids?.includes(rol.id)) {
+              {{ rol.nombre | titlecase }}
+            }
+          }
         </div>
       </div>
-      <div *ngIf="selectCheckbox" class="text-red-600 text-sm align-bottom">Debe seleccionar al menos uno.</div>
-    </div>
+    } @else {
+      <div class="flex flex-col">
+        <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
+        <div class="flex flex-wrap">
+          <div *ngFor="let rol of roles" class="flex items-center me-4 mb-3">
+            <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id" [checked]="this.usuario && this.usuario.roles_ids?.includes(rol.id)" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
+          </div>
+        </div>
+        <div *ngIf="selectCheckbox" class="text-red-600 text-sm align-bottom">Debe seleccionar al menos uno.</div>
+      </div>
     }
   </div>
   @if (this.esFormulario) {
-  <div class="flex my-auto">
-    <p class="text-gray-400 text-sm">*La contraseña asignada sera el documento. Luego el usuario podra cambiarla.</p>
-    <button type="submit" [disabled]="!userForm.valid"
-      class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
-  </div>
+    <div class="flex my-auto">
+      <p class="text-gray-400 text-sm">*La contraseña asignada sera el documento. Luego el usuario podra cambiarla.</p>
+      <button type="submit" [disabled]="!userForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+    </div>
   } @else {
-  @if (!estaEditando) {
-  <div class="flex my-auto">
-    <button type="button" (click)="activarFormulario()"
-      class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar
-      valores</button>
-  </div>
-  } @else {
-  <div class="flex flex-row my-auto">
-    <button type="button" (click)="desactivarFormulario()"
-      class="flex my-auto ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-    <button type="submit"
-      class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
-  </div>
-  }
+    @if (!estaEditando) {
+      <div class="flex my-auto">
+        <button type="button" (click)="activarFormulario()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar valores</button>
+      </div>
+    } @else {
+      <div class="flex flex-row my-auto">
+        <button type="button" (click)="desactivarFormulario()" class="flex my-auto ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+        <button type="submit" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+      </div>
+    }
   }
 </form>
