@@ -12,6 +12,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'Fundación Sol';
   // validar si existe la session
 }

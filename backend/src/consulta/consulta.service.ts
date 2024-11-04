@@ -129,7 +129,7 @@ export class ConsultaService {
   }
 
   findAll() {
-    return `This action returns all consulta`;
+    return this.consultaORM.find({ where: { deshabilitado: false }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
 
   update(id: number, updateConsultaDto: UpdateConsultaDto) {

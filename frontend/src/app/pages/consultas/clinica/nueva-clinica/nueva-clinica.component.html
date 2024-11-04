@@ -94,19 +94,6 @@
                   idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
               </div>
             </div>
-            <!-- Grupo de consumos problemáticos
-            <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico tiene antecedentes familiares de consumos problemáticos de:</h3>
-              <div class="flex flex-col mt-2">
-                <app-input-checkbox label="Alcohol" [control]="controlDeInput('consumo_alcohol')"
-                  idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas"
-                  (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Tabaco" [control]="controlDeInput('consumo_tabaco')" idInput="consumo_tabaco"
-                  (change)="onChangeCheckbox($event)" />
-              </div>
-            </div>-->
-            <!-- Grupo de lácteos -->
           </div>
         </div>
         <!-- Lacteos -->
@@ -144,22 +131,6 @@
         </div>
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
-          <!-- <label for="ortopedia_traumatologia" class="block mb-4 text-sm font-medium text-gray-900">Ortopedia y
-            Traumatologia</label>
-          <select formControlName="ortopedia_traumatologia" id="ortopedia_traumatologia"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="normal">Normal</option>
-            <option value="escoliosis">Escoliosis</option>
-            <option value="piePlano">Pie Plano</option>
-            <option value="Otras(VER!!!!!!!)">Otras(VER!!!!!!!)</option>
-          </select>
-          <div
-            *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors && (clinicaForm.get('ortopedia_traumatologia')?.dirty || clinicaForm.get('ortopedia_traumatologia')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="clinicaForm.get('ortopedia_traumatologia')?.errors?.['required']">Debe seleccionar una opción.
-            </div>
-          </div> -->
           <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')"
             idInput="ortopedia_traumatologia" [opciones]="['Normal', 'Escoliosis', 'Pie Plano','Otras(VER!!!!!!!)']"
             [valores]="['Normal', 'Escoliosis', 'Pie Plano','Otras(VER!!!!!!!)']" />
@@ -228,7 +199,6 @@
               idInput="derivacion_externa" (change)="onChangeCheckbox($event)" />
           </div>
         </div>
-
         <!-- Observaciones -->
         <div class="md:col-span-6">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
@@ -237,8 +207,7 @@
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <!-- [disabled]="!clinicaForm.valid" -->
-        <button type="submit"
+        <button type="submit" [disabled]="!clinicaForm.valid"
           class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
         </button>
       </div>

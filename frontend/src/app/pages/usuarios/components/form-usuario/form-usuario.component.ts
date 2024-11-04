@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
@@ -17,11 +18,12 @@ import { SessionService } from '../../../../services/session.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
+import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputRadioComponent, MatRadioModule],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -30,7 +32,7 @@ export class FormUsuarioComponent implements OnInit {
   @Input() usuario: Usuario | null = null;
 
   public userForm: FormGroup;
-  public hoy = new Date();
+  public fechaHoy = new Date();
   public roles: Rol[] = [];
   public selectCheckbox = true;
   public estaEditando = false;

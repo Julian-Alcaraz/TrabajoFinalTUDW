@@ -66,34 +66,12 @@
     </div>
     <!-- Sexo: -->
     <div class="md:col-span-2">
-      <p class="block mb-2 text-sm font-medium text-gray-900">Sexo</p>
-      <ul class="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <label for="horizontal-list-sexoFemenino" class="w-full flex items-center ps-3 py-3 cursor-pointer">
-            <input id="horizontal-list-sexoFemenino" type="radio" value="Femenino" name="sexo" formControlName="sexo"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <span class="ms-2 text-sm font-medium text-gray-900">Femenino</span>
-          </label>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <label for="horizontal-list-sexoMasculino" class="w-full flex items-center ps-3 py-3 cursor-pointer">
-            <input id="horizontal-list-sexoMasculino" type="radio" value="Masculino" name="sexo" formControlName="sexo"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <span class="ms-2 text-sm font-medium text-gray-900">Masculino</span>
-          </label>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-          <label for="horizontal-list-sexoOtro" class="w-full flex items-center ps-3 py-3 cursor-pointer">
-            <input id="horizontal-list-sexoOtro" type="radio" value="Otro" name="sexo" formControlName="sexo"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <span class="ms-2 text-sm font-medium text-gray-900">Otro</span>
-          </label>
-        </li>
-      </ul>
+      <app-input-radio [items]="['Femenino', 'Masculino', 'Otro']" [control]="controlDeInput('sexo')" nombre="sexo"
+        label="Sexo" />
     </div>
     <!-- Fecha de Nacimiento -->
     <div class="md:col-span-2">
-      <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" />
+      <app-input-date label="Fecha de Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHaceUnAnio"/>
     </div>
     <!-- Nombre padre: -->
     <div class="md:col-span-2">

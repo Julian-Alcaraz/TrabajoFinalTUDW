@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
     <p class="block mb-2 text-sm font-medium text-gray-900">{{ label }}</p>
     <mat-form-field class="col-span-2">
       <mat-label>{{ label }}</mat-label>
-      <input matInput [matDatepicker]="picker" [formControl]="control" [max]="hoy" />
+      <input matInput [matDatepicker]="picker" [formControl]="control" [max]="max" [min]="min"/>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
       <mat-hint *ngIf="control?.errors && (control?.dirty || control?.touched)" class="text-red-600 text-sm">
@@ -25,7 +25,6 @@ import { MatInputModule } from '@angular/material/input';
 export class InputDateComponent {
   @Input() label!: string;
   @Input() control!: FormControl;
-  @Input() placeholder = '';
-  @Input() idInput = '';
-  public hoy = new Date();
+  @Input() min!: Date;
+  @Input() max!: Date;
 }

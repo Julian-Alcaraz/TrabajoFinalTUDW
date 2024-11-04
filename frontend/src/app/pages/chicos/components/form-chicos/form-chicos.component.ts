@@ -20,11 +20,12 @@ import { InputTextComponent } from '../../../../components/inputs/input-text.com
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputDateComponent } from "../../../../components/inputs/input-date.component";
 import { LoadingComponent } from '../../../../components/loading/input-loading.component';
+import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
 
 @Component({
   selector: 'app-form-chicos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputDateComponent, LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputDateComponent, LoadingComponent, InputRadioComponent],
   templateUrl: './form-chicos.component.html',
   styleUrl: './form-chicos.component.css',
 })
@@ -34,13 +35,14 @@ export class FormChicosComponent implements OnInit {
 
   public searching = false;
   public chicoForm: FormGroup;
-  public hoy = new Date();
   public barrios: Barrio[] = [];
   public localidades: Localidad[] = [];
   public localidadForm: FormGroup;
   public barrioForm: FormGroup;
   public estaEditando = false;
   public chico: Chico | null = null;
+  public fechaHaceUnAnio = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+  public fechaHoy = new Date();
 
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
