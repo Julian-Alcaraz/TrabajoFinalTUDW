@@ -112,19 +112,19 @@
             <label for="clinica" class="text-sm font-medium text-gray-900">Clinica</label>
           </div>
           <div class="flex items-center">
-            <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Odontologia"
+            <input (change)="onChangeCheckbox($event)" id="Odontologia" type="checkbox" value="Odontologia"
               class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
-            <label for="clinica" class="text-sm font-medium text-gray-900">Odontologia</label>
+            <label for="Odontologia" class="text-sm font-medium text-gray-900">Odontologia</label>
           </div>
           <div class="flex items-center">
-            <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Fonoaudiologia"
+            <input (change)="onChangeCheckbox($event)" id="Fonoaudiologia" type="checkbox" value="Fonoaudiologia"
               class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
-            <label for="clinica" class="text-sm font-medium text-gray-900">Fonoaudiologia</label>
+            <label for="Fonoaudiologia" class="text-sm font-medium text-gray-900">Fonoaudiologia</label>
           </div>
           <div class="flex items-center">
-            <input (change)="onChangeCheckbox($event)" id="clinica" type="checkbox" value="Oftalmologia"
+            <input (change)="onChangeCheckbox($event)" id="Oftalmologia" type="checkbox" value="Oftalmologia"
               class="m-2 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 sm:w-4 sm:h-4" />
-            <label for="clinica" class="text-sm font-medium text-gray-900">Oftalmologia</label>
+            <label for="Oftalmologia" class="text-sm font-medium text-gray-900">Oftalmologia</label>
           </div>
         </div>
         <div class="scroll">
@@ -165,7 +165,7 @@
               <th mat-header-cell *matHeaderCellDef>Obra Social</th>
               <td mat-cell *matCellDef="let consulta">
                 <p *ngIf="!consulta.obra_social; else tieneObraSocial">-</p>
-                <ng-template #tieneObraSocial>{{ consulta.obra_social }}</ng-template>
+                <ng-template #tieneObraSocial>{{ consulta.obra_social ? 'Tiene' : 'No tiene' }}</ng-template>
               </td>
             </ng-container>
             <!-- Curso-->
