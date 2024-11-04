@@ -48,16 +48,7 @@
         </ng-container>
         <!-- Proximo Control -->
         <div class="mt-4 md:col-span-3">
-          <p class="block mb-2 text-sm font-medium text-gray-900">Fecha del próximo control</p>
-          <mat-form-field class="md:col-span-2">
-            <mat-label>Próximo Control</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="prox_control" [min]="fechaManana" />
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-hint
-              *ngIf="oftalmologiaForm.get('prox_control')?.errors && (oftalmologiaForm.get('prox_control')?.dirty || oftalmologiaForm.get('prox_control')?.touched) && oftalmologiaForm.get('prox_control')?.errors?.['required']"
-              class="text-red-600">El campo es requerido. </mat-hint>
-          </mat-form-field>
+          <app-input-date label="Fecha del Próximo Control" [control]="controlDeInput('prox_control')" idInput="prox_control" [min]="fechaManana" />
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-6">

@@ -27,7 +27,8 @@
         idInput="dni" />
     </div>
     <div>
-      <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" />
+      <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento"
+        [max]="fechaHoy" />
     </div>
     @if (this.usuario && !this.esFormulario) {
     <div>

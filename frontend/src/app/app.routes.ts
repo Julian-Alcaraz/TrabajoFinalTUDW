@@ -15,6 +15,8 @@ import { NuevaOftalmologiaComponent } from './pages/consultas/oftalmologia/nueva
 import { NuevaFonoaudiologicaComponent } from './pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
 import { NuevaOdontologiaComponent } from './pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
 import { EditarChicoComponent } from './pages/chicos/editar-chico/editar-chico.component';
+import { ListaComponent } from './pages/lista/lista.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,7 +32,7 @@ export const routes: Routes = [
       { path: 'usuarios/miUsuario', component: MiUsuarioComponent, canActivate: [] },
       { path: 'usuarios/nuevo', component: NuevoUsuarioComponent, canActivate: [adminGuard] },
       { path: 'usuarios/list', component: ListaUsuarioComponent, canActivate: [adminGuard] },
-      { path: 'chicos/nuevo', component: NuevoChicoComponent, canActivate: [] }, // Esta ruta deberia ser accesible solo a los usuarios administradores o medicos, no para acceso-info
+      { path: 'chicos/nuevo', component: NuevoChicoComponent, canActivate: [] }, // Admin y medicos
       { path: 'chicos/list', component: ListaChicoComponent, canActivate: [] },
       { path: 'chicos/ver/:id', component: VerChicoComponent, canActivate: [] },
       { path: 'chicos/editar/:id', component: EditarChicoComponent, canActivate: [adminGuard] },
@@ -38,6 +40,7 @@ export const routes: Routes = [
       { path: 'consultas/oftalmologia/nueva', component: NuevaOftalmologiaComponent, canActivate: [] },
       { path: 'consultas/odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [] },
       { path: 'consultas/fonoaudiologia/nueva', component: NuevaFonoaudiologicaComponent, canActivate: [] },
+      { path: 'lista', component: ListaComponent, canActivate: [] }, // Admin, Profesionales y Acceso Info
     ],
   },
 ];

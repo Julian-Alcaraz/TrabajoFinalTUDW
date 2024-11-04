@@ -158,6 +158,13 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
+          url: 'lista',
+          label: 'Lista',
+          orden: 5,
+          icon: '',
+          roles: [roles[0], roles[1], roles[2]],
+        },
+        {
           url: 'menuDeshabilitado',
           label: 'menuDeshabilitado',
           orden: 0,
@@ -456,7 +463,8 @@ export class MainSeeder implements Seeder {
           derivaciones: {
             fonoaudiologia: true,
             odontologia: true,
-            externa: false,
+            oftalmologia: true,
+            externa: true,
           },
         },
         {
@@ -478,9 +486,6 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Tarde',
           obra_social: false,
-          derivaciones: {
-            externa: false,
-          },
         },
         {
           type: 'Fonoaudiologia',
@@ -503,9 +508,6 @@ export class MainSeeder implements Seeder {
           institucion: instituciones[0],
           turno: 'Mañana',
           deshabilitado: true,
-          derivaciones: {
-            externa: false,
-          },
         },
       ]);
       console.log('Seeding consultas clinicas...');

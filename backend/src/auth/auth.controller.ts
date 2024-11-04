@@ -18,7 +18,7 @@ export class AuthController {
     const { token, usuario } = req.user as any;
     // Guardo token en cookie
     res.cookie('Authorization', token, {
-      maxAge: 60 * 60 * 1000, // 1 hora
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
       httpOnly: false,
       secure: false,
     });

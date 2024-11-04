@@ -15,12 +15,13 @@ import { InputTextComponent } from '../../../../components/inputs/input-text.com
 import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import { InputDateComponent } from '../../../../components/inputs/input-date.component';
 import { Chico } from '../../../../models/chico.model';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
   templateUrl: './nueva-oftalmologia.component.html',
   styleUrl: './nueva-oftalmologia.component.css',
 })

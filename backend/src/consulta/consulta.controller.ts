@@ -24,7 +24,7 @@ export class ConsultaController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelte todas las consultas sin los datos por especialidad' })
+  @ApiOperation({ summary: 'Devuelte todas las consultas relacionadas con chico, curso e institución pero sin los datos por especialidad' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async findAll() {
     const consultas = await this.consultaService.findAll();
