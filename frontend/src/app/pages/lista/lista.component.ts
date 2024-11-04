@@ -11,8 +11,10 @@ import { Consulta } from '../../models/consulta.model';
 import { ConsultaService } from '../../services/consulta.service';
 import { LoadingComponent } from '../../components/loading/input-loading.component';
 import { DataConsultaPipe } from '../../utils/pipes/data-consulta.pipe';
-// import { ButtonModule } from 'primeng/button';
-// import { TableModule } from 'primeng/table';
+
+//
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-lista',
@@ -53,6 +55,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerConsultas();
+  }
+
+  toggleDarkMode() {
+    const element = document.querySelector('html');
+    element?.classList.toggle('my-app-dark');
   }
 
   obtenerConsultas() {

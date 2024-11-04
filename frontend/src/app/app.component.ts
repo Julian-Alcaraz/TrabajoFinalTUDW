@@ -4,6 +4,20 @@ import { NavBarComponent } from './pages/layout/components/side-bar/side-bar.com
 import { LoginComponent } from './pages/login/login.component';
 import { CommonModule } from '@angular/common';
 
+import { PrimeNGConfig } from 'primeng/api';
+import { Aura } from 'primeng/themes/aura';
+// import { definePreset } from 'primeng/themes';
+// import { Lara } from 'primeng/themes/lara';
+// import { Nora } from 'primeng/themes/nora';
+
+// const MyPreset = definePreset(Aura, {
+//   semantic: {
+//     primary: {
+//       blue: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a', 950: '#172554' },
+//     },
+//   },
+// });
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,5 +27,16 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'Fundación Sol';
+
   // validar si existe la session
+  constructor(private config: PrimeNGConfig) {
+    this.config.theme.set({
+      preset: Aura,
+      options: {
+        prefix: 'p',
+        darkModeSelector: '.my-app-dark',
+        cssLayer: false,
+      },
+    });
+  }
 }

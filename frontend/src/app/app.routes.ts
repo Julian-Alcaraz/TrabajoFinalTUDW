@@ -18,6 +18,7 @@ import { EditarChicoComponent } from './pages/chicos/editar-chico/editar-chico.c
 import { ListaComponent } from './pages/lista/lista.component';
 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   // { path: 'asda',component:LayoutComponent  },
