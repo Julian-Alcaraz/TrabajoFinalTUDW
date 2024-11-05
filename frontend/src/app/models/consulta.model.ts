@@ -1,4 +1,3 @@
-
 import { Oftalmologia } from './oftalmologia.model';
 import { Clinica } from './clinica.model';
 import { Fonoaudiologia } from './fonoaudiologia.model';

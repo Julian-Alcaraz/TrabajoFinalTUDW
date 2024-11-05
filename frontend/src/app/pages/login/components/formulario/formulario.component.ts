@@ -42,7 +42,6 @@ export class FormularioComponent {
           this._sessionService.setIdentidad(response.data);
           // this._router.navigate(['/layout']);
           this._router.navigate(['/layout'], { queryParams: { from: 'login' } });
-
         } else {
           MostrarNotificacion.mensajeError(this.snackBar, response.message);
         }

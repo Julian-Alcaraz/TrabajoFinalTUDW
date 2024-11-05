@@ -7,38 +7,28 @@
       <div class="grid gap-6 md:grid-cols-8 sm:grid-cols-3">
         <!-- Diagnostico Presuntivo -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Diagnostico Presuntivo" [control]="controlDeInput('diagnostico_presuntivo')"
-            idInput="diagnostico_presuntivo"
-            [opciones]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']"
-            [valores]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']" />
+          <app-input-select-enum label="Diagnostico Presuntivo" [control]="controlDeInput('diagnostico_presuntivo')" idInput="diagnostico_presuntivo" [opciones]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']" [valores]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']" />
         </div>
         <!-- Causas -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Causas" [control]="controlDeInput('causas')" idInput="causas"
-            [opciones]="['Prenatal', 'Postnatal','Acv', 'Respiratorias','Audicion', 'Patologias clinicas','Sindromes', 'Inflamacion de amigdalas o adenoides','Prematurez', 'Otras']"
-            [valores]="['Prenatal', 'Postnatal','Acv', 'Respiratorias','Audicion', 'Patologias clinicas','Sindromes', 'Inflamacion de amigdalas o adenoides','Prematurez', 'Otras']" />
+          <app-input-select-enum label="Causas" [control]="controlDeInput('causas')" idInput="causas" [opciones]="['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras']" [valores]="['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras']" />
         </div>
         <!-- Asistencia -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia"
-            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
-            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-8">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
-            idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
         </div>
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!fonoaudiologiaForm.valid"
-          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-        </button>
+        <button type="submit" [disabled]="!fonoaudiologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
       </div>
     </form>
   </div>

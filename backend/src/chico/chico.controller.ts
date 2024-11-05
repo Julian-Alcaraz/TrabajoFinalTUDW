@@ -112,5 +112,4 @@ export class ChicoController {
       message: 'Consultas encontradas por chico con exito',
     };
   }
-
 }

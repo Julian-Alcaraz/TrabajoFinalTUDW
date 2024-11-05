@@ -37,4 +37,3 @@ export class ChicoService {
     return this._http.patch(this.url + 'chico/' + id, data);
   }
 }
-

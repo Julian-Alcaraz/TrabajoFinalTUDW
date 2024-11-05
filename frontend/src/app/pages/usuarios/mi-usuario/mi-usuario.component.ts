@@ -66,10 +66,10 @@ export class MiUsuarioComponent implements OnInit {
         if (this.identidad) {
           this._usuarioService.modificarUsuario(this.identidad.id, this.cambioForm.value).subscribe({
             next: (response: any) => {
-              if(response.success){
-                MostrarNotificacion.mensajeExito(this.snackBar,response.message)
-              }else{
-                MostrarNotificacion.mensajeError(this.snackBar,response.message)
+              if (response.success) {
+                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+              } else {
+                MostrarNotificacion.mensajeError(this.snackBar, response.message);
               }
             },
             error: (err: any) => {

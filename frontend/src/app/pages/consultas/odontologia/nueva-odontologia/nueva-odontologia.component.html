@@ -6,86 +6,71 @@
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Calculos primera_vez y ulterior -->
         <ng-container class="mt-4">
-          <div *ngIf="chico !== null"
-            class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
-            <p><span class="font-bold">Es su primera vez: </span><span>{{
-                this.odontologiaForm.get('primera_vez')?.value ? "Si": "No" }}</span></p>
-            <p><span class="font-bold">Es ulterior: </span><span>{{ this.odontologiaForm.get('ulterior')?.value
-                ?"Si": "No" }}</span></p>
+          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+            <p>
+              <span class="font-bold">Es su primera vez: </span><span>{{ this.odontologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
+            </p>
+            <p>
+              <span class="font-bold">Es ulterior: </span><span>{{ this.odontologiaForm.get('ulterior')?.value ? 'Si' : 'No' }}</span>
+            </p>
           </div>
         </ng-container>
         <!-- Cepillo -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Tiene cepillo?" [control]="controlDeInput('cepillo')" idInput="cepillo"
-            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Tiene cepillo?" [control]="controlDeInput('cepillo')" idInput="cepillo" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Cepillado -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Se cepilla los dientes?" [control]="controlDeInput('cepillado')"
-            idInput="cepillado" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Se cepilla los dientes?" [control]="controlDeInput('cepillado')" idInput="cepillado" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Topificacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')"
-            idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')" idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <h3 class="mt-4 md:col-span-6">Estado de sus dientes:</h3>
         <!-- Dientes Permanentes -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Dientes Permanentes" [control]="controlDeInput('dientes_permanentes')"
-            placeholder="Ej: 2" idInput="dientes_permanentes" />
+          <app-input-number label="Dientes Permanentes" [control]="controlDeInput('dientes_permanentes')" placeholder="Ej: 2" idInput="dientes_permanentes" />
         </div>
         <!-- Dientes Temporales -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Dientes Temporales" [control]="controlDeInput('dientes_temporales')"
-            placeholder="Ej: 10" idInput="dientes_temporales" />
+          <app-input-number label="Dientes Temporales" [control]="controlDeInput('dientes_temporales')" placeholder="Ej: 10" idInput="dientes_temporales" />
         </div>
         <!-- Sellador -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Dientes con Sellador" [control]="controlDeInput('sellador')" placeholder="Ej: 1"
-            idInput="sellador" />
+          <app-input-number label="Dientes con Sellador" [control]="controlDeInput('sellador')" placeholder="Ej: 1" idInput="sellador" />
         </div>
         <!-- Dientes Recuperables -->
         <div class="mt-4 md:col-span-3">
-          <app-input-number label="Dientes Recuperables" [control]="controlDeInput('dientes_recuperables')"
-            placeholder="Ej: 5" idInput="dientes_recuperables" />
+          <app-input-number label="Dientes Recuperables" [control]="controlDeInput('dientes_recuperables')" placeholder="Ej: 5" idInput="dientes_recuperables" />
         </div>
         <!-- Dientes no Recuperables -->
         <div class="mt-4 md:col-span-3">
-          <app-input-number label="Dientes no Recuperables" [control]="controlDeInput('dientes_irecuperables')"
-            placeholder="Ej: 3" idInput="dientes_irecuperables" />
+          <app-input-number label="Dientes no Recuperables" [control]="controlDeInput('dientes_irecuperables')" placeholder="Ej: 3" idInput="dientes_irecuperables" />
         </div>
         <!-- Calculo estado bucal -->
-        <ng-container
-          *ngIf="odontologiaForm.get('dientes_recuperables')?.value !== '' && odontologiaForm.get('dientes_irecuperables')?.value !== '' && odontologiaForm.get('dientes_recuperables')?.value >= 0 && odontologiaForm.get('dientes_irecuperables')?.value >= 0">
+        <ng-container *ngIf="odontologiaForm.get('dientes_recuperables')?.value !== '' && odontologiaForm.get('dientes_irecuperables')?.value !== '' && odontologiaForm.get('dientes_recuperables')?.value >= 0 && odontologiaForm.get('dientes_irecuperables')?.value >= 0">
           <div class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-4">
             <span class="font-bold"> Clasificacion dental: </span>
-            <span>{{clasificacionDental(odontologiaForm.get('dientes_recuperables')?.value ,
-              odontologiaForm.get('dientes_irecuperables')?.value) }}
-            </span>
+            <span>{{ clasificacionDental(odontologiaForm.get('dientes_recuperables')?.value, odontologiaForm.get('dientes_irecuperables')?.value) }} </span>
           </div>
         </ng-container>
         <!-- Habitos -->
         <div class="mt-4 md:col-span-3">
-          <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante"
-            idInput="habitos" />
+          <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante" idInput="habitos" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
-            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Observaciones -->
         <div class="mt-4 md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
-            idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
         </div>
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!odontologiaForm.valid"
-          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-        </button>
+        <button type="submit" [disabled]="!odontologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
       </div>
     </form>
   </div>

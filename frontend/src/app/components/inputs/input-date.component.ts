@@ -13,13 +13,13 @@ import { MatInputModule } from '@angular/material/input';
     <p class="block mb-2 text-sm font-medium text-gray-900">{{ label }}</p>
     <mat-form-field class="col-span-2">
       <mat-label>{{ label }}</mat-label>
-      <input matInput [matDatepicker]="picker" [formControl]="control" [max]="max" [min]="min"/>
+      <input matInput [matDatepicker]="picker" [formControl]="control" [max]="max" [min]="min" />
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-hint *ngIf="control?.errors && (control?.dirty || control?.touched)" class="text-red-600 text-sm">
-        <div *ngIf="control?.errors?.['required']">Debe seleccionar una opción.</div>
-      </mat-hint>
     </mat-form-field>
+    <div *ngIf="control?.errors && (control?.dirty || control?.touched)" class="text-red-600 text-sm">
+      <div *ngIf="control?.errors?.['required']">Debe seleccionar una opción.</div>
+    </div>
   `,
 })
 export class InputDateComponent {

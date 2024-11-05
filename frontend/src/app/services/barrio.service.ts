@@ -4,7 +4,7 @@ import { GLOBAL } from './global';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BarrioService {
   private url: string;
@@ -15,7 +15,6 @@ export class BarrioService {
   cargarBarrio(data: any): Observable<any> {
     return this._http.post(this.url + 'barrio', data);
   }
-
 
   /*
   obtenerBarriosXLocalidad(idLocalidad: string) {

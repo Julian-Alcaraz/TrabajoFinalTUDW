@@ -16,34 +16,31 @@
         </div> -->
         <!-- Calculos primera_vez y control -->
         <ng-container class="mt-4">
-          <div *ngIf="chico !== null"
-            class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
-            <p><span class="font-bold">Es su primera vez: </span><span>{{
-                this.oftalmologiaForm.get('primera_vez')?.value ? "Si": "No" }}</span></p>
-            <p><span class="font-bold">Es control: </span><span>{{ this.oftalmologiaForm.get('control')?.value
-                ?"Si": "No" }}</span></p>
+          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+            <p>
+              <span class="font-bold">Es su primera vez: </span><span>{{ this.oftalmologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
+            </p>
+            <p>
+              <span class="font-bold">Es control: </span><span>{{ this.oftalmologiaForm.get('control')?.value ? 'Si' : 'No' }}</span>
+            </p>
           </div>
         </ng-container>
         <!-- Receta -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="¿Necesita receta?" [control]="controlDeInput('receta')" idInput="receta"
-            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Necesita receta?" [control]="controlDeInput('receta')" idInput="receta" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Demanda -->
         <div class="mt-4 md:col-span-3">
-          <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')"
-            placeholder="Ej: Padre" idInput="demanda" />
+          <app-input-text label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')" placeholder="Ej: Padre" idInput="demanda" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
-            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Anteojos -->
         <ng-container>
           <div *ngIf="this.oftalmologiaForm.get('control')?.value" class="mt-4 md:col-span-3">
-            <app-input-select-enum label="¿Se le entregaron los anteojos?" [control]="controlDeInput('anteojos')"
-              idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+            <app-input-select-enum label="¿Se le entregaron los anteojos?" [control]="controlDeInput('anteojos')" idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
           </div>
         </ng-container>
         <!-- Proximo Control -->
@@ -52,15 +49,12 @@
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
-            idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
         </div>
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!oftalmologiaForm.valid"
-          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-        </button>
+        <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
       </div>
     </form>
   </div>

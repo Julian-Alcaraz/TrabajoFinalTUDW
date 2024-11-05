@@ -50,7 +50,7 @@
         <!-- Sexo -->
         <ng-container matColumnDef="sexo">
           <th mat-header-cell *matHeaderCellDef>Sexo</th>
-          <td mat-cell *matCellDef="let element">{{ element.chico.sexo === "Masculino" ? "M" : "F" }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.chico.sexo === 'Masculino' ? 'M' : 'F' }}</td>
         </ng-container>
         <!-- Direccion -->
         <ng-container matColumnDef="direccionChico">
@@ -66,25 +66,28 @@
         <ng-container matColumnDef="derivaciones">
           <th mat-header-cell *matHeaderCellDef>Derivaciones</th>
           <td mat-cell *matCellDef="let element">
-            @if (element.derivaciones !== null){
-            @if (element.derivaciones.externa) {
-            {{ "Externa" }}
-            } @if (element.derivaciones.odontologia) {
-            {{ 'Odontologia' }}
-            } @if (element.derivaciones.fonoaudiologia) {
-            {{ 'Fonoaudiologia' }}
-            } @if (element.derivaciones.oftalmologia) {
-            {{ 'Oftalmologia' }}
-            }
+            @if (element.derivaciones !== null) {
+              @if (element.derivaciones.externa) {
+                {{ 'Externa' }}
+              }
+              @if (element.derivaciones.odontologia) {
+                {{ 'Odontologia' }}
+              }
+              @if (element.derivaciones.fonoaudiologia) {
+                {{ 'Fonoaudiologia' }}
+              }
+              @if (element.derivaciones.oftalmologia) {
+                {{ 'Oftalmologia' }}
+              }
             } @else {
-            {{'Ninguna'}}
+              {{ 'Ninguna' }}
             }
           </td>
         </ng-container>
         <!-- Institucion -->
         <ng-container matColumnDef="institucion">
           <th mat-header-cell *matHeaderCellDef>Institucion</th>
-          <td mat-cell *matCellDef="let element">{{ element.institucion.tipo +" "+ element.institucion.nombre}}</td>
+          <td mat-cell *matCellDef="let element">{{ element.institucion.tipo + ' ' + element.institucion.nombre }}</td>
         </ng-container>
         <!-- Curso -->
         <ng-container matColumnDef="curso">
@@ -94,7 +97,7 @@
         <!-- Nombre profesional -->
         <ng-container matColumnDef="profesional">
           <th mat-header-cell *matHeaderCellDef>Profesional</th>
-          <td mat-cell *matCellDef="let element">{{ element.usuario.nombre +" "+ element.usuario.apellido }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.usuario.nombre + ' ' + element.usuario.apellido }}</td>
         </ng-container>
         <!-- Documento profesional
         <ng-container matColumnDef="documentoProfesional">
@@ -111,7 +114,7 @@
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
             @if (searching) {
-            <app-loading />
+              <app-loading />
             }
           </td>
         </tr>

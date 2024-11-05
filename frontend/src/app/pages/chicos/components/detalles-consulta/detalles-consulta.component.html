@@ -29,6 +29,12 @@
               <p class="text-slate-500 text-sm font-normal leading-normal">Fecha consulta</p>
             </div>
           </div>
+          <div class="flex min-w-auto flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ consulta.derivaciones | filtrarKeysTrue | titlecase }}</p>
+            <div class="flex items-center gap-2">
+              <p class="text-slate-500 text-sm font-normal leading-normal">Derivaciones</p>
+            </div>
+          </div>
           <div class="flex min-w-auto flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center" [class]="consulta.observaciones ? 'w-full' : ''">
             <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ consulta.observaciones | dataConsulta }}</p>
             <div class="flex items-center gap-2">

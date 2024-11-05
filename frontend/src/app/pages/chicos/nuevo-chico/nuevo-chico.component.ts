@@ -9,6 +9,4 @@ import { FormChicosComponent } from '../components/form-chicos/form-chicos.compo
   templateUrl: './nuevo-chico.component.html',
   styleUrl: './nuevo-chico.component.css',
 })
-export class NuevoChicoComponent {
-
-}
+export class NuevoChicoComponent {}

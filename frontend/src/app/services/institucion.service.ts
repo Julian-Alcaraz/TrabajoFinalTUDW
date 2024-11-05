@@ -4,7 +4,7 @@ import { GLOBAL } from './global';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InstitucionService {
   private url: string;

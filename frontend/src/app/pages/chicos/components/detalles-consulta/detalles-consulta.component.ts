@@ -8,11 +8,11 @@ import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-n
 import { ConsultaService } from '../../../../services/consulta.service';
 import { DataConsultaPipe } from '../../../../utils/pipes/data-consulta.pipe';
 import { KeyDataConsultaPipe } from '../../../../utils/pipes/key-data-consulta.pipe';
-
+import { FiltrarKeysTruePipe } from '../../../../utils/pipes/filtrar-keys-true.pipe';
 @Component({
   selector: 'app-detalles-consulta',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, DataConsultaPipe, KeyDataConsultaPipe, TitleCasePipe],
+  imports: [CommonModule, MatPaginatorModule, DataConsultaPipe, KeyDataConsultaPipe, TitleCasePipe, FiltrarKeysTruePipe],
   templateUrl: './detalles-consulta.component.html',
   styleUrl: './detalles-consulta.component.css',
 })
@@ -99,5 +99,6 @@ export class DetallesConsultaComponent implements OnInit, OnChanges {
     delete consulta.id;
 
     this.consulta = consulta;
+    console.log(this.consulta);
   }
 }

@@ -1,111 +1,93 @@
 <!-- Cuando creas una localidad y despues queres agregar un barrio el modal no se abre solo!!!!!!!!!!!!!!! -->
 @if (searching && !esFormulario) {
-<div class="md:col-span-6 sm:col-span-3">
-  <app-loading />
-</div>
+  <div class="md:col-span-6 sm:col-span-3">
+    <app-loading />
+  </div>
 }
 @if (!chico && !esFormulario && !searching) {
-<h2>El chico buscado no existe</h2>
+  <h2>El chico buscado no existe</h2>
 } @else {
-<form (ngSubmit)="estaEditando ? editarChico() : cargarChico()" [formGroup]="chicoForm">
-  <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-    <!-- Nombre: -->
-    <div class="md:col-span-2">
-      <app-input-text label="Nombre" [control]="controlDeInput('nombre')" placeholder="Ej: Pepito" idInput="nombre" />
-    </div>
-    <!-- Apellido: -->
-    <div class="md:col-span-2">
-      <app-input-text label="Apellido" [control]="controlDeInput('apellido')" placeholder="Ej: Gonzales"
-        idInput="apellido" />
-    </div>
-    <!-- Direccion: -->
-    <div class="md:col-span-2">
-      <app-input-text label="Direccion" [control]="controlDeInput('direccion')" placeholder="Ej: Gonzales"
-        idInput="direccion" />
-    </div>
-    <!-- Dni -->
-    <div class="sm:col-span-2 md:col-span-1">
-      <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx"
-        idInput="dni" />
-    </div>
-    <!-- Telefono: -->
-    <div class="sm:col-span-2 md:col-span-1">
-      <app-input-number label="Teléfono" [control]="controlDeInput('telefono')" placeholder="Ej: 299 1234567"
-        idInput="telefono" />
-    </div>
-    <!-- Localidad: -->
-    <div class="md:col-span-2">
-      <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
-      <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="new">Cargar una localidad</option>
-        <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
-      </select>
-      <div
-        *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+  <form (ngSubmit)="estaEditando ? editarChico() : cargarChico()" [formGroup]="chicoForm">
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+      <!-- Nombre: -->
+      <div class="md:col-span-2">
+        <app-input-text label="Nombre" [control]="controlDeInput('nombre')" placeholder="Ej: Pepito" idInput="nombre" />
+      </div>
+      <!-- Apellido: -->
+      <div class="md:col-span-2">
+        <app-input-text label="Apellido" [control]="controlDeInput('apellido')" placeholder="Ej: Gonzales" idInput="apellido" />
+      </div>
+      <!-- Direccion: -->
+      <div class="md:col-span-2">
+        <app-input-text label="Direccion" [control]="controlDeInput('direccion')" placeholder="Ej: Gonzales" idInput="direccion" />
+      </div>
+      <!-- Dni -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
+      </div>
+      <!-- Telefono: -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <app-input-number label="Teléfono" [control]="controlDeInput('telefono')" placeholder="Ej: 299 1234567" idInput="telefono" />
+      </div>
+      <!-- Localidad: -->
+      <div class="md:col-span-2">
+        <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
+        <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="new">Cargar una localidad</option>
+          <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
+        </select>
+        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+        </div>
+      </div>
+      <!-- Barrio: -->
+      <div class="md:col-span-2">
+        <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
+        <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option>
+          <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
+        </select>
+        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+        </div>
+      </div>
+      <!-- Sexo: -->
+      <div class="md:col-span-2">
+        <app-input-radio [items]="['Femenino', 'Masculino', 'Otro']" [control]="controlDeInput('sexo')" nombre="sexo" label="Sexo" />
+      </div>
+      <!-- Fecha de Nacimiento -->
+      <div class="md:col-span-2">
+        <app-input-date label="Fecha de Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHaceUnAnio" />
+      </div>
+      <!-- Nombre padre: -->
+      <div class="md:col-span-2">
+        <app-input-text label="Nombre padre" [control]="controlDeInput('nombre_padre')" idInput="nombre_padre" [opcional]="true" />
+      </div>
+      <!-- Nombre madre: -->
+      <div class="md:col-span-2">
+        <app-input-text label="Nombre madre" [control]="controlDeInput('nombre_madre')" idInput="nombre_madre" [opcional]="true" />
       </div>
     </div>
-    <!-- Barrio: -->
-    <div class="md:col-span-2">
-      <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
-      <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span>
-        </option>
-        <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
-      </select>
-      <div
-        *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)"
-        class="text-red-600 text-sm">
-        <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+    @if (this.esFormulario) {
+      <!-- Enviar -->
+      <div class="flex my-auto mt-5">
+        <button type="submit" [disabled]="!chicoForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
       </div>
-    </div>
-    <!-- Sexo: -->
-    <div class="md:col-span-2">
-      <app-input-radio [items]="['Femenino', 'Masculino', 'Otro']" [control]="controlDeInput('sexo')" nombre="sexo"
-        label="Sexo" />
-    </div>
-    <!-- Fecha de Nacimiento -->
-    <div class="md:col-span-2">
-      <app-input-date label="Fecha de Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHaceUnAnio"/>
-    </div>
-    <!-- Nombre padre: -->
-    <div class="md:col-span-2">
-      <app-input-text label="Nombre padre" [control]="controlDeInput('nombre_padre')" idInput="nombre_padre" />
-    </div>
-    <!-- Nombre madre: -->
-    <div class="md:col-span-2">
-      <app-input-text label="Nombre madre" [control]="controlDeInput('nombre_madre')" idInput="nombre_madre" />
-    </div>
-  </div>
-  @if (this.esFormulario) {
-  <!-- Enviar -->
-  <div class="flex my-auto mt-5">
-    <button type="submit" [disabled]="!chicoForm.valid"
-      class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full  sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-    </button>
-  </div>
-  } @else {
-  @if (!estaEditando) {
-  <div class="flex my-auto">
-    <button type="button" (click)="activarFormulario()"
-      class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar
-      valores</button>
-  </div>
-  } @else {
-  <div class="flex flex-row my-auto">
-    <button type="button" (click)="desactivarFormulario()"
-      class="flex mt-4 ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-    <button type="submit"
-      class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
-  </div>
-  }
-  }
-</form>
+    } @else {
+      @if (!estaEditando) {
+        <div class="flex my-auto">
+          <button type="button" (click)="activarFormulario()" class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar valores</button>
+        </div>
+      } @else {
+        <div class="flex flex-row my-auto">
+          <button type="button" (click)="desactivarFormulario()" class="flex mt-4 ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+          <button type="submit" class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+        </div>
+      }
+    }
+  </form>
 }
 
 <!-- Localidad Modal -->
@@ -113,28 +95,20 @@
   <div class="p-4">
     <div class="flex flex-row justify-between mb-3">
       <h3>Agregar localidad</h3>
-      <button class="btn-close border-none" (click)="cerraModalLocalidad()"><i
-          class="fa-solid fa-xmark fa-xl"></i></button>
+      <button class="btn-close border-none" (click)="cerraModalLocalidad()"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
     <form (submit)="cargarLocalidad()" [formGroup]="localidadForm">
       <div class="border-t-2 p-4">
         <div class="mb-3">
           <label for="nueva_localidad" class="block mb-2 text-sm font-medium text-gray-900">Nueva Localidad</label>
-          <input type="text" id="nueva_localidad" formControlName="nueva_localidad"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="Ingresa el nombre de la nueva localidad" required />
-          <div
-            *ngIf="localidadForm.get('nueva_localidad')?.errors && (localidadForm.get('nueva_localidad')?.dirty || localidadForm.get('nueva_localidad')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="localidadForm.get('nueva_localidad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede
-              estar en blanco.</div>
+          <input type="text" id="nueva_localidad" formControlName="nueva_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ingresa el nombre de la nueva localidad" required />
+          <div *ngIf="localidadForm.get('nueva_localidad')?.errors && (localidadForm.get('nueva_localidad')?.dirty || localidadForm.get('nueva_localidad')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="localidadForm.get('nueva_localidad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
           </div>
           <div *ngIf="chicoForm.get('nueva_localidad')?.errors?.['minlength']">Minimo 1 caracteres.</div>
           <div *ngIf="chicoForm.get('nueva_localidad')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
           <div class="flex my-auto">
-            <button type="submit" [disabled]="!localidadForm.valid"
-              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-              localidad</button>
+            <button type="submit" [disabled]="!localidadForm.valid" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar localidad</button>
           </div>
         </div>
       </div>
@@ -147,29 +121,21 @@
   <div class="p-4">
     <div class="flex flex-row justify-between mb-3">
       <h3>Agregar barrio</h3>
-      <button class="btn-close border-none" (click)="cerraModalBarrio()"><i
-          class="fa-solid fa-xmark fa-xl"></i></button>
+      <button class="btn-close border-none" (click)="cerraModalBarrio()"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
     <form (submit)="cargarBarrio()" [formGroup]="barrioForm">
       <div class="border-t-2 p-4">
         <div class="mb-3">
           <!-- Cambiar a nombre de localidad despues: -->
           <label for="nuevo_barrio" class="block mb-2 text-sm font-medium text-gray-900">Nuevo Barrio</label>
-          <input type="text" id="nuevo_barrio" formControlName="nuevo_barrio"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="Ingresa el nombre del nuevo barrio" required />
-          <div
-            *ngIf="barrioForm.get('nuevo_barrio')?.errors && (barrioForm.get('nuevo_barrio')?.dirty || barrioForm.get('nuevo_barrio')?.touched)"
-            class="text-red-600 text-sm">
-            <div *ngIf="barrioForm.get('nuevo_barrio')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en
-              blanco.</div>
+          <input type="text" id="nuevo_barrio" formControlName="nuevo_barrio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ingresa el nombre del nuevo barrio" required />
+          <div *ngIf="barrioForm.get('nuevo_barrio')?.errors && (barrioForm.get('nuevo_barrio')?.dirty || barrioForm.get('nuevo_barrio')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="barrioForm.get('nuevo_barrio')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
             <div *ngIf="chicoForm.get('nuevo_barrio')?.errors?.['minlength']">Minimo 1 caracteres.</div>
             <div *ngIf="chicoForm.get('nuevo_barrio')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
           </div>
           <div class="flex my-auto">
-            <button type="submit" [disabled]="!barrioForm.valid"
-              class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar
-              barrio</button>
+            <button type="submit" [disabled]="!barrioForm.valid" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar barrio</button>
           </div>
         </div>
       </div>

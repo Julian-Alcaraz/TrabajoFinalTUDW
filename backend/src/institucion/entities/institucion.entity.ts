@@ -11,7 +11,6 @@ export class Institucion extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Jardin', 'Primario', 'Secundario', 'Terciario'], nullable: false })
   tipo: tiposInstitucion;
 
-
   @OneToMany(() => Consulta, (consulta) => consulta.chico)
   consultas: Consulta[];
 }

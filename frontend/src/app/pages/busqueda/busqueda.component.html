@@ -7,54 +7,46 @@
         <!-- Tipo de consulta -->
         <div class="md:col-span-3">
           <p-floatlabel>
-            <p-multiselect [options]="tipoConsulta" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas"
-              placeholder="" optionLabel="name" display="chip" styleClass="w-full" />
+            <p-multiselect [options]="tipoConsulta" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas" placeholder="" optionLabel="name" display="chip" styleClass="w-full" />
             <label for="rangoFechas">Tipo de consulta</label>
           </p-floatlabel>
         </div>
         <!-- Rango de fechas -->
         <div class="md:col-span-2">
           <p-floatlabel>
-            <p-datepicker inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range"
-              [readonlyInput]="true" styleClass="w-full" />
+            <p-datepicker inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" [readonlyInput]="true" styleClass="w-full" />
             <label for="rangoFechas">Rango de fechas</label>
           </p-floatlabel>
         </div>
         <!-- Edad -->
         <div class="md:col-span-6">
           <p-floatlabel>
-            <p-inputnumber formControlName="edad" inputId="edad" mode="decimal" [min]="1" [max]="20"
-              styleClass="w-full" />
+            <p-inputnumber formControlName="edad" inputId="edad" mode="decimal" [min]="1" [max]="20" styleClass="w-full" />
             <label for="edad">Edad</label>
           </p-floatlabel>
         </div>
         <!-- Sexo -->
         <div class="md:col-span-2 -mt-6">
           <p class="m-0 p-0">Sexo</p>
-          <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
-            styleClass="w-full" />
+          <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
         </div>
         <!-- Obra Social -->
         <div class="md:col-span-2 -mt-6">
           <p class="m-0 p-0">Obra Social</p>
-          <p-selectbutton [options]="obraSocialOptions" formControlName="obra_social" optionLabel="nombre"
-            optionValue="valor" styleClass="w-full" />
+          <p-selectbutton [options]="obraSocialOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
         </div>
         <!-- Turno -->
         <div class="md:col-span-2 -mt-6">
           <p class="m-0 p-0">Turno</p>
-          <p-selectbutton [options]="turnoOptions" formControlName="turno" optionLabel="nombre" optionValue="valor"
-            styleClass="w-full" />
+          <p-selectbutton [options]="turnoOptions" formControlName="turno" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
         </div>
         <!-- Institucion -->
         <div class="md:col-span-3">
-          <p-select [options]="instituciones" formControlName="institucionSeleccionada" [checkmark]="true"
-            optionLabel="nombre" [showClear]="true" placeholder="Institución" class="w-full" />
+          <p-select [options]="instituciones" formControlName="institucionSeleccionada" [checkmark]="true" optionLabel="nombre" [showClear]="true" placeholder="Institución" class="w-full" />
         </div>
         <!-- Curso -->
         <div class="md:col-span-3">
-          <p-select [options]="cursos" formControlName="cursoSeleccionado" [checkmark]="true" optionLabel="nombre"
-            [showClear]="true" placeholder="Curso" class="w-full" />
+          <p-select [options]="cursos" formControlName="cursoSeleccionado" [checkmark]="true" optionLabel="nombre" [showClear]="true" placeholder="Curso" class="w-full" />
         </div>
         <!-- Profesional -->
 

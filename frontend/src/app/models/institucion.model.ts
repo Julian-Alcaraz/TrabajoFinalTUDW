@@ -1,4 +1,4 @@
-export type TiposInstitucion = 'Jardin' | 'Primario' | 'Secundario'| 'Terciario';
+export type TiposInstitucion = 'Jardin' | 'Primario' | 'Secundario' | 'Terciario';
 
 export class Institucion {
   constructor(

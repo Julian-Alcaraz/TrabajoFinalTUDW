@@ -76,6 +76,7 @@ export class FormUsuarioComponent implements OnInit {
 
   esCargaOedicion() {
     if (!this.esFormulario && this.usuario) {
+      this.userForm.get('roles_ids')?.clearValidators();
       this._usuarioService.obtenerUsuarioxId(this.usuario.id).subscribe({
         next: (response: any) => {
           this.userForm.patchValue({
@@ -194,5 +195,22 @@ export class FormUsuarioComponent implements OnInit {
     } else {
       MostrarNotificacion.mensajeError(this.snackBar, 'No se esta editando ningun usuario.');
     }
+  }
+  activarModificar() {
+    let hayCambios = this.userForm.dirty;
+    if (hayCambios) {
+      const fechaActual = new Date(String(this.usuarioActual?.fe_nacimiento));
+      fechaActual.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
+      const fechaMod = new Date(this.userForm.value.fe_nacimiento);
+      fechaMod.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
+      const stringFechaActual = `${fechaActual.getFullYear()}-${(fechaActual.getMonth() + 1).toString().padStart(2, '0')}-${(fechaActual.getDate() + 1).toString().padStart(2, '0')}`;
+      const stringFechaMod = `${fechaMod.getFullYear()}-${(fechaMod.getMonth() + 1).toString().padStart(2, '0')}-${fechaMod.getDate().toString().padStart(2, '0')}`;
+      if (this.usuarioActual?.dni === this.userForm.value.dni && this.usuarioActual?.nombre === this.userForm.value.nombre && this.usuarioActual?.apellido === this.userForm.value.apellido && this.usuarioActual?.email === this.userForm.value.email && stringFechaMod === stringFechaActual) {
+        hayCambios = false;
+      } else {
+        hayCambios = true;
+      }
+    }
+    return !(this.userForm.valid && hayCambios);
   }
 }

@@ -4,7 +4,7 @@ import { GLOBAL } from './global';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CursoService {
   private url: string;
@@ -17,7 +17,6 @@ export class CursoService {
   }
 
   cargarCurso(data: any): Observable<any> {
-    return this._http.post(this.url + 'curso' , data);
+    return this._http.post(this.url + 'curso', data);
   }
 }
-

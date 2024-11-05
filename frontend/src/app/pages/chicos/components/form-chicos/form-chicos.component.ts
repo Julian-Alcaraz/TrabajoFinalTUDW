@@ -18,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '../../../../models/chico.model';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputDateComponent } from "../../../../components/inputs/input-date.component";
+import { InputDateComponent } from '../../../../components/inputs/input-date.component';
 import { LoadingComponent } from '../../../../components/loading/input-loading.component';
 import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
 

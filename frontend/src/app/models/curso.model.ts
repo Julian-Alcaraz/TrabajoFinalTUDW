@@ -1,4 +1,4 @@
-export type NivelCurso = 'Primaria' | 'Secundario' | 'Jardin'| 'Terciario' | 'Universitario';
+export type NivelCurso = 'Primaria' | 'Secundario' | 'Jardin' | 'Terciario' | 'Universitario';
 
 export class Curso {
   constructor(
