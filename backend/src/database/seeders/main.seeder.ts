@@ -165,8 +165,8 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
         },
         {
-          url: 'busqueda',
-          label: 'Busqueda',
+          url: 'personalizada',
+          label: 'Personalizada',
           orden: 6,
           icon: '',
           roles: [roles[0], roles[1], roles[2]],

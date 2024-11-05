@@ -16,7 +16,7 @@ import { NuevaFonoaudiologicaComponent } from './pages/consultas/fonoaudiologia/
 import { NuevaOdontologiaComponent } from './pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
 import { EditarChicoComponent } from './pages/chicos/editar-chico/editar-chico.component';
 import { ListaComponent } from './pages/lista/lista.component';
-import { BusquedaComponent } from './pages/busqueda/busqueda.component';
+import { PersonalizadaComponent } from './pages/personalizada/personalizada.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,7 +41,7 @@ export const routes: Routes = [
       { path: 'consultas/odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [] },
       { path: 'consultas/fonoaudiologia/nueva', component: NuevaFonoaudiologicaComponent, canActivate: [] },
       { path: 'lista', component: ListaComponent, canActivate: [] }, // Admin, Profesionales y Acceso Info
-      { path: 'busqueda', component: BusquedaComponent, canActivate: [] }, // Admin, Profesionales y Acceso Info
+      { path: 'personalizada', component: PersonalizadaComponent, canActivate: [] }, // Admin, Profesionales y Acceso Info
     ],
   },
 ];

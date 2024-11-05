@@ -14,24 +14,28 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 
 import * as MostrarNotificacion from '../../utils/notificaciones/mostrar-notificacion';
-import { CursoService } from '../../services/curso.service';
+import { Usuario } from '../../models/usuario.model';
+import { UsuarioService } from '../../services/usuario.service';
 import { InstitucionService } from '../../services/institucion.service';
 import { Institucion } from '../../models/institucion.model';
 import { Curso } from '../../models/curso.model';
+import { CursoService } from '../../services/curso.service';
 
 @Component({
-  selector: 'app-busqueda',
+  selector: 'app-personalizada',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule],
-  templateUrl: './busqueda.component.html',
-  styleUrl: './busqueda.component.css',
+  templateUrl: './personalizada.component.html',
+  styleUrl: './personalizada.component.css',
 })
-export class BusquedaComponent implements OnInit {
+export class PersonalizadaComponent implements OnInit {
   public formBusqueda: FormGroup;
   public loading = false;
 
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
+  public profesionales: Usuario[] = [];
+
 
   public tipoConsulta = [
     { name: 'Clinica', code: 'NY' },
@@ -58,9 +62,10 @@ export class BusquedaComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private _cursoService: CursoService,
     private _institucionService: InstitucionService,
-    private snackBar: MatSnackBar,
+    private _usuarioService: UsuarioService,
   ) {
     this.formBusqueda = this.fb.group({
       rangoFechas: [''],
@@ -74,9 +79,10 @@ export class BusquedaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('init busqueda');
+    console.log('init personalizada');
     this.obtenerCursos();
     this.obtenerInstituciones();
+    this.obtenerProfesionales();
   }
 
   obtenerCursos(): any {
@@ -99,6 +105,18 @@ export class BusquedaComponent implements OnInit {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     });
+  }
+
+  obtenerProfesionales(): any {
+    console.log("")
+    // this._usuarioService.obtenerProfesionales().subscribe({
+    //   next: (response: any) => {
+    //     this.profesionales = response.data;
+    //   },
+    //   error: (err: any) => {
+    //     MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+    //   },
+    // });
   }
 
   buscar() {
