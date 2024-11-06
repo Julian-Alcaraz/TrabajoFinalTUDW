@@ -179,6 +179,14 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: true,
         },
+        {
+          url: 'busqueda',
+          label: 'Busqueda',
+          orden: 0,
+          icon: 'fa-solid fa-magnifying-glass',
+          roles: [roles[0], roles[1], roles[2]],
+          deshabilitado: false,
+        },
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
