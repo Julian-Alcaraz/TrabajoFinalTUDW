@@ -121,7 +121,7 @@
   @if (this.esFormulario) {
     <div class="flex my-auto">
       <p class="text-gray-400 text-sm">*La contraseña asignada sera el documento. Luego el usuario podra cambiarla.</p>
-      <button type="submit" [disabled]="!userForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+      <button type="submit" [disabled]="!(userForm.valid && emailApiValidate)" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
     </div>
   } @else {
     @if (!estaEditando) {

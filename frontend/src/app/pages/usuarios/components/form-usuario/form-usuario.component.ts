@@ -57,10 +57,12 @@ export class FormUsuarioComponent implements OnInit {
     this.obtenerRoles();
     this.esCargaOedicion();
   }
-
+  public emailApiValidate = false;
   onChangeEmail() {
     this.userForm.get('email')?.updateValueAndValidity();
     if (this.userForm.get('email')?.valid) {
+      this.emailApiValidate = false;
+
       this.validarEmail(this.userForm.get('email')?.value);
     } else {
       this.apiEmail = null;
@@ -71,6 +73,12 @@ export class FormUsuarioComponent implements OnInit {
     this.verifyingEmail = true;
     this._apiEmailService.validarEmail(email).subscribe({
       next: (response: any) => {
+        if(response.success){
+          this.emailApiValidate= true
+        }else{
+          this.emailApiValidate= false
+
+        }
         this.apiEmail = response.data;
         this.verifyingEmail = false;
       },
