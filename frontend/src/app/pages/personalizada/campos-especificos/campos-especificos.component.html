@@ -1,0 +1,212 @@
+<ng-container>
+  <div *ngIf="consultasSeleccionadas.length === 1">
+    <!-- Caso A: Clinica -->
+    <div *ngIf="consultasSeleccionadas.includes('Clinica')">
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para clinica</p>
+        <!-- Diabetes -->
+        <p class="col-span-6">Antecedentes familiares:</p>
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Diabetes</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="diabetes" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- HTA -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Hipertension arterial</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="hta" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Obesidad -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Obesidad</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="obesidad" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Consumo Alcohol -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Consumo alcohol</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="consumo_alcohol" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <!-- Consumo Drogas -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Consumo drogas</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="consumo_drogas" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <!-- Consumo Tabaco -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Consumo tabaco</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="consumo_tabaco" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <p class="col-span-6">Condiciones:</p>
+        <!-- Antecedentes perinatales -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Antecedentes perinatales</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="antecedentes_perinatal" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <!-- Enfermedades previas -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">Enfermedades previas</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="enfermedades_previas" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <span class="md:col-span-6">****</span>
+        <!-- Seguimiento -->
+        <div class="md:col-span-6">
+          <p class="m-0 p-0">Seguimiento</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="segto" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Vacunas -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="vacunasOptions" formControlName="vacunas" idInput="vacunas" [checkmark]="true"
+              [showClear]="true" placeholder="" class="w-full" />
+            <label for="vacunas">Vacunas</label>
+          </p-iftalabel>
+        </div>
+        <!-- Examen visual -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="examenVisualOptions" formControlName="examen_visual" idInput="examen_visual"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="examen_visual">Examen Visual</label>
+          </p-iftalabel>
+        </div>
+        <!-- Lenguaje -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="lenguajeOptions" formControlName="lenguaje" idInput="lenguaje" [checkmark]="true"
+              [showClear]="true" placeholder="" class="w-full" />
+            <label for="lenguaje">Lenguaje</label>
+          </p-iftalabel>
+        </div>
+        <!-- Ortopedia y traumatologia -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="ortopediaTraumatologiaOptions" formControlName="ortopedia_traumatologia"
+              idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="ortopedia_traumatologia">Ortopedia y Traumatologia</label>
+          </p-iftalabel>
+        </div>
+        <!-- Alimentacion -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="alimentacionOptions" formControlName="alimentacion" idInput="alimentacion"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="alimentacion">Alimentación</label>
+          </p-iftalabel>
+        </div>
+        <!-- Hidratacion -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="hidratacionOptions" formControlName="hidratacion" idInput="hidratacion"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="hidratacion">Hidratación</label>
+          </p-iftalabel>
+        </div>
+        <p class="md:col-span-6">Horas diarias dedicadas a:</p>
+        <!-- Horas pantalla -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="horas_pantalla">Horas pantalla</label>
+          </p-iftalabel>
+        </div>
+        <!-- Horas juego aire libre -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre"
+              idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="horas_juego_aire_libre">Horas juego aire libre</label>
+          </p-iftalabel>
+        </div>
+        <!-- Horas sueño -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="horas_suenio">Horas sueño</label>
+          </p-iftalabel>
+        </div>
+        <!-- Tension arterial -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="tensionArterialOptions" formControlName="tension_arterial" idInput="tension_arterial"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="tension_arterial">Tension arterial</label>
+          </p-iftalabel>
+        </div>
+        <!-- Estado nutricional -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="estadoNutricionalOptions" formControlName="estado_nutricional"
+              idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="estado_nutricional">Estado nutricional</label>
+          </p-iftalabel>
+        </div>
+        <!-- Derivaciones -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+              [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full" />
+            <label for="derivaciones">Derivaciones</label>
+          </p-iftalabel>
+        </div>
+      </div>
+    </div>
+    <!-- Caso B: Oftalmologia -->
+    <div *ngIf="consultasSeleccionadas.includes('Oftalmologia')">
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <!-- Receta -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">¿Necesita receta?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Control -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">¿Es un control?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Derivacion -->
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">¿Es primera vez?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Derivacion externa
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">¿Derivacion externa?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="derivacion_externa" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div> -->
+        <!-- Fecha proximo control
+        <div class="md:col-span-1">
+          <p class="m-0 p-0">¿Fecha próximo control?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>  -->
+      </div>
+    </div>
+    <!-- Caso C: Fonoaudiologia -->
+    <div *ngIf="consultasSeleccionadas.includes('Fonoaudiologia')">
+      Este es el contenido para Fonoaudiología.
+    </div>
+    <!-- Caso D: Odontologia -->
+    <div *ngIf="consultasSeleccionadas.includes('Odontologia')">
+      Este es el contenido para Odontologia.
+    </div>
+    <!-- Caso por defecto -->
+    <div
+      *ngIf="!(consultasSeleccionadas.includes('Clinica') || consultasSeleccionadas.includes('Oftalmologia') || consultasSeleccionadas.includes('Fonoaudiologia') || consultasSeleccionadas.includes('Odontologia'))">
+      Este es el contenido por defecto si no se cumple ninguna condición.
+    </div>
+  </div>
+</ng-container>

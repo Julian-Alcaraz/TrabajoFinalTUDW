@@ -3,58 +3,91 @@
   <div class="card-body">
     <form (ngSubmit)="buscar()" [formGroup]="formBusqueda">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6">
-        <h3 class="md:col-span-6">Usted puede filtrar la busqueda de consultas por las siguientes campos:</h3>
+        <h3 class="md:col-span-6 text-lg">Usted puede filtrar la busqueda de consultas por las siguientes campos:</h3>
         <!-- Tipo de consulta -->
         <div class="md:col-span-3">
-          <p-floatlabel>
-            <p-multiselect [options]="tipoConsulta" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas" placeholder="" optionLabel="name" display="chip" styleClass="w-full" />
-            <label for="rangoFechas">Tipo de consulta</label>
-          </p-floatlabel>
+          <p-iftalabel>
+            <p-multiselect [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4"
+              formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full" />
+            <label for="consultasSeleccionadas">Tipo de consulta</label>
+          </p-iftalabel>
         </div>
         <!-- Rango de fechas -->
-        <div class="md:col-span-1">
-          <p-floatlabel>
-            <p-datepicker inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" [readonlyInput]="true" styleClass="w-full" />
+        <div class="md:col-span-2" formGroupName="generales">
+          <p-iftalabel>
+            <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas"
+              selectionMode="range" styleClass="w-full" dateFormat="dd/mm/yy" />
             <label for="rangoFechas">Rango de fechas</label>
-          </p-floatlabel>
+          </p-iftalabel>
         </div>
         <!-- Edad -->
-        <div class="md:col-span-6">
-          <p-floatlabel>
-            <p-inputnumber formControlName="edad" inputId="edad" mode="decimal" [min]="1" [max]="20" styleClass="w-full" />
+        <div class="md:col-span-1" formGroupName="generales">
+          <p-iftalabel>
+            <p-inputnumber formControlName="edad" inputId="edad" mode="decimal" [min]="1" [max]="20"
+              styleClass="w-full"></p-inputnumber>
             <label for="edad">Edad</label>
-          </p-floatlabel>
-        </div>
-        <!-- Sexo -->
-        <div class="md:col-span-2 -mt-6">
-          <p class="m-0 p-0">Sexo</p>
-          <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-        </div>
-        <!-- Obra Social -->
-        <div class="md:col-span-2 -mt-6">
-          <p class="m-0 p-0">Obra Social</p>
-          <p-selectbutton [options]="obraSocialOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-        </div>
-        <!-- Turno -->
-        <div class="md:col-span-2 -mt-6">
-          <p class="m-0 p-0">Turno</p>
-          <p-selectbutton [options]="turnoOptions" formControlName="turno" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+          </p-iftalabel>
         </div>
         <!-- Institucion -->
-        <div class="md:col-span-3">
-          <p-select [options]="instituciones" formControlName="institucionSeleccionada" [checkmark]="true" optionLabel="nombre" [showClear]="true" placeholder="Institución" class="w-full" />
+        <div class="md:col-span-2" formGroupName="generales">
+          <div formGroupName="institucion">
+            <p-iftalabel>
+              <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+              <label for="instituciones">Institución</label>
+            </p-iftalabel>
+          </div>
         </div>
         <!-- Curso -->
-        <div class="md:col-span-3">
-          <p-select [options]="cursos" formControlName="cursoSeleccionado" [checkmark]="true" optionLabel="nombre" [showClear]="true" placeholder="Curso" class="w-full" />
+        <div class="md:col-span-2" formGroupName="generales">
+          <div formGroupName="curso">
+            <p-iftalabel>
+              <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
+                optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+              <label for="cursos">Cursos</label>
+            </p-iftalabel>
+          </div>
         </div>
         <!-- Profesional -->
-
-        <!-- Enviar -->
-        <div class="md:col-span-6 m-4">
-          <p-button severity="info" label="Enviar" icon="pi pi-check" [loading]="loading" (onClick)="buscar()" />
+        <div class="md:col-span-2" formGroupName="generales">
+          <div formGroupName="usuario">
+            <p-iftalabel>
+              <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+              <label for="profesionales">Profesionales</label>
+            </p-iftalabel>
+          </div>
         </div>
+        <!-- Sexo -->
+        <div class="md:col-sp|-1" formGroupName="generales">
+          <div formGroupName="chico">
+            <p class="m-0 p-0">Sexo</p>
+            <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
+              styleClass="w-full" />
+          </div>
+        </div>
+        <!-- Obra Social -->
+        <div class="md:col-span-2" formGroupName="generales">
+          <p class="m-0 p-0">Obra Social</p>
+          <p-selectbutton [options]="obraSocialOptions" formControlName="obra_social" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <!-- Turno -->
+        <div class="md:col-span-2" formGroupName="generales">
+          <p class="m-0 p-0" for="turno">Turno</p>
+          <p-selectbutton [options]="turnoOptions" idInput="turno" formControlName="turno" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+      </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null">
+        <app-campos-especificos [consultasSeleccionadas]="formBusqueda.get('consultasSeleccionadas')?.value"
+          [form]="formBusqueda" />
+      </div>
+      <!-- Enviar -->
+      <div class="md:col-span-6 m-4">
+        <p-button severity="info" label="Enviar" icon="pi pi-check" [loading]="loading" (onClick)="buscar()" />
       </div>
     </form>
   </div>
+
 </div>

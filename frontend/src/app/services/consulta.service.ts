@@ -12,6 +12,10 @@ export class ConsultaService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  busquedaPersonalizada(data: any): Observable<any> {
+    return this._http.post(this.url + 'consulta/busquedaPersonalizada', data);
+  }
+
   // Obtiene todas las consultas y sus relaciones con chico, curso e institucion
   obtenerConsultas(): Observable<any> {
     return this._http.get(this.url + 'consulta/');

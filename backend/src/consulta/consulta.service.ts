@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { EntityManager, Repository } from 'typeorm';
+import { Between, EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateConsultaDto } from './dto/create-consulta.dto';
@@ -126,6 +126,58 @@ export class ConsultaService {
     });
     if (consulta) return { primera_vez: false };
     else return { primera_vez: true };
+  }
+
+  async busquedaPersonalizada(data: any) {
+    const consulta = { ...data };
+    consulta.generales = {
+      ...consulta.generales,
+      deshabilitado: false,
+    };
+    if (consulta.consultasSeleccionadas) delete consulta.consultasSeleccionadas;
+    if (consulta.generales.rangoFechas) {
+      console.log('FECHA 1:', consulta.generales.rangoFechas[0]);
+      console.log('FECHA 2:', consulta.generales.rangoFechas[1]);
+      consulta.generales = {
+        ...consulta.generales,
+        created_at: Between(consulta.generales.rangoFechas[0], consulta.generales.rangoFechas[1]),
+      };
+      delete consulta.generales.rangoFechas;
+    }
+    console.log('CONSULTA BD: ', consulta);
+    const consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: consulta.generales });
+
+    if (data.consultasSeleccionadas && data.consultasSeleccionadas.length === 1) {
+      if (data.consultasSeleccionadas.includes('Clinica')) {
+        const clinicaData = await this.clinicaORM.find({ where: consulta.especificas });
+
+        const resultados = consultas
+          .map((consulta) => {
+            const datosClinica = clinicaData.find((clinica) => clinica.id_consulta === consulta.id);
+            return datosClinica ? { ...consulta, clinica: datosClinica } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        return resultados;
+      } else if (data.consultasSeleccionadas.includes('Odontologia')) {
+        console.log('Odontologia!');
+      } else if (data.consultasSeleccionadas.includes('Oftalmologia')) {
+        console.log('Oftalmologia!!!!!!!!!!!!!!!!');
+        const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
+        const resultados = consultas
+          .map((consulta) => {
+            const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
+            return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        console.log(resultados);
+        return resultados;
+      } else if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
+        console.log('Fonoaudiologia!');
+      } else {
+        console.log('No se especifico tipo.. ');
+      }
+    }
+    return consultas;
   }
 
   findAll() {

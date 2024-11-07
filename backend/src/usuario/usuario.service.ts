@@ -140,4 +140,18 @@ export class UsuarioService {
     colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
     return colMenus;
   }
+
+  async usuariosProfesionales() {
+    const usuariosProfesionales = [];
+    const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'] });
+    const rolProfesional = await this.rolORM.findOne({ where: { nombre: 'Profesional', deshabilitado: false } });
+    if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
+    for (const usuario of usuarios) {
+      if (usuario.roles.find((item) => item.nombre === 'Profesional')) {
+        delete usuario.contrasenia;
+        usuariosProfesionales.push(usuario);
+      }
+    }
+    return usuariosProfesionales;
+  }
 }

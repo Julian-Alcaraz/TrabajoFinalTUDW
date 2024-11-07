@@ -16,6 +16,9 @@ export class UsuarioService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  obtenerProfesionales(): Observable<any> {
+    return this._http.get(this.url + 'usuario/profesionales');
+  }
   cargarUsuario(data: any): Observable<any> {
     return this._http.post(this.url + 'usuario', data);
   }

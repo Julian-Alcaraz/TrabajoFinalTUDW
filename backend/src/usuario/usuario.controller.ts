@@ -38,6 +38,18 @@ export class UsuarioController {
     };
   }
 
+  @Get('profesionales')
+  @ApiOperation({ summary: 'Devuelve todos los usuarios solo con el rol de profesional' })
+  @ApiResponse({ status: 200, description: 'Usuarios devueltos con exito' })
+  async usuariosProfesionales() {
+    const usuariosProfesionales = await this.usuarioService.usuariosProfesionales();
+    return {
+      success: true,
+      data: usuariosProfesionales,
+      message: 'Usuarios profesionales retornados con exito',
+    };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Devuelve el usuario buscado' })
   @ApiResponse({ status: 200, description: 'Retorna el usuario buscado con exito' })
