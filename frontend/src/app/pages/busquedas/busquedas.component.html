@@ -1,5 +1,32 @@
+
 <div class="card">
-  <div class="card-header">Busqueda</div>
+  <div class="card-header">Consultas por:</div>
+  <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+    <li class="me-1">
+      <a  aria-current="page" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active">Año realizada</a>
+    </li>
+    <li class="me-1">
+      <a class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50">Asistencia Niño </a>
+    </li>
+    <li class="me-1">
+      <a class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50">Perzonalizada</a>
+    </li>
+    <!-- <li class="me-1">
+      <a  class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50"></a>
+    </li> -->
+  </ul>
   <div class="card-body">
+    <div>
+      <p-datepicker [(ngModel)]="date" view="year" dateFormat="yy" [maxDate]="maxDate"/>
+      <button (click)="buscar()">buscar</button>
+      @if(consultas && consultas.length>0){
+        <app-consultas-table [consultas]="consultas" />
+      }
+
+
+
+
+    </div>
+
   </div>
 </div>

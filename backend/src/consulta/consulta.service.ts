@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Between, EntityManager, Repository } from 'typeorm';
+import { Between, EntityManager, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateConsultaDto } from './dto/create-consulta.dto';
@@ -184,6 +184,12 @@ export class ConsultaService {
     return this.consultaORM.find({ where: { deshabilitado: false }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
 
+  findAllByYear(year) {
+    // const startOfYear = new Date(year, 0, 1); // 1 de enero del año especificado
+    // const endOfYear = new Date(year, 11, 31, 23, 59, 59);
+    // return this.consultaORM.find({ where: { created_at: Between(startOfYear, endOfYear) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
+    return this.consultaORM.find({ where: { created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
+  }
   update(id: number, updateConsultaDto: UpdateConsultaDto) {
     return `This action updates a #${id} consulta`;
   }

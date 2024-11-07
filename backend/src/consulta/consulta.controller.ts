@@ -59,6 +59,18 @@ export class ConsultaController {
     };
   }
 
+  @Get('year/:year')
+  @ApiOperation({ summary: 'Devuelte todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad' })
+  @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
+  async findAllByYear(@Param('year', ParseIntPipe) year: number) {
+    const consultas = await this.consultaService.findAllByYear(year);
+    return {
+      success: true,
+      data: consultas,
+      message: 'Consultas obtenidas con exito.',
+    };
+  }
+
   @Get('primeraVezChico/:id/:tipoConsulta')
   @ApiOperation({ summary: 'Devuelte si es la primera vez del chico en una consulta o no' })
   @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })

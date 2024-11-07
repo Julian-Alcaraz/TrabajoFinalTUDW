@@ -20,7 +20,9 @@ export class ConsultaService {
   obtenerConsultas(): Observable<any> {
     return this._http.get(this.url + 'consulta/');
   }
-
+  obtenerConsultasxAnio(anio:number): Observable<any> {
+    return this._http.get(this.url + 'consulta/year/'+anio);
+  }
   cargarConsulta(data: any): Observable<any> {
     return this._http.post(this.url + 'consulta', data);
   }
