@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Between, EntityManager, Raw, Repository } from 'typeorm';
+import { Between, EntityManager, IsNull, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateConsultaDto } from './dto/create-consulta.dto';
@@ -129,55 +129,94 @@ export class ConsultaService {
   }
 
   async busquedaPersonalizada(data: any) {
+    const consulta = this.prepararDataConsultaPersonalizada(data);
+    console.log('CONSULTA A LA BD: ', consulta);
+    let consultas: Consulta[];
+    if (!consulta.generales) {
+      consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: { deshabilitado: false } });
+      console.log('No llegaron datos generales');
+    } else {
+      consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: consulta.generales });
+      console.log('Llegaron datos generales');
+    }
+    if (data.consultasSeleccionadas) {
+      const resultados = [];
+      // De la forma en la que esta esto, si se seleccionan mas de 1 tipo de consulta, va a retornar mas data de la que se deberia mostrar
+      if (data.consultasSeleccionadas.includes('Clinica')) {
+        const clinicaData = await this.clinicaORM.find({ where: consulta.especificas });
+        const resultadosClinica = consultas
+          .map((consulta) => {
+            const datosClinica = clinicaData.find((clinica) => clinica.id_consulta === consulta.id);
+            return datosClinica ? { ...consulta, clinica: datosClinica } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosClinica);
+      }
+      if (data.consultasSeleccionadas.includes('Odontologia')) {
+        const odontologiaData = await this.odontologiaORM.find({ where: consulta.especificas });
+        const resultadosOdontologia = consultas
+          .map((consulta) => {
+            const datosOdontologia = odontologiaData.find((odontologia) => odontologia.id_consulta === consulta.id);
+            return datosOdontologia ? { ...consulta, odontologia: datosOdontologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosOdontologia);
+      }
+      if (data.consultasSeleccionadas.includes('Oftalmologia')) {
+        const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
+        const resultadosOftalmologia = consultas
+          .map((consulta) => {
+            const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
+            return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosOftalmologia);
+      }
+      if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
+        const fonoaudiologiaData = await this.fonoaudiologiaORM.find({ where: consulta.especificas });
+        const resultadosFonoaudiologia = consultas
+          .map((consulta) => {
+            const datosFonoaudiologia = fonoaudiologiaData.find((fonoaudiologia) => fonoaudiologia.id_consulta === consulta.id);
+            return datosFonoaudiologia ? { ...consulta, fonoaudiologia: datosFonoaudiologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosFonoaudiologia);
+      } else {
+        // Deberia dar error esto!!!!
+        console.log('No se especifico tipo.. ');
+      }
+      return resultados;
+    }
+    return consultas;
+  }
+
+  prepararDataConsultaPersonalizada(data) {
     const consulta = { ...data };
+    if (!consulta.generales) return consulta;
     consulta.generales = {
       ...consulta.generales,
       deshabilitado: false,
     };
     if (consulta.consultasSeleccionadas) delete consulta.consultasSeleccionadas;
     if (consulta.generales.rangoFechas) {
-      console.log('FECHA 1:', consulta.generales.rangoFechas[0]);
-      console.log('FECHA 2:', consulta.generales.rangoFechas[1]);
       consulta.generales = {
         ...consulta.generales,
         created_at: Between(consulta.generales.rangoFechas[0], consulta.generales.rangoFechas[1]),
       };
       delete consulta.generales.rangoFechas;
     }
-    console.log('CONSULTA BD: ', consulta);
-    const consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: consulta.generales });
-
-    if (data.consultasSeleccionadas && data.consultasSeleccionadas.length === 1) {
-      if (data.consultasSeleccionadas.includes('Clinica')) {
-        const clinicaData = await this.clinicaORM.find({ where: consulta.especificas });
-
-        const resultados = consultas
-          .map((consulta) => {
-            const datosClinica = clinicaData.find((clinica) => clinica.id_consulta === consulta.id);
-            return datosClinica ? { ...consulta, clinica: datosClinica } : null;
-          })
-          .filter((consulta) => consulta !== null);
-        return resultados;
-      } else if (data.consultasSeleccionadas.includes('Odontologia')) {
-        console.log('Odontologia!');
-      } else if (data.consultasSeleccionadas.includes('Oftalmologia')) {
-        console.log('Oftalmologia!!!!!!!!!!!!!!!!');
-        const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
-        const resultados = consultas
-          .map((consulta) => {
-            const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
-            return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
-          })
-          .filter((consulta) => consulta !== null);
-        console.log(resultados);
-        return resultados;
-      } else if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
-        console.log('Fonoaudiologia!');
-      } else {
-        console.log('No se especifico tipo.. ');
-      }
+    if (consulta.generales.observaciones === true) {
+      consulta.generales = {
+        ...consulta.generales,
+        observaciones: Not(IsNull()),
+      };
+    } else if (consulta.generales.observaciones === false) {
+      consulta.generales = {
+        ...consulta.generales,
+        observaciones: IsNull(),
+      };
     }
-    return consultas;
+    return consulta;
   }
 
   findAll() {

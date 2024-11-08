@@ -626,7 +626,7 @@ export class MainSeeder implements Seeder {
           dientes_temporales: 10,
           dientes_permanentes: 2,
           sellador: 9,
-          clasificacion: 'BAJO INDICE DE CARIES',
+          clasificacion: 'Bajo índice de caries',
           habitos: 'Cepillado constante',
           primera_vez: false,
           // situacion_bucal: 'Buena',
@@ -638,8 +638,8 @@ export class MainSeeder implements Seeder {
       const consultasFonoaudiologicas = await fonoaudiologiaORM.save([
         {
           consulta: consultas[3],
-          diagnostico_presuntivo: 'Dificultades de comprensión auditiva',
-          causas: 'Factores genéticos',
+          diagnostico_presuntivo: 'Tel',
+          causas: 'Prematurez',
           asistencia: true,
         },
         {

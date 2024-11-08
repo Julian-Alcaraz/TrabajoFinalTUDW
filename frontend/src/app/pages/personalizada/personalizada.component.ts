@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -13,6 +13,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { IftaLabelModule } from 'primeng/iftalabel';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 import * as MostrarNotificacion from '../../utils/notificaciones/mostrar-notificacion';
 import { Usuario } from '../../models/usuario.model';
@@ -27,23 +28,21 @@ import { ConsultaService } from '../../services/consulta.service';
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, CamposEspecificosComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, CamposEspecificosComponent, KeyFilterModule],
   templateUrl: './personalizada.component.html',
   styleUrl: './personalizada.component.css',
 })
-export class PersonalizadaComponent implements OnInit, AfterViewInit {
+export class PersonalizadaComponent implements OnInit {
   public formBusqueda: FormGroup;
   public loading = false;
   public resultados: any;
-
   public hoy = new Date();
-
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
   public profesionales: Usuario[] = [];
 
   public tipoConsulta = ['Clinica', 'Oftalmologia', 'Odontologia', 'Fonoaudiologia'];
-  public obraSocialOptions: any[] = [
+  public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
@@ -56,8 +55,6 @@ export class PersonalizadaComponent implements OnInit, AfterViewInit {
     { nombre: 'M', valor: 'Masculino' },
     { nombre: 'F', valor: 'Femenino' },
   ];
-
-  // public rangoFechas: Date[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -82,35 +79,40 @@ export class PersonalizadaComponent implements OnInit, AfterViewInit {
           id: [],
         }),
         edad: [],
-        // rangoFechas: this.fb.control<Date[]>([]),
         rangoFechas: [],
         turno: [],
         obra_social: [],
+        observaciones: [],
       }),
       consultasSeleccionadas: [],
     });
   }
 
   ngOnInit(): void {
-    //this.formBusqueda.addControl('rangoFechas', new FormControl(''));
+    this.hoy.setHours(23, 59, 59, 999);
     this.obtenerCursos();
     this.obtenerInstituciones();
     this.obtenerProfesionales();
     this.formBusqueda.get('consultasSeleccionadas')?.valueChanges.subscribe(() => {
       this.onChangeTipoConsulta();
     });
+    this.formBusqueda.get('generales.rangoFechas')?.valueChanges.subscribe(() => {
+      this.agregarHora(this.formBusqueda.get('generales.rangoFechas')?.value);
+    });
   }
 
-  // NO SE USA!!!!
-  ngAfterViewInit(): void {
-    // Establecer el valor del rango de fechas aquí
-    console.log(this.formBusqueda.get('generales.rangoFechas')?.value);
-    this.formBusqueda.get('generales.rangoFechas')?.setValue([]);
-    console.log(this.formBusqueda.get('generales.rangoFechas')?.value);
+  agregarHora(rangoFechas: Date[]) {
+    if (rangoFechas?.length === 2 && rangoFechas[1]) {
+      const fechaInicio = new Date(rangoFechas[0]);
+      const fechaFin = new Date(rangoFechas[1]);
+      fechaFin.setHours(23, 59, 59, 999);
+      this.formBusqueda.get('generales.rangoFechas')?.setValue([fechaInicio, fechaFin], { emitEvent: false });
+    }
   }
 
   onChangeTipoConsulta() {
     this.formBusqueda.get('especificas')?.reset();
+    this.formBusqueda.get('derivaciones')?.reset();
   }
 
   obtenerCursos(): any {
@@ -152,16 +154,22 @@ export class PersonalizadaComponent implements OnInit, AfterViewInit {
       this.loading = true;
       console.log(this.formBusqueda.value);
       const formValues = eliminarValoresNulosYVacios(this.formBusqueda.value);
-      const derivaciones = {
-        ...(formValues.derivaciones && formValues.derivaciones[0]?.Fonoaudiologia && { Fonoaudiologia: formValues.derivaciones[0].Fonoaudiologia }),
-        ...(formValues.derivaciones && formValues.derivaciones[1]?.Odontologia && { Odontologia: formValues.derivaciones[1].Odontologia }),
-        ...(formValues.derivaciones && formValues.derivaciones[2]?.Oftalmologia && { Oftalmologia: formValues.derivaciones[2].Oftalmologia }),
-      };
+      const derivaciones = formValues.derivaciones?.reduce((acc: any, item: any) => {
+        if (item.Fonoaudiologia) acc.Fonoaudiologia = item.Fonoaudiologia;
+        if (item.Externa) acc.Externa = item.Externa;
+        if (item.Odontologia) acc.Odontologia = item.Odontologia;
+        if (item.Oftalmologia) acc.Oftalmologia = item.Oftalmologia;
+        return acc;
+      }, {});
       formValues.derivaciones = derivaciones;
-      if (formValues.generales.rangoFechas && formValues.generales.rangoFechas.length === 0) delete formValues.generales.rangoFechas;
+      if (formValues.generales) {
+        if (formValues.generales.rangoFechas && formValues.generales.rangoFechas.length === 0) {
+          delete formValues.generales.rangoFechas;
+        }
+      }
       if (formValues.derivaciones && Object.keys(formValues.derivaciones).length === 0) delete formValues.derivaciones;
-      // var size = Object.keys(myObj).length;
-      console.log('LA DATA ES ', formValues);
+      console.log('---------');
+      console.log('LA DATA ENVIADA ES ', formValues);
       console.log('---------');
       this._consultaService.busquedaPersonalizada(formValues).subscribe({
         next: (response: any) => {

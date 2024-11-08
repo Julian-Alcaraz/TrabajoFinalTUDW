@@ -2,10 +2,10 @@
   <div class="card-header">Buscar consultas</div>
   <div class="card-body">
     <form (ngSubmit)="buscar()" [formGroup]="formBusqueda">
-      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6">
-        <h3 class="md:col-span-6 text-lg">Usted puede filtrar la busqueda de consultas por las siguientes campos:</h3>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-12">
+        <h3 class="md:col-span-12 text-lg">Usted puede filtrar la busqueda de consultas por las siguientes campos:</h3>
         <!-- Tipo de consulta -->
-        <div class="md:col-span-3">
+        <div class="md:col-span-6">
           <p-iftalabel>
             <p-multiselect [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4"
               formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full" />
@@ -13,23 +13,36 @@
           </p-iftalabel>
         </div>
         <!-- Rango de fechas -->
+        <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
+        <!-- ACA SE PODRIA AGREGAR UN  [minDate]="" CON LA CONSULTA MAS VIEJA DE LA BD -->
         <div class="md:col-span-2" formGroupName="generales">
           <p-iftalabel>
             <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas"
-              selectionMode="range" styleClass="w-full" dateFormat="dd/mm/yy" />
+              selectionMode="range" styleClass="w-full" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy">
+              <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+              <ng-template pTemplate="footer">
+                <p-button class="p-datepicker-prev hidden">Previous</p-button>
+                <p-button class="p-datepicker-next hidden">Next</p-button>
+              </ng-template>
+              <!-- end TODO -->
+            </p-datepicker>
             <label for="rangoFechas">Rango de fechas</label>
           </p-iftalabel>
         </div>
-        <!-- Edad -->
-        <div class="md:col-span-1" formGroupName="generales">
-          <p-iftalabel>
-            <p-inputnumber formControlName="edad" inputId="edad" mode="decimal" [min]="1" [max]="20"
-              styleClass="w-full"></p-inputnumber>
-            <label for="edad">Edad</label>
-          </p-iftalabel>
+        <!-- Profesional -->
+        <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+        <div class="md:col-span-4" formGroupName="generales">
+          <div formGroupName="usuario">
+            <p-iftalabel>
+              <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+              <label for="profesionales">Profesionales</label>
+            </p-iftalabel>
+          </div>
         </div>
         <!-- Institucion -->
-        <div class="md:col-span-2" formGroupName="generales">
+        <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+        <div class="md:col-span-4" formGroupName="generales">
           <div formGroupName="institucion">
             <p-iftalabel>
               <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
@@ -39,7 +52,8 @@
           </div>
         </div>
         <!-- Curso -->
-        <div class="md:col-span-2" formGroupName="generales">
+        <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+        <div class="md:col-span-4" formGroupName="generales">
           <div formGroupName="curso">
             <p-iftalabel>
               <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
@@ -48,18 +62,24 @@
             </p-iftalabel>
           </div>
         </div>
-        <!-- Profesional -->
-        <div class="md:col-span-2" formGroupName="generales">
-          <div formGroupName="usuario">
-            <p-iftalabel>
-              <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
-                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
-              <label for="profesionales">Profesionales</label>
-            </p-iftalabel>
-          </div>
+        <!-- Turno -->
+        <div class="md:col-span-4" formGroupName="generales">
+          <p-iftalabel>
+            <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true"
+              optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full" />
+            <label for="turno">Turno</label>
+          </p-iftalabel>
+        </div>
+        <!-- Edad -->
+        <div class="md:col-span-4" formGroupName="generales">
+          <p-iftalabel>
+            <p-inputnumber formControlName="edad" pKeyFilter="int" inputId="edad" mode="decimal" [min]="1" [max]="20"
+              [showButtons]="true" class="w-full" />
+            <label for="edad">Edad</label>
+          </p-iftalabel>
         </div>
         <!-- Sexo -->
-        <div class="md:col-sp|-1" formGroupName="generales">
+        <div class="md:col-span-3" formGroupName="generales">
           <div formGroupName="chico">
             <p class="m-0 p-0">Sexo</p>
             <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
@@ -67,15 +87,15 @@
           </div>
         </div>
         <!-- Obra Social -->
-        <div class="md:col-span-2" formGroupName="generales">
+        <div class="md:col-span-3" formGroupName="generales">
           <p class="m-0 p-0">Obra Social</p>
-          <p-selectbutton [options]="obraSocialOptions" formControlName="obra_social" optionLabel="nombre"
-            optionValue="valor" styleClass="w-full" />
+          <p-selectbutton [options]="siNoOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
         </div>
-        <!-- Turno -->
-        <div class="md:col-span-2" formGroupName="generales">
-          <p class="m-0 p-0" for="turno">Turno</p>
-          <p-selectbutton [options]="turnoOptions" idInput="turno" formControlName="turno" optionLabel="nombre"
+        <!-- Tiene observaciones -->
+        <div class="md:col-span-1" formGroupName="generales">
+          <p class="m-0 p-0">Observaciones</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="observaciones" optionLabel="nombre"
             optionValue="valor" styleClass="w-full" />
         </div>
       </div>
@@ -89,5 +109,4 @@
       </div>
     </form>
   </div>
-
 </div>

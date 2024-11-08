@@ -33,14 +33,18 @@ export class CamposEspecificosComponent implements OnInit {
   public horasSuenioOptions: string[] = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Mas de 13hs'];
   public tensionArterialOptions: string[] = ['Normotenso', 'Riesgo', 'Hipertenso'];
   public estadoNutricionalOptions: string[] = ['A Riesgo Nutricional', 'B Bajo peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
-  // public derivacionesOptions: string[] = ['Fonoaudiologia', 'Odontologia', 'Oftalmologia'];
-  public derivacionesOptions: any[] = [
+  public derivacionesOptionsClinica: any[] = [
     { nombre: 'Fonoaudiologia', valor: { Fonoaudiologia: true } },
     { nombre: 'Odontologia', valor: { Odontologia: true } },
     { nombre: 'Oftalmologia', valor: { Oftalmologia: true } },
   ];
+  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { Externa: true } }];
+  public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
+  public diagnosticoPresuntivoOptions: string[] = ['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion'];
+  public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras'];
+
   /*
-  FALTAN:
+  FALTAN EN CLINICA:
       talla: [170, [Validators.required, ValidarNumerosFloat]],
       cc: [40, [Validators.required, ValidarNumerosFloat]],
       tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
@@ -74,11 +78,20 @@ export class CamposEspecificosComponent implements OnInit {
       receta: new FormControl(),
       control: new FormControl(),
       primera_vez: new FormControl(),
-
+      anteojos: new FormControl(),
+      // Odontologia
+      topificacion: new FormControl(),
+      cepillado: new FormControl(),
+      cepillo: new FormControl(),
+      clasificacion: new FormControl(),
+      ulterior: new FormControl(),
+      // Fonoaudiologia
+      diagnostico_presuntivo: new FormControl(),
+      causas: new FormControl(),
+      asistencia: new FormControl(),
     });
-    // derivacionesSeleccionadas: new FormControl(''),
-    this.form.addControl('especificas', this.especificas);
     this.form.addControl('derivaciones', new FormControl());
+    this.form.addControl('especificas', this.especificas);
   }
 
   get controlDeInput(): (input: string) => FormControl {

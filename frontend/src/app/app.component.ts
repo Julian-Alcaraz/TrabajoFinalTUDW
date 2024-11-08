@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 
 import { PrimeNGConfig } from 'primeng/api';
 import { Aura } from 'primeng/themes/aura';
-// import { definePreset } from 'primeng/themes';
+import { definePreset, palette } from 'primeng/themes';
 // import { Lara } from 'primeng/themes/lara';
 // import { Nora } from 'primeng/themes/nora';
 
@@ -31,7 +31,10 @@ export class AppComponent implements OnInit {
   // validar si existe la session
   constructor(private primengConfig: PrimeNGConfig) {
     this.primengConfig.theme.set({
-      preset: Aura,
+      //preset: Aura,
+      preset: definePreset(Aura, {
+        semantic: { primary: palette('{blue}') },
+      }),
       options: {
         prefix: 'p',
         darkModeSelector: '.my-app-dark',

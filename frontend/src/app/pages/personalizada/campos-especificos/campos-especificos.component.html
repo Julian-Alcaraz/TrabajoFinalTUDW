@@ -153,7 +153,7 @@
         <!-- Derivaciones -->
         <div class="md:col-span-2">
           <p-iftalabel>
-            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+            <p-multiselect [options]="derivacionesOptionsClinica" [formControl]="controlDeInput('derivaciones')"
               [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full" />
             <label for="derivaciones">Derivaciones</label>
           </p-iftalabel>
@@ -164,29 +164,43 @@
     <div *ngIf="consultasSeleccionadas.includes('Oftalmologia')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
         <!-- Receta -->
-        <div class="md:col-span-1">
-          <p class="m-0 p-0">¿Necesita receta?</p>
+        <div class="md:col-span-1 my-8">
+          <p>¿Necesita receta?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Control -->
-        <div class="md:col-span-1">
-          <p class="m-0 p-0">¿Es un control?</p>
+        <div class="md:col-span-1 my-8">
+          <p>¿Es un control?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Derivacion -->
-        <div class="md:col-span-1">
-          <p class="m-0 p-0">¿Es primera vez?</p>
+        <div class="md:col-span-1 my-8">
+          <p>¿Es primera vez?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
-        <!-- Derivacion externa
-        <div class="md:col-span-1">
-          <p class="m-0 p-0">¿Derivacion externa?</p>
-          <p-selectbutton [options]="siNoOptions" formControlName="derivacion_externa" optionLabel="nombre" optionValue="valor"
+        <!-- Anteojos -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Se entregaron Anteojos?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="anteojos" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
-        </div> -->
+        </div>
+        <!-- Derivacion externa-->
+        <div class="md:col-span-1 my-8">
+          <p-iftalabel>
+            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+            <label for="derivaciones">Derivacion externa</label>
+          </p-iftalabel>
+        </div>
+        <!-- Derivacion externa-->
+        <div class="md:col-span-1 my-8">
+          <p>¿Derivación externa?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="derivaciones" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
         <!-- Fecha proximo control
         <div class="md:col-span-1">
           <p class="m-0 p-0">¿Fecha próximo control?</p>
@@ -197,11 +211,89 @@
     </div>
     <!-- Caso C: Fonoaudiologia -->
     <div *ngIf="consultasSeleccionadas.includes('Fonoaudiologia')">
-      Este es el contenido para Fonoaudiología.
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <!-- Diagnostico Presuntivo -->
+        <div class="md:col-span-2 my-8">
+          <p-iftalabel>
+            <p-select [options]="diagnosticoPresuntivoOptions" formControlName="diagnostico_presuntivo"
+              idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="diagnostico_presuntivo">Diagnostico Presuntivo</label>
+          </p-iftalabel>
+        </div>
+        <!-- Causas -->
+        <div class="md:col-span-2 my-8">
+          <p-iftalabel>
+            <p-select [options]="casuasOptions" formControlName="causas" idInput="causas" [checkmark]="true"
+              [showClear]="true" placeholder="" class="w-full" />
+            <label for="causas">Causas</label>
+          </p-iftalabel>
+        </div>
+        <!-- Derivacion externa-->
+        <div class="md:col-span-2 my-8">
+          <p-iftalabel>
+            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+            <label for="derivaciones">Derivacion externa</label>
+          </p-iftalabel>
+        </div>
+        <!-- Asistencia -->
+        <div class="md:col-span-1 mb-8">
+          <p>¿Asistió?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="asistencia" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+      </div>
     </div>
     <!-- Caso D: Odontologia -->
     <div *ngIf="consultasSeleccionadas.includes('Odontologia')">
-      Este es el contenido para Odontologia.
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <!-- Topificacion -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Se aplicó topificacion?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="topificacion" optionLabel="nombre"
+            optionValue="valor" styleClass="w-full" />
+        </div>
+        <!-- Se cepilla -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Se cepilla?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="cepillado" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Cepillo -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Tiene cepillo?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="cepillo" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Control -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Es ulterior?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="ulterior" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Derivacion -->
+        <div class="md:col-span-1 my-8">
+          <p>¿Es primera vez?</p>
+          <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
+            styleClass="w-full" />
+        </div>
+        <!-- Clasificacion dental -->
+        <div class="md:col-span-3 my-8">
+          <p-iftalabel>
+            <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion"
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+            <label for="clasificacion">Clasificación Dental</label>
+          </p-iftalabel>
+        </div>
+        <!-- Derivacion externa-->
+        <div class="md:col-span-3 my-8">
+          <p-iftalabel>
+            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+            <label for="derivaciones">Derivación externa</label>
+          </p-iftalabel>
+        </div>
+      </div>
     </div>
     <!-- Caso por defecto -->
     <div
