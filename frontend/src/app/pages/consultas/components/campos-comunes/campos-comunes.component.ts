@@ -20,7 +20,7 @@ import { Institucion } from '../../../../models/institucion.model';
 import { InstitucionService } from '../../../../services/institucion.service';
 import { Curso } from '../../../../models/curso.model';
 import { CursoService } from '../../../../services/curso.service';
-import { LoadingComponent } from '../../../../components/loading/input-loading.component';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-campos-comunes',

@@ -14,7 +14,7 @@ import { Consulta } from '../../../models/consulta.model';
 import { DetallesConsultaComponent } from '../components/detalles-consulta/detalles-consulta.component';
 import { InputCheckboxComponent } from '../../../components/inputs/input-checkbox.component';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/input-loading.component';
+import { LoadingComponent } from '../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-ver-chico',

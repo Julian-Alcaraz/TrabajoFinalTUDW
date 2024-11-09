@@ -8,7 +8,7 @@
         <div class="md:col-span-6">
           <p-iftalabel>
             <p-multiselect [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4"
-              formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full" />
+              formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full h-16" />
             <label for="consultasSeleccionadas">Tipo de consulta</label>
           </p-iftalabel>
         </div>
@@ -18,7 +18,7 @@
         <div class="md:col-span-2" formGroupName="generales">
           <p-iftalabel>
             <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas"
-              selectionMode="range" styleClass="w-full" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy">
+              selectionMode="range" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy" styleClass="w-full h-16">
               <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
               <ng-template pTemplate="footer">
                 <p-button class="p-datepicker-prev hidden">Previous</p-button>
@@ -35,7 +35,7 @@
           <div formGroupName="usuario">
             <p-iftalabel>
               <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
-                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
               <label for="profesionales">Profesionales</label>
             </p-iftalabel>
           </div>
@@ -46,7 +46,7 @@
           <div formGroupName="institucion">
             <p-iftalabel>
               <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
-                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
               <label for="instituciones">Institución</label>
             </p-iftalabel>
           </div>
@@ -57,7 +57,7 @@
           <div formGroupName="curso">
             <p-iftalabel>
               <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
-                optionValue="id" [showClear]="true" placeholder="" class="w-full" />
+                optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
               <label for="cursos">Cursos</label>
             </p-iftalabel>
           </div>
@@ -66,7 +66,7 @@
         <div class="md:col-span-4" formGroupName="generales">
           <p-iftalabel>
             <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true"
-              optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full" />
+              optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="turno">Turno</label>
           </p-iftalabel>
         </div>
@@ -74,7 +74,7 @@
         <div class="md:col-span-4" formGroupName="generales">
           <p-iftalabel>
             <p-inputnumber formControlName="edad" pKeyFilter="int" inputId="edad" mode="decimal" [min]="1" [max]="20"
-              [showButtons]="true" class="w-full" />
+              [showButtons]="true" class="w-full h-16" />
             <label for="edad">Edad</label>
           </p-iftalabel>
         </div>

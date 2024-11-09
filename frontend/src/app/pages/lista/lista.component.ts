@@ -9,7 +9,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import * as MostrarNotificacion from '../../utils/notificaciones/mostrar-notificacion';
 import { Consulta } from '../../models/consulta.model';
 import { ConsultaService } from '../../services/consulta.service';
-import { LoadingComponent } from '../../components/loading/input-loading.component';
+import { LoadingComponent } from '../../components/loading/loading.component';
 import { DataConsultaPipe } from '../../utils/pipes/data-consulta.pipe';
 
 //

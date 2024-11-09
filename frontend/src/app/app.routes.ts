@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './pages/layout/layout.component';
-import { adminGuard, authGuard, loginGuard } from './guards/auth.guard';
+import { authGuard, loginGuard } from './guards/auth.guard';
+/*
+import { adminGuard } from './guards/auth.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MiUsuarioComponent } from './pages/usuarios/mi-usuario/mi-usuario.component';
 import { NuevoUsuarioComponent } from './pages/usuarios/nuevo-usuario/nuevo-usuario.component';
@@ -47,6 +49,49 @@ export const routes: Routes = [
     ],
   },
 ];
+*/
+
+export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+  {
+    path: 'layout',
+    component: LayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./lazy-modules/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'usuarios',
+        loadChildren: () => import('./lazy-modules/usuarios.module').then((m) => m.UsuariosModule),
+      },
+      {
+        path: 'chicos',
+        loadChildren: () => import('./lazy-modules/chicos.module').then((m) => m.ChicosModule),
+      },
+      {
+        path: 'consultas',
+        loadChildren: () => import('./lazy-modules/consultas.module').then((m) => m.ConsultasModule),
+      },
+      {
+        path: 'lista',
+        loadChildren: () => import('./lazy-modules/lista.module').then((m) => m.ListaModule),
+      },
+      {
+        path: 'busqueda',
+        loadChildren: () => import('./lazy-modules/busquedas.module').then((m) => m.BusquedasModule),
+      },
+      {
+        path: 'personalizada',
+        loadChildren: () => import('./lazy-modules/personalizada.module').then((m) => m.PersonalizadaModule),
+      },
+    ],
+  },
+];
+
 // { esto yo creo que sirve par ahacer lazy loading y en component pones el modulo
 //   path: 'usuarios',
 //   children: [

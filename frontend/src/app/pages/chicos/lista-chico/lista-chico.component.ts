@@ -12,7 +12,7 @@ import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { RouterModule, Router } from '@angular/router';
-import { LoadingComponent } from '../../../components/loading/input-loading.component';
+import { LoadingComponent } from '../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-lista-chico',

@@ -65,7 +65,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="vacunasOptions" formControlName="vacunas" idInput="vacunas" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="vacunas">Vacunas</label>
           </p-iftalabel>
         </div>
@@ -73,7 +73,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="examenVisualOptions" formControlName="examen_visual" idInput="examen_visual"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="examen_visual">Examen Visual</label>
           </p-iftalabel>
         </div>
@@ -81,15 +81,24 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="lenguajeOptions" formControlName="lenguaje" idInput="lenguaje" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="lenguaje">Lenguaje</label>
+          </p-iftalabel>
+        </div>
+        <!-- Cantidad de comidas -->
+        <div class="md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="cantidadComidasOptions" formControlName="cantidad_comidas" idInput="cantidad_comidas" [checkmark]="true"
+              [showClear]="true" placeholder="" class="w-full h-16" />
+            <label for="cantidad_comidas">Cantidad de comidas</label>
           </p-iftalabel>
         </div>
         <!-- Ortopedia y traumatologia -->
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="ortopediaTraumatologiaOptions" formControlName="ortopedia_traumatologia"
-              idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="ortopedia_traumatologia">Ortopedia y Traumatologia</label>
           </p-iftalabel>
         </div>
@@ -97,7 +106,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="alimentacionOptions" formControlName="alimentacion" idInput="alimentacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="alimentacion">Alimentación</label>
           </p-iftalabel>
         </div>
@@ -105,7 +114,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="hidratacionOptions" formControlName="hidratacion" idInput="hidratacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="hidratacion">Hidratación</label>
           </p-iftalabel>
         </div>
@@ -114,7 +123,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="horas_pantalla">Horas pantalla</label>
           </p-iftalabel>
         </div>
@@ -122,7 +131,8 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre"
-              idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="horas_juego_aire_libre">Horas juego aire libre</label>
           </p-iftalabel>
         </div>
@@ -130,7 +140,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="horas_suenio">Horas sueño</label>
           </p-iftalabel>
         </div>
@@ -138,7 +148,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="tensionArterialOptions" formControlName="tension_arterial" idInput="tension_arterial"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="tension_arterial">Tension arterial</label>
           </p-iftalabel>
         </div>
@@ -146,7 +156,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="estadoNutricionalOptions" formControlName="estado_nutricional"
-              idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="estado_nutricional">Estado nutricional</label>
           </p-iftalabel>
         </div>
@@ -154,7 +164,8 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptionsClinica" [formControl]="controlDeInput('derivaciones')"
-              [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full" />
+              [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip"
+              styleClass="w-full h-16" />
             <label for="derivaciones">Derivaciones</label>
           </p-iftalabel>
         </div>
@@ -191,16 +202,16 @@
         <div class="md:col-span-1 my-8">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
-              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+              optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
             <label for="derivaciones">Derivacion externa</label>
           </p-iftalabel>
         </div>
-        <!-- Derivacion externa-->
+        <!-- Derivacion externa
         <div class="md:col-span-1 my-8">
           <p>¿Derivación externa?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="derivaciones" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
-        </div>
+        </div> -->
         <!-- Fecha proximo control
         <div class="md:col-span-1">
           <p class="m-0 p-0">¿Fecha próximo control?</p>
@@ -216,7 +227,8 @@
         <div class="md:col-span-2 my-8">
           <p-iftalabel>
             <p-select [options]="diagnosticoPresuntivoOptions" formControlName="diagnostico_presuntivo"
-              idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="diagnostico_presuntivo">Diagnostico Presuntivo</label>
           </p-iftalabel>
         </div>
@@ -224,7 +236,7 @@
         <div class="md:col-span-2 my-8">
           <p-iftalabel>
             <p-select [options]="casuasOptions" formControlName="causas" idInput="causas" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="causas">Causas</label>
           </p-iftalabel>
         </div>
@@ -232,7 +244,7 @@
         <div class="md:col-span-2 my-8">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
-              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+              optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
             <label for="derivaciones">Derivacion externa</label>
           </p-iftalabel>
         </div>
@@ -281,7 +293,7 @@
         <div class="md:col-span-3 my-8">
           <p-iftalabel>
             <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="clasificacion">Clasificación Dental</label>
           </p-iftalabel>
         </div>
@@ -289,7 +301,7 @@
         <div class="md:col-span-3 my-8">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
-              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+              optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
             <label for="derivaciones">Derivación externa</label>
           </p-iftalabel>
         </div>
