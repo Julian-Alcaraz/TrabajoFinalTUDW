@@ -229,8 +229,111 @@ export class ConsultaService {
     // return this.consultaORM.find({ where: { created_at: Between(startOfYear, endOfYear) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
     return this.consultaORM.find({ where: { created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
-  update(id: number, updateConsultaDto: UpdateConsultaDto) {
-    return `This action updates a #${id} consulta`;
+
+  async update(id: number, cambios: UpdateConsultaDto) {
+    if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
+    // Consulta
+    const consulta = await this.consultaORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
+    if (!consulta) throw new NotFoundException(`Consulta con id ${id} no encontrada`);
+    // Curso
+    const idCurso = cambios.id_curso ? cambios.id_curso : null;
+    let cursoEncontrado: Curso | null = null;
+    if (!idCurso) cursoEncontrado = null;
+    else {
+      cursoEncontrado = await this.cursoORM.findOne({ where: { id: idCurso, deshabilitado: false } });
+      if (!cursoEncontrado) throw new NotFoundException(`Curso con id ${cambios.id_curso} no encontrado`);
+      console.log('esta idcurso');
+    }
+    // Institucion
+    const idInstitucion = cambios.id_institucion ? cambios.id_institucion : null;
+    let institucionEncontrada: Institucion | null = null;
+    if (!idInstitucion) institucionEncontrada = null;
+    else {
+      institucionEncontrada = await this.institucionORM.findOne({ where: { id: idInstitucion, deshabilitado: false } });
+      if (!institucionEncontrada) throw new NotFoundException(`Institución con id ${cambios.id_institucion} no encontrada`);
+    }
+    // Chico
+    const idChico = cambios.id_chico ? cambios.id_chico : null;
+    let chicoEncontrado: Chico | null = null;
+    if (!idChico) chicoEncontrado = null;
+    else {
+      chicoEncontrado = await this.chicoORM.findOne({ where: { id: idChico, deshabilitado: false } });
+      if (!chicoEncontrado) throw new NotFoundException(`Chico con id ${cambios.id_chico} no encontrado`);
+    }
+    // Aplica cambios generales
+    const { clinica, oftalmologia, odontologia, fonoaudiologia, ...cambiosConsulta } = cambios;
+    const cambiosAplicadosConsulta = {
+      ...cambiosConsulta,
+      ...(cursoEncontrado ? { curso: cursoEncontrado } : {}),
+      ...(chicoEncontrado ? { chico: chicoEncontrado } : {}),
+      ...(institucionEncontrada ? { institucion: institucionEncontrada } : {}),
+    };
+    const consultaModificada = this.consultaORM.merge(consulta, cambiosAplicadosConsulta);
+    await this.consultaORM.save(consultaModificada);
+    // Cambios especificos
+    if (clinica) {
+      const clinicaEncontrada = await this.clinicaORM.findOne({ where: { id_consulta: id } });
+      if (!clinicaEncontrada) throw new NotFoundException(`Clínica asociada a consulta con id ${id} no encontrada`);
+      let imc: number | null = null;
+      let estado_nutricional: string | null = null;
+      let tension_arterial: string | null = null;
+      if (clinica.talla && clinica.peso) {
+        imc = clinica.peso / ((clinica.talla / 100) * (clinica.talla / 100));
+      } else if (clinica.peso) {
+        imc = clinica.peso / ((clinicaEncontrada.talla / 100) * (clinicaEncontrada.talla / 100));
+      } else if (clinica.talla) {
+        imc = clinicaEncontrada.peso / ((clinica.talla / 100) * (clinica.talla / 100));
+      }
+      if (clinica.pcimc) {
+        estado_nutricional = estadoNutricional(clinica.pcimc);
+      }
+      if (clinica.pcta) {
+        tension_arterial = tensionArterial(clinica.pcta);
+      }
+      const cambiosAplicadosClinica = {
+        ...clinica,
+        ...(imc !== null ? { imc } : {}),
+        ...(estado_nutricional !== null ? { estado_nutricional } : {}),
+        ...(tension_arterial !== null ? { tension_arterial } : {}),
+      };
+      const clinicaModificada = this.clinicaORM.merge(clinicaEncontrada, cambiosAplicadosClinica);
+      await this.clinicaORM.save(clinicaModificada);
+    } else if (oftalmologia) {
+      const oftalmologiaEncontrada = await this.oftalmologiaORM.findOne({ where: { id_consulta: id } });
+      if (!oftalmologiaEncontrada) throw new NotFoundException(`Oftalmologia asociada a consulta con id ${id} no encontrada`);
+      const oftalmologiaModificada = this.oftalmologiaORM.merge(oftalmologiaEncontrada, oftalmologia);
+      await this.oftalmologiaORM.save(oftalmologiaModificada);
+    } else if (odontologia) {
+      const odontologiaEncontrada = await this.odontologiaORM.findOne({ where: { id_consulta: id } });
+      if (!odontologiaEncontrada) throw new NotFoundException(`Odontologia asociada a consulta con id ${id} no encontrada`);
+      let clasificacion: string | null = null;
+      if (odontologia.dientes_recuperables >= 0 && odontologia.dientes_irecuperables >= 0) {
+        clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables);
+      } else if (odontologia.dientes_recuperables >= 0) {
+        clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologiaEncontrada.dientes_irecuperables);
+      } else if (odontologia.dientes_irecuperables >= 0) {
+        clasificacion = clasificacionDental(odontologiaEncontrada.dientes_recuperables, odontologia.dientes_irecuperables);
+      }
+      const cambiosAplicadosOdontologia = {
+        ...odontologia,
+        ...(clasificacion !== null ? { clasificacion } : {}),
+      };
+      const odontologiaModificada = this.odontologiaORM.merge(odontologiaEncontrada, cambiosAplicadosOdontologia);
+      await this.odontologiaORM.save(odontologiaModificada);
+    } else if (fonoaudiologia) {
+      const fonoaudiologiaEncontrada = await this.fonoaudiologiaORM.findOne({ where: { id_consulta: id } });
+      if (!fonoaudiologiaEncontrada) throw new NotFoundException(`Fonoaudiologia asociada a consulta con id ${id} no encontrada`);
+      const fonoaudiologiaModificada = this.fonoaudiologiaORM.merge(fonoaudiologiaEncontrada, fonoaudiologia);
+      await this.fonoaudiologiaORM.save(fonoaudiologiaModificada);
+    }
+    // Resultados
+    return {
+      ...consultaModificada,
+      ...(cambios.clinica ? { clinica: await this.clinicaORM.findOne({ where: { id_consulta: id } }) } : {}),
+      ...(cambios.oftalmologia ? { oftalmologia: await this.oftalmologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
+      ...(cambios.odontologia ? { odontologia: await this.odontologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
+      ...(cambios.fonoaudiologia ? { fonoaudiologia: await this.fonoaudiologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
+    };
   }
 
   remove(id: number) {

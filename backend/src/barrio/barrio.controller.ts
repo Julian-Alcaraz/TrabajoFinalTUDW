@@ -25,7 +25,7 @@ export class BarrioController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los barrios' })
+  @ApiOperation({ summary: 'Devuelve todos los barrios habilitados' })
   @ApiResponse({ status: 200, description: 'Retorna todos los barrios habilitados con exito' })
   async findAll() {
     const colBarrios = await this.barrioService.findAll();
@@ -37,7 +37,7 @@ export class BarrioController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Devuelve todos los barrios' })
+  @ApiOperation({ summary: 'Devuelve todos un barrio' })
   @ApiResponse({ status: 200, description: 'Retorna el barrio habilitado con exito' })
   @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
@@ -59,7 +59,7 @@ export class BarrioController {
     return {
       succes: true,
       data: barrio,
-      message: 'Barrios actualizado correctamente',
+      message: 'Barrio actualizado correctamente',
     };
   }
 

@@ -21,7 +21,7 @@ export class CreateClinicaDto {
   @ApiProperty({ description: 'Consume alchol' })
   @IsNotEmpty({ message: 'Consumo de alchol no puede estar vacio' })
   @IsBoolean({ message: 'Consumo de alchol debe ser un boleano' })
-  readonly consumo_alcohol: boolean; // NO consumo_alchol ES consumo_alcohol
+  readonly consumo_alcohol: boolean;
 
   @ApiProperty({ description: 'Consume drogas' })
   @IsNotEmpty({ message: 'Consumo de drogas no puede estar vacio' })

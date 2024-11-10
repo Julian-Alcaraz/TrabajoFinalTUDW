@@ -26,20 +26,6 @@ export class BarrioService {
     return this.barrioORM.find({ where: { deshabilitado: false } });
   }
 
-  /*
-  findAll() {
-    return this.barrioORM.find({
-      where: {
-        deshabilitado: false,
-        localidad: {
-          id: 1,
-        },
-      },
-      //relations: ['localidad'],
-    });
-  }
-*/
-
   async findOne(id: number) {
     const barrio = await this.barrioORM.findOne({ where: { id, deshabilitado: false } /*relations: ['localidad'] */ });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
@@ -50,6 +36,7 @@ export class BarrioService {
     if (Object.keys(updateBarrioDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
     const barrio = await this.barrioORM.findOneBy({ id });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
+    // aca falta verificar si se envio localidad, si existe y se cambia!!!.
     this.barrioORM.merge(barrio, updateBarrioDto);
     return this.barrioORM.save(barrio);
   }

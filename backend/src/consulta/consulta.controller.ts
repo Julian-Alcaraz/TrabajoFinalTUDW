@@ -26,7 +26,7 @@ export class ConsultaController {
   @Post('busquedaPersonalizada')
   @ApiOperation({ summary: 'Devuelte todas las consultas de una busqueda personalizada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
-  async busquedaPersonalizada(@Body() data: any, @Req() req: any) {
+  async busquedaPersonalizada(@Body() data: any) {
     const consultas = await this.consultaService.busquedaPersonalizada(data);
     return {
       success: true,
