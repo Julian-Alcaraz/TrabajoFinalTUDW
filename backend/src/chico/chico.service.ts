@@ -44,14 +44,14 @@ export class ChicoService {
 
   async update(id: number, updateChicoDto: UpdateChicoDto) {
     if (Object.keys(updateChicoDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
-    const usuario = await this.chicoORM.findOneBy({ id });
-    if (!usuario) throw new NotFoundException(`Chico con id ${id} no encontrado`);
+    const chico = await this.chicoORM.findOneBy({ id });
+    if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     if (updateChicoDto.dni) {
       const chicoEncontradoDni = await this.chicoORM.findOneBy({ dni: updateChicoDto.dni });
       if (chicoEncontradoDni && chicoEncontradoDni.id != id) throw new BadRequestException(`El dni ${updateChicoDto.dni} ya esta cargado en el sistema`);
     }
-    this.chicoORM.merge(usuario, updateChicoDto);
-    return this.chicoORM.save(usuario);
+    this.chicoORM.merge(chico, updateChicoDto);
+    return this.chicoORM.save(chico);
   }
 
   async remove(id: number) {

@@ -126,13 +126,13 @@ export class NuevaClinicaComponent implements OnInit {
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivacionesSinFiltrar = {
+          const derivaciones = {
             odontologia: formValues.derivacion_odontologia,
             oftalmologia: formValues.derivacion_oftalmologia,
             fonoaudiologia: formValues.derivacion_fonoaudiologia,
             externa: formValues.derivacion_externa,
           };
-          const derivaciones = Object.fromEntries(Object.entries(derivacionesSinFiltrar).filter(([, value]) => value === true));
+          //const derivaciones = Object.fromEntries(Object.entries(derivacionesSinFiltrar).filter(([, value]) => value === true));
           delete formValues.derivacion_externa;
           delete formValues.derivacion_fonoaudiologia;
           delete formValues.derivacion_odontologia;
@@ -148,7 +148,8 @@ export class NuevaClinicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(Object.keys(derivaciones).length > 0 && derivaciones.constructor === Object && { derivaciones }),
+            derivaciones,
+            //...(Object.keys(derivaciones).length > 0 && derivaciones.constructor === Object && { derivaciones }),
             clinica: {
               ...clinicaValues,
             },

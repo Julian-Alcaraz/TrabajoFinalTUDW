@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, Max, Min } from 'class-validator';
-import { sexoType } from '../entities/chico.entity';
 import { Transform, Type } from 'class-transformer';
+
+import { sexoType } from '../entities/chico.entity';
 
 export class CreateChicoDto {
   @ApiProperty({ description: 'Dni del chico' })
@@ -16,19 +17,6 @@ export class CreateChicoDto {
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
   @Length(3, 50, { message: 'El nombre debe tener entre 3 y 50 caracteres' })
-  /*
- TypeError: value.trim is not a function
-backend-1      |     at Object.transformFn (/home/app/backend/src/chico/dto/create-chico.dto.ts:69:35)
-backend-1      |     at /home/app/backend/node_modules/src/TransformOperationExecutor.ts:412:24
-backend-1      |     at Array.forEach (<anonymous>)
-backend-1      |     at TransformOperationExecutor.applyCustomTransformations (/home/app/backend/node_modules/src/TransformOperationExecutor.ts:411:15)
-backend-1      |     at TransformOperationExecutor.transform (/home/app/backend/node_modules/src/TransformOperationExecutor.ts:334:33)
-backend-1      |     at ClassTransformer.plainToInstance (/home/app/backend/node_modules/src/ClassTransformer.ts:77:21)
-backend-1      |     at Object.plainToClass (/home/app/backend/node_modules/src/index.ts:71:27)
-backend-1      |     at ValidationPipe.transform (/home/app/backend/node_modules/@nestjs/common/pipes/validation.pipe.js:60:39)
-backend-1      |     at /home/app/backend/node_modules/@nestjs/core/pipes/pipes-consumer.js:16:33
-backend-1      |     at processTicksAndRejections (node:internal/process/task_queues:105:5)
-  */
   @Transform(({ value }) => value.trim())
   readonly nombre: string;
 

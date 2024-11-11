@@ -27,16 +27,28 @@ export class BarrioService {
   }
 
   async findOne(id: number) {
-    const barrio = await this.barrioORM.findOne({ where: { id, deshabilitado: false } /*relations: ['localidad'] */ });
+    const barrio = await this.barrioORM.findOne({ where: { id: id, deshabilitado: false } /*relations: ['localidad'] */ });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
     return barrio;
   }
 
   async update(id: number, updateBarrioDto: UpdateBarrioDto) {
     if (Object.keys(updateBarrioDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
-    const barrio = await this.barrioORM.findOneBy({ id });
+    const barrio = await this.barrioORM.findOne({ where: { id: id, deshabilitado: false }, relations: ['localidad'] });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
-    // aca falta verificar si se envio localidad, si existe y se cambia!!!.
+    // Localidad
+    const idLocalidad = updateBarrioDto.id_localidad ? updateBarrioDto.id_localidad : null;
+    let localidadEncontrada: Localidad | null = null;
+    if (!idLocalidad) localidadEncontrada = null;
+    else {
+      localidadEncontrada = await this.localidadORM.findOne({ where: { id: idLocalidad, deshabilitado: false } });
+      if (!localidadEncontrada) throw new NotFoundException(`Localidad con id ${idLocalidad} no encontrada`);
+      if (localidadEncontrada && barrio.localidad.id !== localidadEncontrada.id) {
+        barrio.localidad = localidadEncontrada;
+      } else {
+        throw new BadRequestException(`Se envio la misma localidad que ya tenia el barrio`);
+      }
+    }
     this.barrioORM.merge(barrio, updateBarrioDto);
     return this.barrioORM.save(barrio);
   }

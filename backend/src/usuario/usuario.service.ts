@@ -68,7 +68,7 @@ export class UsuarioService {
     return this.usuarioORM.save(usuario);
   }
 
-  async borradoLogico(id: number) {
+  async remove(id: number) {
     const usuario = await this.usuarioORM.findOneBy({ id });
     if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     else if (usuario.deshabilitado) throw new BadRequestException(`El usuario con id ${id} ya esta deshabilitado`);

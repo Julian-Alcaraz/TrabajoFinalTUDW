@@ -9,6 +9,7 @@ import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-n
 import { ConsultaService } from '../../../../services/consulta.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
+import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
@@ -18,7 +19,7 @@ import { Consulta } from '../../../../models/consulta.model';
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
@@ -115,6 +116,9 @@ export class NuevaOdontologiaComponent implements OnInit {
           formValues.obra_social = formValues.obra_social === 'true';
           const derivaciones = {
             externa: formValues.derivacion_externa === 'true',
+            odontologia: false,
+            oftalmologia: false,
+            fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
@@ -127,7 +131,8 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(derivaciones.externa && { derivaciones }),
+            // ...(derivaciones.externa && { derivaciones }),
+            derivaciones,
             odontologia: {
               ...odontologicaValues,
             },

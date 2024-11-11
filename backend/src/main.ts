@@ -22,7 +22,7 @@ async function bootstrap() {
     }),
   );
   // Swagger:
-  const config = new DocumentBuilder().setTitle('API TPFinalTUDW').setDescription('API para la aplicacion web de la fundacion sol').setVersion('1.0').build();
+  const config = new DocumentBuilder().setTitle('API TPFinalTUDW').setDescription('API para la aplicación web de la Fundacion Sol').setVersion('1.0').build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

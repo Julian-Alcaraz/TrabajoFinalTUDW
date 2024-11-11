@@ -13,16 +13,6 @@
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="oftalmologiaForm">
       <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
-        <!-- Primera Vez
-        <div class="mt-4 md:col-span-1">
-          <app-input-select-enum label="¿Es la primera vez?" [control]="controlDeInput('primera_vez')"
-            idInput="primera_vez" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div> -->
-        <!-- Control
-        <div class="mt-4 md:col-span-1">
-          <app-input-select-enum label="¿Es un control?" [control]="controlDeInput('control')"
-          idInput="control" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div> -->
         <!-- Calculos primera_vez y control -->
         <ng-container class="mt-4">
           <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 grid grid-cols-2">

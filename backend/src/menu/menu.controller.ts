@@ -65,16 +65,16 @@ export class MenuController {
     };
   }
 
-  @Delete('eliminar/:id')
-  @ApiOperation({ summary: 'Borrado logico de un menu' })
-  @ApiResponse({ status: 200, description: 'Menu borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
-  async borradoLogico(@Param('id', ParseIntPipe) id: number) {
-    const menuBorradoLogico = await this.menuService.borradoLogico(id);
+  @Delete(':id')
+  @ApiOperation({ summary: 'Borrado logico de un barrio' })
+  @ApiResponse({ status: 200, description: 'Barrio borrado logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const menuBorrado = await this.menuService.remove(id);
     return {
-      success: true,
-      data: menuBorradoLogico,
-      message: 'Menu borrado logicamente con exito',
+      succes: true,
+      data: menuBorrado,
+      message: 'Barrio borrado logicamente',
     };
   }
 
@@ -106,14 +106,4 @@ export class MenuController {
       message: 'Rol del menu asignado con exito',
     };
   }
-
-  /*
-  @Delete(':id')
-  @ApiOperation({ summary: 'Borra un menu' })
-  @ApiResponse({ status: 200, description: 'Menu borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Menu no encontrado' })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.menuService.remove(id);
-  }
-  */
 }

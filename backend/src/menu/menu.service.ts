@@ -81,14 +81,6 @@ export class MenuService {
     return this.menuORM.save(nuevoMenu);
   }
 
-  async borradoLogico(id: number) {
-    const menu = await this.menuORM.findOneBy({ id });
-    if (!menu) throw new NotFoundException(`Menu con id ${id} no encontrado`);
-    else if (menu.deshabilitado) throw new BadRequestException(`El menu con id ${id} ya esta deshabilitado`);
-    menu.deshabilitado = true;
-    return this.menuORM.save(menu);
-  }
-
   async eliminarRolDeMenu(idMenu: number, idRol: number) {
     const menu = await this.menuORM.findOne({ where: { id: idMenu, deshabilitado: false }, relations: ['roles'] });
     if (!menu) throw new NotFoundException(`Menu con id ${idMenu} no encontrado`);
@@ -110,44 +102,11 @@ export class MenuService {
     return this.menuORM.save(menu);
   }
 
-  /*
-  async menusUsuario(id: number) {
-    // Validar si el usuario existe
-    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, id: id } });
-    if (!usuario) throw new NotFoundException(`El usuario con id ${id} no se encontro`);
-    // Obtener sus roles y validar si tiene por lo menos uno
-    const rolesDeUsuario = await this.usuarioRolService.devolverRoles(id);
-    if (!rolesDeUsuario || rolesDeUsuario.length === 0) throw new NotFoundException(`El usuario con id ${id} no tiene roles asignados`);
-    const resultado = [];
-    let tieneMenus = false;
-    // Iterar sobre los roles y obtener los menus de cada rol
-    for (const rol of rolesDeUsuario) {
-      const menusRol = await this.menuRolService.buscarMenuRol(rol.id_rol);
-      if (menusRol && menusRol.length > 0) {
-        // Iterar sobre los menus asociados a los roles
-        tieneMenus = true;
-        for (const menuRol of menusRol) {
-          const menu = await this.menuORM.findOne({ where: { id: menuRol.id_menu, deshabilitado: false }, relations: ['menu_padre', 'sub_menus'] });
-          // Solo agregar menus que no tengan menu_padre
-          if (menu && !menu.menu_padre) {
-            resultado.push(menu);
-          }
-        }
-      }
-    }
-    // Si ningun rol del usuario tiene menus
-    if (!tieneMenus) throw new NotFoundException(`Ningun rol del usuario con id ${id} tiene menus asignados`);
-    return resultado;
-  }
-  */
-
-  /*
   async remove(id: number) {
     const menu = await this.menuORM.findOneBy({ id });
-    if (!menu) {
-      throw new NotFoundException(`Menu con id ${id} no encontrado`);
-    }
-    this.menuORM.delete(id);
+    if (!menu) throw new NotFoundException(`Menu con id ${id} no encontrado`);
+    else if (menu.deshabilitado) throw new BadRequestException(`El menu con id ${id} ya esta deshabilitado`);
+    menu.deshabilitado = true;
+    return this.menuORM.save(menu);
   }
-  */
 }

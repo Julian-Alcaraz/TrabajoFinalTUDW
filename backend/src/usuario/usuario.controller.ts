@@ -83,11 +83,11 @@ export class UsuarioController {
   @ApiOperation({ summary: 'Borrado logico de un usuario' })
   @ApiResponse({ status: 200, description: 'Usuario borrado logicamente con exito' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  async borradoLogico(@Param('id', ParseIntPipe) id: number) {
-    const usuarioBorradoLogico = await this.usuarioService.borradoLogico(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const usuarioBorrado = await this.usuarioService.remove(id);
     return {
       success: true,
-      data: usuarioBorradoLogico,
+      data: usuarioBorrado,
       message: 'Usuario borrado logicamente con exito',
     };
   }

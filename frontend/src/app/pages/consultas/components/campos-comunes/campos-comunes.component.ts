@@ -13,7 +13,6 @@ import { InputNumberComponent } from '../../../../components/inputs/input-number
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { Chico } from '../../../../models/chico.model';
 import { ChicoService } from '../../../../services/chico.service';
 import { Institucion } from '../../../../models/institucion.model';
@@ -26,7 +25,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 @Component({
   selector: 'app-campos-comunes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent, LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './campos-comunes.component.html',
   styleUrl: './campos-comunes.component.css',
 })

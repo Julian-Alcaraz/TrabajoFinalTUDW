@@ -68,27 +68,12 @@ export class RolController {
   @ApiResponse({ status: 200, description: 'Rol borrado logicamente con exito' })
   @ApiResponse({ status: 400, description: 'El rol ya esta deshabilitado' })
   @ApiResponse({ status: 404, description: 'Rol no encontrado' })
-  async borradoLogico(@Param('id', ParseIntPipe) id: number) {
-    const rolBorradoLogico = await this.rolService.borradoLogico(id);
-    return {
-      success: true,
-      data: rolBorradoLogico,
-      message: 'Rol borrado logicamente con exito',
-    };
-  }
-
-  /*
-  @Delete(':id')
-  @ApiOperation({ summary: 'Borra un rol' })
-  @ApiResponse({ status: 200, description: 'Rol borrado con exito' })
-  @ApiResponse({ status: 404, description: 'Rol no encontrado' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const rolBorrado = await this.rolService.remove(id);
     return {
       success: true,
       data: rolBorrado,
-      message:'Rol borrado con exito',
+      message: 'Rol borrado logicamente con exito',
     };
   }
-  */
 }

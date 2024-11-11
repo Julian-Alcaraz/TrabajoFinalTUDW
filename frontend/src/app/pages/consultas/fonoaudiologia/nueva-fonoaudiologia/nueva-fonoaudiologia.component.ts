@@ -80,6 +80,9 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
           formValues.obra_social = formValues.obra_social === 'true';
           const derivaciones = {
             externa: formValues.derivacion_externa === 'true',
+            odontologia: false,
+            oftalmologia: false,
+            fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
           delete formValues.dni;
@@ -93,7 +96,8 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(derivaciones.externa && { derivaciones }),
+            derivaciones,
+            //...(derivaciones.externa && { derivaciones }),
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },

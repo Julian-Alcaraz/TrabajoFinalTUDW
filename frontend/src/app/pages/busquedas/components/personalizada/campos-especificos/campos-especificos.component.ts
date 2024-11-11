@@ -34,15 +34,15 @@ export class CamposEspecificosComponent implements OnInit {
   public tensionArterialOptions: string[] = ['Normotenso', 'Riesgo', 'Hipertenso'];
   public estadoNutricionalOptions: string[] = ['A Riesgo Nutricional', 'B Bajo peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   public derivacionesOptionsClinica: any[] = [
-    { nombre: 'Fonoaudiologia', valor: { Fonoaudiologia: true } },
-    { nombre: 'Odontologia', valor: { Odontologia: true } },
-    { nombre: 'Oftalmologia', valor: { Oftalmologia: true } },
+    { nombre: 'Fonoaudiologia', valor: { fonoaudiologia: true } },
+    { nombre: 'Odontologia', valor: { odontologia: true } },
+    { nombre: 'Oftalmologia', valor: { oftalmologia: true } },
   ];
-  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { Externa: true } }];
+  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
   public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
   public diagnosticoPresuntivoOptions: string[] = ['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion'];
   public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras'];
-
+  public cantidadComidasOptions: string[] = ['4', 'Mayor a 4', 'Menor a 4', 'Picoteo'];
   /*
   FALTAN EN CLINICA:
       talla: [170, [Validators.required, ValidarNumerosFloat]],
@@ -90,6 +90,12 @@ export class CamposEspecificosComponent implements OnInit {
       causas: new FormControl(),
       asistencia: new FormControl(),
     });
+    const generalesGroup = this.form.get('generales') as FormGroup;
+    if (generalesGroup) {
+      generalesGroup.addControl('derivaciones', new FormControl());
+    } else {
+      console.error("El grupo 'generales' no existe o no es un FormGroup en el formulario padre.");
+    }
     this.form.addControl('derivaciones', new FormControl());
     this.form.addControl('especificas', this.especificas);
   }

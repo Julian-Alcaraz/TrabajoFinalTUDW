@@ -33,21 +33,11 @@ export class RolService {
     return this.rolORM.save(rol);
   }
 
-  async borradoLogico(id: number) {
+  async remove(id: number) {
     const rol = await this.rolORM.findOneBy({ id });
     if (!rol) throw new NotFoundException(`Rol con id ${id} no encontrado`);
     else if (rol.deshabilitado) throw new BadRequestException(`El rol con id ${id} ya esta deshabilitado`);
     rol.deshabilitado = true;
     return this.rolORM.save(rol);
   }
-
-  /*
-  async remove(id: number) {
-    const rol = await this.rolORM.findOneBy({ id });
-    if (!rol) {
-      throw new NotFoundException(`Rol con id ${id} no encontrado`);
-    }
-    return this.rolORM.delete(id);
-  }
-  */
 }

@@ -156,25 +156,74 @@ export class PersonalizadaComponent implements OnInit {
   buscar() {
     if (this.formBusqueda.valid) {
       this.loading = true;
-      console.log(this.formBusqueda.value);
-      const formValues = eliminarValoresNulosYVacios(this.formBusqueda.value);
-      const derivaciones = formValues.derivaciones?.reduce((acc: any, item: any) => {
-        if (item.Fonoaudiologia) acc.Fonoaudiologia = item.Fonoaudiologia;
-        if (item.Externa) acc.Externa = item.Externa;
-        if (item.Odontologia) acc.Odontologia = item.Odontologia;
-        if (item.Oftalmologia) acc.Oftalmologia = item.Oftalmologia;
+      console.log('DATA: ', this.formBusqueda.value);
+      const data = this.formBusqueda.value;
+      const derivaciones = data.derivaciones?.reduce((acc: any, item: any) => {
+        // FUNCIONA PERO COMPARA TODO.
+        acc.odontologia = acc.odontologia || item.odontologia || false;
+        acc.oftalmologia = acc.oftalmologia || item.oftalmologia || false;
+        acc.fonoaudiologia = acc.fonoaudiologia || item.fonoaudiologia || false;
+        acc.externa = acc.externa || item.externa || false;
+
+        // Solo si no se selecciona clinica se incluye externa!!!!!!!!!!!!!
+        // if (!formValues.consultasSeleccionadas?.includes('Clinica')) {
+        //   acc.Externa = acc.Externa || item.Externa || false;
+        // }
         return acc;
       }, {});
-      formValues.derivaciones = derivaciones;
+      // OTRO INTENTO:
+      /*
+      const derivaciones2 = data.derivaciones?.reduce((acc: any, item: any) => {
+        // Inicializamos `acc` como un objeto vacío si es la primera iteración
+        acc = acc || {};
+        // Solo agregamos al acumulador las propiedades con valor `true`
+        if (item.odontologia) {
+          acc.odontologia = true;
+        }
+        if (item.oftalmologia) {
+          acc.oftalmologia = true;
+        }
+        if (item.fonoaudiologia) {
+          acc.fonoaudiologia = true;
+        }
+        if (item.externa) {
+          acc.externa = true;
+        }
+
+        return acc;
+      }, {}); // Inicializamos `acc` como un objeto vacío al comienzo
+      */
+
+      if (data.derivaciones) {
+        console.log('if');
+        data.generales.derivaciones = derivaciones;
+        delete data.derivaciones;
+      }
+      console.log('Derivaciones:');
+      console.log(derivaciones);
+      console.log('---------');
+      const formValues = eliminarValoresNulosYVacios(this.formBusqueda.value);
+      //const formValues = this.formBusqueda.value;
+
+      /*
+      if (formValues.derivaciones) {
+        formValues.generales.derivaciones = derivaciones;
+        delete formValues.derivaciones;
+      }
+      */
+
       if (formValues.generales) {
         if (formValues.generales.rangoFechas && formValues.generales.rangoFechas.length === 0) {
           delete formValues.generales.rangoFechas;
         }
       }
+      // Probar este if depsyues!!!!!!!
       if (formValues.derivaciones && Object.keys(formValues.derivaciones).length === 0) delete formValues.derivaciones;
+
       console.log('---------');
       console.log('LA DATA ENVIADA ES ', formValues);
       console.log('---------');
+
       this._consultaService.busquedaPersonalizada(formValues).subscribe({
         next: (response: any) => {
           if (response.success) {
