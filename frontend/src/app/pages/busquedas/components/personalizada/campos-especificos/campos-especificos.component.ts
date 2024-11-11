@@ -42,7 +42,7 @@ export class CamposEspecificosComponent implements OnInit {
   public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
   public diagnosticoPresuntivoOptions: string[] = ['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion'];
   public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras'];
-  public cantidadComidasOptions: string[] = ['4','Mayor a 4','Menor a 4','Picoteo',]
+
   /*
   FALTAN EN CLINICA:
       talla: [170, [Validators.required, ValidarNumerosFloat]],
@@ -74,7 +74,6 @@ export class CamposEspecificosComponent implements OnInit {
       horas_suenio: new FormControl(),
       tension_arterial: new FormControl(),
       estado_nutricional: new FormControl(),
-      cantidad_comidas: new FormControl(),
       // Oftalmologia
       receta: new FormControl(),
       control: new FormControl(),

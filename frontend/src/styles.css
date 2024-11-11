@@ -93,3 +93,16 @@ body {
 [mat-header-cell]:last-child {
   border-top-right-radius: 10px; /* Radio de borde superior derecho */
 }
+.scroll {
+  overflow-x: auto;
+}
+.full-screen-dialog {
+  min-width: 80vw !important;
+  max-height: 90vh !important;
+  max-width: 100vw !important;
+  margin: 0;
+  padding: 0;
+  /* overflow: auto !important; */
+}
+
+

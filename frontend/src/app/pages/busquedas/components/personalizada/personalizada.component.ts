@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,15 +15,16 @@ import { ButtonModule } from 'primeng/button';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { KeyFilterModule } from 'primeng/keyfilter';
 
-import * as MostrarNotificacion from '../../utils/notificaciones/mostrar-notificacion';
-import { Usuario } from '../../models/usuario.model';
-import { UsuarioService } from '../../services/usuario.service';
-import { InstitucionService } from '../../services/institucion.service';
-import { Institucion } from '../../models/institucion.model';
-import { Curso } from '../../models/curso.model';
-import { CursoService } from '../../services/curso.service';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { Usuario } from '../../../../models/usuario.model';
+import { UsuarioService } from '../../../../services/usuario.service';
+import { InstitucionService } from '../../../../services/institucion.service';
+import { Institucion } from '../../../../models/institucion.model';
+import { Curso } from '../../../../models/curso.model';
+import { CursoService } from '../../../../services/curso.service';
 import { CamposEspecificosComponent } from './campos-especificos/campos-especificos.component';
-import { ConsultaService } from '../../services/consulta.service';
+import { ConsultaService } from '../../../../services/consulta.service';
+import { Consulta } from '../../../../models/consulta.model';
 
 @Component({
   selector: 'app-personalizada',
@@ -33,6 +34,7 @@ import { ConsultaService } from '../../services/consulta.service';
   styleUrl: './personalizada.component.css',
 })
 export class PersonalizadaComponent implements OnInit {
+  @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
   public formBusqueda: FormGroup;
   public loading = false;
   public resultados: any;
@@ -109,7 +111,9 @@ export class PersonalizadaComponent implements OnInit {
       this.formBusqueda.get('generales.rangoFechas')?.setValue([fechaInicio, fechaFin], { emitEvent: false });
     }
   }
-
+  enviarConsultas(data: Consulta[]) {
+    this.consultasEmitidas.emit(data);
+  }
   onChangeTipoConsulta() {
     this.formBusqueda.get('especificas')?.reset();
     this.formBusqueda.get('derivaciones')?.reset();
@@ -177,6 +181,7 @@ export class PersonalizadaComponent implements OnInit {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
             this.resultados = response.data;
             console.log('Resultados backend', this.resultados);
+            this.enviarConsultas(response.data)
             // this.formBusqueda.reset();
             this.loading = false;
           }

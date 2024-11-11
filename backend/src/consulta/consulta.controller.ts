@@ -84,8 +84,13 @@ export class ConsultaController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
-    return this.consultaService.update(id, updateConsultaDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
+    const respuesta = await this.consultaService.update(id, updateConsultaDto);
+    return {
+      success: true,
+      data: respuesta,
+      message: 'Consulta acutualizada con exito.',
+    };
   }
 
   @Delete(':id')

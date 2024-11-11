@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
   template: `
     <p class="block mb-2 text-sm font-medium text-gray-900">{{ label }}</p>
     <mat-form-field class="col-span-2">
-      <mat-label>{{ label }}</mat-label>
+      <mat-label>Ingresar fecha</mat-label>
       <input matInput [matDatepicker]="picker" [formControl]="control" [max]="max" [min]="min" />
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>

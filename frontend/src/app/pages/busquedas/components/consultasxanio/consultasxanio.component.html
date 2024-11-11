@@ -1,0 +1,5 @@
+
+<form [formGroup]="buscarForm"  (ngSubmit)="buscar()" >
+  <p-datepicker [(ngModel)]="date" view="year" dateFormat="yy" [maxDate]="maxDate" formControlName="year" />
+  <button  type="submit"  class=" ms-2 my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Buscar</button>
+</form>

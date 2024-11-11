@@ -1,6 +1,6 @@
-<div class="card">
+<!-- <div class="card">
   <div class="card-header">Buscar consultas</div>
-  <div class="card-body">
+  <div class="card-body"> -->
     <form (ngSubmit)="buscar()" [formGroup]="formBusqueda">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-12">
         <h3 class="md:col-span-12 text-lg">Usted puede filtrar la busqueda de consultas por las siguientes campos:</h3>
@@ -8,7 +8,7 @@
         <div class="md:col-span-6">
           <p-iftalabel>
             <p-multiselect [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4"
-              formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full h-16" />
+              formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full  h-16" />
             <label for="consultasSeleccionadas">Tipo de consulta</label>
           </p-iftalabel>
         </div>
@@ -18,7 +18,7 @@
         <div class="md:col-span-2" formGroupName="generales">
           <p-iftalabel>
             <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas"
-              selectionMode="range" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy" styleClass="w-full h-16">
+              selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy">
               <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
               <ng-template pTemplate="footer">
                 <p-button class="p-datepicker-prev hidden">Previous</p-button>
@@ -35,7 +35,7 @@
           <div formGroupName="usuario">
             <p-iftalabel>
               <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
-                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
               <label for="profesionales">Profesionales</label>
             </p-iftalabel>
           </div>
@@ -46,7 +46,7 @@
           <div formGroupName="institucion">
             <p-iftalabel>
               <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
-                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+                optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full" />
               <label for="instituciones">Institución</label>
             </p-iftalabel>
           </div>
@@ -57,7 +57,7 @@
           <div formGroupName="curso">
             <p-iftalabel>
               <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
-                optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+                optionValue="id" [showClear]="true" placeholder="" class="w-full" />
               <label for="cursos">Cursos</label>
             </p-iftalabel>
           </div>
@@ -66,7 +66,7 @@
         <div class="md:col-span-4" formGroupName="generales">
           <p-iftalabel>
             <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true"
-              optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full h-16" />
+              optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full" />
             <label for="turno">Turno</label>
           </p-iftalabel>
         </div>
@@ -74,7 +74,7 @@
         <div class="md:col-span-4" formGroupName="generales">
           <p-iftalabel>
             <p-inputnumber formControlName="edad" pKeyFilter="int" inputId="edad" mode="decimal" [min]="1" [max]="20"
-              [showButtons]="true" class="w-full h-16" />
+              [showButtons]="true" class="w-full" />
             <label for="edad">Edad</label>
           </p-iftalabel>
         </div>
@@ -83,20 +83,20 @@
           <div formGroupName="chico">
             <p class="m-0 p-0">Sexo</p>
             <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
-              styleClass="w-full" />
+              styleClass="w-full h-16" />
           </div>
         </div>
         <!-- Obra Social -->
         <div class="md:col-span-3" formGroupName="generales">
           <p class="m-0 p-0">Obra Social</p>
           <p-selectbutton [options]="siNoOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor"
-            styleClass="w-full" />
+            styleClass="w-full h-16" />
         </div>
         <!-- Tiene observaciones -->
         <div class="md:col-span-1" formGroupName="generales">
           <p class="m-0 p-0">Observaciones</p>
           <p-selectbutton [options]="siNoOptions" formControlName="observaciones" optionLabel="nombre"
-            optionValue="valor" styleClass="w-full" />
+            optionValue="valor" styleClass="w-full h-16" />
         </div>
       </div>
       <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null">
@@ -108,5 +108,5 @@
         <p-button severity="info" label="Enviar" icon="pi pi-check" [loading]="loading" (onClick)="buscar()" />
       </div>
     </form>
-  </div>
-</div>
+  <!-- </div>
+</div> -->

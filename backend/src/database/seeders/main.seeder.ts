@@ -165,13 +165,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
         },
         {
-          url: 'personalizada',
-          label: 'Personalizada',
-          orden: 6,
-          icon: '',
-          roles: [roles[0], roles[1], roles[2]],
-        },
-        {
           url: 'menuDeshabilitado',
           label: 'menuDeshabilitado',
           orden: 0,
@@ -583,10 +576,10 @@ export class MainSeeder implements Seeder {
           hta: false,
           infusiones: 'Té',
           leche: true,
-          lenguaje: 'adecuado',
+          lenguaje: 'Adecuado',
           cantidad_comidas: '4',
           obesidad: false,
-          ortopedia_traumatologia: 'normal',
+          ortopedia_traumatologia: 'Normal',
           estado_nutricional: 'D Sobrepeso',
           imc: 28.9,
           pcimc: 8.3,
@@ -644,10 +637,9 @@ export class MainSeeder implements Seeder {
         },
         {
           consulta: consultas[4],
-          diagnostico_presuntivo: 'DESHABILITADO',
-          causas: 'DESHABILITADO',
+          diagnostico_presuntivo: 'Tel',
+          causas: 'Prenatal',
           asistencia: true,
-          created_at: '9999-12-31',
         },
       ]);
     } catch (error) {

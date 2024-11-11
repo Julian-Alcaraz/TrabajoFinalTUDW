@@ -39,6 +39,11 @@
           <p>
             Edad: <span class="font-semibold">{{ edadAnios }} años y {{ edadMeses }} meses</span>
           </p>
+          @if(values){
+            <p>
+              Edad al asistir: <span class="font-semibold">{{ values.edad }} años</span>
+            </p>
+          }
         </div>
       </div>
     </div>

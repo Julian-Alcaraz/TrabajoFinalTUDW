@@ -1,9 +1,8 @@
-import { CommonModule, DatePipe, Location } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {  MatPaginatorIntl } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -11,15 +10,14 @@ import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-noti
 import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { Consulta } from '../../../models/consulta.model';
-import { DetallesConsultaComponent } from '../components/detalles-consulta/detalles-consulta.component';
-import { InputCheckboxComponent } from '../../../components/inputs/input-checkbox.component';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import { ConsultasTableComponent } from '../../busquedas/components/consultas-table/consultas-table.component';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-ver-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, DetallesConsultaComponent, InputCheckboxComponent, LoadingComponent],
+  imports: [CommonModule,  MatInputModule, MatFormFieldModule, RouterModule, LoadingComponent, ConsultasTableComponent],
   templateUrl: './ver-chico.component.html',
   styleUrl: './ver-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -27,22 +25,14 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 export class VerChicoComponent implements OnInit {
   public idConsulta: number | null = null;
   public chico: Chico | null = null;
-  public consultas: MatTableDataSource<Consulta>;
+
+  public consultas: Consulta[] = [];
+  public consultasComplete: Consulta[] = [];
+  // public consultas: MatTableDataSource<Consulta>;
   public resultsLength = 0;
-  public consultasColumns: string[] = [
-    'numero',
-    'tipo',
-    'fecha',
-    'profesional',
-    'obra_social',
-    // 'edad',
-    //  'institucion', 'curso', 'turno',
-    'observaciones',
-  ];
+  public consultasColumns: string[] = ['numero', 'type', 'fecha', 'obra_social', 'profesional', 'observaciones'];
   public searchingChico = false;
   public searchingConsultas = false;
-
-  @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
 
   constructor(
     private _chicoService: ChicoService,
@@ -50,19 +40,13 @@ export class VerChicoComponent implements OnInit {
     private snackBar: MatSnackBar,
     private location: Location,
   ) {
-    this.consultas = new MatTableDataSource<Consulta>([]);
+    // this.consultas = new MatTableDataSource<Consulta>([]);
   }
 
   ngOnInit(): void {
     this.obtenerConsultasxChico();
-    this.activateTableFilter();
   }
-  activateTableFilter() {
-    this.consultas.filterPredicate = (data: Consulta, filter: string) => {
-      const searchTerms = JSON.parse(filter);
-      return searchTerms.type ? searchTerms.type.includes(data.type) : true;
-    };
-  }
+
   obtenerConsultasxChico() {
     this.searchingChico = true;
     this.searchingConsultas = true;
@@ -88,7 +72,9 @@ export class VerChicoComponent implements OnInit {
     this._chicoService.obtenerConsultasDeChico(idChico).subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.consultas.data = response.data;
+          // this.consultas.data = response.data;
+          this.consultas = response.data;
+          this.consultasComplete = response.data;
           this.resultsLength = response.data.length;
         }
         this.searchingConsultas = false;
@@ -131,13 +117,8 @@ export class VerChicoComponent implements OnInit {
       this.typeFiltered.push(checkbox.value);
     } else {
       this.typeFiltered = this.typeFiltered.filter((item) => item !== checkbox.value);
-    }
-    const searchTerms = {
-      ...(this.typeFiltered.length > 0 && { type: this.typeFiltered }),
-    };
-    this.consultas.filter = JSON.stringify(searchTerms);
-    if (this.consultas.paginator) {
-      this.consultas.paginator.firstPage();
-    }
+    } // Filtrar las consultas completas con los tipos seleccionados
+    this.consultas = this.consultasComplete.filter((consulta: Consulta) => this.typeFiltered.length === 0 || this.typeFiltered.includes(consulta.type));
+    console.log(this.consultas)
   }
 }

@@ -20,6 +20,7 @@ import { Institucion } from '../../../../models/institucion.model';
 import { InstitucionService } from '../../../../services/institucion.service';
 import { Curso } from '../../../../models/curso.model';
 import { CursoService } from '../../../../services/curso.service';
+import { Consulta } from '../../../../models/consulta.model';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
@@ -31,6 +32,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 })
 export class CamposComunesComponent implements OnInit {
   @Input() form!: FormGroup;
+  @Input() values: Consulta | null = null;
 
   public chico: Chico | null = null;
   public instituciones: Institucion[] = [];
@@ -90,18 +92,29 @@ export class CamposComunesComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerInstituciones();
     this.obtenerCursos();
-
     this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
-    this.form.addControl('dni', new FormControl(1234567, [Validators.required, ValidarSoloNumeros, ValidarDni]));
-    this.form.addControl('obra_social', new FormControl(true, [Validators.required]));
+    this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
+    this.form.addControl('obra_social', new FormControl('', [Validators.required]));
     this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
-    this.form.addControl('id_institucion', new FormControl(1, [Validators.required]));
-    this.form.addControl('id_curso', new FormControl(1, [Validators.required]));
-    this.form.addControl('turno', new FormControl('Mañana', [Validators.required]));
+    this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
+    this.form.addControl('id_curso', new FormControl('', [Validators.required]));
+    this.form.addControl('turno', new FormControl('', [Validators.required]));
+    // this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
+    // this.form.addControl('dni', new FormControl(1234567, [Validators.required, ValidarSoloNumeros, ValidarDni]));
+    // this.form.addControl('obra_social', new FormControl(true, [Validators.required]));
+    // this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
+    // this.form.addControl('id_institucion', new FormControl(1, [Validators.required]));
+    // this.form.addControl('id_curso', new FormControl(1, [Validators.required]));
+    // this.form.addControl('turno', new FormControl('Mañana', [Validators.required]));
 
     this.form.get('dni')?.valueChanges.subscribe(() => {
       this.onChangeDni();
     });
+
+    // si la consulta existe completar los valores con esto
+    if (this.values) {
+      this.completarCampos();
+    }
   }
 
   onChangeDni() {
@@ -114,10 +127,8 @@ export class CamposComunesComponent implements OnInit {
 
     const dni = this.form.get('dni')?.value;
     if (!dni || dni.toString().length !== 8) {
-      // console.log('El DNI no tiene 8 dígitos');
       return;
     }
-    // console.log('El DNI tiene 8 dígitos, procediendo a verificar');
     this.searching = true;
     this._chicoService
       .obtenerChicoxDni(dni)
@@ -129,7 +140,6 @@ export class CamposComunesComponent implements OnInit {
             this.actualizarChico(this.chico);
             this.form.get('id_chico')?.setValue(response.data.id);
             this.calcularEdad();
-            // console.log('Chico encontrado: ', this.form.get('chicoParam')?.value);
           } else {
             this.chico = null;
             this.actualizarChico(this.chico);
@@ -137,8 +147,6 @@ export class CamposComunesComponent implements OnInit {
             this.form.get('edad')?.setValue(null);
             this.edadMeses = null;
             this.edadAnios = null;
-            // this.errorDni = 'No hay chico con ese DNI.';
-            // console.log('Chico no encontrado, esto deberia ser null: ', this.form.get('chicoParam')?.value);
           }
           this.searching = false;
         }),
@@ -209,7 +217,6 @@ export class CamposComunesComponent implements OnInit {
   }
 
   cargarInstitucion() {
-    console.log(this.institucionForm.value);
     if (this.institucionForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva institución?',
@@ -220,8 +227,6 @@ export class CamposComunesComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const data = this.institucionForm.value;
-          console.log('DATA');
-          console.log(data);
           this._institucionService.cargarInstitucion(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -267,7 +272,6 @@ export class CamposComunesComponent implements OnInit {
   }
 
   cargarCurso() {
-    console.log(this.cursoForm.value);
     if (this.cursoForm.valid) {
       Swal.fire({
         title: '¿Cargar nuevo curso?',
@@ -278,8 +282,6 @@ export class CamposComunesComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const data = this.cursoForm.value;
-          console.log('DATA');
-          console.log(data);
           this._cursoService.cargarCurso(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -312,6 +314,19 @@ export class CamposComunesComponent implements OnInit {
 
   cargarChico() {
     this._router.navigate(['/layout/chicos/nuevo']);
+  }
+
+  completarCampos() {
+    this.form.patchValue({
+      // edad:this.values?.chico?.edad,
+      dni: this.values?.chico?.dni,
+      obra_social: this.values?.obra_social,
+      id_chico: this.values?.chico?.id,
+      id_institucion: this.values?.institucion?.id,
+      id_curso: this.values?.curso?.id,
+      turno: this.values?.turno,
+    });
+    this.form.disable();
   }
 }
 

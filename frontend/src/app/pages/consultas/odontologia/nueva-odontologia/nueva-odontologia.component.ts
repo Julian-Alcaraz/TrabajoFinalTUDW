@@ -1,7 +1,7 @@
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
@@ -9,21 +9,24 @@ import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-n
 import { ConsultaService } from '../../../../services/consulta.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
-import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Chico } from '../../../../models/chico.model';
+import { Consulta } from '../../../../models/consulta.model';
 
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputCheckboxComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
-export class NuevaOdontologiaComponent {
+export class NuevaOdontologiaComponent implements OnInit {
+  @Input() consulta: Consulta | null = null;
+  @Input() editar= false;
+  habilitarModificar = false;
+
   public odontologiaForm: FormGroup;
   public chico: Chico | null = null;
 
@@ -34,29 +37,41 @@ export class NuevaOdontologiaComponent {
   ) {
     this.odontologiaForm = this.fb.group({
       // Campos comunes
-      observaciones: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet justo ut posuere faucibus. Donec augue nisi, mollis et consequat nec, dignissim in ipsum. Phasellus auctor metus at leo tristique pretium. Nulla lacus magna, scelerisque pulvinar lacus ac, blandit lacinia tellus. Mauris mattis diam nec ullamcorper lobortis. Proin ut velit finibus, sagittis odio at, gravida dui. Maecenas malesuada ultrices lectus malesuada ullamcorper. Praesent massa libero, maximus at urna hendrerit, iaculis malesuada velit. Nunc odio quam, suscipit a feugiat vel, viverra sed nisi. Curabitur eleifend sapien eu lacus euismod vestibulum. Integer volutpat, leo at laoreet euismod, purus odio hendrerit velit, vitae viverra magna magna eu nulla. Quisque eget ex vitae elit tristique facilisis nec ac arcu. Mauris ut leo sem. ', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
+      // Campos odontologia
       // Campos odontologia
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
-      cepillo: [true, [Validators.required]],
-      cepillado: [true, [Validators.required]],
-      topificacion: [false, [Validators.required]],
+      cepillo: ['', [Validators.required]],
+      cepillado: ['', [Validators.required]],
+      topificacion: ['', [Validators.required]],
       derivacion_externa: ['', [Validators.required]],
-      dientes_permanentes: [10, [Validators.required, ValidarSoloNumeros]],
-      dientes_temporales: [2, [Validators.required, ValidarSoloNumeros]],
-      sellador: [1, [Validators.required, ValidarSoloNumeros]],
-      dientes_recuperables: [1, [Validators.required, ValidarSoloNumeros]],
-      dientes_irecuperables: [2, [Validators.required, ValidarSoloNumeros]],
-      habitos: ['Buen cepillado', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
+      sellador: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
-
+  ngOnInit(): void {
+    if (this.consulta) {
+      // llenar form y deshabilitarlo
+      this.completarCampos();
+      this.odontologiaForm.valueChanges.subscribe({
+        next: () => {
+          this.habilitarModificar = this.existenCambios();
+        },
+      });
+    }
+  }
   recibirChico(chicoRecibido: Chico | null) {
     this.chico = chicoRecibido;
-    if (this.chico) this.esPrimeraVez(this.chico.id);
+    if (!this.consulta) {
+      if (this.chico) this.esPrimeraVez(this.chico.id);
+    }
   }
-
   esPrimeraVez(id: number) {
     this._consultaService.esPrimeraVez(id, 'Odontologia').subscribe({
       next: (response: any) => {
@@ -117,9 +132,6 @@ export class NuevaOdontologiaComponent {
               ...odontologicaValues,
             },
           };
-          console.log('DERIVACIONES: ' + derivaciones);
-          console.log('DATA:');
-          console.log(data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -142,6 +154,140 @@ export class NuevaOdontologiaComponent {
     else if (dIr == 1) return 'Moderado índice de caries';
     else if (dIr > 1) return 'Alto índice de caries';
     else return 'Sin clasificación';
+  }
+
+  //  ver y modificar
+  completarCampos() {
+    const derivacion = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
+    this.odontologiaForm.patchValue({
+      observaciones: this.consulta?.observaciones,
+      derivacion_externa: derivacion,
+      primera_vez: this.consulta?.odontologia?.primera_vez,
+      ulterior:this.consulta?.odontologia?.ulterior,
+      cepillo:this.consulta?.odontologia?.cepillo ,
+      cepillado: this.consulta?.odontologia?.cepillado,
+      topificacion: this.consulta?.odontologia?.topificacion,
+      dientes_permanentes:this.consulta?.odontologia?.dientes_permanentes ,
+      dientes_temporales:this.consulta?.odontologia?.dientes_temporales ,
+      sellador:this.consulta?.odontologia?.sellador ,
+      dientes_recuperables:this.consulta?.odontologia?.dientes_recuperables ,
+      dientes_irecuperables:this.consulta?.odontologia?.dientes_irecuperables ,
+      habitos:this.consulta?.odontologia?.habitos ,
+
+    });
+  }
+  cambiarEstado() {
+    if (this.odontologiaForm.disabled) {
+      this.odontologiaForm.enable();
+    } else {
+      this.odontologiaForm.disable();
+    }
+  }
+
+  existenCambios() {
+    let hayCambios = this.odontologiaForm.dirty;
+    let observaciones = this.odontologiaForm.value.observaciones;
+    if (this.odontologiaForm.value.observaciones !== undefined) {
+      if (this.odontologiaForm.value.observaciones !== null) {
+        observaciones = this.odontologiaForm.value.observaciones.trim() === '' ? null : this.odontologiaForm.value.observaciones;
+      }
+    }
+    let obra_social = this.odontologiaForm.value.obra_social;
+    if (typeof obra_social === 'string') {
+      obra_social = this.convertToBoolean(obra_social);
+    }
+    const derivacion_externaForm = this.convertToBoolean(this.odontologiaForm.value.derivacion_externa);
+    let derivacion_externaConsulta = false;
+    if (this.consulta?.derivaciones) {
+      derivacion_externaConsulta = this.consulta?.derivaciones.externa;
+    }
+    const cepillo = this.convertToBoolean(this.odontologiaForm.value.cepillo);
+    const cepillado = this.convertToBoolean(this.odontologiaForm.value.cepillado);
+    const topificacion = this.convertToBoolean(this.odontologiaForm.value.topificacion);
+    if (hayCambios) {
+      if (
+        // cambios campos comunes
+        this.consulta?.chico?.dni === +this.odontologiaForm.value.dni &&
+        this.consulta?.institucion?.id === Number(this.odontologiaForm.value.id_institucion) &&
+        this.consulta?.observaciones === observaciones &&
+        this.consulta?.curso?.id === +this.odontologiaForm.value.id_curso &&
+        this.consulta?.turno === this.odontologiaForm.value.turno &&
+        this.consulta?.obra_social === obra_social
+        &&
+        //  cambios por especialidad
+        derivacion_externaConsulta === derivacion_externaForm &&
+        this.consulta?.odontologia?.cepillo === cepillo &&
+        this.consulta?.odontologia?.cepillado === cepillado &&
+        this.consulta?.odontologia?.topificacion === topificacion &&
+        this.consulta?.odontologia?.dientes_permanentes === this.odontologiaForm.value.dientes_permanentes &&
+        this.consulta?.odontologia?.dientes_temporales === this.odontologiaForm.value.dientes_temporales &&
+        this.consulta?.odontologia?.sellador === this.odontologiaForm.value.sellador &&
+        this.consulta?.odontologia?.dientes_recuperables === this.odontologiaForm.value.dientes_recuperables &&
+        this.consulta?.odontologia?.dientes_irecuperables === this.odontologiaForm.value.dientes_irecuperables
+         &&
+        this.consulta?.odontologia?.habitos === this.odontologiaForm.value.habitos
+      ) {
+        hayCambios = false;
+      } else {
+        hayCambios = true;
+      }
+    }
+    return !(this.odontologiaForm.valid && hayCambios);
+  }
+  convertToBoolean(value: string | boolean): boolean {
+    return value === true || value === 'true';
+  }
+  modificarConsulta() {
+    if (this.odontologiaForm.valid) {
+      Swal.fire({
+        title: '¿Confirmar cambios en la consulta?',
+        showDenyButton: true,
+        confirmButtonColor: '#3f77b4',
+        confirmButtonText: 'Confirmar',
+        denyButtonText: `Cancelar`,
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          const formValues = this.odontologiaForm.value;
+          delete formValues.dni;
+          formValues.cepillado = formValues.cepillado === 'true';
+          formValues.cepillo = formValues.cepillo === 'true';
+          formValues.topificacion = formValues.topificacion === 'true';
+          formValues.obra_social = formValues.obra_social === 'true';
+          const derivaciones = {
+            externa: formValues.derivacion_externa === 'true',
+          };
+          delete formValues.derivacion_externa;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          const data = {
+            type: 'Odontologia',
+            turno,
+            obra_social,
+            ...(observaciones && { observaciones }),
+            edad: parseInt(edad),
+            id_chico: id_chico,
+            id_institucion: parseInt(id_institucion),
+            id_curso: parseInt(id_curso),
+            ...(derivaciones.externa && { derivaciones }),
+            odontologia: {
+              ...odontologicaValues,
+            },
+          };
+          if(this.consulta){
+            this._consultaService.modficarConsulta(this.consulta?.id,data).subscribe({
+              next: (response: any) => {
+                if (response.success) {
+                  MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                  this.cambiarEstado()
+                }
+              },
+              error: (err) => {
+                MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+              },
+            });
+          }
+        }
+      });
+    }
   }
 }
 

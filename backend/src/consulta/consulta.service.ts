@@ -93,7 +93,7 @@ export class ConsultaService {
   }
 
   async findOne(id: number) {
-    const consulta = await this.consultaORM.findOne({ where: { id }, relations: ['curso', 'institucion', 'usuario'] });
+    const consulta = await this.consultaORM.findOne({ where: { id }, relations: ['chico', 'curso', 'institucion', 'usuario'] });
     if (!consulta) throw new NotFoundException(`Consulta con id ${id} no encontrada`);
     let consultaHija;
     switch (consulta.type) {
@@ -114,7 +114,7 @@ export class ConsultaService {
         break;
     }
     delete consultaHija.id_consulta;
-    return { ...consulta, consultaHija };
+    return { ...consulta, [consulta.type.toLowerCase()]: consultaHija };
   }
 
   async esPrimeraVez(id: number, tipoConsulta: any) {
@@ -227,7 +227,7 @@ export class ConsultaService {
     // const startOfYear = new Date(year, 0, 1); // 1 de enero del año especificado
     // const endOfYear = new Date(year, 11, 31, 23, 59, 59);
     // return this.consultaORM.find({ where: { created_at: Between(startOfYear, endOfYear) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
-    return this.consultaORM.find({ where: { created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
+    return this.consultaORM.find({ where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
 
   async update(id: number, cambios: UpdateConsultaDto) {

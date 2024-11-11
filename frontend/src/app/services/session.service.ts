@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { LoadingService } from './loading.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class SessionService {
     private _http: HttpClient,
     private _router: Router,
     private _loadingService: LoadingService,
+    private _dialog: MatDialog,
   ) {
     this.url = GLOBAL.URL_BACKEND;
     this.identidad = null;
@@ -36,6 +38,7 @@ export class SessionService {
             this._loadingService.startLoading();
           }
           this._router.navigate(['/login']);
+          this._dialog.closeAll()
         } else {
           console.log('Fallo cerrar la sesion', response.message);
         }

@@ -1,8 +1,17 @@
 <div class="card">
-  <span class="card-header">Cargar una nueva consulta de oftalmologia</span>
+  <span class="card-header">
+    @if (consulta) {
+      <div class="flex justify-between">
+        <div class="">Consulta Oftalmologia</div>
+        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd/MM/yyyy' }}</div>
+      </div>
+    } @else {
+      Cargar una nueva consulta de oftalmologia
+    }
+  </span>
   <div class="card-body">
-    <form (ngSubmit)="enviarFormulario()" [formGroup]="oftalmologiaForm">
-      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" />
+    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="oftalmologiaForm">
+      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Primera Vez
         <div class="mt-4 md:col-span-1">
@@ -16,12 +25,12 @@
         </div> -->
         <!-- Calculos primera_vez y control -->
         <ng-container class="mt-4">
-          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6">
+          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 grid grid-cols-2">
             <p>
-              <span class="font-bold">Es su primera vez: </span><span>{{ this.oftalmologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
+              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} su primera vez: </span><span>{{ this.oftalmologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
             </p>
             <p>
-              <span class="font-bold">Es control: </span><span>{{ this.oftalmologiaForm.get('control')?.value ? 'Si' : 'No' }}</span>
+              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} control: </span><span>{{ this.oftalmologiaForm.get('control')?.value ? 'Si' : 'No' }}</span>
             </p>
           </div>
         </ng-container>
@@ -52,9 +61,39 @@
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
         </div>
       </div>
+      @if (consulta) {
+        @if (consulta.usuario) {
+          <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
+            <div class="font-bold">Datos del medico</div>
+            <div class="grid grid-cols-3">
+              <div class="col">
+                <strong> Nombre: </strong>
+                {{ consulta.usuario.nombre }} <br />
+              </div>
+              <div class="col">
+                <strong> Apellido: </strong>
+                {{ consulta.usuario.apellido }}<br />
+              </div>
+              <div class="col">
+                <strong> Dni: </strong>
+                {{ consulta.usuario.dni }}
+              </div>
+            </div>
+          </div>
+        }
+      }
       <!-- Enviar -->
       <div class="flex mt-4">
-        <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+        @if (consulta && editar) {
+          @if (oftalmologiaForm.disabled) {
+            <button type="button" (click)="cambiarEstado()" [disabled]="false" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
+          } @else {
+            <button type="button" (click)="cambiarEstado()" class=" ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+            <button type="submit" [disabled]="habilitarModificar" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+          }
+        } @else {
+          <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+        }
       </div>
     </form>
   </div>

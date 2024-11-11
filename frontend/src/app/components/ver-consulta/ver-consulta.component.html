@@ -1,0 +1,36 @@
+<!-- {{this.consulta | json}} -->
+ <!-- estatico arriba -->
+<div class="relative">
+  <div class="absolute left-1/2 mt-2">
+    <button (click)="cerrarModal()" class="bg-gray-100 rounded-full border-2 border-gray-200 px-2 py-1 hover:bg-gray-300">
+      <i class="fa-solid fa-xmark fa-lg"></i>
+    </button>
+  </div>
+</div>
+<!-- baja con el modal -->
+   <!-- <div class="fixed ">
+     <div class="absolute left-1/2  mt-2">
+       <button (click)="cerrarModal()" class="bg-gray-100 rounded-full border-2 border-gray-200 px-2 py-1 hover:bg-gray-300">
+         <i class="fa-solid fa-xmark fa-lg"></i>
+        </button>
+      </div>
+    </div> -->
+@if (consulta !== null) {
+  @switch (consulta.type) {
+    @case ('Clinica') {
+      <app-nueva-clinica [consulta]="consulta" [editar]="editar" />
+    }
+    @case ('Odontologia') {
+      <app-nueva-odontologia [consulta]="consulta" [editar]="editar" />
+    }
+    @case ('Fonoaudiologia') {
+      <app-nueva-fonoaudiologia [consulta]="consulta" [editar]="editar" />
+    }
+    @case ('Oftalmologia') {
+      <app-nueva-oftalmologia [consulta]="consulta" [editar]="editar" />
+    }
+    @default {
+      No existe el tipo de oonsulta ingresado.
+    }
+  }
+}

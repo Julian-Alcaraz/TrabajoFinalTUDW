@@ -6,7 +6,7 @@ export class Odontologia {
     public dientes_permanentes: number,
     public dientes_temporales: number,
     public sellador: number,
-    public topificacion: number,
+    public topificacion: boolean,
     public cepillado: boolean,
     // public derivacion: boolean,
     public dientes_recuperables: number,
@@ -17,6 +17,6 @@ export class Odontologia {
   ) {}
 
   static overload_constructor() {
-    return new Odontologia(0, false, false, 0, 0, 0, 0, false, 0, 0, false, '');
+    return new Odontologia(0, false, false, 0, 0, 0, false, false, 0, 0, false, '');
   }
 }
