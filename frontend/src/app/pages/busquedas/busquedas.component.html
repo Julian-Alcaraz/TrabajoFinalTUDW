@@ -2,13 +2,19 @@
   <div class="card-header">Buscar consultas por:</div>
   <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200">
     <li class="me-1">
-      <button [ngClass]="!currentParam || currentParam === '1' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(1)">Año realizada</button>
+      <button
+        [ngClass]="!currentParam || currentParam === '1' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
+        (click)="cambiarParam(1)">Año realizada</button>
     </li>
     <li class="me-1">
-      <button [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(2)">Asistencia Niño</button>
+      <button
+        [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
+        (click)="cambiarParam(2)">Asistencia Niño</button>
     </li>
     <li class="me-1">
-      <button [ngClass]="currentParam === '3' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(3)">Perzonalizada</button>
+      <button
+        [ngClass]="currentParam === '3' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
+        (click)="cambiarParam(3)">Personalizada</button>
     </li>
     <!-- <li class="me-1">
       <a  class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50"></a>
@@ -17,19 +23,20 @@
   <div class="card-body">
     <div class="mb-2">
       @if (currentParam === '1' || !currentParam) {
-        <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)"></app-consultasxanio>
+      <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)"></app-consultasxanio>
       }
       @if (currentParam === '2') {
-        <app-consultasxanio></app-consultasxanio>
+      <app-consultasxanio></app-consultasxanio>
       }
       @if (currentParam === '3') {
-        <app-personalizada (consultasEmitidas)="mostrarConsultas($event)"></app-personalizada>
+      <app-personalizada (consultasEmitidas)="mostrarConsultas($event)"></app-personalizada>
       }
     </div>
     @if (consultas && consultas.length > 0) {
-      <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
+    <app-consultas-table [consultas]="consultas"
+      [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
-      <h1>Consultas no encontradas</h1>
+    <h1>Consultas no encontradas</h1>
     }
   </div>
 </div>

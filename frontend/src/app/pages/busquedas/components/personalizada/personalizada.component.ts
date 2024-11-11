@@ -111,6 +111,7 @@ export class PersonalizadaComponent implements OnInit {
       this.formBusqueda.get('generales.rangoFechas')?.setValue([fechaInicio, fechaFin], { emitEvent: false });
     }
   }
+
   enviarConsultas(data: Consulta[]) {
     this.consultasEmitidas.emit(data);
   }
@@ -230,7 +231,7 @@ export class PersonalizadaComponent implements OnInit {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
             this.resultados = response.data;
             console.log('Resultados backend', this.resultados);
-            this.enviarConsultas(response.data)
+            this.enviarConsultas(response.data);
             // this.formBusqueda.reset();
             this.loading = false;
           }

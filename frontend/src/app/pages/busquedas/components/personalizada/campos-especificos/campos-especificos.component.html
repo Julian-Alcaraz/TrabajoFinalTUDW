@@ -4,6 +4,125 @@
     <div *ngIf="consultasSeleccionadas.includes('Clinica')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
         <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para clinica</p>
+        <!-- Talla (aseguramos que col-span esté en el contenedor directo del grid) -->
+        <div class="md:col-span-6">
+          <div class="grid gap-3 md:grid-cols-4">
+            <!-- Talla Min -->
+            <div formGroupName="rangoTalla">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tallaMin" inputId="tallaMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tallaMin">Talla Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Talla Max -->
+            <div formGroupName="rangoTalla">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tallaMax" inputId="tallaMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tallaMax">Talla Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- CC Min -->
+            <div formGroupName="rangoCC">
+              <p-iftalabel>
+                <p-inputnumber formControlName="ccMin" inputId="ccMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="ccMin">Circunferencia de la cintura Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- CC Max -->
+            <div formGroupName="rangoCC">
+              <p-iftalabel>
+                <p-inputnumber formControlName="ccMax" inputId="ccMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="ccMax">Circunferencia de la cintura Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Peso Min -->
+            <div formGroupName="rangoPeso">
+              <p-iftalabel>
+                <p-inputnumber formControlName="pesoMin" inputId="pesoMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="pesoMin">Peso Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Peso Max -->
+            <div formGroupName="rangoPeso">
+              <p-iftalabel>
+                <p-inputnumber formControlName="pesoMax" inputId="pesoMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="pesoMax">Peso Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Percentil de talla (pct) Min -->
+            <div formGroupName="rangoPct">
+              <p-iftalabel>
+                <p-inputnumber formControlName="pctMin" inputId="pctMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="pctMin">Percentil de talla Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Percentil de talla (pct) Max -->
+            <div formGroupName="rangoPct">
+              <p-iftalabel>
+                <p-inputnumber formControlName="pctMax" inputId="pctMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="pctMax">Percentil de talla Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Tension Arterial Sistolica (tas) Min -->
+            <div formGroupName="rangoTas">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tasMin" inputId="tasMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tasMin">Tension Arterial Sistolica Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Tension Arterial Sistolica (tas) Max -->
+            <div formGroupName="rangoTas">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tasMax" inputId="tasMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tasMax">Tension Arterial Sistolica Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Tension Arterial Diastolica (tad) Min -->
+            <div formGroupName="rangoTad">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tadMin" inputId="tadMin" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tadMin">Tension Arterial Diastolica Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Tension Arterial Diastolica (tad) Max -->
+            <div formGroupName="rangoTad">
+              <p-iftalabel>
+                <p-inputnumber formControlName="tadMax" inputId="tadMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="tadMax">Tension Arterial Diastolica Max</label>
+              </p-iftalabel>
+            </div>
+          </div>
+          <div *ngIf="especificas.get('rangoTalla')?.errors" class="text-red-600 text-sm">
+            El valor de la talla mínima no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoCC')?.errors" class="text-red-600 text-sm">
+            El valor de la circunferencia de la cintura mínima no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoPeso')?.errors" class="text-red-600 text-sm">
+            El valor del peso mínimo no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoPct')?.errors" class="text-red-600 text-sm">
+            El valor del Percentil de talla mínimo no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoTas')?.errors" class="text-red-600 text-sm">
+            El valor de la Tension Arterial Sistolica mínimo no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoTad')?.errors" class="text-red-600 text-sm">
+            El valor de la Tension Arterial Diastolica mínimo no puede ser mayor al máximo.
+          </div>
+        </div>
         <!-- Diabetes -->
         <p class="col-span-6">Antecedentes familiares:</p>
         <div class="md:col-span-1">
@@ -65,7 +184,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="vacunasOptions" formControlName="vacunas" idInput="vacunas" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="vacunas">Vacunas</label>
           </p-iftalabel>
         </div>
@@ -73,7 +192,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="examenVisualOptions" formControlName="examen_visual" idInput="examen_visual"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="examen_visual">Examen Visual</label>
           </p-iftalabel>
         </div>
@@ -81,7 +200,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="lenguajeOptions" formControlName="lenguaje" idInput="lenguaje" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="lenguaje">Lenguaje</label>
           </p-iftalabel>
         </div>
@@ -89,7 +208,8 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="ortopediaTraumatologiaOptions" formControlName="ortopedia_traumatologia"
-              idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="ortopedia_traumatologia">Ortopedia y Traumatologia</label>
           </p-iftalabel>
         </div>
@@ -97,7 +217,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="alimentacionOptions" formControlName="alimentacion" idInput="alimentacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="alimentacion">Alimentación</label>
           </p-iftalabel>
         </div>
@@ -105,7 +225,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="hidratacionOptions" formControlName="hidratacion" idInput="hidratacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="hidratacion">Hidratación</label>
           </p-iftalabel>
         </div>
@@ -114,7 +234,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="horas_pantalla">Horas pantalla</label>
           </p-iftalabel>
         </div>
@@ -122,7 +242,8 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre"
-              idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="horas_juego_aire_libre">Horas juego aire libre</label>
           </p-iftalabel>
         </div>
@@ -130,7 +251,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="horas_suenio">Horas sueño</label>
           </p-iftalabel>
         </div>
@@ -138,7 +259,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="tensionArterialOptions" formControlName="tension_arterial" idInput="tension_arterial"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="tension_arterial">Tension arterial</label>
           </p-iftalabel>
         </div>
@@ -146,7 +267,7 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-select [options]="estadoNutricionalOptions" formControlName="estado_nutricional"
-              idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="estado_nutricional">Estado nutricional</label>
           </p-iftalabel>
         </div>
@@ -154,7 +275,8 @@
         <div class="md:col-span-2">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptionsClinica" [formControl]="controlDeInput('derivaciones')"
-              [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full" />
+              [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip"
+              styleClass="w-full h-16" />
             <label for="derivaciones">Derivaciones</label>
           </p-iftalabel>
         </div>
@@ -163,44 +285,61 @@
     <!-- Caso B: Oftalmologia -->
     <div *ngIf="consultasSeleccionadas.includes('Oftalmologia')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para Oftalmologia</p>
         <!-- Receta -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Necesita receta?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Control -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Es un control?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Derivacion -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Es primera vez?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Anteojos -->
-        <div class="md:col-span-1 my-8">
-          <p>¿Se entregaron Anteojos?</p>
+        <div class="md:col-span-1 my-2">
+          <p class="text-sm">¿Se entregaron Anteojos?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="anteojos" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
-        <!-- Derivacion externa-->
-        <div class="md:col-span-1 my-8">
+        <!-- Rango de fechas del proximo control -->
+        <div class="md:col-span-1 my-2">
           <p-iftalabel>
-            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
-              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-            <label for="derivaciones">Derivacion externa</label>
+            <p-datepicker [readonlyInput]="true" inputId="rangoFechasProxControl"
+              formControlName="rangoFechasProxControl" selectionMode="range" styleClass="w-full h-16"
+              dateFormat="dd/mm/yy" appendTo="body">
+              <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+              <ng-template pTemplate="footer">
+                <p-button class="p-datepicker-prev hidden">Previous</p-button>
+                <p-button class="p-datepicker-next hidden">Next</p-button>
+              </ng-template>
+              <!-- end TODO -->
+            </p-datepicker>
+            <label for="rangoFechas">Rango de fechas del próximos controles</label>
           </p-iftalabel>
         </div>
         <!-- Derivacion externa-->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
+          <p-iftalabel>
+            <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
+              optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
+            <label for="derivaciones">Derivacion externa</label>
+          </p-iftalabel>
+        </div>
+        <!-- Derivacion externa
+        <div class="md:col-span-1 my-2">
           <p>¿Derivación externa?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="derivaciones" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
-        </div>
+        </div>  -->
         <!-- Fecha proximo control
         <div class="md:col-span-1">
           <p class="m-0 p-0">¿Fecha próximo control?</p>
@@ -212,27 +351,29 @@
     <!-- Caso C: Fonoaudiologia -->
     <div *ngIf="consultasSeleccionadas.includes('Fonoaudiologia')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para Fonoaudiologia</p>
         <!-- Diagnostico Presuntivo -->
-        <div class="md:col-span-2 my-8">
+        <div class="md:col-span-2 my-2">
           <p-iftalabel>
             <p-select [options]="diagnosticoPresuntivoOptions" formControlName="diagnostico_presuntivo"
-              idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder=""
+              class="w-full h-16" />
             <label for="diagnostico_presuntivo">Diagnostico Presuntivo</label>
           </p-iftalabel>
         </div>
         <!-- Causas -->
-        <div class="md:col-span-2 my-8">
+        <div class="md:col-span-2 my-2">
           <p-iftalabel>
             <p-select [options]="casuasOptions" formControlName="causas" idInput="causas" [checkmark]="true"
-              [showClear]="true" placeholder="" class="w-full" />
+              [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="causas">Causas</label>
           </p-iftalabel>
         </div>
         <!-- Derivacion externa-->
-        <div class="md:col-span-2 my-8">
+        <div class="md:col-span-2 my-2">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
-              optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+              optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
             <label for="derivaciones">Derivacion externa</label>
           </p-iftalabel>
         </div>
@@ -247,46 +388,108 @@
     <!-- Caso D: Odontologia -->
     <div *ngIf="consultasSeleccionadas.includes('Odontologia')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
+        <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para Odontologia</p>
+        <div class="md:col-span-6">
+          <div class="grid gap-3 md:grid-cols-4">
+            <!-- Dientes Permanentes Min -->
+            <div formGroupName="rangoDientesPermanentes">
+              <p-iftalabel>
+                <p-inputnumber formControlName="dientesPermanentesMin" inputId="dientesPermanentesMin" pKeyFilter="num"
+                  mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="dientesPermanentesMin">Dientes Permanentes Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Dientes Permanentes Max -->
+            <div formGroupName="rangoDientesPermanentes">
+              <p-iftalabel>
+                <p-inputnumber formControlName="dientesPermanentesMax" inputId="dientesPermanentesMax" pKeyFilter="num"
+                  mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="dientesPermanentesMax">Dientes Permanentes Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Dientes Temporales Min -->
+            <div formGroupName="rangoDientesTemporales">
+              <p-iftalabel>
+                <p-inputnumber formControlName="dientesTemporalesMin" inputId="dientesTemporalesMin" pKeyFilter="num"
+                  mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="dientesTemporalesMin">Dientes Temporales Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Dientes Temporales Max -->
+            <div formGroupName="rangoDientesTemporales">
+              <p-iftalabel>
+                <p-inputnumber formControlName="dientesTemporalesMax" inputId="dientesTemporalesMax" pKeyFilter="num"
+                  mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="dientesTemporalesMax">Dientes Temporales Max</label>
+              </p-iftalabel>
+            </div>
+            <!-- Dientes con Sellador Min -->
+            <div formGroupName="rangoSellador">
+              <p-iftalabel>
+                <p-inputnumber formControlName="selladorMin" inputId="selladorMin" pKeyFilter="num" mode="decimal"
+                  [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="selladorMin">Dientes con Sellador Min</label>
+              </p-iftalabel>
+            </div>
+            <!-- Dientes con Sellador Max -->
+            <div formGroupName="rangoSellador">
+              <p-iftalabel>
+                <p-inputnumber formControlName="selladorMax" inputId="selladorMax" pKeyFilter="num" mode="decimal"
+                  [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+                <label for="selladorMax">Dientes con Sellador Max</label>
+              </p-iftalabel>
+            </div>
+          </div>
+          <div *ngIf="especificas.get('rangoDientesPermanentes')?.errors" class="text-red-600 text-sm">
+            El valor de los dientes permanentes mínimo no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoDientesTemporales')?.errors" class="text-red-600 text-sm">
+            El valor de los dientes temporales mínimo no puede ser mayor al máximo.
+          </div>
+          <div *ngIf="especificas.get('rangoSellador')?.errors" class="text-red-600 text-sm">
+            El valor de dientes con sellador mínimo no puede ser mayor al máximo.
+          </div>
+        </div>
         <!-- Topificacion -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Se aplicó topificacion?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="topificacion" optionLabel="nombre"
             optionValue="valor" styleClass="w-full" />
         </div>
         <!-- Se cepilla -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Se cepilla?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="cepillado" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Cepillo -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Tiene cepillo?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="cepillo" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Control -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Es ulterior?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="ulterior" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Derivacion -->
-        <div class="md:col-span-1 my-8">
+        <div class="md:col-span-1 my-2">
           <p>¿Es primera vez?</p>
           <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
             styleClass="w-full" />
         </div>
         <!-- Clasificacion dental -->
-        <div class="md:col-span-3 my-8">
+        <div class="md:col-span-3 my-2">
           <p-iftalabel>
             <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion"
-              [checkmark]="true" [showClear]="true" placeholder="" class="w-full" />
+              [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
             <label for="clasificacion">Clasificación Dental</label>
           </p-iftalabel>
         </div>
         <!-- Derivacion externa-->
-        <div class="md:col-span-3 my-8">
+        <div class="md:col-span-3 my-2">
           <p-iftalabel>
             <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')"
               optionLabel="nombre" optionValue="valor" styleClass="w-full" />

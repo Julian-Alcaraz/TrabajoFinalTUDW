@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+import { KeyFilterModule } from 'primeng/keyfilter';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-campos-especificos',
   standalone: true,
-  imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule],
+  imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule],
   templateUrl: './campos-especificos.component.html',
   styleUrl: './campos-especificos.component.css',
 })
@@ -45,15 +50,55 @@ export class CamposEspecificosComponent implements OnInit {
   public cantidadComidasOptions: string[] = ['4', 'Mayor a 4', 'Menor a 4', 'Picoteo'];
   /*
   FALTAN EN CLINICA:
-      talla: [170, [Validators.required, ValidarNumerosFloat]],
-      cc: [40, [Validators.required, ValidarNumerosFloat]],
-      tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+    tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+    tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
 */
 
   ngOnInit(): void {
     this.especificas = new FormGroup({
       // Clinica
+      rangoTalla: new FormGroup(
+        {
+          tallaMin: new FormControl(),
+          tallaMax: new FormControl(),
+        },
+        { validators: this.validarRango('tallaMin', 'tallaMax') },
+      ),
+      rangoCC: new FormGroup(
+        {
+          ccMin: new FormControl(),
+          ccMax: new FormControl(),
+        },
+        { validators: this.validarRango('ccMin', 'ccMax') },
+      ),
+      rangoPeso: new FormGroup(
+        {
+          pesoMin: new FormControl(),
+          pesoMax: new FormControl(),
+        },
+        { validators: this.validarRango('pesoMin', 'pesoMax') },
+      ),
+      rangoPct: new FormGroup(
+        {
+          pctMin: new FormControl(),
+          pctMax: new FormControl(),
+        },
+        { validators: this.validarRango('pctMin', 'pctMax') },
+      ),
+      rangoTas: new FormGroup(
+        {
+          tasMin: new FormControl(),
+          tasMax: new FormControl(),
+        },
+        { validators: this.validarRango('tasMin', 'tasMax') },
+      ),
+      rangoTad: new FormGroup(
+        {
+          tadMin: new FormControl(),
+          tadMax: new FormControl(),
+        },
+        { validators: this.validarRango('tadMin', 'tadMax') },
+      ),
       diabetes: new FormControl(),
       hta: new FormControl(),
       obesidad: new FormControl(),
@@ -75,11 +120,33 @@ export class CamposEspecificosComponent implements OnInit {
       tension_arterial: new FormControl(),
       estado_nutricional: new FormControl(),
       // Oftalmologia
+      rangoFechasProxControl: new FormControl(),
       receta: new FormControl(),
       control: new FormControl(),
       primera_vez: new FormControl(),
       anteojos: new FormControl(),
       // Odontologia
+      rangoDientesPermanentes: new FormGroup(
+        {
+          dientesPermanentesMin: new FormControl(),
+          dientesPermanentesMax: new FormControl(),
+        },
+        { validators: this.validarRango('dientesPermanentesMin', 'dientesPermanentesMax') },
+      ),
+      rangoDientesTemporales: new FormGroup(
+        {
+          dientesTemporalesMin: new FormControl(),
+          dientesTemporalesMax: new FormControl(),
+        },
+        { validators: this.validarRango('dientesTemporalesMin', 'dientesTemporalesMax') },
+      ),
+      rangoSellador: new FormGroup(
+        {
+          selladorMin: new FormControl(),
+          selladorMax: new FormControl(),
+        },
+        { validators: this.validarRango('selladorMin', 'selladorMax') },
+      ),
       topificacion: new FormControl(),
       cepillado: new FormControl(),
       cepillo: new FormControl(),
@@ -99,6 +166,21 @@ export class CamposEspecificosComponent implements OnInit {
     this.form.addControl('derivaciones', new FormControl());
     this.form.addControl('especificas', this.especificas);
   }
+
+  validarRango: (campoMin: string, campoMax: string) => ValidatorFn = (campoMin, campoMax) => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const formGroup = control as FormGroup;
+      const valorMin = formGroup.get(campoMin)?.value;
+      const valorMax = formGroup.get(campoMax)?.value;
+      if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
+        return null;
+      }
+      if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
+        return null;
+      }
+      return { rangoInvalido: true };
+    };
+  };
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;
