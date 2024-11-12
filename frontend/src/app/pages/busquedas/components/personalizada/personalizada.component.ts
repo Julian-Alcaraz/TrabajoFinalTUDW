@@ -98,26 +98,21 @@ export class PersonalizadaComponent implements OnInit {
     this.formBusqueda.get('consultasSeleccionadas')?.valueChanges.subscribe(() => {
       this.onChangeTipoConsulta();
     });
-    this.formBusqueda.get('generales.rangoFechas')?.valueChanges.subscribe(() => {
-      this.agregarHora(this.formBusqueda.get('generales.rangoFechas')?.value);
-    });
-  }
-
-  agregarHora(rangoFechas: Date[]) {
-    if (rangoFechas?.length === 2 && rangoFechas[1]) {
-      const fechaInicio = new Date(rangoFechas[0]);
-      const fechaFin = new Date(rangoFechas[1]);
-      fechaFin.setHours(23, 59, 59, 999);
-      this.formBusqueda.get('generales.rangoFechas')?.setValue([fechaInicio, fechaFin], { emitEvent: false });
-    }
+    // this.formBusqueda.get('generales.rangoFechas')?.valueChanges.subscribe(() => {
+    //   this.agregarHora(this.formBusqueda.get('generales.rangoFechas')?.value);
+    // });
   }
 
   enviarConsultas(data: Consulta[]) {
     this.consultasEmitidas.emit(data);
   }
+
   onChangeTipoConsulta() {
     this.formBusqueda.get('especificas')?.reset();
     this.formBusqueda.get('derivaciones')?.reset();
+    if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
+      this.formBusqueda.get('consultasSeleccionadas')?.reset();
+    }
   }
 
   obtenerCursos(): any {
@@ -158,22 +153,54 @@ export class PersonalizadaComponent implements OnInit {
     if (this.formBusqueda.valid) {
       this.loading = true;
       console.log('DATA: ', this.formBusqueda.value);
-      const data = this.formBusqueda.value;
-      const derivaciones = data.derivaciones?.reduce((acc: any, item: any) => {
-        // FUNCIONA PERO COMPARA TODO.
-        acc.odontologia = acc.odontologia || item.odontologia || false;
-        acc.oftalmologia = acc.oftalmologia || item.oftalmologia || false;
-        acc.fonoaudiologia = acc.fonoaudiologia || item.fonoaudiologia || false;
-        acc.externa = acc.externa || item.externa || false;
+      const resultado = prepararData(this.formBusqueda.value);
+      console.log('la respuesta es ', resultado);
+      const dataLimpia = eliminarValoresNulosYVacios(resultado);
+      console.log('---------');
+      console.log('LA DATA ENVIADA ES ', dataLimpia);
+      console.log('---------');
+      this._consultaService.busquedaPersonalizada(dataLimpia).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+            this.resultados = response.data;
+            console.log('Resultados backend', this.resultados);
+            this.enviarConsultas(response.data);
+            // this.formBusqueda.reset();
+            this.loading = false;
+          }
+        },
+        error: (err) => {
+          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+          this.loading = false;
+        },
+      });
+    }
+  }
+}
 
-        // Solo si no se selecciona clinica se incluye externa!!!!!!!!!!!!!
-        // if (!formValues.consultasSeleccionadas?.includes('Clinica')) {
-        //   acc.Externa = acc.Externa || item.Externa || false;
-        // }
-        return acc;
-      }, {});
-      // OTRO INTENTO:
-      /*
+function prepararData(data: any): any {
+  /*
+  console.log('me llego la data: ', data);
+  console.log('me llegaron las derivaciones: ', data.generales.derivaciones);
+  */
+  let derivaciones;
+  if (data.derivaciones !== '' && data.derivaciones) {
+    derivaciones = data.derivaciones?.reduce((acc: any, item: any) => {
+      // FUNCIONA PERO COMPARA TODO.
+      acc.odontologia = acc.odontologia || item.odontologia || false;
+      acc.oftalmologia = acc.oftalmologia || item.oftalmologia || false;
+      acc.fonoaudiologia = acc.fonoaudiologia || item.fonoaudiologia || false;
+      acc.externa = acc.externa || item.externa || false;
+
+      // Solo si no se selecciona clinica se incluye externa!!!!!!!!!!!!!
+      // if (!formValues.consultasSeleccionadas?.includes('Clinica')) {
+      //   acc.Externa = acc.Externa || item.Externa || false;
+      // }
+      return acc;
+    }, {});
+    // OTRO INTENTO:
+    /*
       const derivaciones2 = data.derivaciones?.reduce((acc: any, item: any) => {
         // Inicializamos `acc` como un objeto vacío si es la primera iteración
         acc = acc || {};
@@ -194,70 +221,29 @@ export class PersonalizadaComponent implements OnInit {
         return acc;
       }, {}); // Inicializamos `acc` como un objeto vacío al comienzo
       */
-
-      if (data.derivaciones) {
-        console.log('if');
-        data.generales.derivaciones = derivaciones;
-        delete data.derivaciones;
-      }
-      console.log('Derivaciones:');
-      console.log(derivaciones);
-      console.log('---------');
-      const formValues = eliminarValoresNulosYVacios(this.formBusqueda.value);
-      //const formValues = this.formBusqueda.value;
-
-      /*
-      if (formValues.derivaciones) {
-        formValues.generales.derivaciones = derivaciones;
-        delete formValues.derivaciones;
-      }
-      */
-
-      if (formValues.generales) {
-        if (formValues.generales.rangoFechas && formValues.generales.rangoFechas.length === 0) {
-          delete formValues.generales.rangoFechas;
-        }
-      }
-      // Probar este if depsyues!!!!!!!
-      if (formValues.derivaciones && Object.keys(formValues.derivaciones).length === 0) delete formValues.derivaciones;
-
-      console.log('---------');
-      console.log('LA DATA ENVIADA ES ', formValues);
-      console.log('---------');
-
-      this._consultaService.busquedaPersonalizada(formValues).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            this.resultados = response.data;
-            console.log('Resultados backend', this.resultados);
-            this.enviarConsultas(response.data);
-            // this.formBusqueda.reset();
-            this.loading = false;
-          }
-        },
-        error: (err) => {
-          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-          this.loading = false;
-        },
-      });
-    }
+    data.generales.derivaciones = derivaciones;
+    delete data.derivaciones;
+  } else if (data.generales.derivaciones) {
+    delete data.generales.derivaciones;
   }
+  if (data.generales.rangoFechas) {
+    const fechaFin = new Date(data.generales.rangoFechas[1]);
+    fechaFin.setHours(23, 59, 59, 999);
+    data.generales.rangoFechas[1] = fechaFin;
+  }
+  return data;
 }
 
 function eliminarValoresNulosYVacios(obj: any): any {
   const cleanedObj: any = {};
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
-    // Si el valor es un objeto, llamamos recursivamente a la función
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       const nestedCleanedObj = eliminarValoresNulosYVacios(value);
       if (Object.keys(nestedCleanedObj).length > 0) {
         cleanedObj[key] = nestedCleanedObj;
       }
-    }
-    // Si el valor no es nulo, undefined o cadena vacía, lo añadimos
-    else if (value !== null && value !== undefined && value !== '') {
+    } else if (value !== null && value !== undefined && value !== '') {
       cleanedObj[key] = value;
     }
   });

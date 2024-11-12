@@ -139,7 +139,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'usuarios',
           label: 'Usuarios',
-          orden: 2,
+          orden: 5,
           icon: 'fa-solid fa-users',
           roles: [roles[0], roles[1]],
         },
@@ -158,11 +158,12 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
-          url: 'lista',
-          label: 'Lista',
-          orden: 5,
-          icon: '',
+          url: 'busqueda',
+          label: 'Buscar',
+          orden: 2,
+          icon: 'fa-solid fa-magnifying-glass',
           roles: [roles[0], roles[1], roles[2]],
+          deshabilitado: false,
         },
         {
           url: 'menuDeshabilitado',
@@ -171,14 +172,6 @@ export class MainSeeder implements Seeder {
           icon: 'menuDeshabilitado',
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: true,
-        },
-        {
-          url: 'busqueda',
-          label: 'Busqueda',
-          orden: 0,
-          icon: 'fa-solid fa-magnifying-glass',
-          roles: [roles[0], roles[1], roles[2]],
-          deshabilitado: false,
         },
       ]);
       await menuORM.save(menus);

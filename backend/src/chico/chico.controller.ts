@@ -27,8 +27,8 @@ export class ChicoController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los chicos habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todos los chicos habilitados con exito' })
+  @ApiOperation({ summary: 'Devuelve todos los chicos' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
   async findAll() {
     const chicos = await this.chicoService.findAll();
     return {
@@ -37,7 +37,17 @@ export class ChicoController {
       message: 'Chicos encontrados con exito',
     };
   }
-
+  @Get('/activity')
+  @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
+  async findAllbyActivty() {
+    const chicos = await this.chicoService.findAllWHitActuivy(2024);
+    return {
+      success: true,
+      data: chicos,
+      message: 'Chicos encontrados con exito',
+    };
+  }
   @Get(':id')
   @ApiOperation({ summary: 'Devuelve el chico buscado' })
   @ApiResponse({ status: 200, description: 'Retorna el chico buscado con exito' })

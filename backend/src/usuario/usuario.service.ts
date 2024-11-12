@@ -138,6 +138,8 @@ export class UsuarioService {
     }
     // Convertimos el Set nuevamente a un array de objetos
     colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
+    // Ordena los padres por "orden"
+    colMenus.sort((a, b) => a.orden - b.orden);
     return colMenus;
   }
 

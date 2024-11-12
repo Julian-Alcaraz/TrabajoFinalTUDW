@@ -24,6 +24,9 @@
       <!-- Dni -->
       <div class="sm:col-span-2 md:col-span-1">
         <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
+        <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
+          {{ mensajeDoc }}
+        </div>
       </div>
       <!-- Telefono: -->
       <div class="sm:col-span-2 md:col-span-1">
@@ -83,7 +86,7 @@
       } @else {
         <div class="flex flex-row my-auto">
           <button type="button" (click)="desactivarFormulario()" class="flex mt-4 ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-          <button type="submit" class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+          <button type="submit" [disabled]="habilitarModificar" class="flex mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
         </div>
       }
     }

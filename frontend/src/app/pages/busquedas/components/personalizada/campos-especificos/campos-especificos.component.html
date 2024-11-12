@@ -3,7 +3,7 @@
     <!-- Caso A: Clinica -->
     <div *ngIf="consultasSeleccionadas.includes('Clinica')">
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
-        <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para clinica</p>
+        <h3 class="col-span-6 font-semibold mt-4 mb-4">Filtros de clinica</h3>
         <!-- Talla (aseguramos que col-span esté en el contenedor directo del grid) -->
         <div class="md:col-span-6">
           <div class="grid gap-3 md:grid-cols-4">

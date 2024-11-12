@@ -9,7 +9,6 @@ import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-n
 import { ConsultaService } from '../../../../services/consulta.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
@@ -19,13 +18,13 @@ import { Consulta } from '../../../../models/consulta.model';
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputSelectComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent,  InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
 export class NuevaOdontologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar= false;
+  @Input() editar = false;
   habilitarModificar = false;
 
   public odontologiaForm: FormGroup;
@@ -52,7 +51,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       sellador: ['', [Validators.required, ValidarSoloNumeros]],
       dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
       dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
-      situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
@@ -168,17 +167,16 @@ export class NuevaOdontologiaComponent implements OnInit {
       observaciones: this.consulta?.observaciones,
       derivacion_externa: derivacion,
       primera_vez: this.consulta?.odontologia?.primera_vez,
-      ulterior:this.consulta?.odontologia?.ulterior,
-      cepillo:this.consulta?.odontologia?.cepillo ,
+      ulterior: this.consulta?.odontologia?.ulterior,
+      cepillo: this.consulta?.odontologia?.cepillo,
       cepillado: this.consulta?.odontologia?.cepillado,
       topificacion: this.consulta?.odontologia?.topificacion,
-      dientes_permanentes:this.consulta?.odontologia?.dientes_permanentes ,
-      dientes_temporales:this.consulta?.odontologia?.dientes_temporales ,
-      sellador:this.consulta?.odontologia?.sellador ,
-      dientes_recuperables:this.consulta?.odontologia?.dientes_recuperables ,
-      dientes_irecuperables:this.consulta?.odontologia?.dientes_irecuperables ,
-      habitos:this.consulta?.odontologia?.habitos ,
-
+      dientes_permanentes: this.consulta?.odontologia?.dientes_permanentes,
+      dientes_temporales: this.consulta?.odontologia?.dientes_temporales,
+      sellador: this.consulta?.odontologia?.sellador,
+      dientes_recuperables: this.consulta?.odontologia?.dientes_recuperables,
+      dientes_irecuperables: this.consulta?.odontologia?.dientes_irecuperables,
+      habitos: this.consulta?.odontologia?.habitos,
     });
   }
   cambiarEstado() {
@@ -217,8 +215,7 @@ export class NuevaOdontologiaComponent implements OnInit {
         this.consulta?.observaciones === observaciones &&
         this.consulta?.curso?.id === +this.odontologiaForm.value.id_curso &&
         this.consulta?.turno === this.odontologiaForm.value.turno &&
-        this.consulta?.obra_social === obra_social
-        &&
+        this.consulta?.obra_social === obra_social &&
         //  cambios por especialidad
         derivacion_externaConsulta === derivacion_externaForm &&
         this.consulta?.odontologia?.cepillo === cepillo &&
@@ -228,8 +225,7 @@ export class NuevaOdontologiaComponent implements OnInit {
         this.consulta?.odontologia?.dientes_temporales === this.odontologiaForm.value.dientes_temporales &&
         this.consulta?.odontologia?.sellador === this.odontologiaForm.value.sellador &&
         this.consulta?.odontologia?.dientes_recuperables === this.odontologiaForm.value.dientes_recuperables &&
-        this.consulta?.odontologia?.dientes_irecuperables === this.odontologiaForm.value.dientes_irecuperables
-         &&
+        this.consulta?.odontologia?.dientes_irecuperables === this.odontologiaForm.value.dientes_irecuperables &&
         this.consulta?.odontologia?.habitos === this.odontologiaForm.value.habitos
       ) {
         hayCambios = false;
@@ -277,12 +273,12 @@ export class NuevaOdontologiaComponent implements OnInit {
               ...odontologicaValues,
             },
           };
-          if(this.consulta){
-            this._consultaService.modficarConsulta(this.consulta?.id,data).subscribe({
+          if (this.consulta) {
+            this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                  this.cambiarEstado()
+                  this.cambiarEstado();
                 }
               },
               error: (err) => {

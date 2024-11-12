@@ -6,18 +6,18 @@ import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/mat
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-
+import { ProgressBarModule } from 'primeng/progressbar';
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { Chico } from '../../../models/chico.model';
 import { ChicoService } from '../../../services/chico.service';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { RouterModule, Router } from '@angular/router';
 import { LoadingComponent } from '../../../components/loading/loading.component';
-
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent,ProgressBarModule,TooltipModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -27,7 +27,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
   public searching = false;
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'action'];
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar','action'];
 
   constructor(
     private _chicoService: ChicoService,

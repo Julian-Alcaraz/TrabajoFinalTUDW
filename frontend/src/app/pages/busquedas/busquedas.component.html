@@ -1,16 +1,14 @@
 <div class="card">
-  <div class="card-header">Buscar consultas por:</div>
+  <!-- <div class="card-header">Buscar consultas por:</div> -->
   <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200">
     <li class="me-1">
       <button
         [ngClass]="!currentParam || currentParam === '1' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
-        (click)="cambiarParam(1)">Año realizada</button>
+        (click)="cambiarParam(1)">Año</button>
     </li>
-    <li class="me-1">
-      <button
-        [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
-        (click)="cambiarParam(2)">Asistencia Niño</button>
-    </li>
+    <!-- <li class="me-1">
+      <button [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(2)">Asistencia Niño</button>
+    </li> -->
     <li class="me-1">
       <button
         [ngClass]="currentParam === '3' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
@@ -25,9 +23,9 @@
       @if (currentParam === '1' || !currentParam) {
       <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)"></app-consultasxanio>
       }
-      @if (currentParam === '2') {
-      <app-consultasxanio></app-consultasxanio>
-      }
+      <!-- @if (currentParam === '2') {
+        <app-consultasxanio></app-consultasxanio>
+      } -->
       @if (currentParam === '3') {
       <app-personalizada (consultasEmitidas)="mostrarConsultas($event)"></app-personalizada>
       }
@@ -36,7 +34,10 @@
     <app-consultas-table [consultas]="consultas"
       [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
-    <h1>Consultas no encontradas</h1>
+      <div class="text-center font-semibold  text-lg">
+
+        <h1>Consultas no encontradas</h1>
+      </div>
     }
   </div>
 </div>

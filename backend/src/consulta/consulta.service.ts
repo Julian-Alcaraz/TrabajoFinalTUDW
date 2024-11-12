@@ -145,6 +145,7 @@ export class ConsultaService {
       if (data.consultasSeleccionadas.includes('Clinica')) {
         // Clinica
         if (consulta.especificas) {
+          console.log('clinica');
           if (consulta.especificas.rangoTalla) {
             consulta.especificas = {
               ...consulta.especificas,
@@ -202,6 +203,7 @@ export class ConsultaService {
       }
       if (data.consultasSeleccionadas.includes('Odontologia')) {
         // Odontologia
+        console.log('Odontologia');
         if (consulta.especificas) {
           if (consulta.especificas.rangoDientesPermanentes) {
             consulta.especificas = {
@@ -235,6 +237,7 @@ export class ConsultaService {
         resultados.push(...resultadosOdontologia);
       }
       if (data.consultasSeleccionadas.includes('Oftalmologia')) {
+        console.log('Oftalmologia');
         // Oftalmologia
         if (consulta.especificas) {
           if (consulta.especificas.rangoFechasProxControl) {
@@ -244,33 +247,34 @@ export class ConsultaService {
             };
             delete consulta.especificas.rangoFechasProxControl;
           }
-          const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
-          const resultadosOftalmologia = consultas
-            .map((consulta) => {
-              const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
-              return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
-            })
-            .filter((consulta) => consulta !== null);
-          resultados.push(...resultadosOftalmologia);
         }
-        if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
-          // Fonoaudiologia
-          const fonoaudiologiaData = await this.fonoaudiologiaORM.find({ where: consulta.especificas });
-          const resultadosFonoaudiologia = consultas
-            .map((consulta) => {
-              const datosFonoaudiologia = fonoaudiologiaData.find((fonoaudiologia) => fonoaudiologia.id_consulta === consulta.id);
-              return datosFonoaudiologia ? { ...consulta, fonoaudiologia: datosFonoaudiologia } : null;
-            })
-            .filter((consulta) => consulta !== null);
-          resultados.push(...resultadosFonoaudiologia);
-        } else {
-          // Deberia dar error esto!!!!
-          console.log('No se especifico tipo.. ');
-        }
-        return resultados;
+        const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
+        const resultadosOftalmologia = consultas
+          .map((consulta) => {
+            const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
+            return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosOftalmologia);
       }
-      return consultas;
+      if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
+        console.log('Fonoaudiologia');
+        // Fonoaudiologia
+        const fonoaudiologiaData = await this.fonoaudiologiaORM.find({ where: consulta.especificas });
+        const resultadosFonoaudiologia = consultas
+          .map((consulta) => {
+            const datosFonoaudiologia = fonoaudiologiaData.find((fonoaudiologia) => fonoaudiologia.id_consulta === consulta.id);
+            return datosFonoaudiologia ? { ...consulta, fonoaudiologia: datosFonoaudiologia } : null;
+          })
+          .filter((consulta) => consulta !== null);
+        resultados.push(...resultadosFonoaudiologia);
+      } else {
+        // Deberia dar error esto!!!!
+        console.log('No se especifico tipo.. ');
+      }
+      return resultados;
     }
+    return consultas;
   }
 
   prepararDataConsultaPersonalizada(data) {

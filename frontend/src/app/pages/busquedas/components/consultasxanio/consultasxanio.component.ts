@@ -4,11 +4,12 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { Consulta } from '../../../../models/consulta.model';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { CommonModule } from '@angular/common';
+import { IftaLabelModule } from 'primeng/iftalabel';
 
 @Component({
   selector: 'app-consultasxanio',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePickerModule, FormsModule, ReactiveFormsModule, IftaLabelModule],
   templateUrl: './consultasxanio.component.html',
   styleUrl: './consultasxanio.component.css',
 })
@@ -30,6 +31,7 @@ export class ConsultasxanioComponent {
     this.date= new Date()
     this.buscar()
   }
+  // No es mejor que este en el onInit en vez de constructor ?
   enviarConsultas(data: Consulta[]) {
     this.consultasEmitidas.emit(data);
   }
