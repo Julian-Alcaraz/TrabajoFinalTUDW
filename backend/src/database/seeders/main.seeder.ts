@@ -158,13 +158,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
-          url: 'lista',
-          label: 'Lista',
-          orden: 5,
-          icon: '',
-          roles: [roles[0], roles[1], roles[2]],
-        },
-        {
           url: 'menuDeshabilitado',
           label: 'menuDeshabilitado',
           orden: 0,

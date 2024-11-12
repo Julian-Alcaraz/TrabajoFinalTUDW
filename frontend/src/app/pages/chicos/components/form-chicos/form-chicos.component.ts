@@ -43,7 +43,8 @@ export class FormChicosComponent implements OnInit {
   public chico: Chico | null = null;
   public fechaHaceUnAnio = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   public fechaHoy = new Date();
-
+  public habilitarModificar = false;
+  public mensajeDoc=""
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
@@ -55,7 +56,6 @@ export class FormChicosComponent implements OnInit {
     private _localidadService: LocalidadService,
     private _barrioService: BarrioService,
   ) {
-    // Hacer un trim o algo, este es un string valido: "          a                Juan"
     this.chicoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
@@ -83,12 +83,45 @@ export class FormChicosComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerLocalidades();
     this.esCargaOedicion();
+    this.buscarChicoDniIngresado();
   }
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.chicoForm.get(input) as FormControl;
   }
 
+  buscarChicoDniIngresado() {
+    this.chicoForm.get('dni')?.valueChanges.subscribe((value) => {
+      if (this.chicoForm.get('dni')?.valid) {
+        if (!this.esFormulario && this.id_chico) {
+          if (this.chico?.dni !== value) {
+            this.buscarChicoxDni(value);
+          }
+        } else {
+          this.mensajeDoc= ""
+          this.buscarChicoxDni(value);
+        }
+      }else{
+        this.mensajeDoc= ""
+      }
+    });
+  }
+  buscarChicoxDni(dni: number) {
+    this._chicoService.obtenerChicoxDni(dni).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
+          this.mensajeDoc= "Documento ya ingresado en otro chico."
+        } else {
+          this.chicoForm.get('dni')?.setErrors(null);
+          this.mensajeDoc= ""
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
   onChangeBarrio() {
     const idBarrio = this.chicoForm.get('id_barrio')?.value;
     if (idBarrio === 'new') {
@@ -118,13 +151,13 @@ export class FormChicosComponent implements OnInit {
       },
     });
   }
-
   esCargaOedicion() {
     this.searching = true;
     if (!this.esFormulario && this.id_chico) {
       this._chicoService.obtenerChicoxId(this.id_chico).subscribe({
         next: (response: any) => {
           if (response.data) {
+            console.log(response);
             this.chico = response.data;
             const stringFecha = String(this.chico?.fe_nacimiento) + 'T12:00:00';
             this.chicoForm.patchValue({
@@ -143,6 +176,11 @@ export class FormChicosComponent implements OnInit {
             this.obtenerBarriosXLocalidad(this.chicoForm.get('id_localidad')?.value);
             this.chicoForm.disable();
             this.searching = false;
+            this.chicoForm.valueChanges.subscribe({
+              next: () => {
+                this.habilitarModificar = this.existenCambios();
+              },
+            });
           }
         },
       });
@@ -314,6 +352,24 @@ export class FormChicosComponent implements OnInit {
         }
       });
     }
+  }
+
+  existenCambios() {
+    let hayCambios = this.chicoForm.dirty;
+    if (hayCambios) {
+      if (this.chico?.apellido == this.chicoForm.value.apellido && this.chico?.nombre == this.chicoForm.value.nombre && this.chico?.dni == this.chicoForm.value.dni && this.chico?.direccion == this.chicoForm.value.direccion && this.chico?.nombre_madre == this.chicoForm.value.nombre_madre && this.chico?.nombre_padre == this.chicoForm.value.nombre_padre && this.chico?.telefono == this.chicoForm.value.telefono && this.chico?.barrio?.id == this.chicoForm.value.id_barrio && this.chico?.barrio?.localidad?.id == this.chicoForm.value.id_localidad && this.chico?.sexo == this.chicoForm.value.sexo && this.formatearFecha(this.chicoForm.value.fe_nacimiento) === String(this.chico?.fe_nacimiento)) {
+        hayCambios = false;
+      } else {
+        hayCambios = true;
+      }
+    }
+    return !(this.chicoForm.valid && hayCambios);
+  }
+
+  formatearFecha(fecha: any) {
+    const aux = new Date(String(fecha));
+    aux.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
+    return `${aux.getFullYear()}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getDate().toString().padStart(2, '0')}`;
   }
 
   // Modal Barrio

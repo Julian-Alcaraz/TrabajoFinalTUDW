@@ -1,20 +1,9 @@
-<!-- {{this.consulta | json}} -->
- <!-- estatico arriba -->
 <div class="relative">
-  <div class="absolute left-1/2 mt-2">
-    <button (click)="cerrarModal()" class="bg-gray-100 rounded-full border-2 border-gray-200 px-2 py-1 hover:bg-gray-300">
-      <i class="fa-solid fa-xmark fa-lg"></i>
-    </button>
+  <div class="fixed left-1/2 transform -translate-x-1/2 z-10 mt-2">
+    <button (click)="cerrarModal()" class="bg-gray-100 rounded-full border-2 border-gray-200 px-2 py-1 hover:bg-gray-300"><i class="fa-solid fa-xmark fa-lg"></i></button>
   </div>
 </div>
-<!-- baja con el modal -->
-   <!-- <div class="fixed ">
-     <div class="absolute left-1/2  mt-2">
-       <button (click)="cerrarModal()" class="bg-gray-100 rounded-full border-2 border-gray-200 px-2 py-1 hover:bg-gray-300">
-         <i class="fa-solid fa-xmark fa-lg"></i>
-        </button>
-      </div>
-    </div> -->
+
 @if (consulta !== null) {
   @switch (consulta.type) {
     @case ('Clinica') {

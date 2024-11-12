@@ -4,9 +4,9 @@
     <li class="me-1">
       <button [ngClass]="!currentParam || currentParam === '1' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(1)">Año realizada</button>
     </li>
-    <li class="me-1">
+    <!-- <li class="me-1">
       <button [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(2)">Asistencia Niño</button>
-    </li>
+    </li> -->
     <li class="me-1">
       <button [ngClass]="currentParam === '3' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(3)">Perzonalizada</button>
     </li>
@@ -19,9 +19,9 @@
       @if (currentParam === '1' || !currentParam) {
         <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)"></app-consultasxanio>
       }
-      @if (currentParam === '2') {
+      <!-- @if (currentParam === '2') {
         <app-consultasxanio></app-consultasxanio>
-      }
+      } -->
       @if (currentParam === '3') {
         <app-personalizada (consultasEmitidas)="mostrarConsultas($event)"></app-personalizada>
       }
@@ -29,7 +29,10 @@
     @if (consultas && consultas.length > 0) {
       <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
-      <h1>Consultas no encontradas</h1>
+      <div class="text-center font-semibold  text-lg">
+
+        <h1>Consultas no encontradas</h1>
+      </div>
     }
   </div>
 </div>
