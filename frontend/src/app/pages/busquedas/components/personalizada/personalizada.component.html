@@ -96,26 +96,20 @@
         styleClass="w-full" />
     </div>
   </div>
-  <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null">
-    <!--
-    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1">
-
-      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
-
-      </div>
-      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Oftalmologia')">
-
-      </div>
-      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Fonoaudiologia')">
-
-      </div>
-      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Odontologia')">
-
-      </div>
+  <div
+    *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1">
+    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
+      <app-campos-clinica [form]="formBusqueda" />
     </div>
-     -->
-    <app-campos-especificos [consultasSeleccionadas]="formBusqueda.get('consultasSeleccionadas')?.value"
-      [form]="formBusqueda" />
+    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Oftalmologia')">
+      <app-campos-oftalmologia [form]="formBusqueda" />
+    </div>
+    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Fonoaudiologia')">
+      <app-campos-fonoaudiologia [form]="formBusqueda" />
+    </div>
+    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Odontologia')">
+      <app-campos-odontologia [form]="formBusqueda" />
+    </div>
   </div>
   <!-- Buscar -->
   <div class="flex justify-end mt-4">

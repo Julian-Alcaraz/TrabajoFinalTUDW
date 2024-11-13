@@ -22,14 +22,17 @@ import { InstitucionService } from '../../../../services/institucion.service';
 import { Institucion } from '../../../../models/institucion.model';
 import { Curso } from '../../../../models/curso.model';
 import { CursoService } from '../../../../services/curso.service';
-import { CamposEspecificosComponent } from './campos-especificos/campos-especificos.component';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { Consulta } from '../../../../models/consulta.model';
+import { CamposClinicaComponent } from './components/campos-clinica/campos-clinica.component';
+import { CamposOftalmologiaComponent } from "./components/campos-oftalmologia/campos-oftalmologia.component";
+import { CamposFonoaudiologiaComponent } from "./components/campos-fonoaudiologia/campos-fonoaudiologia.component";
+import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, CamposEspecificosComponent, KeyFilterModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent],
   templateUrl: './personalizada.component.html',
   styleUrl: './personalizada.component.css',
 })

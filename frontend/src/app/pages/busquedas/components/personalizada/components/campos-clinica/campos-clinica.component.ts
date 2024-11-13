@@ -1,28 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { KeyFilterModule } from 'primeng/keyfilter';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { IftaLabelModule } from 'primeng/iftalabel';
-import { SelectModule } from 'primeng/select';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DatePickerModule } from 'primeng/datepicker';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
-  selector: 'app-campos-especificos',
+  selector: 'app-campos-clinica',
   standalone: true,
-  imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule],
-  templateUrl: './campos-especificos.component.html',
-  styleUrl: './campos-especificos.component.css',
+  imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule],
+  templateUrl: './campos-clinica.component.html',
+  styleUrl: './campos-clinica.component.css',
 })
-export class CamposEspecificosComponent implements OnInit {
-  @Input() consultasSeleccionadas: string[] = [];
+export class CamposClinicaComponent implements OnInit {
   @Input() form!: FormGroup;
 
   public especificas!: FormGroup;
+
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
@@ -43,20 +41,9 @@ export class CamposEspecificosComponent implements OnInit {
     { nombre: 'Odontologia', valor: { odontologia: true } },
     { nombre: 'Oftalmologia', valor: { oftalmologia: true } },
   ];
-  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
-  public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
-  public diagnosticoPresuntivoOptions: string[] = ['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion'];
-  public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras'];
-  public cantidadComidasOptions: string[] = ['4', 'Mayor a 4', 'Menor a 4', 'Picoteo'];
-  /*
-  FALTAN EN CLINICA:
-    tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-    tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-*/
 
   ngOnInit(): void {
     this.especificas = new FormGroup({
-      // Clinica
       rangoTalla: new FormGroup(
         {
           tallaMin: new FormControl(),
@@ -119,43 +106,6 @@ export class CamposEspecificosComponent implements OnInit {
       horas_suenio: new FormControl(),
       tension_arterial: new FormControl(),
       estado_nutricional: new FormControl(),
-      // Oftalmologia
-      rangoFechasProxControl: new FormControl(),
-      receta: new FormControl(),
-      control: new FormControl(),
-      primera_vez: new FormControl(),
-      anteojos: new FormControl(),
-      // Odontologia
-      rangoDientesPermanentes: new FormGroup(
-        {
-          dientesPermanentesMin: new FormControl(),
-          dientesPermanentesMax: new FormControl(),
-        },
-        { validators: this.validarRango('dientesPermanentesMin', 'dientesPermanentesMax') },
-      ),
-      rangoDientesTemporales: new FormGroup(
-        {
-          dientesTemporalesMin: new FormControl(),
-          dientesTemporalesMax: new FormControl(),
-        },
-        { validators: this.validarRango('dientesTemporalesMin', 'dientesTemporalesMax') },
-      ),
-      rangoSellador: new FormGroup(
-        {
-          selladorMin: new FormControl(),
-          selladorMax: new FormControl(),
-        },
-        { validators: this.validarRango('selladorMin', 'selladorMax') },
-      ),
-      topificacion: new FormControl(),
-      cepillado: new FormControl(),
-      cepillo: new FormControl(),
-      clasificacion: new FormControl(),
-      ulterior: new FormControl(),
-      // Fonoaudiologia
-      diagnostico_presuntivo: new FormControl(),
-      causas: new FormControl(),
-      asistencia: new FormControl(),
     });
     const generalesGroup = this.form.get('generales') as FormGroup;
     if (generalesGroup) {
@@ -163,6 +113,7 @@ export class CamposEspecificosComponent implements OnInit {
     } else {
       console.error("El grupo 'generales' no existe o no es un FormGroup en el formulario padre.");
     }
+    // VER DE SACAR ESTAS DERIVACIONES:!!!!!!!
     this.form.addControl('derivaciones', new FormControl());
     this.form.addControl('especificas', this.especificas);
   }
