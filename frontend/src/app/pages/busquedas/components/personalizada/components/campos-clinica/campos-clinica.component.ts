@@ -25,7 +25,7 @@ export class CamposClinicaComponent implements OnInit {
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public vacunasOptions: string[] = ['Completo', 'Incompleto', 'Se desconoce'];
+  public vacunasOptions: string[] = ['Completo', 'Incompleto', 'Desconocido'];
   public examenVisualOptions: string[] = ['Normal', 'Anormal'];
   public lenguajeOptions: string[] = ['Adecuado', 'Inadecuado'];
   public ortopediaTraumatologiaOptions: string[] = ['Normal', 'Escoliosis', 'Pie plano'];

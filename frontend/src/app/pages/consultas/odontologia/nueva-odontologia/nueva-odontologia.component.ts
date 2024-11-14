@@ -153,7 +153,6 @@ export class NuevaOdontologiaComponent implements OnInit {
   }
 
   clasificacionDental(dR: number, dIr: number) {
-    console.log(dR,dIr)
     if (dR == 0 && dIr == 0) return 'Boca sana';
     else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
     else if (dIr == 1) return 'Moderado índice de caries';

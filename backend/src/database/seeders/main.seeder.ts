@@ -39,6 +39,12 @@ export class MainSeeder implements Seeder {
 
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
+      const chicoFactory = factoryManager.get(Chico);
+      const consultaFactory = factoryManager.get(Consulta);
+      const FonoaudiologiaFactory = factoryManager.get(Fonoaudiologia);
+      const ClinicaFactory = factoryManager.get(Clinica);
+      const OftalmologiaFactory = factoryManager.get(Oftalmologia);
+      const OdontologiaFactory = factoryManager.get(Odontologia);
 
       // Roles
       console.log('Seeding roles...');
@@ -422,8 +428,21 @@ export class MainSeeder implements Seeder {
         },
       ]);
       // Chicos
-      console.log('Seeding Chicos...');
-      const chicos = await chicoORM.save([
+      console.log('Seeding chicos...');
+
+      // Crea 50 chicos
+      const chicos = await Promise.all(
+        Array(500)
+          .fill('')
+          .map(async () => {
+            const chico = await chicoFactory.make({
+              barrio: faker.helpers.arrayElement(barrios),
+            });
+            return chico;
+          }),
+      );
+      await chicoORM.save(chicos);
+      const chicosPredeterminados = await chicoORM.save([
         {
           dni: 12345678,
           nombre: 'Juan',
@@ -461,18 +480,6 @@ export class MainSeeder implements Seeder {
           barrio: barrios[1],
         },
         {
-          dni: 33333333,
-          nombre: 'Martina',
-          apellido: 'Pérez',
-          sexo: 'Femenino',
-          fe_nacimiento: '2010-05-12',
-          direccion: 'Calle Falsa 123',
-          telefono: '123456789',
-          nombre_madre: 'María López',
-          nombre_padre: 'Carlos Pérez',
-          barrio: barrios[1],
-        },
-        {
           dni: 12345679,
           nombre: 'Deshabilitado',
           apellido: 'Deshabilitado',
@@ -487,154 +494,61 @@ export class MainSeeder implements Seeder {
         },
       ]);
       // Consultas
-      console.log('Seeding consultas');
-      const consultas = await consultaORM.save([
-        {
-          type: 'Clinica',
-          edad: 14,
-          usuario: usuariosPredeterminados[1],
-          chico: chicos[0],
-          curso: cursos[13],
-          institucion: instituciones[0],
-          turno: 'Mañana',
-          obra_social: false,
-          derivaciones: {
-            fonoaudiologia: true,
-            odontologia: true,
-            oftalmologia: true,
-          },
-        },
-        {
-          type: 'Oftalmologia',
-          edad: 14,
-          usuario: usuariosPredeterminados[2],
-          chico: chicos[0],
-          curso: cursos[13],
-          institucion: instituciones[0],
-          turno: 'Tarde',
-          obra_social: true,
-        },
-        {
-          type: 'Odontologia',
-          edad: 14,
-          usuario: usuariosPredeterminados[1],
-          chico: chicos[0],
-          curso: cursos[13],
-          institucion: instituciones[0],
-          turno: 'Tarde',
-          obra_social: false,
-        },
-        {
-          type: 'Fonoaudiologia',
-          edad: 14,
-          usuario: usuariosPredeterminados[2],
-          chico: chicos[0],
-          curso: cursos[13],
-          institucion: instituciones[0],
-          turno: 'Mañana',
-          obra_social: false,
-          derivaciones: {
-            externa: true,
-          },
-        },
-        {
-          type: 'Fonoaudiologia',
-          edad: 14,
-          usuario: usuariosPredeterminados[1],
-          chico: chicos[0],
-          curso: cursos[13],
-          institucion: instituciones[0],
-          turno: 'Mañana',
-          deshabilitado: true,
-          obra_social: false,
-        },
-      ]);
-      console.log('Seeding consultas clinicas...');
-      const consultasClinicas = await clinicaORM.save([
-        {
-          consulta: consultas[0],
-          alimentacion: 'Mixta y variada',
-          antecedentes_perinatal: true,
-          cc: 30,
-          consumo_alcohol: false,
-          consumo_drogas: false,
-          consumo_tabaco: false,
-          diabetes: false,
-          enfermedades_previas: false,
-          examen_visual: 'Normal',
-          hidratacion: 'Agua',
-          horas_juego_aire_libre: 'Menos de 1h',
-          horas_pantalla: 'Menor a 2hs',
-          horas_suenio: 'Menos de 10hs',
-          hta: false,
-          infusiones: 'Té',
-          leche: true,
-          lenguaje: 'Adecuado',
-          cantidad_comidas: '4',
-          obesidad: false,
-          ortopedia_traumatologia: 'Normal',
-          estado_nutricional: 'D Sobrepeso',
-          imc: 28.9,
-          pcimc: 8.3,
-          pct: 8.1,
-          pcta: 85,
-          tension_arterial: 'Normotenso',
-          peso: 65,
-          //proyecto: 'Control Niño Sano',
-          segto: false,
-          tad: 120,
-          talla: 150,
-          tas: 70,
-          vacunas: 'Completo',
-        },
-      ]);
-      console.log('Seeding consultas oftalmologicas...');
-      const consultasOftalmologicas = await oftalmologiaORM.save([
-        {
-          consulta: consultas[1],
-          anteojos: null,
-          control: false,
-          demanda: 'Miopia',
-          primera_vez: true,
-          prox_control: '2024-11-30',
-          receta: true,
-        },
-      ]);
-      console.log('Seeding consultas odontologicas...');
-      const consultasOdontologicas = await odontologiaORM.save([
-        {
-          consulta: consultas[2],
-          cepillado: true,
-          cepillo: true,
-          // derivacion: false,
-          dientes_irecuperables: 0,
-          dientes_recuperables: 3,
-          dientes_temporales: 10,
-          dientes_permanentes: 2,
-          sellador: 9,
-          clasificacion: 'Bajo índice de caries',
-          habitos: 'Cepillado constante',
-          primera_vez: false,
-          // situacion_bucal: 'Buena',
-          topificacion: false,
-          ulterior: true,
-        },
-      ]);
-      console.log('Seeding consultas fonoaudiologicas...');
-      const consultasFonoaudiologicas = await fonoaudiologiaORM.save([
-        {
-          consulta: consultas[3],
-          diagnostico_presuntivo: 'Tel',
-          causas: 'Prematurez',
-          asistencia: true,
-        },
-        {
-          consulta: consultas[4],
-          diagnostico_presuntivo: 'Tel',
-          causas: 'Prenatal',
-          asistencia: true,
-        },
-      ]);
+      console.log('Seeding consultas...');
+
+      // Crea 150 consultas
+      const consultasSimples = await Promise.all(
+        Array(1500)
+          .fill('')
+          .map(async () => {
+            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+            const usuarioConRol = faker.helpers.arrayElement(usuarios.filter((usuario) => usuario.roles.filter((rol) => rol.nombre === 'Medico' || rol.nombre === 'Admin')));
+            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+            // consultas
+            const consulta = await consultaFactory.make({
+              curso: faker.helpers.arrayElement(cursos),
+              institucion: faker.helpers.arrayElement(instituciones),
+              chico: chicoSeleccionado,
+              usuario: usuarioConRol,
+              edad: edad,
+            });
+            return consulta;
+          }),
+      );
+
+      await consultaORM.save(consultasSimples);
+
+      for (const consulta of consultasSimples) {
+        switch (consulta.type) {
+          case 'Clinica':
+            const clinica = await ClinicaFactory.make({
+              consulta: consulta,
+            });
+            await clinicaORM.save(clinica);
+            break;
+          case 'Fonoaudiologia':
+            const fonoaudiologia = await FonoaudiologiaFactory.make({
+              consulta: consulta,
+            });
+            await fonoaudiologiaORM.save(fonoaudiologia);
+            break;
+          case 'Oftalmologia':
+            const oftalmologia = await OftalmologiaFactory.make({
+              consulta: consulta,
+            });
+            await oftalmologiaORM.save(oftalmologia);
+            break;
+          case 'Odontologia':
+            const odontologia = await OdontologiaFactory.make({
+              consulta: consulta,
+            });
+            await odontologiaORM.save(odontologia);
+            break;
+          default:
+            throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
+        }
+      }
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
     }

@@ -45,7 +45,7 @@ export class Odontologia {
   @Column({ type: 'boolean' })
   cepillo: boolean;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 1000 })
   habitos: string;
 
   // @Column({ type: 'varchar', length: 100 })

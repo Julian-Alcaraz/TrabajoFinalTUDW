@@ -130,6 +130,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
     });
     // this.fonoaudiologiaForm.disable()
   }
+
   cambiarEstado() {
     if (this.fonoaudiologiaForm.disabled) {
       this.fonoaudiologiaForm.enable();
@@ -179,9 +180,11 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
     }
     return !(this.fonoaudiologiaForm.valid && hayCambios);
   }
+
   convertToBoolean(value: string | boolean): boolean {
     return value === true || value === 'true';
   }
+  
   modificarConsulta() {
     if (this.fonoaudiologiaForm.valid) {
       Swal.fire({

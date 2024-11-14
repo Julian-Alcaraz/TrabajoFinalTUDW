@@ -3,10 +3,16 @@ import { runSeeders, SeederOptions } from 'typeorm-extension';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 
+import { MainSeeder } from './main.seeder';
 import { RolFactory } from '../factories/rol.factory';
 import { UsuarioFactory } from '../factories/usuario.factory';
+import { ChicoFactory } from '../factories/chico.factory';
 import { MenuFactory } from '../factories/menu.factory';
-import { MainSeeder } from './main.seeder';
+import { ConsultaFactory } from '../factories/consulta.factory';
+import { FonoaudiologiaFactory } from '../factories/fonoaudiologia.factory';
+import { ClinicaFactory } from '../factories/clinica.factory';
+import { OftalmologiaFactory } from '../factories/oftalmologia.factory';
+import { OdontologiaFactory } from '../factories/odontologia.factory';
 
 dotenv.config({ path: './config/.env' });
 
@@ -20,7 +26,7 @@ const options: DataSourceOptions & SeederOptions = {
   password: configService.getOrThrow<string>('TYPE_ORM_PASSWORD'),
   database: configService.getOrThrow<string>('TYPE_ORM_DATABASE'),
   entities: [configService.getOrThrow<string>('TYPE_ORM_ENTITIES')],
-  factories: [RolFactory, UsuarioFactory, MenuFactory],
+  factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
   seeds: [MainSeeder],
 };
 
