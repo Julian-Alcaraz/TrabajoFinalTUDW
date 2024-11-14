@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
@@ -18,9 +18,10 @@ import { PaginadorPersonalizado } from '../../../../utils/paginador/paginador-pe
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 
 })
-export class ConsultasTableComponent implements OnInit , OnChanges{
+export class ConsultasTableComponent implements OnInit,AfterViewInit , OnChanges{
   @ViewChild(MatSort) sort!: MatSort;
   @Input() consultas: Consulta[] = [];
+  @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   // por defecto todas las columnas
   @Input() displayedColumns: string[] = ['numero', 'type', 'nombre', 'sexo', 'edad', 'fecha', 'obra_social', 'documento', 'fechaNac', 'direccionChico', 'telefono', 'derivaciones', 'institucion', 'curso', 'observaciones', 'profesional'];
   dataSource: MatTableDataSource<Consulta>;
@@ -34,6 +35,9 @@ export class ConsultasTableComponent implements OnInit , OnChanges{
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.consultas);
     this.dataSource.sort = this.sort;
+  }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginador;
   }
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {

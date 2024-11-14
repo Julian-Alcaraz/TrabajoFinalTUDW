@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
@@ -16,7 +15,7 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 @Component({
   selector: 'app-lista-usuario',
   standalone: true,
-  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, LoadingComponent],
+  imports: [MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, LoadingComponent],
   templateUrl: './lista-usuario.component.html',
   styleUrl: './lista-usuario.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

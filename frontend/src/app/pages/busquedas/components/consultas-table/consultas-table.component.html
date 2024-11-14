@@ -113,4 +113,4 @@
     </tr>
   </table>
 </div>
-<mat-paginator [length]="dataSource.data.length" [pageSize]="10"></mat-paginator>
+<mat-paginator [length]="dataSource" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
