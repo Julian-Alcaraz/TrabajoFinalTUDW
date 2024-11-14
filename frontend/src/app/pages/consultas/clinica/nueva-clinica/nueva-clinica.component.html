@@ -63,22 +63,41 @@
           <div class="grid gap-0 md:grid-cols-6">
             <!-- Grupo de antecedentes familiares -->
             <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico presenta alguno de los siguientes antecedentes familiares:</h3>
-              <div class="flex flex-col mt-2">
-                <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Consumo problematico de alcohol" [control]="controlDeInput('consumo_alcohol')" idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Consumo problematico de drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Consumo problematico de tabaco" [control]="controlDeInput('consumo_tabaco')" idInput="consumo_tabaco" (change)="onChangeCheckbox($event)" />
+              <div class="flex flex-col mx-2">
+                <label for="" class="block mb-2 text-sm font-medium text-gray-900">Indica si el chico presenta alguno de los siguientes antecedentes familiares:</label>
+                <ul class="flex flex-row flex-wrap items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mt-2">
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Consumo problematico de alcohol" [control]="controlDeInput('consumo_alcohol')" idInput="consumo_alcohol" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Consumo problematico de drogas" [control]="controlDeInput('consumo_drogas')" idInput="consumo_drogas" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Consumo problematico de tabaco" [control]="controlDeInput('consumo_tabaco')" idInput="consumo_tabaco" (change)="onChangeCheckbox($event)" />
+                  </li>
+                </ul>
               </div>
             </div>
-            <!-- Grupo de antecedentes del chico -->
             <div class="md:col-span-3">
-              <h3 class="mt-4">Indica si el chico tuvo alguna de las siguientes condiciones:</h3>
-              <div class="flex flex-col mt-2">
-                <app-input-checkbox label="Antecedentes Perinatales" [control]="controlDeInput('antecedentes_perinatal')" idInput="antecedentes_perinatal" (change)="onChangeCheckbox($event)" />
-                <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')" idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
+              <div class="flex flex-col">
+                <label for="" class="block mb-2 text-sm font-medium text-gray-900">Indica si el chico tuvo alguna de las siguientes condiciones:</label>
+                <ul class="flex flex-row flex-wrap items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mt-2 mx-2">
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Antecedentes Perinatales" [control]="controlDeInput('antecedentes_perinatal')" idInput="antecedentes_perinatal" (change)="onChangeCheckbox($event)" />
+                  </li>
+                  <li class="w-full border-b border-gray-200 p-1">
+                    <app-input-checkbox label="Enfermedades Previas" [control]="controlDeInput('enfermedades_previas')" idInput="enfermedades_previas" (change)="onChangeCheckbox($event)" />
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -150,13 +169,23 @@
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Derivaciones -->
-        <div class="md:col-span-3">
-          <h3 class="mt-4">Indica si hace falta derivar el chico a:</h3>
-          <div class="flex flex-row mt-2">
-            <app-input-checkbox label="Odontologia" [control]="controlDeInput('derivacion_odontologia')" idInput="derivacion_odontologia" (change)="onChangeCheckbox($event)" />
-            <app-input-checkbox label="Oftalmologia" [control]="controlDeInput('derivacion_oftalmologia')" idInput="derivacion_oftalmologia" (change)="onChangeCheckbox($event)" />
-            <app-input-checkbox label="Fonoaudiologia" [control]="controlDeInput('derivacion_fonoaudiologia')" idInput="derivacion_fonoaudiologia" (change)="onChangeCheckbox($event)" />
-            <app-input-checkbox label="Externa" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" (change)="onChangeCheckbox($event)" />
+        <div class="mt-4 md:col-span-3">
+          <div class="flex flex-col">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900">Indica si hace falta derivar el chico a:</label>
+            <ul class="flex flex-row flex-wrap items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mt-2">
+              <li class="w-full sm:w-1/2 lg:w-1/4 border-b lg:border-r sm:border-r border-gray-200 sm:border-b">
+                <div class="flex items-center p-1"><app-input-checkbox label="Odontologia" [control]="controlDeInput('derivacion_odontologia')" idInput="derivacion_odontologia" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+              <li class="w-full sm:w-1/2 lg:w-1/4 lg:border-r border-b border-gray-200 sm:border-b">
+                <div class="flex items-center p-1"><app-input-checkbox label="Oftalmologia" [control]="controlDeInput('derivacion_oftalmologia')" idInput="derivacion_oftalmologia" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+              <li class="w-full sm:w-1/2 lg:w-1/4 lg:border-r border-b border-gray-200 sm:border-b-0 sm:border-r">
+                <div class="flex items-center p-1"><app-input-checkbox label="Fonoaudiologia" [control]="controlDeInput('derivacion_fonoaudiologia')" idInput="derivacion_fonoaudiologia" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+              <li class="w-full sm:w-1/2 lg:w-1/4 border-b border-gray-200 sm:border-b-0">
+                <div class="flex items-center p-1"><app-input-checkbox label="Externa" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+            </ul>
           </div>
         </div>
         <!-- Observaciones -->

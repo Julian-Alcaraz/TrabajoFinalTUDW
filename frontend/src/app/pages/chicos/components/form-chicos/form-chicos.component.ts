@@ -111,6 +111,7 @@ export class FormChicosComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
+          this.habilitarModificar=true
           this.mensajeDoc= "Documento ya ingresado en otro chico."
         } else {
           this.chicoForm.get('dni')?.setErrors(null);
@@ -151,28 +152,15 @@ export class FormChicosComponent implements OnInit {
       },
     });
   }
+
   esCargaOedicion() {
     this.searching = true;
     if (!this.esFormulario && this.id_chico) {
       this._chicoService.obtenerChicoxId(this.id_chico).subscribe({
         next: (response: any) => {
           if (response.data) {
-            console.log(response);
             this.chico = response.data;
-            const stringFecha = String(this.chico?.fe_nacimiento) + 'T12:00:00';
-            this.chicoForm.patchValue({
-              nombre: this.chico?.nombre,
-              apellido: this.chico?.apellido,
-              dni: this.chico?.dni,
-              sexo: this.chico?.sexo,
-              fe_nacimiento: new Date(stringFecha), // Problema
-              direccion: this.chico?.direccion,
-              telefono: this.chico?.telefono,
-              nombre_padre: this.chico?.nombre_padre,
-              nombre_madre: this.chico?.nombre_madre,
-              id_barrio: this.chico?.barrio?.id,
-              id_localidad: this.chico?.barrio?.localidad?.id,
-            });
+            this.completarDatosForm()
             this.obtenerBarriosXLocalidad(this.chicoForm.get('id_localidad')?.value);
             this.chicoForm.disable();
             this.searching = false;
@@ -187,6 +175,22 @@ export class FormChicosComponent implements OnInit {
     }
   }
 
+  completarDatosForm(){
+    const stringFecha = String(this.chico?.fe_nacimiento) + 'T12:00:00';
+    this.chicoForm.patchValue({
+      nombre: this.chico?.nombre,
+      apellido: this.chico?.apellido,
+      dni: this.chico?.dni,
+      sexo: this.chico?.sexo,
+      fe_nacimiento: new Date(stringFecha), // Problema
+      direccion: this.chico?.direccion,
+      telefono: this.chico?.telefono,
+      nombre_padre: this.chico?.nombre_padre,
+      nombre_madre: this.chico?.nombre_madre,
+      id_barrio: this.chico?.barrio?.id,
+      id_localidad: this.chico?.barrio?.localidad?.id,
+    });
+  }
   obtenerBarriosXLocalidad(idLocalidad: string) {
     this._localidadService.obtenerBarriosXLocalidad(idLocalidad).subscribe({
       next: (response: any) => {
@@ -271,6 +275,7 @@ export class FormChicosComponent implements OnInit {
 
   desactivarFormulario() {
     this.chicoForm.disable();
+    this.completarDatosForm()
     this.estaEditando = false;
   }
 

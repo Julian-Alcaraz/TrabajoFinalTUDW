@@ -46,11 +46,11 @@ export class NuevaOdontologiaComponent implements OnInit {
       cepillado: ['', [Validators.required]],
       topificacion: ['', [Validators.required]],
       derivacion_externa: ['', [Validators.required]],
-      dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_permanentes: [null, [Validators.required, ValidarSoloNumeros]],
+      dientes_temporales: [null, [Validators.required, ValidarSoloNumeros]],
       sellador: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
-      dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
+      dientes_recuperables: [null, [Validators.required, ValidarSoloNumeros]],
+      dientes_irecuperables: [null, [Validators.required, ValidarSoloNumeros]],
       // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
@@ -153,6 +153,7 @@ export class NuevaOdontologiaComponent implements OnInit {
   }
 
   clasificacionDental(dR: number, dIr: number) {
+    console.log(dR,dIr)
     if (dR == 0 && dIr == 0) return 'Boca sana';
     else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
     else if (dIr == 1) return 'Moderado índice de caries';
