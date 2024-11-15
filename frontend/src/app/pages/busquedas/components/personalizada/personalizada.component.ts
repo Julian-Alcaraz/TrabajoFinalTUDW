@@ -25,8 +25,8 @@ import { CursoService } from '../../../../services/curso.service';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { Consulta } from '../../../../models/consulta.model';
 import { CamposClinicaComponent } from './components/campos-clinica/campos-clinica.component';
-import { CamposOftalmologiaComponent } from "./components/campos-oftalmologia/campos-oftalmologia.component";
-import { CamposFonoaudiologiaComponent } from "./components/campos-fonoaudiologia/campos-fonoaudiologia.component";
+import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
+import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 
 @Component({
@@ -111,11 +111,12 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   onChangeTipoConsulta() {
-    this.formBusqueda.get('especificas')?.reset();
+    this.formBusqueda.removeControl('especificas');
     this.formBusqueda.get('derivaciones')?.reset();
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
     }
+    console.log("EL FORM DESPUES DE CAMBIAR TIPO CONSULTA ES ",this.formBusqueda.value)
   }
 
   obtenerCursos(): any {
@@ -155,9 +156,7 @@ export class PersonalizadaComponent implements OnInit {
   buscar() {
     if (this.formBusqueda.valid) {
       this.loading = true;
-      console.log('DATA: ', this.formBusqueda.value);
       const resultado = prepararData(this.formBusqueda.value);
-      console.log('la respuesta es ', resultado);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
       console.log('---------');
       console.log('LA DATA ENVIADA ES ', dataLimpia);
@@ -169,7 +168,6 @@ export class PersonalizadaComponent implements OnInit {
             this.resultados = response.data;
             console.log('Resultados backend', this.resultados);
             this.enviarConsultas(response.data);
-            // this.formBusqueda.reset();
             this.loading = false;
           }
         },

@@ -1,5 +1,6 @@
 <form [formGroup]="buscarForm" (ngSubmit)="buscar()" class="flex items-center space-x-2">
   <p-iftalabel class="my-4">
+    <!-- SACAR ngModel, ESTA DEPRECADO!!!!!!!!! -->
     <p-datepicker [(ngModel)]="date" idInput="year" view="year" dateFormat="yy" [maxDate]="maxDate"
       formControlName="year" appendTo="body" styleClass="h-16">
       <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->

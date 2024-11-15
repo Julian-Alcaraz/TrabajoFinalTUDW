@@ -34,10 +34,9 @@
     <app-consultas-table [consultas]="consultas"
       [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
-      <div class="text-center font-semibold  text-lg">
-
-        <h1>Consultas no encontradas</h1>
-      </div>
+    <div class="text-center font-semibold  text-lg">
+      <h1>Consultas no encontradas</h1>
+    </div>
     }
   </div>
 </div>

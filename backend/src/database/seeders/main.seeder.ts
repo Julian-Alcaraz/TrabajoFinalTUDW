@@ -86,6 +86,15 @@ export class MainSeeder implements Seeder {
           roles: [roles[1]], // Profesional
         },
         {
+          nombre: 'AccesoInfo',
+          apellido: 'AccesoInfo',
+          email: 'AccesoInfo@AccesoInfo.com',
+          contrasenia: codificarContrasenia('1234567'),
+          dni: 12345671,
+          fe_nacimiento: '2000-12-30',
+          roles: [roles[3]], // Profesional
+        },
+        {
           nombre: 'ProfesionalYAdmin',
           apellido: 'ProfesionalYAdmin',
           email: 'ProfesionalYAdmin@ProfesionalYAdmin.com',
@@ -105,9 +114,10 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
       ]);
-      // Crea 10 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos
+
+      // Crea 50 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos
       const usuarios = await Promise.all(
-        Array(5)
+        Array(50)
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
@@ -116,9 +126,9 @@ export class MainSeeder implements Seeder {
             return usuario;
           }),
       );
-      // Crea 3 usuarios con 2 roles cada uno
-      const usuarios2 = await Promise.all(
-        Array(2)
+      // Crea 40 usuarios con 2 roles cada uno
+      const usuariosCon2Roles = await Promise.all(
+        Array(40)
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
@@ -127,9 +137,9 @@ export class MainSeeder implements Seeder {
             return usuario;
           }),
       );
-      await usuarioORM.save(usuariosPredeterminados);
+      // await usuarioORM.save(usuariosPredeterminados);
       await usuarioORM.save(usuarios);
-      await usuarioORM.save(usuarios2);
+      await usuarioORM.save(usuariosCon2Roles);
 
       // Menus
       // Menus que tienen hijos
@@ -430,7 +440,7 @@ export class MainSeeder implements Seeder {
       // Chicos
       console.log('Seeding chicos...');
 
-      // Crea 50 chicos
+      // Crea 500 chicos
       const chicos = await Promise.all(
         Array(500)
           .fill('')
@@ -493,19 +503,30 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
       ]);
-      // Consultas
-      console.log('Seeding consultas...');
 
-      // Crea 150 consultas
+      // Busco usuarios profesionales
+      const todosLosUsuarios = await usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'] });
+      const usuariosProfesionales = [];
+      for (const usuario of todosLosUsuarios) {
+        for (const rol of usuario.roles) {
+          const nombre = rol.nombre;
+          if (nombre === 'Profesional') {1
+            usuariosProfesionales.push(usuario);
+          }
+        }
+      }
+
+      // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
         Array(1500)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-            const usuarioConRol = faker.helpers.arrayElement(usuarios.filter((usuario) => usuario.roles.filter((rol) => rol.nombre === 'Medico' || rol.nombre === 'Admin')));
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
             const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
             const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-            // consultas
             const consulta = await consultaFactory.make({
               curso: faker.helpers.arrayElement(cursos),
               institucion: faker.helpers.arrayElement(instituciones),

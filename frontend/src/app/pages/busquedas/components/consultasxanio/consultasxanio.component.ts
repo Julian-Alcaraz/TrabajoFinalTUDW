@@ -27,11 +27,10 @@ export class ConsultasxanioComponent {
     this.maxDate = new Date(currentYear, 11, 31); // 11 es diciembre (meses son 0 indexados)
     this.buscarForm = this.fb.group({ year: [null, Validators.required] });
 
-  //  comentar esto para que no busque automaticamente
-    this.date= new Date()
-    this.buscar()
+    // comentar esto para que no busque automaticamente
+    this.date = new Date();
+    this.buscar();
   }
-  // No es mejor que este en el onInit en vez de constructor ?
   enviarConsultas(data: Consulta[]) {
     this.consultasEmitidas.emit(data);
   }

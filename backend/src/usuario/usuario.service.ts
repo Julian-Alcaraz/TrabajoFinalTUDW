@@ -149,11 +149,13 @@ export class UsuarioService {
     const rolProfesional = await this.rolORM.findOne({ where: { nombre: 'Profesional', deshabilitado: false } });
     if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
     for (const usuario of usuarios) {
-      if (usuario.roles.find((item) => item.nombre === 'Profesional')) {
+      const rolesDeUsuario = usuario.roles;
+      if (rolesDeUsuario.map((item) => item.nombre === 'Profesional').includes(true)) {
         delete usuario.contrasenia;
         usuariosProfesionales.push(usuario);
       }
     }
+    console.log('PROFESIONALES BACK', usuariosProfesionales);
     return usuariosProfesionales;
   }
 }
