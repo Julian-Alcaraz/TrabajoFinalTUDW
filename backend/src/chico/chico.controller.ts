@@ -37,11 +37,11 @@ export class ChicoController {
       message: 'Chicos encontrados con exito',
     };
   }
-  @Get('/activity')
+  @Get('/activity/:year')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
-  async findAllbyActivty() {
-    const chicos = await this.chicoService.findAllWHitActuivy(2024);
+  async findAllbyActivity(@Param('year', ParseIntPipe) year: number) {
+    const chicos = await this.chicoService.findAllWhitActivity(year);
     return {
       success: true,
       data: chicos,

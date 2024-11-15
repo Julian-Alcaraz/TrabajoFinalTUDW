@@ -28,7 +28,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   public resultsLength = 0;
   public searching = false;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'fechaNac', 'documento', 'email', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'fechaNac', 'documento', 'email', 'roles', 'habilitado', 'action'];
   constructor(
     private _usuarioService: UsuarioService,
     private snackBar: MatSnackBar,
@@ -43,6 +43,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     this._usuarioService.obtenerUsuarios().subscribe({
       next: (response: any) => {
         if (response.success) {
+          console.log(response)
           this.usuarios.data = response.data;
           this.resultsLength = response.data.length;
         }

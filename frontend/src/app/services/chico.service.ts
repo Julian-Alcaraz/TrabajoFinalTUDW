@@ -30,7 +30,7 @@ export class ChicoService {
   }
 
   obtenerChicos(): Observable<any> {
-    return this._http.get(this.url + 'chico/activity');
+    return this._http.get(this.url + 'chico/activity/'+2024);
   }
 
   modificarChico(id: number, data: any): Observable<any> {

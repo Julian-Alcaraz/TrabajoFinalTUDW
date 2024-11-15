@@ -55,8 +55,8 @@
           <th mat-header-cell *matHeaderCellDef>Cosultas asistidas por año</th>
           <td mat-cell *matCellDef="let element">
             <!-- <input type="text" pInputText pTooltip="Enter your username" tooltipPosition="top" placeholder="Top" /> -->
-            <div [pTooltip]="element.actividad+' de 4'">
-              <p-progressbar  [value]="element.actividad *25" [showValue]="false" />
+            <div [pTooltip]="element.actividad + ' de 4'">
+              <p-progressbar [value]="element.actividad * 25" [showValue]="false" />
             </div>
           </td>
         </ng-container>
@@ -73,42 +73,9 @@
                   <i class="fa-solid fa-xmark fa-lg"></i>
                 }
               </button>
-              <!-- Segunda opcion:
-              <button
-                (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id); $event.stopPropagation()"
-                class="flex flex-col items-center gap-2 py-2.5 text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300">
-                <div class="rounded-full p-2.5 bg-[#e8edf3]">
-                  <div class="text-black" [attr.data-icon]="element.deshabilitado ? 'check' : 'xmark'" data-size="20px"
-                    data-weight="regular">
-                    <i *ngIf="element.deshabilitado" class="fa-solid fa-check"></i>
-                    <i *ngIf="!element.deshabilitado" class="fa-solid fa-xmark fa-lg"></i>
-                  </div>
-                </div>
-                <div class="flex justify-center">
-                  <p class="text-black text-sm font-medium leading-normal">
-                    {{ element.deshabilitado ? 'Habilitar' : 'Deshabilitar' }}
-                  </p>
-                </div>
-              </button>
-              -->
               <!-- Primera opcion -->
               <button (click)="element.deshabilitado ? notificar(element.id) : editarChico(element.id); $event.stopPropagation()" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
-              </button>
-              <button (click)="element.deshabilitado ? notificar(element.id) : editarChico(element.id); $event.stopPropagation()" class="flex flex-col items-center gap-2 py-2.5 text-center">
-                <!-- Segunda opcion
-                <div class="rounded-full p-2.5 bg-[#e8edf3]">
-                  <div class="text-black" data-icon="PencilSimple" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
-                      viewBox="0 0 256 256">
-                      <path
-                        d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z">
-                      </path>
-                    </svg>
-                  </div>
-                </div>
-                <p class="text-black text-sm font-medium leading-normal">Editar</p>
-                -->
               </button>
             </div>
           </td>
@@ -129,6 +96,6 @@
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

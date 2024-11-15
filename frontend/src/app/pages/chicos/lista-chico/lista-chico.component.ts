@@ -14,10 +14,12 @@ import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-perso
 import { RouterModule, Router } from '@angular/router';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { TooltipModule } from 'primeng/tooltip';
+import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent,ProgressBarModule,TooltipModule],
+  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -27,12 +29,13 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
   public searching = false;
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar','action'];
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
 
   constructor(
     private _chicoService: ChicoService,
     private _router: Router,
     private snackBar: MatSnackBar,
+    private _dialog: MatDialog,
   ) {
     this.chicos = new MatTableDataSource<Chico>([]);
   }
@@ -150,7 +153,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   editarChico(id: number) {
-    this._router.navigate(['/layout/chicos/editar/' + id]);
+    this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
   }
 
   verDetallesChico(id: number) {

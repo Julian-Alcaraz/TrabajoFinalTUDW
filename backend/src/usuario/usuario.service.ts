@@ -37,7 +37,7 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return this.usuarioORM.find();
+    return this.usuarioORM.find({ relations: ['roles'] });
     // { where: { deshabilitado: false } }
   }
 

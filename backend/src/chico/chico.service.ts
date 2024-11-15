@@ -30,7 +30,7 @@ export class ChicoService {
   findAll() {
     return this.chicoORM.find();
   }
-  async findAllWHitActuivy(year: number) {
+  async findAllWhitActivity(year: number) {
     const result = await this.chicoORM
       .createQueryBuilder('chico')
       .select(['chico.id AS id', 'chico.created_at AS created_at', 'chico.updated_at AS updated_at', 'chico.deshabilitado AS deshabilitado', 'chico.dni AS dni', 'chico.nombre AS nombre', 'chico.apellido AS apellido', 'chico.sexo AS sexo', 'chico.fe_nacimiento AS fe_nacimiento', 'chico.direccion AS direccion', 'chico.telefono AS telefono', 'chico.nombre_madre AS nombre_madre', 'chico.nombre_padre AS nombre_padre', 'chico.id_barrio AS id_barrio'])
