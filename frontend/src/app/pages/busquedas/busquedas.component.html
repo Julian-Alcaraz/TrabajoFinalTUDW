@@ -1,42 +1,20 @@
 <div class="card">
-  <!-- <div class="card-header">Buscar consultas por:</div> -->
-  <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-    <li class="me-1">
-      <button
-        [ngClass]="!currentParam || currentParam === '1' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
-        (click)="cambiarParam(1)">Año</button>
-    </li>
-    <!-- <li class="me-1">
-      <button [ngClass]="currentParam === '2' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'" (click)="cambiarParam(2)">Asistencia Niño</button>
-    </li> -->
-    <li class="me-1">
-      <button
-        [ngClass]="currentParam === '3' ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg' : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50'"
-        (click)="cambiarParam(3)">Personalizada</button>
-    </li>
-    <!-- <li class="me-1">
-      <a  class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50"></a>
-    </li> -->
-  </ul>
+  <app-tabs [tabs]="['Año', 'Personalizada']" (positionEmitter)="escucharParam($event)"></app-tabs>
   <div class="card-body">
     <div class="mb-2">
-      @if (currentParam === '1' || !currentParam) {
-      <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)" />
+      @if (currentParam === 0 || !currentParam) {
+        <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)" />
       }
-      <!-- @if (currentParam === '2') {
-        <app-consultasxanio></app-consultasxanio>
-      } -->
-      @if (currentParam === '3') {
-      <app-personalizada (consultasEmitidas)="mostrarConsultas($event)" />
+      @if (currentParam === 1) {
+        <app-personalizada (consultasEmitidas)="mostrarConsultas($event)" />
       }
     </div>
     @if (consultas && consultas.length > 0) {
-    <app-consultas-table [consultas]="consultas"
-      [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
+      <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
-    <div class="text-center font-semibold  text-lg">
-      <h1>Consultas no encontradas</h1>
-    </div>
+      <div class="text-center font-semibold text-lg">
+        <h1>Consultas no encontradas</h1>
+      </div>
     }
   </div>
 </div>
