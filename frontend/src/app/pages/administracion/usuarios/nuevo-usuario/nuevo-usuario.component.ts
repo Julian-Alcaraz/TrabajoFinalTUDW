@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormUsuarioComponent } from '../components/form-usuario/form-usuario.component';
+import { FormUsuarioComponent } from '../../../usuarios/components/form-usuario/form-usuario.component';
 
 @Component({
   selector: 'app-nuevo-usuario',

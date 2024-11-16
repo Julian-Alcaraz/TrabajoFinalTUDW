@@ -12,14 +12,15 @@ export class LocalidadService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  modificarLocalidad(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'localidad/' + id, data);
+  }
   obtenerLocalidades() {
     return this._http.get(this.url + 'localidad');
   }
-
   obtenerBarriosXLocalidad(id: string) {
     return this._http.get(this.url + `localidad/${id}/barrios`);
   }
-
   cargarLocalidad(data: any): Observable<any> {
     return this._http.post(this.url + 'localidad', data);
   }

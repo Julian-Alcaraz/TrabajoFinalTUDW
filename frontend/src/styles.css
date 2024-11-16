@@ -81,6 +81,9 @@ body {
   box-shadow: none !important;
 }
 
+.mat-sort-header-arrow {
+  color: white !important; /* Cambia el color de la flecha a blanco */
+}
 /* headers para tablas */
 [mat-header-cell] {
   background-color: #02204c !important;

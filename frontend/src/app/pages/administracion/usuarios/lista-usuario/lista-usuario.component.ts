@@ -6,11 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { UsuarioService } from '../../../services/usuario.service';
-import { Usuario } from '../../../models/usuario.model';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/loading.component';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { UsuarioService } from '../../../../services/usuario.service';
+import { Usuario } from '../../../../models/usuario.model';
+import { PaginadorPersonalizado } from '../../../../utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-lista-usuario',

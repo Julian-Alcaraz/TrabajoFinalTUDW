@@ -153,13 +153,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
-          url: 'usuarios',
-          label: 'Usuarios',
-          orden: 5,
-          icon: 'fa-solid fa-users',
-          roles: [roles[0], roles[1]],
-        },
-        {
           url: 'chicos',
           label: 'Chicos',
           orden: 3,
@@ -174,12 +167,27 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
+          url: 'administracion',
+          label: 'Administración',
+          orden: 6,
+          icon: 'fa-solid fa-shield',
+          roles: [roles[0]],
+        },
+        {
           url: 'busqueda',
           label: 'Buscar',
           orden: 2,
           icon: 'fa-solid fa-magnifying-glass',
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: false,
+        },
+        // cambiar url despues!!!!!!!!!!!!!!!
+        {
+          url: 'usuarios/miUsuario',
+          label: 'Mi Usuario',
+          orden: 3,
+          icon: 'fa-regular fa-user',
+          roles: [roles[0], roles[1], roles[2], roles[3]],
         },
         {
           url: 'menuDeshabilitado',
@@ -192,30 +200,83 @@ export class MainSeeder implements Seeder {
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
-      const menus2 = await menuORM.save([
+
+      const menusAdmin = await menuORM.save([
         {
-          url: 'usuarios/miUsuario',
-          label: 'Mi Usuario',
-          orden: 3,
-          icon: 'fa-regular fa-user',
-          roles: [roles[0], roles[1], roles[2], roles[3]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
+          url: 'usuarios',
+          label: 'Usuarios',
+          orden: 5,
+          icon: 'fa-solid fa-users',
+          roles: [roles[0]],
+          menu_padre: menus[3],
         },
         {
-          url: 'usuarios/nuevo',
+          url: 'localidades',
+          label: 'Localidades',
+          orden: 5,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'barrios',
+          label: 'Barrios',
+          orden: 5,
+          icon: '',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[3],
+        },
+      ]);
+      await menuORM.save(menusAdmin);
+
+      const menus2 = await menuORM.save([
+        {
+          url: 'administracion/usuarios/nuevo',
           label: 'Nuevo Usuario',
           orden: 4,
           icon: 'fa-solid  fa-user-plus',
           roles: [roles[0]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
+          menu_padre: menusAdmin[0],
         },
         {
-          url: 'usuarios/list',
+          url: 'administracion/usuarios/list',
           label: 'Lista Usuarios',
           orden: 5,
           icon: 'fa-solid fa-users-line',
           roles: [roles[0]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
+          menu_padre: menusAdmin[0],
+        },
+        {
+          url: 'administracion/localidades/nueva',
+          label: 'Nueva Localidad',
+          orden: 6,
+          icon: '',
+          roles: [roles[0]],
+          menu_padre: menusAdmin[1],
+        },
+        {
+          url: 'administracion/localidades/list',
+          label: 'Lista Localidades',
+          orden: 7,
+          icon: '',
+          roles: [roles[0]],
+          menu_padre: menusAdmin[1],
+        },
+        {
+          url: 'administracion/barrios/nuevo',
+          label: 'Nuevo Barrio',
+          orden: 8,
+          icon: '',
+          roles: [roles[0]],
+          menu_padre: menusAdmin[2],
+        },
+        {
+          url: 'administracion/barrios/list',
+          label: 'Lista Barrios',
+          orden: 9,
+          icon: '',
+          roles: [roles[0]],
+          menu_padre: menusAdmin[2],
         },
         {
           url: 'chicos/nuevo',
@@ -223,7 +284,7 @@ export class MainSeeder implements Seeder {
           orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
         },
         {
           url: 'chicos/list',
@@ -231,7 +292,7 @@ export class MainSeeder implements Seeder {
           orden: 7,
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
         },
         {
           url: 'chicos/:id',
@@ -239,7 +300,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: '',
           roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
           deshabilitado: true,
         },
         {
@@ -248,7 +309,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: '',
           roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
           deshabilitado: true,
         },
         {
@@ -257,7 +318,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/odontologia/nueva',
@@ -265,7 +326,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/oftalmologia/nueva',
@@ -273,7 +334,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/fonoaudiologia/nueva',
@@ -281,7 +342,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'hijoDeshabilitado',
@@ -290,10 +351,11 @@ export class MainSeeder implements Seeder {
           icon: 'hijoDeshabilitado',
           roles: [roles[0], roles[1]],
           deshabilitado: true,
-          menu_padre: await menuORM.findOneBy({ id: 1 }),
+          menu_padre: menus[0],
         },
       ]);
       await menuORM.save(menus2);
+
       // Localidades
       console.log('Seeding localidades...');
       const localidades = await localidadORM.save([

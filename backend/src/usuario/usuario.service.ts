@@ -110,34 +110,40 @@ export class UsuarioService {
 
   async menusDeUsuario(id: number) {
     // Busco el usuario
-    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['roles'] });
+    const usuario = await this.usuarioORM.findOne({
+      where: { deshabilitado: false, id: id },
+      relations: ['roles'],
+    });
     if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     const rolesUsuario = usuario.roles;
-    if (!rolesUsuario) throw new NotFoundException(`Usuario con id ${id} no tiene roles`); // No deberia pasar esto nunca
-    let colMenus = [];
+    if (!rolesUsuario || rolesUsuario.length === 0) {
+      throw new NotFoundException(`Usuario con id ${id} no tiene roles`);
+    }
     const colMenusSet = new Set();
     for (const rol of rolesUsuario) {
-      const objRol = await this.rolORM.findOne({ where: { id: rol.id }, relations: ['menus', 'menus.sub_menus', 'menus.menu_padre'] });
-      const menusRol = objRol.menus;
-      const menusNoFalsos = menusRol.filter((menu) => {
-        if (!menu.deshabilitado) {
-          const submenusNoFalsos = menu.sub_menus.filter((subMenu) => {
-            if (!subMenu.deshabilitado) {
-              return subMenu;
-            }
-          });
-          menu.sub_menus = submenusNoFalsos;
-          return menu;
-        }
+      const objRol = await this.rolORM.findOne({
+        where: { id: rol.id },
+        relations: ['menus', 'menus.sub_menus', 'menus.menu_padre', 'menus.sub_menus.sub_menus'],
       });
+      const menusRol = objRol?.menus || [];
+      const menusNoFalsos = menusRol.filter((menu) => !menu.deshabilitado);
       for (const menu of menusNoFalsos) {
+        // Filtrar los submenús del menú actual
+        const subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado);
+        for (const subMenu of subMenusValidos) {
+          // Filtrar los submenús del submenú
+          const subSubMenusValidos = subMenu.sub_menus.filter((subSubMenu) => !subSubMenu.deshabilitado);
+          subMenu.sub_menus = subSubMenusValidos; // Asignar los submenús válidos al submenú
+        }
+        menu.sub_menus = subMenusValidos; // Asignar los submenús válidos al menú
+        // Solo agregar el menú principal al conjunto si no tiene un menú padre
         if (!menu.menu_padre) {
           colMenusSet.add(JSON.stringify(menu));
         }
       }
     }
-    colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
-    // Ordena los padres por "orden"
+    // Convertir los menús a un array y ordenarlos por "orden"
+    const colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
     colMenus.sort((a, b) => a.orden - b.orden);
     return colMenus;
   }
