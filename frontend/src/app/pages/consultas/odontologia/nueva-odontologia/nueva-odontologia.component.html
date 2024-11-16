@@ -66,7 +66,7 @@
         </ng-container>
         <!-- Habitos -->
         <div class="mt-4 md:col-span-3">
-          <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante" idInput="habitos" />
+          <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante" idInput="habitos" [opcional]="true" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
@@ -74,7 +74,7 @@
         </div>
         <!-- Observaciones -->
         <div class="mt-4 md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
       @if (consulta) {

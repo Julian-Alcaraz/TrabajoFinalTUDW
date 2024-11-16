@@ -109,7 +109,7 @@
         </div>
         <!-- Infusiones -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones" [opciones]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" [valores]="['Té', 'Mate Cocido', 'Otras(VER!!!!!!!)']" />
+          <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones" [opciones]="['Té', 'Mate Cocido', 'Otras']" [valores]="['Té', 'Mate Cocido', 'Otras']" />
         </div>
         <!-- Vacunas -->
         <div class="mt-4 md:col-span-2">
@@ -129,7 +129,7 @@
         </div>
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')" idInput="ortopedia_traumatologia" [opciones]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras(VER!!!!!!!)']" [valores]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras(VER!!!!!!!)']" />
+          <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')" idInput="ortopedia_traumatologia" [opciones]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras']" [valores]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras']" />
         </div>
         <!-- Lenguaje -->
         <div class="mt-4 md:col-span-2">
@@ -145,25 +145,21 @@
         </div>
         <!-- Hidratacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="['Agua', 'Bebidas edulcoradas']" [valores]="['Agua', 'Bebidas edulcoradas']" />
+          <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="['Agua', 'Bebidas Edulcoradas']" [valores]="['Agua', 'Bebidas Edulcoradas']" />
         </div>
         <h3 class="mt-4 md:col-span-6">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs']" [valores]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Mas de 6hs']" />
+          <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs']" [valores]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs']" />
         </div>
         <!-- Horas de juego al aire libre -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de juego al aire libre" [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre" [opciones]="['Menos de 1h', '1h', 'Más de 1h']" [valores]="['Menos de 1h', '1h', 'Mas de 1h']" />
+          <app-input-select-enum label="Horas de juego al aire libre" [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre" [opciones]="['Menos de 1h', '1h', 'Más de 1h']" [valores]="['Menos de 1h', '1h', 'Más de 1h']" />
         </div>
         <!-- Horas de sueño -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')" idInput="horas_suenio" [opciones]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']" [valores]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Mas de 13hs']" />
+          <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')" idInput="horas_suenio" [opciones]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']" [valores]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']" />
         </div>
-        <!-- Proyecto
-        <div class="mt-4 md:col-span-3">
-          <app-input-text label="Proyecto" [control]="controlDeInput('proyecto')" placeholder="" idInput="proyecto" />
-        </div> -->
         <!-- Seguimiento (segto) -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
@@ -190,7 +186,7 @@
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
       @if (consulta) {

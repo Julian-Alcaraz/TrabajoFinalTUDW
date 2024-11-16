@@ -1,22 +1,19 @@
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 export class DerivacionesDto {
-  // @IsBoolean()
-  // Clinica: boolean;
-
   @IsBoolean({ message: 'La derivación Odontologia debe ser booleana' })
-  @IsOptional()
-  odontologia?: boolean;
+  // @IsOptional()
+  odontologia: boolean;
 
   @IsBoolean({ message: 'La derivación Oftalmologia debe ser booleana' })
-  @IsOptional()
-  oftalmologia?: boolean;
+  // @IsOptional()
+  oftalmologia: boolean;
 
   @IsBoolean({ message: 'La derivación Fonoaudiologia debe ser booleana' })
-  @IsOptional()
-  fonoaudiologia?: boolean;
+  // @IsOptional()
+  fonoaudiologia: boolean;
 
   @IsBoolean({ message: 'La derivación Externa debe ser booleana' })
-  @IsOptional()
-  externa?: boolean;
+  // @IsOptional()
+  externa: boolean;
 }

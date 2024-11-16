@@ -7,7 +7,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <label [for]="idInput" class="block mb-4 text-sm font-medium text-gray-900">{{ label }}</label>
+    <label [for]="idInput" class="block mb-4 text-sm font-medium text-gray-900"
+      >{{ label }} <small class="text-gray-500">{{ opcional ? '(Opcional)' : '' }}</small></label
+    >
     <textarea [id]="idInput" [formControl]="control" [placeholder]="placeholder" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"> </textarea>
     <div *ngIf="control?.errors && (control?.dirty || control?.touched)" class="text-red-600 text-sm">
       <div *ngIf="control?.errors?.['required']">El campo es requerido.</div>
@@ -23,4 +25,5 @@ export class InputTextareaComponent {
   @Input() control!: FormControl;
   @Input() placeholder = '';
   @Input() idInput = '';
+  @Input() opcional = false;
 }

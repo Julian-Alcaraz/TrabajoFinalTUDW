@@ -132,11 +132,10 @@ export class UsuarioService {
       });
       for (const menu of menusNoFalsos) {
         if (!menu.menu_padre) {
-          colMenusSet.add(JSON.stringify(menu)); // Convertimos el objeto en string para poder usarlo en un Set
+          colMenusSet.add(JSON.stringify(menu));
         }
       }
     }
-    // Convertimos el Set nuevamente a un array de objetos
     colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
     // Ordena los padres por "orden"
     colMenus.sort((a, b) => a.orden - b.orden);
@@ -155,7 +154,6 @@ export class UsuarioService {
         usuariosProfesionales.push(usuario);
       }
     }
-    console.log('PROFESIONALES BACK', usuariosProfesionales);
     return usuariosProfesionales;
   }
 }

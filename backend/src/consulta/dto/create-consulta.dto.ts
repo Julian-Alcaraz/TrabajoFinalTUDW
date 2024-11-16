@@ -51,15 +51,15 @@ export class CreateConsultaDto {
   readonly id_curso: number;
 
   @ApiProperty({ description: 'Observaciones de la consulta' })
-  @IsOptional()
   @IsString({ message: 'Las Observaciones debe ser un string' })
-  @Length(1, 1000, { message: 'Las Observaciones deben tener entre 0 y 1000 caracteres' })
+  @Length(1, 1000, { message: 'Las Observaciones deben tener entre 1 y 1000 caracteres' })
+  @IsOptional()
   @Transform(({ value }) => value.trim())
   readonly observaciones?: string;
 
   @ApiProperty({ description: 'Derivaciones de la consulta' })
-  @IsOptional()
   @IsObject({ message: 'Las derivaciones deben ser un objeto' })
+  @IsOptional()
   @ValidateNested()
   @Type(() => DerivacionesDto)
   readonly derivaciones?: DerivacionesType;

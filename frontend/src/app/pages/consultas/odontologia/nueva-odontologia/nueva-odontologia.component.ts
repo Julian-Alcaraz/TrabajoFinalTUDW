@@ -18,7 +18,7 @@ import { Consulta } from '../../../../models/consulta.model';
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent,  InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
@@ -52,7 +52,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       dientes_recuperables: [null, [Validators.required, ValidarSoloNumeros]],
       dientes_irecuperables: [null, [Validators.required, ValidarSoloNumeros]],
       // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      habitos: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
     });
   }
   ngOnInit(): void {
@@ -120,7 +120,7 @@ export class NuevaOdontologiaComponent implements OnInit {
             fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',
             turno,
@@ -130,12 +130,13 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            // ...(derivaciones.externa && { derivaciones }),
+            ...(habitos && { habitos }),
             derivaciones,
             odontologia: {
               ...odontologicaValues,
             },
           };
+          console.log("DATA ENVIADA", data)
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {

@@ -510,7 +510,8 @@ export class MainSeeder implements Seeder {
       for (const usuario of todosLosUsuarios) {
         for (const rol of usuario.roles) {
           const nombre = rol.nombre;
-          if (nombre === 'Profesional') {1
+          if (nombre === 'Profesional') {
+            1;
             usuariosProfesionales.push(usuario);
           }
         }
@@ -533,6 +534,7 @@ export class MainSeeder implements Seeder {
               chico: chicoSeleccionado,
               usuario: usuarioConRol,
               edad: edad,
+              created_at: faker.date.between({ from: '2022-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
             });
             return consulta;
           }),

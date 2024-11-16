@@ -11,7 +11,7 @@ import { Curso } from '../../curso/entities/curso.entity';
 
 export type ConsultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type TurnoType = 'Mañana' | 'Tarde' | 'Noche';
-export type DerivacionesType = { /*'Clinica' | */ odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
+export type DerivacionesType = { odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
 
 @Entity('consulta')
 export class Consulta extends EntidadBasica {
@@ -31,14 +31,15 @@ export class Consulta extends EntidadBasica {
   observaciones: string;
 
   @Column({ type: 'simple-json', nullable: true })
+  derivaciones: DerivacionesType;
+  /*
   derivaciones: {
-    //Clinica: boolean;
     odontologia: boolean;
     oftalmologia: boolean;
     fonoaudiologia: boolean;
     externa: boolean;
   };
-
+  */
   // Relaciones
 
   @ManyToOne(() => Usuario, (usuario) => usuario.id)
@@ -49,16 +50,20 @@ export class Consulta extends EntidadBasica {
   @JoinColumn({ name: 'id_chico' })
   chico: Chico;
 
+  // Institucion deberia tener un array de consultas
   @ManyToOne(() => Institucion)
   @JoinColumn({ name: 'id_institucion' })
   institucion: Institucion;
 
+  // Curso deberia tener un array de consultas
   @ManyToOne(() => Curso)
   @JoinColumn({ name: 'id_curso' })
   curso: Curso;
 
   @OneToOne(() => Clinica)
   clinica: Clinica;
+
+  // Hijas
 
   @OneToOne(() => Fonoaudiologia)
   fonoaudiologia: Fonoaudiologia;

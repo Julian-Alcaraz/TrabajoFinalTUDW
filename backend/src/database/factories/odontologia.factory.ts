@@ -12,7 +12,6 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
     'SE COME LAS UÑAS',
     'CONSUME MUCHA CANTIDAD DE AZUCAR',
     'SE COME LAS UÑAS',
-    'NO',
     'Toma mamadera. No se alimenta correctamente. (solo consume cosas que puede comer con la mano)',
     'Tomo mamadera mucho tiempo',
     'Uso de mamadera',
@@ -31,7 +30,7 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
     'Come muchas golosinas',
     'Toma mamadera todas las noches con leche con azucar y chocolate. Cepilla una sola vez los dientes despues del almuerzo',
   ];
-  odontologia.habitos = faker.helpers.arrayElement(habitosDentales);
+  odontologia.habitos = Math.random() > 0.5 ? faker.helpers.arrayElement(habitosDentales) : null;
   odontologia.dientes_irecuperables = faker.number.int({ min: 0, max: 14 });
   odontologia.dientes_recuperables = faker.number.int({ min: 0, max: 7 });
   odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables);
@@ -42,7 +41,7 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
   odontologia.dientes_permanentes = faker.number.int({ min: 0, max: 12 });
   odontologia.primera_vez = Math.random() > 0.5 ? true : false;
   if (odontologia.primera_vez === true) odontologia.ulterior = false;
-  else odontologia.ulterior = true
+  else odontologia.ulterior = true;
   return odontologia;
 });
 

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty } from 'class-validator';
+
+import { CausasType, DiagnosticoPresuntivoType } from '../entities/fonoaudiologia.entity';
 
 export class CreateFonoaudiologiaDto {
   @ApiProperty({ description: 'Asistencia' })
@@ -10,15 +11,11 @@ export class CreateFonoaudiologiaDto {
 
   @ApiProperty({ description: 'Diagnostico presuntivo del niño que asiste' })
   @IsNotEmpty({ message: 'El diagnostico presuntivo no puede estar vacio' })
-  @IsString({ message: 'El diagnostico presuntivo debe ser un string' })
-  @Length(1, 100, { message: 'El diagnostico presuntivo debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly diagnostico_presuntivo: string;
+  @IsEnum(['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'], { message: 'El tipo no es una opcion valida. TEL, TEA, Retraso en el lenguaje, dislalias funcionales, Respirador bucal, Anquiloglosia, Ortodoncia: Protrusión lingual, paladar hendido, Síndromes, Otras patologías que dificulten el lenguaje y la comunicación' })
+  readonly diagnostico_presuntivo: DiagnosticoPresuntivoType;
 
   @ApiProperty({ description: 'Causas del niño que asiste' })
   @IsNotEmpty({ message: 'Causas no puede estar vacio' })
-  @IsString({ message: 'Causas debe ser un string' })
-  @Length(1, 100, { message: 'Causas debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly causas: string;
+  @IsEnum(['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'], { message: 'El tipo no es una opcion valida. Prenatal, Postnatal, ACV, Respiratorias, Audición, Patologías clínicas, Síndromes, Inflamación de amígdalas o adenoides, Prematurez, Otras' })
+  readonly causas: CausasType;
 }

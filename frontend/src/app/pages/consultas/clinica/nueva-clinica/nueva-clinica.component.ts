@@ -40,41 +40,43 @@ export class NuevaClinicaComponent implements OnInit {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Medica Clinica
-      peso: ['', [Validators.required, ValidarNumerosFloat]],
-      diabetes: [false, [Validators.required]],
+      peso: [45, [Validators.required, ValidarNumerosFloat]],
+      diabetes: [true, [Validators.required]],
       hta: [false, [Validators.required]],
-      obesidad: [false, [Validators.required]],
+      obesidad: [true, [Validators.required]],
       consumo_alcohol: [false, [Validators.required]],
       consumo_drogas: [false, [Validators.required]],
-      consumo_tabaco: [false, [Validators.required]],
+      consumo_tabaco: [true, [Validators.required]],
       antecedentes_perinatal: [false, [Validators.required]],
-      enfermedades_previas: [false, [Validators.required]],
-      vacunas: ['', [Validators.required]],
-      talla: ['', [Validators.required, ValidarNumerosFloat]],
-      cc: ['', [Validators.required, ValidarNumerosFloat]],
-      tas: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      tad: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      examen_visual: ['', [Validators.required]],
-      ortopedia_traumatologia: ['', [Validators.required]],
-      lenguaje: ['', [Validators.required]],
-      segto: ['', [Validators.required]],
-      leche: ['', [Validators.required]],
-      infusiones: ['', [Validators.required]],
-      cantidad_comidas: ['', [Validators.required]],
-      alimentacion: ['', [Validators.required]],
-      hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      horas_pantalla: ['', [Validators.required]],
-      horas_juego_aire_libre: ['', [Validators.required]],
-      horas_suenio: ['', [Validators.required]],
-      derivacion_fonoaudiologia: [false, []],
-      derivacion_oftalmologia: [false, []],
-      derivacion_odontologia: [false, []],
-      derivacion_externa: [false, []],
-      pcta: ['', [Validators.required, ValidarNumerosFloat]],
-      pcimc: ['', [Validators.required, ValidarNumerosFloat]],
-      pct: ['', [Validators.required, ValidarNumerosFloat]],
+      enfermedades_previas: [true, [Validators.required]],
+      vacunas: ['Completo', [Validators.required]],
+      talla: [170, [Validators.required, ValidarNumerosFloat]],
+      cc: [40, [Validators.required, ValidarNumerosFloat]],
+      tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      examen_visual: ['Normal', [Validators.required]],
+      ortopedia_traumatologia: ['Normal', [Validators.required]],
+      lenguaje: ['Adecuado', [Validators.required]],
+      segto: [true, [Validators.required]],
+      leche: [true, [Validators.required]],
+      infusiones: ['Té', [Validators.required]],
+      cantidad_comidas: ['4', [Validators.required]],
+      alimentacion: ['Frituras', [Validators.required]],
+      hidratacion: ['Agua', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      horas_pantalla: ['Menor a 2hs', [Validators.required]],
+      horas_juego_aire_libre: ['Menos de 1h', [Validators.required]],
+      horas_suenio: ['Menos de 10hs', [Validators.required]],
+      derivacion_fonoaudiologia: [true, [Validators.required]],
+      derivacion_oftalmologia: [false, [Validators.required]],
+      derivacion_odontologia: [true, [Validators.required]],
+      derivacion_externa: [false, [Validators.required]],
+      // Ver maximos y minimos de estos valores:
+      pcta: [70, [Validators.required, ValidarNumerosFloat]],
+      pcimc: [90, [Validators.required, ValidarNumerosFloat]],
+      pct: [85, [Validators.required, ValidarNumerosFloat]],
     });
   }
+  
   ngOnInit(): void {
     if (this.consulta) {
       // llenar form y deshabilitarlo
@@ -384,12 +386,12 @@ export class NuevaClinicaComponent implements OnInit {
             },
           };
           console.log('DATA:');
-          if(this.consulta){
-            this._consultaService.modficarConsulta(this.consulta?.id,data).subscribe({
+          if (this.consulta) {
+            this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                  this.cambiarEstado()
+                  this.cambiarEstado();
                 }
               },
               error: (err) => {
@@ -404,42 +406,40 @@ export class NuevaClinicaComponent implements OnInit {
 }
 // FORMULARIO LIMPIO:
 /*
-     // Campos comunes
+// Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Medica Clinica
-      peso: [45, [Validators.required, ValidarNumerosFloat]],
-      diabetes: [true, [Validators.required]],
+      peso: ['', [Validators.required, ValidarNumerosFloat]],
+      diabetes: [false, [Validators.required]],
       hta: [false, [Validators.required]],
-      obesidad: [true, [Validators.required]],
+      obesidad: [false, [Validators.required]],
       consumo_alcohol: [false, [Validators.required]],
       consumo_drogas: [false, [Validators.required]],
-      consumo_tabaco: [true, [Validators.required]],
+      consumo_tabaco: [false, [Validators.required]],
       antecedentes_perinatal: [false, [Validators.required]],
-      enfermedades_previas: [true, [Validators.required]],
-      vacunas: ['Completo', [Validators.required]],
-      talla: [170, [Validators.required, ValidarNumerosFloat]],
-      cc: [40, [Validators.required, ValidarNumerosFloat]],
-      tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      examen_visual: ['Normal', [Validators.required]],
-      ortopedia_traumatologia: ['Normal', [Validators.required]],
-      lenguaje: ['Adecuado', [Validators.required]],
-      segto: [true, [Validators.required]],
-      leche: [true, [Validators.required]],
-      infusiones: ['Té', [Validators.required]],
-      cantidad_comidas: ['4', [Validators.required]],
-      alimentacion: ['Frituras', [Validators.required]],
-      hidratacion: ['Agua', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      horas_pantalla: ['Menor a 2hs', [Validators.required]],
-      horas_juego_aire_libre: ['Menos de 1h', [Validators.required]],
-      horas_suenio: ['Menos de 10hs', [Validators.required]],
-      derivacion_fonoaudiologia: [false, [Validators.required]],
-      derivacion_oftalmologia: [false, [Validators.required]],
-      derivacion_odontologia: [false, [Validators.required]],
-      derivacion_externa: [false, [Validators.required]],
-      // proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      // Ver maximos y minimos de estos valores:
-      pcta: [70, [Validators.required, ValidarNumerosFloat]],
-      pcimc: [90, [Validators.required, ValidarNumerosFloat]],
-      pct: [85, [Validators.required, ValidarNumerosFloat]],
+      enfermedades_previas: [false, [Validators.required]],
+      vacunas: ['', [Validators.required]],
+      talla: ['', [Validators.required, ValidarNumerosFloat]],
+      cc: ['', [Validators.required, ValidarNumerosFloat]],
+      tas: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      tad: ['', [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
+      examen_visual: ['', [Validators.required]],
+      ortopedia_traumatologia: ['', [Validators.required]],
+      lenguaje: ['', [Validators.required]],
+      segto: ['', [Validators.required]],
+      leche: ['', [Validators.required]],
+      infusiones: ['', [Validators.required]],
+      cantidad_comidas: ['', [Validators.required]],
+      alimentacion: ['', [Validators.required]],
+      hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      horas_pantalla: ['', [Validators.required]],
+      horas_juego_aire_libre: ['', [Validators.required]],
+      horas_suenio: ['', [Validators.required]],
+      derivacion_fonoaudiologia: [false, []],
+      derivacion_oftalmologia: [false, []],
+      derivacion_odontologia: [false, []],
+      derivacion_externa: [false, []],
+      pcta: ['', [Validators.required, ValidarNumerosFloat]],
+      pcimc: ['', [Validators.required, ValidarNumerosFloat]],
+      pct: ['', [Validators.required, ValidarNumerosFloat]],
 */

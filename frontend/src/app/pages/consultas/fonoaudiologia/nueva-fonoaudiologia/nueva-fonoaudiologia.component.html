@@ -1,12 +1,12 @@
 <div class="card">
   <span class="card-header">
     @if (consulta) {
-      <div class="flex justify-between">
-        <div class="">Consulta fonoaudiologia</div>
-        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd/MM/yyyy' }}</div>
-      </div>
+    <div class="flex justify-between">
+      <div class="">Consulta fonoaudiologia</div>
+      <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd/MM/yyyy' }}</div>
+    </div>
     } @else {
-      Cargar una nueva consulta de fonoaudiologia
+    Cargar una nueva consulta de fonoaudiologia
     }
   </span>
   <div class="card-body">
@@ -17,59 +17,71 @@
         <!-- <div class="grid gap-6 md:grid-cols-8 sm:grid-cols-3"> -->
         <!-- Diagnostico Presuntivo -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Diagnostico Presuntivo" [control]="controlDeInput('diagnostico_presuntivo')" idInput="diagnostico_presuntivo" [opciones]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']" [valores]="['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion']" />
+          <app-input-select-enum label="Diagnostico Presuntivo" [control]="controlDeInput('diagnostico_presuntivo')"
+            idInput="diagnostico_presuntivo"
+            [opciones]="['TEL' , 'TEA' , 'Retraso en el lenguaje, dislalias funcionales' , 'Respirador bucal' , 'Anquiloglosia' , 'Ortodoncia: Protrusión lingual, paladar hendido' , 'Síndromes' , 'Otras patologías que dificulten el lenguaje y la comunicación']"
+            [valores]="['TEL' , 'TEA' , 'Retraso en el lenguaje, dislalias funcionales' , 'Respirador bucal' , 'Anquiloglosia' , 'Ortodoncia: Protrusión lingual, paladar hendido' , 'Síndromes' , 'Otras patologías que dificulten el lenguaje y la comunicación']" />
         </div>
         <!-- Causas -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Causas" [control]="controlDeInput('causas')" idInput="causas" [opciones]="['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras']" [valores]="['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras']" />
+          <app-input-select-enum label="Causas" [control]="controlDeInput('causas')" idInput="causas"
+            [opciones]="['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras']"
+            [valores]="['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras']" />
         </div>
         <!-- Asistencia -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Asistió?" [control]="controlDeInput('asistencia')" idInput="asistencia"
+            [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')"
+            idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-8">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder=""
+            idInput="observaciones" [opcional]="true" />
         </div>
       </div>
       <div>
         @if (consulta && editar) {
-          @if (consulta.usuario) {
-            <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
-              <div class="font-bold">Datos del medico</div>
-              <div class="grid grid-cols-3">
-                <div class="col">
-                  <strong> Nombre: </strong>
-                  {{ consulta.usuario.nombre }} <br />
-                </div>
-                <div class="col">
-                  <strong> Apellido: </strong>
-                  {{ consulta.usuario.apellido }}<br />
-                </div>
-                <div class="col">
-                  <strong> Dni: </strong>
-                  {{ consulta.usuario.dni }}
-                </div>
-              </div>
+        @if (consulta.usuario) {
+        <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
+          <div class="font-bold">Datos del medico</div>
+          <div class="grid grid-cols-3">
+            <div class="col">
+              <strong> Nombre: </strong>
+              {{ consulta.usuario.nombre }} <br />
             </div>
-          }
+            <div class="col">
+              <strong> Apellido: </strong>
+              {{ consulta.usuario.apellido }}<br />
+            </div>
+            <div class="col">
+              <strong> Dni: </strong>
+              {{ consulta.usuario.dni }}
+            </div>
+          </div>
+        </div>
+        }
         }
       </div>
       <!-- Enviar -->
       <div class="flex mt-4">
         @if (consulta) {
-          @if (fonoaudiologiaForm.disabled) {
-            <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
-          } @else {
-            <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-            <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
-          }
+        @if (fonoaudiologiaForm.disabled) {
+        <button type="button" (click)="cambiarEstado()"
+          class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
         } @else {
-          <button type="submit" [disabled]="!fonoaudiologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+        <button type="button" (click)="cambiarEstado()"
+          class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+        <button type="submit" [disabled]="habilitarModificar"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+        }
+        } @else {
+        <button type="submit" [disabled]="!fonoaudiologiaForm.valid"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
         }
       </div>
     </form>
