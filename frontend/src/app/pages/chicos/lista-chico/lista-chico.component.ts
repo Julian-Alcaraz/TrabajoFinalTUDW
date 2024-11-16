@@ -28,7 +28,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
-  public searching = false;
+  public searching = true;
   public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
 
   constructor(
@@ -57,11 +57,11 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
           this.chicos.data = response.data;
           this.resultsLength = response.data.length;
         }
-        this.searching = false;
+        //this.searching = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        this.searching = false;
+        //this.searching = false;
       },
     });
   }

@@ -21,13 +21,13 @@
   <div class="card-body">
     <div class="mb-2">
       @if (currentParam === '1' || !currentParam) {
-      <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)"></app-consultasxanio>
+      <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)" />
       }
       <!-- @if (currentParam === '2') {
         <app-consultasxanio></app-consultasxanio>
       } -->
       @if (currentParam === '3') {
-      <app-personalizada (consultasEmitidas)="mostrarConsultas($event)"></app-personalizada>
+      <app-personalizada (consultasEmitidas)="mostrarConsultas($event)" />
       }
     </div>
     @if (consultas && consultas.length > 0) {

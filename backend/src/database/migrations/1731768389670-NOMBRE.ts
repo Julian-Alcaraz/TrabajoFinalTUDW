@@ -1,22 +1,40 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class NOMBRE1731715263149 implements MigrationInterface {
-    name = 'NOMBRE1731715263149'
+export class NOMBRE1731768389670 implements MigrationInterface {
+    name = 'NOMBRE1731768389670'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "menu" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "label" character varying(100) NOT NULL, "url" character varying(100) NOT NULL, "orden" integer NOT NULL, "icon" character varying(100), "menu_padre_id" integer, CONSTRAINT "PK_35b2a8f47d153ff7a41860cceeb" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "rol" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, CONSTRAINT "PK_c93a22388638fac311781c7f2dd" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_vacunas_enum" AS ENUM('Completo', 'Incompleto', 'Desconocido')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_examen_visual_enum" AS ENUM('Normal', 'Anormal')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_ortopedia_traumatologia_enum" AS ENUM('Normal', 'Escoliosis', 'Pie Plano', 'Otras')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_lenguaje_enum" AS ENUM('Adecuado', 'Inadecuado')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_alimentacion_enum" AS ENUM('Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_infusiones_enum" AS ENUM('Té', 'Mate Cocido', 'Otras')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_cantidad_comidas_enum" AS ENUM('Menor a 4', '4', 'Mayor a 4', 'Picoteo')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_horas_pantalla_enum" AS ENUM('Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_horas_juego_aire_libre_enum" AS ENUM('Menos de 1h', '1h', 'Más de 1h')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_horas_suenio_enum" AS ENUM('Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs')`);
+        await queryRunner.query(`CREATE TYPE "public"."clinica_hidratacion_enum" AS ENUM('Agua', 'Bebidas Edulcoradas')`);
         await queryRunner.query(`CREATE TABLE "clinica" ("id_consulta" integer NOT NULL, "vacunas" "public"."clinica_vacunas_enum" NOT NULL, "examen_visual" "public"."clinica_examen_visual_enum" NOT NULL, "ortopedia_traumatologia" "public"."clinica_ortopedia_traumatologia_enum" NOT NULL, "lenguaje" "public"."clinica_lenguaje_enum" NOT NULL, "alimentacion" "public"."clinica_alimentacion_enum" NOT NULL, "infusiones" "public"."clinica_infusiones_enum" NOT NULL, "cantidad_comidas" "public"."clinica_cantidad_comidas_enum" NOT NULL, "horas_pantalla" "public"."clinica_horas_pantalla_enum" NOT NULL, "horas_juego_aire_libre" "public"."clinica_horas_juego_aire_libre_enum" NOT NULL, "horas_suenio" "public"."clinica_horas_suenio_enum" NOT NULL, "hidratacion" "public"."clinica_hidratacion_enum" NOT NULL, "diabetes" boolean NOT NULL, "hta" boolean NOT NULL, "obesidad" boolean NOT NULL, "consumo_alcohol" boolean NOT NULL, "consumo_drogas" boolean NOT NULL, "consumo_tabaco" boolean NOT NULL, "antecedentes_perinatal" boolean NOT NULL, "enfermedades_previas" boolean NOT NULL, "peso" double precision NOT NULL, "talla" double precision NOT NULL, "pct" double precision NOT NULL, "cc" double precision NOT NULL, "imc" double precision NOT NULL, "pcimc" double precision NOT NULL, "estado_nutricional" character varying(100) NOT NULL, "tas" double precision NOT NULL, "tad" double precision NOT NULL, "pcta" double precision NOT NULL, "tension_arterial" character varying(100) NOT NULL, "segto" boolean NOT NULL, "leche" boolean NOT NULL, CONSTRAINT "PK_64b678c96046d7aec0df78d169d" PRIMARY KEY ("id_consulta"))`);
+        await queryRunner.query(`CREATE TYPE "public"."fonoaudiologia_diagnostico_presuntivo_enum" AS ENUM('TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación')`);
+        await queryRunner.query(`CREATE TYPE "public"."fonoaudiologia_causas_enum" AS ENUM('Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras')`);
         await queryRunner.query(`CREATE TABLE "fonoaudiologia" ("id_consulta" integer NOT NULL, "asistencia" boolean NOT NULL, "diagnostico_presuntivo" "public"."fonoaudiologia_diagnostico_presuntivo_enum" NOT NULL, "causas" "public"."fonoaudiologia_causas_enum" NOT NULL, CONSTRAINT "PK_7a7cb00668425c025a5faf83fa3" PRIMARY KEY ("id_consulta"))`);
-        await queryRunner.query(`CREATE TABLE "odontologia" ("id_consulta" integer NOT NULL, "primera_vez" boolean NOT NULL, "ulterior" boolean NOT NULL, "dientes_permanentes" integer, "dientes_temporales" integer, "sellador" integer, "topificacion" boolean NOT NULL, "cepillado" boolean NOT NULL, "dientes_recuperables" integer, "dientes_irecuperables" integer, "cepillo" boolean NOT NULL, "clasificacion" character varying(100) NOT NULL, "habitos" character varying, CONSTRAINT "PK_a13f0d6e808bea7c3bd8067662c" PRIMARY KEY ("id_consulta"))`);
+        await queryRunner.query(`CREATE TABLE "odontologia" ("id_consulta" integer NOT NULL, "primera_vez" boolean NOT NULL, "ulterior" boolean NOT NULL, "dientes_permanentes" integer, "dientes_temporales" integer, "sellador" integer, "topificacion" boolean NOT NULL, "cepillado" boolean NOT NULL, "dientes_recuperables" integer, "dientes_irecuperables" integer, "cepillo" boolean NOT NULL, "clasificacion" character varying(100) NOT NULL, "habitos" text, CONSTRAINT "PK_a13f0d6e808bea7c3bd8067662c" PRIMARY KEY ("id_consulta"))`);
         await queryRunner.query(`CREATE TABLE "oftalmologia" ("id_consulta" integer NOT NULL, "demanda" character varying(100) NOT NULL, "primera_vez" boolean NOT NULL, "control" boolean NOT NULL, "receta" boolean NOT NULL, "prox_control" date NOT NULL, "anteojos" boolean, CONSTRAINT "PK_e73ca20e3dd28958ccab04804f1" PRIMARY KEY ("id_consulta"))`);
         await queryRunner.query(`CREATE TABLE "localidad" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, CONSTRAINT "PK_e76c026cd7c5842719b7a3901ae" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "barrio" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, "id_localidad" integer, CONSTRAINT "PK_0b41150a0a8470cf8fbc3609310" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."chico_sexo_enum" AS ENUM('Femenino', 'Masculino', 'Otro')`);
         await queryRunner.query(`CREATE TABLE "chico" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "dni" integer NOT NULL, "nombre" character varying(50) NOT NULL, "apellido" character varying(50) NOT NULL, "sexo" "public"."chico_sexo_enum" NOT NULL, "fe_nacimiento" date NOT NULL, "direccion" character varying(255), "telefono" character varying(50), "nombre_madre" character varying(100), "nombre_padre" character varying(100), "id_barrio" integer, CONSTRAINT "UQ_b402d990586b3fddd1d092944b5" UNIQUE ("dni"), CONSTRAINT "PK_539cfd384510f7d445a650c9e22" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."institucion_tipo_enum" AS ENUM('Jardin', 'Primario', 'Secundario', 'Terciario')`);
         await queryRunner.query(`CREATE TABLE "institucion" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, "tipo" "public"."institucion_tipo_enum" NOT NULL, CONSTRAINT "PK_8aa1903e37f2f82c98164b644a7" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."curso_nivel_enum" AS ENUM('Primaria', 'Secundario', 'Jardin', 'Terciario', 'Universitario')`);
         await queryRunner.query(`CREATE TABLE "curso" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "grado" integer NOT NULL, "nivel" "public"."curso_nivel_enum" NOT NULL, "nombre" character varying(100) NOT NULL, CONSTRAINT "PK_76073a915621326fb85f28ecc5d" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "consulta" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "type" "public"."consulta_type_enum", "turno" "public"."consulta_turno_enum", "obra_social" boolean, "edad" integer NOT NULL, "observaciones" text, "derivaciones" text, "id_usuario" integer, "id_chico" integer, "id_institucion" integer, "id_curso" integer, CONSTRAINT "PK_248230d7f1e2536f83b4d07c955" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."consulta_type_enum" AS ENUM('Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia')`);
+        await queryRunner.query(`CREATE TYPE "public"."consulta_turno_enum" AS ENUM('Mañana', 'Tarde', 'Noche')`);
+        await queryRunner.query(`CREATE TABLE "consulta" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "type" "public"."consulta_type_enum", "turno" "public"."consulta_turno_enum", "obra_social" boolean, "edad" integer NOT NULL, "observaciones" text, "derivaciones" text NOT NULL, "id_usuario" integer, "id_chico" integer, "id_institucion" integer, "id_curso" integer, CONSTRAINT "PK_248230d7f1e2536f83b4d07c955" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "usuario" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, "apellido" character varying(100) NOT NULL, "dni" integer NOT NULL, "email" character varying(100) NOT NULL, "contrasenia" character varying(255) NOT NULL, "especialidad" character varying(100), "fe_nacimiento" date NOT NULL, CONSTRAINT "UQ_d88d01a9aaf85b32b985061d369" UNIQUE ("dni"), CONSTRAINT "UQ_2863682842e688ca198eb25c124" UNIQUE ("email"), CONSTRAINT "PK_a56c58e5cabaa04fb2c98d2d7e2" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "rol" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deshabilitado" boolean NOT NULL DEFAULT false, "nombre" character varying(100) NOT NULL, CONSTRAINT "PK_c93a22388638fac311781c7f2dd" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "menu-rol" ("id_menu" integer NOT NULL, "id_rol" integer NOT NULL, CONSTRAINT "PK_3711270614667162b67cff4b78f" PRIMARY KEY ("id_menu", "id_rol"))`);
         await queryRunner.query(`CREATE INDEX "IDX_874d9038e6baa5e169682c6921" ON "menu-rol" ("id_menu") `);
         await queryRunner.query(`CREATE INDEX "IDX_a355bdae45c686776a82a48ee4" ON "menu-rol" ("id_rol") `);
@@ -62,18 +80,36 @@ export class NOMBRE1731715263149 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_a355bdae45c686776a82a48ee4"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_874d9038e6baa5e169682c6921"`);
         await queryRunner.query(`DROP TABLE "menu-rol"`);
-        await queryRunner.query(`DROP TABLE "rol"`);
         await queryRunner.query(`DROP TABLE "usuario"`);
         await queryRunner.query(`DROP TABLE "consulta"`);
+        await queryRunner.query(`DROP TYPE "public"."consulta_turno_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."consulta_type_enum"`);
         await queryRunner.query(`DROP TABLE "curso"`);
+        await queryRunner.query(`DROP TYPE "public"."curso_nivel_enum"`);
         await queryRunner.query(`DROP TABLE "institucion"`);
+        await queryRunner.query(`DROP TYPE "public"."institucion_tipo_enum"`);
         await queryRunner.query(`DROP TABLE "chico"`);
+        await queryRunner.query(`DROP TYPE "public"."chico_sexo_enum"`);
         await queryRunner.query(`DROP TABLE "barrio"`);
         await queryRunner.query(`DROP TABLE "localidad"`);
         await queryRunner.query(`DROP TABLE "oftalmologia"`);
         await queryRunner.query(`DROP TABLE "odontologia"`);
         await queryRunner.query(`DROP TABLE "fonoaudiologia"`);
+        await queryRunner.query(`DROP TYPE "public"."fonoaudiologia_causas_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."fonoaudiologia_diagnostico_presuntivo_enum"`);
         await queryRunner.query(`DROP TABLE "clinica"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_hidratacion_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_horas_suenio_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_horas_juego_aire_libre_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_horas_pantalla_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_cantidad_comidas_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_infusiones_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_alimentacion_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_lenguaje_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_ortopedia_traumatologia_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_examen_visual_enum"`);
+        await queryRunner.query(`DROP TYPE "public"."clinica_vacunas_enum"`);
+        await queryRunner.query(`DROP TABLE "rol"`);
         await queryRunner.query(`DROP TABLE "menu"`);
     }
 

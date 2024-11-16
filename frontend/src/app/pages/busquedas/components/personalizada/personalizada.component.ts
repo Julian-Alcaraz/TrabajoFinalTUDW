@@ -28,16 +28,19 @@ import { CamposClinicaComponent } from './components/campos-clinica/campos-clini
 import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
   templateUrl: './personalizada.component.html',
   styleUrl: './personalizada.component.css',
 })
 export class PersonalizadaComponent implements OnInit {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
+
+  public colapsarPaneles = false;
   public formBusqueda: FormGroup;
   public loading = false;
   public resultados: any;
@@ -156,6 +159,7 @@ export class PersonalizadaComponent implements OnInit {
   buscar() {
     if (this.formBusqueda.valid) {
       this.loading = true;
+      this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
       console.log('---------');

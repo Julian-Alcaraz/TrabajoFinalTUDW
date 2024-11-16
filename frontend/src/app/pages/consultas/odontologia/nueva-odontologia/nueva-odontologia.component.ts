@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
@@ -18,7 +17,7 @@ import { Consulta } from '../../../../models/consulta.model';
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
@@ -98,7 +97,7 @@ export class NuevaOdontologiaComponent implements OnInit {
   }
 
   enviarFormulario() {
-    if (this.odontologiaForm.valid || 1 + 1 == 2) {
+    if (this.odontologiaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta odontologica?',
         showDenyButton: true,
@@ -130,9 +129,9 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(habitos && { habitos }),
             derivaciones,
             odontologia: {
+              ...(habitos && { habitos }),
               ...odontologicaValues,
             },
           };

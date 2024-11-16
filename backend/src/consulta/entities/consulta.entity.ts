@@ -1,6 +1,7 @@
+import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Usuario } from '../../usuario/entities/usuario.entity';
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { Clinica } from './clinica.entity';
 import { Fonoaudiologia } from './fonoaudiologia.entity';
 import { Odontologia } from './odontologia.entity';
@@ -30,19 +31,12 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'text', nullable: true })
   observaciones: string;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ type: 'simple-json', nullable: false })
   derivaciones: DerivacionesType;
-  /*
-  derivaciones: {
-    odontologia: boolean;
-    oftalmologia: boolean;
-    fonoaudiologia: boolean;
-    externa: boolean;
-  };
-  */
+
   // Relaciones
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.id)
+  @ManyToOne(() => Usuario, (usuario) => usuario.consultas)
   @JoinColumn({ name: 'id_usuario' })
   usuario: Usuario;
 
@@ -50,20 +44,18 @@ export class Consulta extends EntidadBasica {
   @JoinColumn({ name: 'id_chico' })
   chico: Chico;
 
-  // Institucion deberia tener un array de consultas
-  @ManyToOne(() => Institucion)
+  @ManyToOne(() => Institucion, (institucion) => institucion.consultas)
   @JoinColumn({ name: 'id_institucion' })
   institucion: Institucion;
 
-  // Curso deberia tener un array de consultas
-  @ManyToOne(() => Curso)
+  @ManyToOne(() => Curso, (curso) => curso.consultas)
   @JoinColumn({ name: 'id_curso' })
   curso: Curso;
 
+  // Hijas
+
   @OneToOne(() => Clinica)
   clinica: Clinica;
-
-  // Hijas
 
   @OneToOne(() => Fonoaudiologia)
   fonoaudiologia: Fonoaudiologia;

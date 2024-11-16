@@ -86,7 +86,9 @@
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
             @if (searching) {
-              <app-loading />
+              <div class="flex justify-center items-center h-32">
+                <app-loading />
+              </div>
             } @else {
               <p class="py-5">
                 {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}

@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
-import { tiposInstitucion } from '../entities/institucion.entity';
 import { Transform } from 'class-transformer';
+
+import { tiposInstitucion } from '../entities/institucion.entity';
 
 export class CreateInstitucionDto {
   @ApiProperty({ description: 'Nombre de la insititucion' })

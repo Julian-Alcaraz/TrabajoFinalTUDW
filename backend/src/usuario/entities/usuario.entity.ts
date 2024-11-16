@@ -43,6 +43,6 @@ export class Usuario extends EntidadBasica {
   })
   roles: Rol[];
 
-  @OneToMany(() => Consulta, (consulta) => consulta.id)
+  @OneToMany(() => Consulta, (consulta) => consulta.usuario)
   consultas: Consulta[];
 }

@@ -46,6 +46,6 @@ export class Odontologia {
   @Column({ type: 'varchar', length: 100 })
   clasificacion: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'text', nullable: true })
   habitos: string;
 }
