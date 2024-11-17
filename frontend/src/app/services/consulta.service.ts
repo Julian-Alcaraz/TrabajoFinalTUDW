@@ -36,4 +36,12 @@ export class ConsultaService {
   esPrimeraVez(id: number, tipoConsulta: string) {
     return this._http.get(this.url + 'consulta/primeraVezChico/' + id + '/' + tipoConsulta);
   }
+
+  countConsultaLastYears(year:number){
+    return this._http.get(this.url + 'consulta/contarXanios/' + year);
+  }
+  
+  countTypeConsultaLastYears(year:number){
+    return this._http.get(this.url + 'consulta/contarTipoXanios/' + year);
+  }
 }

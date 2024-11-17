@@ -7,7 +7,7 @@ import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 
 @Controller('consulta')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class ConsultaController {
   constructor(private readonly consultaService: ConsultaService) {}
 
@@ -96,5 +96,29 @@ export class ConsultaController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.consultaService.remove(id);
+  }
+
+  @Get('contarXanios/:year')
+  @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
+  @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
+  async countByYear(@Param('year', ParseIntPipe) year: number) {
+    const cantByYearList = await this.consultaService.countByYear(year);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Primera vez obtenida con exito.',
+    };
+  }
+
+  @Get('contarTipoXanios/:year')
+  @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
+  @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
+  async countTypeByYear(@Param('year', ParseIntPipe) year: number) {
+    const cantByYearList = await this.consultaService.countTypeByYear(year);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Primera vez obtenida con exito.',
+    };
   }
 }

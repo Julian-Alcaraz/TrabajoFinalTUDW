@@ -426,6 +426,26 @@ export class ConsultaService {
   remove(id: number) {
     return `This action removes a #${id} consulta`;
   }
+
+  async countByYear(year: number) {
+    const respuesta = [];
+    for (let i = 0; i < 4; i++) {
+      const countConsultas = await this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).getCount();
+      respuesta.push(countConsultas);
+      year--;
+    }
+    return respuesta.reverse();
+  }
+  async countTypeByYear(year: number) {
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
+      respuesta[year] = counts;
+      year--;
+    }
+    return respuesta;
+  }
 }
 
 function estadoNutricional(pcimc: number) {

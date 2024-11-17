@@ -19,5 +19,7 @@ export const ChicoFactory = setSeederFactory(Chico, async () => {
   chico.sexo = sexoFaker === 'male' ? sexoType.Masculino : sexoType.Femenino;
   chico.nombre = faker.person.firstName(sexoFaker === 'male' ? 'male' : 'female');
   chico.apellido = faker.person.lastName(sexoFaker === 'male' ? 'male' : 'female');
+  chico.created_at = faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' });
+
   return chico;
 });

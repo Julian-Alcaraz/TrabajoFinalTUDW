@@ -81,4 +81,14 @@ export class ChicoService {
     chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
     return chico.consultas;
   }
+
+  async countChicosUpxYear(year: number) {
+    const respuesta = [];
+    for (let i = 0; i < 4; i++) {
+      const countChicos = await this.chicoORM.createQueryBuilder('chico').where('EXTRACT(YEAR FROM chico.created_at) = :year', { year }).getCount();
+      respuesta.push(countChicos);
+      year--;
+    }
+    return respuesta.reverse();
+  }
 }

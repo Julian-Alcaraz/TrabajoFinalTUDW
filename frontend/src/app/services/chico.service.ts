@@ -36,4 +36,8 @@ export class ChicoService {
   modificarChico(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'chico/' + id, data);
   }
+
+  countChicosCargadosxAnios(year:number): Observable<any> {
+    return this._http.get(this.url + 'chico/cargadosxanios/'+year);
+  }
 }

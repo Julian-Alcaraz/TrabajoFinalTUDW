@@ -1,1 +1,9 @@
-<p>general works!</p>
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+  <div class="border"><app-bar-graph titulo="Consultas por año" [labels]="lastFourYears"  [sets]="dataConsultaxAnio" /></div>
+  <div class="border"><app-bar-graph titulo="Tipos de consulta " [labels]="['Clinica','Odontologia','Oftalmologia','Fonoaudiologia']" [sets]="dataTipoConsultaxanio" /></div>
+  <div class="border"><app-bar-graph titulo="Chicos cargados por año" [labels]="lastFourYears" [sets]="dataChicosxAnio"/></div>
+  <div class="border">pensar proximos graficos</div>
+  <div class="border">pensar proximos graficos</div>
+  <div class="border">pensar proximos graficos</div>
+</div>
+<!-- <app-bar-graph/> -->

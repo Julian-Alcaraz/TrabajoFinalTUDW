@@ -122,4 +122,17 @@ export class ChicoController {
       message: 'Consultas encontradas por chico con exito',
     };
   }
+
+  @Get('cargadosxanios/:year')
+  @ApiOperation({ summary: 'Devuelve la cantidad de chicos cargados por año en los ultimos 4' })
+  @ApiResponse({ status: 200, description: 'Devuelve la cantidad de chicos cargados por año en los ultimos 4' })
+  @ApiResponse({ status: 404, description: 'Consulta no encontrada' })
+  async countChicosUpxYear(@Param('year', ParseIntPipe) year: number) {
+    const arrayCount = await this.chicoService.countChicosUpxYear(year);
+    return {
+      success: true,
+      data: arrayCount,
+      message: 'Chicos contados con exito',
+    };
+  }
 }
