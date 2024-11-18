@@ -23,6 +23,10 @@ export class BarrioService {
   }
 
   findAll() {
+    return this.barrioORM.find({ relations: ['localidad'] });
+  }
+
+  findAllHabilitados() {
     return this.barrioORM.find({ where: { deshabilitado: false } });
   }
 
@@ -34,7 +38,7 @@ export class BarrioService {
 
   async update(id: number, updateBarrioDto: UpdateBarrioDto) {
     if (Object.keys(updateBarrioDto).length === 0) throw new BadRequestException(`No se enviaron cambios`);
-    const barrio = await this.barrioORM.findOne({ where: { id: id, deshabilitado: false }, relations: ['localidad'] });
+    const barrio = await this.barrioORM.findOne({ where: { id: id /*, deshabilitado: false*/ }, relations: ['localidad'] });
     if (!barrio) throw new NotFoundException(`Barrio con id ${id} no encontrado`);
     // Localidad
     const idLocalidad = updateBarrioDto.id_localidad ? updateBarrioDto.id_localidad : null;

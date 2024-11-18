@@ -15,11 +15,13 @@ export class BarrioService {
   cargarBarrio(data: any): Observable<any> {
     return this._http.post(this.url + 'barrio', data);
   }
-
-  /*
-  obtenerBarriosXLocalidad(idLocalidad: string) {
-    return this._http.get(this.url + 'barrio/localidad/'+idLocalidad);
-    //return this._http.get(this.url + 'barrio');
+  obtenerBarrios() {
+    return this._http.get(this.url + 'barrio/habilitados');
   }
-  */
+  obtenerTodosBarrios() {
+    return this._http.get(this.url + 'barrio');
+  }
+  modificarBarrio(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'barrio/' + id, data);
+  }
 }

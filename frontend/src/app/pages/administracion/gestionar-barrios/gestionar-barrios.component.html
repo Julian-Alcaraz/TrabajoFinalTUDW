@@ -1,23 +1,37 @@
 <div class="card">
-  <div class="card-header">Localidades del sistema</div>
+  <div class="card-header">Barrios del sistema</div>
   <div class="card-body">
-    <input (keyup)="applyFilter($event)" placeholder="Ingrese el dato a buscar" #input type="text" id="filtro"
-      class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-      required />
+    <div class="grid md:grid-cols-2 md:grid-gap-0">
+      <div class="md:col-span-1">
+        <input (keyup)="applyFilter($event)" placeholder="Buscar por nombre" #input type="text" id="filtro"
+          class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+          required />
+      </div>
+      <div class="md:col-span-1">
+        <button type="button" (click)="nuevoBarrio()"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Nuevo
+          barrio
+        </button>
+      </div>
+    </div>
     <div class="scroll">
-      <table mat-table [dataSource]="localidades" matSort (matSortChange)="announceSortChange($event)"
+      <table mat-table [dataSource]="barrios" matSort (matSortChange)="announceSortChange($event)"
         class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
-        <!-- No funciona el orden aca porque deberia usar position o otra coas, no reptitiva -->
         <ng-container matColumnDef="numero">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por orden">#</th>
+          <th mat-header-cell *matHeaderCellDef>#</th>
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
         <!-- Nombre -->
-        <!-- Name Column -->
         <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por nombre">Nombre</th>
           <td mat-cell *matCellDef="let element"> {{ element.nombre }} </td>
+        </ng-container>
+        <!-- Localidad -->
+        <ng-container matColumnDef="nombre_localidad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por localidad">Localidad
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.localidad.nombre }} </td>
         </ng-container>
         <!-- Estado -->
         <ng-container matColumnDef="habilitado">
@@ -31,7 +45,7 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Acción</th>
           <td mat-cell *matCellDef="let element">
-            <div class="flex flex-row">
+            <div class="flex flex-row gap-2">
               <button (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id)"
                 [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 @if (element.deshabilitado) {
@@ -39,6 +53,10 @@
                 } @else {
                 <i class="fa-solid fa-xmark"></i>
                 }
+              </button>
+              <button (click)="element.deshabilitado ? notificar(element.id) : editarBarrio(element)"
+                class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+                <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
               </button>
             </div>
           </td>
@@ -54,7 +72,8 @@
             </div>
             } @else {
             <p class="py-5">
-              {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
+              {{ input.value ? "No se encontraron datos de barrios llamados '" + input.value + "'" :
+              'No hay barrios cargados.' }}
             </p>
             }
           </td>

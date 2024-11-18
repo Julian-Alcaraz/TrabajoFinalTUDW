@@ -6,8 +6,10 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
 export class LocalidadService {
   private url: string;
+
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.URL_BACKEND;
   }
@@ -16,6 +18,10 @@ export class LocalidadService {
     return this._http.patch(this.url + 'localidad/' + id, data);
   }
   obtenerLocalidades() {
+    return this._http.get(this.url + 'localidad/habilitadas');
+  }
+  // Obtiene las deshabilitadas tambien
+  obtenerTodasLocalidades() {
     return this._http.get(this.url + 'localidad');
   }
   obtenerBarriosXLocalidad(id: string) {
