@@ -100,25 +100,49 @@ export class ConsultaController {
 
   @Get('contarXanios/:year')
   @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
-  @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito.' })
   async countByYear(@Param('year', ParseIntPipe) year: number) {
     const cantByYearList = await this.consultaService.countByYear(year);
     return {
       success: true,
       data: cantByYearList,
-      message: 'Primera vez obtenida con exito.',
+      message: 'Datos obtenidos con exito.',
     };
   }
 
   @Get('contarTipoXanios/:year')
   @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
-  @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async countTypeByYear(@Param('year', ParseIntPipe) year: number) {
     const cantByYearList = await this.consultaService.countTypeByYear(year);
     return {
       success: true,
       data: cantByYearList,
-      message: 'Primera vez obtenida con exito.',
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
+  @Get('estadoNutricionalPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async estadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.estadoNutricionalData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
+  @Get('tensionArterialPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async tensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.tensionArterialData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
     };
   }
 }

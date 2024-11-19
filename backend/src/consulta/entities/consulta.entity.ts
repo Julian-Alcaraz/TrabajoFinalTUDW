@@ -54,15 +54,15 @@ export class Consulta extends EntidadBasica {
 
   // Hijas
 
-  @OneToOne(() => Clinica)
+  @OneToOne(() => Clinica, (clinica) => clinica.consulta)
   clinica: Clinica;
 
-  @OneToOne(() => Fonoaudiologia)
+  @OneToOne(() => Fonoaudiologia, (fonoaudiologia) => fonoaudiologia.consulta)
   fonoaudiologia: Fonoaudiologia;
 
-  @OneToOne(() => Odontologia)
+  @OneToOne(() => Odontologia, (odontologia) => odontologia.consulta)
   odontologia: Odontologia;
 
-  @OneToOne(() => Oftalmologia)
+  @OneToOne(() => Oftalmologia, (oftalmologia) => oftalmologia.consulta)
   oftalmologia: Oftalmologia;
 }

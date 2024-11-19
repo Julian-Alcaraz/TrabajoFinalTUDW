@@ -1,6 +1,6 @@
 <div class="card">
   <app-tabs [tabs]="['General', 'Clinica']" (positionEmitter)="escucharParam($event)"></app-tabs>
-  <div class="card-body">
+  <div class="sm:p-0 md:p-4">
     <div class="mb-2">
       @if (currentParam === 0 || !currentParam) {
         <app-general />

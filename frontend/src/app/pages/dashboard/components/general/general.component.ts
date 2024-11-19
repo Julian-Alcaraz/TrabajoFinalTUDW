@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BarGraphComponent } from '../bar-graph/bar-graph.component';
+import { BarGraphComponent } from '../graphs/bar-graph.component';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { ChicoService } from '../../../../services/chico.service';
 

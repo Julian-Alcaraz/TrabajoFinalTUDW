@@ -22,7 +22,9 @@ export class TabsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.routeSub = this._route.queryParams.subscribe((params) => {
-      this.currentParam = +params['i']; // Lógica adicional cuando el parámetro cambia console.log('Parámetro actual:', this.currentParam);
+      this.currentParam = +params['i'];
+      this.positionEmitter.emit(this.currentParam);
+
     });
   }
 

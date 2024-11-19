@@ -10,7 +10,7 @@ export class Fonoaudiologia {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 
-  @OneToOne(() => Consulta)
+  @OneToOne(() => Consulta, (consulta) => consulta.fonoaudiologia)
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 

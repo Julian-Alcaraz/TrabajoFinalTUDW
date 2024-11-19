@@ -1,6 +1,12 @@
-<div class="grid grid-cols-3">
-  <div class="border">a</div>
-  <div class="border">a</div>
+
+<div class="p-2">
+  <app-year-grado-form/>
+</div>
+
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+  <div class="border"><app-pie-graph [titulo]="'Consulta 1'" [labels]="['A','B','C']"  [set]="{label:'',data:[100,200,300]}" /></div>
+  <div class="border"><app-bar-graph/></div>
+  <div class="border"><app-pie-graph [titulo]="'Hipertension Grado y Año '" [labels]="['Hipertenso','Normotenso','culorotos']"  [set]="{label:'!erGrado',data:[100,200,300]}" /></div>
   <div class="border">a</div>
   <div class="border">a</div>
   <div class="border">a</div>

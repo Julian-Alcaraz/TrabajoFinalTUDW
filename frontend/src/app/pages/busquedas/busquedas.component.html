@@ -10,7 +10,7 @@
       }
     </div>
     @if (consultas && consultas.length > 0) {
-      <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'profesional', 'nombre', 'documento', 'observaciones']" />
+      <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'nombre', 'profesional', 'documento', 'observaciones']" />
     } @else if (consultas && consultas.length === 0) {
       <div class="text-center font-semibold text-lg">
         <h1>Consultas no encontradas</h1>

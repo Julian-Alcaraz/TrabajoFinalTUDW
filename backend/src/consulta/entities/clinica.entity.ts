@@ -119,7 +119,7 @@ export class Clinica {
 
   // Relaciones
 
-  @OneToOne(() => Consulta)
+  @OneToOne(() => Consulta, (consulta) => consulta.clinica)
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 }

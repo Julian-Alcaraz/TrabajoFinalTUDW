@@ -4,8 +4,10 @@ import { ChartModule } from 'primeng/chart';
   selector: 'app-bar-graph',
   standalone: true,
   imports: [ChartModule],
-  templateUrl: './bar-graph.component.html',
-  styleUrl: './bar-graph.component.css',
+  template: `
+    <h2 class="text-center text-2xl">{{ titulo }}</h2>
+    <p-chart type="bar" class="w-full" [data]="basicData" [options]="basicOptions" />
+  `,
 })
 export class BarGraphComponent implements OnInit, OnChanges {
   @Input() titulo = 'Titulo no definido';
@@ -69,17 +71,17 @@ export class BarGraphComponent implements OnInit, OnChanges {
   };
   ngOnInit() {
     console.log('SET', this.sets);
-    this.actualizarSets()
+    this.actualizarSets();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['sets']) {
       console.log('Sets has changed:', changes['sets'].currentValue);
-      this.sets=changes['sets'].currentValue
-      this.actualizarSets()
+      this.sets = changes['sets'].currentValue;
+      this.actualizarSets();
     }
   }
-  actualizarSets(){
+  actualizarSets() {
     const datasets = [];
     let color = 0;
     for (const set of this.sets) {

@@ -446,6 +446,45 @@ export class ConsultaService {
     }
     return respuesta;
   }
+
+  async estadoNutricionalData(year: number, id: number) {
+    const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async tensionArterialData(year: number, id: number) {
+    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.tension_arterial = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
 }
 
 function estadoNutricional(pcimc: number) {
