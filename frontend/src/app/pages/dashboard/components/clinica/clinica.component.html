@@ -1,13 +1,21 @@
-
 <div class="p-2">
-  <app-year-grado-form (cambioForm)="cambioForm($event)"/>
+  <app-year-grado-form (cambioForm)="cambioForm($event)" />
 </div>
 
 <div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
-  <div class="border"><app-pie-graph [titulo]="tituloEstadoNutriconal" [labels]="['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad']"  [set]="{label:'' ,data: estadoNutriconal}" /></div>
-  <div class="border"><app-bar-graph/></div>
-  <div class="border"><app-pie-graph [titulo]="tituloTensionArterial" [labels]="['Normotenso','Riesgo','Hipertenso']"  [set]="{label:'',data: tensionArterial}" /></div>
-  <div class="border">a</div>
+  <div class="border"><app-pie-graph [titulo]="tituloEstadoNutriconal" [subTitulo]="subTitulo" [labels]="estadosNutricional" [set]="{ label: '', data: estadoNutriconal }" /></div>
+  <div class="border"><app-pie-graph [titulo]="tituloTensionArterial"  [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionArterial }" /></div>
+  <div class="border">
+    <div class="flex ">
+      <select (change)="seleccionarEstadoNutricional($event)" class="mx-auto mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+        <option *ngFor="let estado of estadosNutricional; let i =index" [selected]="i===2" [value]="estado">{{ estado }}</option>
+      </select>
+    </div>
+    <app-pie-graph [titulo]="tituloTensionxEstado" [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionXestado }" />
+  </div>
+  <div class="border"><app-bar-graph  /></div>
+  <div class="border"><app-bar-graph [porcentaje]="true" titulo="Tipos de consulta " [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
+  <div class="border"><app-bar-graph [porcentaje]="true"  titulo="Tipos de consulta " [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
   <div class="border">a</div>
   <div class="border">a</div>
   <div class="border">a</div>

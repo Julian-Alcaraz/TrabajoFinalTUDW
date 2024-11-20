@@ -12,6 +12,7 @@ import { ChartModule } from 'primeng/chart';
 export class BarGraphComponent implements OnInit, OnChanges {
   @Input() titulo = 'Titulo no definido';
   @Input() labels: any[] = ['Q1', 'Q2', 'Q3', 'Q4'];
+  @Input() porcentaje = false;
   @Input() sets = [
     { label: '', data: [0] },
     { label: '', data: [0] },
@@ -52,7 +53,10 @@ export class BarGraphComponent implements OnInit, OnChanges {
         beginAtZero: true,
         ticks: {
           color: this.textColorSecondary,
+          callback: (value: number) =>  (this.porcentaje) ? value+'%':value,
+          stepSize: this.porcentaje	? 10 :undefined
         },
+        max: this.porcentaje ? 100 : undefined,
         grid: {
           color: this.surfaceBorder,
           drawBorder: false,
@@ -69,6 +73,7 @@ export class BarGraphComponent implements OnInit, OnChanges {
       },
     },
   };
+
   ngOnInit() {
     this.actualizarSets();
   }

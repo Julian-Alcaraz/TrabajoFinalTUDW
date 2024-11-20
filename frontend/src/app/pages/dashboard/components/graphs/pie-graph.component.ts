@@ -6,7 +6,8 @@ import { ChartModule } from 'primeng/chart';
   standalone: true,
   imports: [ChartModule],
   template: `
-    <h2 class="text-center text-2xl">{{ titulo }}</h2>
+    <h1 class="text-center text-2xl">{{ titulo }}</h1>
+    <h2 class="text-center text-lg">{{ subTitulo }}</h2>
     <div class="flex justify-center">
       <p-chart class="w-4/6" type="pie" [data]="data" [options]="options" />
     </div>
@@ -15,6 +16,7 @@ import { ChartModule } from 'primeng/chart';
 })
 export class PieGraphComponent implements OnInit, OnChanges {
   @Input() titulo = 'Titulo no definido';
+  @Input() subTitulo = '';
   @Input() labels: any[] = ['A', 'B', 'C'];
   @Input() set = { label: '', data: [0] };
   textColor = '#0000000';
@@ -67,7 +69,7 @@ export class PieGraphComponent implements OnInit, OnChanges {
       this.actualizarSets();
     }
   }
-  
+
   actualizarSets() {
     this.data = {
       labels: this.labels,

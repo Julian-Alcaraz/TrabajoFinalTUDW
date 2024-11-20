@@ -7,7 +7,7 @@ import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 
 @Controller('consulta')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ConsultaController {
   constructor(private readonly consultaService: ConsultaService) {}
 
@@ -133,12 +133,47 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
+  @Get('porcentajeEstadoNutricionalPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeEstadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeEstadoNutricional(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 
   @Get('tensionArterialPorAnio/:year/curso/:id')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async tensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
     const cantByYearList = await this.consultaService.tensionArterialData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
+  @Get('porcentajeTensionArterialPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeTensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeTensionArterialData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Post('tensionxEstadoPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async tensionxEstado(@Body() data: any, @Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const estado = data.estado;
+    const cantByYearList = await this.consultaService.tensionxEstadoData(year, id, estado);
     return {
       success: true,
       data: cantByYearList,

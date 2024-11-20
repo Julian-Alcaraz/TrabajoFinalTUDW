@@ -466,6 +466,18 @@ export class ConsultaService {
     );
     return counts;
   }
+
+  async porcentajeEstadoNutricional(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 3; i++) {
+      const data = await this.estadoNutricionalData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
   async tensionArterialData(year: number, id: number) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
@@ -485,6 +497,43 @@ export class ConsultaService {
     );
     return counts;
   }
+
+  async porcentajeTensionArterialData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 3; i++) {
+      const data = await this.tensionArterialData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async tensionxEstadoData(year: number, id: number, estado: string) {
+    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :estado  AND clinica.tension_arterial = :type', { estado, type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+}
+
+function calcularPorcentaje(data: number[]) {
+  const total = data.reduce((sum, value) => sum + value, 0);
+  const porcentajes = data.map((value) => (value * 100) / total);
+  return porcentajes;
 }
 
 function estadoNutricional(pcimc: number) {

@@ -1,4 +1,4 @@
-import { Menu } from '../../../../models/menu.model';
+import { Menu } from '../../models/menu.model';
 
 export const navbarData: Menu[] = [
   {
