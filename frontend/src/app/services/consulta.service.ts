@@ -40,8 +40,16 @@ export class ConsultaService {
   countConsultaLastYears(year:number){
     return this._http.get(this.url + 'consulta/contarXanios/' + year);
   }
-  
+
   countTypeConsultaLastYears(year:number){
     return this._http.get(this.url + 'consulta/contarTipoXanios/' + year);
+  }
+
+  countTensionArterialByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}`);
+  }
+  
+  countEstadoNutricionalByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/estadoNutricionalPorAnio/${year}/curso/${id_curso}`);
   }
 }

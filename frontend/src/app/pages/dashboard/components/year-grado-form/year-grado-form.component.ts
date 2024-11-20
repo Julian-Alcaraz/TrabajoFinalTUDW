@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CursoService } from '../../../../services/curso.service';
@@ -15,6 +15,7 @@ import { InputSelectComponent } from '../../../../components/inputs/input-select
   styleUrl: './year-grado-form.component.css',
 })
 export class YearGradoFormComponent implements OnInit {
+  @Output() cambioForm = new EventEmitter<any>();
   optionForm: FormGroup;
   cursos: Curso[] = [];
   maxDate: Date;
@@ -32,7 +33,7 @@ export class YearGradoFormComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerCursos();
-    this.traerDatosGraficos()
+    this.traerDatosGraficos();
   }
 
   get controlDeInput(): (input: string) => FormControl {
@@ -51,7 +52,24 @@ export class YearGradoFormComponent implements OnInit {
     });
   }
 
-  traerDatosGraficos(){
-    console.log(this.optionForm.value);
+  traerDatosGraficos() {
+    const id_curso = +this.optionForm.value.id_curso;
+    const year = this.optionForm.value.year ? this.optionForm.value.year.getFullYear() : 0;
+    let nombreCurso = '';
+    if (id_curso) {
+      const cursoSeleccionado = this.cursos.filter((curso) => {
+        if (curso.id === id_curso) {
+          return curso;
+        } else {
+          return;
+        }
+      });
+      nombreCurso = cursoSeleccionado[0].nombre;
+    }
+    this.cambioForm.emit({ id_curso, year, nombreCurso });
+  }
+  resetearForm() {
+    this.optionForm.reset();
+    this.traerDatosGraficos();
   }
 }

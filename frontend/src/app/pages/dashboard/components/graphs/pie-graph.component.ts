@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 
 @Component({
@@ -10,16 +10,15 @@ import { ChartModule } from 'primeng/chart';
     <div class="flex justify-center">
       <p-chart class="w-4/6" type="pie" [data]="data" [options]="options" />
     </div>
-    <p class="flex float-end mr-2">Total : {{total}}</p>
-    <!-- <p-chart type="bar" class="w-full" [data]="basicData" [options]="basicOptions" /> -->
+    <p class="flex float-end mr-2">Total : {{ total }}</p>
   `,
 })
-export class PieGraphComponent implements OnInit {
+export class PieGraphComponent implements OnInit, OnChanges {
   @Input() titulo = 'Titulo no definido';
   @Input() labels: any[] = ['A', 'B', 'C'];
-  @Input() set ={ label: '', data: [0] };
-  textColor = "#0000000";
-  total=0;
+  @Input() set = { label: '', data: [0] };
+  textColor = '#0000000';
+  total = 0;
   data: any;
   options = {
     plugins: {
@@ -48,18 +47,36 @@ export class PieGraphComponent implements OnInit {
       background: 'rgba(153, 102, 255, 0.6)',
       border: 'rgba(153, 102, 255)',
     },
+    {
+      background: 'rgba(255, 206, 86, 0.6)',
+      border: 'rgb(255, 206, 86)',
+    },
+    {
+      background: 'rgba(231, 76, 60, 0.6)',
+      border: 'rgb(231, 76, 60)',
+    },
   ];
-
+  backgroundColors = this.pieColors.map((color) => color.background);
+  hoverBackgroundColors = this.pieColors.map((color) => color.border);
   ngOnInit() {
-    this.calcularTotal()
+    this.actualizarSets();
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['set']) {
+      this.set = changes['set'].currentValue;
+      this.actualizarSets();
+    }
+  }
+  
+  actualizarSets() {
     this.data = {
-      labels:this.labels,
+      labels: this.labels,
       datasets: [
         {
-          label:this.set.label,
+          label: this.set.label,
           data: this.set.data,
-          backgroundColor: [this.pieColors[0].background, this.pieColors[1].background, this.pieColors[2].background],
-          hoverBackgroundColor: [this.pieColors[0].border, this.pieColors[1].border, this.pieColors[2].border],
+          backgroundColor: this.backgroundColors,
+          hoverBackgroundColor: this.hoverBackgroundColors,
         },
         // {
         //   data: [100, 50, 702],
@@ -68,9 +85,10 @@ export class PieGraphComponent implements OnInit {
         // },
       ],
     };
-  }
-  calcularTotal(){
-    // this.total= this.data
+    this.calcularTotal();
   }
 
+  calcularTotal() {
+    this.total = this.set.data.reduce((sum, value) => sum + value, 0);
+  }
 }

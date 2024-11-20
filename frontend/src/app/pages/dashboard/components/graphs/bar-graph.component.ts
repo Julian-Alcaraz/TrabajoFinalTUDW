@@ -70,13 +70,11 @@ export class BarGraphComponent implements OnInit, OnChanges {
     },
   };
   ngOnInit() {
-    console.log('SET', this.sets);
     this.actualizarSets();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['sets']) {
-      console.log('Sets has changed:', changes['sets'].currentValue);
       this.sets = changes['sets'].currentValue;
       this.actualizarSets();
     }
