@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavBarComponent } from './components/side-bar/side-bar.component';
+import { NavBarComponent } from '../components/side-bar/side-bar.component';
 import { RouterModule } from '@angular/router';
 
 interface SideNavToggle {
@@ -10,7 +10,12 @@ interface SideNavToggle {
   selector: 'app-layout',
   standalone: true,
   imports: [RouterModule, NavBarComponent],
-  templateUrl: './layout.component.html',
+  template: `
+    <app-side-bar (toggleSideNav)="toggleSideNav($event)" />
+    <div class="body" [class]="getBodyClass()">
+      <router-outlet />
+    </div>
+  `,
   styleUrl: './layout.component.css',
 })
 export class LayoutComponent {

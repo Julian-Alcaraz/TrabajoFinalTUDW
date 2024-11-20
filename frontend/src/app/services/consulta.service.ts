@@ -48,8 +48,21 @@ export class ConsultaService {
   countTensionArterialByYearAndCurso(year:number,id_curso:number){
     return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}`);
   }
-  
+
   countEstadoNutricionalByYearAndCurso(year:number,id_curso:number){
     return this._http.get(`${this.url}consulta/estadoNutricionalPorAnio/${year}/curso/${id_curso}`);
+  }
+
+  countTensionxEstadoByYearAndCurso(year:number,id_curso:number,estadoNutricional:string){
+    console.log(estadoNutricional)
+    return this._http.post(`${this.url}consulta/tensionxEstadoPorAnio/${year}/curso/${id_curso}`,{estado:estadoNutricional});
+  }
+
+  porcentajeTensionArterialByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeTensionArterialPorAnio/${year}/curso/${id_curso}`);
+  }
+
+  porcentajeEstadoNutricionalByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeEstadoNutricionalPorAnio/${year}/curso/${id_curso}`);
   }
 }
