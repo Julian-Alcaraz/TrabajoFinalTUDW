@@ -159,6 +159,9 @@
     .sublevel-nav-link:hover {
       background-color: white;
       color: #000;
+      .menu-collapse-icon {
+        color: #000;
+      }
     }
   }
 }
