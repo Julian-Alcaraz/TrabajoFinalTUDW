@@ -18,12 +18,11 @@ import { SessionService } from '../../../../services/session.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
-import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputRadioComponent, MatRadioModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })

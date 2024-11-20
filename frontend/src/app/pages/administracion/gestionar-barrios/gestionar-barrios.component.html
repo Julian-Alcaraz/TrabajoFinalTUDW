@@ -20,7 +20,7 @@
         <!-- # -->
         <ng-container matColumnDef="numero">
           <th mat-header-cell *matHeaderCellDef>#</th>
-          <td mat-cell *matCellDef="let element">{{barrios.data.indexOf(element)}}</td>
+          <td mat-cell *matCellDef="let element">{{barrios.data.indexOf(element) + 1}}</td>
         </ng-container>
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">

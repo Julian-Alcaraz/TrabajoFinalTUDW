@@ -10,48 +10,48 @@ import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { Localidad } from '../../../models/localidad.model';
-import { LocalidadService } from '../../../services/localidad.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { LoadingComponent } from '../../../components/loading/loading.component';
-import { ModalLocalidadComponent } from './components/modal-localidad/modal-localidad.component';
+import { Institucion } from '../../../models/institucion.model';
+import { InstitucionService } from '../../../services/institucion.service';
+import { ModalInstitucionComponent } from './modal-institucion/modal-institucion.component';
 
 @Component({
-  selector: 'app-gestionar-localidades',
+  selector: 'app-gestionar-instituciones',
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
-  templateUrl: './gestionar-localidades.component.html',
-  styleUrl: './gestionar-localidades.component.css',
+  templateUrl: './gestionar-instituciones.component.html',
+  styleUrl: './gestionar-instituciones.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
+export class GestionarInstitucionesComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
-  public localidades: MatTableDataSource<Localidad>;
+  public instituciones: MatTableDataSource<Institucion>;
   public resultsLength = 0;
   public searching = false;
 
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
-  @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
+  @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'cantidadBarrios', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'tipo', 'cantidadConsultas', 'habilitado', 'action'];
   constructor(
-    private _localidadService: LocalidadService,
+    private _institucionService: InstitucionService,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
   ) {
-    this.localidades = new MatTableDataSource<Localidad>([]);
+    this.instituciones = new MatTableDataSource<Institucion>([]);
   }
 
   ngOnInit(): void {
-    this.obtenerLocalidades();
+    this.obtenerInstituciones();
   }
 
   ngAfterViewInit() {
-    this.localidades.paginator = this.paginador;
-    this.localidades.sort = this.sort;
+    this.instituciones.paginator = this.paginador;
+    this.instituciones.sort = this.sort;
   }
 
   announceSortChange(sortState: Sort) {
@@ -62,14 +62,14 @@ export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  obtenerLocalidades() {
+  obtenerInstituciones() {
     this.searching = true;
-    this._localidadService.obtenerTodasLocalidades().subscribe({
+    this._institucionService.obtenerTodasInstituciones().subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.localidades.data = response.data;
+          this.instituciones.data = response.data;
           this.resultsLength = response.data.length;
-          console.log(this.localidades);
+          console.log(this.instituciones);
         }
         this.searching = false;
       },
@@ -82,12 +82,12 @@ export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.localidades.filter = filterValue.trim().toLowerCase();
+    this.instituciones.filter = filterValue.trim().toLowerCase();
   }
 
   habilitar(id: number) {
     Swal.fire({
-      title: '¿Habilitar localidad?',
+      title: '¿Habilitar institucion?',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -95,14 +95,14 @@ export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: false };
-        this.modifcarLocalidad(id, edit);
+        this.modifcarInstitucion(id, edit);
       }
     });
   }
 
   inhabilitar(id: number) {
     Swal.fire({
-      title: '¿Deshabilitar localidad?',
+      title: '¿Deshabilitar institucion?',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -110,13 +110,13 @@ export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: true };
-        this.modifcarLocalidad(id, edit);
+        this.modifcarInstitucion(id, edit);
       }
     });
   }
 
-  modifcarLocalidad(id: number, edit: any) {
-    this._localidadService.modificarLocalidad(id, edit).subscribe({
+  modifcarInstitucion(id: number, edit: any) {
+    this._institucionService.modificarInstitucion(id, edit).subscribe({
       next: (response: any) => {
         if (response.success) {
           MostrarNotificacion.mensajeExito(this.snackBar, response.message);
@@ -134,34 +134,34 @@ export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder editar la localidad, usted debe habilitarla',
+      text: 'Para poder editar la institucion, usted debe habilitarla',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Habilitar localidad',
+      confirmButtonText: 'Habilitar institucion',
       denyButtonText: 'Cancelar',
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: false };
-        this.modifcarLocalidad(id, edit);
+        this.modifcarInstitucion(id, edit);
       }
     });
   }
 
-  editarLocalidad(localidad: Localidad) {
-    const modal = this._dialog.open(ModalLocalidadComponent, { panelClass: 'full-screen-dialog', data: { localidad } });
+  editarInstitucion(institucion: Institucion) {
+    const modal = this._dialog.open(ModalInstitucionComponent, { panelClass: 'full-screen-dialog', data: { institucion } });
     modal.afterClosed().subscribe((result) => {
       if (result) {
-        this.obtenerLocalidades();
+        this.obtenerInstituciones();
       }
     });
   }
 
-  nuevaLocalidad() {
-    const modal = this._dialog.open(ModalLocalidadComponent, { panelClass: 'full-screen-dialog' });
+  nuevaInstitucion() {
+    const modal = this._dialog.open(ModalInstitucionComponent, { panelClass: 'full-screen-dialog' });
     modal.afterClosed().subscribe((result) => {
       if (result) {
-        this.obtenerLocalidades();
+        this.obtenerInstituciones();
       }
     });
   }

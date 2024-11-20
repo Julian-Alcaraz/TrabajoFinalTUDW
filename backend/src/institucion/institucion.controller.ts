@@ -31,6 +31,18 @@ export class InstitucionController {
     };
   }
 
+  @Get('habilitadas')
+  @ApiOperation({ summary: 'Devuelve todas las instituciones habilitadas ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las instituciones habilitadas con exito' })
+  async findAllHabilitadas() {
+    const instituciones = await this.institucionService.findAllHabilitadas();
+    return {
+      success: true,
+      data: instituciones,
+      message: 'Instituciones obtenidas con exito',
+    };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Devuelve la institucion buscada' })
   @ApiResponse({ status: 200, description: 'Retorna la institucion buscada con exito' })

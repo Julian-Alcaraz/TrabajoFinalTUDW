@@ -1,7 +1,12 @@
 <div class="card">
   <div class="card-header">Usuarios del sistema</div>
   <div class="card-body">
-    <input (keyup)="applyFilter($event)" placeholder="Ingrese el dato a buscar" #input type="text" id="filtro" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required />
+    <input (keyup)="applyFilter($event)" placeholder="Ingrese el dato a buscar" #input type="text" id="filtro"
+      class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+      required />
+    <div class="demo-button-container">
+      <button mat-flat-button (click)="submitRolesForm()" class="demo-button">Confirmar cambios</button>
+    </div>
     <div class="scroll">
       <table mat-table [dataSource]="usuarios" class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
@@ -32,9 +37,23 @@
         <ng-container matColumnDef="roles">
           <th mat-header-cell *matHeaderCellDef>Roles</th>
           <td mat-cell *matCellDef="let element">
-            @for (rol of element.roles; track $index) {
-              {{rol.nombre}}
-            }
+            <form #rolesFormElement (submit)="cambiarRoles(element.id)" [formGroup]="rolesForm">
+              <div class="flex flex-col">
+                <ul
+                  class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+                  <li *ngFor="let rol of roles; let last = last" [ngClass]="{ 'sm:border-r': !last }"
+                    class="w-full border-b border-gray-200 sm:border-b-0">
+                    <div class="flex items-center p-2">
+                      <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id"
+                        [checked]="tieneElRol(rol.id, element)" (change)="onCheckboxChange($event)"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                      <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{
+                        rol.nombre }}</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </form>
           </td>
         </ng-container>
         <ng-container matColumnDef="habilitado">
@@ -47,14 +66,18 @@
           <th mat-header-cell *matHeaderCellDef>Acción</th>
           <td mat-cell *matCellDef="let element">
             <div class="flex flex-row">
-              <button (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id)" [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button
+                [attr.aria-label]="element.deshabilitado ? 'Botón de habilitar usuario' : 'Botón de deshabilitar usuario'"
+                (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id)"
+                [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 @if (element.deshabilitado) {
-                  <i class="fa-solid fa-check"></i>
+                <i class="fa-solid fa-check"></i>
                 } @else {
-                  <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-xmark"></i>
                 }
               </button>
-              <button (click)="resetarContrasenia(element)" class="ms-2 text-white bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button aria-label="Botón de resetear contraseña usuario" (click)="resetarContrasenia(element)"
+                class="ms-2 text-white bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 <i class="fa-solid fa-arrow-rotate-right"></i>
               </button>
             </div>
@@ -62,23 +85,23 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
             @if (searching) {
-              <div class="flex justify-center items-center h-32">
-                <app-loading />
-              </div>
+            <div class="flex justify-center items-center h-32">
+              <app-loading />
+            </div>
             } @else {
-              <p class="py-5">
-                {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
-              </p>
+            <p class="py-5">
+              {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
+            </p>
             }
           </td>
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5,10,15]"
+      showFirstLastButtons></mat-paginator>
   </div>
 </div>

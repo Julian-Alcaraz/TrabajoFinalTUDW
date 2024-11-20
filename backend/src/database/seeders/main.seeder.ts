@@ -223,7 +223,15 @@ export class MainSeeder implements Seeder {
           label: 'Gestionar Barrios',
           orden: 5,
           icon: 'fa-solid fa-map-location',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/gestionarInstituciones',
+          label: 'Gestionar Instituciones',
+          orden: 5,
+          icon: 'fa-solid fa-school',
+          roles: [roles[0]],
           menu_padre: menus[3],
         },
       ]);
