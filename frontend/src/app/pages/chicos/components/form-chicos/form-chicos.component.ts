@@ -22,6 +22,13 @@ import { InputDateComponent } from '../../../../components/inputs/input-date.com
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
 
+/*
+
+EL CODIGO COMENTADO ES DE LA FUNCIONALIDAD PARA CARGAR BARRIO Y CARGAR LOCALIDAD.
+LO SAQUE PARA QUE EL ADMIN SOLO PUEDA CARGAR LOCALIDADES Y BARRIOS.
+SI SE DESCOMENTA HAY QUE VALIDAR LOS ROLES DEL USUARIO ANTES DE DEJAR CARGAR.
+
+*/
 @Component({
   selector: 'app-form-chicos',
   standalone: true,
@@ -37,14 +44,14 @@ export class FormChicosComponent implements OnInit {
   public chicoForm: FormGroup;
   public barrios: Barrio[] = [];
   public localidades: Localidad[] = [];
-  public localidadForm: FormGroup;
-  public barrioForm: FormGroup;
+  //public localidadForm: FormGroup;
+  //public barrioForm: FormGroup;
   public estaEditando = false;
   public chico: Chico | null = null;
   public fechaHaceUnAnio = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   public fechaHoy = new Date();
   public habilitarModificar = false;
-  public mensajeDoc=""
+  public mensajeDoc = '';
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
@@ -69,6 +76,7 @@ export class FormChicosComponent implements OnInit {
       id_barrio: [{ value: '', disabled: this.esFormulario ? false : true }, [Validators.required]],
       id_localidad: ['', [Validators.required]],
     });
+    /*
     // Nueva localidad
     this.localidadForm = this.fb.group({
       nueva_localidad: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
@@ -78,6 +86,7 @@ export class FormChicosComponent implements OnInit {
       nuevo_barrio: ['', [Validators.required, ValidarCadenaSinEspacios]],
       id_localidad: ['', [Validators.required]],
     });
+    */
   }
 
   ngOnInit(): void {
@@ -98,11 +107,11 @@ export class FormChicosComponent implements OnInit {
             this.buscarChicoxDni(value);
           }
         } else {
-          this.mensajeDoc= ""
+          this.mensajeDoc = '';
           this.buscarChicoxDni(value);
         }
-      }else{
-        this.mensajeDoc= ""
+      } else {
+        this.mensajeDoc = '';
       }
     });
   }
@@ -111,11 +120,11 @@ export class FormChicosComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
-          this.habilitarModificar=true
-          this.mensajeDoc= "Documento ya ingresado en otro chico."
+          this.habilitarModificar = true;
+          this.mensajeDoc = 'Documento ya ingresado en otro chico.';
         } else {
           this.chicoForm.get('dni')?.setErrors(null);
-          this.mensajeDoc= ""
+          this.mensajeDoc = '';
         }
       },
       error: (error: any) => {
@@ -127,7 +136,7 @@ export class FormChicosComponent implements OnInit {
     const idBarrio = this.chicoForm.get('id_barrio')?.value;
     if (idBarrio === 'new') {
       this.abrirModalBarrio();
-      this.barrioForm.get('id_localidad')?.setValue(this.chicoForm.get('id_localidad')?.value);
+      // this.barrioForm.get('id_localidad')?.setValue(this.chicoForm.get('id_localidad')?.value);
     }
   }
 
@@ -160,7 +169,7 @@ export class FormChicosComponent implements OnInit {
         next: (response: any) => {
           if (response.data) {
             this.chico = response.data;
-            this.completarDatosForm()
+            this.completarDatosForm();
             this.obtenerBarriosXLocalidad(this.chicoForm.get('id_localidad')?.value);
             this.chicoForm.disable();
             this.searching = false;
@@ -175,7 +184,7 @@ export class FormChicosComponent implements OnInit {
     }
   }
 
-  completarDatosForm(){
+  completarDatosForm() {
     const stringFecha = String(this.chico?.fe_nacimiento) + 'T12:00:00';
     this.chicoForm.patchValue({
       nombre: this.chico?.nombre,
@@ -203,6 +212,7 @@ export class FormChicosComponent implements OnInit {
   }
 
   cargarLocalidad() {
+    /*
     if (this.localidadForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva localidad?',
@@ -232,9 +242,11 @@ export class FormChicosComponent implements OnInit {
         }
       });
     }
+    */
   }
 
   cargarBarrio() {
+    /*
     if (this.barrioForm.valid) {
       Swal.fire({
         title: '¿Cargar nuevo barrio?',
@@ -266,6 +278,7 @@ export class FormChicosComponent implements OnInit {
         }
       });
     }
+    */
   }
 
   activarFormulario() {
@@ -275,7 +288,7 @@ export class FormChicosComponent implements OnInit {
 
   desactivarFormulario() {
     this.chicoForm.disable();
-    this.completarDatosForm()
+    this.completarDatosForm();
     this.estaEditando = false;
   }
 
@@ -380,28 +393,36 @@ export class FormChicosComponent implements OnInit {
   // Modal Barrio
 
   abrirModalBarrio() {
+    /*
     const dialogRef = this._dialog.open(this.barrioModal, { minWidth: '40%' });
     dialogRef.afterClosed().subscribe(() => {
       this.barrioForm.reset();
     });
+    */
   }
 
   cerraModalBarrio() {
+    /*
     this._dialog.closeAll();
     this.chicoForm.get('id_barrio')?.setValue('');
+    */
   }
 
   // Modal localidad
 
   abrirModalLocalidad() {
+    /*
     const dialogRef = this._dialog.open(this.localidadModal, { minWidth: '40%' });
     dialogRef.afterClosed().subscribe(() => {
       this.localidadForm.reset();
     });
+    */
   }
 
   cerraModalLocalidad() {
+    /*
     this._dialog.closeAll();
     this.chicoForm.get('id_localidad')?.setValue('');
+    */
   }
 }

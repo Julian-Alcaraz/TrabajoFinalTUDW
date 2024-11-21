@@ -18,14 +18,14 @@ import { InstitucionService } from '../../../services/institucion.service';
 import { ModalInstitucionComponent } from './modal-institucion/modal-institucion.component';
 
 @Component({
-  selector: 'app-gestionar-instituciones',
+  selector: 'app-instituciones',
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
-  templateUrl: './gestionar-instituciones.component.html',
-  styleUrl: './gestionar-instituciones.component.css',
+  templateUrl: './instituciones.component.html',
+  styleUrl: './instituciones.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class GestionarInstitucionesComponent implements OnInit, AfterViewInit {
+export class InstitucionesComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
   public instituciones: MatTableDataSource<Institucion>;

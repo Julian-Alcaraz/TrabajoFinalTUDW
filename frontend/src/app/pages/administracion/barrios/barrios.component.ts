@@ -17,14 +17,14 @@ import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-perso
 import { ModalBarrioComponent } from './modal-barrio/modal-barrio.component';
 
 @Component({
-  selector: 'app-gestionar-barrios',
+  selector: 'app-barrios',
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
-  templateUrl: './gestionar-barrios.component.html',
-  styleUrl: './gestionar-barrios.component.css',
+  templateUrl: './barrios.component.html',
+  styleUrl: './barrios.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class GestionarBarriosComponent implements OnInit, AfterViewInit {
+export class BarriosComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
   public barrios: MatTableDataSource<Barrio>;

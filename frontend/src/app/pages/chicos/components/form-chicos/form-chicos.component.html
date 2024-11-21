@@ -48,7 +48,7 @@
         <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
         <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
           <option value="" disabled selected>Selecciona una opción</option>
-          <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option>
+          <!-- <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option> -->
           <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
         </select>
         <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
@@ -92,7 +92,7 @@
   </form>
 }
 
-<!-- Barrio Modal -->
+<!-- Barrio Modal
 <ng-template #barrioModal>
   <div class="p-4">
     <div class="flex flex-row justify-between mb-3">
@@ -102,7 +102,6 @@
     <form (submit)="cargarBarrio()" [formGroup]="barrioForm">
       <div class="border-t-2 p-4">
         <div class="mb-3">
-          <!-- Cambiar a nombre de localidad despues: -->
           <label for="nuevo_barrio" class="block mb-2 text-sm font-medium text-gray-900">Nuevo Barrio</label>
           <input type="text" id="nuevo_barrio" formControlName="nuevo_barrio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ingresa el nombre del nuevo barrio" required />
           <div *ngIf="barrioForm.get('nuevo_barrio')?.errors && (barrioForm.get('nuevo_barrio')?.dirty || barrioForm.get('nuevo_barrio')?.touched)" class="text-red-600 text-sm">
@@ -117,4 +116,4 @@
       </div>
     </form>
   </div>
-</ng-template>
+</ng-template> -->

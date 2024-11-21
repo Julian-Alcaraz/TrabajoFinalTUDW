@@ -9,7 +9,7 @@ import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { Institucion } from '../../../../models/institucion.model';
 import { InstitucionService } from '../../../../services/institucion.service';
-import { ModalLocalidadComponent } from '../../gestionar-localidades/components/modal-localidad/modal-localidad.component';
+import { ModalLocalidadComponent } from '../../localidades/components/modal-localidad/modal-localidad.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 
 @Component({

@@ -1,25 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { GestionarLocalidadesComponent } from '../pages/administracion/gestionar-localidades/gestionar-localidades.component';
+import { LocalidadesComponent } from '../pages/administracion/localidades/localidades.component';
 import { NuevoUsuarioComponent } from '../pages/administracion/usuarios/nuevo-usuario/nuevo-usuario.component';
 import { ListaUsuarioComponent } from '../pages/administracion/usuarios/lista-usuario/lista-usuario.component';
 import { adminGuard } from '../guards/auth.guard';
-import { GestionarBarriosComponent } from '../pages/administracion/gestionar-barrios/gestionar-barrios.component';
-import { GestionarInstitucionesComponent } from '../pages/administracion/gestionar-instituciones/gestionar-instituciones.component';
+import { BarriosComponent } from '../pages/administracion/barrios/barrios.component';
+import { InstitucionesComponent } from '../pages/administracion/instituciones/instituciones.component';
 
 const routes: Routes = [
   {
-    path: 'gestionarLocalidades',
-    children: [{ path: '', component: GestionarLocalidadesComponent, canActivate: [adminGuard] }],
+    path: 'localidades',
+    children: [{ path: '', component: LocalidadesComponent, canActivate: [adminGuard] }],
   },
   {
-    path: 'gestionarBarrios',
-    children: [{ path: '', component: GestionarBarriosComponent, canActivate: [adminGuard] }],
+    path: 'barrios',
+    children: [{ path: '', component: BarriosComponent, canActivate: [adminGuard] }],
   },
   {
-    path: 'gestionarInstituciones',
-    children: [{ path: '', component: GestionarInstitucionesComponent, canActivate: [adminGuard] }],
+    path: 'instituciones',
+    children: [{ path: '', component: InstitucionesComponent, canActivate: [adminGuard] }],
   },
   {
     path: 'usuarios',

@@ -18,14 +18,14 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 import { ModalLocalidadComponent } from './components/modal-localidad/modal-localidad.component';
 
 @Component({
-  selector: 'app-gestionar-localidades',
+  selector: 'app-localidades',
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
-  templateUrl: './gestionar-localidades.component.html',
-  styleUrl: './gestionar-localidades.component.css',
+  templateUrl: './localidades.component.html',
+  styleUrl: './localidades.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class GestionarLocalidadesComponent implements OnInit, AfterViewInit {
+export class LocalidadesComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
   public localidades: MatTableDataSource<Localidad>;
