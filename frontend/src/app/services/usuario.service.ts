@@ -16,6 +16,12 @@ export class UsuarioService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  eliminarRolDeUsuario(idUsuario: number, idRol: number): Observable<any> {
+    return this._http.delete(`${this.url}usuario/${idUsuario}/rol/${idRol}`);
+  }
+  agregarRolDeUsuario(idUsuario: number, idRol: number): Observable<any> {
+    return this._http.put(`${this.url}usuario/${idUsuario}/rol/${idRol}`, {}); // creo que no hace falta {}
+  }
   obtenerProfesionales(): Observable<any> {
     return this._http.get(this.url + 'usuario/profesionales');
   }

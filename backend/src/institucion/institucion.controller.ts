@@ -16,7 +16,12 @@ export class InstitucionController {
   @ApiOperation({ summary: 'Crea una nueva institucion' })
   @ApiResponse({ status: 201, description: 'Institucion creada con exito' })
   async create(@Body() createInstitucionDto: CreateInstitucionDto) {
-    return this.institucionService.create(createInstitucionDto);
+    const institucion = this.institucionService.create(createInstitucionDto);
+    return {
+      success: true,
+      data: institucion,
+      message: 'Instituciones creada con exito',
+    };
   }
 
   @Get()

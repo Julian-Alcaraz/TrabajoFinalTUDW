@@ -15,7 +15,7 @@ import { LocalidadService } from '../../../services/localidad.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { LoadingComponent } from '../../../components/loading/loading.component';
-import { ModalLocalidadComponent } from './components/modal-localidad/modal-localidad.component';
+import { ModalLocalidadComponent } from './modal-localidad/modal-localidad.component';
 
 @Component({
   selector: 'app-localidades',

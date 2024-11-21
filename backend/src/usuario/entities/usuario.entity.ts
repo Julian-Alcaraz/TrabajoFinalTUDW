@@ -21,9 +21,6 @@ export class Usuario extends EntidadBasica {
   @Column({ type: 'varchar', length: 255 })
   contrasenia: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  especialidad: string;
-
   @Column({ type: 'date' })
   fe_nacimiento: Date;
 

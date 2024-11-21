@@ -7,7 +7,6 @@ export class Usuario {
     public nombre: string,
     public apellido: string,
     public email: string,
-    public especialidad: string,
     public roles_ids?: number[],
     public contrasenia?: string,
     public fe_nacimiento?: Date,
@@ -17,6 +16,6 @@ export class Usuario {
   ) {}
 
   static overload_constructor() {
-    return new Usuario(0, 0, '', '', '', '', [], '', undefined);
+    return new Usuario(0, 0, '', '', '', [], '', undefined);
   }
 }

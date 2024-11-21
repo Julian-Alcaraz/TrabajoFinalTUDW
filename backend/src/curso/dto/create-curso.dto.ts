@@ -1,18 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsPositive, IsString, Length } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
 import { nivelCurso } from '../entities/curso.entity';
 import { Transform } from 'class-transformer';
 
 export class CreateCursoDto {
-  @ApiProperty({ description: 'Grado del curso.' })
-  @IsNotEmpty({ message: 'El grado no puede estar vacio' })
-  @IsInt({ message: 'El grado debe ser un number' })
-  @IsPositive({ message: 'El grado debe ser un numero positivo' })
-  readonly grado: number;
-
   @ApiProperty({ description: 'Nivel del chico' })
   @IsNotEmpty({ message: 'El Nivel no puede estar vacio' })
-  @IsEnum(['Primaria', 'Secundario', 'Jardin', 'Terciario', 'Universitario'], { message: 'No es un nivel valido. Primaria, Secundario, Jardin, Terciario, Universitario' })
+  @IsEnum(['Jardin', 'Primario', 'Secundario'], { message: 'No es un nivel valido. Jardin, Primario' })
   readonly nivel: nivelCurso;
 
   @ApiProperty({ description: 'Nombre del curso' })

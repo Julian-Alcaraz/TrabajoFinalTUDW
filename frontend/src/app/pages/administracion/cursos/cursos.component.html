@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="card-header">Localidades del sistema</div>
+  <div class="card-header">Cursos del sistema</div>
   <div class="card-body">
     <div class="grid md:grid-cols-2 md:grid-gap-0">
       <div class="md:col-span-1">
@@ -8,29 +8,35 @@
           required />
       </div>
       <div class="md:col-span-1">
-        <button type="button" (click)="nuevaLocalidad()"
-          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Nueva
-          localidad
+        <button type="button" (click)="nuevoCurso()"
+          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Nuevo
+          curso
         </button>
       </div>
     </div>
     <div class="scroll">
-      <table mat-table [dataSource]="localidades" matSort (matSortChange)="announceSortChange($event)"
+      <table mat-table [dataSource]="cursos" matSort (matSortChange)="announceSortChange($event)"
         class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
         <ng-container matColumnDef="numero">
           <th mat-header-cell *matHeaderCellDef>#</th>
-          <td mat-cell *matCellDef="let element">{{localidades.data.indexOf(element) + 1}}</td>
+          <td mat-cell *matCellDef="let element">{{cursos.data.indexOf(element) + 1}}</td>
         </ng-container>
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por nombre">Nombre</th>
           <td mat-cell *matCellDef="let element"> {{ element.nombre }} </td>
         </ng-container>
-        <!-- Cantidad de barrios -->
-        <ng-container matColumnDef="cantidadBarrios">
-          <th mat-header-cell *matHeaderCellDef>Barrios</th>
-          <td mat-cell *matCellDef="let element"> {{ element.cantidadBarrios === 0 ? '-' : element.cantidadBarrios }}</td>
+        <!-- Nivel -->
+        <ng-container matColumnDef="nivel">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por nivel">Nivel</th>
+          <td mat-cell *matCellDef="let element"> {{ element.nivel }} </td>
+        </ng-container>
+        <!-- Cantidad de consultas podria ponerse -->
+        <ng-container matColumnDef="cantidadConsultas">
+          <th mat-header-cell *matHeaderCellDef>Consultas</th>
+          <td mat-cell *matCellDef="let element"> {{ element.cantidadConsultas === 0 ? '-' : element.cantidadConsultas
+            }}</td>
         </ng-container>
         <!-- Estado -->
         <ng-container matColumnDef="habilitado">
@@ -53,7 +59,7 @@
                 <i class="fa-solid fa-xmark"></i>
                 }
               </button>
-              <button (click)="element.deshabilitado ? notificar(element.id) : editarLocalidad(element)"
+              <button (click)="element.deshabilitado ? notificar(element.id) : editarCurso(element)"
                 class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
               </button>
@@ -71,8 +77,8 @@
             </div>
             } @else {
             <p class="py-5">
-              {{ input.value ? "No se encontraron localidades llamadas '" + input.value + "'" :
-              'No hay localidades cargadas.' }}
+              {{ input.value ? "No se encontraron cursos llamados '" + input.value + "'" :
+              'No hay cursos cargados.' }}
             </p>
             }
           </td>

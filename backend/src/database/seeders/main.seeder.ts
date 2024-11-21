@@ -58,10 +58,6 @@ export class MainSeeder implements Seeder {
         {
           nombre: 'Acceso informacion',
         },
-        {
-          nombre: 'rolDeshabilitado',
-          deshabilitado: true,
-        },
       ]);
 
       // Usuarios
@@ -92,7 +88,7 @@ export class MainSeeder implements Seeder {
           contrasenia: codificarContrasenia('1234567'),
           dni: 12345671,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[3]], // AccesoInfo
+          roles: [roles[2]], // AccesoInfo
         },
         {
           nombre: 'ProfesionalYAdmin',
@@ -137,7 +133,6 @@ export class MainSeeder implements Seeder {
             return usuario;
           }),
       );
-      // await usuarioORM.save(usuariosPredeterminados);
       await usuarioORM.save(usuarios);
       await usuarioORM.save(usuariosCon2Roles);
 
@@ -187,7 +182,7 @@ export class MainSeeder implements Seeder {
           label: 'Mi Usuario',
           orden: 3,
           icon: 'fa-solid fa-user',
-          roles: [roles[0], roles[1], roles[2], roles[3]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'menuDeshabilitado',
@@ -214,7 +209,6 @@ export class MainSeeder implements Seeder {
           url: 'administracion/localidades',
           label: 'Localidades',
           orden: 7,
-          // icon: 'fa-solid fa-location-dot',
           icon: 'fa-solid fa-earth-americas',
           roles: [roles[0]],
           menu_padre: menus[3],
@@ -223,7 +217,6 @@ export class MainSeeder implements Seeder {
           url: 'administracion/barrios',
           label: 'Barrios',
           orden: 5,
-          //icon: 'fa-solid fa-map-location',
           icon: 'fa-solid fa-location-dot',
           roles: [roles[0]],
           menu_padre: menus[3],
@@ -236,6 +229,14 @@ export class MainSeeder implements Seeder {
           roles: [roles[0]],
           menu_padre: menus[3],
         },
+        {
+          url: 'administracion/cursos',
+          label: 'Cursos',
+          orden: 5,
+          icon: 'fa-solid fa-graduation-cap',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
       ]);
       await menuORM.save(menusAdmin);
 
@@ -244,7 +245,6 @@ export class MainSeeder implements Seeder {
           url: 'administracion/usuarios/list',
           label: 'Lista Usuarios',
           orden: 5,
-          //icon: 'fa-solid fa-users-line',
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0]],
           menu_padre: menusAdmin[0],
@@ -253,7 +253,6 @@ export class MainSeeder implements Seeder {
           url: 'administracion/usuarios/nuevo',
           label: 'Nuevo Usuario',
           orden: 4,
-          // icon: 'fa-solid fa-user-plus',
           icon: 'fa-solid fa-plus',
           roles: [roles[0]],
           menu_padre: menusAdmin[0],
@@ -380,84 +379,52 @@ export class MainSeeder implements Seeder {
       console.log('Seeding cursos...');
       const cursos = await cursoORM.save([
         {
-          grado: 1,
-          nivel: 'Primaria',
-          nombre: 'Primer Grado',
-        },
-        {
-          grado: 2,
-          nivel: 'Primaria',
-          nombre: 'Segundo Grado',
-        },
-        {
-          grado: 3,
-          nivel: 'Primaria',
-          nombre: 'Tercer Grado',
-        },
-        {
-          grado: 4,
-          nivel: 'Primaria',
-          nombre: 'Cuarto Grado',
-        },
-        {
-          grado: 5,
-          nivel: 'Primaria',
-          nombre: 'Quinto Grado',
-        },
-        {
-          grado: 6,
-          nivel: 'Primaria',
-          nombre: 'Sexto Grado',
-        },
-        {
-          grado: 7,
-          nivel: 'Primaria',
-          nombre: 'Septimo Grado',
-        },
-        {
-          grado: 1,
-          nivel: 'Secundario',
-          nombre: 'Primer Año',
-        },
-        {
-          grado: 2,
-          nivel: 'Secundario',
-          nombre: 'Segundo Año',
-        },
-        {
-          grado: 3,
-          nivel: 'Secundario',
-          nombre: 'Tercer Año',
-        },
-        {
-          grado: 4,
-          nivel: 'Secundario',
-          nombre: 'Cuarto Año',
-        },
-        {
-          grado: 5,
-          nivel: 'Secundario',
-          nombre: 'Quinto Año',
-        },
-        {
-          grado: 6,
-          nivel: 'Secundario',
-          nombre: 'Sexto Año',
-        },
-        {
-          grado: 3,
           nivel: 'Jardin',
           nombre: 'Sala de 3 Años',
         },
         {
-          grado: 4,
           nivel: 'Jardin',
           nombre: 'Sala de 4 Años',
         },
         {
-          grado: 5,
           nivel: 'Jardin',
           nombre: 'Sala de 5 Años',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Primer Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Segundo Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Tercer Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Cuarto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Quinto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Sexto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Septimo Grado',
+        },
+        {
+          nivel: 'Secundario',
+          nombre: 'Primer Año',
+        },
+        {
+          nivel: 'Secundario',
+          nombre: 'Segundo Año',
         },
       ]);
       console.log('Seeding instituciones...');
@@ -473,10 +440,6 @@ export class MainSeeder implements Seeder {
         {
           nombre: 'E.P.E.T N° 20',
           tipo: 'Secundario',
-        },
-        {
-          nombre: 'Universidad nacional del comahue',
-          tipo: 'Terciario',
         },
       ]);
       // Chicos

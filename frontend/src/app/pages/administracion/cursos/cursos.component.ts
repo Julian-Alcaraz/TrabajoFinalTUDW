@@ -1,69 +1,73 @@
-import { AfterViewInit, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
+import { inject } from '@angular/core';
+import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { BarrioService } from '../../../services/barrio.service';
-import { Barrio } from '../../../models/barrio.model';
-import { LoadingComponent } from '../../../components/loading/loading.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { ModalBarrioComponent } from './modal-barrio/modal-barrio.component';
+import { LoadingComponent } from '../../../components/loading/loading.component';
+import { Curso } from '../../../models/curso.model';
+import { CursoService } from '../../../services/curso.service';
+import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
 
 @Component({
-  selector: 'app-barrios',
+  selector: 'app-cursos',
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
-  templateUrl: './barrios.component.html',
-  styleUrl: './barrios.component.css',
+  templateUrl: './cursos.component.html',
+  styleUrl: './cursos.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class BarriosComponent implements OnInit, AfterViewInit {
+export class CursosComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
-  public barrios: MatTableDataSource<Barrio>;
+  public cursos: MatTableDataSource<Curso>;
   public resultsLength = 0;
   public searching = false;
 
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
-  @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
+  @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'nombre_localidad', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'nivel', 'cantidadConsultas', 'habilitado', 'action'];
   constructor(
-    private _barrioService: BarrioService,
-    private _dialog: MatDialog,
+    private _cursoService: CursoService,
     private snackBar: MatSnackBar,
+    private _dialog: MatDialog,
   ) {
-    this.barrios = new MatTableDataSource<Barrio>([]);
+    this.cursos = new MatTableDataSource<Curso>([]);
   }
 
   ngOnInit(): void {
-    this.obtenerBarrios();
+    this.obtenerCursos();
   }
 
   ngAfterViewInit() {
-    this.barrios.paginator = this.paginador;
-    this.barrios.sort = this.sort;
+    this.cursos.paginator = this.paginador;
+    this.cursos.sort = this.sort;
   }
 
   announceSortChange(sortState: Sort) {
-    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
-    else this._liveAnnouncer.announce('Orden eliminado');
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    } else {
+      this._liveAnnouncer.announce('Orden eliminado');
+    }
   }
 
-  obtenerBarrios() {
+  obtenerCursos() {
     this.searching = true;
-    this._barrioService.obtenerTodosBarrios().subscribe({
+    this._cursoService.obtenerTodosCursos().subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.barrios.data = response.data;
+          this.cursos.data = response.data;
           this.resultsLength = response.data.length;
         }
         this.searching = false;
@@ -77,28 +81,12 @@ export class BarriosComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.barrios.filter = filterValue.trim().toLowerCase();
-  }
-
-  notificar(id: number) {
-    Swal.fire({
-      title: 'Error',
-      text: 'Para poder editar el barrio, usted debe habilitarlo',
-      icon: 'warning',
-      showDenyButton: true,
-      confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Habilitar barrio',
-      denyButtonText: 'Cancelar',
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.habilitar(id);
-      }
-    });
+    this.cursos.filter = filterValue.trim().toLowerCase();
   }
 
   habilitar(id: number) {
     Swal.fire({
-      title: '¿Habilitar barrio?',
+      title: '¿Habilitar curso?',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -106,14 +94,14 @@ export class BarriosComponent implements OnInit, AfterViewInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: false };
-        this.modificarBarrio(id, edit);
+        this.modificarCurso(id, edit);
       }
     });
   }
 
   inhabilitar(id: number) {
     Swal.fire({
-      title: '¿Deshabilitar barrio?',
+      title: '¿Deshabilitar curso?',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -121,13 +109,13 @@ export class BarriosComponent implements OnInit, AfterViewInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         const edit = { deshabilitado: true };
-        this.modificarBarrio(id, edit);
+        this.modificarCurso(id, edit);
       }
     });
   }
 
-  modificarBarrio(id: number, edit: any) {
-    this._barrioService.modificarBarrio(id, edit).subscribe({
+  modificarCurso(id: number, edit: any) {
+    this._cursoService.modificarCurso(id, edit).subscribe({
       next: (response: any) => {
         if (response.success) {
           MostrarNotificacion.mensajeExito(this.snackBar, response.message);
@@ -142,20 +130,37 @@ export class BarriosComponent implements OnInit, AfterViewInit {
     });
   }
 
-  editarBarrio(barrio: Barrio) {
-    const modal = this._dialog.open(ModalBarrioComponent, { panelClass: 'full-screen-dialog', data: { barrio } });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
-        this.obtenerBarrios();
+  notificar(id: number) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Para poder editar la curso, usted debe habilitarla',
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#3f77b4',
+      confirmButtonText: 'Habilitar curso',
+      denyButtonText: 'Cancelar',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        const edit = { deshabilitado: false };
+        this.modificarCurso(id, edit);
       }
     });
   }
 
-  nuevoBarrio() {
-    const modal = this._dialog.open(ModalBarrioComponent, { panelClass: 'full-screen-dialog' });
+  editarCurso(curso: Curso) {
+    const modal = this._dialog.open(ModalCursoComponent, { panelClass: 'full-screen-dialog', data: { curso } });
     modal.afterClosed().subscribe((result) => {
       if (result) {
-        this.obtenerBarrios();
+        this.obtenerCursos();
+      }
+    });
+  }
+
+  nuevoCurso() {
+    const modal = this._dialog.open(ModalCursoComponent, { panelClass: 'full-screen-dialog' });
+    modal.afterClosed().subscribe((result) => {
+      if (result) {
+        this.obtenerCursos();
       }
     });
   }

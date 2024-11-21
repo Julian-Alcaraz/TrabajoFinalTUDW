@@ -14,6 +14,6 @@ export class CreateInstitucionDto {
 
   @ApiProperty({ description: 'Tipo de insititucion' })
   @IsNotEmpty({ message: 'El tipo de institución no puede estar vacio' })
-  @IsEnum(['Jardin', 'Primario', 'Secundario', 'Terciario'], { message: 'No es un nivel valido. Primaria, Secundario, Jardin, Terciario, Universitario' })
+  @IsEnum(['Jardin', 'Primario', 'Secundario'], { message: 'No es un nivel valido. Jardin, Primario, Secundario' })
   readonly tipo: tiposInstitucion;
 }

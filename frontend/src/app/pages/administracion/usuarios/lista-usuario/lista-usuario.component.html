@@ -4,9 +4,6 @@
     <input (keyup)="applyFilter($event)" placeholder="Ingrese el dato a buscar" #input type="text" id="filtro"
       class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
       required />
-    <div class="demo-button-container">
-      <button mat-flat-button (click)="submitRolesForm()" class="demo-button">Confirmar cambios</button>
-    </div>
     <div class="scroll">
       <table mat-table [dataSource]="usuarios" class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
@@ -37,23 +34,12 @@
         <ng-container matColumnDef="roles">
           <th mat-header-cell *matHeaderCellDef>Roles</th>
           <td mat-cell *matCellDef="let element">
-            <form #rolesFormElement (submit)="cambiarRoles(element.id)" [formGroup]="rolesForm">
-              <div class="flex flex-col">
-                <ul
-                  class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-                  <li *ngFor="let rol of roles; let last = last" [ngClass]="{ 'sm:border-r': !last }"
-                    class="w-full border-b border-gray-200 sm:border-b-0">
-                    <div class="flex items-center p-2">
-                      <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id"
-                        [checked]="tieneElRol(rol.id, element)" (change)="onCheckboxChange($event)"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                      <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{
-                        rol.nombre }}</label>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </form>
+            <!-- Agregar , despues de cada rol!!! -->
+            @for (rol of element.roles; track $index) {
+              {{rol.nombre}}
+            }
+            <button aria-label="Botón de editar roles" (click)="editarRoles(element)"
+              class="flex m-0 p-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Editar</button>
           </td>
         </ng-container>
         <ng-container matColumnDef="habilitado">

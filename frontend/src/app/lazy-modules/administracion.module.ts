@@ -7,6 +7,7 @@ import { ListaUsuarioComponent } from '../pages/administracion/usuarios/lista-us
 import { adminGuard } from '../guards/auth.guard';
 import { BarriosComponent } from '../pages/administracion/barrios/barrios.component';
 import { InstitucionesComponent } from '../pages/administracion/instituciones/instituciones.component';
+import { CursosComponent } from '../pages/administracion/cursos/cursos.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'instituciones',
     children: [{ path: '', component: InstitucionesComponent, canActivate: [adminGuard] }],
+  },
+  {
+    path: 'cursos',
+    children: [{ path: '', component: CursosComponent, canActivate: [adminGuard] }],
   },
   {
     path: 'usuarios',

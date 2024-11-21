@@ -50,12 +50,4 @@ export class CreateUsuarioDto {
   @IsPositive({ each: true, message: 'Cada elemento del arreglo debe ser un numero positivo' })
   @IsInt({ each: true, message: 'Cada elemento del arreglo debe ser un numero entero' })
   readonly roles_ids: number[];
-
-  @ApiProperty({ description: 'Especialidad del usuario medico' })
-  @IsOptional()
-  @IsNotEmpty({ message: 'La especialidad no puede estar vacia' })
-  @IsString({ message: 'La especialidad debe ser un string' })
-  @Length(1, 100, { message: 'La especialidad debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly especialidad?: string;
 }

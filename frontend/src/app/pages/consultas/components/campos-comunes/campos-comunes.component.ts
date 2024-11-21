@@ -1,16 +1,13 @@
-import { Component, Input, OnInit, Output, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, debounceTime, map, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Chico } from '../../../../models/chico.model';
@@ -25,7 +22,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 @Component({
   selector: 'app-campos-comunes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputTextComponent, InputSelectComponent, InputSelectEnumComponent, LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputSelectComponent, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './campos-comunes.component.html',
   styleUrl: './campos-comunes.component.css',
 })
@@ -36,38 +33,20 @@ export class CamposComunesComponent implements OnInit {
   public chico: Chico | null = null;
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
-  public institucionForm: FormGroup;
-  public cursoForm: FormGroup;
   public edadAnios: number | null = null;
   public edadMeses: number | null = null;
 
   public searching = false;
 
-  @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
-  @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
-
   @Output() chicoChange = new EventEmitter<Chico | null>();
 
   constructor(
-    private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _router: Router,
     private _cursoService: CursoService,
     private _chicoService: ChicoService,
     private _institucionService: InstitucionService,
-    private _dialog: MatDialog,
   ) {
-    // Nueva institucion
-    this.institucionForm = this.fb.group({
-      nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      tipo: ['', [Validators.required, ValidarCadenaSinEspacios]],
-    });
-    // Nuevo curso
-    this.cursoForm = this.fb.group({
-      nombre: ['', [Validators.required, ValidarCadenaSinEspacios, Validators.minLength(1), Validators.maxLength(100)]],
-      grado: ['', [Validators.required, ValidarSoloNumeros]],
-      nivel: ['', [Validators.required, ValidarCadenaSinEspacios]],
-    });
   }
 
   actualizarChico(nuevoChico: Chico | null) {
@@ -75,17 +54,8 @@ export class CamposComunesComponent implements OnInit {
     this.chicoChange.emit(this.chico);
   }
 
-  // HACER UNO DE ESTOS PARA TODOS LOS FORM, NO USAR 3
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;
-  }
-
-  get controlDeInputInstitucion(): (input: string) => FormControl {
-    return (input: string) => this.institucionForm.get(input) as FormControl;
-  }
-
-  get controlDeInputCurso(): (input: string) => FormControl {
-    return (input: string) => this.cursoForm.get(input) as FormControl;
   }
 
   ngOnInit(): void {
@@ -197,118 +167,6 @@ export class CamposComunesComponent implements OnInit {
       }
       this.form.get('edad')?.setValue(this.edadAnios);
     }
-  }
-
-  // Modal institucion
-
-  onChangeInstitucion() {
-    const id_institucion = this.form.get('id_institucion')?.value;
-    if (id_institucion === 'new') {
-      this.abrirModalInstitucion();
-    }
-  }
-
-  abrirModalInstitucion() {
-    const dialogRef = this._dialog.open(this.institucionModal, { width: '40%' });
-    dialogRef.afterClosed().subscribe(() => {
-      this.institucionForm.reset();
-    });
-  }
-
-  cargarInstitucion() {
-    if (this.institucionForm.valid) {
-      Swal.fire({
-        title: '¿Cargar nueva institución?',
-        showDenyButton: true,
-        confirmButtonColor: '#3f77b4',
-        confirmButtonText: 'Confirmar',
-        denyButtonText: `Cancelar`,
-      }).then((result: any) => {
-        if (result.isConfirmed) {
-          const data = this.institucionForm.value;
-          this._institucionService.cargarInstitucion(data).subscribe({
-            next: (response: any) => {
-              if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.cerrarModalInstitucion();
-                this.obtenerInstituciones();
-                this.institucionForm.get('nombre')?.setValue('');
-                this.institucionForm.get('tipo')?.setValue('');
-                // Aca se podria poner en el input de institucion la institucion recien creado
-                // this.cerrarModalInstitucion();
-              }
-            },
-            error: (err) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-            },
-          });
-        }
-      });
-    }
-  }
-
-  cerrarModalInstitucion() {
-    this._dialog.closeAll();
-    this.institucionForm.get('id_institucion')?.setValue('');
-    this.institucionForm.get('tipo')?.setValue('');
-    this.form.get('id_institucion')?.setValue('');
-  }
-
-  // Modal curso
-
-  onChangeCurso() {
-    const id_curso = this.form.get('id_curso')?.value;
-    if (id_curso === 'new') {
-      this.abrirModalCurso();
-    }
-  }
-
-  abrirModalCurso() {
-    const dialogRef = this._dialog.open(this.cursoModal, { width: '40%' });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cursoForm.reset();
-    });
-  }
-
-  cargarCurso() {
-    if (this.cursoForm.valid) {
-      Swal.fire({
-        title: '¿Cargar nuevo curso?',
-        showDenyButton: true,
-        confirmButtonColor: '#3f77b4',
-        confirmButtonText: 'Confirmar',
-        denyButtonText: `Cancelar`,
-      }).then((result: any) => {
-        if (result.isConfirmed) {
-          const data = this.cursoForm.value;
-          this._cursoService.cargarCurso(data).subscribe({
-            next: (response: any) => {
-              if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.cerrarModalCurso();
-                this.obtenerCursos();
-                this.cursoForm.get('nombre')?.setValue('');
-                this.cursoForm.get('tipo')?.setValue('');
-                this.cursoForm.get('grado')?.setValue('');
-                // Aca se podria poner en el input de curso el curso recien creado
-                // this.cerrarModalInstitucion();
-              }
-            },
-            error: (err) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-            },
-          });
-        }
-      });
-    }
-  }
-
-  cerrarModalCurso() {
-    this._dialog.closeAll();
-    // cambiar...!!!!!!!
-    this.institucionForm.get('id_institucion')?.setValue('');
-    this.institucionForm.get('tipo')?.setValue('');
-    this.form.get('id_institucion')?.setValue('');
   }
 
   cargarChico() {

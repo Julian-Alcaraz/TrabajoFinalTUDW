@@ -19,8 +19,15 @@ export class LocalidadService {
     return this.localidadORM.save(localidad);
   }
 
-  findAll() {
-    return this.localidadORM.find({ relations: ['barrios'] });
+  async findAll() {
+    const localidades = await this.localidadORM.find({ relations: ['barrios'] });
+    return localidades.map((localidad) => {
+      const { barrios, ...datosLocalidad } = localidad;
+      return {
+        cantidadBarrios: barrios.length,
+        ...datosLocalidad,
+      };
+    });
   }
 
   findAllHabilitadas() {

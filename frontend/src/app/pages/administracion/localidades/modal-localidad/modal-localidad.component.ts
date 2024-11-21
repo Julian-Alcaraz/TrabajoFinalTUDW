@@ -4,11 +4,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../../utils/notificaciones/mostrar-notificacion';
-import { LocalidadService } from '../../../../../services/localidad.service';
-import { ValidarCadenaSinEspacios } from '../../../../../utils/validadores';
-import { Localidad } from '../../../../../models/localidad.model';
-import { InputTextComponent } from '../../../../../components/inputs/input-text.component';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { LocalidadService } from '../../../../services/localidad.service';
+import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
+import { Localidad } from '../../../../models/localidad.model';
+import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 
 @Component({
   selector: 'app-modal-localidad',
@@ -51,7 +51,7 @@ export class ModalLocalidadComponent implements OnInit {
   }
 
   cerrarModalLocalidad(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion)
+    this.dialogRef.close(esEdicion);
     this.localidadForm.get('nombre')?.reset();
   }
 

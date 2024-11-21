@@ -4,43 +4,45 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
-import { Institucion } from '../../../../models/institucion.model';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import * as MostrarNotificacion from '../../../../../utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios } from '../../../../../utils/validadores';
+
+import { InputTextComponent } from '../../../../../components/inputs/input-text.component';
+import { Curso } from '../../../../../models/curso.model';
+import { CursoService } from '../../../../../services/curso.service';
+import { InputSelectEnumComponent } from "../../../../../components/inputs/input-select-enum.component";
+
 
 @Component({
-  selector: 'app-modal-institucion',
+  selector: 'app-modal-curso',
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule, InputSelectEnumComponent],
-  templateUrl: './modal-institucion.component.html',
-  styleUrl: './modal-institucion.component.css',
+  templateUrl: './modal-curso.component.html',
+  styleUrl: './modal-curso.component.css',
 })
-export class ModalInstitucionComponent implements OnInit {
-  public institucion: Institucion | null = null;
-  public institucionForm: FormGroup;
+export class ModalCursoComponent implements OnInit {
+  public curso: Curso | null = null;
+  public cursoForm: FormGroup;
   public habilitarModificar = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private _institucionService: InstitucionService,
+    private _cursoService: CursoService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<ModalInstitucionComponent>,
+    public dialogRef: MatDialogRef<ModalCursoComponent>,
   ) {
-    this.institucionForm = this.fb.group({
+    this.cursoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      tipo: ['', [Validators.required]],
+      nivel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
 
   ngOnInit() {
     if (this.data !== null) {
-      this.institucion = this.data.institucion;
-      this.institucionForm.patchValue({ nombre: this.institucion?.nombre, tipo: this.institucion?.tipo });
-      this.institucionForm.valueChanges.subscribe({
+      this.curso = this.data.curso;
+      this.cursoForm.patchValue({ nombre: this.curso?.nombre , nivel: this.curso?.nivel });
+      this.cursoForm.valueChanges.subscribe({
         next: () => {
           this.habilitarModificar = this.existenCambios();
         },
@@ -49,32 +51,31 @@ export class ModalInstitucionComponent implements OnInit {
   }
 
   get controlDeInput(): (input: string) => FormControl {
-    return (input: string) => this.institucionForm.get(input) as FormControl;
+    return (input: string) => this.cursoForm.get(input) as FormControl;
   }
 
-  cerrarModalInstitucion(esEdicion: boolean) {
+  cerrarModalCurso(esEdicion: boolean) {
     this.dialogRef.close(esEdicion);
-    this.institucionForm.reset();
+    this.cursoForm.get('nombre')?.reset();
   }
 
-  cargarInstitucion() {
-    if (this.institucionForm.valid) {
+  cargarCurso() {
+    if (this.cursoForm.valid) {
       Swal.fire({
-        title: '¿Cargar nueva institucion?',
+        title: '¿Cargar nuevo curso?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const data = this.institucionForm.value;
-          this._institucionService.cargarInstitucion(data).subscribe({
+          const data = this.cursoForm.value;
+          this._cursoService.cargarCurso(data).subscribe({
             next: (response: any) => {
-              console.log(response);
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.cerrarModalInstitucion(true);
-                this.institucionForm.reset();
+                this.cerrarModalCurso(true);
+                this.cursoForm.reset();
               }
             },
             error: (err) => {
@@ -86,8 +87,8 @@ export class ModalInstitucionComponent implements OnInit {
     }
   }
 
-  modificarInstitucion() {
-    if (this.institucionForm.valid) {
+  modificarCurso() {
+    if (this.cursoForm.valid) {
       Swal.fire({
         title: '¿Confirmar cambios?',
         showDenyButton: true,
@@ -97,14 +98,14 @@ export class ModalInstitucionComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const edit = {
-            ...(this.institucion?.nombre !== this.institucionForm.value.nombre && { nombre: this.institucionForm.value.nombre }),
-            ...(this.institucion?.tipo !== this.institucionForm.value.tipo && { tipo: this.institucionForm.value.tipo }),
+            ...(this.curso?.nombre !== this.cursoForm.value.nombre && { nombre: this.cursoForm.value.nombre }),
+            ...(this.curso?.nivel !== this.cursoForm.value.nivel && { nivel: this.cursoForm.value.nivel }),
           };
-          this._institucionService.modificarInstitucion(this.institucion!.id, edit).subscribe({
+          this._cursoService.modificarCurso(this.curso!.id, edit).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                this.cerrarModalInstitucion(true);
+                this.cerrarModalCurso(true);
               } else {
                 MostrarNotificacion.mensajeError(this.snackBar, response.message);
               }
@@ -119,14 +120,14 @@ export class ModalInstitucionComponent implements OnInit {
   }
 
   existenCambios() {
-    let hayCambios = this.institucionForm.dirty;
+    let hayCambios = this.cursoForm.dirty;
     if (hayCambios) {
-      if (this.institucion?.nombre == this.institucionForm.value.nombre && this.institucion?.tipo == this.institucionForm.value.tipo) {
+      if (this.curso?.nombre == this.cursoForm.value.nombre && this.curso?.nivel == this.cursoForm.value.nivel) {
         hayCambios = false;
       } else {
         hayCambios = true;
       }
     }
-    return !(this.institucionForm.valid && hayCambios);
+    return !(this.cursoForm.valid && hayCambios);
   }
 }
