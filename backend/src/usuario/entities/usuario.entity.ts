@@ -45,4 +45,6 @@ export class Usuario extends EntidadBasica {
 
   @OneToMany(() => Consulta, (consulta) => consulta.usuario)
   consultas: Consulta[];
+
+  cambioContrasenia: boolean;
 }

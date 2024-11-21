@@ -12,6 +12,7 @@ export class Usuario {
     public contrasenia?: string,
     public fe_nacimiento?: Date,
     public deshahilitado?: boolean,
+    public cambioContrasenia?: boolean,
     public roles?: Rol[], // esto es opcional podria  no estar
   ) {}
 

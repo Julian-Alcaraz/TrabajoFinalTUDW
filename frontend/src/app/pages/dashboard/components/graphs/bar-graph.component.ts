@@ -5,12 +5,14 @@ import { ChartModule } from 'primeng/chart';
   standalone: true,
   imports: [ChartModule],
   template: `
-    <h2 class="text-center text-2xl">{{ titulo }}</h2>
+    <h1 class="text-center text-2xl">{{ titulo }}</h1>
+    <h2 class="text-center text-lg">{{ subTitulo }}</h2>
     <p-chart type="bar" class="w-full" [data]="basicData" [options]="basicOptions" />
   `,
 })
 export class BarGraphComponent implements OnInit, OnChanges {
   @Input() titulo = 'Titulo no definido';
+  @Input() subTitulo = '';
   @Input() labels: any[] = ['Q1', 'Q2', 'Q3', 'Q4'];
   @Input() porcentaje = false;
   @Input() sets = [
@@ -53,8 +55,8 @@ export class BarGraphComponent implements OnInit, OnChanges {
         beginAtZero: true,
         ticks: {
           color: this.textColorSecondary,
-          callback: (value: number) =>  (this.porcentaje) ? value+'%':value,
-          stepSize: this.porcentaje	? 10 :undefined
+          callback: (value: number) => (this.porcentaje ? value + '%' : value),
+          stepSize: this.porcentaje ? 10 : undefined,
         },
         max: this.porcentaje ? 100 : undefined,
         grid: {

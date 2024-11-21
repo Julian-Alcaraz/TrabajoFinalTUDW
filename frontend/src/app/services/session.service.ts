@@ -68,7 +68,6 @@ export class SessionService {
             this.setIdentidad(res.user);
             resolve(true);
           } else {
-            // this._loadingService.stopLoading()
             resolve(false);
           }
         },

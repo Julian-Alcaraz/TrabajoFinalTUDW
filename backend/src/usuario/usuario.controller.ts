@@ -132,7 +132,21 @@ export class UsuarioController {
       message: 'Menus del usuario retornados con exito',
     };
   }
-
+  @Patch('modificarContrasenia/:id')
+  @ApiOperation({ summary: 'Actualiza los datos de un usuario' })
+  @ApiResponse({ status: 200, description: 'Usuario actualizado con exito' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
+  @ApiResponse({ status: 400, description: 'El dni del usuario ya esta cargado en el sistema' })
+  @ApiResponse({ status: 400, description: 'El email del usuario ya esta cargado en el sistema' })
+  async updatePassword(@Param('id', ParseIntPipe) id: number, @Body() data: { password: string; confirmPassword: string }) {
+    const usuarioModificado = await this.usuarioService.updatePassword(id, data);
+    return {
+      success: true,
+      data: usuarioModificado,
+      message: 'Usuario modificado con exito',
+    };
+  }
   /*
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de un usuario' })

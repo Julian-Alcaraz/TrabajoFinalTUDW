@@ -162,4 +162,18 @@ export class UsuarioService {
     }
     return usuariosProfesionales;
   }
+  async updatePassword(id: number, data: { password: string; confirmPassword: string }) {
+    if (!data.password) throw new BadRequestException(`No se envio password`);
+    if (!data.confirmPassword) throw new BadRequestException(`No se envio confirmPassword`);
+    if (data.password !== data.confirmPassword) throw new BadRequestException(`Las contraseñas no coinciden`);
+    const usuario = await this.usuarioORM.findOneBy({ id });
+    if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+    const cambios = { contrasenia: '' };
+    if (data.password) {
+      const contrasenia = codificarContrasenia(data.password); // Hashea la contrasenia con bcrypt
+      cambios.contrasenia = contrasenia;
+    }
+    this.usuarioORM.merge(usuario, cambios);
+    return this.usuarioORM.save(usuario);
+  }
 }

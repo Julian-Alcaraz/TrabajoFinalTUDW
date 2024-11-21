@@ -14,8 +14,8 @@
     <app-pie-graph [titulo]="tituloTensionxEstado" [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionXestado }" />
   </div>
   <div class="border"><app-bar-graph  /></div>
-  <div class="border"><app-bar-graph [porcentaje]="true" titulo="Tipos de consulta " [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
-  <div class="border"><app-bar-graph [porcentaje]="true"  titulo="Tipos de consulta " [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
+  <div class="border"><app-bar-graph [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true" titulo="Tipos de consulta " [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
+  <div class="border"><app-bar-graph [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true"  titulo="Tipos de consulta " [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
   <div class="border">a</div>
   <div class="border">a</div>
   <div class="border">a</div>

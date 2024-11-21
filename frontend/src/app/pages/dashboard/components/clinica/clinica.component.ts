@@ -28,7 +28,7 @@ export class ClinicaComponent implements OnInit {
   currentYear:number
   porcentajeEstadoNutricional :any=[];
   porcentajesTensionArterial :any=[];
-
+  cursoLabel=''
   constructor(private _consultaService: ConsultaService) {
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [ this.currentYear - 3, this.currentYear - 2, this.currentYear -1,this.currentYear];
@@ -134,7 +134,6 @@ export class ClinicaComponent implements OnInit {
 
   seleccionarEstadoNutricional(event: any) {
     this.selectedEstadoNutricional = '' + event.target.value;
-    console.log(this.selectedEstadoNutricional);
     this.obtenerGraficoTensionxEstado();
   }
   cambioForm(event: any) {
@@ -160,5 +159,6 @@ export class ClinicaComponent implements OnInit {
       cursoLabel = '';
     }
     this.subTitulo = '' + yearLabel + cursoLabel;
+    this.cursoLabel= cursoLabel
   }
 }

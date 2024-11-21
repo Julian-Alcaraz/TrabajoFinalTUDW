@@ -64,7 +64,7 @@ export class MiUsuarioComponent implements OnInit {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         if (this.identidad) {
-          this._usuarioService.modificarUsuario(this.identidad.id, this.cambioForm.value).subscribe({
+          this._usuarioService.modificarContrasenia(this.identidad.id, this.cambioForm.value).subscribe({
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);

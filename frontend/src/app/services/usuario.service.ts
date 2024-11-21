@@ -31,4 +31,7 @@ export class UsuarioService {
   obtenerUsuarios(): Observable<any> {
     return this._http.get(this.url + 'usuario');
   }
+  modificarContrasenia(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'usuario/modificarContrasenia/' + id, data);
+  }
 }
