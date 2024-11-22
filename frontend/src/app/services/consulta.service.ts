@@ -65,4 +65,16 @@ export class ConsultaService {
   porcentajeEstadoNutricionalByYearAndCurso(year:number,id_curso:number){
     return this._http.get(`${this.url}consulta/porcentajeEstadoNutricionalPorAnio/${year}/curso/${id_curso}`);
   }
+  porcentajeExamenVisualByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeExamenVisualPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeVacunacionByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeVacunacionPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeOrtopediaPorAnioByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeOrtopediaPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeLenguajePorAnioByYearAndCurso(year:number,id_curso:number){
+    return this._http.get(`${this.url}consulta/porcentajeLenguajePorAnio/${year}/curso/${id_curso}`);
+  }
 }

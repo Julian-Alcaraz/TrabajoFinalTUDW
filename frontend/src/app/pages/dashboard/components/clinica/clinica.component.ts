@@ -17,21 +17,30 @@ export class ClinicaComponent implements OnInit {
   tituloTensionArterial = 'Tensión Arterial';
   tituloEstadoNutriconal = 'Estado Nutricional';
   tituloTensionxEstado = 'Tensión por Estado Nutricional';
+  tituloExamenVisual = 'Examen Visual';
+  tituloVacunas = 'Vacunas';
+  tituloOrtopedia = 'Ortopedia y traumatologia';
+  tituloLenguaje = 'Lenguaje'
   subTitulo = '';
   tensionArterial = [];
   estadoNutriconal = [];
   tensionXestado = [];
   year = 0;
   id_curso = 0;
-  selectedEstadoNutricional = this.estadosNutricional[4];
-  lastFourYears:number[]
-  currentYear:number
-  porcentajeEstadoNutricional :any=[];
-  porcentajesTensionArterial :any=[];
-  cursoLabel=''
+  selectedEstadoNutricional = this.estadosNutricional[2];
+  lastFourYears: number[];
+  currentYear: number;
+  porcentajeEstadoNutricional: any = [];
+  porcentajesTensionArterial: any = [];
+  porcentajesExamenVisual: any = [];
+  porcentajesVacunas: any = [];
+  porcentajesOrtopedia: any = [];
+  porcentajesLenguaje:any=[]
+
+  cursoLabel = '';
   constructor(private _consultaService: ConsultaService) {
     this.currentYear = new Date().getFullYear();
-    this.lastFourYears = [ this.currentYear - 3, this.currentYear - 2, this.currentYear -1,this.currentYear];
+    this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
   }
 
   ngOnInit() {
@@ -44,6 +53,10 @@ export class ClinicaComponent implements OnInit {
 
     this.obtenerGraficoPorcentajeTensionArterial();
     this.obtenerGraficoPorcentajeEstadoNutricional();
+    this.obtenerGraficoPorcentajeExamenVisual();
+    this.obtenerGraficoPorcentajeVacunacion();
+    this.obtenerGraficoPorcentajeOrtopedia();
+    this.obtenerGraficoPorcentajeLenguaje();
   }
   obtenerGraficoTensionArterial() {
     this._consultaService.countTensionArterialByYearAndCurso(this.year, this.id_curso).subscribe({
@@ -86,12 +99,12 @@ export class ClinicaComponent implements OnInit {
     this._consultaService.porcentajeTensionArterialByYearAndCurso(this.currentYear, this.id_curso).subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.porcentajesTensionArterial=[]
+          this.porcentajesTensionArterial = [];
           for (const year of this.lastFourYears) {
             this.porcentajesTensionArterial.push({
-              label: ''+year,
-              data:response.data[year]
-            })
+              label: '' + year,
+              data: response.data[year],
+            });
           }
         }
       },
@@ -104,14 +117,31 @@ export class ClinicaComponent implements OnInit {
   obtenerGraficoPorcentajeEstadoNutricional() {
     this._consultaService.porcentajeEstadoNutricionalByYearAndCurso(this.currentYear, this.id_curso).subscribe({
       next: (response: any) => {
-        console.log(response)
         if (response.success) {
-          this.porcentajeEstadoNutricional=[]
+          this.porcentajeEstadoNutricional = [];
           for (const year of this.lastFourYears) {
             this.porcentajeEstadoNutricional.push({
-              label: ''+year,
-              data:response.data[year]
-            })
+              label: '' + year,
+              data: response.data[year],
+            });
+          }
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+  obtenerGraficoPorcentajeExamenVisual() {
+    this._consultaService.porcentajeExamenVisualByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.porcentajesExamenVisual = [];
+          for (const year of this.lastFourYears) {
+            this.porcentajesExamenVisual.push({
+              label: '' + year,
+              data: response.data[year],
+            });
           }
         }
       },
@@ -121,16 +151,63 @@ export class ClinicaComponent implements OnInit {
     });
   }
 
+  obtenerGraficoPorcentajeVacunacion() {
+    this._consultaService.porcentajeVacunacionByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.porcentajesVacunas = [];
+          for (const year of this.lastFourYears) {
+            this.porcentajesVacunas.push({
+              label: '' + year,
+              data: response.data[year],
+            });
+          }
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
+  obtenerGraficoPorcentajeOrtopedia() {
+    this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.porcentajesOrtopedia = [];
+          for (const year of this.lastFourYears) {
+            this.porcentajesOrtopedia.push({
+              label: '' + year,
+              data: response.data[year],
+            });
+          }
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
-
-
-
-
-
-
-
-
+  obtenerGraficoPorcentajeLenguaje() {
+    this._consultaService.porcentajeLenguajePorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        if (response.success) {
+          this.porcentajesLenguaje = [];
+          for (const year of this.lastFourYears) {
+            this.porcentajesLenguaje.push({
+              label: '' + year,
+              data: response.data[year],
+            });
+          }
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
   seleccionarEstadoNutricional(event: any) {
     this.selectedEstadoNutricional = '' + event.target.value;
@@ -159,6 +236,6 @@ export class ClinicaComponent implements OnInit {
       cursoLabel = '';
     }
     this.subTitulo = '' + yearLabel + cursoLabel;
-    this.cursoLabel= cursoLabel
+    this.cursoLabel = cursoLabel;
   }
 }

@@ -180,4 +180,48 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
+  @Get('porcentajeExamenVisualPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeExamenVisual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeExamenVisualData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeVacunacionPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeVacunacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeVacunacionData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeOrtopediaPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeOrtopedia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeOrtopediaData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeLenguajePorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeLenguaje(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.consultaService.porcentajeLenguajeData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 }
