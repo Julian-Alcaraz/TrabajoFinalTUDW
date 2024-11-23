@@ -7,10 +7,19 @@ import { Router } from '@angular/router';
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Label flotante de primeng
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { IftaLabelModule } from 'primeng/iftalabel';
+// Inputs primeng
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+
 @Component({
   selector: 'app-formulario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, InputTextModule, ReactiveFormsModule, FloatLabelModule, InputIconModule, IconFieldModule, IftaLabelModule, PasswordModule],
   templateUrl: './formulario.component.html',
   styleUrl: './formulario.component.css',
 })
@@ -38,7 +47,7 @@ export class FormularioComponent {
     const password = this.loginForm.get('password')?.value;
     this._sessionService.iniciarSession(email, password).subscribe(
       (response) => {
-        console.log(response)
+        console.log(response);
         if (response.success) {
           this._sessionService.setIdentidad(response.data);
           // this._router.navigate(['/layout']);
