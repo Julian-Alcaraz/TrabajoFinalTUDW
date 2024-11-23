@@ -18,8 +18,8 @@ export class BusquedasComponent {
   currentParam: number | null = null;
 
   escucharParam(value: number) {
-    this.currentParam = value;
     if (value !== this.currentParam) {
+      this.currentParam = value;
       this.consultas = null;
     }
   }

@@ -10,6 +10,8 @@ import { SessionService } from '../../services/session.service';
 import Swal from 'sweetalert2';
 import { MenuService } from '../../services/menu.service';
 import { Usuario } from '../../models/usuario.model';
+import { MatDialog } from '@angular/material/dialog';
+import { CambiarContraseniaComponent } from '../../pages/usuarios/components/cambioContrasenia/cambio-contrasenia.component';
 interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;
@@ -42,6 +44,7 @@ export class NavBarComponent implements OnInit {
   }
   constructor(
     private _router: Router,
+    private _dialog: MatDialog,
     private _route: ActivatedRoute,
     private _sessionService: SessionService,
     private _menuService: MenuService,
@@ -52,6 +55,7 @@ export class NavBarComponent implements OnInit {
       this.screenWidth = window.innerWidth;
     }
     this.identidad = this._sessionService.getIdentidad();
+    this.obligarCambioContrasenia();
     this.getMenus();
   }
 
@@ -78,7 +82,11 @@ export class NavBarComponent implements OnInit {
       });
     }
   }
-
+  obligarCambioContrasenia() {
+    if (this.identidad?.cambioContrasenia) {
+      this._dialog.open(CambiarContraseniaComponent, { minWidth: '40%', disableClose: true, data: { cambioObligatorio: true } });
+    }
+  }
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
     this.toggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });

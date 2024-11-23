@@ -10,9 +10,9 @@
           <p-iconfield>
             <!-- <p-inputicon class="pi pi-at" /> -->
             <p-inputicon class="pi pi-envelope" />
-            <input pInputText id="email" type="email" formControlName="email" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
+            <input pInputText id="email" type="email" formControlName="email" placeholder="Email" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
           </p-iconfield>
-          <label for="email" class="text-base pointer-events-none">Email</label>
+          <label for="email"  class="text-base pointer-events-none" hidden>Email</label>
         </p-floatlabel>
       </div>
       <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-base text-left ml-2">
@@ -26,20 +26,19 @@
         <p-floatlabel>
           <p-iconfield>
             <p-inputicon class="pi pi-lock" />
-            <input id="contrasenia" pInputText [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
+            <input id="contrasenia" pInputText placeholder="Contraseña" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
             <p-inputIcon [class]="!mostrarContrasenia ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="verContrasenia()" />
           </p-iconfield>
-          <label for="contrasenia" class="text-base pointer-events-none">Contraseña</label>
+          <label for="contrasenia" class="text-base pointer-events-none" hidden>Contraseña</label>
         </p-floatlabel>
       </div>
-      <br>
       <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-base text-left ml-2">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
-      <button type="submit" [disabled]="!loginForm.valid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-gray-700 disabled:hover:bg-gray-600 disabled:cursor-not-allowed hover:cursor-pointer">Ingresar</button>
+      <button type="submit" [disabled]="!loginForm.valid" class="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-gray-700 disabled:hover:bg-gray-600 disabled:cursor-not-allowed hover:cursor-pointer">Ingresar</button>
     </form>
   </div>
 </section>

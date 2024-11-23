@@ -4,6 +4,8 @@ import { BarGraphComponent } from '../graphs/bar-graph.component';
 import { CommonModule } from '@angular/common';
 import { YearGradoFormComponent } from '../year-grado-form/year-grado-form.component';
 import { ConsultaService } from '../../../../services/consulta.service';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-clinica',
@@ -13,17 +15,18 @@ import { ConsultaService } from '../../../../services/consulta.service';
   styleUrl: './clinica.component.css',
 })
 export class ClinicaComponent implements OnInit {
+  loading = true;
   estadosNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   tituloTensionArterial = 'Tensión Arterial';
-  tituloEstadoNutriconal = 'Estado Nutricional';
+  tituloEstadoNutricional = 'Estado Nutricional';
   tituloTensionxEstado = 'Tensión por Estado Nutricional';
   tituloExamenVisual = 'Examen Visual';
   tituloVacunas = 'Vacunas';
   tituloOrtopedia = 'Ortopedia y traumatologia';
-  tituloLenguaje = 'Lenguaje'
+  tituloLenguaje = 'Lenguaje';
   subTitulo = '';
   tensionArterial = [];
-  estadoNutriconal = [];
+  estadoNutricional = [];
   tensionXestado = [];
   year = 0;
   id_curso = 0;
@@ -35,10 +38,13 @@ export class ClinicaComponent implements OnInit {
   porcentajesExamenVisual: any = [];
   porcentajesVacunas: any = [];
   porcentajesOrtopedia: any = [];
-  porcentajesLenguaje:any=[]
+  porcentajesLenguaje: any = [];
 
   cursoLabel = '';
-  constructor(private _consultaService: ConsultaService) {
+  constructor(
+    private _consultaService: ConsultaService,
+    private snackBar: MatSnackBar,
+  ) {
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
   }
@@ -46,166 +52,205 @@ export class ClinicaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  obtenerGraficos() {
-    this.obtenerGraficoTensionArterial();
-    this.obtenerGraficoEstadoNutricional();
-    this.obtenerGraficoTensionxEstado();
-
-    this.obtenerGraficoPorcentajeTensionArterial();
-    this.obtenerGraficoPorcentajeEstadoNutricional();
-    this.obtenerGraficoPorcentajeExamenVisual();
-    this.obtenerGraficoPorcentajeVacunacion();
-    this.obtenerGraficoPorcentajeOrtopedia();
-    this.obtenerGraficoPorcentajeLenguaje();
+  async obtenerGraficos() {
+    const promesas = [
+      this.obtenerGraficoTensionArterial(),
+      this.obtenerGraficoEstadoNutricional(),
+      this.obtenerGraficoTensionxEstado(),
+      // Porcentajes
+      this.obtenerGraficoPorcentajeTensionArterial(),
+      this.obtenerGraficoPorcentajeEstadoNutricional(),
+      this.obtenerGraficoPorcentajeExamenVisual(),
+      this.obtenerGraficoPorcentajeVacunacion(),
+      this.obtenerGraficoPorcentajeOrtopedia(),
+      this.obtenerGraficoPorcentajeLenguaje(),
+    ];
+    Promise.all(promesas).then(() => (this.loading = false));
+    try {
+      await Promise.all(promesas);
+      MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
+    } catch (error) {
+      MostrarNotificacion.mensajeErrorServicio(this.snackBar, error);
+    } finally {
+      this.loading = false;
+    }
   }
   obtenerGraficoTensionArterial() {
-    this._consultaService.countTensionArterialByYearAndCurso(this.year, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.tensionArterial = response.data;
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    return new Promise((resolve, reject) => {
+      this._consultaService.countTensionArterialByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.tensionArterial = response.data;
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
   obtenerGraficoEstadoNutricional() {
-    this._consultaService.countEstadoNutricionalByYearAndCurso(this.year, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.estadoNutriconal = response.data;
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    return new Promise((resolve, reject) => {
+      this._consultaService.countEstadoNutricionalByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.estadoNutricional = response.data;
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
+
   obtenerGraficoTensionxEstado() {
-    this._consultaService.countTensionxEstadoByYearAndCurso(this.year, this.id_curso, this.selectedEstadoNutricional).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.tensionXestado = response.data;
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    return new Promise((resolve, reject) => {
+      this._consultaService.countTensionxEstadoByYearAndCurso(this.year, this.id_curso, this.selectedEstadoNutricional).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.tensionXestado = response.data;
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 
   obtenerGraficoPorcentajeTensionArterial() {
-    this._consultaService.porcentajeTensionArterialByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.porcentajesTensionArterial = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajesTensionArterial.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeTensionArterialByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesTensionArterial = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesTensionArterial.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 
   obtenerGraficoPorcentajeEstadoNutricional() {
-    this._consultaService.porcentajeEstadoNutricionalByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.porcentajeEstadoNutricional = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajeEstadoNutricional.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeEstadoNutricionalByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajeEstadoNutricional = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajeEstadoNutricional.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
+
   obtenerGraficoPorcentajeExamenVisual() {
-    this._consultaService.porcentajeExamenVisualByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.porcentajesExamenVisual = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajesExamenVisual.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeExamenVisualByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesExamenVisual = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesExamenVisual.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 
   obtenerGraficoPorcentajeVacunacion() {
-    this._consultaService.porcentajeVacunacionByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.porcentajesVacunas = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajesVacunas.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeVacunacionByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesVacunas = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesVacunas.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 
   obtenerGraficoPorcentajeOrtopedia() {
-    this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.porcentajesOrtopedia = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajesOrtopedia.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesOrtopedia = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesOrtopedia.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 
   obtenerGraficoPorcentajeLenguaje() {
-    this._consultaService.porcentajeLenguajePorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        if (response.success) {
-          this.porcentajesLenguaje = [];
-          for (const year of this.lastFourYears) {
-            this.porcentajesLenguaje.push({
-              label: '' + year,
-              data: response.data[year],
-            });
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeLenguajePorAnioByYearAndCurso(this.currentYear, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesLenguaje = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesLenguaje.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
     });
   }
 

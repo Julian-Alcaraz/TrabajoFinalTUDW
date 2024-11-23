@@ -1,16 +1,32 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 @Component({
   selector: 'app-bar-graph',
   standalone: true,
-  imports: [ChartModule],
+  imports: [ChartModule, CommonModule,LoadingComponent],
   template: `
-    <h1 class="text-center text-2xl">{{ titulo }}</h1>
-    <h2 class="text-center text-lg">{{ subTitulo }}</h2>
-    <p-chart type="bar" class="w-full" [data]="basicData" [options]="basicOptions" />
+    <div class="flex flex-col h-full text-center">
+      <h1 class=" text-2xl">{{ titulo }}</h1>
+      <h2 class=" text-lg">{{ subTitulo }}</h2>
+      <div class="flex-grow">
+        <p-chart *ngIf="sets.length" type="bar" class="w-full" [data]="basicData" [options]="basicOptions"></p-chart>
+        <div *ngIf="!sets.length" class="w-full flex justify-center items-center min-h-full">
+          <div *ngIf="!loading">
+            No se encontró información <br />
+            No es posible generar el gráfico.
+          </div>
+          <div *ngIf="loading">
+            <app-loading/>
+          </div>
+        </div>
+      </div>
+    </div>
   `,
 })
 export class BarGraphComponent implements OnInit, OnChanges {
+  @Input() loading = false;
   @Input() titulo = 'Titulo no definido';
   @Input() subTitulo = '';
   @Input() labels: any[] = ['Q1', 'Q2', 'Q3', 'Q4'];
@@ -42,13 +58,10 @@ export class BarGraphComponent implements OnInit, OnChanges {
       border: 'rgba(153, 102, 255)',
     },
   ];
+
   basicOptions = {
     plugins: {
-      legend: {
-        labels: {
-          color: this.textColor,
-        },
-      },
+      legend: { labels: { color: this.textColor } },
     },
     scales: {
       y: {

@@ -1,24 +1,38 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-pie-graph',
   standalone: true,
-  imports: [ChartModule],
+  imports: [ChartModule,CommonModule,LoadingComponent],
   template: `
-    <h1 class="text-center text-2xl">{{ titulo }}</h1>
-    <h2 class="text-center text-lg">{{ subTitulo }}</h2>
-    <div class="flex justify-center">
-      <p-chart class="w-4/6" type="pie" [data]="data" [options]="options" />
+    <div class="flex flex-col h-full text-center">
+      <h1 class=" text-2xl">{{ titulo }}</h1>
+      <h2 class=" text-lg">{{ subTitulo }}</h2>
+      <div class="flex-grow">
+        <p-chart *ngIf="set.data.length" class="w-4/6" type="pie" [data]="data" [options]="options" />
+        <div *ngIf="!set.data.length" class="w-full flex justify-center items-center min-h-full">
+          <div *ngIf="!loading">
+            No se encontró información <br />
+            No es posible generar el gráfico.
+          </div>
+          <div *ngIf="loading">
+            <app-loading/>
+          </div>
+        </div>
+      </div>
+      <p *ngIf="set.data.length">Total : {{ total }}</p>
     </div>
-    <p class="flex float-end mr-2">Total : {{ total }}</p>
   `,
 })
 export class PieGraphComponent implements OnInit, OnChanges {
+  @Input() loading = false;
   @Input() titulo = 'Titulo no definido';
   @Input() subTitulo = '';
   @Input() labels: any[] = ['A', 'B', 'C'];
-  @Input() set = { label: '', data: [0] };
+  @Input() set = { label: '', data: [] };
   textColor = '#0000000';
   total = 0;
   data: any;
@@ -80,11 +94,6 @@ export class PieGraphComponent implements OnInit, OnChanges {
           backgroundColor: this.backgroundColors,
           hoverBackgroundColor: this.hoverBackgroundColors,
         },
-        // {
-        //   data: [100, 50, 702],
-        //   backgroundColor: [this.pieColors[0].background, this.pieColors[1].background, this.pieColors[2].background],
-        //   hoverBackgroundColor: [this.pieColors[0].border, this.pieColors[1].border, this.pieColors[2].border],
-        // },
       ],
     };
     this.calcularTotal();

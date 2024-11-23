@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BarGraphComponent } from '../graphs/bar-graph.component';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { ChicoService } from '../../../../services/chico.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 
 @Component({
   selector: 'app-general',
@@ -13,103 +15,94 @@ import { ChicoService } from '../../../../services/chico.service';
 export class GeneralComponent implements OnInit {
   currentYear: number;
   lastFourYears: number[];
-
+  loading = true;
   constructor(
     private _consultaService: ConsultaService,
     private _chicoService: ChicoService,
+    private snackBar: MatSnackBar,
   ) {
     this.currentYear = new Date().getFullYear();
-    this.lastFourYears = [ this.currentYear - 3, this.currentYear - 2, this.currentYear -1,this.currentYear];
+    this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
   }
 
-  dataChicosxAnio: any = [
-    {
-      label: 'No encontrados',
-      data: [],
-    },
-  ];
-
-  dataConsultaxAnio = [
-    {
-      label: 'No encontradas',
-      data: [],
-    },
-  ];
-  dataTipoConsultaxanio = [
-    {
-      label: 'No encontradas',
-      data: [],
-    },
-    // {
-    //   label: '2023',
-    //   data: [
-    //     200, //clinica
-    //     100, //odontologia
-    //     80, //oftalmologia
-    //     90, //fonoa
-    //   ],
-    // },
-  ];
-
+  dataChicosxAnio: any = [];
+  dataConsultaxAnio: any = [];
+  dataTipoConsultaxanio: any = [];
 
   ngOnInit(): void {
-    this.countChicosCargados();
-    this.countConsultasxanio();
-    this.countTypeConsultaxanio();
+    this.obtenerGraficos();
   }
-
+  async obtenerGraficos() {
+    const promesas = [this.countChicosCargados(), this.countConsultasxanio(), this.countTypeConsultaxanio()];
+    Promise.all(promesas).then(() => (this.loading = false));
+    try {
+      await Promise.all(promesas);
+      MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
+    } catch (error) {
+      MostrarNotificacion.mensajeErrorServicio(this.snackBar, error);
+    } finally {
+      this.loading = false;
+    }
+  }
   countChicosCargados() {
-    this._chicoService.countChicosCargadosxAnios(this.currentYear).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.dataChicosxAnio = [
-            {
+    return new Promise((resolve, reject) => {
+      this._chicoService.countChicosCargadosxAnios(this.currentYear).subscribe({
+        next: (response: any) => {
+          this.dataChicosxAnio = [];
+          if (response.success) {
+            this.dataChicosxAnio.push({
               label: 'Chicos',
               data: response.data,
-            },
-          ];
-        }
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
+            });
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
     });
   }
 
   countConsultasxanio() {
-    this._consultaService.countConsultaLastYears(this.currentYear).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.dataConsultaxAnio = [
-            {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countConsultaLastYears(this.currentYear).subscribe({
+        next: (response: any) => {
+          this.dataConsultaxAnio = [];
+          if (response.success) {
+            this.dataConsultaxAnio.push({
               label: 'Consultas',
               data: response.data,
-            },
-          ];
-        }
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
+            });
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
     });
   }
 
   countTypeConsultaxanio() {
-    this._consultaService.countTypeConsultaLastYears(this.currentYear).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          this.dataTipoConsultaxanio=[]
-          for (const year of this.lastFourYears) {
-            this.dataTipoConsultaxanio.push({
-              label: ''+year,
-              data:response.data[year]
-            })
+    return new Promise((resolve, reject) => {
+      this._consultaService.countTypeConsultaLastYears(this.currentYear).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.dataTipoConsultaxanio = [];
+            for (const year of this.lastFourYears) {
+              this.dataTipoConsultaxanio.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
           }
-        }
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
     });
   }
 }
