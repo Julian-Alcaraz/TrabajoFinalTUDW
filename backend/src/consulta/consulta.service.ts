@@ -528,6 +528,133 @@ export class ConsultaService {
     );
     return counts;
   }
+  async examenVisualData(year: number, id: number) {
+    const types = ['Normal', 'Anormal'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.examen_visual = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeExamenVisualData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.examenVisualData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async vacunacionData(year: number, id: number) {
+    const types = ['Completo', 'Incompleto', 'Desconocido'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.vacunas = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeVacunacionData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.vacunacionData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async ortopediaData(year: number, id: number) {
+    const types = ['Normal', 'Anormal'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica');
+      if (type === 'Normal') {
+        query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' });
+      } else if (type === 'Anormal') {
+        query.where('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' });
+      }
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeOrtopediaData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.ortopediaData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async lenguajeData(year: number, id: number) {
+    const types = ['Adecuado', 'Inadecuado'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.lenguaje = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeLenguajeData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.lenguajeData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
 }
 
 function calcularPorcentaje(data: number[]) {

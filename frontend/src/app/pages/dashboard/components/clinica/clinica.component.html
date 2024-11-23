@@ -13,10 +13,10 @@
     </div>
     <app-pie-graph [titulo]="tituloTensionxEstado" [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionXestado }" />
   </div>
-  <div class="border"><app-bar-graph  /></div>
-  <div class="border"><app-bar-graph [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true" titulo="Tipos de consulta " [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
-  <div class="border"><app-bar-graph [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true"  titulo="Tipos de consulta " [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
-  <div class="border">a</div>
-  <div class="border">a</div>
-  <div class="border">a</div>
+  <div class="border"><app-bar-graph [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
+  <div class="border"><app-bar-graph [titulo]="tituloTensionxEstado"  [subTitulo]="cursoLabel" [porcentaje]="true"   [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
+  <div class="border"><app-bar-graph [titulo]="tituloExamenVisual" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal','Anormal']"  [sets]="porcentajesExamenVisual"/></div>
+  <div class="border"><app-bar-graph [titulo]="tituloVacunas" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Completo','Incompleto','Desconocido']"  [sets]="porcentajesVacunas"/></div>
+  <div class="border"><app-bar-graph [titulo]="tituloOrtopedia" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal','Anormal']"  [sets]="porcentajesOrtopedia"/></div>
+  <div class="border"><app-bar-graph [titulo]="tituloLenguaje" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Adecuado', 'Inadecuado']"  [sets]="porcentajesLenguaje"/></div>
 </div>
