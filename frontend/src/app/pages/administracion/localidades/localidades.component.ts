@@ -69,7 +69,6 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
         if (response.success) {
           this.localidades.data = response.data;
           this.resultsLength = response.data.length;
-          console.log(this.localidades);
         }
         this.searching = false;
       },
@@ -150,8 +149,8 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
 
   editarLocalidad(localidad: Localidad) {
     const modal = this._dialog.open(ModalLocalidadComponent, { panelClass: 'full-screen-dialog', data: { localidad } });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerLocalidades();
       }
     });
@@ -159,8 +158,8 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
 
   nuevaLocalidad() {
     const modal = this._dialog.open(ModalLocalidadComponent, { panelClass: 'full-screen-dialog' });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerLocalidades();
       }
     });

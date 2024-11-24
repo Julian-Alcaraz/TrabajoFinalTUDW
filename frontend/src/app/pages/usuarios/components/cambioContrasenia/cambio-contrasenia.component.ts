@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {  FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -15,15 +15,20 @@ import Swal from 'sweetalert2';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SessionService } from '../../../../services/session.service';
 
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatRadioModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatRadioModule, IconFieldModule, InputIconModule, InputTextModule],
   templateUrl: './cambio-contrasenia.component.html',
 })
 export class CambiarContraseniaComponent implements OnInit {
   public identidad: Usuario | null = null;
   public mostrarContrasenia = false;
+  public mostrarContraseniaConfirmar = false;
   public cambioForm: FormGroup;
   public cambioObligatorio = false
   constructor(
@@ -54,7 +59,7 @@ export class CambiarContraseniaComponent implements OnInit {
   }
   cambiarContrasenia() {
     Swal.fire({
-      title: 'Quieres guardar los cambios?',
+      title: '¿Quieres guardar los cambios?',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText: 'Guardar',
@@ -85,7 +90,8 @@ export class CambiarContraseniaComponent implements OnInit {
     });
   }
 
-  verContrasenia() {
-    this.mostrarContrasenia = !this.mostrarContrasenia;
+  verContrasenia(nombreInput: string) {
+    if (nombreInput === "password") this.mostrarContrasenia = !this.mostrarContrasenia;
+    if (nombreInput === "confirmPassword") this.mostrarContraseniaConfirmar = !this.mostrarContraseniaConfirmar;
   }
 }

@@ -59,10 +59,7 @@ export class PersonalizadaComponent implements OnInit {
     { nombre: 'Tarde', valor: 'Tarde' },
     { nombre: 'Noche', valor: 'Noche' },
   ];
-  public sexoOptions: any[] = [
-    { nombre: 'M', valor: 'Masculino' },
-    { nombre: 'F', valor: 'Femenino' },
-  ];
+  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
 
   constructor(
     private fb: FormBuilder,
@@ -119,7 +116,7 @@ export class PersonalizadaComponent implements OnInit {
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
     }
-    console.log("EL FORM DESPUES DE CAMBIAR TIPO CONSULTA ES ",this.formBusqueda.value)
+    console.log('EL FORM DESPUES DE CAMBIAR TIPO CONSULTA ES ', this.formBusqueda.value);
   }
 
   obtenerCursos(): any {
@@ -149,6 +146,7 @@ export class PersonalizadaComponent implements OnInit {
     this._usuarioService.obtenerProfesionales().subscribe({
       next: (response: any) => {
         this.profesionales = response.data;
+        console.log(this.profesionales);
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);

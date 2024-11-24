@@ -56,7 +56,7 @@ export class MainSeeder implements Seeder {
           nombre: 'Profesional',
         },
         {
-          nombre: 'Acceso informacion',
+          nombre: 'Acceso Info',
         },
       ]);
 

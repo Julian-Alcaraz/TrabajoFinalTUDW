@@ -70,8 +70,8 @@ export class ModalBarrioComponent implements OnInit {
     return (input: string) => this.barrioForm.get(input) as FormControl;
   }
 
-  cerrarModalBarrio(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion);
+  cerrarModalBarrio(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
     this.barrioForm.reset();
   }
 

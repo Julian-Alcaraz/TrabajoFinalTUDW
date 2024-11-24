@@ -6,7 +6,6 @@
       </div>
     </ng-template>
     <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-12">
-      <!-- <h3 class="md:col-span-12 text-lg font-semibold mt-2 mb-2">Filtros comúnes</h3> -->
       <!-- Tipo de consulta -->
       <div class="md:col-span-6">
         <p-iftalabel>
@@ -17,7 +16,6 @@
       </div>
       <!-- Rango de fechas -->
       <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
-      <!-- ACA SE PODRIA AGREGAR UN  [minDate]="" CON LA CONSULTA MAS VIEJA DE LA BD -->
       <div class="md:col-span-2" formGroupName="generales">
         <p-iftalabel>
           <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range"
@@ -34,12 +32,15 @@
       </div>
       <!-- Profesional -->
       <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
-      <!-- AGREGAR NOMBRE Y APELLIDO!!!!!!!!!!! -->
       <div class="md:col-span-4" formGroupName="generales">
         <div formGroupName="usuario">
           <p-iftalabel>
             <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
-              optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+              optionValue="id" [showClear]="true" class="w-full h-16">
+              <ng-template let-profesional pTemplate="item">
+                {{ profesional.nombre +' '+ profesional.apellido }}
+              </ng-template>
+            </p-select>
             <label for="profesionales">Profesionales</label>
           </p-iftalabel>
         </div>
@@ -50,7 +51,7 @@
         <div formGroupName="institucion">
           <p-iftalabel>
             <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
-              optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+              optionLabel="nombre" optionValue="id" [showClear]="true" class="w-full h-16" />
             <label for="instituciones">Institución</label>
           </p-iftalabel>
         </div>
@@ -61,7 +62,7 @@
         <div formGroupName="curso">
           <p-iftalabel>
             <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
-              optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
+              optionValue="id" [showClear]="true" class="w-full h-16" />
             <label for="cursos">Cursos</label>
           </p-iftalabel>
         </div>
@@ -70,7 +71,7 @@
       <div class="md:col-span-4" formGroupName="generales">
         <p-iftalabel>
           <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true"
-            optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full h-16" />
+            optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
           <label for="turno">Turno</label>
         </p-iftalabel>
       </div>
@@ -85,9 +86,11 @@
       <!-- Sexo -->
       <div class="md:col-span-3" formGroupName="generales">
         <div formGroupName="chico">
-          <p class="m-0 p-0">Sexo</p>
-          <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
-            styleClass="w-full" />
+          <p-iftalabel>
+            <p-select [options]="sexoOptions" idInput="sexo" formControlName="sexo" [checkmark]="true"
+              optionLabel="nombre" optionValue="nombre" [showClear]="true" class="w-full h-16" />
+            <label for="sexo">Sexo</label>
+          </p-iftalabel>
         </div>
       </div>
       <!-- Obra Social -->

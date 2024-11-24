@@ -52,8 +52,8 @@ export class ModalInstitucionComponent implements OnInit {
     return (input: string) => this.institucionForm.get(input) as FormControl;
   }
 
-  cerrarModalInstitucion(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion);
+  cerrarModalInstitucion(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
     this.institucionForm.reset();
   }
 
@@ -70,11 +70,9 @@ export class ModalInstitucionComponent implements OnInit {
           const data = this.institucionForm.value;
           this._institucionService.cargarInstitucion(data).subscribe({
             next: (response: any) => {
-              console.log(response);
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.cerrarModalInstitucion(true);
-                this.institucionForm.reset();
               }
             },
             error: (err) => {

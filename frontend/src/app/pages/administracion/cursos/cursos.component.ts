@@ -149,8 +149,8 @@ export class CursosComponent implements OnInit, AfterViewInit {
 
   editarCurso(curso: Curso) {
     const modal = this._dialog.open(ModalCursoComponent, { panelClass: 'full-screen-dialog', data: { curso } });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerCursos();
       }
     });
@@ -158,8 +158,8 @@ export class CursosComponent implements OnInit, AfterViewInit {
 
   nuevoCurso() {
     const modal = this._dialog.open(ModalCursoComponent, { panelClass: 'full-screen-dialog' });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerCursos();
       }
     });

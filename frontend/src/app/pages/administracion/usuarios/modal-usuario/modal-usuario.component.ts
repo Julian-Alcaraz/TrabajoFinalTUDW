@@ -42,10 +42,9 @@ export class ModalUsuarioComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       this.usuario = this.data.usuario;
-      // Poblar roles_ids como FormArray
       const rolesArray: FormArray = this.usuarioForm.get('roles_ids') as FormArray;
       this.usuario?.roles?.forEach((rol) => {
-        rolesArray.push(this.fb.control(rol.id)); // Agrega los IDs de los roles como controles individuales
+        rolesArray.push(this.fb.control(rol.id));
       });
       this.usuarioForm.valueChanges.subscribe({
         next: () => {
@@ -64,8 +63,8 @@ export class ModalUsuarioComponent implements OnInit {
     return usuario?.roles?.some((rolSeleccionado) => rolSeleccionado.id === idRol) || false;
   }
 
-  cerrarModalUsuario(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion);
+  cerrarModalUsuario(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
     this.usuarioForm.reset();
   }
 
@@ -122,8 +121,10 @@ export class ModalUsuarioComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
+          // Ordenar el arreglo de ids
+          const rolesOrdenados = this.usuarioForm.value.roles_ids.sort();
           // Obtener los IDs de roles seleccionados actualmente
-          const nuevosRoles = this.usuarioForm.value.roles_ids.map((idRol: string) => parseInt(idRol));
+          const nuevosRoles = rolesOrdenados.map((idRol: string) => parseInt(idRol));
           // Obtener los IDs de roles que el usuario tenía previamente
           const rolesAnteriores = this.usuario?.roles?.map((rol) => rol.id);
           // Identificar roles a agregar (están en nuevosRoles pero no en rolesAnteriores)
@@ -160,25 +161,10 @@ export class ModalUsuarioComponent implements OnInit {
               },
             });
           });
-          // Cerrar el modal después de los cambios
+          // Cerrar el modal
           this.cerrarModalUsuario(true);
         }
       });
     }
-  }
-
-  cambiarRoles() {
-    Swal.fire({
-      title: '¿Confirmar cambios?',
-      showDenyButton: true,
-      confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Confirmar',
-      denyButtonText: `Cancelar`,
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        //const edit = { deshabilitado: false };
-        //this.modifcarUsuario(id, edit);
-      }
-    });
   }
 }

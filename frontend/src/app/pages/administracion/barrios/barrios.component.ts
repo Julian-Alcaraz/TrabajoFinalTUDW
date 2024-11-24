@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 import { TagModule } from 'primeng/tag';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
@@ -144,8 +144,8 @@ export class BarriosComponent implements OnInit, AfterViewInit {
 
   editarBarrio(barrio: Barrio) {
     const modal = this._dialog.open(ModalBarrioComponent, { panelClass: 'full-screen-dialog', data: { barrio } });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerBarrios();
       }
     });
@@ -153,8 +153,8 @@ export class BarriosComponent implements OnInit, AfterViewInit {
 
   nuevoBarrio() {
     const modal = this._dialog.open(ModalBarrioComponent, { panelClass: 'full-screen-dialog' });
-    modal.afterClosed().subscribe((result) => {
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerBarrios();
       }
     });

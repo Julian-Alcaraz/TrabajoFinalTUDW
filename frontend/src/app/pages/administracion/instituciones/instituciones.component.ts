@@ -69,7 +69,6 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
         if (response.success) {
           this.instituciones.data = response.data;
           this.resultsLength = response.data.length;
-          console.log(this.instituciones);
         }
         this.searching = false;
       },
@@ -150,9 +149,8 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
 
   editarInstitucion(institucion: Institucion) {
     const modal = this._dialog.open(ModalInstitucionComponent, { panelClass: 'full-screen-dialog', data: { institucion } });
-    modal.afterClosed().subscribe((result) => {
-      console.log(result);
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerInstituciones();
       }
     });
@@ -160,9 +158,8 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
 
   nuevaInstitucion() {
     const modal = this._dialog.open(ModalInstitucionComponent, { panelClass: 'full-screen-dialog' });
-    modal.afterClosed().subscribe((result) => {
-      console.log(result);
-      if (result) {
+    modal.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
         this.obtenerInstituciones();
       }
     });

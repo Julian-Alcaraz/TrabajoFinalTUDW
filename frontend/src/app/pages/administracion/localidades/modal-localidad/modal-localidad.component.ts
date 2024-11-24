@@ -50,9 +50,9 @@ export class ModalLocalidadComponent implements OnInit {
     return (input: string) => this.localidadForm.get(input) as FormControl;
   }
 
-  cerrarModalLocalidad(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion);
-    this.localidadForm.get('nombre')?.reset();
+  cerrarModalLocalidad(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
+    this.localidadForm.reset();
   }
 
   cargarLocalidad() {
@@ -71,7 +71,6 @@ export class ModalLocalidadComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.cerrarModalLocalidad(true);
-                this.localidadForm.get('id_localidad')?.reset();
               }
             },
             error: (err) => {

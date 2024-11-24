@@ -6,14 +6,11 @@
   <div class="w-7/12">
     <form (ngSubmit)="iniciarSession()" [formGroup]="loginForm">
       <div class="relative mb-1 mt-6">
-        <p-floatlabel>
-          <p-iconfield>
-            <!-- <p-inputicon class="pi pi-at" /> -->
-            <p-inputicon class="pi pi-envelope" />
-            <input pInputText id="email" type="email" formControlName="email" placeholder="Email" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
-          </p-iconfield>
-          <label for="email"  class="text-base pointer-events-none" hidden>Email</label>
-        </p-floatlabel>
+        <p-iconfield>
+          <p-inputicon class="pi pi-envelope" />
+          <input pInputText id="email" type="email" formControlName="email" placeholder="Email" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500focus:border-blue-500 block ps-10 p-2.5 w-full" />
+        </p-iconfield>
+        <label for="email" class="text-base pointer-events-none" hidden>Email</label>
       </div>
       <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="text-red-600 text-base text-left ml-2">
         <div *ngIf="loginForm.get('email')?.errors?.['required']">El campo es requerido.</div>
@@ -23,14 +20,12 @@
         <div *ngIf="loginForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>
       <div class="relative mb-1 mt-6">
-        <p-floatlabel>
-          <p-iconfield>
-            <p-inputicon class="pi pi-lock" />
-            <input id="contrasenia" pInputText placeholder="Contraseña" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
-            <p-inputIcon [class]="!mostrarContrasenia ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="verContrasenia()" />
-          </p-iconfield>
-          <label for="contrasenia" class="text-base pointer-events-none" hidden>Contraseña</label>
-        </p-floatlabel>
+        <p-iconfield>
+          <p-inputicon class="pi pi-lock" />
+          <input id="contrasenia" pInputText placeholder="Contraseña" [type]="mostrarContrasenia ? 'text' : 'password'" formControlName="password" class="bg-gray-200 border border-gray-300 text-blacktext-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 w-full" />
+          <p-inputIcon [class]="!mostrarContrasenia ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="verContrasenia()" />
+        </p-iconfield>
+        <label for="contrasenia" class="text-base pointer-events-none" hidden>Contraseña</label>
       </div>
       <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-base text-left ml-2">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>

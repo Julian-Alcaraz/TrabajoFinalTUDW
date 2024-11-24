@@ -54,9 +54,9 @@ export class ModalCursoComponent implements OnInit {
     return (input: string) => this.cursoForm.get(input) as FormControl;
   }
 
-  cerrarModalCurso(esEdicion: boolean) {
-    this.dialogRef.close(esEdicion);
-    this.cursoForm.get('nombre')?.reset();
+  cerrarModalCurso(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
+    this.cursoForm.reset();
   }
 
   cargarCurso() {
@@ -75,7 +75,6 @@ export class ModalCursoComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.cerrarModalCurso(true);
-                this.cursoForm.reset();
               }
             },
             error: (err) => {
