@@ -1,9 +1,42 @@
 <div class="card">
   <div class="card-header">Chicos cargados en el sistema</div>
   <div class="card-body">
-    <input (keyup)="applyFilter($event)" placeholder="Buscar por Dni" #input type="number" id="filtro"
-      class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-      required />
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
+      <!-- DNI -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full" />
+          <label for="filtroDni">DNI</label>
+        </p-iftalabel>
+      </div>
+      <!-- Nombre -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroNombre id="filtroNombre" class="w-full" />
+          <label for="filtroNombre">Nombre</label>
+        </p-iftalabel>
+      </div>
+      <!-- Apellido -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroApellido id="filtroApellido"
+            class="w-full" />
+          <label for="filtroApellido">Apellido</label>
+        </p-iftalabel>
+      </div>
+      <!-- Sexo -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="sexoOptions" (onChange)="applyFilter($event)" [checkmark]="true" [showClear]="true"
+            [formControl]="sexoControl" #filtroSexo id="filtroSexo" inputId="filtroSexo" optionLabel="nombre"
+            optionValue="nombre" class="w-full" />
+          <label for="filtroSexo">Sexo</label>
+        </p-iftalabel>
+      </div>
+      <!-- Barrio -->
+
+      <!-- Uno mas para completar el grid -->
+    </div>
     <div class="scroll">
       <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
@@ -99,7 +132,14 @@
             </div>
             } @else {
             <p class="py-5">
-              {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
+              {{ filtroDni.value ? "No se encontraron chicos con DNI: '" + filtroDni.value + "'" : 'No encontro
+              información.' }}
+              {{ filtroNombre.value ? "No se encontraron chicos con nombre: '" + filtroNombre.value + "'" : 'No encontro
+              información.' }}
+              {{ filtroApellido.value ? "No se encontraron chicos con apellido: '" + filtroApellido.value + "'" : 'No
+              encontro información.' }}
+              {{ filtroSexo.value ? "No se encontraron chicos con sexo: '" + filtroSexo.value + "'" : 'No encontro
+              información.' }}
             </p>
             }
           </td>

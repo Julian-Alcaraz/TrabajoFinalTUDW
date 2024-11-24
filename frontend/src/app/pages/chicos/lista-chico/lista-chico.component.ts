@@ -1,3 +1,4 @@
+import { IftaLabelModule } from 'primeng/iftalabel';
 import { DatePipe, CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,21 +17,29 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 import { TooltipModule } from 'primeng/tooltip';
 import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
 import { MatDialog } from '@angular/material/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { Select, SelectModule } from 'primeng/select';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule],
+  imports: [CommonModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
+  @ViewChild('filtroSexo') filtroSexo!: Select;
   public chicos: MatTableDataSource<Chico>;
   public resultsLength = 0;
   public searching = true;
   public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
-
+  public searchTerms: any = {};
+  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
+  public sexoControl: FormControl = new FormControl(null);
   constructor(
     private _chicoService: ChicoService,
     private _router: Router,
@@ -57,19 +66,25 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
           this.chicos.data = response.data;
           this.resultsLength = response.data.length;
         }
-        //this.searching = false;
+        this.searching = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        //this.searching = false;
+        this.searching = false;
       },
     });
   }
 
   activateTableFilter() {
     this.chicos.filterPredicate = (data: Chico, filter: string) => {
-      const searchTerms = JSON.parse(filter);
-      return searchTerms.dni ? String(data.dni).startsWith(searchTerms.dni) : true;
+      const searchTerms = JSON.parse(filter); // Parsear los términos de búsqueda
+      // Verificar si cada término coincide con los datos
+      const matchesDni = searchTerms.dni ? String(data.dni).startsWith(searchTerms.dni) : true;
+      const matchesNombre = searchTerms.nombre ? data.nombre.toLowerCase().includes(searchTerms.nombre.toLowerCase()) : true;
+      const matchesApellido = searchTerms.apellido ? data.apellido.toLowerCase().includes(searchTerms.apellido.toLowerCase()) : true;
+      const matchesSexo = searchTerms.sexo ? String(data.sexo).startsWith(searchTerms.sexo) : true;
+      // Retornar true si todos los términos coinciden
+      return matchesDni && matchesNombre && matchesApellido && matchesSexo;
     };
   }
 
@@ -140,13 +155,26 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this.chicos.filter = filterValue.trim().toLowerCase();
   }
 
-  applyFilter(event: Event) {
-    const dniValue = (event.target as HTMLInputElement).value; // esto lo dejo por que por el momento es solo por dni
-    const searchTerms = {
-      ...(dniValue && { dni: dniValue }),
-    };
-
-    this.chicos.filter = JSON.stringify(searchTerms);
+  applyFilter(event: any) {
+    let idInput = '';
+    if (event.originalEvent) idInput = event.originalEvent.target.id;
+    else if (event.target) idInput = event.target.id;
+    if (idInput === 'filtroDni') {
+      const dniValue = event.target.value.replace(/,/g, ''); // Elimina comas
+      this.searchTerms.dni = dniValue || undefined;
+    } else if (idInput === 'filtroNombre') {
+      const nombreValue = event.target.value.trim();
+      this.searchTerms.nombre = nombreValue || undefined;
+    } else if (idInput === 'filtroApellido') {
+      const apellidoValue = event.target.value.trim();
+      this.searchTerms.apellido = apellidoValue || undefined;
+    } else if (idInput.includes('filtroSexo')) {
+      const sexoValue = event.value;
+      this.searchTerms.sexo = sexoValue || undefined;
+    } else if (idInput === '' && !event.value) {
+      this.searchTerms.sexo = undefined;
+    }
+    this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) {
       this.chicos.paginator.firstPage();
     }

@@ -43,7 +43,7 @@ export class PersonalizadaComponent implements OnInit {
   public colapsarPaneles = false;
   public formBusqueda: FormGroup;
   public loading = false;
-  public resultados: any;
+  // public resultados: any;
   public hoy = new Date();
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
@@ -101,9 +101,6 @@ export class PersonalizadaComponent implements OnInit {
     this.formBusqueda.get('consultasSeleccionadas')?.valueChanges.subscribe(() => {
       this.onChangeTipoConsulta();
     });
-    // this.formBusqueda.get('generales.rangoFechas')?.valueChanges.subscribe(() => {
-    //   this.agregarHora(this.formBusqueda.get('generales.rangoFechas')?.value);
-    // });
   }
 
   enviarConsultas(data: Consulta[]) {
@@ -167,8 +164,8 @@ export class PersonalizadaComponent implements OnInit {
         next: (response: any) => {
           if (response.success) {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            this.resultados = response.data;
-            console.log('Resultados backend', this.resultados);
+            // this.resultados = response.data;
+            // console.log('Resultados backend', this.resultados);
             this.enviarConsultas(response.data);
             this.loading = false;
           }
