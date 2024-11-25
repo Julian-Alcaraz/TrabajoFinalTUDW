@@ -2,23 +2,23 @@
   <app-year-grado-form (cambioForm)="cambioForm($event)" />
 </div>
 
-<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
-  <div class="border"><app-pie-graph [loading]="loading" [titulo]="tituloEstadoNutricional" [subTitulo]="subTitulo" [labels]="estadosNutricional" [set]="{ label: '', data: estadoNutricional }" /></div>
-  <div class="border"><app-pie-graph [loading]="loading" [titulo]="tituloTensionArterial"  [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionArterial }" /></div>
-  <div class="border">
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloEstadoNutricional" [subTitulo]="subTitulo" [labels]="estadosNutricional" [set]="{ label: '', data: estadoNutricional }" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloTensionArterial" [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionArterial }" /></div>
+  <div class="">
     <div class="flex flex-col h-full">
-      <select (change)="seleccionarEstadoNutricional($event)" class="mx-auto mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
-        <option *ngFor="let estado of estadosNutricional; let i =index" [selected]="i===2" [value]="estado">{{ estado }}</option>
-      </select>
       <div class="flex-grow">
         <app-pie-graph [loading]="loading" [titulo]="tituloTensionxEstado" [subTitulo]="subTitulo" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [set]="{ label: '', data: tensionXestado }" />
       </div>
+      <select (change)="seleccionarEstadoNutricional($event)" class="mx-auto mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2">
+        <option *ngFor="let estado of estadosNutricional; let i = index" [selected]="i === 2" [value]="estado">{{ estado }}</option>
+      </select>
     </div>
   </div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloEstadoNutricional"  [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloTensionArterial"  [subTitulo]="cursoLabel" [porcentaje]="true"   [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloExamenVisual" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal','Anormal']"  [sets]="porcentajesExamenVisual"/></div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloVacunas" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Completo','Incompleto','Desconocido']"  [sets]="porcentajesVacunas"/></div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloOrtopedia" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal','Anormal']"  [sets]="porcentajesOrtopedia"/></div>
-  <div class="border"><app-bar-graph [loading]="loading" [titulo]="tituloLenguaje" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Adecuado', 'Inadecuado']"  [sets]="porcentajesLenguaje"/></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloEstadoNutricional" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="estadosNutricional" [sets]="porcentajeEstadoNutricional" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloTensionArterial" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normotenso', 'Riesgo', 'Hipertenso']" [sets]="porcentajesTensionArterial" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloExamenVisual" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal', 'Anormal']" [sets]="porcentajesExamenVisual" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloVacunas" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Completo', 'Incompleto', 'Desconocido']" [sets]="porcentajesVacunas" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloOrtopedia" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Normal', 'Anormal']" [sets]="porcentajesOrtopedia" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloLenguaje" [subTitulo]="cursoLabel" [porcentaje]="true" [labels]="['Adecuado', 'Inadecuado']" [sets]="porcentajesLenguaje" /></div>
 </div>

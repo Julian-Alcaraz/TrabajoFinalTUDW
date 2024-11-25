@@ -47,7 +47,7 @@ export class ChicoService {
   }
 
   async findOneByDni(dni: number) {
-    const chico = await this.chicoORM.findOne({ where: { dni, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
+    const chico = await this.chicoORM.findOne({ where: { dni }, relations: ['barrio', 'barrio.localidad'] });
     // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);
     return chico;
   }

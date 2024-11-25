@@ -1,17 +1,16 @@
-<form  [formGroup]="optionForm" (ngSubmit)="traerDatosGraficos()">
-  <div class="grid gap-2 md:grid-cols-4 sm:grid-cols-3">
-    <div class="col-auto">
+<form [formGroup]="optionForm" (ngSubmit)="traerDatosGraficos()">
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div class="flex-2">
       <label for="year" class="block mb-4 text-sm font-medium text-gray-900">Año</label>
-      <p-datepicker formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" />
+      <p-datepicker placeholder="Año" formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" class="w-full" />
     </div>
-    <div class="col mb-3">
-      <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" />
+    <div class="flex-2">
+      <app-input-select label="Curso" idInput="id_curso" [opciones]="cursos" class="w-full" />
     </div>
-    <!-- podriamos sacarlo  -->
-    <div class="col">
-      <label for="" class="block  text-sm font-medium sm:mb-4 text-gray-900 text-transparent">buscar</label>
+    <div class="col ">
+      <label for="" class="block  text-sm font-medium mb-4 text-gray-900 text-transparent">buscar</label>
       <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
-      <button type="submit" class="ml-2 text-blue-700 underline cursor-pointer" type="button" (click)="resetearForm()">Limpiar</button>
+      <button type="button" class="ml-2 text-blue-700 underline cursor-pointer" (click)="resetearForm()">Limpiar</button>
     </div>
   </div>
 </form>

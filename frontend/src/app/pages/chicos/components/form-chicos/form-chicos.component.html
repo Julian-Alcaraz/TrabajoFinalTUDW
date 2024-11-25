@@ -24,7 +24,14 @@
       <!-- Dni -->
       <div class="sm:col-span-2 md:col-span-1">
         <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
-        <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
+        <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center ">
+          <div class="w-5">
+            <app-loading />
+          </div>
+          <div class="ms-2">
+            {{ mensajeValidando }}
+          </div>
+        </div> <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
           {{ mensajeDoc }}
         </div>
       </div>

@@ -52,6 +52,7 @@ export class FormChicosComponent implements OnInit {
   public fechaHoy = new Date();
   public habilitarModificar = false;
   public mensajeDoc = '';
+  public mensajeValidando = '';
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
@@ -116,8 +117,10 @@ export class FormChicosComponent implements OnInit {
     });
   }
   buscarChicoxDni(dni: number) {
+    this.mensajeValidando = 'Buscando dni en la base de datos.';
     this._chicoService.obtenerChicoxDni(dni).subscribe({
       next: (response: any) => {
+      this.mensajeValidando = '';
         if (response.success) {
           this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
           this.habilitarModificar = true;
@@ -128,7 +131,9 @@ export class FormChicosComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.log(error);
+        this.mensajeValidando = '';
+          this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
+          console.log(error);
       },
     });
   }

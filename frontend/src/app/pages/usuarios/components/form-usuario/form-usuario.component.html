@@ -19,6 +19,16 @@
     </div>
     <div>
       <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
+      <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center ">
+        <div class="w-5">
+          <app-loading />
+        </div>
+        <div class="ms-2">
+          {{ mensajeValidando }}
+        </div>
+      </div> <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
+        {{ mensajeDoc }}
+      </div>
     </div>
     <div>
       <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHoy" />

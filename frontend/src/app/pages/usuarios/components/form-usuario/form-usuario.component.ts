@@ -18,11 +18,12 @@ import { SessionService } from '../../../../services/session.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule,LoadingComponent],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -36,6 +37,8 @@ export class FormUsuarioComponent implements OnInit {
   public selectCheckbox = true;
   public estaEditando = false;
   public usuarioActual: Usuario | null = null;
+  public mensajeDoc = '';
+  public mensajeValidando = '';
   constructor(
     private fb: FormBuilder,
     private _usuarioService: UsuarioService,
@@ -56,6 +59,7 @@ export class FormUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerRoles();
     this.esCargaOedicion();
+    this.buscarUsuarioDniIngresado();
   }
 
   get controlDeInput(): (input: string) => FormControl {
@@ -122,7 +126,44 @@ export class FormUsuarioComponent implements OnInit {
     this.userForm.disable();
     this.estaEditando = false;
   }
-
+  buscarUsuarioDniIngresado() {
+    this.userForm.get('dni')?.valueChanges.subscribe((value) => {
+      if (this.userForm.get('dni')?.valid) {
+        if (!this.esFormulario && this.usuario) {
+          if (this.usuario?.dni !== value) {
+            this.buscarUsuarioxDni(value);
+          }
+        } else {
+          this.mensajeDoc = '';
+          this.buscarUsuarioxDni(value);
+        }
+      } else {
+        this.mensajeDoc = '';
+      }
+    });
+  }
+  buscarUsuarioxDni(dni: number) {
+    this.mensajeValidando = 'Buscando dni en la base de datos.';
+    this._usuarioService.obtenerUsuarioxDni(dni).subscribe({
+      next: (response: any) => {
+        console.log(response)
+        this.mensajeValidando = '';
+        if (response.success) {
+          this.userForm.get('dni')?.setErrors({ invalidDni: true });
+          this.activarModificar()
+          this.mensajeDoc = 'Documento ya ingresado en otro usuario.';
+        } else {
+          this.userForm.get('dni')?.setErrors(null);
+          this.mensajeDoc = '';
+        }
+      },
+      error: (error: any) => {
+        this.mensajeValidando = '';
+        this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
+        console.log(error);
+      },
+    });
+  }
   cargarUsuario() {
     if (this.userForm.valid) {
       Swal.fire({

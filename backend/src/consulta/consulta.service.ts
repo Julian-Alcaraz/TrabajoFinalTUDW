@@ -446,6 +446,24 @@ export class ConsultaService {
     }
     return respuesta;
   }
+  async countTypeByYearAndInstitucion(year: number, id_institucion: number) {
+    console.log(year, id_institucion);
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const respuesta = await Promise.all(
+      types.map(async (type) => {
+        let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.type = :type', { type });
+        if (year !== 0) {
+          query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+        }
+        if (id_institucion !== 0) {
+          query = query.andWhere('consulta.id_institucion = :id_institucion', { id_institucion });
+        }
+        return query.getCount();
+      }),
+    );
+    // const respuesta = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type AND consulta.id_institucion = :id_institucion ', { year, type, id_institucion }).getCount()));
+    return respuesta;
+  }
 
   async estadoNutricionalData(year: number, id: number) {
     const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CursoService } from '../../../../services/curso.service';
 import { Curso } from '../../../../models/curso.model';
@@ -34,10 +34,6 @@ export class YearGradoFormComponent implements OnInit {
   ngOnInit() {
     this.obtenerCursos();
     this.traerDatosGraficos();
-  }
-
-  get controlDeInput(): (input: string) => FormControl {
-    return (input: string) => this.optionForm.get(input) as FormControl;
   }
 
   obtenerCursos(): any {

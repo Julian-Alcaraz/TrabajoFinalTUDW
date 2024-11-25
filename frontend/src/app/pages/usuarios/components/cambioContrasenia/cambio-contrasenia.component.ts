@@ -60,6 +60,7 @@ export class CambiarContraseniaComponent implements OnInit {
   cambiarContrasenia() {
     Swal.fire({
       title: '¿Quieres guardar los cambios?',
+      text: this.cambioObligatorio?'Se cerrara su sesion automaticamente.':'',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText: 'Guardar',
@@ -73,8 +74,7 @@ export class CambiarContraseniaComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 if(this.cambioObligatorio){
-                  this.identidad!.cambioContrasenia=false
-                  this._sessionService.setIdentidad(this.identidad)
+                  this._sessionService.cerrarSesion()
                 }
                 this._dialog.closeAll();
               } else {

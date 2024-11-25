@@ -47,7 +47,12 @@ export class UsuarioService {
     if (usuario.roles) usuario.roles = usuario.roles.filter((rol) => !rol.deshabilitado);
     return usuario;
   }
-
+  async findOneByDni(dni: number) {
+    const usuario = await this.usuarioORM.findOne({ where: { dni } });
+    // if (!usuario) throw new NotFoundException(`Usuario con id ${dni} no encontrado`);
+    // if (usuario.roles) usuario.roles = usuario.roles.filter((rol) => !rol.deshabilitado);
+    return usuario;
+  }
   async update(id: number, cambios: UpdateUsuarioDto) {
     if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
     const usuario = await this.usuarioORM.findOneBy({ id });

@@ -122,6 +122,18 @@ export class ConsultaController {
     };
   }
 
+  @Get('contarTipoXanios/:year/institucion/:id_institucion')
+  @ApiOperation({ summary: 'Cuenta todas los tipos de  consultas por año e institucion' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countTypeByYearAndInstitucion(@Param('year', ParseIntPipe) year: number, @Param('id_institucion', ParseIntPipe) id_institucion: number) {
+    const cantByYearList = await this.consultaService.countTypeByYearAndInstitucion(year, id_institucion);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
   @Get('estadoNutricionalPorAnio/:year/curso/:id')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })

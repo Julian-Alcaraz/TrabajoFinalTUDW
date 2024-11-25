@@ -40,4 +40,7 @@ export class UsuarioService {
   modificarContrasenia(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'usuario/modificarContrasenia/' + id, data);
   }
+  obtenerUsuarioxDni(dni:number){
+    return this._http.get(this.url + 'usuario/dni/' + dni);
+  }
 }

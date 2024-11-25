@@ -45,6 +45,10 @@ export class ConsultaService {
     return this._http.get(this.url + 'consulta/contarTipoXanios/' + year);
   }
 
+  countTypeConsultaByYearAndInstitucion(year: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/contarTipoXanios/${year}/institucion/${id_institucion}`);
+  }
+
   countTensionArterialByYearAndCurso(year: number, id_curso: number) {
     return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}`);
   }

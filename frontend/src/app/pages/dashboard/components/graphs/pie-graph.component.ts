@@ -6,12 +6,12 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 @Component({
   selector: 'app-pie-graph',
   standalone: true,
-  imports: [ChartModule,CommonModule,LoadingComponent],
+  imports: [ChartModule, CommonModule, LoadingComponent],
   template: `
     <div class="flex flex-col h-full text-center">
       <h1 class=" text-2xl">{{ titulo }}</h1>
       <h2 class=" text-lg">{{ subTitulo }}</h2>
-      <div class="flex-grow">
+      <div class="flex-grow flex justify-center items-center">
         <p-chart *ngIf="set.data.length" class="w-4/6" type="pie" [data]="data" [options]="options" />
         <div *ngIf="!set.data.length" class="w-full flex justify-center items-center min-h-full">
           <div *ngIf="!loading">
@@ -19,7 +19,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
             No es posible generar el gráfico.
           </div>
           <div *ngIf="loading">
-            <app-loading/>
+            <app-loading />
           </div>
         </div>
       </div>

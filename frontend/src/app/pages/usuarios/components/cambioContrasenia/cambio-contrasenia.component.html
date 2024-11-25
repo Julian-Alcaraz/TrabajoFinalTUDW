@@ -23,7 +23,7 @@
           <input pInputText [type]="mostrarContraseniaConfirmar ? 'text' : 'password'" formControlName="confirmPassword" type="password" id="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required />
           <p-inputIcon [class]="!mostrarContraseniaConfirmar ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="verContrasenia('confirmPassword')" />
         </p-iconfield>
-        <div *ngIf="cambioForm.get('confirmPassword')?.errors && (cambioForm.get('password')?.dirty || cambioForm.get('password')?.touched)" class="text-red-600 text-sm">
+        <div *ngIf="cambioForm.get('confirmPassword')?.errors && (cambioForm.get('confirmPassword')?.dirty || cambioForm.get('confirmPassword')?.touched)" class="text-red-600 text-sm">
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['required']">El campo es requerido.</div>
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['minlength']">Minimo 7 caracteres.</div>
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
@@ -33,7 +33,7 @@
           <!-- <a (click)="verContrasenia('password')" tabindex (keydown)="verContrasenia('password')" class="text-blue-600 text-sm underline ml-4 mr-4 cursor-pointer">{{ mostrarContrasenia ? 'Ocultar contraseñas' : 'Mostrar contraseñas' }}</a> -->
         </div>
       </div>
-      <div class="mb-2 p-2 text-center bg-orange-300 border border-orange-700 rounded">
+      <div *ngIf="cambioObligatorio" class="mb-2 p-2 text-center bg-orange-300 border border-orange-700 rounded">
         Por favor, cambie su contraseña para continuar.
       </div>
       <div class="flex my-auto">

@@ -78,7 +78,26 @@ export class UsuarioController {
       message: 'Usuario modificado con exito',
     };
   }
-
+  @Get('dni/:dni')
+  @ApiOperation({ summary: 'Devuelve el usuario buscado por dni' })
+  @ApiResponse({ status: 200, description: 'Retorna el usuario buscado con exito' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  async findOneByDni(@Param('dni', ParseIntPipe) dni: number) {
+    const usuario = await this.usuarioService.findOneByDni(dni);
+    if (usuario) {
+      return {
+        success: true,
+        data: usuario,
+        message: 'Usuario obtenido con exito',
+      };
+    } else {
+      return {
+        success: false,
+        data: usuario,
+        message: 'Usuario no encontrado.',
+      };
+    }
+  }
   @Delete('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un usuario' })
   @ApiResponse({ status: 200, description: 'Usuario borrado logicamente con exito' })
