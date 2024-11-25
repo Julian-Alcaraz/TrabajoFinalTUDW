@@ -164,7 +164,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'administracion',
           label: 'Administración',
-          orden: 6,
+          orden: 5,
           icon: 'fa-solid fa-shield',
           roles: [roles[0]],
         },
@@ -180,7 +180,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'usuarios/miUsuario',
           label: 'Mi Usuario',
-          orden: 3,
+          orden: 6,
           icon: 'fa-solid fa-user',
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: true,
@@ -199,33 +199,17 @@ export class MainSeeder implements Seeder {
 
       const menusAdmin = await menuORM.save([
         {
-          url: 'usuarios',
+          url: 'administracion/usuarios',
           label: 'Usuarios',
-          orden: 5,
-          icon: 'fa-solid fa-users',
-          roles: [roles[0]],
-          menu_padre: menus[3],
-        },
-        {
-          url: 'administracion/localidades',
-          label: 'Localidades',
           orden: 7,
-          icon: 'fa-solid fa-earth-americas',
-          roles: [roles[0]],
-          menu_padre: menus[3],
-        },
-        {
-          url: 'administracion/barrios',
-          label: 'Barrios',
-          orden: 5,
-          icon: 'fa-solid fa-location-dot',
+          icon: 'fa-solid fa-users',
           roles: [roles[0]],
           menu_padre: menus[3],
         },
         {
           url: 'administracion/instituciones',
           label: 'Instituciones',
-          orden: 5,
+          orden: 8,
           icon: 'fa-solid fa-school',
           roles: [roles[0]],
           menu_padre: menus[3],
@@ -233,8 +217,24 @@ export class MainSeeder implements Seeder {
         {
           url: 'administracion/cursos',
           label: 'Cursos',
-          orden: 5,
+          orden: 9,
           icon: 'fa-solid fa-graduation-cap',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/localidades',
+          label: 'Localidades',
+          orden: 10,
+          icon: 'fa-solid fa-earth-americas',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/barrios',
+          label: 'Barrios',
+          orden: 11,
+          icon: 'fa-solid fa-location-dot',
           roles: [roles[0]],
           menu_padre: menus[3],
         },
@@ -242,22 +242,6 @@ export class MainSeeder implements Seeder {
       await menuORM.save(menusAdmin);
 
       const menus2 = await menuORM.save([
-        {
-          url: 'administracion/usuarios/list',
-          label: 'Lista Usuarios',
-          orden: 5,
-          icon: 'fa-solid fa-list-ol',
-          roles: [roles[0]],
-          menu_padre: menusAdmin[0],
-        },
-        {
-          url: 'administracion/usuarios/nuevo',
-          label: 'Nuevo Usuario',
-          orden: 4,
-          icon: 'fa-solid fa-plus',
-          roles: [roles[0]],
-          menu_padre: menusAdmin[0],
-        },
         {
           url: 'chicos/nuevo',
           label: 'Nuevo Chico',

@@ -133,15 +133,15 @@ export class UsuarioService {
       const menusRol = objRol?.menus || [];
       const menusNoFalsos = menusRol.filter((menu) => !menu.deshabilitado);
       for (const menu of menusNoFalsos) {
-        // Filtrar los submenús del menú actual
-        const subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado);
+        // Filtrar y ordenar los submenús del menú actual
+        let subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado);
+        subMenusValidos = subMenusValidos.sort((a, b) => a.orden - b.orden);
         for (const subMenu of subMenusValidos) {
-          // Filtrar los submenús del submenú
+          // Filtrar los submenús del submenú (1 nivel)
           const subSubMenusValidos = subMenu.sub_menus.filter((subSubMenu) => !subSubMenu.deshabilitado);
-          subMenu.sub_menus = subSubMenusValidos; // Asignar los submenús válidos al submenú
+          subMenu.sub_menus = subSubMenusValidos;
         }
-        menu.sub_menus = subMenusValidos; // Asignar los submenús válidos al menú
-        // Solo agregar el menú principal al conjunto si no tiene un menú padre
+        menu.sub_menus = subMenusValidos;
         if (!menu.menu_padre) {
           colMenusSet.add(JSON.stringify(menu));
         }

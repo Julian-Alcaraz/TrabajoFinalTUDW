@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { LocalidadesComponent } from '../pages/administracion/localidades/localidades.component';
-import { NuevoUsuarioComponent } from '../pages/administracion/usuarios/nuevo-usuario/nuevo-usuario.component';
 import { ListaUsuarioComponent } from '../pages/administracion/usuarios/lista-usuario/lista-usuario.component';
-import { adminGuard } from '../guards/auth.guard';
 import { BarriosComponent } from '../pages/administracion/barrios/barrios.component';
 import { InstitucionesComponent } from '../pages/administracion/instituciones/instituciones.component';
 import { CursosComponent } from '../pages/administracion/cursos/cursos.component';
+import { adminGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -28,10 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'usuarios',
-    children: [
-      { path: 'nuevo', component: NuevoUsuarioComponent, canActivate: [adminGuard] },
-      { path: 'list', component: ListaUsuarioComponent, canActivate: [adminGuard] },
-    ],
+    children: [{ path: '', component: ListaUsuarioComponent, canActivate: [adminGuard] }],
   },
 ];
 

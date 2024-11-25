@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -30,6 +30,8 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 export class FormUsuarioComponent implements OnInit {
   @Input() esFormulario = true;
   @Input() usuario: Usuario | null = null;
+
+  @Output() usuarioCreado = new EventEmitter<void>();
 
   public userForm: FormGroup;
   public fechaHoy = new Date();
@@ -182,6 +184,7 @@ export class FormUsuarioComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.userForm.reset();
+                this.usuarioCreado.emit();
               }
             },
             error: (err) => {

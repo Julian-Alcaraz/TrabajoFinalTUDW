@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
+
 import { FormUsuarioComponent } from '../../../usuarios/components/form-usuario/form-usuario.component';
 
 @Component({
@@ -13,5 +14,16 @@ import { FormUsuarioComponent } from '../../../usuarios/components/form-usuario/
   styleUrl: './nuevo-usuario.component.css',
 })
 export class NuevoUsuarioComponent {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    public dialogRef: MatDialogRef<NuevoUsuarioComponent>,
+  ) {}
+
+  cerrarModalUsuario(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
+  }
+
+  onUsuarioCreado() {
+    console.log('Usuario creado. Actualizando componente padre.');
+    this.cerrarModalUsuario(true);
+  }
 }
