@@ -27,15 +27,28 @@
       <!-- Sexo -->
       <div class="sm:col-span-2 md:col-span-1">
         <p-iftalabel>
-          <p-select [options]="sexoOptions" (onChange)="applyFilter($event)" [checkmark]="true" [showClear]="true"
-            [formControl]="sexoControl" #filtroSexo id="filtroSexo" inputId="filtroSexo" optionLabel="nombre"
-            optionValue="nombre" class="w-full" />
+          <p-select [options]="sexoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroSexo()"
+            [checkmark]="true" [showClear]="true" [formControl]="sexoControl" #filtroSexo id="filtroSexo"
+            inputId="filtroSexo" optionLabel="nombre" optionValue="nombre" class="w-full" />
           <label for="filtroSexo">Sexo</label>
         </p-iftalabel>
       </div>
       <!-- Barrio -->
-
-      <!-- Uno mas para completar el grid -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="barrios" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroBarrio()"
+            [checkmark]="true" [showClear]="true" [formControl]="barrioControl" #filtroBarrio id="filtroBarrio"
+            inputId="filtroBarrio" optionLabel="nombre" optionValue="nombre" class="w-full" />
+          <label for="filtroBarrio">Barrio</label>
+        </p-iftalabel>
+      </div>
+      <!-- Uno mas para completar el grid
+      <div class="sm:col-span-2 md:col-span-1">
+        <div>
+          <input type="text" pInputText [formControl]="actividadControl" class="w-full mb-4" />
+          <p-slider [formControl]="actividadControl" [step]="25" class="w-full" />
+        </div>
+      </div> -->
     </div>
     <div class="scroll">
       <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll">
@@ -90,7 +103,6 @@
         <ng-container matColumnDef="consultasBar">
           <th mat-header-cell *matHeaderCellDef>Cosultas asistidas por año</th>
           <td mat-cell *matCellDef="let element">
-            <!-- <input type="text" pInputText pTooltip="Enter your username" tooltipPosition="top" placeholder="Top" /> -->
             <div [pTooltip]="element.actividad + ' de 4'">
               <p-progressbar [value]="element.actividad * 25" [showValue]="false" />
             </div>
@@ -131,16 +143,7 @@
               <app-loading />
             </div>
             } @else {
-            <p class="py-5">
-              {{ filtroDni.value ? "No se encontraron chicos con DNI: '" + filtroDni.value + "'" : 'No encontro
-              información.' }}
-              {{ filtroNombre.value ? "No se encontraron chicos con nombre: '" + filtroNombre.value + "'" : 'No encontro
-              información.' }}
-              {{ filtroApellido.value ? "No se encontraron chicos con apellido: '" + filtroApellido.value + "'" : 'No
-              encontro información.' }}
-              {{ filtroSexo.value ? "No se encontraron chicos con sexo: '" + filtroSexo.value + "'" : 'No encontro
-              información.' }}
-            </p>
+            <p class="py-5">{{ mensajes }}</p>
             }
           </td>
         </tr>

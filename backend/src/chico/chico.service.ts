@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Chico } from './entities/chico.entity';
 import { Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
-import { Consulta } from 'src/consulta/entities/consulta.entity';
+//import { Consulta } from 'src/consulta/entities/consulta.entity';
 
 @Injectable()
 export class ChicoService {
@@ -30,16 +30,16 @@ export class ChicoService {
   findAll() {
     return this.chicoORM.find();
   }
-  async findAllWhitActivity(year: number) {
+
+  async findAllWithActivity(year: number) {
     const result = await this.chicoORM
       .createQueryBuilder('chico')
-      .select(['chico.id AS id', 'chico.created_at AS created_at', 'chico.updated_at AS updated_at', 'chico.deshabilitado AS deshabilitado', 'chico.dni AS dni', 'chico.nombre AS nombre', 'chico.apellido AS apellido', 'chico.sexo AS sexo', 'chico.fe_nacimiento AS fe_nacimiento', 'chico.direccion AS direccion', 'chico.telefono AS telefono', 'chico.nombre_madre AS nombre_madre', 'chico.nombre_padre AS nombre_padre', 'chico.id_barrio AS id_barrio'])
-      .addSelect((subQuery) => {
-        return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
-      }, 'actividad')
-      .getRawMany();
+      .leftJoinAndSelect('chico.barrio', 'barrio')
+      .loadRelationCountAndMap('chico.actividad', 'chico.consultas', 'consultas', (qb) => qb.where('EXTRACT(YEAR FROM consultas.created_at) = :year', { year }))
+      .getMany();
     return result;
   }
+
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);

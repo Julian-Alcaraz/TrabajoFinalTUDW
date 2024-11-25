@@ -40,8 +40,8 @@ export class ChicoController {
   @Get('/activity/:year')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
-  async findAllbyActivity(@Param('year', ParseIntPipe) year: number) {
-    const chicos = await this.chicoService.findAllWhitActivity(year);
+  async findAllByActivity(@Param('year', ParseIntPipe) year: number) {
+    const chicos = await this.chicoService.findAllWithActivity(year);
     return {
       success: true,
       data: chicos,

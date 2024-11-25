@@ -16,5 +16,6 @@ import { Curso } from 'src/curso/entities/curso.entity';
   imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso])],
   controllers: [ConsultaController],
   providers: [ConsultaService],
+  exports: [ConsultaService], // Exporta el servicio
 })
 export class ConsultaModule {}

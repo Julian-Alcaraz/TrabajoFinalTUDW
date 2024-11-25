@@ -37,7 +37,6 @@ export class ConsultasxanioComponent {
   buscar() {
     if (this.date) {
       const anio = this.date.getFullYear();
-      console.log(this.date.getFullYear());
       if (anio) {
         this._consultasService.obtenerConsultasxAnio(anio).subscribe({
           next: (response: any) => {

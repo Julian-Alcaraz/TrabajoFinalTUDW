@@ -29,6 +29,7 @@ import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/ca
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 import { PanelModule } from 'primeng/panel';
+import { CsvService } from '../../../../services/csv.service';
 
 @Component({
   selector: 'app-personalizada',
@@ -40,10 +41,11 @@ import { PanelModule } from 'primeng/panel';
 export class PersonalizadaComponent implements OnInit {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
 
+  public mostrarBotonDescarga = false;
   public colapsarPaneles = false;
   public formBusqueda: FormGroup;
   public loading = false;
-  // public resultados: any;
+  public resultados: any;
   public hoy = new Date();
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
@@ -68,6 +70,7 @@ export class PersonalizadaComponent implements OnInit {
     private _institucionService: InstitucionService,
     private _usuarioService: UsuarioService,
     private _consultaService: ConsultaService,
+    private _csvService: CsvService,
   ) {
     this.formBusqueda = this.fb.group({
       generales: this.fb.group({
@@ -101,6 +104,9 @@ export class PersonalizadaComponent implements OnInit {
     this.formBusqueda.get('consultasSeleccionadas')?.valueChanges.subscribe(() => {
       this.onChangeTipoConsulta();
     });
+    this.formBusqueda.valueChanges.subscribe(() => {
+      this.mostrarBotonDescarga = false;
+    });
   }
 
   enviarConsultas(data: Consulta[]) {
@@ -113,7 +119,6 @@ export class PersonalizadaComponent implements OnInit {
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
     }
-    console.log('EL FORM DESPUES DE CAMBIAR TIPO CONSULTA ES ', this.formBusqueda.value);
   }
 
   obtenerCursos(): any {
@@ -143,7 +148,6 @@ export class PersonalizadaComponent implements OnInit {
     this._usuarioService.obtenerProfesionales().subscribe({
       next: (response: any) => {
         this.profesionales = response.data;
-        console.log(this.profesionales);
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
@@ -157,16 +161,13 @@ export class PersonalizadaComponent implements OnInit {
       this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
-      console.log('---------');
-      console.log('LA DATA ENVIADA ES ', dataLimpia);
-      console.log('---------');
       this._consultaService.busquedaPersonalizada(dataLimpia).subscribe({
         next: (response: any) => {
           if (response.success) {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            // this.resultados = response.data;
-            // console.log('Resultados backend', this.resultados);
+            this.resultados = response.data;
             this.enviarConsultas(response.data);
+            this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
             this.loading = false;
           }
         },
@@ -176,6 +177,31 @@ export class PersonalizadaComponent implements OnInit {
         },
       });
     }
+  }
+
+  generarCsv() {
+    const resultado = prepararData(this.formBusqueda.value);
+    const dataLimpia = eliminarValoresNulosYVacios(resultado);
+    this._csvService.generarCsv(dataLimpia).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // Descargar el archivo
+          const nombreArchivo = response.data;
+          this._csvService.descargarCsv(nombreArchivo).subscribe((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = nombreArchivo;
+            link.click();
+            window.URL.revokeObjectURL(url);
+          });
+        }
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        console.log(err);
+      },
+    });
   }
 }
 

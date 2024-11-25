@@ -38,8 +38,9 @@
 <h3 align="center">Trabajo Final de la Técnicatura Universitaria en Desarrollo Web</h3>
 
   <p align="center">
-     Este trabajo se realizo para la materia "Trabajo Final" de la Técnicatura Universitaria en Desarrollo Web de la Universidad Nacional del Comahue.<br>
-     Se tomo la propuesta que comentó el Secretario Académico (SE LLAMABA ASI???) el primer dia de clases de la materia que consistia en un sitio web para remplazar información en planillas Excel a un sistema web. El projecto se realizo teniendo reuiniones con gente de la fundación para tomar en cuenta sus opiniones y hacer un sistema que les sea útil a ellos principalmente.
+  Este trabajo fue desarrollado para la materia "Trabajo Final" de la Tecnicatura Universitaria en Desarrollo Web de la Universidad Nacional del Comahue. <br>
+  La idea inicial surgió de una propuesta realizada por el Secretario Académico (¿SE LLAMABA ASI?) durante el primer día de clases, la cual consistía en un proyecto que una ONG le solicitó a la facultad para reemplazar el manejo de información en planillas Excel por un sistema web. <br>
+  El proyecto se llevó a cabo teniendo reiteradas reuniones con miembros de la fundación, integrando sus opiniones y necesidades para desarrollar un sistema que fuera principalmente útil para ellos. Además, el desarrollo de este proyecto nos permitió aplicar los conocimientos adquiridos a lo largo de la carrera y cumplir con los objetivos académicos requeridos para aprobar la última materia de la Técnicatura.
     </p>
     <!-- 
     <br />
