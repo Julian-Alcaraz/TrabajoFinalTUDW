@@ -27,7 +27,16 @@
       </li>
     </ul>
   </div>
-  <ul class="sidenav-nav" style="padding-top: 0px !important; padding-bottom: 0px !important">
+  <div class="relative flex justify-center">
+    <div class="w-4/5 border-t border-white"></div>
+  </div>
+  <ul class="sidenav-nav" style="padding-bottom: 0px !important">
+    <li class="sidenav-nav-item">
+      <a class="sidenav-nav-link" (click)="cerraElSideBar()" routerLink="/layout/usuarios/miUsuario" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="sidenav-link-icon fa-solid fa-user"></i>
+        <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">Mi usuario</span>
+      </a>
+    </li>
     <li class="sidenav-nav-item" style="margin: 0px !important; padding-bottom: 5px">
       <a class="sidenav-nav-link" (click)="logout()" tabindex (keydown)="logout()">
         <i class="sidenav-link-icon fa-solid fa-arrow-right-to-bracket"></i>

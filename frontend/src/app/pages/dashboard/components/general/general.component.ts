@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { BarGraphComponent } from '../graphs/bar-graph.component';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { ChicoService } from '../../../../services/chico.service';
@@ -17,7 +17,7 @@ import { Institucion } from '../../../../models/institucion.model';
   templateUrl: './general.component.html',
   styleUrl: './general.component.css',
 })
-export class GeneralComponent implements OnInit {
+export class GeneralComponent implements OnInit, AfterViewInit {
   currentYear: number;
   lastFourYears: number[];
   loading = true;
@@ -46,8 +46,11 @@ export class GeneralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obtenerGraficos();
     this.obtenerInstituciones();
+    this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
+  }
+  ngAfterViewInit(){
+    this.obtenerGraficos();
   }
   async obtenerGraficos() {
     const promesas = [this.countChicosCargados(), this.countConsultasxanio(), this.countTypeConsultaxanio(), this.obtenerGraficoByYearAndInstitucion()];
@@ -140,8 +143,6 @@ export class GeneralComponent implements OnInit {
   }
 
   seleccionarYear(event: any) {
-    console.log(event);
-
     this.selectedYear = event ? +event.getFullYear() : 0;
     if (this.selectedYear === 0) {
       this.subTituloYear = '';
@@ -150,6 +151,7 @@ export class GeneralComponent implements OnInit {
     }
     this.obtenerGraficoByYearAndInstitucion();
   }
+  
   seleccionarInstituciones(event: any) {
     this.selectedId_institucion = +event.target.value;
     if (this.selectedId_institucion === 0) {
@@ -160,6 +162,7 @@ export class GeneralComponent implements OnInit {
     }
     this.obtenerGraficoByYearAndInstitucion();
   }
+
   obtenerInstituciones() {
     this._institucionService.obtenerTodasInstituciones().subscribe({
       next: (response: any) => {

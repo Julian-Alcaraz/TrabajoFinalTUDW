@@ -171,7 +171,10 @@
   overflow-y: auto;
   visibility: hidden;
   /* height: calc(100% - 3.65rem); como el de abajo por que es para el logou */
-  height: calc(100% - 7.3rem);
+  /* un solo item */
+  /* height: calc(100% - 7.3rem ); */
+
+  height: calc(100% - 12rem );
 }
 
 .sidenav-nav,

@@ -52,6 +52,7 @@ export class ClinicaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
+
   async obtenerGraficos() {
     const promesas = [
       this.obtenerGraficoTensionArterial(),

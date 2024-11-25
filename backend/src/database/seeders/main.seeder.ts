@@ -183,6 +183,7 @@ export class MainSeeder implements Seeder {
           orden: 3,
           icon: 'fa-solid fa-user',
           roles: [roles[0], roles[1], roles[2]],
+          deshabilitado: true,
         },
         {
           url: 'menuDeshabilitado',
