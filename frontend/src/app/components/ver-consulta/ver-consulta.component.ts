@@ -32,7 +32,7 @@ export class VerConsultaComponent implements OnInit {
   ngOnInit() {
     console.log('Valores en ver consulta', this.data);
     this.obtenerConsulta();
-    this.esAdmin();
+    this.esEditor();
   }
   obtenerConsulta() {
     if (this.data) {
@@ -43,7 +43,7 @@ export class VerConsultaComponent implements OnInit {
       });
     }
   }
-  esAdmin() {
+  esEditor() {
     this.identidad = this._sessionService.getIdentidad();
     // es editar si el id es medico o admin
     if (this.identidad.roles_ids.includes(1) || this.identidad.roles_ids.includes(2)) {

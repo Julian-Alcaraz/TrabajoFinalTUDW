@@ -16,11 +16,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { ModalLocalidadComponent } from './modal-localidad/modal-localidad.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-localidades',
   standalone: true,
-  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
+  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './localidades.component.html',
   styleUrl: './localidades.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

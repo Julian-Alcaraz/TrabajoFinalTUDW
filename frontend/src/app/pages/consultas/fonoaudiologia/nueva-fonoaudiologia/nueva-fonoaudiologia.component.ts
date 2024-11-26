@@ -21,7 +21,7 @@ import { Consulta } from '../../../../models/consulta.model';
 })
 export class NuevaFonoaudiologicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar = false;
+  @Input() editar = true;
   habilitarModificar = false;
 
   public fonoaudiologiaForm: FormGroup;
@@ -184,7 +184,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
   convertToBoolean(value: string | boolean): boolean {
     return value === true || value === 'true';
   }
-  
+
   modificarConsulta() {
     if (this.fonoaudiologiaForm.valid) {
       Swal.fire({

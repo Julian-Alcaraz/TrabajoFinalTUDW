@@ -16,11 +16,12 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso.service';
 import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-cursos',
   standalone: true,
-  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
+  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './cursos.component.html',
   styleUrl: './cursos.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

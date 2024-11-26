@@ -2,8 +2,8 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-auto scroll" matSort (matSortChange)="announceSortChange($event)">
     <!-- # -->
     <ng-container matColumnDef="numero">
-      <th mat-header-cell *matHeaderCellDef >#</th>
-      <td mat-cell *matCellDef="let element"> {{dataSource.data.indexOf(element)+1}}</td>
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let element">{{ dataSource.data.indexOf(element) + 1 }}</td>
     </ng-container>
     <!-- Tipo -->
     <ng-container matColumnDef="type">
@@ -98,13 +98,13 @@
       <td mat-cell *matCellDef="let element">{{ element.usuario.dni }}</td>
     </ng-container>
     <!-- Observaciones -->
-    <ng-container matColumnDef="observaciones" style=" max-width: 200px  ;">
+    <ng-container matColumnDef="observaciones" style="max-width: 200px">
       <th mat-header-cell *matHeaderCellDef>Observaciones</th>
-      <td mat-cell *matCellDef="let element"  class="observaciones">{{ element.observaciones ? element.observaciones : '-' }}</td>
+      <td mat-cell *matCellDef="let element" class="observaciones">{{ element.observaciones ? element.observaciones : '-' }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
-    <tr class="mat-row" *matNoDataRow >
+    <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
+    <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
         <!-- @if (searching) {
           <app-loading />
@@ -113,4 +113,4 @@
     </tr>
   </table>
 </div>
-<mat-paginator [length]="dataSource" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="dataSource" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>

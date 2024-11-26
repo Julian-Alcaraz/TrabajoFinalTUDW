@@ -9,11 +9,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Consulta } from '../../../../models/consulta.model';
 import { VerConsultaComponent } from '../../../../components/ver-consulta/ver-consulta.component';
 import { PaginadorPersonalizado } from '../../../../utils/paginador/paginador-personalizado';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-consultas-table',
   standalone: true,
-  imports: [CommonModule, MatSortModule, MatTableModule, MatPaginator],
+  imports: [CommonModule, MatSortModule, MatTableModule, MatPaginator, TooltipModule],
   templateUrl: './consultas-table.component.html',
   styleUrl: './consultas-table.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -27,9 +28,7 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
   // por defecto todas las columnas
   public dataSource: MatTableDataSource<Consulta>;
 
-  constructor(
-    private _dialog: MatDialog,
-  ) {
+  constructor(private _dialog: MatDialog) {
     this.dataSource = new MatTableDataSource(this.consultas);
     this.dataSource.sort = this.sort;
   }
@@ -62,5 +61,4 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
       this.dataSource.data = changes['consultas'].currentValue;
     }
   }
-
 }

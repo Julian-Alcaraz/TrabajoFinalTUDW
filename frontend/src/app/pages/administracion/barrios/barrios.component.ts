@@ -15,11 +15,12 @@ import { Barrio } from '../../../models/barrio.model';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { ModalBarrioComponent } from './modal-barrio/modal-barrio.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-barrios',
   standalone: true,
-  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule],
+  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './barrios.component.html',
   styleUrl: './barrios.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

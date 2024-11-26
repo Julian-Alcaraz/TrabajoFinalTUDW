@@ -27,7 +27,7 @@ import { Consulta } from '../../../../models/consulta.model';
 })
 export class NuevaOftalmologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar = false;
+  @Input() editar = true;
   habilitarModificar = false;
 
   public oftalmologiaForm: FormGroup;

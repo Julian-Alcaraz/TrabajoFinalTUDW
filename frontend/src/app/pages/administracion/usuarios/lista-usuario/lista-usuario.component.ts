@@ -15,11 +15,12 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 import { Rol } from '../../../../models/rol.model';
 import { ModalUsuarioComponent } from '../modal-usuario/modal-usuario.component';
 import { NuevoUsuarioComponent } from '../nuevo-usuario/nuevo-usuario.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-lista-usuario',
   standalone: true,
-  imports: [CommonModule, TagModule, MatTableModule, MatPaginator, MatPaginatorModule, LoadingComponent],
+  imports: [CommonModule, TagModule, MatTableModule, MatPaginator, MatPaginatorModule, LoadingComponent, TooltipModule],
   templateUrl: './lista-usuario.component.html',
   styleUrl: './lista-usuario.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],

@@ -14,7 +14,7 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, BarGraphComponent, PieGraphComponent,LoadingComponent],
+  imports: [CommonModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
@@ -57,7 +57,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
     Promise.all(promesas).then(() => (this.loading = false));
     try {
       await Promise.all(promesas);
-      MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
+      // MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
     } catch (error) {
       MostrarNotificacion.mensajeErrorServicio(this.snackBar, error);
     } finally {
@@ -71,7 +71,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
           this.dataChicosxAnio = [];
           if (response.success) {
             this.dataChicosxAnio.push({
-              label: 'Chicos',
+              label: 'Niños',
               data: response.data,
             });
           }

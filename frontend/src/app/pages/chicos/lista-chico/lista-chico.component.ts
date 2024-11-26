@@ -127,7 +127,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     else if (event.target) idInput = event.target.id;
     else if (event.originalTarget.id) idInput = event.originalTarget.id;
     if (idInput === 'filtroDni') {
-      const dniValue = event.target.value.replace(/,/g, '');
+      const dniValue = event.target.value.replace(/[,.]/g, '');
       this.searchTerms.dni = dniValue || undefined;
     } else if (idInput === 'filtroNombre') {
       const nombreValue = event.target.value.trim();
@@ -142,7 +142,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       const barrioValue = event.value;
       this.searchTerms.idBarrio = barrioValue || undefined;
     } else if (idInput.includes('filtroActividad')) {
-      const actividadValue = event.originalTarget.valueAsNumber / 25;
+      const actividadValue = event.target.valueAsNumber / 25;
       this.searchTerms.actividad = actividadValue || undefined;
     } else if (idInput.includes('filtroLocalidad')) {
       const localidadValue = event.value;

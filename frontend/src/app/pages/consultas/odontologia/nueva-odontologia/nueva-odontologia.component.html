@@ -36,7 +36,7 @@
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')" idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
-        <h3 class="mt-4 md:col-span-6">Estado de sus dientes:</h3>
+        <h3 class="mt-4 md:col-span-6 text-lg font-medium text-gray-900">Estado de sus dientes:</h3>
         <!-- Dientes Permanentes -->
         <div class="mt-4 md:col-span-2">
           <app-input-number label="Dientes Permanentes" [control]="controlDeInput('dientes_permanentes')" placeholder="Ej: 2" idInput="dientes_permanentes" />
@@ -108,7 +108,9 @@
             <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
           }
         } @else {
-          <button type="submit" [disabled]="!odontologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          @if (editar) {
+            <button type="submit" [disabled]="!odontologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          }
         }
       </div>
     </form>

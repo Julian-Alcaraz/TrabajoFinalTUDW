@@ -68,7 +68,7 @@ export class ClinicaComponent implements OnInit {
     Promise.all(promesas).then(() => (this.loading = false));
     try {
       await Promise.all(promesas);
-      MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
+      // MostrarNotificacion.mensajeExito(this.snackBar, 'Datos encontrados exitosamente.');
     } catch (error) {
       MostrarNotificacion.mensajeErrorServicio(this.snackBar, error);
     } finally {

@@ -170,7 +170,7 @@ export class MainSeeder implements Seeder {
         },
         {
           url: 'busqueda',
-          label: 'Buscar',
+          label: 'Buscar consultas',
           orden: 2,
           icon: 'fa-solid fa-magnifying-glass',
           roles: [roles[0], roles[1], roles[2]],
@@ -244,7 +244,7 @@ export class MainSeeder implements Seeder {
       const menus2 = await menuORM.save([
         {
           url: 'chicos/nuevo',
-          label: 'Cargar Niño',
+          label: 'Nuevo',
           orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
@@ -252,7 +252,7 @@ export class MainSeeder implements Seeder {
         },
         {
           url: 'chicos/list',
-          label: 'Lista Niños',
+          label: 'Lista',
           orden: 7,
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0], roles[1], roles[2]],
@@ -511,7 +511,7 @@ export class MainSeeder implements Seeder {
       // Crea 1500 consultas
       console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
-        Array(2000)
+        Array(2500)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);
@@ -524,7 +524,7 @@ export class MainSeeder implements Seeder {
               chico: chicoSeleccionado,
               usuario: usuarioConRol,
               edad: edad,
-              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
+              created_at: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
             });
             return consulta;
           }),

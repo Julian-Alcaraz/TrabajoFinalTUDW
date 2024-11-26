@@ -1,18 +1,12 @@
 <div class="card">
-  <div class="card-header">Usuarios del sistema</div>
+  <div class="card-header">Usuarios</div>
   <div class="card-body">
-    <div class="grid md:grid-cols-2 md:grid-gap-0">
-      <div class="md:col-span-1">
-        <input (keyup)="applyFilter($event)" placeholder="Buscar por nombre" #input type="text" id="filtro"
-          class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-          required />
-      </div>
-      <div class="md:col-span-1">
-        <button aria-label="Botón de nuevo barrio" type="button" (click)="crearUsuario()"
-          class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400"><i
-            class="pi pi-plus"></i>
-        </button>
-      </div>
+    <div class="flex flex-row justify-between items-center">
+      <input (keyup)="applyFilter($event)" placeholder="Buscar por nombre" #input type="text" id="filtro" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required />
+      <button aria-label="Botón de nuevo barrio" type="button" (click)="crearUsuario()" class="flex mb-2 ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+        <i class="pi pi-plus"></i>
+        <!-- Nuevo -->
+      </button>
     </div>
     <div class="scroll">
       <table mat-table [dataSource]="usuarios" class="mat-elevation-z8 table-auto scroll">
@@ -46,37 +40,30 @@
           <td mat-cell *matCellDef="let element">
             <div class="flex">
               @for (rol of element.roles; track $index) {
-              <p-tag [value]="rol.nombre" styleClass="mr-1" />
+                <p-tag [value]="rol.nombre" styleClass="mr-1" />
               }
-              <button aria-label="Botón de editar roles" (click)="editarRoles(element)"
-                class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'"><i
-                  class="fa-solid fa-pencil" style="color: #ffffff"></i></button>
+              <button aria-label="Botón de editar roles" (click)="editarRoles(element)" [pTooltip]="'Editar roles'" tooltipPosition="top" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'"><i class="fa-solid fa-pencil" style="color: #ffffff"></i></button>
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="habilitado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
           <td mat-cell *matCellDef="let element">
-            <p-tag [severity]="element.deshabilitado ? 'danger' : 'success'"
-              [value]="element.deshabilitado ? 'Deshabilitado' : 'Habilitado'" />
+            <p-tag [severity]="element.deshabilitado ? 'danger' : 'success'" [value]="element.deshabilitado ? 'Deshabilitado' : 'Habilitado'" />
           </td>
         </ng-container>
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Acción</th>
           <td mat-cell *matCellDef="let element">
             <div class="flex flex-row">
-              <button
-                [attr.aria-label]="element.deshabilitado ? 'Botón de habilitar usuario' : 'Botón de deshabilitar usuario'"
-                (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id)"
-                [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button [pTooltip]="element.deshabilitado ? 'Habilitar' : 'Deshabilitar'" tooltipPosition="top" [attr.aria-label]="element.deshabilitado ? 'Botón de habilitar usuario' : 'Botón de deshabilitar usuario'" (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id)" [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 @if (element.deshabilitado) {
-                <i class="fa-solid fa-check"></i>
+                  <i class="fa-solid fa-check"></i>
                 } @else {
-                <i class="fa-solid fa-xmark"></i>
+                  <i class="fa-solid fa-xmark"></i>
                 }
               </button>
-              <button aria-label="Botón de resetear contraseña usuario" (click)="resetarContrasenia(element)"
-                class="ms-2 text-white bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button [pTooltip]="'Resetar contraseña'" tooltipPosition="top" aria-label="Botón de resetear contraseña usuario" (click)="resetarContrasenia(element)" class="ms-2 text-white bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 <i class="fa-solid fa-arrow-rotate-right"></i>
               </button>
             </div>
@@ -88,19 +75,18 @@
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
             @if (searching) {
-            <div class="flex justify-center items-center h-32">
-              <app-loading />
-            </div>
+              <div class="flex justify-center items-center h-32">
+                <app-loading />
+              </div>
             } @else {
-            <p class="py-5">
-              {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
-            </p>
+              <p class="py-5">
+                {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
+              </p>
             }
           </td>
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5,10,15]"
-      showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

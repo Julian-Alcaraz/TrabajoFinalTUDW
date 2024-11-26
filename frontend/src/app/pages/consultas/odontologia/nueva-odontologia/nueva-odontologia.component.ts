@@ -23,7 +23,7 @@ import { Consulta } from '../../../../models/consulta.model';
 })
 export class NuevaOdontologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar = false;
+  @Input() editar = true;
   habilitarModificar = false;
 
   public odontologiaForm: FormGroup;
@@ -135,7 +135,7 @@ export class NuevaOdontologiaComponent implements OnInit {
               ...odontologicaValues,
             },
           };
-          console.log("DATA ENVIADA", data)
+          console.log('DATA ENVIADA', data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
