@@ -87,6 +87,7 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar institucion?',
+      text: 'La institución se hará visible para los usuarios y podrán cargar consultas a esta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -102,6 +103,7 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar institucion?',
+      text: 'La institución dejará de ser visible para los usuarios y no se podrán cargar más consultas a esta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

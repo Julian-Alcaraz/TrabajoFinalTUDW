@@ -99,6 +99,7 @@ export class BarriosComponent implements OnInit, AfterViewInit {
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar barrio?',
+      text: 'El barrio se hará visible para los usuarios y podrán cargar niños a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -114,6 +115,7 @@ export class BarriosComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar barrio?',
+      text: 'El barrio dejará de ser visible para los usuarios y no se podrán cargar más niños a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

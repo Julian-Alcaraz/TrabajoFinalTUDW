@@ -92,7 +92,7 @@ export class ModalUsuarioComponent implements OnInit {
     //     hayCambios = true;
     //   }
     // }
-    return !(this.usuarioForm.valid && hayCambios);
+    return (this.usuarioForm.valid && hayCambios);
   }
 
   obtenerRoles() {

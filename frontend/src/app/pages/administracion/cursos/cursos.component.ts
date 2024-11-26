@@ -87,6 +87,7 @@ export class CursosComponent implements OnInit, AfterViewInit {
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar curso?',
+      text: 'El curso se hará visible para los usuarios y podrán cargar consultas a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -102,6 +103,7 @@ export class CursosComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar curso?',
+      text: 'El curso dejará de ser visible para los usuarios y no se podrán cargar más consultas a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -133,7 +135,7 @@ export class CursosComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder editar la curso, usted debe habilitarla',
+      text: 'Para poder editar el curso, usted debe habilitarlo',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',

@@ -32,6 +32,7 @@ export class CamposComunesComponent implements OnInit {
 
   public chico: Chico | null = null;
   public instituciones: Institucion[] = [];
+  public cursosOriginales: Curso[] = [];
   public cursos: Curso[] = [];
   public edadAnios: number | null = null;
   public edadMeses: number | null = null;
@@ -48,8 +49,7 @@ export class CamposComunesComponent implements OnInit {
     private _cursoService: CursoService,
     private _chicoService: ChicoService,
     private _institucionService: InstitucionService,
-  ) {
-  }
+  ) {}
 
   actualizarChico(nuevoChico: Chico | null) {
     this.chico = nuevoChico;
@@ -136,15 +136,18 @@ export class CamposComunesComponent implements OnInit {
   }
 
   onChangeInstitucion() {
+    this.form.get('id_curso')?.setValue('');
     const idInstitucion = this.form.value.id_institucion;
-    console.log(idInstitucion);
+    const tipoInstitucion = this.instituciones?.find((institucion) => institucion.id === parseInt(idInstitucion))?.tipo;
+    const cursosFiltrados = this.cursosOriginales.filter((curso) => curso.nivel === tipoInstitucion);
+    this.cursos = cursosFiltrados;
   }
 
   obtenerCursos(): any {
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
-        this.searchingCursos=false
-        this.cursos = response.data;
+        this.searchingCursos = false;
+        this.cursosOriginales = response.data;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
@@ -155,9 +158,8 @@ export class CamposComunesComponent implements OnInit {
   obtenerInstituciones(): any {
     this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
-        this.searchingInstituciones=false
+        this.searchingInstituciones = false;
         this.instituciones = response.data;
-
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);

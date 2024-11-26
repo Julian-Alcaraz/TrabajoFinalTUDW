@@ -87,6 +87,7 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar localidad?',
+      text: 'La localidad se hará visible para los usuarios y podrán cargar niños a esta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -102,6 +103,7 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar localidad?',
+      text: 'La localidad dejará de ser visible para los usuarios y no se podrán cargar más niños a esta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

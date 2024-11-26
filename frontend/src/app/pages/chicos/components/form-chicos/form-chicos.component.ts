@@ -152,6 +152,7 @@ export class FormChicosComponent implements OnInit {
     if (idLocalidad && idLocalidad !== 'new' && idLocalidad !== '') {
       this.obtenerBarriosXLocalidad(idLocalidad);
       this.chicoForm.get('id_barrio')?.enable();
+      this.chicoForm.get('id_barrio')?.setValue('');
     } else if (idLocalidad === 'new') {
       this.abrirModalLocalidad();
       this.barrios = [];

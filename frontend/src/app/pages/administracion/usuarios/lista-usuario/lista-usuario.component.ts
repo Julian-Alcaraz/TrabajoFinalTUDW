@@ -39,7 +39,6 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private _usuarioService: UsuarioService,
     private _dialog: MatDialog,
-    // private _router: Router,
   ) {
     this.usuarios = new MatTableDataSource<Usuario>([]);
   }
@@ -96,6 +95,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar usuario?',
+      text: 'El usuario podrá iniciar sesión nuevamente con su cuenta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -111,6 +111,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar usuario?',
+      text: 'El usuario no podrá iniciar sesión con su cuenta.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -141,7 +142,8 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
 
   resetarContrasenia(usuario: Usuario) {
     Swal.fire({
-      title: '¿Restablecer contraseña del usuario?',
+      title: '¿Restablecer la contraseña?',
+      text: 'La contraseña del usuario se restablecerá a su DNI.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

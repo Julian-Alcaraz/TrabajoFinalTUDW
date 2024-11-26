@@ -204,7 +204,7 @@ export class FormUsuarioComponent implements OnInit {
   editarUsuario() {
     if (this.usuario) {
       Swal.fire({
-        title: '¿Modificar tu usuario?',
+        title: '¿Confirmar cambios?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',
