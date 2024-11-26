@@ -15,7 +15,8 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import Swal from 'sweetalert2';
-import { SliderModule } from 'primeng/slider';
+import { MatSliderModule } from '@angular/material/slider';
+//import { SliderModule } from 'primeng/slider';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { Chico } from '../../../models/chico.model';
@@ -27,11 +28,13 @@ import { Barrio } from '../../../models/barrio.model';
 import { BarrioService } from '../../../services/barrio.service';
 import { SessionService } from '../../../services/session.service';
 import { Usuario } from '../../../models/usuario.model';
+import { LocalidadService } from '../../../services/localidad.service';
+import { Localidad } from '../../../models/localidad.model';
 
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, SliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
+  imports: [CommonModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -40,19 +43,29 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   @ViewChild('filtroSexo') filtroSexo!: Select;
   @ViewChild('filtroBarrio') filtroBarrio!: Select;
-  public chicos: MatTableDataSource<Chico>;
-  public resultsLength = 0;
+
+  public loadingLocalidades = false;
+  public loadingBarrios = false;
   public searching = true;
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
+
+  public resultsLength = 0;
   public searchTerms: any = {};
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
   public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
+
+  public localidadControl: FormControl = new FormControl(null);
   public sexoControl: FormControl = new FormControl(null);
   public barrioControl: FormControl = new FormControl(null);
-  // public actividadControl: FormControl = new FormControl();
-  public mensajes = '';
+  public actividadControl: FormControl = new FormControl();
+
+  public chicos: MatTableDataSource<Chico>;
+  public localidades: Localidad[] | undefined = undefined;
   public barrios: Barrio[] | undefined = undefined;
-  public identidad: Usuario |null=null;
+  public identidad: Usuario | null = null;
+  public mensajes = '';
+
   constructor(
+    private _localidadService: LocalidadService,
     private _chicoService: ChicoService,
     private _barrioService: BarrioService,
     private _sessionService: SessionService,
@@ -63,8 +76,8 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this.chicos = new MatTableDataSource<Chico>([]);
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad && this.identidad?.roles_ids) {
-      if ( !(this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2))) {
-        this.displayedColumns.pop()
+      if (!(this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2))) {
+        this.displayedColumns.pop();
       }
     }
   }
@@ -72,30 +85,39 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.obtenerChicos();
     this.obtenerBarrios();
+    this.obtenerLocalidades();
     this.activateTableFilter();
   }
 
-  actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any): void {
-    this.mensajes = 'No se encontró un chico con: ';
-    if (filtroDni) this.mensajes += `DNI: ${filtroDni}. `;
-    if (filtroNombre) this.mensajes += `Nombre: '${filtroNombre}'. `;
-    if (filtroApellido) this.mensajes += `Apellido: '${filtroApellido}'. `;
-    if (filtroSexo) this.mensajes += `Sexo: ${filtroSexo}.`;
-    if (filtroBarrio) this.mensajes += `Barrio: ${filtroBarrio}.`;
+  actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any, filtroActividad: any, filtroLocalidad: any): void {
+    const nombreBarrio = this.barrios?.find((barrio) => barrio.id === filtroBarrio)?.nombre;
+    const nombreLocalidad = this.localidades?.find((localidad) => localidad.id === filtroLocalidad)?.nombre;
+
+    this.mensajes = 'No se encontró un chico con:';
+    if (filtroDni) this.mensajes += ` DNI: ${filtroDni}. `;
+    if (filtroNombre) this.mensajes += ` Nombre: '${filtroNombre}'. `;
+    if (filtroApellido) this.mensajes += ` Apellido: '${filtroApellido}'. `;
+    if (filtroSexo) this.mensajes += ` Sexo: ${filtroSexo}.`;
+    if (filtroBarrio) this.mensajes += ` Barrio: ${nombreBarrio}.`;
+    if (filtroActividad) this.mensajes += ` Actividad: ${filtroActividad}.`;
+    if (filtroLocalidad) this.mensajes += ` Localidad: ${nombreLocalidad}.`;
   }
 
   activateTableFilter() {
-    this.chicos.filterPredicate = (chico: Chico, filter: string) => {
+    // SE PODRIA CAMBIAR A Chico PERO DA ERROR DE TYPE
+    this.chicos.filterPredicate = (chico: any, filter: string) => {
       const searchTerms = JSON.parse(filter);
 
       const matchesDni = searchTerms.dni ? String(chico.dni).startsWith(searchTerms.dni) : true;
       const matchesNombre = searchTerms.nombre ? chico.nombre.toLowerCase().includes(searchTerms.nombre.toLowerCase()) : true;
       const matchesApellido = searchTerms.apellido ? chico.apellido.toLowerCase().includes(searchTerms.apellido.toLowerCase()) : true;
       const matchesSexo = searchTerms.sexo ? String(chico.sexo).startsWith(searchTerms.sexo) : true;
-      const matchesBarrio = searchTerms.nombreBarrio ? String(chico.barrio?.nombre).startsWith(searchTerms.nombreBarrio) : true;
+      const matchesBarrio = searchTerms.idBarrio ? chico.id_barrio === searchTerms.idBarrio : true;
+      const matchesActividad = searchTerms.actividad ? chico.actividad === searchTerms.actividad : true;
+      const matchesLocalidad = searchTerms.idLocalidad ? chico.id_localidad === searchTerms.idLocalidad : true;
 
-      this.actualizarMensajes(searchTerms.dni, searchTerms.nombre, searchTerms.apellido, searchTerms.sexo, searchTerms.nombreBarrio);
-      return matchesDni && matchesNombre && matchesApellido && matchesSexo && matchesBarrio;
+      this.actualizarMensajes(searchTerms.dni, searchTerms.nombre, searchTerms.apellido, searchTerms.sexo, searchTerms.idBarrio, searchTerms.actividad, searchTerms.idLocalidad);
+      return matchesDni && matchesNombre && matchesApellido && matchesSexo && matchesBarrio && matchesActividad && matchesLocalidad;
     };
   }
 
@@ -103,8 +125,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     let idInput = '';
     if (event.originalEvent) idInput = event.originalEvent.target.id;
     else if (event.target) idInput = event.target.id;
+    else if (event.originalTarget.id) idInput = event.originalTarget.id;
     if (idInput === 'filtroDni') {
-      const dniValue = event.target.value.replace(/,/g, ''); // Elimina comas
+      const dniValue = event.target.value.replace(/,/g, '');
       this.searchTerms.dni = dniValue || undefined;
     } else if (idInput === 'filtroNombre') {
       const nombreValue = event.target.value.trim();
@@ -117,12 +140,19 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       this.searchTerms.sexo = sexoValue || undefined;
     } else if (idInput.includes('filtroBarrio')) {
       const barrioValue = event.value;
-      this.searchTerms.nombreBarrio = barrioValue || undefined;
+      this.searchTerms.idBarrio = barrioValue || undefined;
+    } else if (idInput.includes('filtroActividad')) {
+      const actividadValue = event.originalTarget.valueAsNumber / 25;
+      this.searchTerms.actividad = actividadValue || undefined;
+    } else if (idInput.includes('filtroLocalidad')) {
+      const localidadValue = event.value;
+      this.searchTerms.idLocalidad = localidadValue || undefined;
     }
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
   }
 
+  // Podria resumirse en 1 funcion creo.
   limpiarFiltroSexo() {
     this.searchTerms.sexo = undefined;
     this.chicos.filter = JSON.stringify(this.searchTerms);
@@ -130,7 +160,13 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   limpiarFiltroBarrio() {
-    this.searchTerms.nombreBarrio = undefined;
+    this.searchTerms.idBarrio = undefined;
+    this.chicos.filter = JSON.stringify(this.searchTerms);
+    if (this.chicos.paginator) this.chicos.paginator.firstPage();
+  }
+
+  limpiarFiltroLocalidad() {
+    this.searchTerms.idLocalidad = undefined;
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
   }
@@ -157,14 +193,33 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   obtenerBarrios() {
+    this.loadingBarrios = true;
     this._barrioService.obtenerBarrios().subscribe({
       next: (response: any) => {
         if (response.success) {
           this.barrios = response.data;
+          this.loadingBarrios = false;
         }
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingBarrios = false;
+      },
+    });
+  }
+
+  obtenerLocalidades() {
+    this.loadingLocalidades = true;
+    this._localidadService.obtenerTodasLocalidades().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.localidades = response.data;
+        }
+        this.loadingLocalidades = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingLocalidades = false;
       },
     });
   }

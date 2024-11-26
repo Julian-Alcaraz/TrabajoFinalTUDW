@@ -6,7 +6,14 @@
     <div class="flex flex-col h-full justify-center">
       <app-pie-graph [loading]="loading" [titulo]="'Tipos de consulta'" [subTitulo]="subTituloYear + subTituloInstitucion" [labels]="['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia']" [set]="{ label: '', data: dataTypeYearAndInstitucion }" />
       <div class="flex flex-row justify-evenly mt-2">
-        <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" placeholder="Año" view="year" dateFormat="yy" [maxDate]="maxDate" />
+        <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" placeholder="Año" view="year" dateFormat="yy" [maxDate]="maxDate">
+          <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+          <ng-template pTemplate="footer">
+            <p-button class="p-datepicker-prev hidden">Previous</p-button>
+            <p-button class="p-datepicker-next hidden">Next</p-button>
+          </ng-template>
+          <!-- end TODO -->
+        </p-datepicker>
         @if (searchingInstituciones) {
           <app-loading />
         } @else {

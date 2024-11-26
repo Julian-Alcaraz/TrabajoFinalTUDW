@@ -14,6 +14,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { PanelModule } from 'primeng/panel';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { Usuario } from '../../../../models/usuario.model';
@@ -28,7 +29,6 @@ import { CamposClinicaComponent } from './components/campos-clinica/campos-clini
 import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
-import { PanelModule } from 'primeng/panel';
 import { CsvService } from '../../../../services/csv.service';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 
@@ -42,10 +42,13 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 export class PersonalizadaComponent implements OnInit {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
 
+  public loadingCursos = false;
+  public loadingInstituciones = false;
+  public loadingProfesionales = false;
+  public loading = false;
   public mostrarBotonDescarga = false;
   public colapsarPaneles = false;
   public formBusqueda: FormGroup;
-  public loading = false;
   public resultados: any;
   public hoy = new Date();
   public instituciones: Institucion[] = [];
@@ -123,35 +126,44 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   obtenerCursos(): any {
+    this.loadingCursos = true;
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
         this.cursos = response.data;
+        this.loadingCursos = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingCursos = false;
       },
     });
   }
 
   obtenerInstituciones(): any {
+    this.loadingInstituciones = true;
     this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
         this.instituciones = response.data;
+        this.loadingInstituciones = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingInstituciones = false;
       },
     });
   }
 
   // Tambien obtiene usuarios que tienen mas roles aparte del de profesional
   obtenerProfesionales(): any {
+    this.loadingProfesionales = true;
     this._usuarioService.obtenerProfesionales().subscribe({
       next: (response: any) => {
         this.profesionales = response.data;
+        this.loadingProfesionales = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingProfesionales = false;
       },
     });
   }

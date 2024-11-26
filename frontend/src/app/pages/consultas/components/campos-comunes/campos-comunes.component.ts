@@ -135,6 +135,11 @@ export class CamposComunesComponent implements OnInit {
       .subscribe();
   }
 
+  onChangeInstitucion() {
+    const idInstitucion = this.form.value.id_institucion;
+    console.log(idInstitucion);
+  }
+
   obtenerCursos(): any {
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {

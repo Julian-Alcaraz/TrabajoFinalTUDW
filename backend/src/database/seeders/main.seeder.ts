@@ -244,7 +244,7 @@ export class MainSeeder implements Seeder {
       const menus2 = await menuORM.save([
         {
           url: 'chicos/nuevo',
-          label: 'Nuevo Chico',
+          label: 'Cargar Niño',
           orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
@@ -252,7 +252,7 @@ export class MainSeeder implements Seeder {
         },
         {
           url: 'chicos/list',
-          label: 'Lista Chicos',
+          label: 'Lista Niños',
           orden: 7,
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0], roles[1], roles[2]],

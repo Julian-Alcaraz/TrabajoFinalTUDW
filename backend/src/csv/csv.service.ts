@@ -112,7 +112,7 @@ export class CsvService {
       return resultado;
     });
     const csv = Papa.unparse(consultasFormateadas);
-    const directorio = path.join(`${__dirname}../../archivos`, `export-consultas-${Date.now()}.csv`);
+    const directorio = path.join(`${__dirname}../../archivos`, `consultas-${Date.now()}.csv`);
     if (!fs.existsSync(path.dirname(directorio))) {
       fs.mkdirSync(path.dirname(directorio), { recursive: true });
     }
