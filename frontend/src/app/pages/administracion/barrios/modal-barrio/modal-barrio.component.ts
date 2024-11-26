@@ -12,11 +12,12 @@ import { BarrioService } from '../../../../services/barrio.service';
 import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { Localidad } from '../../../../models/localidad.model';
 import { LocalidadService } from '../../../../services/localidad.service';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-modal-barrio',
   standalone: true,
-  imports: [InputTextComponent, ReactiveFormsModule, InputSelectComponent],
+  imports: [InputTextComponent, ReactiveFormsModule, InputSelectComponent, LoadingComponent],
   templateUrl: './modal-barrio.component.html',
   styleUrl: './modal-barrio.component.css',
 })
@@ -25,7 +26,7 @@ export class ModalBarrioComponent implements OnInit {
   public barrio: Barrio | null = null;
   public barrioForm: FormGroup;
   public habilitarModificar = true;
-
+  public searchingLocalidades = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { barrio: Barrio },
     private _barrioService: BarrioService,
@@ -41,6 +42,10 @@ export class ModalBarrioComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.completarDatos();
+    this.obtenerLocalidades();
+  }
+  completarDatos() {
     if (this.data) {
       this.barrio = this.data.barrio;
       this.barrioForm.patchValue({ nombre: this.barrio?.nombre, id_localidad: this.barrio?.localidad?.id });
@@ -50,13 +55,13 @@ export class ModalBarrioComponent implements OnInit {
         },
       });
     }
-    this.obtenerLocalidades();
   }
-
   obtenerLocalidades() {
+    this.searchingLocalidades = true;
     this._localidadService.obtenerTodasLocalidades().subscribe({
       next: (response: any) => {
         if (response.success) {
+          this.searchingLocalidades = false;
           this.localidades = response.data;
         }
       },

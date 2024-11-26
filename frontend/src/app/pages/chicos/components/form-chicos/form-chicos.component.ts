@@ -53,6 +53,8 @@ export class FormChicosComponent implements OnInit {
   public habilitarModificar = false;
   public mensajeDoc = '';
   public mensajeValidando = '';
+  public searchingLocalidades = false;
+  public searchingBarrios = false;
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
@@ -120,7 +122,7 @@ export class FormChicosComponent implements OnInit {
     this.mensajeValidando = 'Buscando dni en la base de datos.';
     this._chicoService.obtenerChicoxDni(dni).subscribe({
       next: (response: any) => {
-      this.mensajeValidando = '';
+        this.mensajeValidando = '';
         if (response.success) {
           this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
           this.habilitarModificar = true;
@@ -132,8 +134,8 @@ export class FormChicosComponent implements OnInit {
       },
       error: (error: any) => {
         this.mensajeValidando = '';
-          this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
-          console.log(error);
+        this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
+        console.log(error);
       },
     });
   }
@@ -157,8 +159,10 @@ export class FormChicosComponent implements OnInit {
   }
 
   obtenerLocalidades(): any {
+    this.searchingLocalidades = true;
     this._localidadService.obtenerLocalidades().subscribe({
       next: (response: any) => {
+        this.searchingLocalidades = false;
         this.localidades = response.data;
       },
       error: (err: any) => {
@@ -206,8 +210,10 @@ export class FormChicosComponent implements OnInit {
     });
   }
   obtenerBarriosXLocalidad(idLocalidad: string) {
+    this.searchingBarrios = true;
     this._localidadService.obtenerBarriosXLocalidad(idLocalidad).subscribe({
       next: (response: any) => {
+        this.searchingBarrios = false;
         this.barrios = response.data;
       },
       error: (err: any) => {

@@ -8,8 +8,12 @@
     <div class="border-t-2 p-4">
       <div class="mb-3">
         <app-input-text label="Nombre barrio" idInput="nombre" [control]="controlDeInput('nombre')" />
-        <app-input-select label="Localidad" [control]="controlDeInput('id_localidad')" idInput="id_localidad"
+        @if(searchingLocalidades){
+          <app-loading/>
+        }@else {
+          <app-input-select label="Localidad" [control]="controlDeInput('id_localidad')" idInput="id_localidad"
           [opciones]="localidades" />
+        }
         <button type="submit" [disabled]="barrio === null ? !barrioForm.valid : habilitarModificar"
           class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">{{
           barrio === null ? 'Agregar Barrio' : 'Editar Barrio'}}

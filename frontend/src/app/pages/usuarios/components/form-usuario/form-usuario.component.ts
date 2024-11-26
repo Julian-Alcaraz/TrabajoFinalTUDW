@@ -23,7 +23,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule,LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule, LoadingComponent],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -41,6 +41,8 @@ export class FormUsuarioComponent implements OnInit {
   public usuarioActual: Usuario | null = null;
   public mensajeDoc = '';
   public mensajeValidando = '';
+  public searchingUser = false;
+  public searchingRoles = false;
   constructor(
     private fb: FormBuilder,
     private _usuarioService: UsuarioService,
@@ -69,8 +71,10 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   obtenerRoles() {
+    this.searchingRoles = true;
     this._rolesService.obtenerRoles().subscribe({
       next: (response: any) => {
+        this.searchingRoles = false;
         this.roles = response.data;
       },
       error: (err: any) => {
@@ -80,10 +84,12 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   esCargaOedicion() {
+    this.searchingUser = true;
     if (!this.esFormulario && this.usuario) {
       this.userForm.get('roles_ids')?.clearValidators();
       this._usuarioService.obtenerUsuarioxId(this.usuario.id).subscribe({
         next: (response: any) => {
+          this.searchingUser = false;
           this.userForm.patchValue({
             roles_ids: this.usuario?.roles_ids, // FormArray para role
           });
@@ -148,11 +154,10 @@ export class FormUsuarioComponent implements OnInit {
     this.mensajeValidando = 'Buscando dni en la base de datos.';
     this._usuarioService.obtenerUsuarioxDni(dni).subscribe({
       next: (response: any) => {
-        console.log(response)
         this.mensajeValidando = '';
         if (response.success) {
           this.userForm.get('dni')?.setErrors({ invalidDni: true });
-          this.activarModificar()
+          this.activarModificar();
           this.mensajeDoc = 'Documento ya ingresado en otro usuario.';
         } else {
           this.userForm.get('dni')?.setErrors(null);

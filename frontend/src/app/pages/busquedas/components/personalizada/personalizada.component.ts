@@ -30,11 +30,12 @@ import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologi
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 import { PanelModule } from 'primeng/panel';
 import { CsvService } from '../../../../services/csv.service';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
+  imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
   templateUrl: './personalizada.component.html',
   styleUrl: './personalizada.component.css',
 })
@@ -50,7 +51,7 @@ export class PersonalizadaComponent implements OnInit {
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
   public profesionales: Usuario[] = [];
-
+  public searching = false;
   public tipoConsulta = ['Clinica', 'Oftalmologia', 'Odontologia', 'Fonoaudiologia'];
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
@@ -156,6 +157,7 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   buscar() {
+    this.searching = true;
     if (this.formBusqueda.valid) {
       this.loading = true;
       this.colapsarPaneles = true;
@@ -166,6 +168,7 @@ export class PersonalizadaComponent implements OnInit {
           if (response.success) {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
             this.resultados = response.data;
+            this.searching = false;
             this.enviarConsultas(response.data);
             this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
             this.loading = false;

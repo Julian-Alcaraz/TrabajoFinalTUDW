@@ -24,14 +24,15 @@
       <!-- Dni -->
       <div class="sm:col-span-2 md:col-span-1">
         <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
-        <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center ">
+        <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center">
           <div class="w-5">
             <app-loading />
           </div>
           <div class="ms-2">
             {{ mensajeValidando }}
           </div>
-        </div> <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
+        </div>
+        <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
           {{ mensajeDoc }}
         </div>
       </div>
@@ -41,26 +42,34 @@
       </div>
       <!-- Localidad: -->
       <div class="md:col-span-2">
-        <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
-        <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option value="" disabled selected>Selecciona una opción</option>
-          <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
-        </select>
-        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
-          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
-        </div>
+        @if (searchingLocalidades) {
+          <app-loading />
+        } @else {
+          <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
+          <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
+          </select>
+          <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+          </div>
+        }
       </div>
       <!-- Barrio: -->
       <div class="md:col-span-2">
-        <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
-        <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option value="" disabled selected>Selecciona una opción</option>
-          <!-- <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option> -->
-          <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
-        </select>
-        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
-          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
-        </div>
+        @if (searchingBarrios) {
+          <app-loading />
+        } @else {
+          <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
+          <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="" disabled selected>Selecciona una opción</option>
+            <!-- <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option> -->
+            <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
+          </select>
+          <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+          </div>
+        }
       </div>
       <!-- Sexo: -->
       <div class="md:col-span-2">

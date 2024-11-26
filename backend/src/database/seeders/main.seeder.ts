@@ -142,14 +142,14 @@ export class MainSeeder implements Seeder {
       const menus = await menuORM.save([
         {
           url: 'dashboard',
-          label: 'Dashboard',
+          label: 'Graficos',
           orden: 1,
           icon: 'fa-solid fa-chart-line',
           roles: [roles[0], roles[1]],
         },
         {
           url: 'chicos',
-          label: 'Chicos',
+          label: 'Niños',
           orden: 3,
           icon: 'fas fa-child',
           roles: [roles[0], roles[1]],

@@ -37,6 +37,8 @@ export class CamposComunesComponent implements OnInit {
   public edadMeses: number | null = null;
 
   public searching = false;
+  public searchingInstituciones = true;
+  public searchingCursos = true;
 
   @Output() chicoChange = new EventEmitter<Chico | null>();
 
@@ -136,6 +138,7 @@ export class CamposComunesComponent implements OnInit {
   obtenerCursos(): any {
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
+        this.searchingCursos=false
         this.cursos = response.data;
       },
       error: (err: any) => {
@@ -147,7 +150,9 @@ export class CamposComunesComponent implements OnInit {
   obtenerInstituciones(): any {
     this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
+        this.searchingInstituciones=false
         this.instituciones = response.data;
+
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
