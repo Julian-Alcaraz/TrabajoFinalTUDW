@@ -1,21 +1,21 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { BarGraphComponent } from '../graphs/bar-graph.component';
-import { ConsultaService } from '../../../../services/consulta.service';
-import { ChicoService } from '../../../../services/chico.service';
+import { BarGraphComponent } from '../components/graphs/bar-graph.component';
+import { ConsultaService } from '../../../services/consulta.service';
+import { ChicoService } from '../../../services/chico.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { PieGraphComponent } from '../graphs/pie-graph.component';
+import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { CommonModule } from '@angular/common';
 import { DatePickerModule } from 'primeng/datepicker';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { Institucion } from '../../../../models/institucion.model';
+import { InstitucionService } from '../../../services/institucion.service';
+import { Institucion } from '../../../models/institucion.model';
+import { LoadingComponent } from '../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, BarGraphComponent, PieGraphComponent],
+  imports: [CommonModule, DatePickerModule, BarGraphComponent, PieGraphComponent,LoadingComponent],
   templateUrl: './general.component.html',
-  styleUrl: './general.component.css',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
   currentYear: number;
@@ -33,7 +33,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   dataChicosxAnio: any = [];
   dataConsultaxAnio: any = [];
   dataTipoConsultaxanio: any = [];
-
+  searchingInstituciones = false;
   constructor(
     private _consultaService: ConsultaService,
     private _chicoService: ChicoService,
@@ -49,7 +49,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
     this.obtenerInstituciones();
     this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
   }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.obtenerGraficos();
   }
   async obtenerGraficos() {
@@ -151,7 +151,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
     }
     this.obtenerGraficoByYearAndInstitucion();
   }
-  
+
   seleccionarInstituciones(event: any) {
     this.selectedId_institucion = +event.target.value;
     if (this.selectedId_institucion === 0) {
@@ -164,8 +164,10 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   }
 
   obtenerInstituciones() {
+    this.searchingInstituciones = true;
     this._institucionService.obtenerTodasInstituciones().subscribe({
       next: (response: any) => {
+        this.searchingInstituciones = false;
         if (response.success) {
           this.instituciones = response.data;
         }

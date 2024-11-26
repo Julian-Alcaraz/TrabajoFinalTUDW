@@ -5,7 +5,11 @@
       <p-datepicker placeholder="Año" formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" class="w-full" />
     </div>
     <div class="flex-2">
-      <app-input-select label="Curso" idInput="id_curso" [opciones]="cursos" class="w-full" />
+      @if(searchingCursos){
+        <app-loading/>
+      }@else {
+        <app-input-select label="Curso" idInput="id_curso" [opciones]="cursos" class="w-full" />
+      }
     </div>
     <div class="col ">
       <label for="" class="block  text-sm font-medium mb-4 text-gray-900 text-transparent">buscar</label>

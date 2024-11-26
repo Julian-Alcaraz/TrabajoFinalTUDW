@@ -128,17 +128,17 @@ export class UsuarioService {
     for (const rol of rolesUsuario) {
       const objRol = await this.rolORM.findOne({
         where: { id: rol.id },
-        relations: ['menus', 'menus.sub_menus', 'menus.menu_padre', 'menus.sub_menus.sub_menus'],
+        relations: ['menus', 'menus.sub_menus', 'menus.menu_padre', 'menus.sub_menus.sub_menus', 'menus.sub_menus.roles', 'menus.sub_menus.sub_menus.roles'],
       });
       const menusRol = objRol?.menus || [];
       const menusNoFalsos = menusRol.filter((menu) => !menu.deshabilitado);
       for (const menu of menusNoFalsos) {
-        // Filtrar y ordenar los submenús del menú actual
-        let subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado);
+        // Filtrar y ordenar los submenús del menú actual, verifico que tenga el rol que corresponde
+        let subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado && subMenu.roles.map((rol) => rol.id).includes(rol.id));
         subMenusValidos = subMenusValidos.sort((a, b) => a.orden - b.orden);
         for (const subMenu of subMenusValidos) {
           // Filtrar los submenús del submenú (1 nivel)
-          const subSubMenusValidos = subMenu.sub_menus.filter((subSubMenu) => !subSubMenu.deshabilitado);
+          const subSubMenusValidos = subMenu.sub_menus.filter((subSubMenu) => !subSubMenu.deshabilitado && subMenu.roles.map((rol) => rol.id).includes(rol.id));
           subMenu.sub_menus = subSubMenusValidos;
         }
         menu.sub_menus = subMenusValidos;

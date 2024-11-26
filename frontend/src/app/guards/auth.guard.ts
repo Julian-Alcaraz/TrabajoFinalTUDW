@@ -40,14 +40,17 @@ export const adminGuard: CanActivateFn = () => {
   if (!isPlatformBrowser(platformId)) {
     return false;
   } else {
+    const _router = inject(Router);
     const _sessionService = inject(SessionService);
     const identidad = _sessionService.getIdentidad();
     if (identidad) {
       if (identidad.roles_ids?.includes(1)) {
         return true;
       }
+      _router.navigate(['/layout']);
       return false;
     } else {
+      _router.navigate(['/login']);
       return false;
     }
   }
@@ -66,6 +69,30 @@ export const loginGuard: CanActivateFn = () => {
       return false;
     } else {
       return true;
+    }
+  }
+};
+
+export const profesionalGuard: CanActivateFn = () => {
+  const _router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
+  if (!isPlatformBrowser(platformId)) {
+    return false;
+  } else {
+    const _sessionService = inject(SessionService);
+    const identidad = _sessionService.getIdentidad();
+    console.log(identidad)
+
+    if (identidad) {
+      console.log(identidad.roles_ids)
+      if (identidad.roles_ids?.includes(1) || identidad.roles_ids?.includes(2)) {
+        return true;
+      }
+      _router.navigate(['/layout']);
+      return false;
+    } else {
+      _router.navigate(['/login']);
+      return false;
     }
   }
 };

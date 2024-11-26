@@ -7,10 +7,14 @@
       <app-pie-graph [loading]="loading" [titulo]="'Tipos de consulta'" [subTitulo]="subTituloYear + subTituloInstitucion" [labels]="['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia']" [set]="{ label: '', data: dataTypeYearAndInstitucion }" />
       <div class="flex flex-row justify-evenly mt-2">
         <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" placeholder="Año" view="year" dateFormat="yy" [maxDate]="maxDate" />
-        <select (change)="seleccionarInstituciones($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-auto p-2">
-          <option selected [value]="0">Seleccionar Institución</option>
-          <option *ngFor="let institucion of instituciones; let i = index" [selected]="" [value]="institucion.id">{{ institucion.nombre }}</option>
-        </select>
+        @if (searchingInstituciones) {
+          <app-loading />
+        } @else {
+          <select (change)="seleccionarInstituciones($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-auto p-2">
+            <option selected [value]="0">Seleccionar Institución</option>
+            <option *ngFor="let institucion of instituciones; let i = index" [selected]="" [value]="institucion.id">{{ institucion.nombre }}</option>
+          </select>
+        }
       </div>
     </div>
   </div>

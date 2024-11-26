@@ -35,24 +35,25 @@ export class FormularioComponent {
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, ValidarEmail, ValidarCadenaSinEspacios]],
-      password: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      password: ['', [Validators.required, Validators.maxLength(100), ValidarCadenaSinEspacios]],
     });
   }
   iniciarSession() {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
+     this.loginForm.disable();
     this._sessionService.iniciarSession(email, password).subscribe(
       (response) => {
-        console.log(response);
         if (response.success) {
           this._sessionService.setIdentidad(response.data);
-          // this._router.navigate(['/layout']);
           this._router.navigate(['/layout'], { queryParams: { from: 'login' } });
         } else {
           MostrarNotificacion.mensajeError(this.snackBar, response.message);
+          this.loginForm.enable();
         }
       },
       (err: any) => {
+        this.loginForm.enable();
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
     );

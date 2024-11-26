@@ -5,12 +5,12 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { CursoService } from '../../../../services/curso.service';
 import { Curso } from '../../../../models/curso.model';
 import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-year-grado-form',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, InputSelectComponent, ReactiveFormsModule],
-
+  imports: [CommonModule, DatePickerModule, InputSelectComponent, ReactiveFormsModule, LoadingComponent],
   templateUrl: './year-grado-form.component.html',
   styleUrl: './year-grado-form.component.css',
 })
@@ -19,7 +19,7 @@ export class YearGradoFormComponent implements OnInit {
   optionForm: FormGroup;
   cursos: Curso[] = [];
   maxDate: Date;
-
+  searchingCursos = false;
   constructor(
     private fb: FormBuilder,
     private _cursoService: CursoService,
@@ -37,8 +37,10 @@ export class YearGradoFormComponent implements OnInit {
   }
 
   obtenerCursos(): any {
+    this.searchingCursos = true;
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
+        this.searchingCursos = false;
         this.cursos = response.data;
       },
       error: (err: any) => {

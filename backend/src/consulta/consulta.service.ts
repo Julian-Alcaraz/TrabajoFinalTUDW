@@ -487,7 +487,7 @@ export class ConsultaService {
 
   async porcentajeEstadoNutricional(year: number, id: number) {
     const respuesta = {};
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const data = await this.estadoNutricionalData(year, id);
       const porcentajes = calcularPorcentaje(data);
       respuesta[year] = porcentajes;
@@ -518,7 +518,7 @@ export class ConsultaService {
 
   async porcentajeTensionArterialData(year: number, id: number) {
     const respuesta = {};
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const data = await this.tensionArterialData(year, id);
       const porcentajes = calcularPorcentaje(data);
       respuesta[year] = porcentajes;
@@ -677,7 +677,7 @@ export class ConsultaService {
 
 function calcularPorcentaje(data: number[]) {
   const total = data.reduce((sum, value) => sum + value, 0);
-  const porcentajes = data.map((value) => (value * 100) / total);
+  const porcentajes = data.map((value) => +((value * 100) / total).toFixed(2));
   return porcentajes;
 }
 

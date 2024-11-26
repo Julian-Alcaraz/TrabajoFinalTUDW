@@ -25,6 +25,8 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
 import { Barrio } from '../../../models/barrio.model';
 import { BarrioService } from '../../../services/barrio.service';
+import { SessionService } from '../../../services/session.service';
+import { Usuario } from '../../../models/usuario.model';
 
 @Component({
   selector: 'app-lista-chico',
@@ -49,14 +51,22 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   // public actividadControl: FormControl = new FormControl();
   public mensajes = '';
   public barrios: Barrio[] | undefined = undefined;
+  public identidad: Usuario |null=null;
   constructor(
     private _chicoService: ChicoService,
     private _barrioService: BarrioService,
+    private _sessionService: SessionService,
     private _router: Router,
     private _dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
     this.chicos = new MatTableDataSource<Chico>([]);
+    this.identidad = this._sessionService.getIdentidad();
+    if (this.identidad && this.identidad?.roles_ids) {
+      if ( !(this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2))) {
+        this.displayedColumns.pop()
+      }
+    }
   }
 
   ngOnInit(): void {

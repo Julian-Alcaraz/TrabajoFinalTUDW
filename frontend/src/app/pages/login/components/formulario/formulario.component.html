@@ -29,7 +29,7 @@
       </div>
       <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-red-600 text-base text-left ml-2">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+        <!-- <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div> -->
         <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
         <div *ngIf="loginForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
       </div>

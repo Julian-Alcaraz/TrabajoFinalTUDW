@@ -5,9 +5,10 @@ import { NuevoChicoComponent } from '../pages/chicos/nuevo-chico/nuevo-chico.com
 
 import { VerChicoComponent } from '../pages/chicos/ver-chico/ver-chico.component';
 import { ListaChicoComponent } from '../pages/chicos/lista-chico/lista-chico.component';
+import { profesionalGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'nuevo', component: NuevoChicoComponent },
+  { path: 'nuevo', component: NuevoChicoComponent, canActivate:[profesionalGuard]},
   { path: 'list', component: ListaChicoComponent },
   { path: 'ver/:id', component: VerChicoComponent },
 ];

@@ -145,14 +145,14 @@ export class MainSeeder implements Seeder {
           label: 'Graficos',
           orden: 1,
           icon: 'fa-solid fa-chart-line',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'chicos',
           label: 'Niños',
           orden: 3,
           icon: 'fas fa-child',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'consultas',
@@ -178,7 +178,7 @@ export class MainSeeder implements Seeder {
         },
         // cambiar url despues!!!!!!!!!!!!!!!
         {
-          url: 'usuarios/miUsuario',
+          url: 'miUsuario',
           label: 'Mi Usuario',
           orden: 6,
           icon: 'fa-solid fa-user',
@@ -272,7 +272,7 @@ export class MainSeeder implements Seeder {
           label: 'Editar Chico',
           orden: 4,
           icon: '',
-          roles: [roles[0], roles[1], roles[2]],
+          roles: [roles[0], roles[1]],
           menu_padre: menus[1],
           deshabilitado: true,
         },
@@ -511,7 +511,7 @@ export class MainSeeder implements Seeder {
       // Crea 1500 consultas
       console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
-        Array(1500)
+        Array(2000)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);
@@ -524,7 +524,7 @@ export class MainSeeder implements Seeder {
               chico: chicoSeleccionado,
               usuario: usuarioConRol,
               edad: edad,
-              created_at: faker.date.between({ from: '2022-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
             });
             return consulta;
           }),
