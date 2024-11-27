@@ -16,7 +16,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import Swal from 'sweetalert2';
 import { MatSliderModule } from '@angular/material/slider';
-//import { SliderModule } from 'primeng/slider';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { Chico } from '../../../models/chico.model';
@@ -34,7 +35,7 @@ import { Localidad } from '../../../models/localidad.model';
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
+  imports: [CommonModule, IconFieldModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -44,24 +45,28 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild('filtroSexo') filtroSexo!: Select;
   @ViewChild('filtroBarrio') filtroBarrio!: Select;
 
+  public chicos: MatTableDataSource<Chico>;
+  public localidadesOriginales: Localidad[] | undefined = undefined;
+  public localidadesFiltradas: Localidad[] | undefined = undefined;
+  public barriosOriginales: Barrio[] | undefined = undefined;
+  public barriosFiltrados: Barrio[] | undefined = undefined;
+  public identidad: Usuario | null = null;
   public loadingLocalidades = false;
   public loadingBarrios = false;
   public searching = true;
-
   public resultsLength = 0;
   public searchTerms: any = {};
   public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
+  public estadoOptions: any[] = [
+    { nombre: 'Habilitado', valor: false },
+    { nombre: 'Deshabilitado', valor: true },
+  ];
   public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
-
+  public estadoControl: FormControl = new FormControl(null);
   public localidadControl: FormControl = new FormControl(null);
   public sexoControl: FormControl = new FormControl(null);
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
-
-  public chicos: MatTableDataSource<Chico>;
-  public localidades: Localidad[] | undefined = undefined;
-  public barrios: Barrio[] | undefined = undefined;
-  public identidad: Usuario | null = null;
   public mensajes = '';
 
   constructor(
@@ -89,9 +94,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this.activateTableFilter();
   }
 
-  actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any, filtroActividad: any, filtroLocalidad: any): void {
-    const nombreBarrio = this.barrios?.find((barrio) => barrio.id === filtroBarrio)?.nombre;
-    const nombreLocalidad = this.localidades?.find((localidad) => localidad.id === filtroLocalidad)?.nombre;
+  actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any, filtroActividad: any, filtroLocalidad: any, filtroEstado: any): void {
+    const nombreBarrio = this.barriosFiltrados?.find((barrio) => barrio.id === filtroBarrio)?.nombre;
+    const nombreLocalidad = this.localidadesFiltradas?.find((localidad) => localidad.id === filtroLocalidad)?.nombre;
 
     this.mensajes = 'No se encontró un chico con:';
     if (filtroDni) this.mensajes += ` DNI: ${filtroDni}. `;
@@ -101,6 +106,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (filtroBarrio) this.mensajes += ` Barrio: ${nombreBarrio}.`;
     if (filtroActividad) this.mensajes += ` Actividad: ${filtroActividad}.`;
     if (filtroLocalidad) this.mensajes += ` Localidad: ${nombreLocalidad}.`;
+    if (filtroEstado) this.mensajes += ` Estado: ${filtroEstado ? 'Deshabilitado' : 'Habilitado'}.`;
   }
 
   activateTableFilter() {
@@ -115,9 +121,10 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       const matchesBarrio = searchTerms.idBarrio ? chico.id_barrio === searchTerms.idBarrio : true;
       const matchesActividad = searchTerms.actividad ? chico.actividad === searchTerms.actividad : true;
       const matchesLocalidad = searchTerms.idLocalidad ? chico.id_localidad === searchTerms.idLocalidad : true;
+      const matchesEstado = searchTerms.estado !== undefined ? chico.deshabilitado === JSON.parse(searchTerms.estado) : true;
 
-      this.actualizarMensajes(searchTerms.dni, searchTerms.nombre, searchTerms.apellido, searchTerms.sexo, searchTerms.idBarrio, searchTerms.actividad, searchTerms.idLocalidad);
-      return matchesDni && matchesNombre && matchesApellido && matchesSexo && matchesBarrio && matchesActividad && matchesLocalidad;
+      this.actualizarMensajes(searchTerms.dni, searchTerms.nombre, searchTerms.apellido, searchTerms.sexo, searchTerms.idBarrio, searchTerms.actividad, searchTerms.idLocalidad, searchTerms.estado);
+      return matchesDni && matchesNombre && matchesApellido && matchesSexo && matchesBarrio && matchesActividad && matchesLocalidad && matchesEstado;
     };
   }
 
@@ -147,6 +154,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     } else if (idInput.includes('filtroLocalidad')) {
       const localidadValue = event.value;
       this.searchTerms.idLocalidad = localidadValue || undefined;
+    } else if (idInput.includes('filtroEstado')) {
+      const estadoValue = event.value;
+      this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
@@ -169,6 +179,36 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this.searchTerms.idLocalidad = undefined;
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
+    this.barriosFiltrados = this.barriosOriginales;
+  }
+
+  limpiarFiltroEstado() {
+    this.searchTerms.estado = undefined;
+    this.chicos.filter = JSON.stringify(this.searchTerms);
+    if (this.chicos.paginator) this.chicos.paginator.firstPage();
+  }
+
+  onChangeLocalidad() {
+    // Verificacion por si el evento change se dispara al tocar la X de limpiar campo
+    const idLocalidad = this.localidadControl.value;
+    if (idLocalidad == null) {
+      return;
+    }
+    this.barrioControl.reset();
+    this.limpiarFiltroBarrio();
+    this.barriosFiltrados = this.barriosOriginales?.filter((barrio) => barrio.localidad?.id === idLocalidad);
+  }
+
+  onChangeBarrio() {
+    // Verificacion por si el evento change se dispara al tocar la X de limpiar campo
+    const idBarrio = this.barrioControl.value;
+    if (idBarrio == null) {
+      return;
+    }
+    const idLocalidad = this.barriosFiltrados?.filter((barrio) => barrio.id === this.barrioControl.value)[0].localidad?.id;
+    if (idLocalidad !== this.localidadControl.value) {
+      this.localidadControl.setValue(idLocalidad);
+    }
   }
 
   ngAfterViewInit() {
@@ -197,7 +237,8 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this._barrioService.obtenerBarrios().subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.barrios = response.data;
+          this.barriosOriginales = response.data;
+          this.barriosFiltrados = response.data;
           this.loadingBarrios = false;
         }
       },
@@ -210,12 +251,13 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
 
   obtenerLocalidades() {
     this.loadingLocalidades = true;
-    this._localidadService.obtenerTodasLocalidades().subscribe({
+    this._localidadService.obtenerLocalidades().subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.localidades = response.data;
+          this.localidadesOriginales = response.data;
+          this.localidadesFiltradas = response.data;
+          this.loadingLocalidades = false;
         }
-        this.loadingLocalidades = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);

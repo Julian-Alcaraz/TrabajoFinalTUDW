@@ -3,6 +3,7 @@
   <div class="card-body">
     <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
       <!-- DNI -->
+      <!-- pi-id-card -->
       <div class="sm:col-span-2 md:col-span-1">
         <p-iftalabel>
           <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full" />
@@ -30,18 +31,25 @@
           <label for="filtroSexo">Sexo</label>
         </p-iftalabel>
       </div>
-      <!-- Barrio -->
-      <div class="sm:col-span-2 md:col-span-1">
-        <p-iftalabel>
-          <p-select [options]="barrios" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroBarrio()" [loading]="loadingBarrios" [checkmark]="true" [showClear]="true" [formControl]="barrioControl" #filtroBarrio id="filtroBarrio" inputId="filtroBarrio" optionLabel="nombre" optionValue="id" class="w-full" />
-          <label for="filtroBarrio">Barrio</label>
-        </p-iftalabel>
-      </div>
       <!-- Localidad -->
       <div class="sm:col-span-2 md:col-span-1">
         <p-iftalabel>
-          <p-select [options]="localidades" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroLocalidad()" [loading]="loadingLocalidades" [checkmark]="true" [showClear]="true" [formControl]="localidadControl" #filtroLocalidad id="filtroLocalidad" inputId="filtroLocalidad" optionLabel="nombre" optionValue="id" class="w-full" />
+          <p-select [options]="localidadesFiltradas" (onChange)="applyFilter($event)" (onChange)="onChangeLocalidad()" (onClear)="limpiarFiltroLocalidad()" [loading]="loadingLocalidades" [checkmark]="true" [showClear]="true" [formControl]="localidadControl" #filtroLocalidad id="filtroLocalidad" inputId="filtroLocalidad" optionLabel="nombre" optionValue="id" class="w-full" />
           <label for="filtroLocalidad">Localidad</label>
+        </p-iftalabel>
+      </div>
+      <!-- Barrio -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="barriosFiltrados" (onChange)="applyFilter($event)" (onChange)="onChangeBarrio()" (onClear)="limpiarFiltroBarrio()" [loading]="loadingBarrios" [checkmark]="true" [showClear]="true" [formControl]="barrioControl" #filtroBarrio id="filtroBarrio" inputId="filtroBarrio" optionLabel="nombre" optionValue="id" class="w-full" />
+          <label for="filtroBarrio">Barrio</label>
+        </p-iftalabel>
+      </div>
+      <!-- Estado -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="estadoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
+          <label for="filtroEstado">Estado</label>
         </p-iftalabel>
       </div>
       <!-- Actividad -->

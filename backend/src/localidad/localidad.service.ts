@@ -31,7 +31,7 @@ export class LocalidadService {
   }
 
   findAllHabilitadas() {
-    return this.localidadORM.find({ where: { deshabilitado: false } });
+    return this.localidadORM.find({ where: { deshabilitado: false }, relations: ['barrios'] });
   }
 
   async findOne(id: number) {
