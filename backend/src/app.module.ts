@@ -20,7 +20,6 @@ import { join } from 'path';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend', 'browser'), // Ruta a la carpeta con el build de Angular
-      renderPath: join(__dirname, '..', 'frontend', 'browser', 'index.csr.html'),
     }),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }),
     DatabaseModule,
