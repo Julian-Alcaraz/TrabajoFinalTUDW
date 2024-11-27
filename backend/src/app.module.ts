@@ -13,9 +13,29 @@ import { LocalidadModule } from './localidad/localidad.module';
 import { CursoModule } from './curso/curso.module';
 import { InstitucionModule } from './institucion/institucion.module';
 import { CsvModule } from './csv/csv.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }), DatabaseModule, RolModule, MenuModule, UsuarioModule, AuthModule, ConsultaModule, ChicoModule, BarrioModule, LocalidadModule, CursoModule, InstitucionModule, CsvModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'frontend', 'browser'), // Ruta a la carpeta con el build de Angular
+      renderPath: join(__dirname, '..', 'frontend', 'browser', 'index.csr.html'),
+    }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }),
+    DatabaseModule,
+    RolModule,
+    MenuModule,
+    UsuarioModule,
+    AuthModule,
+    ConsultaModule,
+    ChicoModule,
+    BarrioModule,
+    LocalidadModule,
+    CursoModule,
+    InstitucionModule,
+    CsvModule,
+  ],
   controllers: [],
   providers: [],
 })
