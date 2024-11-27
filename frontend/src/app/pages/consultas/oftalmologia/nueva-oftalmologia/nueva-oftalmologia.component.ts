@@ -17,11 +17,12 @@ import { InputSelectEnumComponent } from '../../../../components/inputs/input-se
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
 import { Chico } from '../../../../models/chico.model';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
   templateUrl: './nueva-oftalmologia.component.html',
   styleUrl: './nueva-oftalmologia.component.css',
 })

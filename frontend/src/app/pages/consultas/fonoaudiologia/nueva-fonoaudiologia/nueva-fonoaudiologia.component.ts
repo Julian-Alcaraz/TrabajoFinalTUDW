@@ -11,11 +11,12 @@ import { InputTextareaComponent } from '../../../../components/inputs/input-text
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent,DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
   styleUrl: './nueva-fonoaudiologia.component.css',
 })

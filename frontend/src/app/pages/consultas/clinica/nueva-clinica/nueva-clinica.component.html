@@ -192,23 +192,7 @@
       </div>
       @if (consulta) {
         @if (consulta.usuario) {
-          <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
-            <div class="font-bold">Datos del medico</div>
-            <div class="grid grid-cols-3">
-              <div class="col">
-                <strong> Nombre: </strong>
-                {{ consulta.usuario.nombre }} <br />
-              </div>
-              <div class="col">
-                <strong> Apellido: </strong>
-                {{ consulta.usuario.apellido }}<br />
-              </div>
-              <div class="col">
-                <strong> Dni: </strong>
-                {{ consulta.usuario.dni }}
-              </div>
-            </div>
-          </div>
+          <app-datos-medico [profesional]="consulta.usuario"/>
         }
       }
       <!-- Enviar -->

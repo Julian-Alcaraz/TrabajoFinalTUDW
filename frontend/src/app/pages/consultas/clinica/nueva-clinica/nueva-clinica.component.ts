@@ -13,13 +13,14 @@ import { InputCheckboxComponent } from '../../../../components/inputs/input-chec
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
 
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
   styleUrl: './nueva-clinica.component.css',
 })

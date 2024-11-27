@@ -13,11 +13,12 @@ import { CamposComunesComponent } from '../../components/campos-comunes/campos-c
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Chico } from '../../../../models/chico.model';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
