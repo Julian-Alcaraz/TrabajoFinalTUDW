@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-header">Niños cargados</div>
   <div class="card-body">
+    <p class="mb-4">Puedes usar los siguientes filtros para buscar los niños cargados en el sistema.</p>
     <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
       <!-- DNI -->
       <!-- pi-id-card -->
@@ -53,15 +54,15 @@
         </p-iftalabel>
       </div>
       <!-- Actividad -->
-      <div class="sm:col-span-1 md:col-span-1">
-        <label for="filtroActividad">Actividad</label>
-        <mat-slider [max]="100" [min]="0" [step]="25" [discrete]="true" [showTickMarks]="true" style="width: 100%">
-          <input matSliderThumb #slider (onChange)="applyFilter($event)" (change)="applyFilter($event)" id="filtroActividad" [formControl]="actividadControl" aria-label="Filtro de actividad de niño" />
-        </mat-slider>
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="actividadOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroActividad()" [checkmark]="true" [showClear]="true" [formControl]="actividadControl" #filtroActividad id="filtroActividad" inputId="filtroActividad" optionLabel="nombre" optionValue="valor" class="w-full" />
+          <label for="filtroActividad">Actividad</label>
+        </p-iftalabel>
       </div>
     </div>
     <div class="scroll">
-      <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll">
+      <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll" matSort (matSortChange)="announceSortChange($event)">
         <!-- # -->
         <ng-container matColumnDef="numero">
           <th mat-header-cell *matHeaderCellDef>#</th>
@@ -69,12 +70,12 @@
         </ng-container>
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por nombre">Nombre</th>
           <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
         </ng-container>
         <!-- Apellido -->
         <ng-container matColumnDef="apellido">
-          <th mat-header-cell *matHeaderCellDef>Apellido</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por apellido">Apellido</th>
           <td mat-cell *matCellDef="let element">{{ element.apellido }}</td>
         </ng-container>
         <!-- Dni -->
@@ -89,13 +90,13 @@
         </ng-container>
         <!-- Sexo -->
         <ng-container matColumnDef="sexo">
-          <th mat-header-cell *matHeaderCellDef>Sexo</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por sexo">Sexo</th>
           <td mat-cell *matCellDef="let element">{{ element.sexo }}</td>
           <!-- <td mat-cell *matCellDef="let element"> {{ element.sexo === "Masculino" ? 'M' : element.sexo === "Femenino" ? 'F' : 'Otro' }} </td> -->
         </ng-container>
         <!-- Direccion -->
         <ng-container matColumnDef="direccion">
-          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por dirección">Dirección</th>
           <td mat-cell *matCellDef="let element">{{ element.direccion }}</td>
         </ng-container>
         <!-- Telefono -->
@@ -104,10 +105,10 @@
           <td mat-cell *matCellDef="let element">{{ element.telefono }}</td>
         </ng-container>
         <!-- Habilitado -->
-        <ng-container matColumnDef="habilitado">
-          <th mat-header-cell *matHeaderCellDef>Habilitado</th>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.deshabilitado ? 'Inhabilitado' : 'habilitado' }}
+            <p-tag [severity]="element.deshabilitado ? 'danger' : 'success'" [value]="element.deshabilitado ? 'Deshabilitado' : 'Habilitado'" />
           </td>
         </ng-container>
         <!-- Actividad -->

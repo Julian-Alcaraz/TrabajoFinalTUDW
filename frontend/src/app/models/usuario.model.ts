@@ -7,15 +7,16 @@ export class Usuario {
     public nombre: string,
     public apellido: string,
     public email: string,
+    public deshabilitado: boolean,
     public roles_ids?: number[],
     public contrasenia?: string,
     public fe_nacimiento?: Date,
-    public deshahilitado?: boolean,
     public cambioContrasenia?: boolean,
     public roles?: Rol[], // esto es opcional podria  no estar
   ) {}
 
   static overload_constructor() {
-    return new Usuario(0, 0, '', '', '', [], '', undefined);
+    return new Usuario(0, 0, '', '', '', false, [], '', undefined);
   }
+  [key: string]: any; // Esto permite el acceso dinámico
 }

@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
@@ -16,7 +17,7 @@ import { LoadingComponent } from '../../../components/loading/loading.component'
 import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso.service';
 import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
-import { TooltipModule } from 'primeng/tooltip';
+
 
 @Component({
   selector: 'app-cursos',
@@ -37,13 +38,21 @@ export class CursosComponent implements OnInit, AfterViewInit {
   @ViewChild('cursoModal') cursoModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'nivel', 'cantidadConsultas', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'nivel', 'cantidadConsultas', 'estado', 'action'];
   constructor(
     private _cursoService: CursoService,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
   ) {
     this.cursos = new MatTableDataSource<Curso>([]);
+    this.cursos.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'estado':
+          return item.deshabilitado ? 1 : 0;
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -53,14 +62,6 @@ export class CursosComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.cursos.paginator = this.paginador;
     this.cursos.sort = this.sort;
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
-    } else {
-      this._liveAnnouncer.announce('Orden eliminado');
-    }
   }
 
   obtenerCursos() {
@@ -166,5 +167,10 @@ export class CursosComponent implements OnInit, AfterViewInit {
         this.obtenerCursos();
       }
     });
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    else this._liveAnnouncer.announce('Orden eliminado');
   }
 }

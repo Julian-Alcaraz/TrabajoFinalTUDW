@@ -1,5 +1,5 @@
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -14,10 +14,13 @@ import { Select, SelectModule } from 'primeng/select';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
-import Swal from 'sweetalert2';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TagModule } from 'primeng/tag';
+import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { Chico } from '../../../models/chico.model';
@@ -35,16 +38,18 @@ import { Localidad } from '../../../models/localidad.model';
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, IconFieldModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule],
+  imports: [CommonModule, IconFieldModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, DatePipe, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule, MatSortModule, TagModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filtroSexo') filtroSexo!: Select;
   @ViewChild('filtroBarrio') filtroBarrio!: Select;
 
+  private _liveAnnouncer = inject(LiveAnnouncer);
   public chicos: MatTableDataSource<Chico>;
   public localidadesOriginales: Localidad[] | undefined = undefined;
   public localidadesFiltradas: Localidad[] | undefined = undefined;
@@ -56,10 +61,17 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public searching = true;
   public resultsLength = 0;
   public searchTerms: any = {};
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action'];
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'estado', 'action'];
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
     { nombre: 'Deshabilitado', valor: true },
+  ];
+  public actividadOptions: any[] = [
+    { nombre: 'Ninguna especialidad visitada en el año', valor: 0 },
+    { nombre: '1 Especialidad visitada en el año', valor: 1 },
+    { nombre: '2 Especialidades visitadas en el año', valor: 2 },
+    { nombre: '3 Especialidades visitadas en el año', valor: 3 },
+    { nombre: '4 Especialidades visitadas en el año', valor: 4 },
   ];
   public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
   public estadoControl: FormControl = new FormControl(null);
@@ -79,6 +91,14 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
   ) {
     this.chicos = new MatTableDataSource<Chico>([]);
+    this.chicos.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'estado':
+          return item.deshabilitado ? 1 : 0;
+        default:
+          return item[property];
+      }
+    };
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad && this.identidad?.roles_ids) {
       if (!(this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2))) {
@@ -92,6 +112,11 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     this.obtenerBarrios();
     this.obtenerLocalidades();
     this.activateTableFilter();
+  }
+
+  ngAfterViewInit() {
+    this.chicos.paginator = this.paginador;
+    this.chicos.sort = this.sort;
   }
 
   actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any, filtroActividad: any, filtroLocalidad: any, filtroEstado: any): void {
@@ -115,11 +140,11 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       const searchTerms = JSON.parse(filter);
 
       const matchesDni = searchTerms.dni ? String(chico.dni).startsWith(searchTerms.dni) : true;
-      const matchesNombre = searchTerms.nombre ? chico.nombre.toLowerCase().includes(searchTerms.nombre.toLowerCase()) : true;
-      const matchesApellido = searchTerms.apellido ? chico.apellido.toLowerCase().includes(searchTerms.apellido.toLowerCase()) : true;
-      const matchesSexo = searchTerms.sexo ? String(chico.sexo).startsWith(searchTerms.sexo) : true;
+      const matchesNombre = searchTerms.nombre ? sacarAcentos(chico.nombre.toLowerCase()).includes(searchTerms.nombre.toLowerCase()) : true;
+      const matchesApellido = searchTerms.apellido ? sacarAcentos(chico.apellido.toLowerCase()).includes(searchTerms.apellido.toLowerCase()) : true;
+      const matchesSexo = searchTerms.sexo ? String(chico.sexo) === searchTerms.sexo : true;
       const matchesBarrio = searchTerms.idBarrio ? chico.id_barrio === searchTerms.idBarrio : true;
-      const matchesActividad = searchTerms.actividad ? chico.actividad === searchTerms.actividad : true;
+      const matchesActividad = searchTerms.actividad !== undefined ? Number(chico.actividad) === Number(searchTerms.actividad) : true;
       const matchesLocalidad = searchTerms.idLocalidad ? chico.id_localidad === searchTerms.idLocalidad : true;
       const matchesEstado = searchTerms.estado !== undefined ? chico.deshabilitado === JSON.parse(searchTerms.estado) : true;
 
@@ -135,25 +160,25 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     else if (event.originalTarget.id) idInput = event.originalTarget.id;
     if (idInput === 'filtroDni') {
       const dniValue = event.target.value.replace(/[,.]/g, '');
-      this.searchTerms.dni = dniValue || undefined;
+      this.searchTerms.dni = dniValue;
     } else if (idInput === 'filtroNombre') {
-      const nombreValue = event.target.value.trim();
-      this.searchTerms.nombre = nombreValue || undefined;
+      const nombreValue = sacarAcentos(event.target.value.trim().toLowerCase());
+      this.searchTerms.nombre = nombreValue;
     } else if (idInput === 'filtroApellido') {
-      const apellidoValue = event.target.value.trim();
-      this.searchTerms.apellido = apellidoValue || undefined;
+      const apellidoValue = sacarAcentos(event.target.value.trim().toLowerCase());
+      this.searchTerms.apellido = apellidoValue;
     } else if (idInput.includes('filtroSexo')) {
       const sexoValue = event.value;
-      this.searchTerms.sexo = sexoValue || undefined;
+      this.searchTerms.sexo = sexoValue;
     } else if (idInput.includes('filtroBarrio')) {
       const barrioValue = event.value;
-      this.searchTerms.idBarrio = barrioValue || undefined;
+      this.searchTerms.idBarrio = barrioValue;
     } else if (idInput.includes('filtroActividad')) {
-      const actividadValue = event.target.valueAsNumber / 25;
-      this.searchTerms.actividad = actividadValue || undefined;
+      const actividadValue = event.value;
+      this.searchTerms.actividad = actividadValue;
     } else if (idInput.includes('filtroLocalidad')) {
       const localidadValue = event.value;
-      this.searchTerms.idLocalidad = localidadValue || undefined;
+      this.searchTerms.idLocalidad = localidadValue;
     } else if (idInput.includes('filtroEstado')) {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
@@ -162,7 +187,6 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
   }
 
-  // Podria resumirse en 1 funcion creo.
   limpiarFiltroSexo() {
     this.searchTerms.sexo = undefined;
     this.chicos.filter = JSON.stringify(this.searchTerms);
@@ -188,6 +212,12 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
   }
 
+  limpiarFiltroActividad() {
+    this.searchTerms.actividad = undefined;
+    this.chicos.filter = JSON.stringify(this.searchTerms);
+    if (this.chicos.paginator) this.chicos.paginator.firstPage();
+  }
+
   onChangeLocalidad() {
     // Verificacion por si el evento change se dispara al tocar la X de limpiar campo
     const idLocalidad = this.localidadControl.value;
@@ -209,10 +239,6 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (idLocalidad !== this.localidadControl.value) {
       this.localidadControl.setValue(idLocalidad);
     }
-  }
-
-  ngAfterViewInit() {
-    this.chicos.paginator = this.paginador;
   }
 
   obtenerChicos() {
@@ -328,6 +354,11 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     });
   }
 
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    else this._liveAnnouncer.announce('Orden eliminado');
+  }
+
   applyFilterToAllRow(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.chicos.filter = filterValue.trim().toLowerCase();
@@ -340,4 +371,8 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   verDetallesChico(id: number) {
     this._router.navigate(['/layout/chicos/ver', id]);
   }
+}
+
+function sacarAcentos(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }

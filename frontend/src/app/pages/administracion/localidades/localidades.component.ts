@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
@@ -16,7 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { ModalLocalidadComponent } from './modal-localidad/modal-localidad.component';
-import { TooltipModule } from 'primeng/tooltip';
+
 
 @Component({
   selector: 'app-localidades',
@@ -37,13 +38,21 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'cantidadBarrios', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'cantidadBarrios', 'estado', 'action'];
   constructor(
     private _localidadService: LocalidadService,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
   ) {
     this.localidades = new MatTableDataSource<Localidad>([]);
+    this.localidades.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'estado':
+          return item.deshabilitado ? 1 : 0;
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -53,14 +62,6 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.localidades.paginator = this.paginador;
     this.localidades.sort = this.sort;
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
-    } else {
-      this._liveAnnouncer.announce('Orden eliminado');
-    }
   }
 
   obtenerLocalidades() {
@@ -166,5 +167,10 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
         this.obtenerLocalidades();
       }
     });
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    else this._liveAnnouncer.announce('Orden eliminado');
   }
 }

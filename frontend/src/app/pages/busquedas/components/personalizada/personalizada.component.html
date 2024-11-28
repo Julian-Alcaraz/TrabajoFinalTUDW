@@ -33,12 +33,12 @@
       <div class="md:col-span-4" formGroupName="generales">
         <div formGroupName="usuario">
           <p-iftalabel>
-            <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [filter]="true"  filterPlaceholder="Buscar" [loading]="loadingProfesionales" class="w-full h-16">
+            <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [filter]="true" filterPlaceholder="Buscar" [loading]="loadingProfesionales" class="w-full h-16">
               <ng-template pTemplate="selectedItem" let-profesional>
-                <div class="flex items-center gap-2">
-                    <div>{{ profesional.nombre +' '+profesional.apellido }}</div>
+                <div class="flex items-center gap-0">
+                  <div>{{ profesional.nombre + ' ' + profesional.apellido }}</div>
                 </div>
-            </ng-template>
+              </ng-template>
               <ng-template let-profesional pTemplate="item">
                 {{ profesional.nombre + ' ' + profesional.apellido }}
               </ng-template>

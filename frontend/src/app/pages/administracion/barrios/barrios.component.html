@@ -26,7 +26,7 @@
           <td mat-cell *matCellDef="let element">{{ element.localidad.nombre }}</td>
         </ng-container>
         <!-- Estado -->
-        <ng-container matColumnDef="habilitado">
+        <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
           <td mat-cell *matCellDef="let element">
             <p-tag [severity]="element.deshabilitado ? 'danger' : 'success'" [value]="element.deshabilitado ? 'Deshabilitado' : 'Habilitado'" />
@@ -68,6 +68,6 @@
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="resultsLength" [pageSize]="15" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

@@ -10,8 +10,7 @@ import { ValidarCadenaSinEspacios } from '../../../../../utils/validadores';
 import { InputTextComponent } from '../../../../../components/inputs/input-text.component';
 import { Curso } from '../../../../../models/curso.model';
 import { CursoService } from '../../../../../services/curso.service';
-import { InputSelectEnumComponent } from "../../../../../components/inputs/input-select-enum.component";
-
+import { InputSelectEnumComponent } from '../../../../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-modal-curso',
@@ -41,7 +40,7 @@ export class ModalCursoComponent implements OnInit {
   ngOnInit() {
     if (this.data !== null) {
       this.curso = this.data.curso;
-      this.cursoForm.patchValue({ nombre: this.curso?.nombre , nivel: this.curso?.nivel });
+      this.cursoForm.patchValue({ nombre: this.curso?.nombre, nivel: this.curso?.nivel });
       this.cursoForm.valueChanges.subscribe({
         next: () => {
           this.habilitarModificar = this.existenCambios();

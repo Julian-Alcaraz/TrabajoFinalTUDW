@@ -10,7 +10,7 @@ import { Usuario } from './usuario.model';
 export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type Turno = 'Mañana' | 'Tarde' | 'Noche';
 
-export class Consulta  {
+export class Consulta {
   constructor(
     public id: number,
     public created_at: Date,
@@ -36,6 +36,6 @@ export class Consulta  {
   ) {}
 
   static overload_constructor() {
-    return new Consulta(0,new Date,new Date,false, 'Clinica', 'Mañana', 0, 0, 0);
+    return new Consulta(0, new Date(), new Date(), false, 'Clinica', 'Mañana', 0, 0, 0);
   }
 }

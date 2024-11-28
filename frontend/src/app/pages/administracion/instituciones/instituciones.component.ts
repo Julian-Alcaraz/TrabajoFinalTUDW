@@ -9,6 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
+
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
@@ -37,13 +38,21 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'tipo', 'cantidadConsultas', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'tipo', 'cantidadConsultas', 'estado', 'action'];
   constructor(
     private _institucionService: InstitucionService,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
   ) {
     this.instituciones = new MatTableDataSource<Institucion>([]);
+    this.instituciones.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'estado':
+          return item.deshabilitado ? 1 : 0;
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -53,14 +62,6 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.instituciones.paginator = this.paginador;
     this.instituciones.sort = this.sort;
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
-    } else {
-      this._liveAnnouncer.announce('Orden eliminado');
-    }
   }
 
   obtenerInstituciones() {
@@ -166,5 +167,10 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
         this.obtenerInstituciones();
       }
     });
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    else this._liveAnnouncer.announce('Orden eliminado');
   }
 }

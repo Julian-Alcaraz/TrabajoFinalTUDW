@@ -6,8 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
 import { TagModule } from 'primeng/tag';
+import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { BarrioService } from '../../../services/barrio.service';
@@ -36,13 +36,21 @@ export class BarriosComponent implements OnInit, AfterViewInit {
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'nombre_localidad', 'habilitado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'nombre_localidad', 'estado', 'action'];
   constructor(
     private _barrioService: BarrioService,
     private _dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
     this.barrios = new MatTableDataSource<Barrio>([]);
+    this.barrios.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'estado':
+          return item.deshabilitado ? 1 : 0;
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -52,11 +60,6 @@ export class BarriosComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.barrios.paginator = this.paginador;
     this.barrios.sort = this.sort;
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
-    else this._liveAnnouncer.announce('Orden eliminado');
   }
 
   obtenerBarrios() {
@@ -161,5 +164,10 @@ export class BarriosComponent implements OnInit, AfterViewInit {
         this.obtenerBarrios();
       }
     });
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
+    else this._liveAnnouncer.announce('Orden eliminado');
   }
 }
