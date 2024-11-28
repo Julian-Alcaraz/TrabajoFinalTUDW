@@ -17,7 +17,7 @@
       <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
       <div class="md:col-span-2" formGroupName="generales">
         <p-iftalabel>
-          <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy">
+          <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy" [showButtonBar]="true">
             <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
             <ng-template pTemplate="footer">
               <p-button class="p-datepicker-prev hidden">Previous</p-button>

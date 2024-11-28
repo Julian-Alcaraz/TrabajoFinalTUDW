@@ -170,7 +170,7 @@ export class MainSeeder implements Seeder {
         },
         {
           url: 'busqueda',
-          label: 'Buscar consultas',
+          label: 'Buscar Consultas',
           orden: 2,
           icon: 'fa-solid fa-magnifying-glass',
           roles: [roles[0], roles[1], roles[2]],
@@ -357,7 +357,7 @@ export class MainSeeder implements Seeder {
           localidad: localidades[0],
         },
         {
-          nombre: 'Localidad Cipolletti',
+          nombre: 'Barrio de Cipolletti',
           localidad: localidades[1],
         },
       ]);

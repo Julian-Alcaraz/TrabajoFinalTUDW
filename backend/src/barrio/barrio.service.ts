@@ -27,7 +27,7 @@ export class BarrioService {
   }
 
   findAllHabilitados() {
-    return this.barrioORM.find({ where: { deshabilitado: false } });
+    return this.barrioORM.find({ where: { deshabilitado: false }, relations: ['localidad'] });
   }
 
   async findOne(id: number) {
