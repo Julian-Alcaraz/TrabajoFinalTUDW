@@ -165,7 +165,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
 
   obtenerInstituciones() {
     this.searchingInstituciones = true;
-    this._institucionService.obtenerTodasInstituciones().subscribe({
+    this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
         this.searchingInstituciones = false;
         if (response.success) {

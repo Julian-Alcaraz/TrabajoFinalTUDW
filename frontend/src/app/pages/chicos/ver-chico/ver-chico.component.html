@@ -1,88 +1,90 @@
 <!-- Aca faltaria un mensaje de errro en el caso de que el id del chico no este en la bd pero sea valido -->
 <div class="card">
   @if (chico) {
-    <div class="card-header">Datos personales de {{ chico.apellido + ' ' + chico.nombre }}</div>
+    <div class="card-header">
+      <div class="flex justify-between items-center">
+        <div>
+          <button [pTooltip]="'Editar'" tooltipPosition="bottom" style="color: #ffffff" aria-label="Botón de editar chico" (click)="chico.deshabilitado ? notificar(chico.id) : editarChico(chico.id); $event.stopPropagation()" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm font-medium w-full sm:w-auto py-1 px-2 text-center -700 -800 disabled:bg-gray-400'">
+            <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
+          </button>
+          Datos personales de {{ chico.apellido + ' ' + chico.nombre }}
+        </div>
+        <div class="">
+          <button type="button" (click)="volver()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Volver</button>
+        </div>
+      </div>
+    </div>
     <div class="card-body">
       <!-- <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden font-sans"> -->
       <div class="layout-container flex h-full grow flex-col">
         <div class="layout-content-container flex flex-col w-full flex-1">
-          <div class="flex flex-wrap gap-3">
-            <div class="flex min-w-28 flex-1 basis-auto md:basis-1/4 flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre }}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre }} {{ chico.apellido }}</p>
               <div class="flex items-center gap-2">
-                <p class="text-slate-500 text-sm font-normal leading-normal">Nombre</p>
+                <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Completo</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-              <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.apellido }}</p>
-              <div class="flex items-center gap-2">
-                <p class="text-slate-500 text-sm font-normal leading-normal">Apellido</p>
-              </div>
-            </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.dni }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">DNI</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.fe_nacimiento | date: 'dd-MM-yyyy' }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Fecha de Nacimiento</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.sexo }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Sexo</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.telefono }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Teléfono</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.barrio?.localidad?.nombre }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Localidad</p>
               </div>
             </div>
-            <div class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.barrio?.nombre }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Barrio</p>
               </div>
             </div>
-            <div *ngIf="chico?.nombre_madre" class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div *ngIf="chico?.nombre_madre" class="lg:col-span-2 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_madre }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Madre</p>
               </div>
             </div>
-            <div *ngIf="chico?.nombre_padre" class="flex min-w-28 flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+            <div *ngIf="chico?.nombre_padre" class="lg:col-span-2 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
               <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico.nombre_padre }}</p>
               <div class="flex items-center gap-2">
                 <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Padre</p>
               </div>
             </div>
-            @if (resultsLength > 0) {
-              <div class="flex min-w-28 w-full flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-                <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño</p>
-                <div class="flex items-center gap-2">
-                  <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
-                </div>
+            <div *ngIf="resultsLength > 0" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño</p>
+              <div class="flex items-center gap-2">
+                <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
               </div>
-            } @else {
-              @if (searchingConsultas) {
-                <app-loading />
-              } @else {
-                <div class="flex min-w-28 w-full flex-1 basis-auto flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
-                  <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistio a ninguna consulta</p>
-                </div>
-              }
-            }
+            </div>
+            <div *ngIf="!resultsLength && !searchingConsultas" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+              <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistió a ninguna consulta</p>
+            </div>
+            <div *ngIf="searchingConsultas" class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+              <app-loading></app-loading>
+            </div>
           </div>
           @if (resultsLength > 0) {
             <h3 class="text-black text-lg sm:text-xl font-bold leading-tight tracking-tight break-words max-w-full px-2 sm:px-4 pb-2 pt-4">Historial de consultas</h3>
@@ -107,10 +109,6 @@
               </div>
             </div>
             <app-consultas-table [consultas]="consultas" [displayedColumns]="consultasColumns" />
-
-            <div class="flex mx-auto mt-3">
-              <button type="button" (click)="volver()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Volver</button>
-            </div>
           } @else {
             @if (searchingConsultas) {
               <app-loading />

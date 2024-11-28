@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormChicosComponent } from '../components/form-chicos/form-chicos.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-editar-chico',
@@ -14,7 +14,12 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class EditarChicoComponent {
   public id_chico!: number;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(
+    public dialogRef: MatDialogRef<EditarChicoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     this.id_chico = data.id;
+  }
+  cerrarModal(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
   }
 }

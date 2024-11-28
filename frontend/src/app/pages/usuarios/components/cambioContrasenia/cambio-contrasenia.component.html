@@ -15,6 +15,8 @@
         <div *ngIf="cambioForm.get('password')?.errors && (cambioForm.get('password')?.dirty || cambioForm.get('password')?.touched)" class="text-red-600 text-sm">
           <div *ngIf="cambioForm.get('password')?.errors?.['required']">El campo es requerido.</div>
           <div *ngIf="cambioForm.get('password')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+          <div *ngIf="cambioForm.get('password')?.errors?.['ValidarCadenaSinEspacios']">No puede estar vacio.</div>
+          <div *ngIf="cambioForm.get('password')?.errors?.['contraseniaIgualDni']">No puede ser tu documento.</div>
           <div *ngIf="cambioForm.get('password')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
         </div>
         <label for="confirmPassword" class="block mt-2 mb-2 text-sm font-medium text-gray-900">Confirmar contraseña</label>
@@ -26,6 +28,7 @@
         <div *ngIf="cambioForm.get('confirmPassword')?.errors && (cambioForm.get('confirmPassword')?.dirty || cambioForm.get('confirmPassword')?.touched)" class="text-red-600 text-sm">
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['required']">El campo es requerido.</div>
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+          <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['ValidarCadenaSinEspacios']">No puede estar vacio.</div>
           <div *ngIf="cambioForm.get('confirmPassword')?.errors?.['maxlength']">Maximo 30 caracteres.</div>
         </div>
         <div class="mt-2">

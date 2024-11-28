@@ -8,6 +8,6 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    response.sendFile(join(__dirname, '..', 'frontend', 'browser', 'index.csr.html'));
+    response.sendFile(join(__dirname, '..', 'frontend', 'browser', 'index.html'));
   }
 }

@@ -37,7 +37,12 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return this.usuarioORM.find({ relations: ['roles'] });
+    return this.usuarioORM.find({
+      relations: ['roles'],
+      order: {
+        apellido: 'ASC', // Orden ascendente por apellido
+      },
+    });
     // { where: { deshabilitado: false } }
   }
 
@@ -155,7 +160,7 @@ export class UsuarioService {
 
   async usuariosProfesionales() {
     const usuariosProfesionales = [];
-    const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'] });
+    const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'], order: { nombre: 'ASC' } });
     const rolProfesional = await this.rolORM.findOne({ where: { nombre: 'Profesional', deshabilitado: false } });
     if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
     for (const usuario of usuarios) {

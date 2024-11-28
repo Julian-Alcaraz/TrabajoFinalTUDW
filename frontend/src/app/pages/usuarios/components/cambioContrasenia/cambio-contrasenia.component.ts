@@ -8,7 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ContraseniasIguales, ValidarCadenaSinEspacios, } from '../../../../utils/validadores';
+import { ContraseniaIgualDni, ContraseniasIguales, ValidarCadenaSinEspacios, } from '../../../../utils/validadores';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { Usuario } from '../../../../models/usuario.model';
 import Swal from 'sweetalert2';
@@ -52,6 +52,9 @@ export class CambiarContraseniaComponent implements OnInit {
   }
   ngOnInit(): void {
     this.identidad = this._sessionService.getIdentidad();
+    if(this.identidad){
+      this.cambioForm.get('password')?.addValidators(ContraseniaIgualDni(this.identidad!.dni))
+    }
   }
 
   cerraModal() {

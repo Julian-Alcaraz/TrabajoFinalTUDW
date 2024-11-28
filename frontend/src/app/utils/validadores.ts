@@ -25,10 +25,17 @@ export function ValidarCadenaSinEspacios(control: AbstractControl) {
 export const ContraseniasIguales: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
-
   return password && confirmPassword && password.value !== confirmPassword.value ? { contraseñasNoCoinciden: true } : null;
 };
 
+export function ContraseniaIgualDni(dni: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control && control.value === dni.toString()) {
+      return { contraseniaIgualDni: true };
+    }
+    return null;
+  };
+}
 export function ValidarDni(control: AbstractControl) {
   const dni = control?.value;
   if (String(dni).length != 8) {
@@ -44,13 +51,6 @@ export function ValidarSoloNumeros(control: AbstractControl) {
 
   if (!NUMERIC_REGEXP.test(control.value)) {
     return { ValidarSoloNumeros: { message: 'Este campo solo debe contener números.' } };
-    /*
-    Otra forma mas limpia:
-    return { ValidarSoloNumeros: { message: 'Este campo solo debe contener números.' } };
-
-    y en el html:
-    <div *ngIf="control?.errors?.['ValidarSoloNumeros']?.message">{{ control.errors['ValidarSoloNumeros'].message }}</div>
-    */
   } else {
     return null;
   }
