@@ -1,46 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Consulta } from '../../models/consulta.model';
 import { ConsultasTableComponent } from './components/consultas-table/consultas-table.component';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultasxanioComponent } from './components/consultasxanio/consultasxanio.component';
 import { PersonalizadaComponent } from './components/personalizada/personalizada.component';
+import { TabsComponent } from '../../components/tabs/tabs.component';
 @Component({
   selector: 'app-busquedas',
   standalone: true,
-  imports: [CommonModule, ConsultasTableComponent, ConsultasxanioComponent, PersonalizadaComponent],
-
+  imports: [CommonModule, ConsultasTableComponent, ConsultasxanioComponent, PersonalizadaComponent, TabsComponent],
   templateUrl: './busquedas.component.html',
   styleUrl: './busquedas.component.css',
 })
-export class BusquedasComponent implements OnInit, OnDestroy {
-  consultas: Consulta[] | undefined | null = [];
+export class BusquedasComponent {
+  consultas: Consulta[] | undefined | null = null;
   routeSub: any;
-  currentParam: any;
+  currentParam: number | null = null;
 
-  constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
-  ) {}
-
-  ngOnInit(): void {
-    this.routeSub = this._route.queryParams.subscribe((params) => {
-      this.currentParam = params['consulta']; // Lógica adicional cuando el parámetro cambia console.log('Parámetro actual:', this.currentParam);
-      this.consultas=null
-    });
-  }
-  ngOnDestroy() {
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
+  escucharParam(value: number) {
+    if (value !== this.currentParam) {
+      this.currentParam = value;
+      this.consultas = null;
     }
   }
 
-  cambiarParam(value: number) {
-    this._router.navigate([], { relativeTo: this._route, queryParams: { consulta: value } }); // mantiene otros parámetros de la URL intactos
-  }
-
-  mostrarConsultas(consultas:any) {
-    console.log("Consultas Obtenidads",consultas);
-    this.consultas=consultas
+  mostrarConsultas(consultas: any) {
+    this.consultas = consultas;
   }
 }

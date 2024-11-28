@@ -13,19 +13,20 @@ import { InputCheckboxComponent } from '../../../../components/inputs/input-chec
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
 
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
   styleUrl: './nueva-clinica.component.css',
 })
 export class NuevaClinicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar = false;
+  @Input() editar = true;
   habilitarModificar = false;
 
   public clinicaForm: FormGroup;
@@ -75,6 +76,7 @@ export class NuevaClinicaComponent implements OnInit {
       pct: ['', [Validators.required, ValidarNumerosFloat]],
     });
   }
+
   ngOnInit(): void {
     if (this.consulta) {
       // llenar form y deshabilitarlo
@@ -384,12 +386,12 @@ export class NuevaClinicaComponent implements OnInit {
             },
           };
           console.log('DATA:');
-          if(this.consulta){
-            this._consultaService.modficarConsulta(this.consulta?.id,data).subscribe({
+          if (this.consulta) {
+            this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                  this.cambiarEstado()
+                  this.cambiarEstado();
                 }
               },
               error: (err) => {
@@ -404,7 +406,7 @@ export class NuevaClinicaComponent implements OnInit {
 }
 // FORMULARIO LIMPIO:
 /*
-     // Campos comunes
+ // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Medica Clinica
       peso: [45, [Validators.required, ValidarNumerosFloat]],
@@ -433,11 +435,10 @@ export class NuevaClinicaComponent implements OnInit {
       horas_pantalla: ['Menor a 2hs', [Validators.required]],
       horas_juego_aire_libre: ['Menos de 1h', [Validators.required]],
       horas_suenio: ['Menos de 10hs', [Validators.required]],
-      derivacion_fonoaudiologia: [false, [Validators.required]],
+      derivacion_fonoaudiologia: [true, [Validators.required]],
       derivacion_oftalmologia: [false, [Validators.required]],
-      derivacion_odontologia: [false, [Validators.required]],
+      derivacion_odontologia: [true, [Validators.required]],
       derivacion_externa: [false, [Validators.required]],
-      // proyecto: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       // Ver maximos y minimos de estos valores:
       pcta: [70, [Validators.required, ValidarNumerosFloat]],
       pcimc: [90, [Validators.required, ValidarNumerosFloat]],

@@ -37,11 +37,11 @@ export class ChicoController {
       message: 'Chicos encontrados con exito',
     };
   }
-  @Get('/activity')
+  @Get('/activity/:year')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
-  async findAllbyActivty() {
-    const chicos = await this.chicoService.findAllWHitActuivy(2024);
+  async findAllByActivity(@Param('year', ParseIntPipe) year: number) {
+    const chicos = await this.chicoService.findAllWithActivity(year);
     return {
       success: true,
       data: chicos,
@@ -120,6 +120,19 @@ export class ChicoController {
       success: true,
       data: consultas,
       message: 'Consultas encontradas por chico con exito',
+    };
+  }
+
+  @Get('cargadosxanios/:year')
+  @ApiOperation({ summary: 'Devuelve la cantidad de chicos cargados por año en los ultimos 4' })
+  @ApiResponse({ status: 200, description: 'Devuelve la cantidad de chicos cargados por año en los ultimos 4' })
+  @ApiResponse({ status: 404, description: 'Consulta no encontrada' })
+  async countChicosUpxYear(@Param('year', ParseIntPipe) year: number) {
+    const arrayCount = await this.chicoService.countChicosUpxYear(year);
+    return {
+      success: true,
+      data: arrayCount,
+      message: 'Chicos contados con exito',
     };
   }
 }

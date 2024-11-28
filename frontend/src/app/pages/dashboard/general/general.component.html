@@ -1,0 +1,30 @@
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" titulo="Total consultas por año" [labels]="lastFourYears" [sets]="dataConsultaxAnio" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" titulo="Total tipos de consulta " [labels]="['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia']" [sets]="dataTipoConsultaxanio" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" titulo="Niños cargados por año" [labels]="lastFourYears" [sets]="dataChicosxAnio" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <div class="flex flex-col h-full justify-center">
+      <div class="border-b-2 border-gray-400 pb-2">
+        <app-pie-graph [loading]="loading" [titulo]="'Tipos de consulta'" [subTitulo]="subTituloYear + subTituloInstitucion" [labels]="['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia']" [set]="{ label: '', data: dataTypeYearAndInstitucion }" />
+      </div>
+      <div class="flex flex-row justify-evenly mt-2">
+        <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" placeholder="Año" view="year" dateFormat="yy" [maxDate]="maxDate">
+          <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+          <ng-template pTemplate="footer">
+            <p-button class="p-datepicker-prev hidden">Previous</p-button>
+            <p-button class="p-datepicker-next hidden">Next</p-button>
+          </ng-template>
+          <!-- end TODO -->
+        </p-datepicker>
+        @if (searchingInstituciones) {
+          <app-loading />
+        } @else {
+          <select (change)="seleccionarInstituciones($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-auto p-2">
+            <option selected [value]="0">Seleccionar Institución</option>
+            <option *ngFor="let institucion of instituciones; let i = index" [selected]="" [value]="institucion.id">{{ institucion.nombre }}</option>
+          </select>
+        }
+      </div>
+    </div>
+  </div>
+</div>

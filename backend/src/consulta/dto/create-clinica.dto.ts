@@ -1,8 +1,66 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Length, Matches } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
+import { AlimentacionType, CantidadComidasType, ExamenVisualType, HidratacionType, HsJuegoAireLibreType, HsPantallaType, HsSuenioType, InfusionesType, LenguajeType, OrtopediaYTraumatologiaType, VacunasType } from '../entities/clinica.entity';
+// TA se calcula
+// Estado nutricional se calcula y se guarda.
+// imc no lo agrego al dto por que lo calculamos en el back
 export class CreateClinicaDto {
+  @ApiProperty({ description: 'Indica las vacunas que tiene el niño' })
+  @IsNotEmpty({ message: 'Las vacunas no pueden estar vacias' })
+  @IsEnum(['Completo', 'Incompleto', 'Desconocido'], { message: 'El tipo no es una opcion valida. Completo, Incompleto, Desconocido' })
+  readonly vacunas: VacunasType;
+
+  @ApiProperty({ description: 'Resultados del examen visual del niño que asiste' })
+  @IsNotEmpty({ message: 'El examen visual no puede estar vacio' })
+  @IsEnum(['Normal', 'Anormal'], { message: 'El tipo no es una opcion valida. Normal, Anormal' })
+  readonly examen_visual: ExamenVisualType;
+
+  @ApiProperty({ description: 'Ortopedia y traumatologia del niño que asiste' })
+  @IsNotEmpty({ message: 'Ortopedia y traumatologia no puede estar vacio' })
+  @IsEnum(['Normal', 'Escoliosis', 'Pie Plano', 'Otras'], { message: 'El tipo no es una opcion valida. Normal, Escoliosis, Pie Plano, Otras' })
+  readonly ortopedia_traumatologia: OrtopediaYTraumatologiaType;
+
+  @ApiProperty({ description: 'Lenguaje del niño que asiste' })
+  @IsNotEmpty({ message: 'Lenguaje no puede estar vacio' })
+  @IsEnum(['Adecuado', 'Inadecuado'], { message: 'El tipo no es una opcion valida. Adecuado, Inadecuado' })
+  readonly lenguaje: LenguajeType;
+
+  @ApiProperty({ description: 'Alimentacion del niño que asiste' })
+  @IsNotEmpty({ message: 'Alimentacion no puede estar vacio' })
+  @IsEnum(['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'], { message: 'El tipo no es una opcion valida. Mixta y variada, Rica en HdC, Pobre en fibras, Fiambres, Frituras' })
+  readonly alimentacion: AlimentacionType;
+
+  @ApiProperty({ description: 'Ingesta de infusiones del niño' })
+  @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
+  @IsEnum(['Té', 'Mate Cocido', 'Otras'], { message: 'El tipo no es una opcion valida. Té, Mate Cocido, Otras' })
+  readonly infusiones: InfusionesType;
+
+  @ApiProperty({ description: 'Cantidad de comidas del niño que asiste' })
+  @IsNotEmpty({ message: 'Cantidad de comidas  no puede estar vacio' })
+  @IsEnum(['Menor a 4', '4', 'Mayor a 4', 'Picoteo'], { message: 'El tipo no es una opcion valida. Menor a 4, 4, Mayor a 4, Picoteo' })
+  readonly cantidad_comidas: CantidadComidasType;
+
+  @ApiProperty({ description: 'Horas de pantallas diarias' })
+  @IsNotEmpty({ message: 'La hora no puede estar vacía' })
+  @IsEnum(['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'], { message: 'El tipo no es una opcion valida. Menor a 2hs, Entre 2hs y 4hs, Más de 6hs' })
+  readonly horas_pantalla: HsPantallaType;
+
+  @ApiProperty({ description: 'Horas de juego al aire libre' })
+  @IsNotEmpty({ message: 'Las horas de juego al aire libre no puede estar vacía' })
+  @IsEnum(['Menos de 1h', '1h', 'Más de 1h'], { message: 'El tipo no es una opcion valida. Menos de 1h, 1h, Más de 1h' })
+  readonly horas_juego_aire_libre: HsJuegoAireLibreType;
+
+  @ApiProperty({ description: 'Horas de sueño' })
+  @IsNotEmpty({ message: 'Las horas de sueño no puede estar vacía' })
+  @IsEnum(['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'], { message: 'El tipo no es una opcion valida. Menos de 10hs, Entre 10hs y 12hs, Más de 13hs' })
+  readonly horas_suenio: HsSuenioType;
+
+  @ApiProperty({ description: 'Hidratacion del niño que asiste' })
+  @IsNotEmpty({ message: 'Hidratacion no puede estar vacio' })
+  @IsEnum(['Agua', 'Bebidas Edulcoradas'], { message: 'El tipo no es una opcion valida. Agua, Bebidas Edulcoradas' })
+  readonly hidratacion: HidratacionType;
+
   @ApiProperty({ description: 'Tiene diabetes' })
   @IsNotEmpty({ message: 'La diabetes no puede estar vacia' })
   @IsBoolean({ message: 'La diabetes debe ser un boleano' })
@@ -43,14 +101,6 @@ export class CreateClinicaDto {
   @IsBoolean({ message: 'Enfermedades previas debe ser un boleano' })
   readonly enfermedades_previas: boolean;
 
-  // ENUM incompleto completo desconoce
-  @ApiProperty({ description: 'Tiene Vacunas' })
-  @IsNotEmpty({ message: 'Las vacunas no pueden estar vacias' })
-  @IsString({ message: 'Vacunas debe ser un string' })
-  @Length(1, 100, { message: 'Las vacunas social debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly vacunas: string;
-
   @ApiProperty({ description: 'Peso del niño que asiste' })
   @IsNotEmpty({ message: 'El peso no puede estar vacio' })
   @IsNumber({}, { message: 'El peso  debe ser un número' })
@@ -75,15 +125,11 @@ export class CreateClinicaDto {
   @IsPositive({ message: 'La circunferencia de cintura debe ser un numero positivo' })
   readonly cc: number;
 
-  // imc no lo agrego al dto por que lo calculamos en el back
-
   @ApiProperty({ description: 'El percentillo de imc del niño que asiste' })
   @IsNotEmpty({ message: 'El percentillo de imc no puede estar vacia' })
   @IsNumber({}, { message: 'El percentillo de imc debe ser un número' })
   @IsPositive({ message: 'El percentillo de imc debe ser un numero positivo' })
   readonly pcimc: number;
-
-  // Estado nutricional se calcula y se guarda.
 
   @ApiProperty({ description: 'La tension arterial sistolica del niño que asiste' })
   @IsNotEmpty({ message: 'La tension arterial sistolica no puede estar vacia' })
@@ -103,94 +149,13 @@ export class CreateClinicaDto {
   @IsPositive({ message: 'El percentillo de la tension arterial debe ser un numero positivo' })
   readonly pcta: number;
 
-  // TA se calcula
-
-  // ENUM normal anormal
-  @ApiProperty({ description: 'Examen visual del niño que asiste' })
-  @IsNotEmpty({ message: 'El examen visual no puede estar vacio' })
-  @IsString({ message: 'El examen visual debe ser un string' })
-  @Length(1, 100, { message: 'El examen visual debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly examen_visual: string;
-
-  // ENUM normal anormal
-  @ApiProperty({ description: 'Ortopedia y traumatologia del niño que asiste' })
-  @IsNotEmpty({ message: 'Ortopedia y traumatologia no puede estar vacio' })
-  @IsString({ message: 'Ortopedia y traumatologia debe ser un string' })
-  @Length(1, 100, { message: 'Ortopedia y traumatologia debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly ortopedia_traumatologia: string;
-
-  // ENUM adecuado inadecuado
-  @ApiProperty({ description: 'Lenguaje del niño que asiste' })
-  @IsNotEmpty({ message: 'Lenguaje no puede estar vacio' })
-  @IsString({ message: 'Lenguaje debe ser un string' })
-  @Length(1, 100, { message: 'Lenguaje debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly lenguaje: string;
-
   @ApiProperty({ description: 'SEGTO del niño' })
   @IsNotEmpty({ message: 'SEGTO no puede estar vacio' })
   @IsBoolean({ message: 'SEGTO debe ser un boleano' })
   readonly segto: boolean;
 
-  @ApiProperty({ description: 'Alimentacion del niño que asiste' })
-  @IsNotEmpty({ message: 'Alimentacion no puede estar vacio' })
-  @IsString({ message: 'Alimentacion debe ser un string' })
-  @Length(1, 100, { message: 'Alimentacion debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly alimentacion: string;
-
-  @ApiProperty({ description: 'Hidratacion del niño que asiste' })
-  @IsNotEmpty({ message: 'Hidratacion no puede estar vacio' })
-  @IsString({ message: 'Hidratacion debe ser un string' })
-  @Length(1, 100, { message: 'Hidratacion debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly hidratacion: string;
-
   @ApiProperty({ description: 'Ingesta de leche del niño' })
   @IsNotEmpty({ message: 'Ingesta de leche no puede estar vacio' })
   @IsBoolean({ message: 'Ingesta de leche debe ser un boleano' })
   readonly leche: boolean;
-
-  @ApiProperty({ description: 'Ingesta de infusiones del niño' })
-  @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
-  @IsString({ message: 'Ingesta de infusiones debe ser un string' })
-  @Length(1, 100, { message: 'Ingesta de infusiones debe tener entre 1 y 100 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly infusiones: string;
-
-  @ApiProperty({ description: 'Cantidad de comidas del niño que asiste' })
-  @IsNotEmpty({ message: 'Cantidad de comidas  no puede estar vacio' })
-  @IsString({ message: 'Numero de comidas debe ser un string' })
-  @Length(1, 100, { message: 'Numero de comidas debe tener entre 1 y 100 caracteres' })
-  readonly cantidad_comidas: string;
-
-  @ApiProperty({ description: 'Horas de pantallas diarias' })
-  @IsNotEmpty({ message: 'La hora no puede estar vacía' })
-  @IsString({ message: 'Horas de pantallas debe ser un string' })
-  @Length(1, 100, { message: 'Horas de pantallas debe tener entre 1 y 100 caracteres' })
-  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
-  readonly horas_pantalla: string;
-
-  @ApiProperty({ description: 'Horas de juego al aire libre' })
-  @IsNotEmpty({ message: 'Las horas de juego al aire libre no puede estar vacía' })
-  @IsString({ message: 'Horas de juego al aire libre debe ser un string' })
-  @Length(1, 100, { message: 'Horas de juego al aire libre debe tener entre 1 y 100 caracteres' })
-  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
-  readonly horas_juego_aire_libre: string;
-
-  @ApiProperty({ description: 'Horas de sueño' })
-  @IsNotEmpty({ message: 'Las horas de sueño no puede estar vacía' })
-  @IsString({ message: 'Horas de sueño debe ser un string' })
-  @Length(1, 100, { message: 'Horas de sueño debe tener entre 1 y 100 caracteres' })
-  // @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: 'La hora debe estar en formato HH:mm' })
-  readonly horas_suenio: string;
-
-  // @ApiProperty({ description: 'Proyecto del niño que asiste' })
-  // @IsNotEmpty({ message: 'Proyecto no puede estar vacio' })
-  // @IsString({ message: 'Proyecto debe ser un string' })
-  // @Length(1, 100, { message: 'Proyecto debe tener entre 1 y 100 caracteres' })
-  // @Transform(({ value }) => value.trim())
-  // readonly proyecto: string;
 }

@@ -10,7 +10,7 @@ export const ChicoFactory = setSeederFactory(Chico, async () => {
   chico.nombre_padre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.nombre_madre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.direccion = faker.location.streetAddress();
-  chico.telefono = faker.phone.number();
+  chico.telefono = faker.phone.number().replace(/\s+/g, '');
   enum sexoType {
     Masculino = 'Masculino',
     Femenino = 'Femenino',
@@ -19,5 +19,7 @@ export const ChicoFactory = setSeederFactory(Chico, async () => {
   chico.sexo = sexoFaker === 'male' ? sexoType.Masculino : sexoType.Femenino;
   chico.nombre = faker.person.firstName(sexoFaker === 'male' ? 'male' : 'female');
   chico.apellido = faker.person.lastName(sexoFaker === 'male' ? 'male' : 'female');
+  chico.created_at = faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' });
+
   return chico;
 });

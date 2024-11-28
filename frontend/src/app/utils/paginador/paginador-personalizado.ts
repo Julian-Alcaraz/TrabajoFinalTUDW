@@ -8,6 +8,8 @@ export class PaginadorPersonalizado extends MatPaginatorIntl {
   override itemsPerPageLabel = 'Registros por página';
   override nextPageLabel = 'Siguiente';
   override previousPageLabel = 'Anterior';
+  override lastPageLabel = 'Última';
+  override firstPageLabel = 'Primera';
 
   override getRangeLabel = function (page: number, pageSize: number, length: number) {
     if (length === 0 || pageSize === 0) {

@@ -6,7 +6,7 @@ export class Oftalmologia {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 
-  @OneToOne(() => Consulta)
+  @OneToOne(() => Consulta, (consulta) => consulta.oftalmologia)
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 

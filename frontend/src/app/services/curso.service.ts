@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GLOBAL } from './global';
+import { GLOBAL } from '../config/global';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,10 +12,16 @@ export class CursoService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  obtenerCursos() {
+  modificarCurso(id: number, data: any): Observable<any> {
+    return this._http.patch(this.url + 'curso/' + id, data);
+  }
+  // Obtiene los deshabilitados tambien
+  obtenerTodosCursos() {
     return this._http.get(this.url + 'curso');
   }
-
+  obtenerCursos() {
+    return this._http.get(this.url + 'curso/habilitados');
+  }
   cargarCurso(data: any): Observable<any> {
     return this._http.post(this.url + 'curso', data);
   }

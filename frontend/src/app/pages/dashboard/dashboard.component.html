@@ -1,4 +1,13 @@
 <div class="card">
-  <div class="card-header">Dashboard</div>
-  <div class="card-body"></div>
+  <app-tabs [tabs]="['General', 'Clinica']" (positionEmitter)="escucharParam($event)"></app-tabs>
+  <div class="sm:p-0 md:p-4">
+    <div class="mb-2">
+      @if (currentParam === 0 || !currentParam) {
+        <app-general />
+      }
+      @if (currentParam === 1) {
+        <app-clinica/>
+      }
+    </div>
+  </div>
 </div>

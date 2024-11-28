@@ -24,6 +24,14 @@
       <!-- Dni -->
       <div class="sm:col-span-2 md:col-span-1">
         <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
+        <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center">
+          <div class="w-5">
+            <app-loading />
+          </div>
+          <div class="ms-2">
+            {{ mensajeValidando }}
+          </div>
+        </div>
         <div *ngIf="mensajeDoc" class="text-red-600 text-sm">
           {{ mensajeDoc }}
         </div>
@@ -34,27 +42,34 @@
       </div>
       <!-- Localidad: -->
       <div class="md:col-span-2">
-        <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
-        <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option value="" disabled selected>Selecciona una opción</option>
-          <option value="new">Cargar una localidad</option>
-          <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
-        </select>
-        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
-          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
-        </div>
+        @if (searchingLocalidades) {
+          <app-loading />
+        } @else {
+          <label for="localidad" class="block mb-2 text-sm font-medium text-gray-900">Localidad</label>
+          <select (change)="onChangeLocalidad()" formControlName="id_localidad" id="id_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.nombre }}</option>
+          </select>
+          <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+          </div>
+        }
       </div>
       <!-- Barrio: -->
       <div class="md:col-span-2">
-        <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
-        <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-          <option value="" disabled selected>Selecciona una opción</option>
-          <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option>
-          <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
-        </select>
-        <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
-          <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
-        </div>
+        @if (searchingBarrios) {
+          <app-loading />
+        } @else {
+          <label for="barrios" class="block mb-2 text-sm font-medium text-gray-900">Barrio</label>
+          <select (change)="onChangeBarrio()" formControlName="id_barrio" id="barrios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="" disabled selected>Selecciona una opción</option>
+            <!-- <option value="new">Cargar un barrio<span *ngIf="barrios.length === 0"> (la localidad no tiene barrios)</span></option> -->
+            <option *ngFor="let barrio of barrios" [value]="barrio.id">{{ barrio.nombre }}</option>
+          </select>
+          <div *ngIf="chicoForm.get('barrio')?.errors && (chicoForm.get('barrio')?.dirty || chicoForm.get('barrio')?.touched)" class="text-red-600 text-sm">
+            <div *ngIf="chicoForm.get('barrio')?.errors?.['required']">Debe seleccionar una opción.</div>
+          </div>
+        }
       </div>
       <!-- Sexo: -->
       <div class="md:col-span-2">
@@ -93,33 +108,7 @@
   </form>
 }
 
-<!-- Localidad Modal -->
-<ng-template #localidadModal>
-  <div class="p-4">
-    <div class="flex flex-row justify-between mb-3">
-      <h3>Agregar localidad</h3>
-      <button class="btn-close border-none" (click)="cerraModalLocalidad()"><i class="fa-solid fa-xmark fa-xl"></i></button>
-    </div>
-    <form (submit)="cargarLocalidad()" [formGroup]="localidadForm">
-      <div class="border-t-2 p-4">
-        <div class="mb-3">
-          <label for="nueva_localidad" class="block mb-2 text-sm font-medium text-gray-900">Nueva Localidad</label>
-          <input type="text" id="nueva_localidad" formControlName="nueva_localidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ingresa el nombre de la nueva localidad" required />
-          <div *ngIf="localidadForm.get('nueva_localidad')?.errors && (localidadForm.get('nueva_localidad')?.dirty || localidadForm.get('nueva_localidad')?.touched)" class="text-red-600 text-sm">
-            <div *ngIf="localidadForm.get('nueva_localidad')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
-          </div>
-          <div *ngIf="chicoForm.get('nueva_localidad')?.errors?.['minlength']">Minimo 1 caracteres.</div>
-          <div *ngIf="chicoForm.get('nueva_localidad')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
-          <div class="flex my-auto">
-            <button type="submit" [disabled]="!localidadForm.valid" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar localidad</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</ng-template>
-
-<!-- Barrio Modal -->
+<!-- Barrio Modal
 <ng-template #barrioModal>
   <div class="p-4">
     <div class="flex flex-row justify-between mb-3">
@@ -129,7 +118,6 @@
     <form (submit)="cargarBarrio()" [formGroup]="barrioForm">
       <div class="border-t-2 p-4">
         <div class="mb-3">
-          <!-- Cambiar a nombre de localidad despues: -->
           <label for="nuevo_barrio" class="block mb-2 text-sm font-medium text-gray-900">Nuevo Barrio</label>
           <input type="text" id="nuevo_barrio" formControlName="nuevo_barrio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ingresa el nombre del nuevo barrio" required />
           <div *ngIf="barrioForm.get('nuevo_barrio')?.errors && (barrioForm.get('nuevo_barrio')?.dirty || barrioForm.get('nuevo_barrio')?.touched)" class="text-red-600 text-sm">
@@ -144,4 +132,4 @@
       </div>
     </form>
   </div>
-</ng-template>
+</ng-template> -->

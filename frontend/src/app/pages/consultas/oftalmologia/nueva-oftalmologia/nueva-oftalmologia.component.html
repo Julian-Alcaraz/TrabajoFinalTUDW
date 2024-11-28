@@ -3,7 +3,7 @@
     @if (consulta) {
       <div class="flex justify-between">
         <div class="">Consulta Oftalmologia</div>
-        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd/MM/yyyy' }}</div>
+        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
       </div>
     } @else {
       Cargar una nueva consulta de oftalmologia
@@ -48,28 +48,12 @@
         </div>
         <!-- Observaciones -->
         <div class="md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
       @if (consulta) {
         @if (consulta.usuario) {
-          <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
-            <div class="font-bold">Datos del medico</div>
-            <div class="grid grid-cols-3">
-              <div class="col">
-                <strong> Nombre: </strong>
-                {{ consulta.usuario.nombre }} <br />
-              </div>
-              <div class="col">
-                <strong> Apellido: </strong>
-                {{ consulta.usuario.apellido }}<br />
-              </div>
-              <div class="col">
-                <strong> Dni: </strong>
-                {{ consulta.usuario.dni }}
-              </div>
-            </div>
-          </div>
+          <app-datos-medico [profesional]="consulta.usuario"/>
         }
       }
       <!-- Enviar -->
@@ -78,11 +62,13 @@
           @if (oftalmologiaForm.disabled) {
             <button type="button" (click)="cambiarEstado()" [disabled]="false" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
           } @else {
-            <button type="button" (click)="cambiarEstado()" class=" ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-            <button type="submit" [disabled]="habilitarModificar" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+            <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+            <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
           }
         } @else {
-          <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          @if (editar) {
+            <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          }
         }
       </div>
     </form>

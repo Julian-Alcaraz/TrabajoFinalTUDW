@@ -1,6 +1,7 @@
+import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
 import { Usuario } from '../../usuario/entities/usuario.entity';
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { Clinica } from './clinica.entity';
 import { Fonoaudiologia } from './fonoaudiologia.entity';
 import { Odontologia } from './odontologia.entity';
@@ -11,7 +12,7 @@ import { Curso } from '../../curso/entities/curso.entity';
 
 export type ConsultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type TurnoType = 'Mañana' | 'Tarde' | 'Noche';
-export type DerivacionesType = { /*'Clinica' | */ odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
+export type DerivacionesType = { odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
 
 @Entity('consulta')
 export class Consulta extends EntidadBasica {
@@ -30,18 +31,12 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'text', nullable: true })
   observaciones: string;
 
-  @Column({ type: 'simple-json', nullable: true })
-  derivaciones: {
-    //Clinica: boolean;
-    odontologia: boolean;
-    oftalmologia: boolean;
-    fonoaudiologia: boolean;
-    externa: boolean;
-  };
+  @Column({ type: 'simple-json', nullable: false })
+  derivaciones: DerivacionesType;
 
   // Relaciones
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.id)
+  @ManyToOne(() => Usuario, (usuario) => usuario.consultas)
   @JoinColumn({ name: 'id_usuario' })
   usuario: Usuario;
 
@@ -49,23 +44,25 @@ export class Consulta extends EntidadBasica {
   @JoinColumn({ name: 'id_chico' })
   chico: Chico;
 
-  @ManyToOne(() => Institucion)
+  @ManyToOne(() => Institucion, (institucion) => institucion.consultas)
   @JoinColumn({ name: 'id_institucion' })
   institucion: Institucion;
 
-  @ManyToOne(() => Curso)
+  @ManyToOne(() => Curso, (curso) => curso.consultas)
   @JoinColumn({ name: 'id_curso' })
   curso: Curso;
 
-  @OneToOne(() => Clinica)
+  // Hijas
+
+  @OneToOne(() => Clinica, (clinica) => clinica.consulta)
   clinica: Clinica;
 
-  @OneToOne(() => Fonoaudiologia)
+  @OneToOne(() => Fonoaudiologia, (fonoaudiologia) => fonoaudiologia.consulta)
   fonoaudiologia: Fonoaudiologia;
 
-  @OneToOne(() => Odontologia)
+  @OneToOne(() => Odontologia, (odontologia) => odontologia.consulta)
   odontologia: Odontologia;
 
-  @OneToOne(() => Oftalmologia)
+  @OneToOne(() => Oftalmologia, (oftalmologia) => oftalmologia.consulta)
   oftalmologia: Oftalmologia;
 }

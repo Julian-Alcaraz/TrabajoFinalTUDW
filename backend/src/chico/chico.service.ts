@@ -30,16 +30,47 @@ export class ChicoService {
   findAll() {
     return this.chicoORM.find();
   }
-  async findAllWHitActuivy(year: number) {
+
+  async findAllWithActivity(year: number) {
     const result = await this.chicoORM
       .createQueryBuilder('chico')
-      .select(['chico.id AS id', 'chico.created_at AS created_at', 'chico.updated_at AS updated_at', 'chico.deshabilitado AS deshabilitado', 'chico.dni AS dni', 'chico.nombre AS nombre', 'chico.apellido AS apellido', 'chico.sexo AS sexo', 'chico.fe_nacimiento AS fe_nacimiento', 'chico.direccion AS direccion', 'chico.telefono AS telefono', 'chico.nombre_madre AS nombre_madre', 'chico.nombre_padre AS nombre_padre', 'chico.id_barrio AS id_barrio'])
+      .leftJoin('chico.barrio', 'barrio')
+      .leftJoin('barrio.localidad', 'localidad') // Relación con localidad
+      .select([
+        'chico.id AS id',
+        'chico.created_at AS created_at',
+        'chico.updated_at AS updated_at',
+        'chico.deshabilitado AS deshabilitado',
+        'chico.dni AS dni',
+        'chico.nombre AS nombre',
+        'chico.apellido AS apellido',
+        'chico.sexo AS sexo',
+        'chico.fe_nacimiento AS fe_nacimiento',
+        'chico.direccion AS direccion',
+        'chico.telefono AS telefono',
+        'chico.nombre_madre AS nombre_madre',
+        'chico.nombre_padre AS nombre_padre',
+        'chico.id_barrio AS id_barrio',
+        'localidad.id AS id_localidad', // Selecciona el nombre de la localidad
+      ])
       .addSelect((subQuery) => {
         return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
       .getRawMany();
+
     return result;
   }
+  /*
+  async findAllWithActivity(year: number) {
+    const result = await this.chicoORM
+      .createQueryBuilder('chico')
+      .leftJoinAndSelect('chico.barrio', 'barrio')
+      .loadRelationCountAndMap('chico.actividad', 'chico.consultas', 'consultas', (qb) => qb.where('EXTRACT(YEAR FROM consultas.created_at) = :year', { year }))
+      .getMany();
+    return result;
+  }
+  */
+
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
@@ -47,7 +78,7 @@ export class ChicoService {
   }
 
   async findOneByDni(dni: number) {
-    const chico = await this.chicoORM.findOne({ where: { dni, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
+    const chico = await this.chicoORM.findOne({ where: { dni }, relations: ['barrio', 'barrio.localidad'] });
     // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);
     return chico;
   }
@@ -80,5 +111,15 @@ export class ChicoService {
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
     return chico.consultas;
+  }
+
+  async countChicosUpxYear(year: number) {
+    const respuesta = [];
+    for (let i = 0; i < 4; i++) {
+      const countChicos = await this.chicoORM.createQueryBuilder('chico').where('EXTRACT(YEAR FROM chico.created_at) = :year', { year }).getCount();
+      respuesta.push(countChicos);
+      year--;
+    }
+    return respuesta.reverse();
   }
 }

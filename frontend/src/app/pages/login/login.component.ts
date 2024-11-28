@@ -23,12 +23,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: any,
   ) {}
   ngOnInit(): void {
-    // const token = this._cookieService.get('Authorization');
-    // const token = this.getCookie('Authorization');
-    // if (token) {
-    //   // Redirigir al layout si ya tiene un token
-    //   this._router.navigate(['/layout']);
-    // }
     this.getWindowSize();
     this.isLoading = this._loadingService.obtenerValor();
     if (isPlatformBrowser(this.platformId)) {
@@ -65,8 +59,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   executeAction() {
-    // console.log('El LoginComponent ha estado visible por más de 2 segundos');
-    // console.log(this._sessionService.getIdentidad())
     this.isLoading = true;
   }
 }

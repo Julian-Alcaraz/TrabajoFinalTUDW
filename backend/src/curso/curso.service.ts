@@ -13,7 +13,18 @@ export class CursoService {
     return this.cursoORM.save(nuevoCurso);
   }
 
-  findAll() {
+  async findAll() {
+    const cursos = await this.cursoORM.find({ relations: ['consultas'] });
+    return cursos.map((curso) => {
+      const { consultas, ...datosCursos } = curso;
+      return {
+        cantidadConsultas: consultas.length,
+        ...datosCursos,
+      };
+    });
+  }
+
+  findAllHabilitados() {
     return this.cursoORM.find({ where: { deshabilitado: false } });
   }
 

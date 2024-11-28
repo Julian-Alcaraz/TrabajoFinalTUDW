@@ -37,7 +37,12 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return this.usuarioORM.find();
+    return this.usuarioORM.find({
+      relations: ['roles'],
+      order: {
+        apellido: 'ASC', // Orden ascendente por apellido
+      },
+    });
     // { where: { deshabilitado: false } }
   }
 
@@ -47,7 +52,12 @@ export class UsuarioService {
     if (usuario.roles) usuario.roles = usuario.roles.filter((rol) => !rol.deshabilitado);
     return usuario;
   }
-
+  async findOneByDni(dni: number) {
+    const usuario = await this.usuarioORM.findOne({ where: { dni } });
+    // if (!usuario) throw new NotFoundException(`Usuario con id ${dni} no encontrado`);
+    // if (usuario.roles) usuario.roles = usuario.roles.filter((rol) => !rol.deshabilitado);
+    return usuario;
+  }
   async update(id: number, cambios: UpdateUsuarioDto) {
     if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
     const usuario = await this.usuarioORM.findOneBy({ id });
@@ -110,50 +120,70 @@ export class UsuarioService {
 
   async menusDeUsuario(id: number) {
     // Busco el usuario
-    const usuario = await this.usuarioORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['roles'] });
+    const usuario = await this.usuarioORM.findOne({
+      where: { deshabilitado: false, id: id },
+      relations: ['roles'],
+    });
     if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     const rolesUsuario = usuario.roles;
-    if (!rolesUsuario) throw new NotFoundException(`Usuario con id ${id} no tiene roles`); // No deberia pasar esto nunca
-    let colMenus = [];
+    if (!rolesUsuario || rolesUsuario.length === 0) {
+      throw new NotFoundException(`Usuario con id ${id} no tiene roles`);
+    }
     const colMenusSet = new Set();
     for (const rol of rolesUsuario) {
-      const objRol = await this.rolORM.findOne({ where: { id: rol.id }, relations: ['menus', 'menus.sub_menus', 'menus.menu_padre'] });
-      const menusRol = objRol.menus;
-      const menusNoFalsos = menusRol.filter((menu) => {
-        if (!menu.deshabilitado) {
-          const submenusNoFalsos = menu.sub_menus.filter((subMenu) => {
-            if (!subMenu.deshabilitado) {
-              return subMenu;
-            }
-          });
-          menu.sub_menus = submenusNoFalsos;
-          return menu;
-        }
+      const objRol = await this.rolORM.findOne({
+        where: { id: rol.id },
+        relations: ['menus', 'menus.sub_menus', 'menus.menu_padre', 'menus.sub_menus.sub_menus', 'menus.sub_menus.roles', 'menus.sub_menus.sub_menus.roles'],
       });
+      const menusRol = objRol?.menus || [];
+      const menusNoFalsos = menusRol.filter((menu) => !menu.deshabilitado);
       for (const menu of menusNoFalsos) {
+        // Filtrar y ordenar los submenús del menú actual, verifico que tenga el rol que corresponde
+        let subMenusValidos = menu.sub_menus.filter((subMenu) => !subMenu.deshabilitado && subMenu.roles.map((rol) => rol.id).includes(rol.id));
+        subMenusValidos = subMenusValidos.sort((a, b) => a.orden - b.orden);
+        for (const subMenu of subMenusValidos) {
+          // Filtrar los submenús del submenú (1 nivel)
+          const subSubMenusValidos = subMenu.sub_menus.filter((subSubMenu) => !subSubMenu.deshabilitado && subMenu.roles.map((rol) => rol.id).includes(rol.id));
+          subMenu.sub_menus = subSubMenusValidos;
+        }
+        menu.sub_menus = subMenusValidos;
         if (!menu.menu_padre) {
-          colMenusSet.add(JSON.stringify(menu)); // Convertimos el objeto en string para poder usarlo en un Set
+          colMenusSet.add(JSON.stringify(menu));
         }
       }
     }
-    // Convertimos el Set nuevamente a un array de objetos
-    colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
-    // Ordena los padres por "orden"
+    // Convertir los menús a un array y ordenarlos por "orden"
+    const colMenus = Array.from(colMenusSet).map((menuString: string) => JSON.parse(menuString));
     colMenus.sort((a, b) => a.orden - b.orden);
     return colMenus;
   }
 
   async usuariosProfesionales() {
     const usuariosProfesionales = [];
-    const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'] });
+    const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'], order: { nombre: 'ASC' } });
     const rolProfesional = await this.rolORM.findOne({ where: { nombre: 'Profesional', deshabilitado: false } });
     if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
     for (const usuario of usuarios) {
-      if (usuario.roles.find((item) => item.nombre === 'Profesional')) {
+      const rolesDeUsuario = usuario.roles;
+      if (rolesDeUsuario.map((item) => item.nombre === 'Profesional').includes(true)) {
         delete usuario.contrasenia;
         usuariosProfesionales.push(usuario);
       }
     }
     return usuariosProfesionales;
+  }
+  async updatePassword(id: number, data: { password: string; confirmPassword: string }) {
+    if (!data.password) throw new BadRequestException(`No se envio password`);
+    if (!data.confirmPassword) throw new BadRequestException(`No se envio confirmPassword`);
+    if (data.password !== data.confirmPassword) throw new BadRequestException(`Las contraseñas no coinciden`);
+    const usuario = await this.usuarioORM.findOneBy({ id });
+    if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+    const cambios = { contrasenia: '' };
+    if (data.password) {
+      const contrasenia = codificarContrasenia(data.password); // Hashea la contrasenia con bcrypt
+      cambios.contrasenia = contrasenia;
+    }
+    this.usuarioORM.merge(usuario, cambios);
+    return this.usuarioORM.save(usuario);
   }
 }

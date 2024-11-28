@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header">
+    <div class="flex flex-row justify-between">
+      <h3>{{ barrio === null ? 'Agregar Barrio' : 'Editar Barrio' }}</h3>
+      <button class="btn-close border-none" (click)="cerrarModalBarrio(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+    <form (submit)="barrio === null ? cargarBarrio() : modificarBarrio()" [formGroup]="barrioForm">
+      <div class="p-4">
+        <div class="mb-3">
+          <app-input-text label="Nombre barrio" idInput="nombre" [control]="controlDeInput('nombre')" />
+          @if (searchingLocalidades) {
+            <app-loading />
+          } @else {
+            <app-input-select label="Localidad" [control]="controlDeInput('id_localidad')" idInput="id_localidad" [opciones]="localidades" />
+          }
+          <button type="submit" [disabled]="barrio === null ? !barrioForm.valid : habilitarModificar" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">{{ barrio === null ? 'Agregar Barrio' : 'Editar Barrio' }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<!-- <ul class="flex flex-wrap text-sm font-medium text-center text-gray-600 border-b border-gray-200 "> -->
+<ul class="flex flex-wrap text-sm font-medium text-center rounded-t-lg text-gray-600 border-b border-gray-200 " style="background:  #3f77b4 ;">
+  @for (tab of tabs; track $index) {
+    @if ($index === 0) {
+      <li class="me-1">
+        <button [ngClass]="!currentParam || currentParam === $index ? 'p-4 text-black font-bold bg-white border-white rounded-t-lg' : 'text-white p-4 rounded-t-lg hover:text-gray-900 hover:bg-gray-50'" (click)="cambiarParam($index)">{{ tab }}</button>
+      </li>
+    } @else {
+      <li class="me-1">
+        <button [ngClass]="currentParam === $index ? 'p-4 text-black font-bold bg-white border-white rounded-t-lg' : 'text-white p-4 rounded-t-lg hover:text-gray-900 hover:bg-gray-50'" (click)="cambiarParam($index)">{{ tab }}</button>
+      </li>
+    }
+  }
+</ul>

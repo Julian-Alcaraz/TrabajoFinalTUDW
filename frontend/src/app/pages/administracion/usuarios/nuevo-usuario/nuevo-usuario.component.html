@@ -1,0 +1,9 @@
+<div class="card">
+  <div class="card-header flex justify-between">
+    Agregar Usuario
+    <button class="btn-close border-none" (click)="cerrarModalUsuario(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
+  </div>
+  <div class="card-body">
+    <app-form-usuario (usuarioCreado)="onUsuarioCreado()" />
+  </div>
+</div>

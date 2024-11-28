@@ -1,4 +1,4 @@
-import { GLOBAL } from '../services/global';
+import { GLOBAL } from '../config/global';
 
 export class Utiles {
   static functionUtilEj() {

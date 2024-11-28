@@ -1,109 +1,89 @@
 <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
-  <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para Odontologia</p>
   <div class="md:col-span-6">
     <div class="grid gap-3 md:grid-cols-4">
       <!-- Dientes Permanentes Min -->
       <div formGroupName="rangoDientesPermanentes">
         <p-iftalabel>
-          <p-inputnumber formControlName="dientesPermanentesMin" inputId="dientesPermanentesMin" pKeyFilter="num"
-            mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="dientesPermanentesMin" inputId="dientesPermanentesMin" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="dientesPermanentesMin">Dientes Permanentes Min</label>
         </p-iftalabel>
       </div>
       <!-- Dientes Permanentes Max -->
       <div formGroupName="rangoDientesPermanentes">
         <p-iftalabel>
-          <p-inputnumber formControlName="dientesPermanentesMax" inputId="dientesPermanentesMax" pKeyFilter="num"
-            mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="dientesPermanentesMax" inputId="dientesPermanentesMax" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="dientesPermanentesMax">Dientes Permanentes Max</label>
         </p-iftalabel>
       </div>
       <!-- Dientes Temporales Min -->
       <div formGroupName="rangoDientesTemporales">
         <p-iftalabel>
-          <p-inputnumber formControlName="dientesTemporalesMin" inputId="dientesTemporalesMin" pKeyFilter="num"
-            mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="dientesTemporalesMin" inputId="dientesTemporalesMin" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="dientesTemporalesMin">Dientes Temporales Min</label>
         </p-iftalabel>
       </div>
       <!-- Dientes Temporales Max -->
       <div formGroupName="rangoDientesTemporales">
         <p-iftalabel>
-          <p-inputnumber formControlName="dientesTemporalesMax" inputId="dientesTemporalesMax" pKeyFilter="num"
-            mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="dientesTemporalesMax" inputId="dientesTemporalesMax" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="dientesTemporalesMax">Dientes Temporales Max</label>
         </p-iftalabel>
       </div>
       <!-- Dientes con Sellador Min -->
       <div formGroupName="rangoSellador">
         <p-iftalabel>
-          <p-inputnumber formControlName="selladorMin" inputId="selladorMin" pKeyFilter="num" mode="decimal" [min]="0"
-            class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="selladorMin" inputId="selladorMin" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="selladorMin">Dientes con Sellador Min</label>
         </p-iftalabel>
       </div>
       <!-- Dientes con Sellador Max -->
       <div formGroupName="rangoSellador">
         <p-iftalabel>
-          <p-inputnumber formControlName="selladorMax" inputId="selladorMax" pKeyFilter="num" mode="decimal"
-            [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+          <p-inputnumber formControlName="selladorMax" inputId="selladorMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
           <label for="selladorMax">Dientes con Sellador Max</label>
         </p-iftalabel>
       </div>
     </div>
-    <div *ngIf="especificas.get('rangoDientesPermanentes')?.errors" class="text-red-600 text-sm">
-      El valor de los dientes permanentes mínimo no puede ser mayor al máximo.
-    </div>
-    <div *ngIf="especificas.get('rangoDientesTemporales')?.errors" class="text-red-600 text-sm">
-      El valor de los dientes temporales mínimo no puede ser mayor al máximo.
-    </div>
-    <div *ngIf="especificas.get('rangoSellador')?.errors" class="text-red-600 text-sm">
-      El valor de dientes con sellador mínimo no puede ser mayor al máximo.
-    </div>
+    <div *ngIf="especificas.get('rangoDientesPermanentes')?.errors" class="text-red-600 text-sm">El valor de los dientes permanentes mínimo no puede ser mayor al máximo.</div>
+    <div *ngIf="especificas.get('rangoDientesTemporales')?.errors" class="text-red-600 text-sm">El valor de los dientes temporales mínimo no puede ser mayor al máximo.</div>
+    <div *ngIf="especificas.get('rangoSellador')?.errors" class="text-red-600 text-sm">El valor de dientes con sellador mínimo no puede ser mayor al máximo.</div>
   </div>
   <!-- Topificacion -->
   <div class="md:col-span-1 my-2">
     <p>¿Se aplicó topificacion?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="topificacion" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="topificacion" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Se cepilla -->
   <div class="md:col-span-1 my-2">
     <p>¿Se cepilla?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="cepillado" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="cepillado" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Cepillo -->
   <div class="md:col-span-1 my-2">
     <p>¿Tiene cepillo?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="cepillo" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="cepillo" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Control -->
   <div class="md:col-span-1 my-2">
     <p>¿Es ulterior?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="ulterior" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="ulterior" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Derivacion -->
   <div class="md:col-span-1 my-2">
     <p>¿Es primera vez?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Clasificacion dental -->
   <div class="md:col-span-3 my-2">
     <p-iftalabel>
-      <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion"
-        [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="clasificacion">Clasificación Dental</label>
     </p-iftalabel>
   </div>
   <!-- Derivacion externa-->
   <div class="md:col-span-3 my-2">
     <p-iftalabel>
-      <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre"
-        optionValue="valor" styleClass="w-full" />
+      <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full" [filter]="false" [showHeader]="false" />
       <label for="derivaciones">Derivación externa</label>
     </p-iftalabel>
   </div>

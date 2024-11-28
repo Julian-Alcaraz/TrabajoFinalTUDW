@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GLOBAL } from './global';
+import { GLOBAL } from '../config/global';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -68,7 +68,6 @@ export class SessionService {
             this.setIdentidad(res.user);
             resolve(true);
           } else {
-            // this._loadingService.stopLoading()
             resolve(false);
           }
         },

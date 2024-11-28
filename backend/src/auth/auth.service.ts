@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthPayloadDto } from './dto/auth.dto';
@@ -21,6 +21,7 @@ export class AuthService {
     const usuario: Usuario = await this.usuarioService.buscarUsuarioPorEmail(emailIngresado);
     const contraseniaValida = compararContrasenias(contraseniaIngresada, usuario.contrasenia);
     if (contraseniaValida) {
+      usuario.cambioContrasenia = String(usuario.dni) === contraseniaIngresada;
       delete usuario.contrasenia;
       return { token: this.jwtService.sign(usuario, { expiresIn: this.configService.getOrThrow('JWT_EXPIRES') }), usuario: usuario }; // Crea y retorna un token JWT usando las opciones de auth.module
     } else return null;

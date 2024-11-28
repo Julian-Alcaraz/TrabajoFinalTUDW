@@ -16,7 +16,12 @@ export class InstitucionController {
   @ApiOperation({ summary: 'Crea una nueva institucion' })
   @ApiResponse({ status: 201, description: 'Institucion creada con exito' })
   async create(@Body() createInstitucionDto: CreateInstitucionDto) {
-    return this.institucionService.create(createInstitucionDto);
+    const institucion = this.institucionService.create(createInstitucionDto);
+    return {
+      success: true,
+      data: institucion,
+      message: 'Instituciones creada con exito',
+    };
   }
 
   @Get()
@@ -28,6 +33,18 @@ export class InstitucionController {
       success: true,
       data: instituciones,
       message: 'Instituciones encontradas con exito',
+    };
+  }
+
+  @Get('habilitadas')
+  @ApiOperation({ summary: 'Devuelve todas las instituciones habilitadas ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las instituciones habilitadas con exito' })
+  async findAllHabilitadas() {
+    const instituciones = await this.institucionService.findAllHabilitadas();
+    return {
+      success: true,
+      data: instituciones,
+      message: 'Instituciones obtenidas con exito',
     };
   }
 

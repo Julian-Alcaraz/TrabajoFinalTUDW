@@ -9,9 +9,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const _sessionService = inject(SessionService);
   const _cookieService = inject(CookieService);
 
-  // const cookieValue = getCookie('Authorization');
   const cookieValue = _cookieService.get('Authorization');
-  // console.log("intercerptor token ", cookieValue)
   const token = cookieValue ? `Bearer ${cookieValue}` : '';
   let headers = new HttpHeaders();
   if (req.method === 'POST') {

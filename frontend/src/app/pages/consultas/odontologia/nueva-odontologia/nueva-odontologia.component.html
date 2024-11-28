@@ -3,7 +3,7 @@
     @if (consulta) {
       <div class="flex justify-between">
         <div class="">Consulta odontologia</div>
-        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd/MM/yyyy' }}</div>
+        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
       </div>
     } @else {
       Cargar una nueva consulta de odontologia
@@ -36,7 +36,7 @@
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="¿Se aplica topificación?" [control]="controlDeInput('topificacion')" idInput="topificacion" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
-        <h3 class="mt-4 md:col-span-6">Estado de sus dientes:</h3>
+        <h3 class="mt-4 md:col-span-6 text-lg font-medium text-gray-900">Estado de sus dientes:</h3>
         <!-- Dientes Permanentes -->
         <div class="mt-4 md:col-span-2">
           <app-input-number label="Dientes Permanentes" [control]="controlDeInput('dientes_permanentes')" placeholder="Ej: 2" idInput="dientes_permanentes" />
@@ -66,7 +66,7 @@
         </ng-container>
         <!-- Habitos -->
         <div class="mt-4 md:col-span-3">
-          <app-input-text label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante" idInput="habitos" />
+          <app-input-textarea label="Habitos" [control]="controlDeInput('habitos')" placeholder="Ej: Cepillado constante" idInput="habitos" [opcional]="true" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
@@ -74,28 +74,13 @@
         </div>
         <!-- Observaciones -->
         <div class="mt-4 md:col-span-6">
-          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" />
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
       @if (consulta) {
         @if (consulta.usuario) {
-          <div class="bg-yellow-100 border border-yellow -300 text-sm p-4 rounded-lg w-full md:col-span-6 mt-2">
-            <div class="font-bold">Datos del medico</div>
-            <div class="grid grid-cols-3">
-              <div class="col">
-                <strong> Nombre: </strong>
-                {{ consulta.usuario.nombre }} <br />
-              </div>
-              <div class="col">
-                <strong> Apellido: </strong>
-                {{ consulta.usuario.apellido }}<br />
-              </div>
-              <div class="col">
-                <strong> Dni: </strong>
-                {{ consulta.usuario.dni }}
-              </div>
-            </div>
-          </div>
+          <app-datos-medico [profesional]="consulta.usuario"/>
+
         }
       }
       <!-- Enviar -->
@@ -108,7 +93,9 @@
             <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
           }
         } @else {
-          <button type="submit" [disabled]="!odontologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          @if (editar) {
+            <button type="submit" [disabled]="!odontologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+          }
         }
       </div>
     </form>

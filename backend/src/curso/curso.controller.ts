@@ -24,10 +24,22 @@ export class CursoController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los cursos habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todos los cursos habilitados con exito' })
+  @ApiOperation({ summary: 'Devuelve todas los cursos' })
+  @ApiResponse({ status: 200, description: 'Retorna todas los cursos' })
   async findAll() {
     const cursos = await this.cursoService.findAll();
+    return {
+      success: true,
+      data: cursos,
+      message: 'Cursos encontrados con exito',
+    };
+  }
+
+  @Get('habilitados')
+  @ApiOperation({ summary: 'Devuelve todos los cursos habilitados' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los cursos habilitados con exito' })
+  async findAllHabilitados() {
+    const cursos = await this.cursoService.findAllHabilitados();
     return {
       success: true,
       data: cursos,

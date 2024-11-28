@@ -19,8 +19,19 @@ export class LocalidadService {
     return this.localidadORM.save(localidad);
   }
 
-  findAll() {
-    return this.localidadORM.find();
+  async findAll() {
+    const localidades = await this.localidadORM.find({ relations: ['barrios'] });
+    return localidades.map((localidad) => {
+      const { barrios, ...datosLocalidad } = localidad;
+      return {
+        cantidadBarrios: barrios.length,
+        ...datosLocalidad,
+      };
+    });
+  }
+
+  findAllHabilitadas() {
+    return this.localidadORM.find({ where: { deshabilitado: false }, relations: ['barrios'] });
   }
 
   async findOne(id: number) {
@@ -38,10 +49,14 @@ export class LocalidadService {
   }
 
   async findAllXLocalidad(id: number) {
-    const localidad = await this.localidadORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrios'] });
+    const localidad = await this.localidadORM.findOne({
+      where: { id, deshabilitado: false },
+      relations: ['barrios'],
+    });
     if (!localidad) throw new NotFoundException(`Localidad con id ${id} no encontrada`);
-    const barrios = localidad.barrios;
-    return barrios;
+    // Filtrar los barrios que no están deshabilitados
+    const barriosActivos = localidad.barrios.filter((barrio) => !barrio.deshabilitado);
+    return barriosActivos;
   }
 
   async remove(id: number) {

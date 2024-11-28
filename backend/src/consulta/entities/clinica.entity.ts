@@ -2,16 +2,57 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 import { Consulta } from './consulta.entity';
 
+export type VacunasType = 'Completo' | 'Incompleto' | 'Desconocido';
+export type ExamenVisualType = 'Normal' | 'Anormal';
+export type OrtopediaYTraumatologiaType = 'Normal' | 'Escoliosis' | 'Pie Plano' | 'Otras';
+export type LenguajeType = 'Adecuado' | 'Inadecuado';
+export type AlimentacionType = 'Mixta y variada' | 'Rica en HdC' | 'Pobre en fibras' | 'Fiambres' | 'Frituras';
+export type InfusionesType = 'Té' | 'Mate Cocido' | 'Otras';
+export type CantidadComidasType = 'Mayor a 4' | '4' | 'Menor a 4' | 'Picoteo';
+export type HsPantallaType = 'Menor a 2hs' | 'Entre 2hs y 4hs' | 'Más de 6hs';
+export type HsJuegoAireLibreType = 'Menos de 1h' | '1h' | 'Más de 1h';
+export type HsSuenioType = 'Menos de 10hs' | 'Entre 10hs y 12hs' | 'Más de 13hs';
+export type HidratacionType = 'Agua' | 'Bebidas Edulcoradas';
+
 @Entity('clinica')
 export class Clinica {
   @PrimaryColumn({ type: 'int' })
   id_consulta: number;
 
-  @OneToOne(() => Consulta)
-  @JoinColumn({ name: 'id_consulta' })
-  consulta: Consulta;
+  // Datos Clinica
 
-  // Datos clinica general
+  @Column({ type: 'enum', enum: ['Completo', 'Incompleto', 'Desconocido'] })
+  vacunas: VacunasType;
+
+  @Column({ type: 'enum', enum: ['Normal', 'Anormal'] })
+  examen_visual: ExamenVisualType;
+
+  @Column({ type: 'enum', enum: ['Normal', 'Escoliosis', 'Pie Plano', 'Otras'] })
+  ortopedia_traumatologia: OrtopediaYTraumatologiaType;
+
+  @Column({ type: 'enum', enum: ['Adecuado', 'Inadecuado'] })
+  lenguaje: LenguajeType;
+
+  @Column({ type: 'enum', enum: ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'] })
+  alimentacion: AlimentacionType;
+
+  @Column({ type: 'enum', enum: ['Té', 'Mate Cocido', 'Otras'] })
+  infusiones: InfusionesType;
+
+  @Column({ type: 'enum', enum: ['Menor a 4', '4', 'Mayor a 4', 'Picoteo'] })
+  cantidad_comidas: CantidadComidasType;
+
+  @Column({ type: 'enum', enum: ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'] })
+  horas_pantalla: HsPantallaType;
+
+  @Column({ type: 'enum', enum: ['Menos de 1h', '1h', 'Más de 1h'] })
+  horas_juego_aire_libre: HsJuegoAireLibreType;
+
+  @Column({ type: 'enum', enum: ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'] })
+  horas_suenio: HsSuenioType;
+
+  @Column({ type: 'enum', enum: ['Agua', 'Bebidas Edulcoradas'] })
+  hidratacion: HidratacionType;
 
   @Column({ type: 'boolean' })
   diabetes: boolean;
@@ -36,9 +77,6 @@ export class Clinica {
 
   @Column({ type: 'boolean' })
   enfermedades_previas: boolean;
-
-  @Column({ type: 'varchar', length: 100 })
-  vacunas: string;
 
   @Column({ type: 'float' })
   peso: number;
@@ -73,42 +111,15 @@ export class Clinica {
   @Column({ type: 'varchar', length: 100 })
   tension_arterial: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  examen_visual: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  ortopedia_traumatologia: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  lenguaje: string;
-
   @Column({ type: 'boolean' })
   segto: boolean;
-
-  @Column({ type: 'varchar', length: 100 })
-  alimentacion: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  hidratacion: string;
 
   @Column({ type: 'boolean' })
   leche: boolean;
 
-  @Column({ type: 'varchar', length: 100 })
-  infusiones: string;
+  // Relaciones
 
-  @Column({ type: 'varchar', length: 100 })
-  cantidad_comidas: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  horas_pantalla: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  horas_juego_aire_libre: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  horas_suenio: string;
-
-  // @Column({ type: 'varchar', length: 100 })
-  // proyecto: string;
+  @OneToOne(() => Consulta, (consulta) => consulta.clinica)
+  @JoinColumn({ name: 'id_consulta' })
+  consulta: Consulta;
 }

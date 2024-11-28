@@ -13,7 +13,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   standalone: true,
   imports: [SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule],
   templateUrl: './campos-fonoaudiologia.component.html',
-  styleUrl: './campos-fonoaudiologia.component.css'
+  styleUrl: './campos-fonoaudiologia.component.css',
 })
 export class CamposFonoaudiologiaComponent implements OnInit {
   @Input() form!: FormGroup;
@@ -24,8 +24,8 @@ export class CamposFonoaudiologiaComponent implements OnInit {
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public diagnosticoPresuntivoOptions: string[] = ['Tel', 'Tea', 'Retraso en el lenguaje dislalias funcionales', 'Respirador bucal', 'Aniquilogosia', 'Ortodoncia: Protusion lingual, paladar hendido', 'Sindromes', 'Otras patologias que dificulten el lenguaje y la comunicacion'];
-  public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'Acv', 'Respiratorias', 'Audicion', 'Patologias clinicas', 'Sindromes', 'Inflamacion de amigdalas o adenoides', 'Prematurez', 'Otras'];
+  public diagnosticoPresuntivoOptions: string[] = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
+  public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
   public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
 
   ngOnInit(): void {

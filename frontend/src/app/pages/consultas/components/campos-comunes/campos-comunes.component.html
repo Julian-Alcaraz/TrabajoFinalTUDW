@@ -11,12 +11,12 @@
   <ng-container *ngIf="form.get('dni')?.value !== null && form.get('dni')?.value !== ''">
     <div class="md:col-span-8 sm:col-span-4">
       <!-- Mensaje cuando no hay chico cargado -->
-      <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8" class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
+      <div *ngIf="chico === null && this.form.get('dni')?.value.toString().length === 8 && !searching" class="bg-red-100 border border-red-300 text-red-600 text-sm p-4 rounded-lg w-full">
         <div class="flex items-center md:gap-2 sm:gap-2">
           <svg class="w-24 h-24 md:w-8 md:h-8 mr-2" fill="red" stroke="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
           </svg>
-          <span class="font-semibold"> Error, chico no cargado en el sistema, escribe otro DNI o haz click <button class="underline hover:text-red-800" type="button" (click)="cargarChico()">aquí</button> para ir al formulario de nuevo chico y cargarlo. </span>
+          <span class="font-semibold"> Error, niño no cargado en el sistema, escribe otro DNI o haz click <button class="underline hover:text-red-800" type="button" (click)="cargarChico()">aquí</button> para ir al formulario de carga de niño. </span>
         </div>
       </div>
       <!-- Mensaje cuando hay chico cargado -->
@@ -27,7 +27,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p class="text-green-600 font-bold">Chico Seleccionado</p>
+          <p class="text-green-600 font-bold">Niño Encontrado</p>
         </div>
         <div class="ml-14">
           <p>
@@ -39,7 +39,7 @@
           <p>
             Edad: <span class="font-semibold">{{ edadAnios }} años y {{ edadMeses }} meses</span>
           </p>
-          @if(values){
+          @if (values) {
             <p>
               Edad al asistir: <span class="font-semibold">{{ values.edad }} años</span>
             </p>
@@ -50,11 +50,19 @@
   </ng-container>
   <!-- Institucion -->
   <div class="md:col-span-2 mb-3 sm:col-span-4">
-    <app-input-select (change)="onChangeInstitucion()" label="Institucion" [control]="controlDeInput('id_institucion')" idInput="id_institucion" [opciones]="instituciones" />
+    @if (searchingInstituciones) {
+      <app-loading />
+    } @else {
+      <app-input-select label="Institucion" [control]="controlDeInput('id_institucion')" idInput="id_institucion" [opciones]="instituciones" (change)="onChangeInstitucion()" />
+    }
   </div>
   <!-- Curso -->
   <div class="md:col-span-2 mb-3 sm:col-span-4">
-    <app-input-select (change)="onChangeCurso()" label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" />
+    @if (searchingCursos) {
+      <app-loading />
+    } @else {
+      <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" />
+    }
   </div>
   <!-- Turno -->
   <div class="md:col-span-2 mb-4 sm:col-span-4">
@@ -65,56 +73,3 @@
     <app-input-select-enum label="Obra Social" [control]="controlDeInput('obra_social')" idInput="obra_social" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
   </div>
 </div>
-
-<!-- Institucion Modal -->
-<ng-template #institucionModal>
-  <div class="p-4">
-    <div class="flex flex-row justify-between mb-3">
-      <h3>Agregar institucion</h3>
-      <button class="btn-close border-none" (click)="cerrarModalInstitucion()"><i class="fa-solid fa-xmark fa-xl"></i></button>
-    </div>
-    <form (submit)="cargarInstitucion()" [formGroup]="institucionForm">
-      <div class="border-t-2 p-4">
-        <div class="mb-3">
-          <h3>Nueva Institucion</h3>
-          <app-input-text label="Nombre" [control]="controlDeInputInstitucion('nombre')" placeholder="" idInput="nombre" />
-          <div class="md:col-span-2 mb-3">
-            <div class="md:col-span-2 mb-4 sm:col-span-3">
-              <app-input-select-enum label="tipo" [control]="controlDeInputInstitucion('tipo')" idInput="tipo" [opciones]="['Jardin', 'Primario', 'Secundario', 'Terciario']" [valores]="['Jardin', 'Primario', 'Secundario', 'Terciario']" />
-            </div>
-          </div>
-          <div class="flex my-auto">
-            <button type="submit" [disabled]="!institucionForm.valid" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar institucion</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</ng-template>
-
-<!-- Curso Modal -->
-<ng-template #cursoModal>
-  <div class="p-4">
-    <div class="flex flex-row justify-between mb-3">
-      <h3>Agregar curso</h3>
-      <button class="btn-close border-none" (click)="cerrarModalCurso()"><i class="fa-solid fa-xmark fa-xl"></i></button>
-    </div>
-    <form (submit)="cargarCurso()" [formGroup]="cursoForm">
-      <div class="border-t-2 p-4">
-        <div class="mb-3">
-          <h3>Nuevo curso</h3>
-          <app-input-text label="Nombre" [control]="controlDeInputCurso('nombre')" placeholder="" idInput="nombre" />
-          <app-input-number label="Grado" [control]="controlDeInputCurso('grado')" placeholder="" idInput="grado" />
-          <div class="md:col-span-2 mb-3">
-            <div class="md:col-span-2 mb-4 sm:col-span-3">
-              <app-input-select-enum label="nivel" [control]="controlDeInputCurso('nivel')" idInput="nivel" [opciones]="['Jardin', 'Primaria', 'Secundario', 'Terciario', 'Universitario']" [valores]="['Jardin', 'Primaria', 'Secundario', 'Terciario', 'Universitario']" />
-            </div>
-          </div>
-          <div class="flex my-auto">
-            <button type="submit" [disabled]="!cursoForm.valid" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar curso</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</ng-template>

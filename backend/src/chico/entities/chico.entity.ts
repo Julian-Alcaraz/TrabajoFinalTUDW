@@ -10,7 +10,9 @@ export type sexoType = 'Femenino' | 'Masculino' | 'Otro';
 export class Chico extends EntidadBasica {
   @Column({ type: 'int', nullable: false, unique: true })
   dni: number;
-  // datos niño
+
+  // Datos chico
+
   @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
@@ -34,7 +36,6 @@ export class Chico extends EntidadBasica {
 
   @Column({ type: 'varchar', length: 100, nullable: true, default: null })
   nombre_padre: string;
-  // no pondria turno
 
   // RELACIONES
 

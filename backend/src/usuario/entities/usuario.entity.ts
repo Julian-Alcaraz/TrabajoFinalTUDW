@@ -21,9 +21,6 @@ export class Usuario extends EntidadBasica {
   @Column({ type: 'varchar', length: 255 })
   contrasenia: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  especialidad: string;
-
   @Column({ type: 'date' })
   fe_nacimiento: Date;
 
@@ -43,6 +40,8 @@ export class Usuario extends EntidadBasica {
   })
   roles: Rol[];
 
-  @OneToMany(() => Consulta, (consulta) => consulta.id)
+  @OneToMany(() => Consulta, (consulta) => consulta.usuario)
   consultas: Consulta[];
+
+  cambioContrasenia: boolean;
 }

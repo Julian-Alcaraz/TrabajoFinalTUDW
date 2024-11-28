@@ -78,7 +78,26 @@ export class UsuarioController {
       message: 'Usuario modificado con exito',
     };
   }
-
+  @Get('dni/:dni')
+  @ApiOperation({ summary: 'Devuelve el usuario buscado por dni' })
+  @ApiResponse({ status: 200, description: 'Retorna el usuario buscado con exito' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  async findOneByDni(@Param('dni', ParseIntPipe) dni: number) {
+    const usuario = await this.usuarioService.findOneByDni(dni);
+    if (usuario) {
+      return {
+        success: true,
+        data: usuario,
+        message: 'Usuario obtenido con exito',
+      };
+    } else {
+      return {
+        success: false,
+        data: usuario,
+        message: 'Usuario no encontrado.',
+      };
+    }
+  }
   @Delete('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un usuario' })
   @ApiResponse({ status: 200, description: 'Usuario borrado logicamente con exito' })
@@ -132,7 +151,21 @@ export class UsuarioController {
       message: 'Menus del usuario retornados con exito',
     };
   }
-
+  @Patch('modificarContrasenia/:id')
+  @ApiOperation({ summary: 'Actualiza los datos de un usuario' })
+  @ApiResponse({ status: 200, description: 'Usuario actualizado con exito' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  @ApiResponse({ status: 400, description: 'No se enviaron cambios' })
+  @ApiResponse({ status: 400, description: 'El dni del usuario ya esta cargado en el sistema' })
+  @ApiResponse({ status: 400, description: 'El email del usuario ya esta cargado en el sistema' })
+  async updatePassword(@Param('id', ParseIntPipe) id: number, @Body() data: { password: string; confirmPassword: string }) {
+    const usuarioModificado = await this.usuarioService.updatePassword(id, data);
+    return {
+      success: true,
+      data: usuarioModificado,
+      message: 'Usuario modificado con exito',
+    };
+  }
   /*
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de un usuario' })

@@ -13,10 +13,11 @@ export class Odontologia {
     public dientes_irecuperables: number,
     public cepillo: boolean,
     public habitos: string,
+    public clasificacion?: string,
     // public situacion_bucal: string,
   ) {}
 
   static overload_constructor() {
-    return new Odontologia(0, false, false, 0, 0, 0, false, false, 0, 0, false, '');
+    return new Odontologia(0, false, false, 0, 0, 0, false, false, 0, 0, false, '', '');
   }
 }

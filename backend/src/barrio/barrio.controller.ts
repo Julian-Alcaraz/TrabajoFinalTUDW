@@ -20,19 +20,31 @@ export class BarrioController {
     return {
       success: true,
       data: barrio,
-      message: 'Barrio creado con exito',
+      message: 'Barrio creado con éxito',
     };
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los barrios habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todos los barrios habilitados con exito' })
+  @ApiOperation({ summary: 'Devuelve todos los barrios habilitados y deshabilitados' })
+  @ApiResponse({ status: 200, description: 'Retorna todos los barrios habilitados y deshabilitados con éxito' })
   async findAll() {
     const colBarrios = await this.barrioService.findAll();
     return {
       success: true,
       data: colBarrios,
-      message: 'Barrios obtenidos con exito',
+      message: 'Barrios obtenidos con éxito',
+    };
+  }
+
+  @Get('habilitados')
+  @ApiOperation({ summary: 'Devuelve todos los barrios habilitados ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las barrios habilitados con exito' })
+  async findAllHabilitadas() {
+    const colBarrios = await this.barrioService.findAllHabilitados();
+    return {
+      success: true,
+      data: colBarrios,
+      message: 'Barrios obtenidos con éxito',
     };
   }
 
@@ -45,7 +57,7 @@ export class BarrioController {
     return {
       success: true,
       data: barrio,
-      message: 'Barrio obtenido con exito',
+      message: 'Barrio obtenido con éxito',
     };
   }
 
@@ -57,7 +69,7 @@ export class BarrioController {
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateBarrioDto: UpdateBarrioDto) {
     const barrio = await this.barrioService.update(id, updateBarrioDto);
     return {
-      succes: true,
+      success: true,
       data: barrio,
       message: 'Barrio actualizado correctamente',
     };
@@ -70,7 +82,7 @@ export class BarrioController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     const barrio = await this.barrioService.remove(id);
     return {
-      succes: true,
+      success: true,
       data: barrio,
       message: 'Barrio borrado logicamente',
     };

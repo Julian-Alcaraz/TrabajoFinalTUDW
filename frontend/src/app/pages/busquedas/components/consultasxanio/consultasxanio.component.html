@@ -1,7 +1,7 @@
 <form [formGroup]="buscarForm" (ngSubmit)="buscar()" class="flex items-center space-x-2">
   <p-iftalabel class="my-4">
-    <p-datepicker [(ngModel)]="date" idInput="year" view="year" dateFormat="yy" [maxDate]="maxDate"
-      formControlName="year" appendTo="body" styleClass="h-16">
+    <!-- SACAR ngModel, ESTA DEPRECADO!!!!!!!!! -->
+    <p-datepicker [(ngModel)]="date" idInput="year" view="year" dateFormat="yy" [maxDate]="maxDate" formControlName="year" appendTo="body" styleClass="h-16">
       <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
       <ng-template pTemplate="footer">
         <p-button class="p-datepicker-prev hidden">Previous</p-button>
@@ -11,8 +11,8 @@
     </p-datepicker>
     <label for="year">Año</label>
   </p-iftalabel>
-  <button type="submit"
-    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">
-    Buscar
-  </button>
+  <button type="submit" [disabled]="!this.buscarForm.valid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
 </form>
+@if (searching) {
+  <app-loading />
+}

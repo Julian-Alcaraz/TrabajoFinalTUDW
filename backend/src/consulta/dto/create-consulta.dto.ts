@@ -50,19 +50,18 @@ export class CreateConsultaDto {
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly id_curso: number;
 
-  @ApiProperty({ description: 'Observaciones de la consulta' })
-  @IsOptional()
-  @IsString({ message: 'Las Observaciones debe ser un string' })
-  @Length(1, 1000, { message: 'Las Observaciones deben tener entre 0 y 1000 caracteres' })
-  @Transform(({ value }) => value.trim())
-  readonly observaciones?: string;
-
   @ApiProperty({ description: 'Derivaciones de la consulta' })
-  @IsOptional()
   @IsObject({ message: 'Las derivaciones deben ser un objeto' })
   @ValidateNested()
   @Type(() => DerivacionesDto)
-  readonly derivaciones?: DerivacionesType;
+  readonly derivaciones: DerivacionesType;
+
+  @ApiProperty({ description: 'Observaciones de la consulta' })
+  @IsString({ message: 'Las Observaciones debe ser un string' })
+  @Length(1, 1000, { message: 'Las Observaciones deben tener entre 1 y 1000 caracteres' })
+  @IsOptional()
+  @Transform(({ value }) => value.trim())
+  readonly observaciones?: string;
 
   // Validación condicional para "Clinica"
   @ValidateIf((o) => o.type === 'Clinica')

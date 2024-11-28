@@ -1,33 +1,28 @@
 <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
-  <p class="col-span-6 font-semibold mt-4 mb-4">Filtros para Fonoaudiologia</p>
   <!-- Diagnostico Presuntivo -->
   <div class="md:col-span-2 my-2">
     <p-iftalabel>
-      <p-select [options]="diagnosticoPresuntivoOptions" formControlName="diagnostico_presuntivo"
-        idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <p-select [options]="diagnosticoPresuntivoOptions" formControlName="diagnostico_presuntivo" idInput="diagnostico_presuntivo" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="diagnostico_presuntivo">Diagnostico Presuntivo</label>
     </p-iftalabel>
   </div>
   <!-- Causas -->
   <div class="md:col-span-2 my-2">
     <p-iftalabel>
-      <p-select [options]="casuasOptions" formControlName="causas" idInput="causas" [checkmark]="true"
-        [showClear]="true" placeholder="" class="w-full h-16" />
+      <p-select [options]="casuasOptions" formControlName="causas" idInput="causas" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="causas">Causas</label>
     </p-iftalabel>
   </div>
   <!-- Derivacion externa-->
   <div class="md:col-span-2 my-2">
     <p-iftalabel>
-      <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre"
-        optionValue="valor" styleClass="w-full h-16" />
+      <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" [filter]="false" [showHeader]="false" />
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>
   <!-- Asistencia -->
   <div class="md:col-span-1 mb-8">
     <p>¿Asistió?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="asistencia" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="asistencia" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
 </div>

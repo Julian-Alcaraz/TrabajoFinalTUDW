@@ -14,7 +14,18 @@ export class InstitucionService {
     return this.institucionORM.save(nuevaInstitucion);
   }
 
-  findAll() {
+  async findAll() {
+    const instituciones = await this.institucionORM.find({ relations: ['consultas'] });
+    return instituciones.map((institucion) => {
+      const { consultas, ...datosInstitucion } = institucion;
+      return {
+        cantidadConsultas: consultas.length,
+        ...datosInstitucion,
+      };
+    });
+  }
+
+  findAllHabilitadas() {
     return this.institucionORM.find({ where: { deshabilitado: false } });
   }
 

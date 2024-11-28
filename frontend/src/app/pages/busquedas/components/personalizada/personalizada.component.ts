@@ -14,6 +14,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { PanelModule } from 'primeng/panel';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { Usuario } from '../../../../models/usuario.model';
@@ -25,27 +26,35 @@ import { CursoService } from '../../../../services/curso.service';
 import { ConsultaService } from '../../../../services/consulta.service';
 import { Consulta } from '../../../../models/consulta.model';
 import { CamposClinicaComponent } from './components/campos-clinica/campos-clinica.component';
-import { CamposOftalmologiaComponent } from "./components/campos-oftalmologia/campos-oftalmologia.component";
-import { CamposFonoaudiologiaComponent } from "./components/campos-fonoaudiologia/campos-fonoaudiologia.component";
+import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
+import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
+import { CsvService } from '../../../../services/csv.service';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent],
+  imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
   templateUrl: './personalizada.component.html',
   styleUrl: './personalizada.component.css',
 })
 export class PersonalizadaComponent implements OnInit {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
-  public formBusqueda: FormGroup;
+
+  public loadingCursos = false;
+  public loadingInstituciones = false;
+  public loadingProfesionales = false;
   public loading = false;
+  public mostrarBotonDescarga = false;
+  public colapsarPaneles = false;
+  public formBusqueda: FormGroup;
   public resultados: any;
   public hoy = new Date();
   public instituciones: Institucion[] = [];
   public cursos: Curso[] = [];
   public profesionales: Usuario[] = [];
-
+  public searching = false;
   public tipoConsulta = ['Clinica', 'Oftalmologia', 'Odontologia', 'Fonoaudiologia'];
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
@@ -56,10 +65,7 @@ export class PersonalizadaComponent implements OnInit {
     { nombre: 'Tarde', valor: 'Tarde' },
     { nombre: 'Noche', valor: 'Noche' },
   ];
-  public sexoOptions: any[] = [
-    { nombre: 'M', valor: 'Masculino' },
-    { nombre: 'F', valor: 'Femenino' },
-  ];
+  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
 
   constructor(
     private fb: FormBuilder,
@@ -68,6 +74,7 @@ export class PersonalizadaComponent implements OnInit {
     private _institucionService: InstitucionService,
     private _usuarioService: UsuarioService,
     private _consultaService: ConsultaService,
+    private _csvService: CsvService,
   ) {
     this.formBusqueda = this.fb.group({
       generales: this.fb.group({
@@ -101,9 +108,9 @@ export class PersonalizadaComponent implements OnInit {
     this.formBusqueda.get('consultasSeleccionadas')?.valueChanges.subscribe(() => {
       this.onChangeTipoConsulta();
     });
-    // this.formBusqueda.get('generales.rangoFechas')?.valueChanges.subscribe(() => {
-    //   this.agregarHora(this.formBusqueda.get('generales.rangoFechas')?.value);
-    // });
+    this.formBusqueda.valueChanges.subscribe(() => {
+      this.mostrarBotonDescarga = false;
+    });
   }
 
   enviarConsultas(data: Consulta[]) {
@@ -111,7 +118,7 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   onChangeTipoConsulta() {
-    this.formBusqueda.get('especificas')?.reset();
+    this.formBusqueda.removeControl('especificas');
     this.formBusqueda.get('derivaciones')?.reset();
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
@@ -119,57 +126,63 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   obtenerCursos(): any {
+    this.loadingCursos = true;
     this._cursoService.obtenerCursos().subscribe({
       next: (response: any) => {
         this.cursos = response.data;
+        this.loadingCursos = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingCursos = false;
       },
     });
   }
 
   obtenerInstituciones(): any {
+    this.loadingInstituciones = true;
     this._institucionService.obtenerInstituciones().subscribe({
       next: (response: any) => {
         this.instituciones = response.data;
+        this.loadingInstituciones = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingInstituciones = false;
       },
     });
   }
 
   // Tambien obtiene usuarios que tienen mas roles aparte del de profesional
   obtenerProfesionales(): any {
+    this.loadingProfesionales = true;
     this._usuarioService.obtenerProfesionales().subscribe({
       next: (response: any) => {
         this.profesionales = response.data;
+        this.loadingProfesionales = false;
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingProfesionales = false;
       },
     });
   }
 
   buscar() {
+    this.searching = true;
     if (this.formBusqueda.valid) {
       this.loading = true;
-      console.log('DATA: ', this.formBusqueda.value);
+      this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
-      console.log('la respuesta es ', resultado);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
-      console.log('---------');
-      console.log('LA DATA ENVIADA ES ', dataLimpia);
-      console.log('---------');
       this._consultaService.busquedaPersonalizada(dataLimpia).subscribe({
         next: (response: any) => {
           if (response.success) {
             MostrarNotificacion.mensajeExito(this.snackBar, response.message);
             this.resultados = response.data;
-            console.log('Resultados backend', this.resultados);
+            this.searching = false;
             this.enviarConsultas(response.data);
-            // this.formBusqueda.reset();
+            this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
             this.loading = false;
           }
         },
@@ -179,6 +192,31 @@ export class PersonalizadaComponent implements OnInit {
         },
       });
     }
+  }
+
+  generarCsv() {
+    const resultado = prepararData(this.formBusqueda.value);
+    const dataLimpia = eliminarValoresNulosYVacios(resultado);
+    this._csvService.generarCsv(dataLimpia).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // Descargar el archivo
+          const nombreArchivo = response.data;
+          this._csvService.descargarCsv(nombreArchivo).subscribe((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = nombreArchivo;
+            link.click();
+            window.URL.revokeObjectURL(url);
+          });
+        }
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        console.log(err);
+      },
+    });
   }
 }
 

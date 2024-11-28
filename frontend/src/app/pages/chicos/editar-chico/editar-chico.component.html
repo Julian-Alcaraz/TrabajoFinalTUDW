@@ -1,5 +1,10 @@
 <div class="card">
-  <div class="card-header">Ver chico</div>
+  <div class="card-header">
+    <div class="flex flex-row justify-between">
+      <h3>Editar niño</h3>
+      <button class="btn-close border-none" (click)="cerrarModal(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
+    </div>
+  </div>
   <div class="card-body">
     <app-form-chicos [esFormulario]="false" [id_chico]="id_chico" />
   </div>

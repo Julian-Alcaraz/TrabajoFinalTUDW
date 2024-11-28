@@ -10,7 +10,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
   handleRequest(err, user, info) {
     if (err || !user) {
-      throw new UnauthorizedException('Sesión expirada. Ingresa nuevamente.');
+      if (info && info.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Sesión expirada. Ingresa nuevamente.');
+      } else if (info && info.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Token no válido. Por favor, inicia sesión nuevamente.');
+      } else if (!info) {
+        throw new UnauthorizedException('Por favor, inicie sesión.');
+      } else {
+        throw new UnauthorizedException('Por favor, inicie sesión.');
+      }
     }
     return user;
   }

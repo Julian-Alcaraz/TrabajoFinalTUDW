@@ -426,6 +426,259 @@ export class ConsultaService {
   remove(id: number) {
     return `This action removes a #${id} consulta`;
   }
+
+  async countByYear(year: number) {
+    const respuesta = [];
+    for (let i = 0; i < 4; i++) {
+      const countConsultas = await this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).getCount();
+      respuesta.push(countConsultas);
+      year--;
+    }
+    return respuesta.reverse();
+  }
+  async countTypeByYear(year: number) {
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
+      respuesta[year] = counts;
+      year--;
+    }
+    return respuesta;
+  }
+  async countTypeByYearAndInstitucion(year: number, id_institucion: number) {
+    console.log(year, id_institucion);
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const respuesta = await Promise.all(
+      types.map(async (type) => {
+        let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.type = :type', { type });
+        if (year !== 0) {
+          query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+        }
+        if (id_institucion !== 0) {
+          query = query.andWhere('consulta.id_institucion = :id_institucion', { id_institucion });
+        }
+        return query.getCount();
+      }),
+    );
+    // const respuesta = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type AND consulta.id_institucion = :id_institucion ', { year, type, id_institucion }).getCount()));
+    return respuesta;
+  }
+
+  async estadoNutricionalData(year: number, id: number) {
+    const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeEstadoNutricional(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.estadoNutricionalData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async tensionArterialData(year: number, id: number) {
+    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.tension_arterial = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeTensionArterialData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.tensionArterialData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async tensionxEstadoData(year: number, id: number, estado: string) {
+    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :estado  AND clinica.tension_arterial = :type', { estado, type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async examenVisualData(year: number, id: number) {
+    const types = ['Normal', 'Anormal'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.examen_visual = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeExamenVisualData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.examenVisualData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async vacunacionData(year: number, id: number) {
+    const types = ['Completo', 'Incompleto', 'Desconocido'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.vacunas = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeVacunacionData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.vacunacionData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async ortopediaData(year: number, id: number) {
+    const types = ['Normal', 'Anormal'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica');
+      if (type === 'Normal') {
+        query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' });
+      } else if (type === 'Anormal') {
+        query.where('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' });
+      }
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeOrtopediaData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.ortopediaData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+
+  async lenguajeData(year: number, id: number) {
+    const types = ['Adecuado', 'Inadecuado'];
+    const createQuery = (type: string) => {
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.lenguaje = :type', { type });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeLenguajeData(year: number, id: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.lenguajeData(year, id);
+      const porcentajes = calcularPorcentaje(data);
+      respuesta[year] = porcentajes;
+      year--;
+    }
+    return respuesta;
+  }
+}
+
+function calcularPorcentaje(data: number[]) {
+  const total = data.reduce((sum, value) => sum + value, 0);
+  const porcentajes = data.map((value) => +((value * 100) / total).toFixed(2));
+  return porcentajes;
 }
 
 function estadoNutricional(pcimc: number) {

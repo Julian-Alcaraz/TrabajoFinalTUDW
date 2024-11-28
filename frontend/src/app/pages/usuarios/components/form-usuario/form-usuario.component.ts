@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -18,12 +18,12 @@ import { SessionService } from '../../../../services/session.service';
 import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
-import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputRadioComponent, MatRadioModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule, LoadingComponent],
   templateUrl: './form-usuario.component.html',
   styleUrl: './form-usuario.component.css',
 })
@@ -31,12 +31,18 @@ export class FormUsuarioComponent implements OnInit {
   @Input() esFormulario = true;
   @Input() usuario: Usuario | null = null;
 
+  @Output() usuarioCreado = new EventEmitter<void>();
+
   public userForm: FormGroup;
   public fechaHoy = new Date();
   public roles: Rol[] = [];
   public selectCheckbox = true;
   public estaEditando = false;
   public usuarioActual: Usuario | null = null;
+  public mensajeDoc = '';
+  public mensajeValidando = '';
+  public searchingUser = false;
+  public searchingRoles = false;
   constructor(
     private fb: FormBuilder,
     private _usuarioService: UsuarioService,
@@ -57,6 +63,7 @@ export class FormUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerRoles();
     this.esCargaOedicion();
+    this.buscarUsuarioDniIngresado();
   }
 
   get controlDeInput(): (input: string) => FormControl {
@@ -64,8 +71,10 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   obtenerRoles() {
+    this.searchingRoles = true;
     this._rolesService.obtenerRoles().subscribe({
       next: (response: any) => {
+        this.searchingRoles = false;
         this.roles = response.data;
       },
       error: (err: any) => {
@@ -75,10 +84,12 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   esCargaOedicion() {
+    this.searchingUser = true;
     if (!this.esFormulario && this.usuario) {
       this.userForm.get('roles_ids')?.clearValidators();
       this._usuarioService.obtenerUsuarioxId(this.usuario.id).subscribe({
         next: (response: any) => {
+          this.searchingUser = false;
           this.userForm.patchValue({
             roles_ids: this.usuario?.roles_ids, // FormArray para role
           });
@@ -123,7 +134,43 @@ export class FormUsuarioComponent implements OnInit {
     this.userForm.disable();
     this.estaEditando = false;
   }
-
+  buscarUsuarioDniIngresado() {
+    this.userForm.get('dni')?.valueChanges.subscribe((value) => {
+      if (this.userForm.get('dni')?.valid) {
+        if (!this.esFormulario && this.usuario) {
+          if (this.usuario?.dni !== value) {
+            this.buscarUsuarioxDni(value);
+          }
+        } else {
+          this.mensajeDoc = '';
+          this.buscarUsuarioxDni(value);
+        }
+      } else {
+        this.mensajeDoc = '';
+      }
+    });
+  }
+  buscarUsuarioxDni(dni: number) {
+    this.mensajeValidando = 'Buscando dni en la base de datos.';
+    this._usuarioService.obtenerUsuarioxDni(dni).subscribe({
+      next: (response: any) => {
+        this.mensajeValidando = '';
+        if (response.success) {
+          this.userForm.get('dni')?.setErrors({ invalidDni: true });
+          this.activarModificar();
+          this.mensajeDoc = 'Documento ya ingresado en otro usuario.';
+        } else {
+          this.userForm.get('dni')?.setErrors(null);
+          this.mensajeDoc = '';
+        }
+      },
+      error: (error: any) => {
+        this.mensajeValidando = '';
+        this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
+        console.log(error);
+      },
+    });
+  }
   cargarUsuario() {
     if (this.userForm.valid) {
       Swal.fire({
@@ -142,6 +189,7 @@ export class FormUsuarioComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.userForm.reset();
+                this.usuarioCreado.emit();
               }
             },
             error: (err) => {
@@ -156,7 +204,7 @@ export class FormUsuarioComponent implements OnInit {
   editarUsuario() {
     if (this.usuario) {
       Swal.fire({
-        title: '¿Modificar tu usuario?',
+        title: '¿Confirmar cambios?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',

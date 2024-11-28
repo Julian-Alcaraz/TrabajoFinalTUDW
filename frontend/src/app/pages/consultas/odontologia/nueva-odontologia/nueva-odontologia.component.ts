@@ -7,24 +7,24 @@ import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { Chico } from '../../../../models/chico.model';
 import { Consulta } from '../../../../models/consulta.model';
+import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CamposComunesComponent, InputTextComponent, InputNumberComponent,  InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
   styleUrl: './nueva-odontologia.component.css',
 })
 export class NuevaOdontologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
-  @Input() editar = false;
+  @Input() editar = true;
   habilitarModificar = false;
 
   public odontologiaForm: FormGroup;
@@ -52,7 +52,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       dientes_recuperables: [null, [Validators.required, ValidarSoloNumeros]],
       dientes_irecuperables: [null, [Validators.required, ValidarSoloNumeros]],
       // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      habitos: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
     });
   }
   ngOnInit(): void {
@@ -98,7 +98,7 @@ export class NuevaOdontologiaComponent implements OnInit {
   }
 
   enviarFormulario() {
-    if (this.odontologiaForm.valid || 1 + 1 == 2) {
+    if (this.odontologiaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta odontologica?',
         showDenyButton: true,
@@ -120,7 +120,7 @@ export class NuevaOdontologiaComponent implements OnInit {
             fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',
             turno,
@@ -130,12 +130,13 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            // ...(derivaciones.externa && { derivaciones }),
             derivaciones,
             odontologia: {
+              ...(habitos && { habitos }),
               ...odontologicaValues,
             },
           };
+          console.log('DATA ENVIADA', data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {

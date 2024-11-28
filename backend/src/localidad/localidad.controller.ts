@@ -24,10 +24,22 @@ export class LocalidadController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todas las localidades ' })
-  @ApiResponse({ status: 200, description: 'Retorna todas las localidades habilitadas con exito' })
+  @ApiOperation({ summary: 'Devuelve todas las localidades habilitadas y deshabilitadas ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las localidades habilitadas y deshabilitadas' })
   async findAll() {
     const colLocalidad = await this.localidadService.findAll();
+    return {
+      success: true,
+      data: colLocalidad,
+      message: 'Localidades obtenidas con exito',
+    };
+  }
+
+  @Get('habilitadas')
+  @ApiOperation({ summary: 'Devuelve todas las localidades habilitadas ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las localidades habilitadas con exito' })
+  async findAllHabilitadas() {
+    const colLocalidad = await this.localidadService.findAllHabilitadas();
     return {
       success: true,
       data: colLocalidad,

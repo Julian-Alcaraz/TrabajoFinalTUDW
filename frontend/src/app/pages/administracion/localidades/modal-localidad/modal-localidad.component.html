@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-header">
+    <div class="flex flex-row justify-between ">
+      <h3>{{ localidad === null ? 'Agregar Localidad' : 'Editar Localidad' }}</h3>
+      <button class="btn-close border-none" (click)="cerrarModalLocalidad(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+    <form (submit)="localidad === null ? cargarLocalidad() : modificarLocalidad()" [formGroup]="localidadForm">
+      <div class=" p-4">
+        <div class="mb-3">
+          <app-input-text label="Nombre localidad" idInput="nombre" [control]="controlDeInput('nombre')" />
+          <button type="submit" [disabled]="localidad === null ? !localidadForm.valid : habilitarModificar" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">{{ localidad === null ? 'Agregar Localidad' : 'Editar Localidad' }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

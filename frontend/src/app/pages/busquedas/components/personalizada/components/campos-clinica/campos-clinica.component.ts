@@ -31,9 +31,9 @@ export class CamposClinicaComponent implements OnInit {
   public ortopediaTraumatologiaOptions: string[] = ['Normal', 'Escoliosis', 'Pie plano'];
   public alimentacionOptions: string[] = ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'];
   public hidratacionOptions: string[] = ['Agua', 'Bebidas edulcoradas'];
-  public horasPantallaOptions: string[] = ['Menor a 2hs', 'Entre 2hs y 4hs', 'Mas de 6hs'];
-  public horasJuegoAireLibreOptions: string[] = ['Menos de 1h', '1h', 'Mas de 1h'];
-  public horasSuenioOptions: string[] = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Mas de 13hs'];
+  public horasPantallaOptions: string[] = ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'];
+  public horasJuegoAireLibreOptions: string[] = ['Menos de 1h', '1h', 'Más de 1h'];
+  public horasSuenioOptions: string[] = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'];
   public tensionArterialOptions: string[] = ['Normotenso', 'Riesgo', 'Hipertenso'];
   public estadoNutricionalOptions: string[] = ['A Riesgo Nutricional', 'B Bajo peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   public derivacionesOptionsClinica: any[] = [

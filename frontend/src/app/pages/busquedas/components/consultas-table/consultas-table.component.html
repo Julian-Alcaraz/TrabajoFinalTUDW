@@ -2,8 +2,8 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-auto scroll" matSort (matSortChange)="announceSortChange($event)">
     <!-- # -->
     <ng-container matColumnDef="numero">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
-      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let element">{{ dataSource.data.indexOf(element) + 1 }}</td>
     </ng-container>
     <!-- Tipo -->
     <ng-container matColumnDef="type">
@@ -25,15 +25,14 @@
       <th mat-header-cell *matHeaderCellDef>Obra Social</th>
       <td mat-cell *matCellDef="let element">{{ element.obra_social ? 'Sí' : 'No' }}</td>
     </ng-container>
-    <!-- Chico -->
     <!-- Nombre -->
     <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef>Nombre chico</th>
+      <th mat-header-cell *matHeaderCellDef>Nombre niño</th>
       <td mat-cell *matCellDef="let element">{{ element.chico.nombre + ' ' + element.chico.apellido }}</td>
     </ng-container>
     <!-- Dni -->
     <ng-container matColumnDef="documento">
-      <th mat-header-cell *matHeaderCellDef>DNI chico</th>
+      <th mat-header-cell *matHeaderCellDef>DNI niño</th>
       <td mat-cell *matCellDef="let element">{{ element.chico.dni }}</td>
     </ng-container>
     <!-- Fecha Nac. -->
@@ -98,13 +97,13 @@
       <td mat-cell *matCellDef="let element">{{ element.usuario.dni }}</td>
     </ng-container>
     <!-- Observaciones -->
-    <ng-container matColumnDef="observaciones" style=" max-width: 200px  ;">
+    <ng-container matColumnDef="observaciones" style="max-width: 200px">
       <th mat-header-cell *matHeaderCellDef>Observaciones</th>
-      <td mat-cell *matCellDef="let element"  class="observaciones">{{ element.observaciones ? element.observaciones : '-' }}</td>
+      <td mat-cell *matCellDef="let element" class="observaciones">{{ element.observaciones ? element.observaciones : '-' }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
-    <tr class="mat-row" *matNoDataRow >
+    <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
+    <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
         <!-- @if (searching) {
           <app-loading />
@@ -113,4 +112,4 @@
     </tr>
   </table>
 </div>
-<mat-paginator [length]="dataSource" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="dataSource" [pageSize]="25" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons></mat-paginator>

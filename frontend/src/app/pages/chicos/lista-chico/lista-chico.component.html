@@ -1,22 +1,81 @@
 <div class="card">
-  <div class="card-header">Chicos cargados en el sistema</div>
+  <div class="card-header">Niños cargados</div>
   <div class="card-body">
-    <input (keyup)="applyFilter($event)" placeholder="Buscar por Dni" #input type="number" id="filtro" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required />
+    <p class="mb-4">Puedes usar los siguientes filtros para buscar los niños cargados en el sistema.</p>
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
+      <!-- DNI -->
+      <!-- pi-id-card -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full" />
+          <label for="filtroDni">DNI</label>
+        </p-iftalabel>
+      </div>
+      <!-- Nombre -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroNombre id="filtroNombre" class="w-full" />
+          <label for="filtroNombre">Nombre</label>
+        </p-iftalabel>
+      </div>
+      <!-- Apellido -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroApellido id="filtroApellido" class="w-full" />
+          <label for="filtroApellido">Apellido</label>
+        </p-iftalabel>
+      </div>
+      <!-- Sexo -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="sexoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroSexo()" [checkmark]="true" [showClear]="true" [formControl]="sexoControl" #filtroSexo id="filtroSexo" inputId="filtroSexo" optionLabel="nombre" optionValue="nombre" class="w-full" />
+          <label for="filtroSexo">Sexo</label>
+        </p-iftalabel>
+      </div>
+      <!-- Localidad -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="localidadesFiltradas" (onChange)="applyFilter($event)" (onChange)="onChangeLocalidad()" (onClear)="limpiarFiltroLocalidad()" [loading]="loadingLocalidades" [checkmark]="true" [showClear]="true" [formControl]="localidadControl" #filtroLocalidad id="filtroLocalidad" inputId="filtroLocalidad" optionLabel="nombre" optionValue="id" class="w-full" />
+          <label for="filtroLocalidad">Localidad</label>
+        </p-iftalabel>
+      </div>
+      <!-- Barrio -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="barriosFiltrados" (onChange)="applyFilter($event)" (onChange)="onChangeBarrio()" (onClear)="limpiarFiltroBarrio()" [loading]="loadingBarrios" [checkmark]="true" [showClear]="true" [formControl]="barrioControl" #filtroBarrio id="filtroBarrio" inputId="filtroBarrio" optionLabel="nombre" optionValue="id" class="w-full" />
+          <label for="filtroBarrio">Barrio</label>
+        </p-iftalabel>
+      </div>
+      <!-- Estado -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="estadoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
+          <label for="filtroEstado">Estado</label>
+        </p-iftalabel>
+      </div>
+      <!-- Actividad -->
+      <div class="sm:col-span-2 md:col-span-1">
+        <p-iftalabel>
+          <p-select [options]="actividadOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroActividad()" [checkmark]="true" [showClear]="true" [formControl]="actividadControl" #filtroActividad id="filtroActividad" inputId="filtroActividad" optionLabel="nombre" optionValue="valor" class="w-full" />
+          <label for="filtroActividad">Actividad</label>
+        </p-iftalabel>
+      </div>
+    </div>
     <div class="scroll">
-      <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll">
+      <table mat-table [dataSource]="chicos" class="mat-elevation-z8 table-auto scroll" matSort (matSortChange)="announceSortChange($event)">
         <!-- # -->
         <ng-container matColumnDef="numero">
           <th mat-header-cell *matHeaderCellDef>#</th>
-          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          <td mat-cell *matCellDef="let element">{{ chicos.data.indexOf(element) + 1 }}</td>
         </ng-container>
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por nombre">Nombre</th>
           <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
         </ng-container>
         <!-- Apellido -->
         <ng-container matColumnDef="apellido">
-          <th mat-header-cell *matHeaderCellDef>Apellido</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por apellido">Apellido</th>
           <td mat-cell *matCellDef="let element">{{ element.apellido }}</td>
         </ng-container>
         <!-- Dni -->
@@ -31,12 +90,13 @@
         </ng-container>
         <!-- Sexo -->
         <ng-container matColumnDef="sexo">
-          <th mat-header-cell *matHeaderCellDef>Sexo</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por sexo">Sexo</th>
           <td mat-cell *matCellDef="let element">{{ element.sexo }}</td>
+          <!-- <td mat-cell *matCellDef="let element"> {{ element.sexo === "Masculino" ? 'M' : element.sexo === "Femenino" ? 'F' : 'Otro' }} </td> -->
         </ng-container>
         <!-- Direccion -->
         <ng-container matColumnDef="direccion">
-          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por dirección">Dirección</th>
           <td mat-cell *matCellDef="let element">{{ element.direccion }}</td>
         </ng-container>
         <!-- Telefono -->
@@ -45,18 +105,18 @@
           <td mat-cell *matCellDef="let element">{{ element.telefono }}</td>
         </ng-container>
         <!-- Habilitado -->
-        <ng-container matColumnDef="habilitado">
-          <th mat-header-cell *matHeaderCellDef>Habilitado</th>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.deshabilitado ? 'Inhabilitado' : 'habilitado' }}
+            <p-tag [severity]="element.deshabilitado ? 'danger' : 'success'" [value]="element.deshabilitado ? 'Deshabilitado' : 'Habilitado'" />
           </td>
         </ng-container>
+        <!-- Actividad -->
         <ng-container matColumnDef="consultasBar">
           <th mat-header-cell *matHeaderCellDef>Cosultas asistidas por año</th>
           <td mat-cell *matCellDef="let element">
-            <!-- <input type="text" pInputText pTooltip="Enter your username" tooltipPosition="top" placeholder="Top" /> -->
-            <div [pTooltip]="element.actividad+' de 4'">
-              <p-progressbar  [value]="element.actividad *25" [showValue]="false" />
+            <div [pTooltip]="element.actividad + ' de 4'">
+              <p-progressbar [value]="element.actividad * 25" [showValue]="false" />
             </div>
           </td>
         </ng-container>
@@ -65,70 +125,35 @@
           <th mat-header-cell *matHeaderCellDef>Acción</th>
           <td mat-cell *matCellDef="let element">
             <div class="flex flex-row gap-2">
-              <!-- Primera opcion: -->
-              <button (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id); $event.stopPropagation()" [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button [pTooltip]="element.deshabilitado ? 'Habilitar' : 'Deshabilitar'" tooltipPosition="top" [attr.aria-label]="element.deshabilitado ? 'Botón de habilitar chico' : 'Botón de deshabilitar chico'" (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id); $event.stopPropagation()" [class]="element.deshabilitado ? 'text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400' : 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 @if (element.deshabilitado) {
                   <i class="fa-solid fa-check"></i>
                 } @else {
                   <i class="fa-solid fa-xmark fa-lg"></i>
                 }
               </button>
-              <!-- Segunda opcion:
-              <button
-                (click)="element.deshabilitado ? habilitar(element.id) : inhabilitar(element.id); $event.stopPropagation()"
-                class="flex flex-col items-center gap-2 py-2.5 text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300">
-                <div class="rounded-full p-2.5 bg-[#e8edf3]">
-                  <div class="text-black" [attr.data-icon]="element.deshabilitado ? 'check' : 'xmark'" data-size="20px"
-                    data-weight="regular">
-                    <i *ngIf="element.deshabilitado" class="fa-solid fa-check"></i>
-                    <i *ngIf="!element.deshabilitado" class="fa-solid fa-xmark fa-lg"></i>
-                  </div>
-                </div>
-                <div class="flex justify-center">
-                  <p class="text-black text-sm font-medium leading-normal">
-                    {{ element.deshabilitado ? 'Habilitar' : 'Deshabilitar' }}
-                  </p>
-                </div>
-              </button>
-              -->
-              <!-- Primera opcion -->
-              <button (click)="element.deshabilitado ? notificar(element.id) : editarChico(element.id); $event.stopPropagation()" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+              <button [pTooltip]="'Editar'" tooltipPosition="top" aria-label="Botón de editar chico" (click)="element.deshabilitado ? notificar(element.id) : editarChico(element.id); $event.stopPropagation()" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
                 <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
-              </button>
-              <button (click)="element.deshabilitado ? notificar(element.id) : editarChico(element.id); $event.stopPropagation()" class="flex flex-col items-center gap-2 py-2.5 text-center">
-                <!-- Segunda opcion
-                <div class="rounded-full p-2.5 bg-[#e8edf3]">
-                  <div class="text-black" data-icon="PencilSimple" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
-                      viewBox="0 0 256 256">
-                      <path
-                        d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z">
-                      </path>
-                    </svg>
-                  </div>
-                </div>
-                <p class="text-black text-sm font-medium leading-normal">Editar</p>
-                -->
               </button>
             </div>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="!row.deshabilitado ? verDetallesChico(row.id) : notificar(row.id)" class="cursor-pointer hover:bg-gray-300"></tr>
+        <tr [pTooltip]="'Ver chico'" tooltipPosition="top" mat-row *matRowDef="let row; columns: displayedColumns" (click)="!row.deshabilitado ? verDetallesChico(row.id) : notificar(row.id)" class="cursor-pointer hover:bg-gray-300"></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
             @if (searching) {
-              <app-loading />
+              <div class="flex justify-center items-center h-32">
+                <app-loading />
+              </div>
             } @else {
-              <p class="py-5">
-                {{ input.value ? "No encontro informaciónn '" + input.value + "'" : 'No encontro información.' }}
-              </p>
+              <p class="py-5">{{ mensajes }}</p>
             }
           </td>
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5,10,15]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="resultsLength" [pageSize]="15" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

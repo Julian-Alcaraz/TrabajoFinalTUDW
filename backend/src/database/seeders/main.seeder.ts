@@ -56,11 +56,7 @@ export class MainSeeder implements Seeder {
           nombre: 'Profesional',
         },
         {
-          nombre: 'Acceso informacion',
-        },
-        {
-          nombre: 'rolDeshabilitado',
-          deshabilitado: true,
+          nombre: 'Acceso Info',
         },
       ]);
 
@@ -86,6 +82,15 @@ export class MainSeeder implements Seeder {
           roles: [roles[1]], // Profesional
         },
         {
+          nombre: 'AccesoInfo',
+          apellido: 'AccesoInfo',
+          email: 'AccesoInfo@AccesoInfo.com',
+          contrasenia: codificarContrasenia('1234567'),
+          dni: 12345671,
+          fe_nacimiento: '2000-12-30',
+          roles: [roles[2]], // AccesoInfo
+        },
+        {
           nombre: 'ProfesionalYAdmin',
           apellido: 'ProfesionalYAdmin',
           email: 'ProfesionalYAdmin@ProfesionalYAdmin.com',
@@ -105,9 +110,10 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
       ]);
-      // Crea 10 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos
+
+      // Crea 50 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos
       const usuarios = await Promise.all(
-        Array(5)
+        Array(50)
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
@@ -116,9 +122,9 @@ export class MainSeeder implements Seeder {
             return usuario;
           }),
       );
-      // Crea 3 usuarios con 2 roles cada uno
-      const usuarios2 = await Promise.all(
-        Array(2)
+      // Crea 40 usuarios con 2 roles cada uno
+      const usuariosCon2Roles = await Promise.all(
+        Array(40)
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
@@ -127,9 +133,8 @@ export class MainSeeder implements Seeder {
             return usuario;
           }),
       );
-      await usuarioORM.save(usuariosPredeterminados);
       await usuarioORM.save(usuarios);
-      await usuarioORM.save(usuarios2);
+      await usuarioORM.save(usuariosCon2Roles);
 
       // Menus
       // Menus que tienen hijos
@@ -137,24 +142,17 @@ export class MainSeeder implements Seeder {
       const menus = await menuORM.save([
         {
           url: 'dashboard',
-          label: 'Dashboard',
+          label: 'Graficos',
           orden: 1,
           icon: 'fa-solid fa-chart-line',
-          roles: [roles[0], roles[1]],
-        },
-        {
-          url: 'usuarios',
-          label: 'Usuarios',
-          orden: 5,
-          icon: 'fa-solid fa-users',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'chicos',
-          label: 'Chicos',
+          label: 'Niños',
           orden: 3,
           icon: 'fas fa-child',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'consultas',
@@ -164,12 +162,28 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]],
         },
         {
+          url: 'administracion',
+          label: 'Administración',
+          orden: 5,
+          icon: 'fa-solid fa-shield',
+          roles: [roles[0]],
+        },
+        {
           url: 'busqueda',
-          label: 'Buscar',
+          label: 'Buscar Consultas',
           orden: 2,
           icon: 'fa-solid fa-magnifying-glass',
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: false,
+        },
+        // cambiar url despues!!!!!!!!!!!!!!!
+        {
+          url: 'miUsuario',
+          label: 'Mi Usuario',
+          orden: 6,
+          icon: 'fa-solid fa-user',
+          roles: [roles[0], roles[1], roles[2]],
+          deshabilitado: true,
         },
         {
           url: 'menuDeshabilitado',
@@ -182,46 +196,67 @@ export class MainSeeder implements Seeder {
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
+
+      const menusAdmin = await menuORM.save([
+        {
+          url: 'administracion/usuarios',
+          label: 'Usuarios',
+          orden: 7,
+          icon: 'fa-solid fa-users',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/instituciones',
+          label: 'Instituciones',
+          orden: 8,
+          icon: 'fa-solid fa-school',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/cursos',
+          label: 'Cursos',
+          orden: 9,
+          icon: 'fa-solid fa-graduation-cap',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/localidades',
+          label: 'Localidades',
+          orden: 10,
+          icon: 'fa-solid fa-earth-americas',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'administracion/barrios',
+          label: 'Barrios',
+          orden: 11,
+          icon: 'fa-solid fa-location-dot',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
+      ]);
+      await menuORM.save(menusAdmin);
+
       const menus2 = await menuORM.save([
         {
-          url: 'usuarios/miUsuario',
-          label: 'Mi Usuario',
-          orden: 3,
-          icon: 'fa-regular fa-user',
-          roles: [roles[0], roles[1], roles[2], roles[3]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
-        },
-        {
-          url: 'usuarios/nuevo',
-          label: 'Nuevo Usuario',
-          orden: 4,
-          icon: 'fa-solid  fa-user-plus',
-          roles: [roles[0]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
-        },
-        {
-          url: 'usuarios/list',
-          label: 'Lista Usuarios',
-          orden: 5,
-          icon: 'fa-solid fa-users-line',
-          roles: [roles[0]],
-          menu_padre: await menuORM.findOneBy({ id: 2 }),
-        },
-        {
           url: 'chicos/nuevo',
-          label: 'Nuevo Chico',
+          label: 'Nuevo',
           orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
         },
         {
           url: 'chicos/list',
-          label: 'Lista Chicos',
+          label: 'Lista',
           orden: 7,
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
         },
         {
           url: 'chicos/:id',
@@ -229,7 +264,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: '',
           roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          menu_padre: menus[1],
           deshabilitado: true,
         },
         {
@@ -237,8 +272,8 @@ export class MainSeeder implements Seeder {
           label: 'Editar Chico',
           orden: 4,
           icon: '',
-          roles: [roles[0], roles[1], roles[2]],
-          menu_padre: await menuORM.findOneBy({ id: 3 }),
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[1],
           deshabilitado: true,
         },
         {
@@ -247,7 +282,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/odontologia/nueva',
@@ -255,7 +290,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/oftalmologia/nueva',
@@ -263,7 +298,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'consultas/fonoaudiologia/nueva',
@@ -271,7 +306,7 @@ export class MainSeeder implements Seeder {
           orden: 4,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
-          menu_padre: await menuORM.findOneBy({ id: 4 }),
+          menu_padre: menus[2],
         },
         {
           url: 'hijoDeshabilitado',
@@ -280,10 +315,11 @@ export class MainSeeder implements Seeder {
           icon: 'hijoDeshabilitado',
           roles: [roles[0], roles[1]],
           deshabilitado: true,
-          menu_padre: await menuORM.findOneBy({ id: 1 }),
+          menu_padre: menus[0],
         },
       ]);
       await menuORM.save(menus2);
+
       // Localidades
       console.log('Seeding localidades...');
       const localidades = await localidadORM.save([
@@ -321,91 +357,59 @@ export class MainSeeder implements Seeder {
           localidad: localidades[0],
         },
         {
-          nombre: 'Localidad Cipolletti',
+          nombre: 'Barrio de Cipolletti',
           localidad: localidades[1],
         },
       ]);
       console.log('Seeding cursos...');
       const cursos = await cursoORM.save([
         {
-          grado: 1,
-          nivel: 'Primaria',
-          nombre: 'Primer Grado',
-        },
-        {
-          grado: 2,
-          nivel: 'Primaria',
-          nombre: 'Segundo Grado',
-        },
-        {
-          grado: 3,
-          nivel: 'Primaria',
-          nombre: 'Tercer Grado',
-        },
-        {
-          grado: 4,
-          nivel: 'Primaria',
-          nombre: 'Cuarto Grado',
-        },
-        {
-          grado: 5,
-          nivel: 'Primaria',
-          nombre: 'Quinto Grado',
-        },
-        {
-          grado: 6,
-          nivel: 'Primaria',
-          nombre: 'Sexto Grado',
-        },
-        {
-          grado: 7,
-          nivel: 'Primaria',
-          nombre: 'Septimo Grado',
-        },
-        {
-          grado: 1,
-          nivel: 'Secundario',
-          nombre: 'Primer Año',
-        },
-        {
-          grado: 2,
-          nivel: 'Secundario',
-          nombre: 'Segundo Año',
-        },
-        {
-          grado: 3,
-          nivel: 'Secundario',
-          nombre: 'Tercer Año',
-        },
-        {
-          grado: 4,
-          nivel: 'Secundario',
-          nombre: 'Cuarto Año',
-        },
-        {
-          grado: 5,
-          nivel: 'Secundario',
-          nombre: 'Quinto Año',
-        },
-        {
-          grado: 6,
-          nivel: 'Secundario',
-          nombre: 'Sexto Año',
-        },
-        {
-          grado: 3,
           nivel: 'Jardin',
           nombre: 'Sala de 3 Años',
         },
         {
-          grado: 4,
           nivel: 'Jardin',
           nombre: 'Sala de 4 Años',
         },
         {
-          grado: 5,
           nivel: 'Jardin',
           nombre: 'Sala de 5 Años',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Primer Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Segundo Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Tercer Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Cuarto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Quinto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Sexto Grado',
+        },
+        {
+          nivel: 'Primario',
+          nombre: 'Septimo Grado',
+        },
+        {
+          nivel: 'Secundario',
+          nombre: 'Primer Año',
+        },
+        {
+          nivel: 'Secundario',
+          nombre: 'Segundo Año',
         },
       ]);
       console.log('Seeding instituciones...');
@@ -422,15 +426,11 @@ export class MainSeeder implements Seeder {
           nombre: 'E.P.E.T N° 20',
           tipo: 'Secundario',
         },
-        {
-          nombre: 'Universidad nacional del comahue',
-          tipo: 'Terciario',
-        },
       ]);
       // Chicos
       console.log('Seeding chicos...');
 
-      // Crea 50 chicos
+      // Crea 500 chicos
       const chicos = await Promise.all(
         Array(500)
           .fill('')
@@ -493,25 +493,38 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
       ]);
-      // Consultas
-      console.log('Seeding consultas...');
 
-      // Crea 150 consultas
+      // Busco usuarios profesionales
+      const todosLosUsuarios = await usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'] });
+      const usuariosProfesionales = [];
+      for (const usuario of todosLosUsuarios) {
+        for (const rol of usuario.roles) {
+          const nombre = rol.nombre;
+          if (nombre === 'Profesional') {
+            1;
+            usuariosProfesionales.push(usuario);
+          }
+        }
+      }
+
+      // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
-        Array(1500)
+        Array(2500)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-            const usuarioConRol = faker.helpers.arrayElement(usuarios.filter((usuario) => usuario.roles.filter((rol) => rol.nombre === 'Medico' || rol.nombre === 'Admin')));
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
             const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
             const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-            // consultas
             const consulta = await consultaFactory.make({
               curso: faker.helpers.arrayElement(cursos),
               institucion: faker.helpers.arrayElement(instituciones),
               chico: chicoSeleccionado,
               usuario: usuarioConRol,
               edad: edad,
+              created_at: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
             });
             return consulta;
           }),

@@ -1,121 +1,136 @@
 <form (ngSubmit)="buscar()" [formGroup]="formBusqueda">
-  <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-12">
-    <h3 class="md:col-span-12 text-lg font-semibold mt-2 mb-2">Filtros comúnes</h3>
-    <!-- Tipo de consulta -->
-    <div class="md:col-span-6">
-      <p-iftalabel>
-        <p-multiselect [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4"
-          formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full h-16" />
-        <label for="consultasSeleccionadas">Tipo de consulta</label>
-      </p-iftalabel>
-    </div>
-    <!-- Rango de fechas -->
-    <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
-    <!-- ACA SE PODRIA AGREGAR UN  [minDate]="" CON LA CONSULTA MAS VIEJA DE LA BD -->
-    <div class="md:col-span-2" formGroupName="generales">
-      <p-iftalabel>
-        <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range"
-          styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy">
-          <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
-          <ng-template pTemplate="footer">
-            <p-button class="p-datepicker-prev hidden">Previous</p-button>
-            <p-button class="p-datepicker-next hidden">Next</p-button>
-          </ng-template>
-          <!-- end TODO -->
-        </p-datepicker>
-        <label for="rangoFechas">Rango de fechas</label>
-      </p-iftalabel>
-    </div>
-    <!-- Profesional -->
-    <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
-    <div class="md:col-span-4" formGroupName="generales">
-      <div formGroupName="usuario">
+  <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header" class="m-16">
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2 cursor-pointer">
+        <h3 class="md:col-span-12 text-lg font-semibold my-4">Filtros comúnes</h3>
+      </div>
+    </ng-template>
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-12">
+      <!-- Tipo de consulta -->
+      <div class="md:col-span-6">
         <p-iftalabel>
-          <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true"
-            optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
-          <label for="profesionales">Profesionales</label>
+          <p-multiselect [filter]="false" [showHeader]="false" [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full h-16" />
+          <label for="consultasSeleccionadas">Tipo de consulta</label>
         </p-iftalabel>
       </div>
-    </div>
-    <!-- Institucion -->
-    <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
-    <div class="md:col-span-4" formGroupName="generales">
-      <div formGroupName="institucion">
+      <!-- Rango de fechas -->
+      <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
+      <div class="md:col-span-2" formGroupName="generales">
         <p-iftalabel>
-          <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true"
-            optionLabel="nombre" optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
-          <label for="instituciones">Institución</label>
+          <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy" [showButtonBar]="true">
+            <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+            <ng-template pTemplate="footer">
+              <p-button class="p-datepicker-prev hidden">Previous</p-button>
+              <p-button class="p-datepicker-next hidden">Next</p-button>
+            </ng-template>
+            <!-- end TODO -->
+          </p-datepicker>
+          <label for="rangoFechas">Rango de fechas</label>
         </p-iftalabel>
       </div>
-    </div>
-    <!-- Curso -->
-    <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
-    <div class="md:col-span-4" formGroupName="generales">
-      <div formGroupName="curso">
+      <!-- Profesional -->
+      <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+      <div class="md:col-span-4" formGroupName="generales">
+        <div formGroupName="usuario">
+          <p-iftalabel>
+            <p-select [options]="profesionales" idInput="profesionales" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [filter]="true" filterPlaceholder="Buscar" [loading]="loadingProfesionales" class="w-full h-16">
+              <ng-template pTemplate="selectedItem" let-profesional>
+                <div class="flex items-center gap-0">
+                  <div>{{ profesional.nombre + ' ' + profesional.apellido }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-profesional pTemplate="item">
+                {{ profesional.nombre + ' ' + profesional.apellido }}
+              </ng-template>
+            </p-select>
+            <label for="profesionales">Profesionales</label>
+          </p-iftalabel>
+        </div>
+      </div>
+      <!-- Institucion -->
+      <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+      <div class="md:col-span-4" formGroupName="generales">
+        <div formGroupName="institucion">
+          <p-iftalabel>
+            <p-select [options]="instituciones" idInput="instituciones" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [loading]="loadingInstituciones" class="w-full h-16" />
+            <label for="instituciones">Institución</label>
+          </p-iftalabel>
+        </div>
+      </div>
+      <!-- Curso -->
+      <!-- ACA SE PODRIA DEJAR SELECCIONAR MAS DE 1 -->
+      <div class="md:col-span-4" formGroupName="generales">
+        <div formGroupName="curso">
+          <p-iftalabel>
+            <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [loading]="loadingCursos" class="w-full h-16" />
+            <label for="cursos">Cursos</label>
+          </p-iftalabel>
+        </div>
+      </div>
+      <!-- Turno -->
+      <div class="md:col-span-4" formGroupName="generales">
         <p-iftalabel>
-          <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre"
-            optionValue="id" [showClear]="true" placeholder="" class="w-full h-16" />
-          <label for="cursos">Cursos</label>
+          <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+          <label for="turno">Turno</label>
         </p-iftalabel>
       </div>
-    </div>
-    <!-- Turno -->
-    <div class="md:col-span-4" formGroupName="generales">
-      <p-iftalabel>
-        <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true"
-          optionLabel="nombre" optionValue="valor" [showClear]="true" placeholder="" class="w-full h-16" />
-        <label for="turno">Turno</label>
-      </p-iftalabel>
-    </div>
-    <!-- Edad -->
-    <div class="md:col-span-4" formGroupName="generales">
-      <p-iftalabel>
-        <p-inputnumber formControlName="edad" pKeyFilter="int" inputId="edad" mode="decimal" [min]="1" [max]="20"
-          [showButtons]="true" class="w-full h-16" />
-        <label for="edad">Edad</label>
-      </p-iftalabel>
-    </div>
-    <!-- Sexo -->
-    <div class="md:col-span-3" formGroupName="generales">
-      <div formGroupName="chico">
-        <p class="m-0 p-0">Sexo</p>
-        <p-selectbutton [options]="sexoOptions" formControlName="sexo" optionLabel="nombre" optionValue="valor"
-          styleClass="w-full" />
+      <!-- Edad -->
+      <div class="md:col-span-4" formGroupName="generales">
+        <p-iftalabel>
+          <p-inputnumber formControlName="edad" pKeyFilter="int" inputId="edad" mode="decimal" [min]="1" [max]="20" [showButtons]="true" class="w-full h-16" />
+          <label for="edad">Edad</label>
+        </p-iftalabel>
+      </div>
+      <!-- Sexo -->
+      <div class="md:col-span-3" formGroupName="generales">
+        <div formGroupName="chico">
+          <p-iftalabel>
+            <p-select [options]="sexoOptions" idInput="sexo" formControlName="sexo" [checkmark]="true" optionLabel="nombre" optionValue="nombre" [showClear]="true" class="w-full h-16" />
+            <label for="sexo">Sexo</label>
+          </p-iftalabel>
+        </div>
+      </div>
+      <!-- Obra Social -->
+      <div class="md:col-span-3" formGroupName="generales">
+        <p class="m-0 p-0">Obra Social</p>
+        <p-selectbutton [options]="siNoOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+      </div>
+      <!-- Tiene observaciones -->
+      <div class="md:col-span-1" formGroupName="generales">
+        <p class="m-0 p-0">Observaciones</p>
+        <p-selectbutton [options]="siNoOptions" formControlName="observaciones" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
       </div>
     </div>
-    <!-- Obra Social -->
-    <div class="md:col-span-3" formGroupName="generales">
-      <p class="m-0 p-0">Obra Social</p>
-      <p-selectbutton [options]="siNoOptions" formControlName="obra_social" optionLabel="nombre" optionValue="valor"
-        styleClass="w-full" />
-    </div>
-    <!-- Tiene observaciones -->
-    <div class="md:col-span-1" formGroupName="generales">
-      <p class="m-0 p-0">Observaciones</p>
-      <p-selectbutton [options]="siNoOptions" formControlName="observaciones" optionLabel="nombre" optionValue="valor"
-        styleClass="w-full" />
-    </div>
-  </div>
-  <div
-    *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1">
-    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
-      <app-campos-clinica [form]="formBusqueda" />
-    </div>
-    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Oftalmologia')">
-      <app-campos-oftalmologia [form]="formBusqueda" />
-    </div>
-    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Fonoaudiologia')">
-      <app-campos-fonoaudiologia [form]="formBusqueda" />
-    </div>
-    <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Odontologia')">
-      <app-campos-odontologia [form]="formBusqueda" />
-    </div>
+  </p-panel>
+  <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1">
+    <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header">
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-2">
+          <h3 class="md:col-span-12 text-lg font-semibold my-4 cursor-pointer">Filtros de {{ this.formBusqueda.get('consultasSeleccionadas')?.value }}</h3>
+        </div>
+      </ng-template>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
+        <app-campos-clinica [form]="formBusqueda" />
+      </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Oftalmologia')">
+        <app-campos-oftalmologia [form]="formBusqueda" />
+      </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Fonoaudiologia')">
+        <app-campos-fonoaudiologia [form]="formBusqueda" />
+      </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Odontologia')">
+        <app-campos-odontologia [form]="formBusqueda" />
+      </div>
+    </p-panel>
   </div>
   <!-- Buscar -->
   <div class="flex justify-end mt-4">
-    <button type="submit"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">
-      Buscar
-    </button>
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
+  </div>
+  <div *ngIf="mostrarBotonDescarga">
+    <button type="button" (click)="generarCsv()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Descargar CSV</button>
   </div>
 </form>
+@if (searching) {
+  <app-loading />
+}
