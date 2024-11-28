@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeicons/primeicons.css";
+@import 'primeicons/primeicons.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -108,5 +108,11 @@ body {
   padding: 0;
   /* overflow: auto !important; */
 }
-
-
+.p-datepicker-clear-icon {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  color: rgb(148, 163, 184);
+  cursor: pointer;
+  padding: 10px 10px;
+}

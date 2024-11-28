@@ -2,32 +2,27 @@
   <!-- Receta -->
   <div class="md:col-span-1 my-2">
     <p>¿Necesita receta?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Control -->
   <div class="md:col-span-1 my-2">
     <p>¿Es un control?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Derivacion -->
   <div class="md:col-span-1 my-2">
     <p>¿Es primera vez?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Anteojos -->
   <div class="md:col-span-1 my-2">
     <p class="text-sm">¿Se entregaron Anteojos?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="anteojos" optionLabel="nombre" optionValue="valor"
-      styleClass="w-full" />
+    <p-selectbutton [options]="siNoOptions" formControlName="anteojos" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Rango de fechas del proximo control -->
   <div class="md:col-span-1 my-2">
     <p-iftalabel>
-      <p-datepicker [readonlyInput]="true" inputId="rangoFechasProxControl" formControlName="rangoFechasProxControl"
-        selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body">
+      <p-datepicker [showClear]="true" [showButtonBar]="true" [readonlyInput]="true" inputId="rangoFechasProxControl" formControlName="rangoFechasProxControl" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body">
         <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
         <ng-template pTemplate="footer">
           <p-button class="p-datepicker-prev hidden">Previous</p-button>
@@ -41,17 +36,10 @@
   <!-- Derivacion externa-->
   <div class="md:col-span-1 my-2">
     <p-iftalabel>
-      <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre"
-        optionValue="valor" styleClass="w-full h-16" />
+      <p-multiselect [options]="derivacionesOptions" [filter]="false" [showHeader]="false" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>
-  <!-- Derivacion externa
-    <div class="md:col-span-1 my-2">
-      <p>¿Derivación externa?</p>
-      <p-selectbutton [options]="siNoOptions" formControlName="derivaciones" optionLabel="nombre" optionValue="valor"
-        styleClass="w-full" />
-    </div>  -->
   <!-- Fecha proximo control
     <div class="md:col-span-1">
       <p class="m-0 p-0">¿Fecha próximo control?</p>
