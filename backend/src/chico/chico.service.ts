@@ -56,20 +56,11 @@ export class ChicoService {
       .addSelect((subQuery) => {
         return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
+      .orderBy('chico.nombre')
       .getRawMany();
 
     return result;
   }
-  /*
-  async findAllWithActivity(year: number) {
-    const result = await this.chicoORM
-      .createQueryBuilder('chico')
-      .leftJoinAndSelect('chico.barrio', 'barrio')
-      .loadRelationCountAndMap('chico.actividad', 'chico.consultas', 'consultas', (qb) => qb.where('EXTRACT(YEAR FROM consultas.created_at) = :year', { year }))
-      .getMany();
-    return result;
-  }
-  */
 
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });

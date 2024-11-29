@@ -48,8 +48,8 @@ export class CreateChicoDto {
   @ApiProperty({ description: 'Telefono del chico' })
   @IsNotEmpty({ message: 'El telefono no puede estar vacio' })
   @IsString({ message: 'El telefono debe ser un string' })
-  @Length(1, 50, { message: 'El telefono debe tener entre 1 y 15 caracteres' })
-  @Transform(({ value }) => value.trim())
+  @Length(1, 15, { message: 'El telefono debe tener entre 1 y 15 caracteres' })
+  // @Transform(({ value }) => value.trim())
   readonly telefono: string;
 
   @ApiProperty({ description: 'Nombre madre del chico' })

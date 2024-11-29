@@ -61,7 +61,7 @@
     @if (searchingCursos) {
       <app-loading />
     } @else {
-      <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" />
+      <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="values ? cursosOriginales : cursos" />
     }
   </div>
   <!-- Turno -->

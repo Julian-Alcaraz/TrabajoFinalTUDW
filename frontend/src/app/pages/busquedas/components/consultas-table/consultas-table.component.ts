@@ -24,7 +24,7 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
 
   @Input() consultas: Consulta[] = [];
-  @Input() displayedColumns: string[] = ['numero', 'type', 'nombre','documento', 'sexo', 'edad', 'fecha', 'obra_social', 'fechaNac', 'direccionChico', 'telefono', 'derivaciones', 'institucion', 'curso', 'observaciones', 'profesional'];
+  @Input() displayedColumns: string[] = ['numero', 'type', 'nombre', 'documento', 'sexo', 'edad', 'fecha', 'obra_social', 'fechaNac', 'direccionChico', 'telefono', 'derivaciones', 'institucion', 'curso', 'observaciones', 'profesional'];
   // por defecto todas las columnas
   public dataSource: MatTableDataSource<Consulta>;
 

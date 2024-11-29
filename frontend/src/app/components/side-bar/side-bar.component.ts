@@ -110,7 +110,7 @@ export class NavBarComponent implements OnInit {
   }
 
   cerraElSideBar() {
-    if (this.screenWidth < 426) {
+    if (this.screenWidth < 455) {
       this.toggleCollapsed();
     }
   }

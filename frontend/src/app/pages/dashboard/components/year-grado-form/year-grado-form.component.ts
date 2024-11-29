@@ -6,11 +6,12 @@ import { CursoService } from '../../../../services/curso.service';
 import { Curso } from '../../../../models/curso.model';
 import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-year-grado-form',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, InputSelectComponent, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, DatePickerModule, InputSelectComponent, ReactiveFormsModule, LoadingComponent, InputSelectEnumComponent],
   templateUrl: './year-grado-form.component.html',
   styleUrl: './year-grado-form.component.css',
 })
@@ -28,6 +29,7 @@ export class YearGradoFormComponent implements OnInit {
     this.optionForm = this.fb.group({
       year: ['', []],
       id_curso: ['', [Validators.required]],
+      porcentaje: ['', [Validators.required]],
     });
   }
 
@@ -35,7 +37,7 @@ export class YearGradoFormComponent implements OnInit {
     this.obtenerCursos();
     this.traerDatosGraficos();
   }
-  get controlDeInput(): (input: string) => FormControl{
+  get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.optionForm.get(input) as FormControl;
   }
 
@@ -67,7 +69,8 @@ export class YearGradoFormComponent implements OnInit {
       });
       nombreCurso = cursoSeleccionado[0].nombre;
     }
-    this.cambioForm.emit({ id_curso, year, nombreCurso });
+    const porcentaje = this.optionForm.value.porcentaje;
+    this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje });
   }
   resetearForm() {
     this.optionForm.reset();

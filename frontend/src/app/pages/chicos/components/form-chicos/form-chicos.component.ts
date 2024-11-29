@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +39,7 @@ SI SE DESCOMENTA HAY QUE VALIDAR LOS ROLES DEL USUARIO ANTES DE DEJAR CARGAR.
 export class FormChicosComponent implements OnInit {
   @Input() esFormulario = true;
   @Input() id_chico: number | null = null;
-
+  @Output() editoChico: EventEmitter<boolean> = new EventEmitter<boolean>()
   public searching = false;
   public chicoForm: FormGroup;
   public barrios: Barrio[] = [];
@@ -305,7 +305,7 @@ export class FormChicosComponent implements OnInit {
   }
 
   editarChico() {
-    if (this.chico) {
+    if (this.chico && this.chicoForm.valid) {
       Swal.fire({
         title: '¿Modificar chico?',
         showDenyButton: true,
@@ -323,7 +323,7 @@ export class FormChicosComponent implements OnInit {
             ...(this.chico?.nombre !== this.chicoForm.value.nombre && { nombre: this.chicoForm.value.nombre }),
             ...(this.chico?.apellido !== this.chicoForm.value.apellido && { apellido: this.chicoForm.value.apellido }),
             ...(this.chico?.direccion !== this.chicoForm.value.direccion && { direccion: this.chicoForm.value.direccion }),
-            ...(this.chico?.telefono !== this.chicoForm.value.telefono && { telefono: this.chicoForm.value.telefono }),
+            ...(this.chico?.telefono !== this.chicoForm.value.telefono && { telefono: this.chicoForm.value.telefono+'' }),
             ...(this.chico?.nombre_padre !== this.chicoForm.value.nombre_padre && { nombre_padre: this.chicoForm.value.nombre_padre }),
             ...(this.chico?.nombre_madre !== this.chicoForm.value.nombre_madre && { nombre_madre: this.chicoForm.value.nombre_madre }),
             ...(this.chico?.barrio?.localidad?.id !== this.chicoForm.value.id_localidad && { id_localidad: this.chicoForm.value.id_localidad }),
@@ -334,6 +334,7 @@ export class FormChicosComponent implements OnInit {
           if (!data.nombre_padre) delete data.nombre_padre;
           this._chicoService.modificarChico(this.chico.id, data).subscribe({
             next: (response: any) => {
+              this.editoChico.emit(true)
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
               } else {
@@ -352,7 +353,6 @@ export class FormChicosComponent implements OnInit {
   }
 
   cargarChico() {
-    console.log('Formulario válido:', this.chicoForm.valid);
     if (this.chicoForm.valid) {
       Swal.fire({
         title: '¿Cargar nuevo chico?',

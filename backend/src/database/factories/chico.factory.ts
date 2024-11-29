@@ -10,7 +10,7 @@ export const ChicoFactory = setSeederFactory(Chico, async () => {
   chico.nombre_padre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.nombre_madre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.direccion = faker.location.streetAddress();
-  chico.telefono = faker.phone.number().replace(/\s+/g, '');
+  chico.telefono = faker.phone.number().replace(/[.\s-]+/g, '');
   enum sexoType {
     Masculino = 'Masculino',
     Femenino = 'Femenino',

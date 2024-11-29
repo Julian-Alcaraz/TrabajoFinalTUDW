@@ -61,7 +61,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public searching = true;
   public resultsLength = 0;
   public searchTerms: any = {};
-  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'estado', 'action'];
+  public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action']; //'estado',
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
     { nombre: 'Deshabilitado', valor: true },
@@ -365,7 +365,12 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   editarChico(id: number) {
-    this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
+    const dialogRef = this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
+    dialogRef.afterClosed().subscribe((recargar) => {
+      if (recargar) {
+        this.obtenerChicos();
+      }
+    });
   }
 
   verDetallesChico(id: number) {
