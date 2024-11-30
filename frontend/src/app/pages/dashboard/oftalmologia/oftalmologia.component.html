@@ -1,1 +1,12 @@
-<p>oftalmologia works!</p>
+<div class="p-2">
+  <app-year-grado-form (cambioForm)="cambioForm($event)" />
+</div>
+
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloAnteojos" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si','No']" [sets]="porcentajeAnteojos" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloDemanda" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]=" ['Control niño sano', 'Docente', 'Familiar', 'Otro']" [sets]="porcentajeDemanda" /></div>
+  <!-- <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="''" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Normal', 'Anormal']" [sets]="porcentajesExamenVisual" /></div> -->
+  <!-- <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloVacunas" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Completo', 'Incompleto', 'Desconocido']" [sets]="porcentajesVacunas" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloOrtopedia" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Normal', 'Anormal']" [sets]="porcentajesOrtopedia" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloLenguaje" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Adecuado', 'Inadecuado']" [sets]="porcentajesLenguaje" /></div> -->
+</div>

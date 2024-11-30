@@ -1,14 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { DemandaEnum } from '../entities/oftalmologia.entity';
 
 export class CreateOftalmologiaDto {
   @ApiProperty({ description: 'Demanada de la consulta' })
   @IsNotEmpty({ message: 'La demanda no puede estar vacia' })
   @IsString({ message: 'La demanda debe ser un string' })
-  @Length(1, 100, { message: 'La demanda debe tener entre 1 y 100 caracteres' })
+  @IsEnum(['Control niño sano', 'Docente', 'Familiar', 'Otro'], { message: 'El tipo no es una opcion valida. TEL, TEA, Retraso en el lenguaje, dislalias funcionales, Respirador bucal, Anquiloglosia, Ortodoncia: Protrusión lingual, paladar hendido, Síndromes, Otras patologías que dificulten el lenguaje y la comunicación' })
   @Transform(({ value }) => value.trim())
-  readonly demanda: string;
+  readonly demanda: DemandaEnum;
 
   @ApiProperty({ description: 'Primera vez' })
   @IsNotEmpty({ message: 'Primera vez no puede estar vacia' })

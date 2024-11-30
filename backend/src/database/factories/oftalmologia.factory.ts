@@ -5,8 +5,14 @@ import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 
 export const OftalmologiaFactory = setSeederFactory(Oftalmologia, async () => {
   const oftalmologia = new Oftalmologia();
-  const demandaOptions = ['Familiar', 'Docente', 'Control Niño Sano'];
-  oftalmologia.demanda = faker.helpers.arrayElement(demandaOptions);
+  enum DemandaOptions {
+    control = 'Control niño sano',
+    docente = 'Docente',
+    familiar = 'Familiar',
+    otro = 'Otro',
+  }
+  const demandaOptions = [DemandaOptions.control, DemandaOptions.docente, DemandaOptions.familiar, DemandaOptions.otro];
+  oftalmologia.demanda = demandaOptions[Math.floor(Math.random() * demandaOptions.length)];
   oftalmologia.prox_control = faker.date.future({ years: 1 });
   oftalmologia.receta = Math.random() > 0.5 ? true : false;
   oftalmologia.primera_vez = Math.random() > 0.5 ? true : false;
@@ -15,7 +21,7 @@ export const OftalmologiaFactory = setSeederFactory(Oftalmologia, async () => {
   if (oftalmologia.primera_vez === false && oftalmologia.control === true) {
     oftalmologia.anteojos = Math.random() > 0.5 ? true : false;
   } else {
-    oftalmologia.anteojos = null;
+    oftalmologia.anteojos = false;
   }
   return oftalmologia;
 });

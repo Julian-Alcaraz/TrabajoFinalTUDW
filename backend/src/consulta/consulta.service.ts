@@ -697,6 +697,223 @@ export class ConsultaService {
     }
     return respuesta;
   }
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ODONOTOLOGIA
+
+  async cepilladoData(year: number, id: number) {
+    const types = ['Si', 'No'];
+    const createQuery = (type: string) => {
+      const cepilladoBoolean = type === 'Si';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.cepillado = :cepilladoBoolean', { cepilladoBoolean });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeCepilladoData(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.cepilladoData(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+
+  async topificacionData(year: number, id: number) {
+    const types = ['Si', 'No'];
+    const createQuery = (type: string) => {
+      const topificacionBoolean = type === 'Si';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.topificacion = :topificacionBoolean', { topificacionBoolean });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeTopificacionData(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.topificacionData(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+
+  async situacionBucalData(year: number, id: number) {
+    const types = ['Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries', 'Boca sana', 'Sin clasificación'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.clasificacion = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeSituacionBucalData(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.situacionBucalData(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  // async selladoData(year: number, id: number) {
+  //   const types = ['Si', 'No'];
+  //   const createQuery = (type: string) => {
+  //     const cepilladoBolean = type === 'Si';
+  //     let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.cepillado = :cepilladoBolean', { cepilladoBolean });
+  //     if (year) {
+  //       query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+  //     }
+  //     if (id) {
+  //       query = query.andWhere('consulta.id_curso = :id', { id });
+  //     }
+  //     return query.getCount();
+  //   };
+  //   const counts = await Promise.all(
+  //     types.map(async (type) => {
+  //       return await createQuery(type);
+  //     }),
+  //   );
+  //   return counts;
+  // }
+
+  // async porcentajeSelladoData(year: number, id: number, porcentaje: number) {
+  //   const respuesta = {};
+  //   for (let i = 0; i < 4; i++) {
+  //     const data = await this.selladoData(year, id);
+  //     if (porcentaje === 1) {
+  //       const porcentajes = calcularPorcentaje(data);
+  //       respuesta[year] = porcentajes;
+  //     } else {
+  //       respuesta[year] = data;
+  //     }
+  //     year--;
+  //   }
+  //   return respuesta;
+  // }
+
+  // !!!!!!!!!! OFTALMOLIGA
+  async anteojosData(year: number, id: number) {
+    const types = ['Si', 'No'];
+    const createQuery = (type: string) => {
+      const clasificacion = type === 'Si';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('oftalmologia.anteojos = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeAnteojosData(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.anteojosData(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  async demandaData(year: number, id: number) {
+    const types = ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('oftalmologia.demanda = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+
+  async porcentajeDemandaData(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.demandaData(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
 }
 
 function calcularPorcentaje(data: number[]) {

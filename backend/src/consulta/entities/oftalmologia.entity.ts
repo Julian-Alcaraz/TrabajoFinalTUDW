@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
-
+export type DemandaEnum = 'Control niño sano' | 'Docente' | 'Familiar' | 'Otro';
 @Entity('oftalmologia')
 export class Oftalmologia {
   @PrimaryColumn({ type: 'int' })
@@ -10,8 +10,8 @@ export class Oftalmologia {
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
-  @Column({ type: 'varchar', length: 100, nullable: false })
-  demanda: string;
+  @Column({ type: 'enum', enum: ['Control niño sano', 'Docente', 'Familiar', 'Otro'] })
+  demanda: DemandaEnum;
 
   @Column({ type: 'boolean', nullable: false })
   primera_vez: boolean;

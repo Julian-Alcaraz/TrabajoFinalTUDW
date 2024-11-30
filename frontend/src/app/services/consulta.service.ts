@@ -36,6 +36,7 @@ export class ConsultaService {
   esPrimeraVez(id: number, tipoConsulta: string) {
     return this._http.get(this.url + 'consulta/primeraVezChico/' + id + '/' + tipoConsulta);
   }
+
   // Graficos
   countConsultaLastYears(year: number) {
     return this._http.get(this.url + 'consulta/contarXanios/' + year);
@@ -48,7 +49,7 @@ export class ConsultaService {
   countTypeConsultaByYearAndInstitucion(year: number, id_institucion: number) {
     return this._http.get(`${this.url}consulta/contarTipoXanios/${year}/institucion/${id_institucion}`);
   }
-
+  // clinica
   countTensionArterialByYearAndCurso(year: number, id_curso: number) {
     return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}`);
   }
@@ -79,5 +80,26 @@ export class ConsultaService {
   }
   porcentajeLenguajePorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeLenguajePorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  // odontologia
+  porcentajeCepilladoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeCepilladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeTopificacionPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeTopificacionPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeSituacionBucalPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  // porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+  //   return this._http.get(`${this.url}consulta/porcentajeSelladorPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  // }
+
+  // Ofatlmologia
+  porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeAnteojosPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
 }

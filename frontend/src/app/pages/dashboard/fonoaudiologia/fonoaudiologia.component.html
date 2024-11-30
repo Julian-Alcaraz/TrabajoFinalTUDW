@@ -1,1 +1,7 @@
-<p>fonoaudiologia works!</p>
+<div class="p-2">
+  <app-year-grado-form (cambioForm)="cambioForm($event)" />
+</div>
+
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="''" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="[]" [sets]="[]" /></div>
+</div>
