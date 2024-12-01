@@ -214,17 +214,12 @@ export class PersonalizadaComponent implements OnInit {
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        console.log(err);
       },
     });
   }
 }
 
 function prepararData(data: any): any {
-  /*
-  console.log('me llego la data: ', data);
-  console.log('me llegaron las derivaciones: ', data.generales.derivaciones);
-  */
   let derivaciones;
   if (data.derivaciones !== '' && data.derivaciones) {
     derivaciones = data.derivaciones?.reduce((acc: any, item: any) => {

@@ -136,7 +136,6 @@ export class NuevaOdontologiaComponent implements OnInit {
               ...odontologicaValues,
             },
           };
-          console.log('DATA ENVIADA', data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {

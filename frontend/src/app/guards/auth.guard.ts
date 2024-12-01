@@ -81,10 +81,8 @@ export const profesionalGuard: CanActivateFn = () => {
   } else {
     const _sessionService = inject(SessionService);
     const identidad = _sessionService.getIdentidad();
-    console.log(identidad)
 
     if (identidad) {
-      console.log(identidad.roles_ids)
       if (identidad.roles_ids?.includes(1) || identidad.roles_ids?.includes(2)) {
         return true;
       }

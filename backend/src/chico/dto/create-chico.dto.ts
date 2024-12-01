@@ -58,7 +58,7 @@ export class CreateChicoDto {
   @IsString({ message: 'El nombre de la madre debe ser un string' })
   @Length(1, 100, { message: 'El nombre de la madre debe tener entre 1 y 100 caracteres' })
   // Este transform da error cuando no se envia este dato opcional
-  // @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value.trim())
   readonly nombre_madre?: string;
 
   @ApiProperty({ description: 'Nombre padre del chico' })
@@ -67,7 +67,7 @@ export class CreateChicoDto {
   @IsString({ message: 'El nombre del padre debe ser un string' })
   @Length(1, 100, { message: 'El nombre del padre debe tener entre 1 y 100 caracteres' })
   // Este transform da error cuando no se envia este dato opcional
-  // @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value.trim())
   readonly nombre_padre?: string;
 
   @ApiProperty({ description: 'Id del barrio' })

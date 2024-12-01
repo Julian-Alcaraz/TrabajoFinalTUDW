@@ -23,7 +23,6 @@ export class NuevoUsuarioComponent {
   }
 
   onUsuarioCreado() {
-    console.log('Usuario creado. Actualizando componente padre.');
     this.cerrarModalUsuario(true);
   }
 }

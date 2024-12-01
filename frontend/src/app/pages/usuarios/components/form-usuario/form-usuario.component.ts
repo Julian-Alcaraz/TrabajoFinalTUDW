@@ -167,7 +167,6 @@ export class FormUsuarioComponent implements OnInit {
       error: (error: any) => {
         this.mensajeValidando = '';
         this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
-        console.log(error);
       },
     });
   }

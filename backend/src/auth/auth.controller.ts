@@ -31,7 +31,6 @@ export class AuthController {
   @Get('status')
   @UseGuards(JwtAuthGuard)
   status(@Res() res: Response, @Req() req: Request) {
-    console.log('Validate', req.user);
     return res.status(200).send({ success: true, user: req.user });
   }
 

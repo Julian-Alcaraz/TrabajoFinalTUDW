@@ -63,11 +63,11 @@ export class VerChicoComponent implements OnInit {
           this.obtenerChico(idChico);
           this.obtenerConsultas(idChico);
         } else {
-          console.log('El ID proporcionado no es un número válido.');
+          // console.log('El ID proporcionado no es un número válido.');
           // Manejar el caso en que el ID no es un número
         }
       } else {
-        console.log('No se proporcionó un ID válido.');
+        // console.log('No se proporcionó un ID válido.');
         // Manejar el caso en que no se proporcionó un ID
       }
     });

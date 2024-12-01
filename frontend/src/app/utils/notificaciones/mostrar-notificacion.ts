@@ -29,7 +29,6 @@ function mensajeError(snackBar: MatSnackBar, err: string) {
 }
 
 function mensajeErrorServicio(snackBar: MatSnackBar, error: any) {
-  // console.log('[ERROR SERVICIO] ', error);
   const error_mje: any = error;
 
   if (error_mje != null) {
@@ -43,7 +42,6 @@ function mensajeErrorServicio(snackBar: MatSnackBar, error: any) {
         mensaje = error_mje.error;
       }
     }
-
     mensajeError(snackBar, mensaje);
   }
 }

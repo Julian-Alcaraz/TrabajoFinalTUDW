@@ -56,7 +56,6 @@ export class ConsultaService {
         const tension_arterial = tensionArterial(clinica.pcta);
         // cualquiera de las dos formas esta bien, nose cual es mejor!!!!! segun chat la del objeto por como se gestiona orm
         nuevaConsultaHija = manager.create(Clinica, { consulta: consultaGuardada, ...clinica, imc, estado_nutricional, tension_arterial });
-        // nuevaConsultaHija = manager.create(clinica, { consultaId: consultaGuardada.id, ...clinica, imc, estado_nutricional, tension_arterial });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
@@ -81,11 +80,6 @@ export class ConsultaService {
         throw new BadRequestException('Fallo la carga de la consulta hija');
       }
 
-      // return consultaGuardada; //devuelve solo la consulta
-      // return { ...consultaGuardada, ...consultaHijaGuardada }; // devuelve laconsulta join consultahija un solo objeto
-      // return consultaHijaGuardada; // devuelve la consulta hija con un objeto de la consulta
-
-      // de esta forma devuelve todo como si fuera el mismo registro, para mi la mejor forma
       delete consultaHijaGuardada.consulta;
       delete consultaHijaGuardada.id_consulta;
       return { ...consultaGuardada, ...consultaHijaGuardada };
@@ -130,14 +124,11 @@ export class ConsultaService {
 
   async busquedaPersonalizada(data: any) {
     const consulta = this.prepararDataConsultaPersonalizada(data);
-    console.log('CONSULTA A LA BD: ', consulta);
     let consultas: Consulta[];
     if (!consulta.generales) {
       consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: { deshabilitado: false } });
-      console.log('No llegaron datos generales');
     } else {
       consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: consulta.generales });
-      console.log('Llegaron datos generales');
     }
     if (data.consultasSeleccionadas) {
       const resultados = [];
@@ -145,7 +136,6 @@ export class ConsultaService {
       if (data.consultasSeleccionadas.includes('Clinica')) {
         // Clinica
         if (consulta.especificas) {
-          console.log('clinica');
           if (consulta.especificas.rangoTalla) {
             consulta.especificas = {
               ...consulta.especificas,
@@ -168,7 +158,6 @@ export class ConsultaService {
             delete consulta.especificas.rangoPeso;
           }
           if (consulta.especificas.rangoPct) {
-            console.log(consulta.especificas.rangoPct);
             consulta.especificas = {
               ...consulta.especificas,
               pct: Between(consulta.especificas.rangoPct.pctMin, consulta.especificas.rangoPct.pctMax),
@@ -176,7 +165,6 @@ export class ConsultaService {
             delete consulta.especificas.rangoPct;
           }
           if (consulta.especificas.rangoTas) {
-            console.log(consulta.especificas.rangoTas);
             consulta.especificas = {
               ...consulta.especificas,
               tas: Between(consulta.especificas.rangoTas.tasMin, consulta.especificas.rangoTas.tasMax),
@@ -184,7 +172,6 @@ export class ConsultaService {
             delete consulta.especificas.rangoTas;
           }
           if (consulta.especificas.rangoTad) {
-            console.log(consulta.especificas.rangoTad);
             consulta.especificas = {
               ...consulta.especificas,
               tad: Between(consulta.especificas.rangoTad.tadMin, consulta.especificas.rangoTad.tadMax),
@@ -203,7 +190,6 @@ export class ConsultaService {
       }
       if (data.consultasSeleccionadas.includes('Odontologia')) {
         // Odontologia
-        console.log('Odontologia');
         if (consulta.especificas) {
           if (consulta.especificas.rangoDientesPermanentes) {
             consulta.especificas = {
@@ -237,7 +223,6 @@ export class ConsultaService {
         resultados.push(...resultadosOdontologia);
       }
       if (data.consultasSeleccionadas.includes('Oftalmologia')) {
-        console.log('Oftalmologia');
         // Oftalmologia
         if (consulta.especificas) {
           if (consulta.especificas.rangoFechasProxControl) {
@@ -258,7 +243,6 @@ export class ConsultaService {
         resultados.push(...resultadosOftalmologia);
       }
       if (data.consultasSeleccionadas.includes('Fonoaudiologia')) {
-        console.log('Fonoaudiologia');
         // Fonoaudiologia
         const fonoaudiologiaData = await this.fonoaudiologiaORM.find({ where: consulta.especificas });
         const resultadosFonoaudiologia = consultas
@@ -270,7 +254,7 @@ export class ConsultaService {
         resultados.push(...resultadosFonoaudiologia);
       } else {
         // Deberia dar error esto!!!!
-        console.log('No se especifico tipo.. ');
+        // console.log('No se especifico tipo.. ');
       }
       return resultados;
     }
@@ -311,9 +295,6 @@ export class ConsultaService {
   }
 
   findAllByYear(year) {
-    // const startOfYear = new Date(year, 0, 1); // 1 de enero del año especificado
-    // const endOfYear = new Date(year, 11, 31, 23, 59, 59);
-    // return this.consultaORM.find({ where: { created_at: Between(startOfYear, endOfYear) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
     return this.consultaORM.find({ where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
 
@@ -329,7 +310,6 @@ export class ConsultaService {
     else {
       cursoEncontrado = await this.cursoORM.findOne({ where: { id: idCurso, deshabilitado: false } });
       if (!cursoEncontrado) throw new NotFoundException(`Curso con id ${cambios.id_curso} no encontrado`);
-      console.log('esta idcurso');
     }
     // Institucion
     const idInstitucion = cambios.id_institucion ? cambios.id_institucion : null;
@@ -423,14 +403,18 @@ export class ConsultaService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} consulta`;
+  async remove(id: number) {
+    const consulta = await this.consultaORM.findOne({ where: { deshabilitado: false, id } });
+    if (!consulta) throw new NotFoundException(`Consulta con id ${id} no encontrada`);
+    consulta.deshabilitado = true;
+    return this.consultaORM.save(consulta);
   }
 
+  // !!!!! GRAFICOS GENERALES
   async countByYear(year: number) {
     const respuesta = [];
     for (let i = 0; i < 4; i++) {
-      const countConsultas = await this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).getCount();
+      const countConsultas = await this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).getCount();
       respuesta.push(countConsultas);
       year--;
     }
@@ -440,18 +424,17 @@ export class ConsultaService {
     const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
+      const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
       respuesta[year] = counts;
       year--;
     }
     return respuesta;
   }
   async countTypeByYearAndInstitucion(year: number, id_institucion: number) {
-    console.log(year, id_institucion);
     const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
     const respuesta = await Promise.all(
       types.map(async (type) => {
-        let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.type = :type', { type });
+        let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND consulta.type = :type', { type });
         if (year !== 0) {
           query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
         }
@@ -467,7 +450,7 @@ export class ConsultaService {
   async tensionxEstadoData(year: number, id: number, estado: string) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :estado  AND clinica.tension_arterial = :type', { estado, type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.estado_nutricional = :estado  AND clinica.tension_arterial = :type', { estado, type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -487,7 +470,7 @@ export class ConsultaService {
   async estadoNutricionalData(year: number, id: number) {
     const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.estado_nutricional = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.estado_nutricional = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -522,7 +505,7 @@ export class ConsultaService {
   async tensionArterialData(year: number, id: number) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.tension_arterial = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.tension_arterial = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -557,7 +540,7 @@ export class ConsultaService {
   async examenVisualData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.examen_visual = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.examen_visual = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -591,7 +574,7 @@ export class ConsultaService {
   async vacunacionData(year: number, id: number) {
     const types = ['Completo', 'Incompleto', 'Desconocido'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.vacunas = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND  clinica.vacunas = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -626,7 +609,7 @@ export class ConsultaService {
   async ortopediaData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica');
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false ');
       if (type === 'Normal') {
         query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' });
       } else if (type === 'Anormal') {
@@ -666,7 +649,7 @@ export class ConsultaService {
   async lenguajeData(year: number, id: number) {
     const types = ['Adecuado', 'Inadecuado'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('clinica.lenguaje = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.lenguaje = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -704,7 +687,7 @@ export class ConsultaService {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       const cepilladoBoolean = type === 'Si';
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.cepillado = :cepilladoBoolean', { cepilladoBoolean });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.cepillado = :cepilladoBoolean', { cepilladoBoolean });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -740,7 +723,7 @@ export class ConsultaService {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       const topificacionBoolean = type === 'Si';
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.topificacion = :topificacionBoolean', { topificacionBoolean });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.topificacion = :topificacionBoolean', { topificacionBoolean });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -776,7 +759,7 @@ export class ConsultaService {
     const types = ['Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries', 'Boca sana', 'Sin clasificación'];
     const createQuery = (type: string) => {
       const clasificacion = type;
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.clasificacion = :clasificacion', { clasificacion });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.clasificacion = :clasificacion', { clasificacion });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -811,7 +794,7 @@ export class ConsultaService {
   //   const types = ['Si', 'No'];
   //   const createQuery = (type: string) => {
   //     const cepilladoBolean = type === 'Si';
-  //     let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('odontologia.cepillado = :cepilladoBolean', { cepilladoBolean });
+  //     let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.cepillado = :cepilladoBolean', { cepilladoBolean });
   //     if (year) {
   //       query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
   //     }
@@ -848,7 +831,7 @@ export class ConsultaService {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       const clasificacion = type === 'Si';
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('oftalmologia.anteojos = :clasificacion', { clasificacion });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('consulta.deshabilitado=false AND oftalmologia.anteojos = :clasificacion', { clasificacion });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -883,7 +866,7 @@ export class ConsultaService {
     const types = ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
     const createQuery = (type: string) => {
       const clasificacion = type;
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('oftalmologia.demanda = :clasificacion', { clasificacion });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('consulta.deshabilitado=false AND oftalmologia.demanda = :clasificacion', { clasificacion });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }

@@ -110,7 +110,7 @@
           <h3 class="md:col-span-12 text-lg font-semibold my-4 cursor-pointer">Filtros de {{ this.formBusqueda.get('consultasSeleccionadas')?.value }}</h3>
         </div>
       </ng-template>
-      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica') || true">
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
         <app-campos-clinica [form]="formBusqueda" />
       </div>
       <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Oftalmologia')">

@@ -94,7 +94,6 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     this._usuarioService.obtenerUsuarios().subscribe({
       next: (response: any) => {
         if (response.success) {
-          console.log(response);
           this.usuarios.data = response.data;
           this.resultsLength = response.data.length;
         }

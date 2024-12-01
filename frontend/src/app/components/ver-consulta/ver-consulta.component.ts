@@ -30,7 +30,6 @@ export class VerConsultaComponent implements OnInit {
     this.isDialog = !data;
   }
   ngOnInit() {
-    console.log('Valores en ver consulta', this.data);
     this.obtenerConsulta();
     this.esEditor();
   }

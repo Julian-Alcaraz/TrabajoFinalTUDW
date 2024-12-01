@@ -1,6 +1,4 @@
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { catchError, debounceTime, map, Observable, of, switchMap } from 'rxjs';
-import { ChicoService } from '../services/chico.service';
 
 export function ValidarEmail(control: AbstractControl) {
   const email = control?.value as string;
@@ -84,34 +82,6 @@ export function ValidarCampoOpcional(...validators: ValidatorFn[]): ValidatorFn 
     }
     const composedValidator = Validators.compose(validators);
     return composedValidator ? composedValidator(control) : null;
-  };
-}
-
-// No tiene usso
-export function ExisteDniChico(_chicoService: ChicoService) {
-  return (control: AbstractControl): Observable<ValidationErrors | null> => {
-    const dni = control.value;
-    // Si no tiene 8 digitos me voy
-    if (!dni || dni.toString().length !== 8) {
-      console.log('DNI no tiene 8 dígitos:', dni);
-      return of(null);
-    }
-    console.log('DNI con 8 dígitos, procediendo a verificar:', dni);
-    return of(dni).pipe(
-      debounceTime(300),
-      switchMap((dni) => {
-        console.log('Llamando al servicio con DNI:', dni);
-        return _chicoService.obtenerChicoxDni(dni);
-      }),
-      map((response) => {
-        console.log('Respuesta recibida:', response);
-        return response?.success ? null : { dniNoExistente: true };
-      }),
-      catchError((error) => {
-        console.error('Error en la validación asincrónica:', error);
-        return of(null);
-      }),
-    );
   };
 }
 

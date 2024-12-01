@@ -94,8 +94,16 @@ export class ConsultaController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.consultaService.remove(id);
+  @ApiOperation({ summary: 'Borrado logico de una consulta' })
+  @ApiResponse({ status: 200, description: 'Consulta borrada logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'Consulta no encontrada' })
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const consultaEliminada = await this.consultaService.remove(id);
+    return {
+      success: true,
+      data: consultaEliminada,
+      message: 'Consulta eliminada con exito',
+    };
   }
 
   @Get('contarXanios/:year')

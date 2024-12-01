@@ -71,9 +71,9 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_oftalmologia: [false, []],
       derivacion_odontologia: [false, []],
       derivacion_externa: [false, []],
-      pcta: ['', [Validators.required, ValidarNumerosFloat]],
-      pcimc: ['', [Validators.required, ValidarNumerosFloat]],
-      pct: ['', [Validators.required, ValidarNumerosFloat]],
+      pcta: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
+      pcimc: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
+      pct: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
     });
   }
 
@@ -123,7 +123,6 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          console.log(this.clinicaForm.value);
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
@@ -156,8 +155,6 @@ export class NuevaClinicaComponent implements OnInit {
               ...clinicaValues,
             },
           };
-          console.log('DATA:');
-          console.log(data);
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -353,7 +350,6 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          console.log(this.clinicaForm.value);
           const formValues = this.clinicaForm.value;
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
@@ -385,7 +381,6 @@ export class NuevaClinicaComponent implements OnInit {
               ...clinicaValues,
             },
           };
-          console.log('DATA:');
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {

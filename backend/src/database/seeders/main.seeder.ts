@@ -524,7 +524,8 @@ export class MainSeeder implements Seeder {
               chico: chicoSeleccionado,
               usuario: usuarioConRol,
               edad: edad,
-              created_at: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2024-12-31T00:00:00.000Z' }),
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+              deshabilitado: faker.datatype.boolean(0.05),
             });
             return consulta;
           }),

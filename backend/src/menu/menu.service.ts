@@ -87,7 +87,6 @@ export class MenuService {
     const rol = menu.roles.find((rol) => rol.id === idRol);
     if (!rol) throw new NotFoundException(`Rol con id ${idRol} no esta asignado al menu ${idMenu}`);
     menu.roles = menu.roles.filter((item) => item.id !== idRol);
-    console.log(menu.roles);
     if (menu.roles.length === 0) throw new BadRequestException(`Un menu no puede quedarse sin roles`);
     return this.menuORM.save(menu);
   }

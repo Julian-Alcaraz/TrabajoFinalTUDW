@@ -25,7 +25,7 @@ export class OdontologiaComponent implements OnInit {
   tituloTopificacion = 'Topificacion';
   porcentajesTopificacion: any = [];
   situacionBucales = ['Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries', 'Boca sana', 'Sin clasificación'];
-  tituloSituacionBucal = 'Situacion Bucal';
+  tituloSituacionBucal = 'Situación bucal';
   porcentajesSituacionBucal: any = [];
 
   constructor(

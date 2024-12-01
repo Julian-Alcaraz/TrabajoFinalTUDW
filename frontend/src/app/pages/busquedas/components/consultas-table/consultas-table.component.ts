@@ -57,7 +57,6 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['consultas']) {
-      console.log('Consultas has changed:', changes['consultas']);
       this.dataSource.data = changes['consultas'].currentValue;
     }
   }
