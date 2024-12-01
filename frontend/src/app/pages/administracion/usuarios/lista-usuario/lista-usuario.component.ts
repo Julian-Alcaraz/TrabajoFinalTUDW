@@ -53,7 +53,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   @ViewChild('rolesFormElement') rolesFormElement!: ElementRef<HTMLFormElement>;
   @ViewChild('nuevoUsuarioModal') nuevoUsuarioModal!: TemplateRef<any>;
 
-  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'email', 'roles', 'estado', 'action'];
+  displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'email', 'roles', 'action']; //, 'estado'
   constructor(
     private snackBar: MatSnackBar,
     private _usuarioService: UsuarioService,

@@ -116,3 +116,7 @@ body {
   cursor: pointer;
   padding: 10px 10px;
 }
+/* ESTILO PARA QUE NO SE OVERFLOWEN LOS CAMPOS DE DNI  */
+.p-inputnumber-input{
+  width: 100%;
+}

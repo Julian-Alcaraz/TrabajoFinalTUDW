@@ -1,6 +1,6 @@
-<div class="grid gap-6 sm:grid-cols-2 md:grid-cols-6" [formGroup]="especificas">
-  <div class="md:col-span-6">
-    <div class="grid gap-3 md:grid-cols-4">
+<div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8" [formGroup]="especificas">
+  <div class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">
+    <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
       <!-- Dientes Permanentes Min -->
       <div formGroupName="rangoDientesPermanentes">
         <p-iftalabel>
@@ -49,39 +49,39 @@
     <div *ngIf="especificas.get('rangoSellador')?.errors" class="text-red-600 text-sm">El valor de dientes con sellador mínimo no puede ser mayor al máximo.</div>
   </div>
   <!-- Topificacion -->
-  <div class="md:col-span-1 my-2">
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p>¿Se aplicó topificacion?</p>
     <p-selectbutton [options]="siNoOptions" formControlName="topificacion" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Se cepilla -->
-  <div class="md:col-span-1 my-2">
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p>¿Se cepilla?</p>
     <p-selectbutton [options]="siNoOptions" formControlName="cepillado" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Cepillo -->
-  <div class="md:col-span-1 my-2">
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p>¿Tiene cepillo?</p>
     <p-selectbutton [options]="siNoOptions" formControlName="cepillo" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Control -->
-  <div class="md:col-span-1 my-2">
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p>¿Es ulterior?</p>
     <p-selectbutton [options]="siNoOptions" formControlName="ulterior" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Derivacion -->
-  <div class="md:col-span-1 my-2">
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p>¿Es primera vez?</p>
     <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
   </div>
   <!-- Clasificacion dental -->
-  <div class="md:col-span-3 my-2">
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p-iftalabel>
       <p-select [options]="clasificacionDentalOptions" formControlName="clasificacion" idInput="clasificacion" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="clasificacion">Clasificación Dental</label>
     </p-iftalabel>
   </div>
   <!-- Derivacion externa-->
-  <div class="md:col-span-3 my-2">
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
     <p-iftalabel>
       <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full" [filter]="false" [showHeader]="false" />
       <label for="derivaciones">Derivación externa</label>
