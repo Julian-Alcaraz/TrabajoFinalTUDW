@@ -32,7 +32,9 @@ export class ConsultaService {
   obtenerConsultaxId(id: number): Observable<any> {
     return this._http.get(this.url + 'consulta/' + id);
   }
-
+  borrarLogico(id: number): Observable<any> {
+    return this._http.delete(this.url + 'consulta/' + id);
+  }
   esPrimeraVez(id: number, tipoConsulta: string) {
     return this._http.get(this.url + 'consulta/primeraVezChico/' + id + '/' + tipoConsulta);
   }
@@ -91,9 +93,9 @@ export class ConsultaService {
   porcentajeSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeSituacionBucalPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
-  // porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-  //   return this._http.get(`${this.url}consulta/porcentajeSelladorPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
-  // }
+  porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeSelladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
 
   // Ofatlmologia
   porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {

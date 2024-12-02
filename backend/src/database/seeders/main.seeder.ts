@@ -109,6 +109,66 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1]], // ProfesionalYAdmin
           deshabilitado: true,
         },
+        {
+          nombre: 'Julian',
+          apellido: 'Alcaraz',
+          email: 'julianalcaraz4@gmail.com',
+          contrasenia: codificarContrasenia('44671915'),
+          dni: 44671915,
+          fe_nacimiento: '2003-02-09',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
+        {
+          nombre: 'Belen',
+          apellido: 'Casanova',
+          email: 'belencasanova@gmail.com',
+          contrasenia: codificarContrasenia('23456782'),
+          dni: 23456782,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
+        {
+          nombre: 'Marcia',
+          apellido: 'Pichun',
+          email: 'marciapichun@gmail.com',
+          contrasenia: codificarContrasenia('23456789'),
+          dni: 23456789,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
+        {
+          nombre: 'Jorge',
+          apellido: 'Rodriguez',
+          email: 'jorgeRodriguez@gmail.com',
+          contrasenia: codificarContrasenia('12345674'),
+          dni: 12345674,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
+        {
+          nombre: 'Lucas',
+          apellido: 'Puyol',
+          email: 'lucasPujol@gmail.com',
+          contrasenia: codificarContrasenia('12345672'),
+          dni: 12345672,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
+        {
+          nombre: 'Fernando',
+          apellido: 'Lascano',
+          email: 'fernandoLascano@gmail.com',
+          contrasenia: codificarContrasenia('12345673'),
+          dni: 12345673,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+          deshabilitado: true,
+        },
       ]);
 
       // Crea 50 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos

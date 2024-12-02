@@ -44,7 +44,7 @@ export class OdontologiaComponent implements OnInit {
       this.obtenerGraficoCepillado(),
       this.obtenerGraficoSitaucionBucal(),
       this.obtenerGraficoTopificacion(),
-      // this.obtenerGraficoSellador
+      this.obtenerGraficoSellador()
     ];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
@@ -121,29 +121,29 @@ export class OdontologiaComponent implements OnInit {
     });
   }
 
-  // tituloSellador='Sellador'
-  // porcentajesSellador:any=[]
-  // obtenerGraficoSellador() {
-  //   return new Promise((resolve, reject) => {
-  //     this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
-  //       next: (response: any) => {
-  //         if (response.success) {
-  //           this.porcentajesSituacionBucal = [];
-  //           for (const year of this.lastFourYears) {
-  //             this.porcentajesSituacionBucal.push({
-  //               label: '' + year,
-  //               data: response.data[year],
-  //             });
-  //           }
-  //         }
-  //         resolve(true);
-  //       },
-  //       error: (err) => {
-  //         reject(err);
-  //       },
-  //     });
-  //   });
-  // }
+  tituloSellador='Sellador'
+  porcentajesSellador:any=[]
+  obtenerGraficoSellador() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajesSellador = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajesSellador.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
 
   cambioForm(event: any) {
     this.setearLabels(event);

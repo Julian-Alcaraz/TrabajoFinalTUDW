@@ -36,8 +36,8 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
   odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables);
   odontologia.cepillado = Math.random() > 0.5 ? true : false;
   odontologia.topificacion = Math.random() > 0.5 ? true : false;
-  odontologia.sellador = faker.number.int({ min: 4, max: 10 });
-  odontologia.dientes_temporales = faker.number.int({ min: 10, max: 20 });
+  odontologia.sellador = faker.number.int({ min: 0, max: 10 });
+  odontologia.dientes_temporales = faker.number.int({ min: 0, max: 20 });
   odontologia.dientes_permanentes = faker.number.int({ min: 0, max: 12 });
   odontologia.primera_vez = Math.random() > 0.5 ? true : false;
   if (odontologia.primera_vez === true) odontologia.ulterior = false;

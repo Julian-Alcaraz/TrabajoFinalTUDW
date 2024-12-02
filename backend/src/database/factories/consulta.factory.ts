@@ -236,7 +236,7 @@ export const ConsultaFactory = setSeederFactory(Consulta, async () => {
   } else if (consulta.type === 'Fonoaudiologia') {
     consulta.observaciones = Math.random() > 0.5 ? faker.helpers.arrayElement(observacionesFonoaudiologia) : null;
   } else if (consulta.type === 'Oftalmologia') {
-    consulta.observaciones = Math.random() > 0.5 ? faker.helpers.arrayElement(observacionesClinica) : null;
+    consulta.observaciones = Math.random() > 0.5 ? faker.helpers.arrayElement(observacionesOftalmologia) : null;
   }
 
   // consulta.observaciones = Math.random() > 0.5 ? faker.word.words({ count: { min: 50, max: 1000 } }) : null;

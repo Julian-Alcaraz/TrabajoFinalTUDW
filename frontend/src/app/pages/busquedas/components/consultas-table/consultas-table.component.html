@@ -101,6 +101,14 @@
       <th mat-header-cell *matHeaderCellDef>Observaciones</th>
       <td mat-cell *matCellDef="let element" class="observaciones">{{ element.observaciones ? element.observaciones : '-' }}</td>
     </ng-container>
+    <ng-container matColumnDef="accion">
+      <th mat-header-cell *matHeaderCellDef>Acción</th>
+      <td mat-cell *matCellDef="let element">
+        <button [pTooltip]="'Eliminar'" tooltipPosition="top" (click)="eliminar($event, element)" class="'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
+          <i class="fa-solid fa-trash" style="color: #ffffff"></i>
+        </button>
+      </td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
     <tr class="mat-row" *matNoDataRow>

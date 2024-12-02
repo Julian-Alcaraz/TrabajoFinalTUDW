@@ -11,11 +11,12 @@ import { Fonoaudiologia } from './entities/fonoaudiologia.entity';
 import { Institucion } from 'src/institucion/entities/institucion.entity';
 import { Chico } from 'src/chico/entities/chico.entity';
 import { Curso } from 'src/curso/entities/curso.entity';
+import { GraficosService } from './graficos.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso])],
   controllers: [ConsultaController],
-  providers: [ConsultaService],
-  exports: [ConsultaService], // Exporta el servicio
+  providers: [ConsultaService, GraficosService],
+  exports: [ConsultaService, GraficosService], // Exporta el servicio
 })
 export class ConsultaModule {}

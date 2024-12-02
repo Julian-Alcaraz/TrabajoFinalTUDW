@@ -5,11 +5,15 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ConsultaService } from './consulta.service';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
+import { GraficosService } from './graficos.service';
 
 @Controller('consulta')
 @UseGuards(JwtAuthGuard)
 export class ConsultaController {
-  constructor(private readonly consultaService: ConsultaService) {}
+  constructor(
+    private readonly consultaService: ConsultaService,
+    private readonly graficosService: GraficosService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Crea una nueva consulta' })
@@ -105,12 +109,12 @@ export class ConsultaController {
       message: 'Consulta eliminada con exito',
     };
   }
-
+  // Graficos routes
   @Get('contarXanios/:year')
   @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito.' })
   async countByYear(@Param('year', ParseIntPipe) year: number) {
-    const cantByYearList = await this.consultaService.countByYear(year);
+    const cantByYearList = await this.graficosService.countByYear(year);
     return {
       success: true,
       data: cantByYearList,
@@ -122,7 +126,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Cuenta todas las consultas por año de los ultimos 4' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async countTypeByYear(@Param('year', ParseIntPipe) year: number) {
-    const cantByYearList = await this.consultaService.countTypeByYear(year);
+    const cantByYearList = await this.graficosService.countTypeByYear(year);
     return {
       success: true,
       data: cantByYearList,
@@ -134,7 +138,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Cuenta todas los tipos de  consultas por año e institucion' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async countTypeByYearAndInstitucion(@Param('year', ParseIntPipe) year: number, @Param('id_institucion', ParseIntPipe) id_institucion: number) {
-    const cantByYearList = await this.consultaService.countTypeByYearAndInstitucion(year, id_institucion);
+    const cantByYearList = await this.graficosService.countTypeByYearAndInstitucion(year, id_institucion);
     return {
       success: true,
       data: cantByYearList,
@@ -146,7 +150,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async estadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
-    const cantByYearList = await this.consultaService.estadoNutricionalData(year, id);
+    const cantByYearList = await this.graficosService.estadoNutricionalData(year, id);
     return {
       success: true,
       data: cantByYearList,
@@ -158,7 +162,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async tensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
-    const cantByYearList = await this.consultaService.tensionArterialData(year, id);
+    const cantByYearList = await this.graficosService.tensionArterialData(year, id);
     return {
       success: true,
       data: cantByYearList,
@@ -171,7 +175,7 @@ export class ConsultaController {
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async tensionxEstado(@Body() data: any, @Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
     const estado = data.estado;
-    const cantByYearList = await this.consultaService.tensionxEstadoData(year, id, estado);
+    const cantByYearList = await this.graficosService.tensionxEstadoData(year, id, estado);
     return {
       success: true,
       data: cantByYearList,
@@ -183,7 +187,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeEstadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeEstadoNutricional(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeEstadoNutricional(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -195,7 +199,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeTensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeTensionArterialData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeTensionArterialData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -207,7 +211,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeExamenVisual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeExamenVisualData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeExamenVisualData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -218,7 +222,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeVacunacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeVacunacionData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeVacunacionData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -229,7 +233,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeOrtopedia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeOrtopediaData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeOrtopediaData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -240,7 +244,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeLenguaje(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeLenguajeData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeLenguajeData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -254,7 +258,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeCepilladoData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeCepilladoData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -265,7 +269,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeTopificacionData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeTopificacionData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -276,7 +280,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeSituacionBucalData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeSituacionBucalData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -284,24 +288,24 @@ export class ConsultaController {
     };
   }
   // A preguntar
-  // @Get('porcentajeSelladoPorAnio/:year/curso/:id/:porcentaje')
-  // @ApiOperation({ summary: '' })
-  // @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  // async porcentajeSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-  //   const cantByYearList = await this.consultaService.porcentajeSelladoData(year, id, porcentaje);
-  //   return {
-  //     success: true,
-  //     data: cantByYearList,
-  //     message: 'Datos obtenidos con exito.',
-  //   };
-  // }
+  @Get('porcentajeSelladoPorAnio/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const cantByYearList = await this.graficosService.porcentajeSelladoData(year, id, porcentaje);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 
   // !!!!!!!!!! OFTALMOLOGIA
   @Get('porcentajeAnteojosPorAnio/:year/curso/:id/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeAnteojosData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeAnteojosData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
@@ -312,7 +316,7 @@ export class ConsultaController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async porcentajeDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const cantByYearList = await this.consultaService.porcentajeDemandaData(year, id, porcentaje);
+    const cantByYearList = await this.graficosService.porcentajeDemandaData(year, id, porcentaje);
     return {
       success: true,
       data: cantByYearList,
