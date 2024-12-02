@@ -67,11 +67,11 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     { nombre: 'Deshabilitado', valor: true },
   ];
   public actividadOptions: any[] = [
-    { nombre: 'Ninguna especialidad visitada en el año', valor: 0 },
-    { nombre: '1 Especialidad visitada en el año', valor: 1 },
-    { nombre: '2 Especialidades visitadas en el año', valor: 2 },
-    { nombre: '3 Especialidades visitadas en el año', valor: 3 },
-    { nombre: '4 Especialidades visitadas en el año', valor: 4 },
+    { nombre: 'Ninguna especialidad visitada', valor: 0 },
+    { nombre: '1 Especialidad visitada', valor: 1 },
+    { nombre: '2 Especialidades visitadas', valor: 2 },
+    { nombre: '3 Especialidades visitadas', valor: 3 },
+    { nombre: '4 Especialidades visitadas', valor: 4 },
   ];
   public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
   public estadoControl: FormControl = new FormControl(null);

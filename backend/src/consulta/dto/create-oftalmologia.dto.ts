@@ -6,7 +6,7 @@ import { DemandaEnum } from '../entities/oftalmologia.entity';
 export class CreateOftalmologiaDto {
   @ApiProperty({ description: 'Demanada de la consulta' })
   @IsNotEmpty({ message: 'La demanda no puede estar vacia' })
-  @IsEnum(['Control niño sano', 'Docente', 'Familiar', 'Otro'], { message: 'El tipo no es una opcion valida. TEL, TEA, Retraso en el lenguaje, dislalias funcionales, Respirador bucal, Anquiloglosia, Ortodoncia: Protrusión lingual, paladar hendido, Síndromes, Otras patologías que dificulten el lenguaje y la comunicación' })
+  @IsEnum(['Control niño sano', 'Docente', 'Familiar', 'Otro'], { message: 'El tipo no es una opcion valida. Control niño sano, Docente, Familiar, Otro' })
   readonly demanda: DemandaEnum;
 
   @ApiProperty({ description: 'Primera vez' })

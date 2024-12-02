@@ -6,8 +6,10 @@ import { NuevaOftalmologiaComponent } from '../pages/consultas/oftalmologia/nuev
 import { NuevaOdontologiaComponent } from '../pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
 import { NuevaFonoaudiologicaComponent } from '../pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
 import { profesionalGuard } from '../guards/auth.guard';
+import { BusquedasComponent } from '../pages/busquedas/busquedas.component';
 
 const routes: Routes = [
+  { path: 'busqueda', component: BusquedasComponent },
   { path: 'clinica/nueva', component: NuevaClinicaComponent, canActivate: [profesionalGuard] },
   { path: 'oftalmologia/nueva', component: NuevaOftalmologiaComponent, canActivate: [profesionalGuard] },
   { path: 'odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [profesionalGuard] },

@@ -14,7 +14,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   standalone: true,
   imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule],
   templateUrl: './campos-odontologia.component.html',
-  styleUrl: './campos-odontologia.component.css'
+  styleUrl: './campos-odontologia.component.css',
 })
 export class CamposOdontologiaComponent implements OnInit {
   @Input() form!: FormGroup;
@@ -26,7 +26,10 @@ export class CamposOdontologiaComponent implements OnInit {
     { nombre: 'No', valor: false },
   ];
   public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
-  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
+  public derivacionesOptions: any[] = [
+    { nombre: 'Si', valor: { externa: true } },
+    { nombre: 'No', valor: { externa: false } },
+  ];
 
   ngOnInit(): void {
     this.especificas = new FormGroup({

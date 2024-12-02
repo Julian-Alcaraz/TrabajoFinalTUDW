@@ -1,149 +1,126 @@
 <!-- <div class="sm:text-blue-600 md:text-red-600 lg:text-green-500">sm azul 4 cols, md rojo 6 cols, lg verde col 8</div> -->
 <div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8" [formGroup]="especificas">
-  <!-- Talla -->
   <div class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">
     <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
-      <!-- Talla Min -->
-      <div formGroupName="rangoTalla">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tallaMin" inputId="tallaMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tallaMin">Talla Min</label>
-        </p-iftalabel>
+      <!-- Rango Talla -->
+      <div formGroupName="rangoTalla" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Talla</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tallaMin" inputId="tallaMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tallaMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tallaMax" inputId="tallaMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tallaMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
-      <!-- Talla Max -->
-      <div formGroupName="rangoTalla">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tallaMax" inputId="tallaMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tallaMax">Talla max</label>
-        </p-iftalabel>
+      <!-- Rango CC -->
+      <div formGroupName="rangoCC" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Circunferencia de la Cintura</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="ccMin" inputId="ccMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="ccMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="ccMax" inputId="ccMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="ccMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
-      <!-- CC Min -->
-      <div formGroupName="rangoCC">
-        <p-iftalabel>
-          <p-inputnumber formControlName="ccMin" inputId="ccMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="ccMin">Circunferencia de la cintura Min</label>
-        </p-iftalabel>
+      <!-- Rango Peso -->
+      <div formGroupName="rangoPeso" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Peso (kg)</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="pesoMin" inputId="pesoMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="pesoMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="pesoMax" inputId="pesoMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="pesoMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
-      <!-- CC Max -->
-      <div formGroupName="rangoCC">
-        <p-iftalabel>
-          <p-inputnumber formControlName="ccMax" inputId="ccMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="ccMax">Circunferencia de la cintura Max</label>
-        </p-iftalabel>
+      <!-- Rango Percentil de talla (pct) -->
+      <div formGroupName="rangoPct" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Percentil de Talla</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="pctMin" inputId="pctMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="pctMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="pctMax" inputId="pctMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="pctMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
-      <!-- Peso Min -->
-      <div formGroupName="rangoPeso">
-        <p-iftalabel>
-          <p-inputnumber formControlName="pesoMin" inputId="pesoMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="pesoMin">Peso Min</label>
-        </p-iftalabel>
+      <!-- Rango Tension Arterial Sistolica (tas) -->
+      <div formGroupName="rangoTas" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Sistolica</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tasMin" inputId="tasMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tasMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tasMax" inputId="tasMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tasMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
-      <!-- Peso Max -->
-      <div formGroupName="rangoPeso">
-        <p-iftalabel>
-          <p-inputnumber formControlName="pesoMax" inputId="pesoMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="pesoMax">Peso Max</label>
-        </p-iftalabel>
-      </div>
-      <!-- Percentil de talla (pct) Min -->
-      <div formGroupName="rangoPct">
-        <p-iftalabel>
-          <p-inputnumber formControlName="pctMin" inputId="pctMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="pctMin">Percentil de talla Min</label>
-        </p-iftalabel>
-      </div>
-      <!-- Percentil de talla (pct) Max -->
-      <div formGroupName="rangoPct">
-        <p-iftalabel>
-          <p-inputnumber formControlName="pctMax" inputId="pctMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="pctMax">Percentil de talla Max</label>
-        </p-iftalabel>
-      </div>
-      <!-- Tension Arterial Sistolica (tas) Min -->
-      <div formGroupName="rangoTas">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tasMin" inputId="tasMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tasMin">Tension Arterial Sistolica Min</label>
-        </p-iftalabel>
-      </div>
-      <!-- Tension Arterial Sistolica (tas) Max -->
-      <div formGroupName="rangoTas">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tasMax" inputId="tasMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tasMax">Tension Arterial Sistolica Max</label>
-        </p-iftalabel>
-      </div>
-      <!-- Tension Arterial Diastolica (tad) Min -->
-      <div formGroupName="rangoTad">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tadMin" inputId="tadMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tadMin">Tension Arterial Diastolica Min</label>
-        </p-iftalabel>
-      </div>
-      <!-- Tension Arterial Diastolica (tad) Max -->
-      <div formGroupName="rangoTad">
-        <p-iftalabel>
-          <p-inputnumber formControlName="tadMax" inputId="tadMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
-          <label for="tadMax">Tension Arterial Diastolica Max</label>
-        </p-iftalabel>
+      <!-- Rango Tension Arterial Diastolica (tad) Min -->
+      <div formGroupName="rangoTad" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Diastolica</p>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tadMin" inputId="tadMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tadMin">Min.</label>
+          </p-iftalabel>
+        </div>
+        <div>
+          <p-iftalabel>
+            <p-inputnumber formControlName="tadMax" inputId="tadMax" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
+            <label for="tadMax">Max.</label>
+          </p-iftalabel>
+        </div>
       </div>
     </div>
-    <div *ngIf="especificas.get('rangoTalla')?.errors" class="text-red-600 text-sm">El valor de la talla mínima no puede ser mayor al máximo.</div>
-    <div *ngIf="especificas.get('rangoCC')?.errors" class="text-red-600 text-sm">El valor de la circunferencia de la cintura mínima no puede ser mayor al máximo.</div>
-    <div *ngIf="especificas.get('rangoPeso')?.errors" class="text-red-600 text-sm">El valor del peso mínimo no puede ser mayor al máximo.</div>
-    <div *ngIf="especificas.get('rangoPct')?.errors" class="text-red-600 text-sm">El valor del Percentil de talla mínimo no puede ser mayor al máximo.</div>
-    <div *ngIf="especificas.get('rangoTas')?.errors" class="text-red-600 text-sm">El valor de la Tension Arterial Sistolica mínimo no puede ser mayor al máximo.</div>
-    <div *ngIf="especificas.get('rangoTad')?.errors" class="text-red-600 text-sm">El valor de la Tension Arterial Diastolica mínimo no puede ser mayor al máximo.</div>
+    <div *ngIf="especificas.get('rangoTalla')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
+    <div *ngIf="especificas.get('rangoCC')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
+    <div *ngIf="especificas.get('rangoPeso')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
+    <div *ngIf="especificas.get('rangoPct')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
+    <div *ngIf="especificas.get('rangoTas')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
+    <div *ngIf="especificas.get('rangoTad')?.errors" class="text-red-600 text-sm">Rango inválido.</div>
   </div>
-  <!-- Diabetes -->
-  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Antecedentes familiares:</p>
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Diabetes</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="diabetes" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <!-- HTA -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Hipertension arterial</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="hta" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <!-- Obesidad -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Obesidad</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="obesidad" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <!-- Consumo Alcohol -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Consumo alcohol</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="consumo_alcohol" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <!-- Consumo Drogas -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Consumo drogas</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="consumo_drogas" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <!-- Consumo Tabaco -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="m-0 p-0">Consumo tabaco</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="consumo_tabaco" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Condiciones:</p>
+  <!-- <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Condiciones:</p> -->
   <!-- Antecedentes perinatales -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p class="m-0 p-0">Antecedentes perinatales</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="antecedentes_perinatal" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="antecedentes_perinatal" formControlName="antecedentes_perinatal" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="antecedentes_perinatal">Antecedentes perinatales</label>
+    </p-iftalabel>
   </div>
   <!-- Enfermedades previas -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p class="m-0 p-0">Enfermedades previas</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="enfermedades_previas" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="enfermedades_previas" formControlName="enfermedades_previas" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="enfermedades_previas">Enfermedades previas</label>
+    </p-iftalabel>
   </div>
-  <span class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">****</span>
-  <!-- Seguimiento -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p class="m-0 p-0">Seguimiento</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="segto" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
-  </div>
-  <span class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">****</span>
   <!-- Vacunas -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
@@ -186,26 +163,11 @@
       <label for="hidratacion">Hidratación</label>
     </p-iftalabel>
   </div>
-  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Horas diarias dedicadas a:</p>
-  <!-- Horas pantalla -->
+  <!-- Estado nutricional -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
-      <label for="horas_pantalla">Horas pantalla</label>
-    </p-iftalabel>
-  </div>
-  <!-- Horas juego aire libre -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p-iftalabel>
-      <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre" idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
-      <label for="horas_juego_aire_libre">Horas juego aire libre</label>
-    </p-iftalabel>
-  </div>
-  <!-- Horas sueño -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p-iftalabel>
-      <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
-      <label for="horas_suenio">Horas sueño</label>
+      <p-select [options]="estadoNutricionalOptions" formControlName="estado_nutricional" idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <label for="estado_nutricional">Estado nutricional</label>
     </p-iftalabel>
   </div>
   <!-- Tension arterial -->
@@ -215,18 +177,85 @@
       <label for="tension_arterial">Tension arterial</label>
     </p-iftalabel>
   </div>
-  <!-- Estado nutricional -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p-iftalabel>
-      <p-select [options]="estadoNutricionalOptions" formControlName="estado_nutricional" idInput="estado_nutricional" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
-      <label for="estado_nutricional">Estado nutricional</label>
-    </p-iftalabel>
-  </div>
   <!-- Derivaciones -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-multiselect [options]="derivacionesOptionsClinica" [formControl]="controlDeInput('derivaciones')" [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full h-16" [filter]="false" [showHeader]="false" />
       <label for="derivaciones">Derivaciones</label>
+    </p-iftalabel>
+  </div>
+  <!-- Seguimiento -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="segto" formControlName="segto" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="segto">Seguimiento</label>
+    </p-iftalabel>
+  </div>
+  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Antecedentes familiares:</p>
+  <!-- Diabetes -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="diabetes" formControlName="diabetes" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="diabetes">Diabetes</label>
+    </p-iftalabel>
+  </div>
+  <!-- Obesidad -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="obesidad" formControlName="obesidad" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="obesidad">Obesidad</label>
+    </p-iftalabel>
+  </div>
+  <!-- HTA -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="hta" formControlName="hta" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="hta">Hipertension arterial</label>
+    </p-iftalabel>
+  </div>
+  <!-- Consumo Alcohol -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="consumo_alcohol" formControlName="consumo_alcohol" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="consumo_alcohol">Consumo alcohol</label>
+    </p-iftalabel>
+  </div>
+  <!-- Consumo Drogas -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="consumo_drogas" formControlName="consumo_drogas" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="consumo_drogas">Consumo drogas</label>
+    </p-iftalabel>
+  </div>
+  <!-- Consumo Tabaco -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="consumo_tabaco" formControlName="consumo_tabaco" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="consumo_tabaco">Consumo tabaco</label>
+    </p-iftalabel>
+  </div>
+
+  <!-- <span class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">****</span> -->
+  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Horas diarias dedicadas a:</p>
+  <!-- Horas pantalla -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <label for="horas_pantalla">Pantalla</label>
+    </p-iftalabel>
+  </div>
+  <!-- Horas juego aire libre -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre" idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <label for="horas_juego_aire_libre">Juego aire libre</label>
+    </p-iftalabel>
+  </div>
+  <!-- Horas sueño -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <label for="horas_suenio">Sueño</label>
     </p-iftalabel>
   </div>
 </div>

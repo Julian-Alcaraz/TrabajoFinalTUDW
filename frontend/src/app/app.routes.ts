@@ -28,10 +28,7 @@ export const routes: Routes = [
         path: 'consultas',
         loadChildren: () => import('./lazy-modules/consultas.module').then((m) => m.ConsultasModule),
       },
-      {
-        path: 'busqueda',
-        loadChildren: () => import('./lazy-modules/busquedas.module').then((m) => m.BusquedasModule),
-      },
+
       {
         path: 'administracion',
         loadChildren: () => import('./lazy-modules/administracion.module').then((m) => m.AdministracionModule),

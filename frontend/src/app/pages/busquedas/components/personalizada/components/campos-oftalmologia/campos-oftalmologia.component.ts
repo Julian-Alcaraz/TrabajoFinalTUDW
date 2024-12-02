@@ -6,12 +6,13 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-campos-oftalmologia',
   standalone: true,
-  imports: [SelectButtonModule, ReactiveFormsModule, IftaLabelModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule],
+  imports: [SelectButtonModule, ReactiveFormsModule, IftaLabelModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule, SelectModule],
   templateUrl: './campos-oftalmologia.component.html',
   styleUrl: './campos-oftalmologia.component.css',
 })
@@ -24,7 +25,10 @@ export class CamposOftalmologiaComponent implements OnInit {
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
+  public derivacionesOptions: any[] = [
+    { nombre: 'Si', valor: { externa: true } },
+    { nombre: 'No', valor: { externa: false } },
+  ];
   ngOnInit(): void {
     this.especificas = new FormGroup({
       // Oftalmologia

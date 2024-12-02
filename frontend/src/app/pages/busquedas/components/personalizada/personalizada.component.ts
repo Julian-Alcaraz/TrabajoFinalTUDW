@@ -47,6 +47,9 @@ export class PersonalizadaComponent implements OnInit {
   public loadingProfesionales = false;
   public loading = false;
   public mostrarBotonDescarga = false;
+  public generandoCsv = false;
+  public estaColapsadoComunes = false;
+  public estaColapsadoEspecificos = false;
   public colapsarPaneles = false;
   public formBusqueda: FormGroup;
   public resultados: any;
@@ -169,6 +172,9 @@ export class PersonalizadaComponent implements OnInit {
   }
 
   buscar() {
+    this.colapsarPaneles = false;
+    this.estaColapsadoComunes = true;
+    this.estaColapsadoEspecificos = true;
     this.searching = true;
     if (this.formBusqueda.valid) {
       this.loading = true;
@@ -182,7 +188,7 @@ export class PersonalizadaComponent implements OnInit {
             this.resultados = response.data;
             this.searching = false;
             this.enviarConsultas(response.data);
-            this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
+            this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
             this.loading = false;
           }
         },
@@ -194,7 +200,19 @@ export class PersonalizadaComponent implements OnInit {
     }
   }
 
+  limpiarFormGenerales() {
+    this.formBusqueda.reset();
+  }
+
+  limpiarFormsEspecificos() {
+    if (this.formBusqueda.get('especificas')?.value !== null) {
+      this.formBusqueda.get('especificas')?.reset();
+      this.formBusqueda.get('derivaciones')?.reset();
+    }
+  }
+
   generarCsv() {
+    this.generandoCsv = true;
     const resultado = prepararData(this.formBusqueda.value);
     const dataLimpia = eliminarValoresNulosYVacios(resultado);
     this._csvService.generarCsv(dataLimpia).subscribe({
@@ -209,11 +227,13 @@ export class PersonalizadaComponent implements OnInit {
             link.download = nombreArchivo;
             link.click();
             window.URL.revokeObjectURL(url);
+            this.generandoCsv = false;
           });
         }
       },
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.generandoCsv = false;
       },
     });
   }
@@ -253,7 +273,6 @@ function prepararData(data: any): any {
         if (item.externa) {
           acc.externa = true;
         }
-
         return acc;
       }, {}); // Inicializamos `acc` como un objeto vacío al comienzo
       */

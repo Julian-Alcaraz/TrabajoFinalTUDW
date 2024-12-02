@@ -1,33 +1,24 @@
-<div class="p-4">
-  <div class="flex flex-row justify-between mb-3">
-    <h3>Editar roles de {{ usuario.nombre + ' ' + usuario.apellido}}</h3>
-    <button class="btn-close border-none" (click)="cerrarModalUsuario(false)"><i
-        class="fa-solid fa-xmark fa-xl"></i></button>
+<div class="card">
+  <div class="card-header flex flex-row justify-between">
+    <h3>Editar roles de {{ usuario.nombre + ' ' + usuario.apellido }}</h3>
+    <button class="btn-close border-none" (click)="cerrarModalUsuario(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
   </div>
   <form (submit)="modificarRoles()" [formGroup]="usuarioForm">
-    <div class="border-t-2 p-4">
+    <div class="card-body">
       <div class="mb-3">
         <div class="flex flex-col">
           <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-          <ul
-            class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-            <li *ngFor="let rol of roles; let last = last; trackBy: trackById" [ngClass]="{ 'sm:border-r': !last }"
-              class="w-full border-b border-gray-200 sm:border-b-0">
+          <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+            <li *ngFor="let rol of roles; let last = last; trackBy: trackById" [ngClass]="{ 'sm:border-r': !last }" class="w-full border-b border-gray-200 sm:border-b-0">
               <div class="flex items-center p-3">
-                <input [id]="rol.id" type="checkbox" [value]="rol.id" [checked]="tieneElRol(usuario, rol.id)"
-                  (change)="onCheckboxChange($event)"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{
-                  rol.nombre }}</label>
+                <input [id]="rol.id" type="checkbox" [value]="rol.id" [checked]="tieneElRol(usuario, rol.id)" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
               </div>
             </li>
           </ul>
           <div *ngIf="selectCheckbox" class="text-red-600 text-sm align-bottom">Debe seleccionar al menos uno.</div>
         </div>
-        <button type="submit" [disabled]="habilitarModificar"
-          class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Editar
-          roles
-        </button>
+        <button type="submit" [disabled]="habilitarModificar" class="flex my-auto ml-auto mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Editar roles</button>
       </div>
     </div>
   </form>

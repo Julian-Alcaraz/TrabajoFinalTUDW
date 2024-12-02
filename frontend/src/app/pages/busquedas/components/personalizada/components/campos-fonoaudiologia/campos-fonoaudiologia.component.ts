@@ -26,7 +26,10 @@ export class CamposFonoaudiologiaComponent implements OnInit {
   ];
   public diagnosticoPresuntivoOptions: string[] = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
   public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
-  public derivacionesOptions: any[] = [{ nombre: 'Si', valor: { externa: true } }];
+  public derivacionesOptions: any[] = [
+    { nombre: 'Si', valor: { externa: true } },
+    { nombre: 'No', valor: { externa: false } },
+  ];
 
   ngOnInit(): void {
     this.especificas = new FormGroup({

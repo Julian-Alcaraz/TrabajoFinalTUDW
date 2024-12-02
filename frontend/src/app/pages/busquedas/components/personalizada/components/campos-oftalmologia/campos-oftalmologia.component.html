@@ -1,26 +1,34 @@
 <div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8" [formGroup]="especificas">
   <!-- Receta -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p>¿Necesita receta?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="receta" formControlName="receta" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="receta">Receta</label>
+    </p-iftalabel>
   </div>
   <!-- Control -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p>¿Es un control?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="control" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="control" formControlName="control" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="control">Control</label>
+    </p-iftalabel>
   </div>
-  <!-- Derivacion -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p>¿Es primera vez?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="primera_vez" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+  <!-- Primera Vez -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="primera_vez" formControlName="primera_vez" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="primera_vez">Primera Vez</label>
+    </p-iftalabel>
   </div>
   <!-- Anteojos -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
-    <p class="text-sm">¿Se entregaron Anteojos?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="anteojos" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="anteojos" formControlName="anteojos" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="anteojos">Se entregaron anteojos</label>
+    </p-iftalabel>
   </div>
   <!-- Rango de fechas del proximo control -->
-  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2 ">
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-datepicker [showClear]="true" [showButtonBar]="true" [readonlyInput]="true" inputId="rangoFechasProxControl" formControlName="rangoFechasProxControl" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body">
         <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
@@ -40,10 +48,4 @@
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>
-  <!-- Fecha proximo control
-    <div class="md:col-span-1">
-      <p class="m-0 p-0">¿Fecha próximo control?</p>
-      <p-selectbutton [options]="siNoOptions" formControlName="receta" optionLabel="nombre" optionValue="valor"
-        styleClass="w-full" />
-    </div>  -->
 </div>

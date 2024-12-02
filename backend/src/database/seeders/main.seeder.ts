@@ -236,7 +236,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: false,
         },
-        // cambiar url despues!!!!!!!!!!!!!!!
         {
           url: 'miUsuario',
           label: 'Mi Usuario',

@@ -1,21 +1,23 @@
 <form (ngSubmit)="buscar()" [formGroup]="formBusqueda">
-  <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header" class="m-16">
+  <p-panel [toggleable]="true" [(collapsed)]="estaColapsadoComunes" [collapsed]="colapsarPaneles" toggler="header" class="m-16">
     <!-- <div class="sm:text-blue-600 md:text-red-600 lg:text-green-500">sm azul 4 cols, md rojo 6 cols, lg verde col 8</div> -->
     <ng-template pTemplate="header">
-      <div class="flex items-center gap-2 cursor-pointer">
-        <h3 class="md:col-span-12 text-lg font-semibold my-4">Filtros comúnes</h3>
+      <div class="flex justify-center w-full gap-2 cursor-pointer">
+        <h3 class="text-lg font-semibold my-4">Filtros comúnes</h3>
+        <div class="ml-auto">
+          <button type="button" *ngIf="!estaColapsadoComunes" (click)="limpiarFormGenerales(); $event.stopPropagation()" aria-label="Botón de limpiar filtros generales" class="flex mr-3 my-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Limpiar</button>
+        </div>
       </div>
     </ng-template>
     <div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
       <!-- Tipo de consulta -->
       <div class="col-span-2 sm:col-span-2 md:col-span-4">
         <p-iftalabel>
-          <p-multiselect [filter]="false" [showHeader]="false" [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas" optionLabel="" display="chip" styleClass="w-full h-16" />
+          <p-multiselect [filter]="false" [showHeader]="false" [options]="tipoConsulta" inputId="consultasSeleccionadas" [maxSelectedLabels]="4" formControlName="consultasSeleccionadas" display="chip" styleClass="w-full h-16" />
           <label for="consultasSeleccionadas">Tipo de consulta</label>
         </p-iftalabel>
       </div>
       <!-- Rango de fechas -->
-      <!-- Para que esteticamente quede igual a los otros dos que tiene adladop deberia ser col-span-2 y grid-cols-6 -->
       <div class="col-span-2 sm:col-span-2" formGroupName="generales">
         <p-iftalabel>
           <p-datepicker [readonlyInput]="true" inputId="rangoFechas" formControlName="rangoFechas" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" [maxDate]="hoy" [showButtonBar]="true">
@@ -104,10 +106,13 @@
     </div>
   </p-panel>
   <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1">
-    <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header">
+    <p-panel [toggleable]="true" [(collapsed)]="estaColapsadoEspecificos" [collapsed]="colapsarPaneles" toggler="header">
       <ng-template pTemplate="header">
-        <div class="flex items-center gap-2">
-          <h3 class="md:col-span-12 text-lg font-semibold my-4 cursor-pointer">Filtros de {{ this.formBusqueda.get('consultasSeleccionadas')?.value }}</h3>
+        <div class="flex justify-center w-full gap-2 cursor-pointer">
+          <h3 class="text-lg font-semibold my-4">Filtros de {{ this.formBusqueda.get('consultasSeleccionadas')?.value }}</h3>
+          <div class="ml-auto">
+            <button type="button" *ngIf="!estaColapsadoEspecificos" (click)="limpiarFormsEspecificos(); $event.stopPropagation()" aria-label="Botón de limpiar filtros específicos" class="flex mr-3 my-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Limpiar</button>
+          </div>
         </div>
       </ng-template>
       <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Clinica')">
@@ -125,11 +130,13 @@
     </p-panel>
   </div>
   <!-- Buscar -->
-  <div class="flex justify-end mt-4">
-    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
-  </div>
-  <div *ngIf="mostrarBotonDescarga">
-    <button type="button" (click)="generarCsv()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Descargar CSV</button>
+  <div class="flex items-center w-full justify-between">
+    <div class="my-4 ml-4">
+      <button *ngIf="mostrarBotonDescarga" type="button" (click)="generarCsv()" [disabled]="generandoCsv" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Descargar CSV</button>
+    </div>
+    <div class="my-4 mr-4">
+      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
+    </div>
   </div>
 </form>
 @if (searching) {

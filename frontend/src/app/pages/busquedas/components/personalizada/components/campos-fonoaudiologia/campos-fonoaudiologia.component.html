@@ -17,12 +17,15 @@
   <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-multiselect [options]="derivacionesOptions" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" [filter]="false" [showHeader]="false" />
+      <!-- <p-select [options]="derivacionesOptions" optionLabel="nombre" optionValue="valor" [formControl]="controlDeInput('derivaciones')" idInput="derivaciones" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />  -->
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>
   <!-- Asistencia -->
   <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p>¿Asistió?</p>
-    <p-selectbutton [options]="siNoOptions" formControlName="asistencia" optionLabel="nombre" optionValue="valor" styleClass="w-full" />
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" optionLabel="nombre" optionValue="valor" formControlName="asistencia" idInput="asistencia" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
+      <label for="asistencia">Asistencia</label>
+    </p-iftalabel>
   </div>
 </div>

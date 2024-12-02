@@ -1,10 +1,11 @@
 export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type Turno = 'Mañana' | 'Tarde' | 'Noche';
+export type Demanda = 'Control niño sano' | 'Docente' | 'Familiar' | 'Otro';
 
 export class Oftalmologia {
   constructor(
     public id: number,
-    public demanda: string,
+    public demanda: Demanda,
     public primera_vez: boolean,
     public control: boolean,
     public receta: boolean,
@@ -13,6 +14,6 @@ export class Oftalmologia {
   ) {}
 
   static overload_constructor() {
-    return new Oftalmologia(0, '', false, false, false, false, new Date('2000-12-10'));
+    return new Oftalmologia(0, 'Otro', false, false, false, false, new Date('2000-12-10'));
   }
 }

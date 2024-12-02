@@ -162,13 +162,20 @@ export class UsuarioService {
     const usuariosProfesionales = [];
     const usuarios = await this.usuarioORM.find({ where: { deshabilitado: false }, relations: ['roles'], order: { nombre: 'ASC' } });
     const rolProfesional = await this.rolORM.findOne({ where: { nombre: 'Profesional', deshabilitado: false } });
+    const rolAdministrador = await this.rolORM.findOne({ where: { nombre: 'Administrador', deshabilitado: false } });
     if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
+    if (!rolAdministrador) throw new NotFoundException(`Rol "Administrador" no encontrado`);
     for (const usuario of usuarios) {
       const rolesDeUsuario = usuario.roles;
-      if (rolesDeUsuario.map((item) => item.nombre === 'Profesional').includes(true)) {
+      const tieneRol = usuario.roles.some((rol) => rol.nombre === rolProfesional.nombre || rol.nombre === rolAdministrador.nombre);
+      if (tieneRol) {
         delete usuario.contrasenia;
         usuariosProfesionales.push(usuario);
       }
+      //if (rolesDeUsuario.map((item) => (item.nombre === 'Profesional').includes(true)) || item.nombre === 'Admin').includes(true)) {
+      //  delete usuario.contrasenia;
+      //  usuariosProfesionales.push(usuario);
+      //}
     }
     return usuariosProfesionales;
   }
