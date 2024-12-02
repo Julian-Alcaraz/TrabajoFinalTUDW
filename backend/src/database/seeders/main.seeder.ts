@@ -229,14 +229,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0]],
         },
         {
-          url: 'busqueda',
-          label: 'Buscar Consultas',
-          orden: 2,
-          icon: 'fa-solid fa-magnifying-glass',
-          roles: [roles[0], roles[1], roles[2]],
-          deshabilitado: false,
-        },
-        {
           url: 'miUsuario',
           label: 'Mi Usuario',
           orden: 6,
