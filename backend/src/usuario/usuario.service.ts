@@ -166,16 +166,11 @@ export class UsuarioService {
     if (!rolProfesional) throw new NotFoundException(`Rol "Profesional" no encontrado`);
     if (!rolAdministrador) throw new NotFoundException(`Rol "Administrador" no encontrado`);
     for (const usuario of usuarios) {
-      const rolesDeUsuario = usuario.roles;
       const tieneRol = usuario.roles.some((rol) => rol.nombre === rolProfesional.nombre || rol.nombre === rolAdministrador.nombre);
       if (tieneRol) {
         delete usuario.contrasenia;
         usuariosProfesionales.push(usuario);
       }
-      //if (rolesDeUsuario.map((item) => (item.nombre === 'Profesional').includes(true)) || item.nombre === 'Admin').includes(true)) {
-      //  delete usuario.contrasenia;
-      //  usuariosProfesionales.push(usuario);
-      //}
     }
     return usuariosProfesionales;
   }
