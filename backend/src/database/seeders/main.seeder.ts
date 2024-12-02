@@ -328,6 +328,14 @@ export class MainSeeder implements Seeder {
           deshabilitado: true,
         },
         {
+          url: 'consultas/busqueda',
+          label: 'Buscar',
+          orden: 2,
+          icon: 'fa-solid fa-magnifying-glass',
+          roles: [roles[0], roles[1], roles[2]],
+          menu_padre: menus[2],
+        },
+        {
           url: 'consultas/clinica/nueva',
           label: 'Clinica',
           orden: 4,
