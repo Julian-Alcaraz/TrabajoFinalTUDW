@@ -16,11 +16,8 @@ export class UsuarioService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  eliminarRolDeUsuario(idUsuario: number, idRol: number): Observable<any> {
-    return this._http.delete(`${this.url}usuario/${idUsuario}/rol/${idRol}`);
-  }
-  agregarRolDeUsuario(idUsuario: number, idRol: number): Observable<any> {
-    return this._http.put(`${this.url}usuario/${idUsuario}/rol/${idRol}`, {}); // creo que no hace falta {}
+  administrarRoles(id: number, roles: number[]): Observable<any> {
+    return this._http.post(`${this.url}usuario/administrarRoles/${id}` , roles);
   }
   obtenerProfesionales(): Observable<any> {
     return this._http.get(this.url + 'usuario/profesionales');
@@ -40,7 +37,7 @@ export class UsuarioService {
   modificarContrasenia(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'usuario/modificarContrasenia/' + id, data);
   }
-  obtenerUsuarioxDni(dni:number){
+  obtenerUsuarioxDni(dni: number) {
     return this._http.get(this.url + 'usuario/dni/' + dni);
   }
 }

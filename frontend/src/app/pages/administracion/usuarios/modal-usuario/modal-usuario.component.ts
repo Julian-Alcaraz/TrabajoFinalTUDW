@@ -54,20 +54,7 @@ export class ModalUsuarioComponent implements OnInit {
     }
     this.obtenerRoles();
   }
-
-  trackById(index: number, rol: Rol): number {
-    return rol.id;
-  }
-
-  tieneElRol(usuario: Usuario, idRol: number): boolean {
-    return usuario?.roles?.some((rolSeleccionado) => rolSeleccionado.id === idRol) || false;
-  }
-
-  cerrarModalUsuario(actualizar: boolean) {
-    this.dialogRef.close(actualizar);
-    this.usuarioForm.reset();
-  }
-
+  
   onCheckboxChange(e: any) {
     const rolesArray: FormArray = this.usuarioForm.get('roles_ids') as FormArray;
     if (e.target.checked) {
@@ -83,6 +70,15 @@ export class ModalUsuarioComponent implements OnInit {
     }
   }
 
+  tieneElRol(usuario: Usuario, idRol: number): boolean {
+    return usuario?.roles?.some((rolSeleccionado) => rolSeleccionado.id === idRol) || false;
+  }
+
+  cerrarModalUsuario(actualizar: boolean) {
+    this.dialogRef.close(actualizar);
+    this.usuarioForm.reset();
+  }
+
   existenCambios() {
     const hayCambios = this.usuarioForm.dirty;
     // if (hayCambios) {
@@ -92,7 +88,7 @@ export class ModalUsuarioComponent implements OnInit {
     //     hayCambios = true;
     //   }
     // }
-    return (this.usuarioForm.valid && hayCambios);
+    return this.usuarioForm.valid && hayCambios;
   }
 
   obtenerRoles() {
@@ -123,43 +119,18 @@ export class ModalUsuarioComponent implements OnInit {
         if (result.isConfirmed) {
           // Ordenar el arreglo de ids
           const rolesOrdenados = this.usuarioForm.value.roles_ids.sort();
-          // Obtener los IDs de roles seleccionados actualmente
-          const nuevosRoles = rolesOrdenados.map((idRol: string) => parseInt(idRol));
-          // Obtener los IDs de roles que el usuario tenía previamente
-          const rolesAnteriores = this.usuario?.roles?.map((rol) => rol.id);
-          // Identificar roles a agregar (están en nuevosRoles pero no en rolesAnteriores)
-          const rolesAAgregar = nuevosRoles.filter((idRol: number) => !rolesAnteriores?.includes(idRol));
-          // Identificar roles a eliminar (están en rolesAnteriores pero no en nuevosRoles)
-          const rolesAEliminar = rolesAnteriores?.filter((idRol) => !nuevosRoles.includes(idRol));
-          // Agregar roles nuevos
-          rolesAAgregar.forEach((idRol: number) => {
-            this._usuarioService.agregarRolDeUsuario(this.usuario!.id, idRol).subscribe({
-              next: (response: any) => {
-                if (response.success) {
-                  MostrarNotificacion.mensajeExito(this.snackBar, `Rol ${idRol} agregado correctamente.`);
-                } else {
-                  MostrarNotificacion.mensajeError(this.snackBar, response.message);
-                }
-              },
-              error: (err: any) => {
-                MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-              },
-            });
-          });
-          // Eliminar roles deseleccionados
-          rolesAEliminar?.forEach((idRol) => {
-            this._usuarioService.eliminarRolDeUsuario(this.usuario!.id, idRol).subscribe({
-              next: (response: any) => {
-                if (response.success) {
-                  MostrarNotificacion.mensajeExito(this.snackBar, `Rol ${idRol} eliminado correctamente.`);
-                } else {
-                  MostrarNotificacion.mensajeError(this.snackBar, response.message);
-                }
-              },
-              error: (err: any) => {
-                MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-              },
-            });
+          const roles = rolesOrdenados.map((idRol: string) => parseInt(idRol));
+          this._usuarioService.administrarRoles(this.usuario!.id, roles).subscribe({
+            next: (response: any) => {
+              if (response.success) {
+                MostrarNotificacion.mensajeExito(this.snackBar, `Roles modificados.`);
+              } else {
+                MostrarNotificacion.mensajeError(this.snackBar, response.message);
+              }
+            },
+            error: (err: any) => {
+              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+            },
           });
           // Cerrar el modal
           this.cerrarModalUsuario(true);

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, Delete, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsuarioService } from './usuario.service';
@@ -23,6 +23,19 @@ export class UsuarioController {
       success: true,
       data: usuario,
       message: 'Usuario creado con exito',
+    };
+  }
+
+  @Post('administrarRoles/:id')
+  @ApiOperation({ summary: 'Agrega o quita roles de usuario' })
+  @ApiResponse({ status: 201, description: 'Roles de usuario modificados con éxito' })
+  @ApiResponse({ status: 400, description: 'El usuario no existe' })
+  async administrarRoles(@Param('id', ParseIntPipe) id: number, @Body() roles: number[]) {
+    const usuario = await this.usuarioService.administrarRoles(id, roles);
+    return {
+      success: true,
+      data: usuario,
+      message: 'Roles modificados con exito',
     };
   }
 
@@ -78,6 +91,7 @@ export class UsuarioController {
       message: 'Usuario modificado con exito',
     };
   }
+
   @Get('dni/:dni')
   @ApiOperation({ summary: 'Devuelve el usuario buscado por dni' })
   @ApiResponse({ status: 200, description: 'Retorna el usuario buscado con exito' })
@@ -98,6 +112,7 @@ export class UsuarioController {
       };
     }
   }
+
   @Delete('eliminar/:id')
   @ApiOperation({ summary: 'Borrado logico de un usuario' })
   @ApiResponse({ status: 200, description: 'Usuario borrado logicamente con exito' })
@@ -111,6 +126,7 @@ export class UsuarioController {
     };
   }
 
+  /*
   @Delete(':idUsuario/rol/:idRol')
   @ApiOperation({ summary: 'Borrado de un rol relacionado a un usuario' })
   @ApiResponse({ status: 200, description: 'Rol relacionado al usuario borrado con exito' })
@@ -139,6 +155,7 @@ export class UsuarioController {
       message: 'Rol del usuario asignado con exito',
     };
   }
+  */
 
   @Get('menus/:id')
   @ApiOperation({ summary: 'Devuelve todos los menus segun el id de un usuario' })

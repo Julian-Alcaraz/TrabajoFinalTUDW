@@ -86,6 +86,23 @@ export class UsuarioService {
     return this.usuarioORM.save(usuario);
   }
 
+  async administrarRoles(id: number, roles: number[]) {
+    const usuario = await this.usuarioORM.findOne({ where: { id: id /*, deshabilitado: false*/ }, relations: ['roles'] });
+    if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+    const rolesAnteriores = usuario.roles.map((rol) => rol.id);
+    const rolesAAgregar = roles.filter((idRol: number) => !rolesAnteriores?.includes(idRol));
+    const rolesAEliminar = rolesAnteriores?.filter((idRol) => !roles.includes(idRol));
+    if (rolesAAgregar.length > 0) {
+      rolesAAgregar.forEach((idRol: number) => {
+        this.agregarRolDeUsuario(id, idRol);
+      });
+    } else if (rolesAEliminar.length > 0) {
+      rolesAEliminar.forEach((idRol) => {
+        this.eliminarRolDeUsuario(id, idRol);
+      });
+    }
+  }
+
   async eliminarRolDeUsuario(idUsuario: number, idRol: number) {
     const usuario = await this.usuarioORM.findOne({ where: { id: idUsuario, deshabilitado: false }, relations: ['roles'] });
     if (!usuario) throw new NotFoundException(`Usuario con id ${idUsuario} no encontrado`);

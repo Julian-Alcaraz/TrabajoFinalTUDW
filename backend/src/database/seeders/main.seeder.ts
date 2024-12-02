@@ -117,7 +117,6 @@ export class MainSeeder implements Seeder {
           dni: 44671915,
           fe_nacimiento: '2003-02-09',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
         {
           nombre: 'Belen',
@@ -127,7 +126,6 @@ export class MainSeeder implements Seeder {
           dni: 23456782,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
         {
           nombre: 'Marcia',
@@ -137,7 +135,6 @@ export class MainSeeder implements Seeder {
           dni: 23456789,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
         {
           nombre: 'Jorge',
@@ -147,7 +144,6 @@ export class MainSeeder implements Seeder {
           dni: 12345674,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
         {
           nombre: 'Lucas',
@@ -157,7 +153,6 @@ export class MainSeeder implements Seeder {
           dni: 12345672,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
         {
           nombre: 'Fernando',
@@ -167,7 +162,6 @@ export class MainSeeder implements Seeder {
           dni: 12345673,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
-          deshabilitado: true,
         },
       ]);
 
