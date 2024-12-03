@@ -89,37 +89,13 @@ export class UsuarioService {
   async administrarRoles(id: number, roles: number[]) {
     const usuario = await this.usuarioORM.findOne({ where: { id: id /*, deshabilitado: false*/ }, relations: ['roles'] });
     if (!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
-    const rolesAnteriores = usuario.roles.map((rol) => rol.id);
-    const rolesAAgregar = roles.filter((idRol: number) => !rolesAnteriores?.includes(idRol));
-    const rolesAEliminar = rolesAnteriores?.filter((idRol) => !roles.includes(idRol));
-    if (rolesAAgregar.length > 0) {
-      rolesAAgregar.forEach((idRol: number) => {
-        this.agregarRolDeUsuario(id, idRol);
-      });
-    } else if (rolesAEliminar.length > 0) {
-      rolesAEliminar.forEach((idRol) => {
-        this.eliminarRolDeUsuario(id, idRol);
-      });
+    usuario.roles = [];
+    for (const idRol of roles) {
+      const rol = await this.rolORM.findOne({ where: { id: idRol, deshabilitado: false } });
+      if (!rol) throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
+      usuario.roles.push(rol);
     }
-  }
-
-  async eliminarRolDeUsuario(idUsuario: number, idRol: number) {
-    const usuario = await this.usuarioORM.findOne({ where: { id: idUsuario, deshabilitado: false }, relations: ['roles'] });
-    if (!usuario) throw new NotFoundException(`Usuario con id ${idUsuario} no encontrado`);
-    const rol = usuario.roles.find((rol) => rol.id === idRol);
-    if (!rol) throw new NotFoundException(`Rol con id ${idRol} no esta asignado al usuario ${idUsuario}`);
-    usuario.roles = usuario.roles.filter((item) => item.id !== idRol);
     if (usuario.roles.length === 0) throw new BadRequestException(`Un usuario no puede quedarse sin roles`);
-    return this.usuarioORM.save(usuario);
-  }
-
-  async agregarRolDeUsuario(idUsuario: number, idRol: number) {
-    const usuario = await this.usuarioORM.findOne({ where: { id: idUsuario, deshabilitado: false }, relations: ['roles'] });
-    if (!usuario) throw new NotFoundException(`Usuario con id ${idUsuario} no encontrado`);
-    const rol = await this.rolORM.findOne({ where: { id: idRol, deshabilitado: false } });
-    if (!rol) throw new NotFoundException(`Rol con id ${idRol} no encontrado`);
-    if (usuario.roles.find((item) => item.id === idRol)) throw new BadRequestException(`El usuario con id ${idUsuario} ya tiene al rol con id ${idRol}`);
-    usuario.roles.push(rol);
     return this.usuarioORM.save(usuario);
   }
 

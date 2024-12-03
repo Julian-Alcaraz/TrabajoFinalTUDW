@@ -54,20 +54,19 @@ export class ModalUsuarioComponent implements OnInit {
     }
     this.obtenerRoles();
   }
-  
-  onCheckboxChange(e: any) {
+
+  onCheckboxChange(event: any) {
+    const inputElement = event.target as HTMLInputElement;
     const rolesArray: FormArray = this.usuarioForm.get('roles_ids') as FormArray;
-    if (e.target.checked) {
-      rolesArray.push(this.fb.control(e.target.value));
+    if (inputElement.checked) {
+      rolesArray.push(this.fb.control(+inputElement.value));
     } else {
-      const index = rolesArray.controls.findIndex((x) => x.value === e.target.value);
-      rolesArray.removeAt(index);
+      const index = rolesArray.controls.findIndex((control) => +control.value === +inputElement.value);
+      if (index !== -1) {
+        rolesArray.removeAt(index);
+      }
     }
-    if (this.usuarioForm.get('roles_ids')?.value.length == 0) {
-      this.selectCheckbox = true;
-    } else {
-      this.selectCheckbox = false;
-    }
+    this.selectCheckbox = this.usuarioForm.get('roles_ids')?.value.length === 0;
   }
 
   tieneElRol(usuario: Usuario, idRol: number): boolean {
@@ -81,13 +80,6 @@ export class ModalUsuarioComponent implements OnInit {
 
   existenCambios() {
     const hayCambios = this.usuarioForm.dirty;
-    // if (hayCambios) {
-    //   if (this.barrio?.nombre == this.barrioForm.value.nombre && this.barrio?.localidad?.id == this.barrioForm.value.id_localidad) {
-    //     hayCambios = false;
-    //   } else {
-    //     hayCambios = true;
-    //   }
-    // }
     return this.usuarioForm.valid && hayCambios;
   }
 
@@ -106,7 +98,6 @@ export class ModalUsuarioComponent implements OnInit {
       },
     });
   }
-
   modificarRoles() {
     if (this.usuarioForm.valid) {
       Swal.fire({
@@ -117,7 +108,6 @@ export class ModalUsuarioComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          // Ordenar el arreglo de ids
           const rolesOrdenados = this.usuarioForm.value.roles_ids.sort();
           const roles = rolesOrdenados.map((idRol: string) => parseInt(idRol));
           this._usuarioService.administrarRoles(this.usuario!.id, roles).subscribe({
