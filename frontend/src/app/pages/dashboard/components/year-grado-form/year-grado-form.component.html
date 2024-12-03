@@ -1,28 +1,39 @@
 <form [formGroup]="optionForm" (ngSubmit)="traerDatosGraficos()">
-  <div class="flex flex-col sm:flex-row gap-4">
+  <div class="flex flex-col sm:flex-row gap-4 items-center">
     <div class="flex-2">
-      <label for="year" class="block mb-4 text-sm font-medium text-gray-900">Año</label>
-      <p-datepicker placeholder="Año" formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" class="w-full">
-        <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
-        <ng-template pTemplate="footer">
-          <p-button class="p-datepicker-prev hidden">Previous</p-button>
-          <p-button class="p-datepicker-next hidden">Next</p-button>
-        </ng-template>
-        <!-- end TODO -->
-      </p-datepicker>
+      <p-iftaLabel>
+        <p-datepicker formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" class="w-full" [showButtonBar]="true">
+          <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
+          <ng-template pTemplate="footer">
+            <p-button class="p-datepicker-prev hidden">Previous</p-button>
+            <p-button class="p-datepicker-next hidden">Next</p-button>
+          </ng-template>
+          <!-- end TODO -->
+        </p-datepicker>
+        <label for="year" class="block mb-4 text-sm font-medium text-gray-900">Año</label>
+      </p-iftaLabel>
     </div>
     <div class="flex-2">
       @if (searchingCursos) {
         <app-loading />
       } @else {
-        <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" class="w-full" />
+        <div class="w-full">
+          <p-iftaLabel>
+            <p-select [options]="cursos" optionLabel="nombre" optionValue="id" [checkmark]="true" [showClear]="true" [formControl]="controlDeInput('id_curso')" idInput="id_curso" class="w-full md:w-56" />
+            <label for="id_curso">Curso</label>
+          </p-iftaLabel>
+        </div>
+        <!-- <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" class="w-full" /> -->
       }
     </div>
     <div class="flex-2">
-      <app-input-select-enum label="Vista grafico de barras" [control]="controlDeInput('porcentaje')" idInput="porcentaje" [opciones]="['Porcentajes', 'Cantidades']" [valores]="['1', '0']" />
+      <!-- <app-input-select-enum label="Vista grafico de barras" [control]="controlDeInput('porcentaje')" idInput="porcentaje" [opciones]="['Porcentajes', 'Cantidades']" [valores]="['1', '0']" /> -->
+      <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" />
+      <!--
+      <button type="button" [formControl]="controlDeInput('porcentaje')" (click)="onClickPorcentajes()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">{{ textoBoton }}</button> -->
     </div>
     <div class="col">
-      <label for="" class="block text-sm font-medium mb-4 text-gray-900 text-transparent">buscar</label>
+      <!-- <label for="" class="block text-sm font-medium mb-4 text-gray-900 text-transparent">buscar</label> -->
       <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
       <button type="button" class="ml-2 text-blue-700 underline cursor-pointer" (click)="resetearForm()">Limpiar</button>
     </div>

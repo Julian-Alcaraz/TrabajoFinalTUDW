@@ -10,11 +10,13 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InstitucionService } from '../../../services/institucion.service';
 import { Institucion } from '../../../models/institucion.model';
 import { LoadingComponent } from '../../../components/loading/loading.component';
-
+import { Select } from 'primeng/select';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
@@ -28,6 +30,8 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   instituciones: Institucion[] = [];
   selectedYear = 0;
   selectedId_institucion = 0;
+
+  institucionSeleccionada = new FormControl;
   dataTypeYearAndInstitucion: any = [];
 
   dataChicosxAnio: any = [];
@@ -153,7 +157,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   }
 
   seleccionarInstituciones(event: any) {
-    this.selectedId_institucion = +event.target.value;
+    this.selectedId_institucion = +event.value;
     if (this.selectedId_institucion === 0) {
       this.subTituloInstitucion = '';
     } else {
