@@ -188,20 +188,17 @@ export class FormChicosComponent implements OnInit {
 
   completarDatosForm() {
     const stringFecha = String(this.chico?.fe_nacimiento);
-    const formatDate = (date: Date): string => {
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const year = date.getFullYear();
-      return `${day}-${month}-${year}`;
+    const parseToLocalDate = (dateString: string): Date => {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(year, month - 1, day);
     };
-    const fechaFormateadaString = formatDate(new Date(stringFecha));
-    const fechaFinal = new Date(fechaFormateadaString);
+    const fechaFinal = parseToLocalDate(stringFecha);
     this.chicoForm.patchValue({
       nombre: this.chico?.nombre,
       apellido: this.chico?.apellido,
       dni: this.chico?.dni,
       sexo: this.chico?.sexo,
-      fe_nacimiento: fechaFinal, // Problema
+      fe_nacimiento: fechaFinal,
       direccion: this.chico?.direccion,
       telefono: this.chico?.telefono,
       nombre_padre: this.chico?.nombre_padre,
@@ -210,6 +207,7 @@ export class FormChicosComponent implements OnInit {
       id_localidad: this.chico?.barrio?.localidad?.id,
     });
   }
+
   obtenerBarriosXLocalidad(idLocalidad: string) {
     this.searchingBarrios = true;
     this._localidadService.obtenerBarriosXLocalidad(idLocalidad).subscribe({

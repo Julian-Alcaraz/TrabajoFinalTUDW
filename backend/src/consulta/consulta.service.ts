@@ -256,9 +256,9 @@ export class ConsultaService {
         // Deberia dar error esto!!!!
         // console.log('No se especifico tipo.. ');
       }
-      return formatearFecha(resultados);
+      return resultados;
     }
-    return consultas;
+    return formatearFecha(consultas);
   }
 
   prepararDataConsultaPersonalizada(data) {

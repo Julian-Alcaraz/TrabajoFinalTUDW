@@ -48,13 +48,15 @@ export class ChicoService {
 
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
-    const fe_nacimiento = new Date(chico.fe_nacimiento);
-    const fechaFormateada = [fe_nacimiento.getDate().toString().padStart(2, '0'), (fe_nacimiento.getMonth() + 1).toString().padStart(2, '0'), fe_nacimiento.getFullYear()].join('-');
+    //const fe_nacimiento = new Date(chico.fe_nacimiento);
+    //const fechaFormateada = [fe_nacimiento.getDate().toString().padStart(2, '0'), (fe_nacimiento.getMonth() + 1).toString().padStart(2, '0'), fe_nacimiento.getFullYear()].join('-');
+    //console.log(typeof fechaFormateada);
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
-    return {
-      ...chico,
-      fe_nacimiento: fechaFormateada,
-    };
+    return chico;
+    //return {
+    //  ...chico,
+    //  fe_nacimiento: fe_nacimiento,
+    //};
   }
 
   async findOneByDni(dni: number) {

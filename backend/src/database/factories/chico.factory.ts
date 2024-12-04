@@ -7,6 +7,7 @@ export const ChicoFactory = setSeederFactory(Chico, async () => {
   const chico = new Chico();
   chico.dni = faker.number.int({ min: 10000000, max: 99999999 });
   chico.fe_nacimiento = faker.date.between({ from: '2006-01-01T00:00:00.000Z', to: '2017-01-01T00:00:00.000Z' });
+  //chico.fe_nacimiento = faker.date.between({ from: '2005-12-31T00:00:00.000Z', to: '2017-12-31T00:00:00.000Z' });
   chico.nombre_padre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.nombre_madre = Math.random() > 0.5 ? faker.person.fullName() : null;
   chico.direccion = faker.location.streetAddress();
