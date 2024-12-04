@@ -23,7 +23,6 @@ export class CreateConsultaDto {
   @ApiProperty({ description: 'Obra social de la consulta' })
   @IsNotEmpty({ message: 'La obra social no puede estar vacio' })
   @IsBoolean({ message: 'La obra social debe ser un boolean' })
-  // @Transform(({ value }) => value.trim())
   readonly obra_social: boolean;
 
   @ApiProperty({ description: 'Edad del niño que asiste' })
@@ -60,7 +59,7 @@ export class CreateConsultaDto {
   @IsString({ message: 'Las Observaciones debe ser un string' })
   @Length(1, 1000, { message: 'Las Observaciones deben tener entre 1 y 1000 caracteres' })
   @IsOptional()
-  @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => (value ? value.trim() : value))
   readonly observaciones?: string;
 
   // Validación condicional para "Clinica"

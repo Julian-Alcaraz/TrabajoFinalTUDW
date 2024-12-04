@@ -51,7 +51,6 @@ export class FormChicosComponent implements OnInit {
   public fechaHaceUnAnio = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   public fechaHoy = new Date();
   public habilitarModificar = false;
-  public mensajeDoc = '';
   public mensajeValidando = '';
   public searchingLocalidades = false;
   public searchingBarrios = false;
@@ -72,7 +71,7 @@ export class FormChicosComponent implements OnInit {
       dni: ['' /*Math.floor(10000000 + Math.random() * 90000000)*/, [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['', [Validators.required]],
       fe_nacimiento: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarSoloNumeros]],
+      telefono: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15), ValidarSoloNumeros]],
       direccion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
@@ -110,11 +109,8 @@ export class FormChicosComponent implements OnInit {
             this.buscarChicoxDni(value);
           }
         } else {
-          this.mensajeDoc = '';
           this.buscarChicoxDni(value);
         }
-      } else {
-        this.mensajeDoc = '';
       }
     });
   }
@@ -126,16 +122,12 @@ export class FormChicosComponent implements OnInit {
         if (response.success) {
           this.chicoForm.get('dni')?.setErrors({ invalidDni: true });
           this.habilitarModificar = true;
-          this.mensajeDoc = 'Documento ya ingresado en otro chico.';
         } else {
           this.chicoForm.get('dni')?.setErrors(null);
-          this.mensajeDoc = '';
         }
       },
-      error: (error: any) => {
+      error: () => {
         this.mensajeValidando = '';
-        this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
-        console.log(error);
       },
     });
   }

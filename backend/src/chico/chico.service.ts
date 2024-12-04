@@ -54,7 +54,7 @@ export class ChicoService {
         'localidad.id AS id_localidad', // Selecciona el nombre de la localidad
       ])
       .addSelect((subQuery) => {
-        return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+        return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
       .orderBy('chico.nombre')
       .getRawMany();

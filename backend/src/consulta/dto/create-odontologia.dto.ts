@@ -60,8 +60,8 @@ export class CreateOdontologiaDto {
 
   @ApiProperty({ description: 'Hábitos del niño que asiste', required: false })
   @IsString({ message: 'Habitos debe ser un string' })
-  @Length(1, 1000, { message: 'Habitos debe tener entre 1 y 1000 caracteres' })
-  @Transform(({ value }) => value.trim())
   @IsOptional()
+  @Length(1, 1000, { message: 'Habitos debe tener entre 1 y 1000 caracteres' })
+  @Transform(({ value }) => (value ? value.trim() : value))
   readonly habitos?: string;
 }

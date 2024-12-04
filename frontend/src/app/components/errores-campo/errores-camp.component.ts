@@ -1,40 +1,3 @@
-// import { CommonModule } from '@angular/common';
-// import { Component, Input } from '@angular/core';
-
-// @Component({
-//   selector: 'app-errores-campo',
-//   imports: [CommonModule],
-//   standalone: true,
-//   template: `
-//   {{errors | json}}
-//   {{errors.length}}
-//     <div *ngIf="errors?.['required']">Campo requerido.</div>
-//     <div *ngIf="errors?.['maxlength']">Máximo {{ errors?.['maxlength'].requiredLength }} caracteres.</div>
-//     <div *ngIf="errors?.['minlength']">Mínimo {{ errors?.['minlength'].requiredLength }} caracteres.</div>
-//     <div *ngIf="errors?.['min']">Valor mínimo: {{ errors?.['min'].min }}.</div>
-//     <div *ngIf="errors?.['max']">Valor máximo: {{ errors?.['max'].max }}.</div>
-//     <div *ngIf="errors?.['email']">Correo electrónico inválido.</div>
-//     <div *ngIf="errors?.['pattern']">{{ obtenerMensajePatron(errors?.['pattern']) }}</div>
-//     <!-- Personalizados -->
-//     <div *ngIf="errors?.['ValidarSoloLetras']">Solo puede tener letras.</div>
-//     <div *ngIf="errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
-//     <div *ngIf="errors?.['ValidarHora']">La hora debe estar en formato HH:mm. La hora debe ser valida(pasar esto a otro mensaje de error)</div>
-//     <div *ngIf="errors?.['ValidarDni']">Debe tener 8 dígitos.</div>
-//   `,
-// })
-// export class ErroresCampoComponent {
-//   @Input() errors: any = {};
-
-//   obtenerMensajePatron(error: any): string {
-//     if (error.requiredPattern === '^[a-zA-Z]+$') {
-//       return 'Solo se permiten letras.';
-//     }
-//     if (error.requiredPattern === '^[0-9]+$') {
-//       return 'Solo se permiten números.';
-//     }
-//     return 'Formato inválido.';
-//   }
-// }
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
@@ -68,9 +31,11 @@ export class ErroresCampoComponent {
       ValidarCadenaSinEspacios: 'El campo no puede estar en blanco.',
       ValidarHora: 'La hora debe estar en formato HH:mm.',
       ValidarDni: 'Debe tener 8 dígitos.',
+      ValidarSoloNumeros:'Este campo de',
+      invalidDni: 'El documento esta en uso'
     };
-
-    return mensajesError[tipoError] || 'Error desconocido';
+    // elimino el mensaje por defecto: ese muestra en error de buscar dni 'Error desconocido'
+    return mensajesError[tipoError] || '';
   }
 
   obtenerMensajePatron(error: any): string {

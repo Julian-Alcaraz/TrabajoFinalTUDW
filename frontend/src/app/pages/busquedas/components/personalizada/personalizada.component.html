@@ -46,7 +46,7 @@
                 {{ profesional.nombre + ' ' + profesional.apellido }}
               </ng-template>
             </p-select>
-            <label for="profesionales">Profesionales</label>
+            <label for="profesionales">Profesional</label>
           </p-iftalabel>
         </div>
       </div>
@@ -66,7 +66,7 @@
         <div formGroupName="curso">
           <p-iftalabel>
             <p-select [options]="cursos" idInput="cursos" formControlName="id" [checkmark]="true" optionLabel="nombre" optionValue="id" [showClear]="true" [loading]="loadingCursos" class="w-full h-16" />
-            <label for="cursos">Cursos</label>
+            <label for="cursos">Curso </label>
           </p-iftalabel>
         </div>
       </div>

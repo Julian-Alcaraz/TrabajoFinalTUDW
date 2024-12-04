@@ -39,7 +39,6 @@ export class FormUsuarioComponent implements OnInit {
   public selectCheckbox = true;
   public estaEditando = false;
   public usuarioActual: Usuario | null = null;
-  public mensajeDoc = '';
   public mensajeValidando = '';
   public searchingUser = false;
   public searchingRoles = false;
@@ -142,11 +141,8 @@ export class FormUsuarioComponent implements OnInit {
             this.buscarUsuarioxDni(value);
           }
         } else {
-          this.mensajeDoc = '';
           this.buscarUsuarioxDni(value);
         }
-      } else {
-        this.mensajeDoc = '';
       }
     });
   }
@@ -158,15 +154,12 @@ export class FormUsuarioComponent implements OnInit {
         if (response.success) {
           this.userForm.get('dni')?.setErrors({ invalidDni: true });
           this.activarModificar();
-          this.mensajeDoc = 'Documento ya ingresado en otro usuario.';
         } else {
           this.userForm.get('dni')?.setErrors(null);
-          this.mensajeDoc = '';
         }
       },
       error: () => {
         this.mensajeValidando = '';
-        this.mensajeDoc = 'Error en la busqueda. Intenelo mas tarde';
       },
     });
   }
