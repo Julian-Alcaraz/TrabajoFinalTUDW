@@ -141,6 +141,16 @@ export class NuevaOdontologiaComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.odontologiaForm.reset();
+                // Estos set value son para que se mantegna el mensaje despues de enviar 1 consulta
+                this.odontologiaForm.get('id_institucion')?.setValue('');
+                this.odontologiaForm.get('id_curso')?.setValue('');
+                this.odontologiaForm.get('turno')?.setValue('');
+                this.odontologiaForm.get('obra_social')?.setValue('');
+
+                this.odontologiaForm.get('cepillo')?.setValue('');
+                this.odontologiaForm.get('cepillado')?.setValue('');
+                this.odontologiaForm.get('topificacion')?.setValue('');
+                this.odontologiaForm.get('derivacion_externa')?.setValue('');
               }
             },
             error: (err) => {

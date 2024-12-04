@@ -35,26 +35,10 @@ export class ChicoService {
     const result = await this.chicoORM
       .createQueryBuilder('chico')
       .leftJoin('chico.barrio', 'barrio')
-      .leftJoin('barrio.localidad', 'localidad') // Relación con localidad
-      .select([
-        'chico.id AS id',
-        'chico.created_at AS created_at',
-        'chico.updated_at AS updated_at',
-        'chico.deshabilitado AS deshabilitado',
-        'chico.dni AS dni',
-        'chico.nombre AS nombre',
-        'chico.apellido AS apellido',
-        'chico.sexo AS sexo',
-        'chico.fe_nacimiento AS fe_nacimiento',
-        'chico.direccion AS direccion',
-        'chico.telefono AS telefono',
-        'chico.nombre_madre AS nombre_madre',
-        'chico.nombre_padre AS nombre_padre',
-        'chico.id_barrio AS id_barrio',
-        'localidad.id AS id_localidad', // Selecciona el nombre de la localidad
-      ])
+      .leftJoin('barrio.localidad', 'localidad')
+      .select(['chico.id AS id', 'chico.created_at AS created_at', 'chico.updated_at AS updated_at', 'chico.deshabilitado AS deshabilitado', 'chico.dni AS dni', 'chico.nombre AS nombre', 'chico.apellido AS apellido', 'chico.sexo AS sexo', "TO_CHAR(chico.fe_nacimiento, 'DD-MM-YYYY') AS fe_nacimiento", 'chico.direccion AS direccion', 'chico.telefono AS telefono', 'chico.nombre_madre AS nombre_madre', 'chico.nombre_padre AS nombre_padre', 'chico.id_barrio AS id_barrio', 'localidad.id AS id_localidad'])
       .addSelect((subQuery) => {
-        return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+        return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado = false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
       .orderBy('chico.nombre')
       .getRawMany();
@@ -64,13 +48,18 @@ export class ChicoService {
 
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
+    const fe_nacimiento = new Date(chico.fe_nacimiento);
+    const fechaFormateada = [fe_nacimiento.getDate().toString().padStart(2, '0'), (fe_nacimiento.getMonth() + 1).toString().padStart(2, '0'), fe_nacimiento.getFullYear()].join('-');
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
-    return chico;
+    return {
+      ...chico,
+      fe_nacimiento: fechaFormateada,
+    };
   }
 
   async findOneByDni(dni: number) {
     const chico = await this.chicoORM.findOne({ where: { dni }, relations: ['barrio', 'barrio.localidad'] });
-    // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);
+    // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);!!!! deberia estar descomentado creo
     return chico;
   }
 
@@ -101,6 +90,7 @@ export class ChicoService {
     });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
+    chico.consultas = formatearFecha(chico.consultas);
     return chico.consultas;
   }
 
@@ -113,4 +103,18 @@ export class ChicoService {
     }
     return respuesta.reverse();
   }
+}
+
+function formatearFecha(results: any[]): any[] {
+  const formatDate = (date: Date): string =>
+    [
+      date.getDate().toString().padStart(2, '0'), // Día
+      (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
+      date.getFullYear(), // Año
+    ].join('-');
+
+  return results.map((result) => ({
+    ...result,
+    created_at: result.created_at ? formatDate(new Date(result.created_at)) : null,
+  }));
 }

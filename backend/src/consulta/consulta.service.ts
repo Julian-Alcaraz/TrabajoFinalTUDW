@@ -256,7 +256,7 @@ export class ConsultaService {
         // Deberia dar error esto!!!!
         // console.log('No se especifico tipo.. ');
       }
-      return resultados;
+      return formatearFecha(resultados);
     }
     return consultas;
   }
@@ -294,8 +294,12 @@ export class ConsultaService {
     return this.consultaORM.find({ where: { deshabilitado: false }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
   }
 
-  findAllByYear(year) {
-    return this.consultaORM.find({ where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) }, relations: ['chico', 'institucion', 'curso', 'usuario'] });
+  async findAllByYear(year: number) {
+    const consultas = await this.consultaORM.find({
+      where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) },
+      relations: ['chico', 'institucion', 'curso', 'usuario'],
+    });
+    return formatearFecha(consultas);
   }
 
   async update(id: number, cambios: UpdateConsultaDto) {
@@ -409,6 +413,20 @@ export class ConsultaService {
     consulta.deshabilitado = true;
     return this.consultaORM.save(consulta);
   }
+}
+
+function formatearFecha(results: any[]): any[] {
+  const formatDate = (date: Date): string =>
+    [
+      date.getDate().toString().padStart(2, '0'), // Día
+      (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
+      date.getFullYear(), // Año
+    ].join('-');
+
+  return results.map((result) => ({
+    ...result,
+    created_at: result.created_at ? formatDate(new Date(result.created_at)) : null,
+  }));
 }
 
 function estadoNutricional(pcimc: number) {

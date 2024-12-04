@@ -16,7 +16,7 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent,DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
   styleUrl: './nueva-fonoaudiologia.component.css',
 })
@@ -108,6 +108,15 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.fonoaudiologiaForm.reset();
+                // Estos set value son para que se mantegna el mensaje despues de enviar 1 consulta
+                this.fonoaudiologiaForm.get('id_institucion')?.setValue('');
+                this.fonoaudiologiaForm.get('id_curso')?.setValue('');
+                this.fonoaudiologiaForm.get('turno')?.setValue('');
+                this.fonoaudiologiaForm.get('obra_social')?.setValue('');
+                this.fonoaudiologiaForm.get('derivacion_externa')?.setValue('');
+                this.fonoaudiologiaForm.get('diagnostico_presuntivo')?.setValue('');
+                this.fonoaudiologiaForm.get('causas')?.setValue('');
+                this.fonoaudiologiaForm.get('asistencia')?.setValue('');
               }
             },
             error: (err) => {

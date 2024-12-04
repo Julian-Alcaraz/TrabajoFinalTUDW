@@ -84,7 +84,6 @@ export class NuevaOftalmologiaComponent implements OnInit {
           const primeraVez = response.data.primera_vez;
           this.oftalmologiaForm.get('primera_vez')?.setValue(primeraVez);
           this.oftalmologiaForm.get('control')?.setValue(!primeraVez);
-
           const anteojosControl = this.oftalmologiaForm.get('anteojos');
           if (primeraVez) {
             anteojosControl?.clearValidators();
@@ -119,8 +118,6 @@ export class NuevaOftalmologiaComponent implements OnInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           const formValues = this.oftalmologiaForm.value;
-          formValues.primera_vez = formValues.primera_vez === 'true';
-          formValues.control = formValues.control === 'true';
           formValues.receta = formValues.receta === 'true';
           if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
@@ -142,7 +139,6 @@ export class NuevaOftalmologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            //...(derivaciones.externa && { derivaciones }),
             derivaciones,
             oftalmologia: {
               ...oftalmologiaValues,
@@ -152,7 +148,16 @@ export class NuevaOftalmologiaComponent implements OnInit {
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                // Estos set value son para que se mantegna el mensaje despues de enviar 1 consulta
                 this.oftalmologiaForm.reset();
+                this.oftalmologiaForm.get('id_institucion')?.setValue('');
+                this.oftalmologiaForm.get('id_curso')?.setValue('');
+                this.oftalmologiaForm.get('turno')?.setValue('');
+                this.oftalmologiaForm.get('obra_social')?.setValue('');
+                this.oftalmologiaForm.get('demanda')?.setValue('');
+                this.oftalmologiaForm.get('receta')?.setValue('');
+                this.oftalmologiaForm.get('anteojos')?.setValue('');
+                this.oftalmologiaForm.get('derivacion_externa')?.setValue('');
               }
             },
             error: (err) => {

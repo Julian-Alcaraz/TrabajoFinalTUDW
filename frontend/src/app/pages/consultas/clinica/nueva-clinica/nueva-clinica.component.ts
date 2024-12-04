@@ -160,6 +160,25 @@ export class NuevaClinicaComponent implements OnInit {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.clinicaForm.reset();
+                // Estos set value son para que se mantegna el mensaje despues de enviar 1 consulta
+                this.clinicaForm.get('id_institucion')?.setValue('');
+                this.clinicaForm.get('id_curso')?.setValue('');
+                this.clinicaForm.get('turno')?.setValue('');
+                this.clinicaForm.get('obra_social')?.setValue('');
+
+                this.clinicaForm.get('leche')?.setValue('');
+                this.clinicaForm.get('ortopedia_traumatologia')?.setValue('');
+                this.clinicaForm.get('examen_visual')?.setValue('');
+                this.clinicaForm.get('lenguaje')?.setValue('');
+                this.clinicaForm.get('vacunas')?.setValue('');
+                this.clinicaForm.get('infusiones')?.setValue('');
+                this.clinicaForm.get('cantidad_comidas')?.setValue('');
+                this.clinicaForm.get('alimentacion')?.setValue('');
+                this.clinicaForm.get('hidratacion')?.setValue('');
+                this.clinicaForm.get('horas_pantalla')?.setValue('');
+                this.clinicaForm.get('horas_juego_aire_libre')?.setValue('');
+                this.clinicaForm.get('horas_suenio')?.setValue('');
+                this.clinicaForm.get('segto')?.setValue('');
               }
             },
             error: (err) => {

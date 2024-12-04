@@ -23,17 +23,13 @@
             <label for="id_curso">Curso</label>
           </p-iftaLabel>
         </div>
-        <!-- <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" class="w-full" /> -->
       }
     </div>
     <div class="flex-2">
       <!-- <app-input-select-enum label="Vista grafico de barras" [control]="controlDeInput('porcentaje')" idInput="porcentaje" [opciones]="['Porcentajes', 'Cantidades']" [valores]="['1', '0']" /> -->
       <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" />
-      <!--
-      <button type="button" [formControl]="controlDeInput('porcentaje')" (click)="onClickPorcentajes()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">{{ textoBoton }}</button> -->
     </div>
     <div class="col">
-      <!-- <label for="" class="block text-sm font-medium mb-4 text-gray-900 text-transparent">buscar</label> -->
       <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
       <button type="button" class="ml-2 text-blue-700 underline cursor-pointer" (click)="resetearForm()">Limpiar</button>
     </div>

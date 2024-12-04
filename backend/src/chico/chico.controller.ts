@@ -54,6 +54,7 @@ export class ChicoController {
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const chico = await this.chicoService.findOne(id);
+    console.log(chico);
     return {
       success: true,
       data: chico,

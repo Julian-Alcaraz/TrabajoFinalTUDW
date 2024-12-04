@@ -124,12 +124,12 @@ function calcularEstadoNutricional(pcimc: number) {
   if (pcimc >= 10 && pcimc < 85) return 'C Eutrófico';
   if (pcimc >= 85 && pcimc < 95) return 'D Sobrepeso';
   if (pcimc >= 95) return 'E Obesidad';
-  else return 'Sin clasificacion';
+  else return 'Sin clasificación';
 }
 
 function calcularTensionArterial(pcta: number) {
   if (pcta < 90) return 'Normotenso';
   if (pcta >= 90 && pcta < 95) return 'Riesgo';
   if (pcta >= 95) return 'Hipertenso';
-  else return 'Sin clasificacion';
+  else return 'Sin clasificación';
 }

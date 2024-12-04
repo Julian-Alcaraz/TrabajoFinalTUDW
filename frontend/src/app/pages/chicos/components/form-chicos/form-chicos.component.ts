@@ -39,7 +39,7 @@ SI SE DESCOMENTA HAY QUE VALIDAR LOS ROLES DEL USUARIO ANTES DE DEJAR CARGAR.
 export class FormChicosComponent implements OnInit {
   @Input() esFormulario = true;
   @Input() id_chico: number | null = null;
-  @Output() editoChico: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output() editoChico: EventEmitter<boolean> = new EventEmitter<boolean>();
   public searching = false;
   public chicoForm: FormGroup;
   public barrios: Barrio[] = [];
@@ -68,7 +68,7 @@ export class FormChicosComponent implements OnInit {
     this.chicoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      dni: ['' /*Math.floor(10000000 + Math.random() * 90000000)*/, [Validators.required, ValidarDni, ValidarSoloNumeros]],
+      dni: ['', [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['', [Validators.required]],
       fe_nacimiento: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15), ValidarSoloNumeros]],
@@ -187,13 +187,21 @@ export class FormChicosComponent implements OnInit {
   }
 
   completarDatosForm() {
-    const stringFecha = String(this.chico?.fe_nacimiento) + 'T12:00:00';
+    const stringFecha = String(this.chico?.fe_nacimiento);
+    const formatDate = (date: Date): string => {
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+    const fechaFormateadaString = formatDate(new Date(stringFecha));
+    const fechaFinal = new Date(fechaFormateadaString);
     this.chicoForm.patchValue({
       nombre: this.chico?.nombre,
       apellido: this.chico?.apellido,
       dni: this.chico?.dni,
       sexo: this.chico?.sexo,
-      fe_nacimiento: new Date(stringFecha), // Problema
+      fe_nacimiento: fechaFinal, // Problema
       direccion: this.chico?.direccion,
       telefono: this.chico?.telefono,
       nombre_padre: this.chico?.nombre_padre,
@@ -315,7 +323,7 @@ export class FormChicosComponent implements OnInit {
             ...(this.chico?.nombre !== this.chicoForm.value.nombre && { nombre: this.chicoForm.value.nombre }),
             ...(this.chico?.apellido !== this.chicoForm.value.apellido && { apellido: this.chicoForm.value.apellido }),
             ...(this.chico?.direccion !== this.chicoForm.value.direccion && { direccion: this.chicoForm.value.direccion }),
-            ...(this.chico?.telefono !== this.chicoForm.value.telefono && { telefono: this.chicoForm.value.telefono+'' }),
+            ...(this.chico?.telefono !== this.chicoForm.value.telefono && { telefono: this.chicoForm.value.telefono + '' }),
             ...(this.chico?.nombre_padre !== this.chicoForm.value.nombre_padre && { nombre_padre: this.chicoForm.value.nombre_padre }),
             ...(this.chico?.nombre_madre !== this.chicoForm.value.nombre_madre && { nombre_madre: this.chicoForm.value.nombre_madre }),
             ...(this.chico?.barrio?.localidad?.id !== this.chicoForm.value.id_localidad && { id_localidad: this.chicoForm.value.id_localidad }),
@@ -326,7 +334,7 @@ export class FormChicosComponent implements OnInit {
           if (!data.nombre_padre) delete data.nombre_padre;
           this._chicoService.modificarChico(this.chico.id, data).subscribe({
             next: (response: any) => {
-              this.editoChico.emit(true)
+              this.editoChico.emit(true);
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
               } else {

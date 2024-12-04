@@ -25,7 +25,7 @@ export class CamposOdontologiaComponent implements OnInit {
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public clasificacionDentalOptions: string[] = ['Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
+  public clasificacionDentalOptions: string[] = ['Sin clasificación', 'Boca sana', 'Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries'];
   public derivacionesOptions: any[] = [
     { nombre: 'Si', valor: { externa: true } },
     { nombre: 'No', valor: { externa: false } },

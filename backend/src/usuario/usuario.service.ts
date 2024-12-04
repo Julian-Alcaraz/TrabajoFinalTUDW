@@ -37,12 +37,13 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return this.usuarioORM.find({
+    const usuarios = await this.usuarioORM.find({
       relations: ['roles'],
       order: {
         apellido: 'ASC', // Orden ascendente por apellido
       },
     });
+    return formatearFecha(usuarios);
     // { where: { deshabilitado: false } }
   }
 
@@ -181,4 +182,18 @@ export class UsuarioService {
     this.usuarioORM.merge(usuario, cambios);
     return this.usuarioORM.save(usuario);
   }
+}
+
+function formatearFecha(results: any[]): any[] {
+  const formatDate = (date: Date): string =>
+    [
+      date.getDate().toString().padStart(2, '0'), // Día
+      (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
+      date.getFullYear(), // Año
+    ].join('-');
+
+  return results.map((result) => ({
+    ...result,
+    fe_nacimiento: result.fe_nacimiento ? formatDate(new Date(result.fe_nacimiento)) : null,
+  }));
 }
