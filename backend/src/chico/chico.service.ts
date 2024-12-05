@@ -73,8 +73,24 @@ export class ChicoService {
       const chicoEncontradoDni = await this.chicoORM.findOneBy({ dni: updateChicoDto.dni });
       if (chicoEncontradoDni && chicoEncontradoDni.id != id) throw new BadRequestException(`El dni ${updateChicoDto.dni} ya esta cargado en el sistema`);
     }
-    this.chicoORM.merge(chico, updateChicoDto);
-    return this.chicoORM.save(chico);
+    const idBarrio = updateChicoDto.id_barrio;
+    let barrioEncontrado: Barrio | null = null;
+    if (!idBarrio) barrioEncontrado = null;
+    else {
+      barrioEncontrado = await this.barrioORM.findOneBy({ id: updateChicoDto.id_barrio });
+      if (!barrioEncontrado) throw new NotFoundException(`Barrio con id ${updateChicoDto.id_barrio} no encontrado`);
+    }
+    if (barrioEncontrado !== null) {
+      console.log('cambie barrio', barrioEncontrado);
+      const cambiosAplicados = {
+        ...updateChicoDto,
+        barrio: barrioEncontrado,
+      };
+      const nuevoChico = this.chicoORM.merge(chico, cambiosAplicados);
+      return this.chicoORM.save(nuevoChico);
+    }
+    const nuevoChico = this.chicoORM.merge(chico, updateChicoDto);
+    return this.chicoORM.save(nuevoChico);
   }
 
   async remove(id: number) {

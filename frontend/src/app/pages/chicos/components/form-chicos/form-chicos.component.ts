@@ -324,8 +324,7 @@ export class FormChicosComponent implements OnInit {
             ...(this.chico?.telefono !== this.chicoForm.value.telefono && { telefono: this.chicoForm.value.telefono + '' }),
             ...(this.chico?.nombre_padre !== this.chicoForm.value.nombre_padre && { nombre_padre: this.chicoForm.value.nombre_padre }),
             ...(this.chico?.nombre_madre !== this.chicoForm.value.nombre_madre && { nombre_madre: this.chicoForm.value.nombre_madre }),
-            ...(this.chico?.barrio?.localidad?.id !== this.chicoForm.value.id_localidad && { id_localidad: this.chicoForm.value.id_localidad }),
-            ...(this.chico?.barrio?.id !== this.chicoForm.value.id_barrio && { id_barrio: this.chicoForm.value.id_barrio }),
+            ...(this.chico?.barrio?.id !== +this.chicoForm.value.id_barrio && { id_barrio: parseInt(this.chicoForm.value.id_barrio) }),
             ...(stringFechaActual !== stringFechaMod && { fe_nacimiento: valorFecha }),
           };
           if (!data.nombre_madre) delete data.nombre_madre;
@@ -349,7 +348,6 @@ export class FormChicosComponent implements OnInit {
       MostrarNotificacion.mensajeError(this.snackBar, 'No se esta editando ningun chico.');
     }
   }
-
   cargarChico() {
     if (this.chicoForm.valid) {
       Swal.fire({
