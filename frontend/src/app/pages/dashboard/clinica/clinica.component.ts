@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ClinicaComponent implements OnInit {
   loading = true;
-  estadosNutricional = ['A Riesgo nutricional', 'B Bajo Peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+  estadosNutricional = [ 'B Bajo peso/Desnutrido','A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   tituloTensionArterial = 'Tensión arterial';
   tituloEstadoNutricional = 'Estado nutricional';
   tituloTensionxEstado = 'Tensión por estado nutricional';
