@@ -213,7 +213,7 @@ export class MainSeeder implements Seeder {
           label: 'Consultas',
           orden: 4,
           icon: 'fa-solid fa-kit-medical',
-          roles: [roles[0], roles[1]],
+          roles: [roles[0], roles[1], roles[2]],
         },
         {
           url: 'administracion',
@@ -410,7 +410,23 @@ export class MainSeeder implements Seeder {
           localidad: localidades[0],
         },
         {
-          nombre: 'Barrio de Cipolletti',
+          nombre: 'Centro',
+          localidad: localidades[1],
+        },
+        {
+          nombre: '12 de Septiembre',
+          localidad: localidades[1],
+        },
+        {
+          nombre: 'San Jorge',
+          localidad: localidades[1],
+        },
+        {
+          nombre: 'San Lorenzo',
+          localidad: localidades[1],
+        },
+        {
+          nombre: 'Parque Norte',
           localidad: localidades[1],
         },
       ]);
@@ -521,7 +537,7 @@ export class MainSeeder implements Seeder {
           barrio: barrios[0],
         },
         {
-          dni: 2222222,
+          dni: 22222221,
           nombre: 'Jose',
           apellido: 'Pérez',
           sexo: 'Masculino',

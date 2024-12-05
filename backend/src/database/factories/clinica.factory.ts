@@ -85,8 +85,8 @@ export const ClinicaFactory = setSeederFactory(Clinica, async () => {
   clinica.peso = faker.number.float({ min: 15, max: 70, fractionDigits: 2 });
   clinica.talla = faker.number.float({ min: 90, max: 140, fractionDigits: 2 });
   clinica.cc = faker.number.float({ min: 35, max: 110, fractionDigits: 2 });
-  clinica.pct = faker.number.int({ min: 10, max: 99 });
-  clinica.pcimc = faker.number.int({ min: 10, max: 99 });
+  clinica.pct = faker.number.int({ min: 1, max: 99 });
+  clinica.pcimc = faker.number.int({ min: 1, max: 99 });
   clinica.tas = faker.number.int({ min: 70, max: 130 });
   clinica.tad = faker.number.int({ min: 40, max: 120 });
   clinica.pcta = faker.number.int({ min: 50, max: 99 });
