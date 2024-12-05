@@ -17,6 +17,8 @@ import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
 import { TooltipModule } from 'primeng/tooltip';
+import { Usuario } from '../../../models/usuario.model';
+import { SessionService } from '../../../services/session.service';
 
 @Component({
   selector: 'app-ver-chico',
@@ -37,15 +39,23 @@ export class VerChicoComponent implements OnInit {
   public consultasColumns: string[] = ['numero', 'type', 'fecha', 'obra_social', 'profesional', 'observaciones'];
   public searchingChico = false;
   public searchingConsultas = false;
-
+  public identidad: Usuario | null = null;
+  public esEditor= false
   constructor(
     private _chicoService: ChicoService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
     private location: Location,
+    private _sessionService: SessionService
   ) {
     // this.consultas = new MatTableDataSource<Consulta>([]);
+    this.identidad = this._sessionService.getIdentidad();
+    if (this.identidad && this.identidad?.roles_ids) {
+      if (this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2)) {
+        this.esEditor=true
+      }
+    }
   }
 
   ngOnInit(): void {
