@@ -41,7 +41,7 @@ export class FormularioComponent {
   iniciarSession() {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
-     this.loginForm.disable();
+    this.loginForm.disable();
     this._sessionService.iniciarSession(email, password).subscribe(
       (response) => {
         if (response.success) {

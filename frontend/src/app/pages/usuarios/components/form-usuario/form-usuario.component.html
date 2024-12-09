@@ -1,86 +1,85 @@
-@if(!esFormulario && searchingUser){
-  <app-loading/>
-}@else{
-<form (ngSubmit)="estaEditando ? editarUsuario() : cargarUsuario()" [formGroup]="userForm">
-  <div class="grid gap-6 md:grid-cols-2">
-    <div>
-      <app-input-text label="Nombre" [control]="controlDeInput('nombre')" placeholder="Ej: Pedro" idInput="nombre" />
-    </div>
-    <div>
-      <app-input-text label="Apellido" [control]="controlDeInput('apellido')" placeholder="Ej: Gonzales" idInput="apellido" />
-    </div>
-    <div>
-      <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-      <input formControlName="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ej: gonzales@email.com" required />
-      <div *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="text-red-600 text-sm">
-        <div *ngIf="userForm.get('email')?.errors?.['required']">El campo es requerido.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['ValidarEmail']">Formato de email incorrecto.</div>
-        <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
-      </div>
-    </div>
-    <div>
-      <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
-      <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center ">
-        <div class="w-5">
-          <app-loading />
-        </div>
-        <div class="ms-2">
-          {{ mensajeValidando }}
-        </div>
-      </div>
-    </div>
-    <div>
-      <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHoy" />
-    </div>
-    @if (this.usuario && !this.esFormulario) {
+@if (!esFormulario && searchingUser) {
+  <app-loading />
+} @else {
+  <form (ngSubmit)="estaEditando ? editarUsuario() : cargarUsuario()" [formGroup]="userForm">
+    <div class="grid gap-6 md:grid-cols-2">
       <div>
-        <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-        <div class="flex flex-wrap">
-          @for (rol of this.roles; track $index) {
-            @if (this.usuario.roles_ids?.includes(rol.id)) {
-              {{ rol.nombre | titlecase }}
+        <app-input-text label="Nombre" [control]="controlDeInput('nombre')" placeholder="Ej: Pedro" idInput="nombre" />
+      </div>
+      <div>
+        <app-input-text label="Apellido" [control]="controlDeInput('apellido')" placeholder="Ej: Gonzales" idInput="apellido" />
+      </div>
+      <div>
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+        <input formControlName="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ej: gonzales@email.com" required />
+        <div *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="text-red-600 text-sm">
+          <div *ngIf="userForm.get('email')?.errors?.['required']">El campo es requerido.</div>
+          <div *ngIf="userForm.get('email')?.errors?.['minlength']">Minimo 7 caracteres.</div>
+          <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Maximo 100 caracteres.</div>
+          <div *ngIf="userForm.get('email')?.errors?.['ValidarEmail']">Formato de email incorrecto.</div>
+          <div *ngIf="userForm.get('email')?.errors?.['ValidarCadenaSinEspacios']">El campo no puede estar en blanco.</div>
+        </div>
+      </div>
+      <div>
+        <app-input-number label="Documento (DNI)" [control]="controlDeInput('dni')" placeholder="xxxxxxxx" idInput="dni" />
+        <div *ngIf="mensajeValidando" class="flex flex-row text-blue-600 text-sm items-center">
+          <div class="w-5">
+            <app-loading />
+          </div>
+          <div class="ms-2">
+            {{ mensajeValidando }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <app-input-date label="Fecha Nacimiento" [control]="controlDeInput('fe_nacimiento')" idInput="fe_nacimiento" [max]="fechaHoy" />
+      </div>
+      @if (this.usuario && !this.esFormulario) {
+        <div>
+          <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
+          <div class="flex flex-wrap">
+            @for (rol of this.roles; track $index) {
+              @if (this.usuario.roles_ids?.includes(rol.id)) {
+                {{ rol.nombre | titlecase }}
+              }
             }
+          </div>
+        </div>
+      } @else {
+        <div class="flex flex-col">
+          @if (searchingRoles) {
+            <app-loading />
+          } @else {
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
+            <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+              <li *ngFor="let rol of roles; let last = last" [ngClass]="{ 'sm:border-r': !last }" class="w-full border-b border-gray-200 sm:border-b-0">
+                <div class="flex items-center p-3">
+                  <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id" [checked]="this.usuario && this.usuario.roles_ids?.includes(rol.id)" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                  <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
+                </div>
+              </li>
+            </ul>
+            <div *ngIf="selectCheckbox" class="text-red-600 text-sm align-bottom">Debe seleccionar al menos uno.</div>
           }
         </div>
-      </div>
-    } @else {
-      <div class="flex flex-col">
-        @if(searchingRoles){
-          <app-loading/>
-        }@else{
-
-          <label for="" class="block mb-2 text-sm font-medium text-gray-900">Roles</label>
-          <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-            <li *ngFor="let rol of roles; let last = last" [ngClass]="{ 'sm:border-r': !last }" class="w-full border-b border-gray-200 sm:border-b-0">
-              <div class="flex items-center p-3">
-                <input id="{{ 'inline-checkbox' + rol.id }}" type="checkbox" [value]="rol.id" [checked]="this.usuario && this.usuario.roles_ids?.includes(rol.id)" (change)="onCheckboxChange($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                <label for="{{ 'inline-checkbox' + rol.id }}" class="ms-2 text-sm font-medium text-gray-900">{{ rol.nombre }}</label>
-              </div>
-            </li>
-          </ul>
-          <div *ngIf="selectCheckbox" class="text-red-600 text-sm align-bottom">Debe seleccionar al menos uno.</div>
-        }
-      </div>
-    }
-  </div>
-  @if (this.esFormulario) {
-    <div class="flex my-auto">
-      <p class="text-gray-400 text-sm">*La contraseña asignada sera el documento. Luego el usuario podra cambiarla.</p>
-      <button type="submit" [disabled]="!userForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+      }
     </div>
-  } @else {
-    @if (!estaEditando) {
+    @if (this.esFormulario) {
       <div class="flex my-auto">
-        <button type="button" (click)="activarFormulario()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar valores</button>
+        <p class="text-gray-400 text-sm">*La contraseña asignada sera el documento. Luego el usuario podra cambiarla.</p>
+        <button type="submit" [disabled]="!userForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
       </div>
     } @else {
-      <div class="flex flex-row my-auto">
-        <button type="button" (click)="desactivarFormulario()" class="flex my-auto ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-        <button type="submit" [disabled]="activarModificar()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
-      </div>
+      @if (!estaEditando) {
+        <div class="flex my-auto">
+          <button type="button" (click)="activarFormulario()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar valores</button>
+        </div>
+      } @else {
+        <div class="flex flex-row my-auto">
+          <button type="button" (click)="desactivarFormulario()" class="flex my-auto ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+          <button type="submit" [disabled]="activarModificar()" class="flex my-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+        </div>
+      }
     }
-  }
-</form>
+  </form>
 }

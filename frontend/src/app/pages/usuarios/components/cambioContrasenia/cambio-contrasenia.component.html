@@ -36,9 +36,7 @@
           <!-- <a (click)="verContrasenia('password')" tabindex (keydown)="verContrasenia('password')" class="text-blue-600 text-sm underline ml-4 mr-4 cursor-pointer">{{ mostrarContrasenia ? 'Ocultar contraseñas' : 'Mostrar contraseñas' }}</a> -->
         </div>
       </div>
-      <div *ngIf="cambioObligatorio" class="mb-2 p-2 text-center bg-orange-300 border border-orange-700 rounded">
-        Por favor, cambie su contraseña para continuar.
-      </div>
+      <div *ngIf="cambioObligatorio" class="mb-2 p-2 text-center bg-orange-300 border border-orange-700 rounded">Por favor, cambie su contraseña para continuar.</div>
       <div class="flex my-auto">
         <button type="submit" [disabled]="!cambioForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cambiar</button>
       </div>

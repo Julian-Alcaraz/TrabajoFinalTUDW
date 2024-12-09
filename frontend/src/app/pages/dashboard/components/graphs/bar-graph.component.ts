@@ -5,7 +5,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 @Component({
   selector: 'app-bar-graph',
   standalone: true,
-  imports: [ChartModule, CommonModule,LoadingComponent],
+  imports: [ChartModule, CommonModule, LoadingComponent],
   template: `
     <div class="flex flex-col h-full text-center">
       <h1 class=" text-2xl">{{ titulo }}</h1>
@@ -18,7 +18,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
             No es posible generar el gráfico.
           </div>
           <div *ngIf="loading">
-            <app-loading/>
+            <app-loading />
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   selectedYear = 0;
   selectedId_institucion = 0;
 
-  institucionSeleccionada = new FormControl;
+  institucionSeleccionada = new FormControl();
   dataTypeYearAndInstitucion: any = [];
 
   dataChicosxAnio: any = [];

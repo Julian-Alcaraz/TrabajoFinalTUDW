@@ -16,7 +16,8 @@ export class EditarChicoComponent {
 
   constructor(
     public dialogRef: MatDialogRef<EditarChicoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
     this.id_chico = data.id;
   }
   cerrarModal(actualizar: boolean) {

@@ -13,7 +13,7 @@ export class DatosPersonalesComponent implements OnChanges {
   @Input() chico: Chico | null = null;
   @Input() resultsLength = 0;
   @Input() searchingConsultas = false;
-  
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['chico']) this.chico = changes['chico'].currentValue;
     if (changes['resultsLength']) this.resultsLength = changes['resultsLength'].currentValue;

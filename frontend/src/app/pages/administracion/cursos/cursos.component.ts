@@ -18,7 +18,6 @@ import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso.service';
 import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
 
-
 @Component({
   selector: 'app-cursos',
   standalone: true,

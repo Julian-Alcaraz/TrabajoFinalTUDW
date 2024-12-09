@@ -1,7 +1,6 @@
 export type DiagnosticoPresuntivoType = 'TEL' | 'TEA' | 'Retraso en el lenguaje, dislalias funcionales' | 'Respirador bucal' | 'Anquiloglosia' | 'Ortodoncia: Protrusión lingual, paladar hendido' | 'Síndromes' | 'Otras patologías que dificulten el lenguaje y la comunicación';
 export type CausasType = 'Prenatal' | 'Postnatal' | 'ACV' | 'Respiratorias' | 'Audición' | 'Patologías clínicas' | 'Síndromes' | 'Inflamación de amígdalas o adenoides' | 'Prematurez' | 'Otras';
 
-
 export class Fonoaudiologia {
   constructor(
     public id: number,

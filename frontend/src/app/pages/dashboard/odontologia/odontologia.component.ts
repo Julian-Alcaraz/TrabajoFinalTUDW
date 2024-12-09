@@ -44,7 +44,8 @@ export class OdontologiaComponent implements OnInit {
       this.obtenerGraficoCepillado(),
       this.obtenerGraficoSitaucionBucal(),
       this.obtenerGraficoTopificacion(),
-      this.obtenerGraficoSellador()
+      this.obtenerGraficoSellador(),
+      //
     ];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
@@ -121,8 +122,8 @@ export class OdontologiaComponent implements OnInit {
     });
   }
 
-  tituloSellador='Sellador'
-  porcentajesSellador:any=[]
+  tituloSellador = 'Sellador';
+  porcentajesSellador: any = [];
   obtenerGraficoSellador() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({

@@ -54,6 +54,6 @@ export class VerConsultaComponent implements OnInit {
   }
 
   cerrarModalYrecargarListado(consultaMod: any) {
-    this.dialogRef.close(consultaMod)
+    this.dialogRef.close(consultaMod);
   }
 }

@@ -32,14 +32,14 @@ export class ChicoService {
   obtenerChicos(): Observable<any> {
     const fecha = new Date();
     const anio = fecha.getFullYear();
-    return this._http.get(this.url + 'chico/activity/'+anio);
+    return this._http.get(this.url + 'chico/activity/' + anio);
   }
 
   modificarChico(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'chico/' + id, data);
   }
 
-  countChicosCargadosxAnios(year:number): Observable<any> {
-    return this._http.get(this.url + 'chico/cargadosxanios/'+year);
+  countChicosCargadosxAnios(year: number): Observable<any> {
+    return this._http.get(this.url + 'chico/cargadosxanios/' + year);
   }
 }

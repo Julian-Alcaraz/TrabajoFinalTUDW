@@ -14,9 +14,7 @@ import { FormUsuarioComponent } from '../../../usuarios/components/form-usuario/
   styleUrl: './nuevo-usuario.component.css',
 })
 export class NuevoUsuarioComponent {
-  constructor(
-    public dialogRef: MatDialogRef<NuevoUsuarioComponent>,
-  ) {}
+  constructor(public dialogRef: MatDialogRef<NuevoUsuarioComponent>) {}
 
   cerrarModalUsuario(actualizar: boolean) {
     this.dialogRef.close(actualizar);

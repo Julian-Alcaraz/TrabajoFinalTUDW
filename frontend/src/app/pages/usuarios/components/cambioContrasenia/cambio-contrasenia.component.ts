@@ -8,7 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 
 import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ContraseniaIgualDni, ContraseniasIguales, ValidarCadenaSinEspacios, } from '../../../../utils/validadores';
+import { ContraseniaIgualDni, ContraseniasIguales, ValidarCadenaSinEspacios } from '../../../../utils/validadores';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { Usuario } from '../../../../models/usuario.model';
 import Swal from 'sweetalert2';
@@ -30,17 +30,17 @@ export class CambiarContraseniaComponent implements OnInit {
   public mostrarContrasenia = false;
   public mostrarContraseniaConfirmar = false;
   public cambioForm: FormGroup;
-  public cambioObligatorio = false
+  public cambioObligatorio = false;
   constructor(
     private _sessionService: SessionService,
     private _dialog: MatDialog,
     private fb: FormBuilder,
     private _usuarioService: UsuarioService,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: any // Recibir datos
+    @Inject(MAT_DIALOG_DATA) public data: any, // Recibir datos
   ) {
-    if(data && data.cambioObligatorio){
-      this.cambioObligatorio = true
+    if (data && data.cambioObligatorio) {
+      this.cambioObligatorio = true;
     }
     this.cambioForm = this.fb.group(
       {
@@ -52,8 +52,8 @@ export class CambiarContraseniaComponent implements OnInit {
   }
   ngOnInit(): void {
     this.identidad = this._sessionService.getIdentidad();
-    if(this.identidad){
-      this.cambioForm.get('password')?.addValidators(ContraseniaIgualDni(this.identidad!.dni))
+    if (this.identidad) {
+      this.cambioForm.get('password')?.addValidators(ContraseniaIgualDni(this.identidad!.dni));
     }
   }
 
@@ -63,7 +63,7 @@ export class CambiarContraseniaComponent implements OnInit {
   cambiarContrasenia() {
     Swal.fire({
       title: '¿Quieres guardar los cambios?',
-      text: this.cambioObligatorio?'Se cerrara su sesion automaticamente.':'',
+      text: this.cambioObligatorio ? 'Se cerrara su sesion automaticamente.' : '',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText: 'Guardar',
@@ -76,8 +76,8 @@ export class CambiarContraseniaComponent implements OnInit {
             next: (response: any) => {
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-                if(this.cambioObligatorio){
-                  this._sessionService.cerrarSesion()
+                if (this.cambioObligatorio) {
+                  this._sessionService.cerrarSesion();
                 }
                 this._dialog.closeAll();
               } else {
@@ -94,7 +94,7 @@ export class CambiarContraseniaComponent implements OnInit {
   }
 
   verContrasenia(nombreInput: string) {
-    if (nombreInput === "password") this.mostrarContrasenia = !this.mostrarContrasenia;
-    if (nombreInput === "confirmPassword") this.mostrarContraseniaConfirmar = !this.mostrarContraseniaConfirmar;
+    if (nombreInput === 'password') this.mostrarContrasenia = !this.mostrarContrasenia;
+    if (nombreInput === 'confirmPassword') this.mostrarContraseniaConfirmar = !this.mostrarContraseniaConfirmar;
   }
 }

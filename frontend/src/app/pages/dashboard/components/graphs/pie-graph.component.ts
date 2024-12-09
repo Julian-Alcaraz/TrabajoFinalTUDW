@@ -86,7 +86,7 @@ export class PieGraphComponent implements OnInit, OnChanges {
 
   actualizarSets() {
     this.data = {
-      labels: this.labels.map((label,i)=> label+ ' ('+ this.set.data[i]+')'),
+      labels: this.labels.map((label, i) => label + ' (' + this.set.data[i] + ')'),
       datasets: [
         {
           label: this.set.label,

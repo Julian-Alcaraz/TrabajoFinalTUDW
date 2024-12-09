@@ -17,7 +17,7 @@ export class UsuarioService {
   }
 
   administrarRoles(id: number, roles: number[]): Observable<any> {
-    return this._http.post(`${this.url}usuario/administrarRoles/${id}` , roles);
+    return this._http.post(`${this.url}usuario/administrarRoles/${id}`, roles);
   }
   obtenerProfesionales(): Observable<any> {
     return this._http.get(this.url + 'usuario/profesionales');

@@ -38,7 +38,7 @@ export class SessionService {
             this._loadingService.startLoading();
           }
           this._router.navigate(['/login']);
-          this._dialog.closeAll()
+          this._dialog.closeAll();
         } else {
           console.log('Fallo cerrar la sesion', response.message);
         }

@@ -30,7 +30,7 @@
         </div>
         <!-- Demanda -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')" idInput="demanda" [opciones]="['Control niño sano', 'Docente','Familiar','Otro']" [valores]="['Control niño sano', 'Docente','Familiar','Otro']" />
+          <app-input-select-enum label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')" idInput="demanda" [opciones]="['Control niño sano', 'Docente', 'Familiar', 'Otro']" [valores]="['Control niño sano', 'Docente', 'Familiar', 'Otro']" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
@@ -53,7 +53,7 @@
       </div>
       @if (consulta) {
         @if (consulta.usuario) {
-          <app-datos-medico [profesional]="consulta.usuario"/>
+          <app-datos-medico [profesional]="consulta.usuario" />
         }
       }
       <!-- Enviar -->

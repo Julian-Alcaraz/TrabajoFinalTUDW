@@ -8,7 +8,7 @@ import { ListaChicoComponent } from '../pages/chicos/lista-chico/lista-chico.com
 import { profesionalGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'nuevo', component: NuevoChicoComponent, canActivate:[profesionalGuard]},
+  { path: 'nuevo', component: NuevoChicoComponent, canActivate: [profesionalGuard] },
   { path: 'list', component: ListaChicoComponent },
   { path: 'ver/:id', component: VerChicoComponent },
 ];

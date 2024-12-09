@@ -24,7 +24,6 @@ export class TabsComponent implements OnInit, OnDestroy {
     this.routeSub = this._route.queryParams.subscribe((params) => {
       this.currentParam = +params['i'];
       this.positionEmitter.emit(this.currentParam);
-
     });
   }
 

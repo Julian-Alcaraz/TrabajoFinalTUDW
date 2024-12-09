@@ -31,8 +31,8 @@ export class ErroresCampoComponent {
       ValidarCadenaSinEspacios: 'El campo no puede estar en blanco.',
       ValidarHora: 'La hora debe estar en formato HH:mm.',
       ValidarDni: 'Debe tener 8 dígitos.',
-      ValidarSoloNumeros:'Este campo de',
-      invalidDni: 'El documento esta en uso'
+      ValidarSoloNumeros: 'Este campo de',
+      invalidDni: 'El documento esta en uso',
     };
     // elimino el mensaje por defecto: ese muestra en error de buscar dni 'Error desconocido'
     return mensajesError[tipoError] || '';

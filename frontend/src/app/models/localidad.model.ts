@@ -1,4 +1,4 @@
-import { Barrio } from "./barrio.model";
+import { Barrio } from './barrio.model';
 
 export class Localidad {
   constructor(
