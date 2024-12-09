@@ -3,7 +3,7 @@ import { setSeederFactory } from 'typeorm-extension';
 
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
 
-enum CausasType  {
+enum CausasType {
   prenatal = 'Prenatal',
   postnatal = 'Postnatal',
   acv = 'ACV',
