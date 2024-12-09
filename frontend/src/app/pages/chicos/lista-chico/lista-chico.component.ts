@@ -22,18 +22,19 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TagModule } from 'primeng/tag';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { Chico } from '../../../models/chico.model';
-import { ChicoService } from '../../../services/chico.service';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/loading.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Chico } from '@models/chico.model';
+import { ChicoService } from '@services/chico.service';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '@components/loading/loading.component';
 import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
-import { Barrio } from '../../../models/barrio.model';
-import { BarrioService } from '../../../services/barrio.service';
-import { SessionService } from '../../../services/session.service';
-import { Usuario } from '../../../models/usuario.model';
-import { LocalidadService } from '../../../services/localidad.service';
-import { Localidad } from '../../../models/localidad.model';
+import { Barrio } from '@models/barrio.model';
+import { BarrioService } from '@services/barrio.service';
+import { SessionService } from '@services/session.service';
+import { Usuario } from '@models/usuario.model';
+import { LocalidadService } from '@services/localidad.service';
+import { Localidad } from '@models/localidad.model';
+import { GLOBAL } from '@config/global';
 
 @Component({
   selector: 'app-lista-chico',
@@ -101,7 +102,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     };
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad && this.identidad?.roles_ids) {
-      if (!(this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2))) {
+      if (!(this.identidad?.roles_ids.includes(GLOBAL.ID_ADMIN) || this.identidad?.roles_ids?.includes(GLOBAL.ID_PROFESIONAL))) {
         this.displayedColumns.pop();
       }
     }

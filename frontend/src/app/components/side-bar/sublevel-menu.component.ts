@@ -3,7 +3,7 @@ import { fadeInOut } from './helper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Menu } from '../../models/menu.model';
+import { Menu } from '@models/menu.model';
 
 @Component({
   selector: 'app-sublevel-menu',

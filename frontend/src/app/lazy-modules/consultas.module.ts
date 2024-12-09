@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { NuevaClinicaComponent } from '../pages/consultas/clinica/nueva-clinica/nueva-clinica.component';
-import { NuevaOftalmologiaComponent } from '../pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
-import { NuevaOdontologiaComponent } from '../pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
-import { NuevaFonoaudiologicaComponent } from '../pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
+import { NuevaClinicaComponent } from '@pages/consultas/clinica/nueva-clinica/nueva-clinica.component';
+import { NuevaOftalmologiaComponent } from '@pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
+import { NuevaOdontologiaComponent } from '@pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
+import { NuevaFonoaudiologicaComponent } from '@pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
+import { BusquedasComponent } from '@pages/busquedas/busquedas.component';
 import { profesionalGuard } from '../guards/auth.guard';
-import { BusquedasComponent } from '../pages/busquedas/busquedas.component';
 
 const routes: Routes = [
   { path: 'busqueda', component: BusquedasComponent },

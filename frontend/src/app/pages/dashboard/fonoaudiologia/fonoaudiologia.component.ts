@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ConsultaService } from '../../../services/consulta.service';
+import { ConsultaService } from '@services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 
 @Component({
   selector: 'app-fonoaudiologia',

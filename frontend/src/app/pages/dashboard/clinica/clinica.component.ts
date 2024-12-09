@@ -3,8 +3,8 @@ import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { CommonModule } from '@angular/common';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
-import { ConsultaService } from '../../../services/consulta.service';
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import { ConsultaService } from '@services/consulta.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

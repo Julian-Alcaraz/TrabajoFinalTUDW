@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidarCadenaSinEspacios, ValidarEmail } from '../../../../utils/validadores';
-import { SessionService } from '../../../../services/session.service';
+import { ValidarCadenaSinEspacios, ValidarEmail } from '@utils/validadores';
+import { SessionService } from '@services/session.service';
 import { Router } from '@angular/router';
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { IconFieldModule } from 'primeng/iconfield';

@@ -5,19 +5,19 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarDni, ValidarSoloNumeros } from '../../../../utils/validadores';
-import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { Chico } from '../../../../models/chico.model';
-import { ChicoService } from '../../../../services/chico.service';
-import { Institucion } from '../../../../models/institucion.model';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { Curso } from '../../../../models/curso.model';
-import { CursoService } from '../../../../services/curso.service';
-import { Consulta } from '../../../../models/consulta.model';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarDni, ValidarSoloNumeros } from '@utils/validadores';
+import { InputNumberComponent } from '@components/inputs/input-number.component';
+import { InputSelectComponent } from '@components/inputs/input-select.component';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
+import { Chico } from '@models/chico.model';
+import { ChicoService } from '@services/chico.service';
+import { Institucion } from '@models/institucion.model';
+import { InstitucionService } from '@services/institucion.service';
+import { Curso } from '@models/curso.model';
+import { CursoService } from '@services/curso.service';
+import { Consulta } from '@models/consulta.model';
+import { LoadingComponent } from '@components/loading/loading.component';
 
 @Component({
   selector: 'app-campos-comunes',

@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Chico } from '../../../../models/chico.model';
+import { Chico } from '@models/chico.model';
 import { CommonModule } from '@angular/common';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { LoadingComponent } from '@components/loading/loading.component';
 
 @Component({
   selector: 'app-datos-personales',

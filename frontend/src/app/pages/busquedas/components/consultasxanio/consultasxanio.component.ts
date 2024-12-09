@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
-import { Consulta } from '../../../../models/consulta.model';
-import { ConsultaService } from '../../../../services/consulta.service';
+import { Consulta } from '@models/consulta.model';
+import { ConsultaService } from '@services/consulta.service';
 import { CommonModule } from '@angular/common';
 import { IftaLabelModule } from 'primeng/iftalabel';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { LoadingComponent } from '@components/loading/loading.component';
 
 @Component({
   selector: 'app-consultasxanio',

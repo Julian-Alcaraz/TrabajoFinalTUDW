@@ -4,18 +4,18 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '../../../../utils/validadores';
-import { ConsultaService } from '../../../../services/consulta.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
+import { ConsultaService } from '@services/consulta.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { InputDateComponent } from '../../../../components/inputs/input-date.component';
-import { Chico } from '../../../../models/chico.model';
-import { Consulta } from '../../../../models/consulta.model';
+import { InputTextareaComponent } from '@components/inputs/input-textarea.component';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
+import { InputDateComponent } from '@components/inputs/input-date.component';
+import { Chico } from '@models/chico.model';
+import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({

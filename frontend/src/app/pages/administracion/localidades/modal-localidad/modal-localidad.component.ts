@@ -4,18 +4,17 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { LocalidadService } from '../../../../services/localidad.service';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
-import { Localidad } from '../../../../models/localidad.model';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { LocalidadService } from '@services/localidad.service';
+import { ValidarCadenaSinEspacios } from '@utils/validadores';
+import { Localidad } from '@models/localidad.model';
+import { InputTextComponent } from '@components/inputs/input-text.component';
 
 @Component({
   selector: 'app-modal-localidad',
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule],
   templateUrl: './modal-localidad.component.html',
-  styleUrl: './modal-localidad.component.css',
 })
 export class ModalLocalidadComponent implements OnInit {
   public localidad: Localidad | null = null;

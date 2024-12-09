@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormUsuarioComponent } from '../components/form-usuario/form-usuario.component';
-import { SessionService } from '../../../services/session.service';
-import { Usuario } from '../../../models/usuario.model';
+import { SessionService } from '@services/session.service';
+import { Usuario } from '@models/usuario.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { CambiarContraseniaComponent } from '../components/cambioContrasenia/cambio-contrasenia.component';

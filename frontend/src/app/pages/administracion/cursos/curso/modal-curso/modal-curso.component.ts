@@ -4,13 +4,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios } from '../../../../../utils/validadores';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios } from '@utils/validadores';
 
-import { InputTextComponent } from '../../../../../components/inputs/input-text.component';
-import { Curso } from '../../../../../models/curso.model';
-import { CursoService } from '../../../../../services/curso.service';
-import { InputSelectEnumComponent } from '../../../../../components/inputs/input-select-enum.component';
+import { InputTextComponent } from '@components/inputs/input-text.component';
+import { Curso } from '@models/curso.model';
+import { CursoService } from '@services/curso.service';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-modal-curso',

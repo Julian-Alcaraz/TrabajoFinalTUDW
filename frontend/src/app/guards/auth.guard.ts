@@ -1,9 +1,10 @@
 import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { Router } from '@angular/router';
-import { SessionService } from '../services/session.service';
+import { SessionService } from '@services/session.service';
 import { CookieService } from 'ngx-cookie-service';
 import { isPlatformBrowser } from '@angular/common';
+import { GLOBAL } from '@config/global';
 
 export const authGuard: CanActivateFn = async (route, state) => {
   const platformId = inject(PLATFORM_ID);
@@ -44,7 +45,7 @@ export const adminGuard: CanActivateFn = () => {
     const _sessionService = inject(SessionService);
     const identidad = _sessionService.getIdentidad();
     if (identidad) {
-      if (identidad.roles_ids?.includes(1)) {
+      if (identidad.roles_ids?.includes(GLOBAL.ID_ADMIN)) {
         return true;
       }
       _router.navigate(['/layout']);
@@ -83,7 +84,7 @@ export const profesionalGuard: CanActivateFn = () => {
     const identidad = _sessionService.getIdentidad();
 
     if (identidad) {
-      if (identidad.roles_ids?.includes(1) || identidad.roles_ids?.includes(2)) {
+      if (identidad.roles_ids?.includes(GLOBAL.ID_ADMIN) || identidad.roles_ids?.includes(GLOBAL.ID_PROFESIONAL)) {
         return true;
       }
       _router.navigate(['/layout']);

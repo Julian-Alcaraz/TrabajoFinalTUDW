@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Usuario } from '../../../../models/usuario.model';
+import { Usuario } from '@models/usuario.model';
 @Component({
   selector: 'app-datos-medico',
   standalone: true,

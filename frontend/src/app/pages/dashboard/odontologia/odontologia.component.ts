@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
-import { ConsultaService } from '../../../services/consulta.service';
+import { ConsultaService } from '@services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 @Component({
   selector: 'app-odontologia',
   standalone: true,

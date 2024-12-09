@@ -4,13 +4,13 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '../../../../utils/validadores';
-import { ConsultaService } from '../../../../services/consulta.service';
-import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
+import { ConsultaService } from '@services/consulta.service';
+import { InputTextareaComponent } from '@components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { Consulta } from '../../../../models/consulta.model';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
+import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({

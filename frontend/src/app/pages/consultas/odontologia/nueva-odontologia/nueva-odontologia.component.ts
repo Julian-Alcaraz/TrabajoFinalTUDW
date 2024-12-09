@@ -1,18 +1,18 @@
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloNumeros } from '../../../../utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloNumeros } from '@utils/validadores';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ConsultaService } from '../../../../services/consulta.service';
-import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ConsultaService } from '@services/consulta.service';
+import { InputNumberComponent } from '@components/inputs/input-number.component';
+import { InputTextareaComponent } from '@components/inputs/input-textarea.component';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { Chico } from '../../../../models/chico.model';
-import { Consulta } from '../../../../models/consulta.model';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
+import { Chico } from '@models/chico.model';
+import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 @Component({

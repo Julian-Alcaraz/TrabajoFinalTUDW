@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tabs.component.html',
-  styleUrl: './tabs.component.css',
 })
 export class TabsComponent implements OnInit, OnDestroy {
   @Input() tabs: any[] = [];

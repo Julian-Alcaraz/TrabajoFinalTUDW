@@ -10,12 +10,12 @@ import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { Localidad } from '../../../models/localidad.model';
-import { LocalidadService } from '../../../services/localidad.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Localidad } from '@models/localidad.model';
+import { LocalidadService } from '@services/localidad.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/loading.component';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '@components/loading/loading.component';
 import { ModalLocalidadComponent } from './modal-localidad/modal-localidad.component';
 
 @Component({
@@ -23,7 +23,6 @@ import { ModalLocalidadComponent } from './modal-localidad/modal-localidad.compo
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './localidades.component.html',
-  styleUrl: './localidades.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class LocalidadesComponent implements OnInit, AfterViewInit {

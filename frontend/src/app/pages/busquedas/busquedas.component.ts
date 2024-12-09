@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Consulta } from '../../models/consulta.model';
+import { Consulta } from '@models/consulta.model';
 import { ConsultasTableComponent } from './components/consultas-table/consultas-table.component';
 import { ConsultasxanioComponent } from './components/consultasxanio/consultasxanio.component';
 import { PersonalizadaComponent } from './components/personalizada/personalizada.component';
-import { TabsComponent } from '../../components/tabs/tabs.component';
+import { TabsComponent } from '@components/tabs/tabs.component';
 @Component({
   selector: 'app-busquedas',
   standalone: true,

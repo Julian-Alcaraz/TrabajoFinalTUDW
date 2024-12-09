@@ -1,20 +1,20 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ConsultaService } from '../../services/consulta.service';
-import { Consulta } from '../../models/consulta.model';
+import { ConsultaService } from '@services/consulta.service';
+import { Consulta } from '@models/consulta.model';
 import { CommonModule } from '@angular/common';
-import { NuevaOdontologiaComponent } from '../../pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
-import { NuevaClinicaComponent } from '../../pages/consultas/clinica/nueva-clinica/nueva-clinica.component';
-import { NuevaFonoaudiologicaComponent } from '../../pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
-import { NuevaOftalmologiaComponent } from '../../pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
-import { SessionService } from '../../services/session.service';
+import { NuevaOdontologiaComponent } from '@pages/consultas/odontologia/nueva-odontologia/nueva-odontologia.component';
+import { NuevaClinicaComponent } from '@pages/consultas/clinica/nueva-clinica/nueva-clinica.component';
+import { NuevaFonoaudiologicaComponent } from '@pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
+import { NuevaOftalmologiaComponent } from '@pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
+import { SessionService } from '@services/session.service';
+import { GLOBAL } from '@config/global';
 
 @Component({
   selector: 'app-ver-consulta',
   standalone: true,
   imports: [CommonModule, NuevaOdontologiaComponent, NuevaClinicaComponent, NuevaFonoaudiologicaComponent, NuevaOftalmologiaComponent],
   templateUrl: './ver-consulta.component.html',
-  styleUrl: './ver-consulta.component.css',
 })
 export class VerConsultaComponent implements OnInit {
   isDialog = false;
@@ -45,7 +45,7 @@ export class VerConsultaComponent implements OnInit {
   esEditor() {
     this.identidad = this._sessionService.getIdentidad();
     // es editar si el id es medico o admin
-    if (this.identidad.roles_ids.includes(1) || this.identidad.roles_ids.includes(2)) {
+    if (this.identidad.roles_ids.includes(GLOBAL.ID_ADMIN) || this.identidad.roles_ids.includes(GLOBAL.ID_PROFESIONAL)) {
       this.editar = true;
     }
   }

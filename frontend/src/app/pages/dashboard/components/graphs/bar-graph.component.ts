@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { LoadingComponent } from '@components/loading/loading.component';
 @Component({
   selector: 'app-bar-graph',
   standalone: true,

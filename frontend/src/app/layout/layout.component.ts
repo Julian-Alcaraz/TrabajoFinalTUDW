@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavBarComponent } from '../components/side-bar/side-bar.component';
+import { NavBarComponent } from '@components/side-bar/side-bar.component';
 import { RouterModule } from '@angular/router';
 
 interface SideNavToggle {

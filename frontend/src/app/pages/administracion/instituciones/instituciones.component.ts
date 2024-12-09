@@ -9,12 +9,12 @@ import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/loading.component';
-import { Institucion } from '../../../models/institucion.model';
-import { InstitucionService } from '../../../services/institucion.service';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { Institucion } from '@models/institucion.model';
+import { InstitucionService } from '@services/institucion.service';
 import { ModalInstitucionComponent } from './modal-institucion/modal-institucion.component';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -23,7 +23,6 @@ import { TooltipModule } from 'primeng/tooltip';
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './instituciones.component.html',
-  styleUrl: './instituciones.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class InstitucionesComponent implements OnInit, AfterViewInit {

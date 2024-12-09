@@ -9,11 +9,11 @@ import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { BarrioService } from '../../../services/barrio.service';
-import { Barrio } from '../../../models/barrio.model';
-import { LoadingComponent } from '../../../components/loading/loading.component';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { BarrioService } from '@services/barrio.service';
+import { Barrio } from '@models/barrio.model';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
 import { ModalBarrioComponent } from './modal-barrio/modal-barrio.component';
 import { TooltipModule } from 'primeng/tooltip';
 

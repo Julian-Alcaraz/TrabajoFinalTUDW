@@ -7,20 +7,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '../../../../utils/validadores';
-import { ChicoService } from '../../../../services/chico.service';
-import { Barrio } from '../../../../models/barrio.model';
-import { Localidad } from '../../../../models/localidad.model';
-import { LocalidadService } from '../../../../services/localidad.service';
-import { BarrioService } from '../../../../services/barrio.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '@utils/validadores';
+import { ChicoService } from '@services/chico.service';
+import { Barrio } from '@models/barrio.model';
+import { Localidad } from '@models/localidad.model';
+import { LocalidadService } from '@services/localidad.service';
+import { BarrioService } from '@services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Chico } from '../../../../models/chico.model';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
-import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputDateComponent } from '../../../../components/inputs/input-date.component';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
-import { InputRadioComponent } from '../../../../components/inputs/input-radio.component';
+import { Chico } from '@models/chico.model';
+import { InputTextComponent } from '@components/inputs/input-text.component';
+import { InputNumberComponent } from '@components/inputs/input-number.component';
+import { InputDateComponent } from '@components/inputs/input-date.component';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { InputRadioComponent } from '@components/inputs/input-radio.component';
 
 /*
 

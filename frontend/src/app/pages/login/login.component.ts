@@ -1,7 +1,7 @@
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormularioComponent } from './components/formulario/formulario.component';
-import { LoadingService } from '../../services/loading.service';
-import { SessionService } from '../../services/session.service';
+import { LoadingService } from '@services/loading.service';
+import { SessionService } from '@services/session.service';
 import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-login',

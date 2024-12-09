@@ -6,16 +6,17 @@ import { CommonModule } from '@angular/common';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Consulta } from '../../../../models/consulta.model';
-import { VerConsultaComponent } from '../../../../components/ver-consulta/ver-consulta.component';
-import { PaginadorPersonalizado } from '../../../../utils/paginador/paginador-personalizado';
+import { Consulta } from '@models/consulta.model';
+import { VerConsultaComponent } from '@components/ver-consulta/ver-consulta.component';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConsultaService } from '../../../../services/consulta.service';
+import { ConsultaService } from '@services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { SessionService } from '../../../../services/session.service';
-import { Usuario } from '../../../../models/usuario.model';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { SessionService } from '@services/session.service';
+import { Usuario } from '@models/usuario.model';
 import Swal from 'sweetalert2';
+import { GLOBAL } from '@config/global';
 
 @Component({
   selector: 'app-consultas-table',
@@ -49,7 +50,7 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
     this.dataSource = new MatTableDataSource(this.consultas);
     this.dataSource.sort = this.sort;
     this.identidad = this._sessionService.getIdentidad();
-    if (this.identidad?.roles_ids?.includes(1) || this.identidad?.roles_ids?.includes(2)) {
+    if (this.identidad?.roles_ids?.includes(GLOBAL.ID_ADMIN) || this.identidad?.roles_ids?.includes(GLOBAL.ID_PROFESIONAL)) {
       this.displayedColumns.push('accion');
     }
   }

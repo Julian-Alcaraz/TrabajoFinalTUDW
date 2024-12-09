@@ -3,23 +3,22 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { Barrio } from '../../../../models/barrio.model';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Barrio } from '@models/barrio.model';
+import { ValidarCadenaSinEspacios } from '@utils/validadores';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
-import { BarrioService } from '../../../../services/barrio.service';
-import { InputSelectComponent } from '../../../../components/inputs/input-select.component';
-import { Localidad } from '../../../../models/localidad.model';
-import { LocalidadService } from '../../../../services/localidad.service';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { InputTextComponent } from '@components/inputs/input-text.component';
+import { BarrioService } from '@services/barrio.service';
+import { InputSelectComponent } from '@components/inputs/input-select.component';
+import { Localidad } from '@models/localidad.model';
+import { LocalidadService } from '@services/localidad.service';
+import { LoadingComponent } from '@components/loading/loading.component';
 
 @Component({
   selector: 'app-modal-barrio',
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule, InputSelectComponent, LoadingComponent],
   templateUrl: './modal-barrio.component.html',
-  styleUrl: './modal-barrio.component.css',
 })
 export class ModalBarrioComponent implements OnInit {
   public localidades!: Localidad[];

@@ -15,12 +15,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { Usuario } from '../../../../models/usuario.model';
-import { PaginadorPersonalizado } from '../../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
-import { Rol } from '../../../../models/rol.model';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { UsuarioService } from '@services/usuario.service';
+import { Usuario } from '@models/usuario.model';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { Rol } from '@models/rol.model';
 import { ModalUsuarioComponent } from '../modal-usuario/modal-usuario.component';
 import { NuevoUsuarioComponent } from '../nuevo-usuario/nuevo-usuario.component';
 
@@ -29,7 +29,6 @@ import { NuevoUsuarioComponent } from '../nuevo-usuario/nuevo-usuario.component'
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatSortModule, TagModule, MatTableModule, MatPaginator, MatPaginatorModule, LoadingComponent, TooltipModule, IftaLabelModule, InputNumberModule, InputTextModule, SelectModule],
   templateUrl: './lista-usuario.component.html',
-  styleUrl: './lista-usuario.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaUsuarioComponent implements OnInit, AfterViewInit {

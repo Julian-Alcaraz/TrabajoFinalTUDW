@@ -6,20 +6,21 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-import { Chico } from '../../../models/chico.model';
-import { ChicoService } from '../../../services/chico.service';
-import { Consulta } from '../../../models/consulta.model';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Chico } from '@models/chico.model';
+import { ChicoService } from '@services/chico.service';
+import { Consulta } from '@models/consulta.model';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
 import { ConsultasTableComponent } from '../../busquedas/components/consultas-table/consultas-table.component';
-import { LoadingComponent } from '../../../components/loading/loading.component';
+import { LoadingComponent } from '@components/loading/loading.component';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
 import { TooltipModule } from 'primeng/tooltip';
-import { Usuario } from '../../../models/usuario.model';
-import { SessionService } from '../../../services/session.service';
+import { Usuario } from '@models/usuario.model';
+import { SessionService } from '@services/session.service';
 import { DatosPersonalesComponent } from '../components/datos-personales/datos-personales.component';
+import { GLOBAL } from '@config/global';
 
 @Component({
   selector: 'app-ver-chico',
@@ -51,7 +52,7 @@ export class VerChicoComponent implements OnInit {
   ) {
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad && this.identidad?.roles_ids) {
-      if (this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2)) {
+      if (this.identidad?.roles_ids.includes(GLOBAL.ID_ADMIN) || this.identidad?.roles_ids?.includes(GLOBAL.ID_PROFESIONAL)) {
         this.esEditor = true;
       }
     }

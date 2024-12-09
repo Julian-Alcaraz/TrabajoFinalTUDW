@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { LocalidadesComponent } from '../pages/administracion/localidades/localidades.component';
-import { ListaUsuarioComponent } from '../pages/administracion/usuarios/lista-usuario/lista-usuario.component';
-import { BarriosComponent } from '../pages/administracion/barrios/barrios.component';
-import { InstitucionesComponent } from '../pages/administracion/instituciones/instituciones.component';
-import { CursosComponent } from '../pages/administracion/cursos/cursos.component';
+import { LocalidadesComponent } from '@pages/administracion/localidades/localidades.component';
+import { ListaUsuarioComponent } from '@pages/administracion/usuarios/lista-usuario/lista-usuario.component';
+import { BarriosComponent } from '@pages/administracion/barrios/barrios.component';
+import { InstitucionesComponent } from '@pages/administracion/instituciones/instituciones.component';
+import { CursosComponent } from '@pages/administracion/cursos/cursos.component';
 import { adminGuard } from '../guards/auth.guard';
 
 const routes: Routes = [

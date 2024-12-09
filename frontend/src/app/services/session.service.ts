@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GLOBAL } from '../config/global';
+import { GLOBAL } from '@config/global';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { Usuario } from '../models/usuario.model';
+import { Usuario } from '@models/usuario.model';
 import { LoadingService } from './loading.service';
 import { MatDialog } from '@angular/material/dialog';
 

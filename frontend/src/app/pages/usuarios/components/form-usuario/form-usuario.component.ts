@@ -8,17 +8,17 @@ import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '../../../../utils/validadores';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { RolesService } from '../../../../services/roles.service';
-import { Rol } from '../../../../models/rol.model';
-import { Usuario } from '../../../../models/usuario.model';
-import { SessionService } from '../../../../services/session.service';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
-import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputDateComponent } from '../../../../components/inputs/input-date.component';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '@utils/validadores';
+import { UsuarioService } from '@services/usuario.service';
+import { RolesService } from '@services/roles.service';
+import { Rol } from '@models/rol.model';
+import { Usuario } from '@models/usuario.model';
+import { SessionService } from '@services/session.service';
+import { InputTextComponent } from '@components/inputs/input-text.component';
+import { InputNumberComponent } from '@components/inputs/input-number.component';
+import { InputDateComponent } from '@components/inputs/input-date.component';
+import { LoadingComponent } from '@components/loading/loading.component';
 
 @Component({
   selector: 'app-form-usuario',

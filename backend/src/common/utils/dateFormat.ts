@@ -9,6 +9,7 @@ export function formatDate(date: Date): string {
 
 /** Formatea las fechas de un arreglo de objetos, los cuales tengan current_at como atributo */
 export function arrayFormatDate(arrayObj: any[]): any[] {
+  if (arrayObj.length === 0) return arrayObj;
   if (!arrayObj[0].created_at) {
     return arrayObj;
   }

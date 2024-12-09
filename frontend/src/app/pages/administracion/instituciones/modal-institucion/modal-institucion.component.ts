@@ -4,19 +4,18 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios } from '../../../../utils/validadores';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
-import { Institucion } from '../../../../models/institucion.model';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios } from '@utils/validadores';
+import { InputTextComponent } from '@components/inputs/input-text.component';
+import { Institucion } from '@models/institucion.model';
+import { InstitucionService } from '@services/institucion.service';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-modal-institucion',
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule, InputSelectEnumComponent],
   templateUrl: './modal-institucion.component.html',
-  styleUrl: './modal-institucion.component.css',
 })
 export class ModalInstitucionComponent implements OnInit {
   public institucion: Institucion | null = null;

@@ -7,13 +7,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ContraseniaIgualDni, ContraseniasIguales, ValidarCadenaSinEspacios } from '../../../../utils/validadores';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { Usuario } from '../../../../models/usuario.model';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ContraseniaIgualDni, ContraseniasIguales, ValidarCadenaSinEspacios } from '@utils/validadores';
+import { UsuarioService } from '@services/usuario.service';
+import { Usuario } from '@models/usuario.model';
 import Swal from 'sweetalert2';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { SessionService } from '../../../../services/session.service';
+import { SessionService } from '@services/session.service';
 
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';

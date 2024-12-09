@@ -5,11 +5,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { fadeInOut } from './helper';
 import { SublevelMenuComponent } from './sublevel-menu.component';
-import { Menu } from '../../models/menu.model';
-import { SessionService } from '../../services/session.service';
+import { Menu } from '@models/menu.model';
+import { SessionService } from '@services/session.service';
 import Swal from 'sweetalert2';
-import { MenuService } from '../../services/menu.service';
-import { Usuario } from '../../models/usuario.model';
+import { MenuService } from '@services/menu.service';
+import { Usuario } from '@models/usuario.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CambiarContraseniaComponent } from '../../pages/usuarios/components/cambioContrasenia/cambio-contrasenia.component';
 interface SideNavToggle {

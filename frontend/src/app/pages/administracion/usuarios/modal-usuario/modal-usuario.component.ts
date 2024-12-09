@@ -5,18 +5,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { Usuario } from '../../../../models/usuario.model';
-import { Rol } from '../../../../models/rol.model';
-import { RolesService } from '../../../../services/roles.service';
-import { UsuarioService } from '../../../../services/usuario.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Usuario } from '@models/usuario.model';
+import { Rol } from '@models/rol.model';
+import { RolesService } from '@services/roles.service';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-modal-usuario',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './modal-usuario.component.html',
-  styleUrl: './modal-usuario.component.css',
 })
 export class ModalUsuarioComponent implements OnInit {
   public roles!: Rol[];

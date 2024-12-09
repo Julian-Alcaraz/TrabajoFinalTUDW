@@ -4,15 +4,15 @@ import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarNumerosFloat } from '../../../../utils/validadores';
-import { ConsultaService } from '../../../../services/consulta.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarNumerosFloat } from '@utils/validadores';
+import { ConsultaService } from '@services/consulta.service';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputNumberComponent } from '../../../../components/inputs/input-number.component';
-import { InputCheckboxComponent } from '../../../../components/inputs/input-checkbox.component';
-import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
-import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
-import { Consulta } from '../../../../models/consulta.model';
+import { InputNumberComponent } from '@components/inputs/input-number.component';
+import { InputCheckboxComponent } from '@components/inputs/input-checkbox.component';
+import { InputTextareaComponent } from '@components/inputs/input-textarea.component';
+import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
+import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION

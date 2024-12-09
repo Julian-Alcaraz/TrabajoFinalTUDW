@@ -10,12 +10,12 @@ import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
-import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PaginadorPersonalizado } from '../../../utils/paginador/paginador-personalizado';
-import { LoadingComponent } from '../../../components/loading/loading.component';
-import { Curso } from '../../../models/curso.model';
-import { CursoService } from '../../../services/curso.service';
+import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { Curso } from '@models/curso.model';
+import { CursoService } from '@services/curso.service';
 import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
 
 @Component({
