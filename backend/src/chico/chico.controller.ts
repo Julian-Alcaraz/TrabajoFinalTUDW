@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ChicoService } from './chico.service';
 import { CreateChicoDto } from './dto/create-chico.dto';
 import { UpdateChicoDto } from './dto/update-chico.dto';
+import { arrayFormatDate } from 'src/common/utils/dateFormat';
 
 @Controller('chico')
 @UseGuards(JwtAuthGuard)
@@ -54,7 +55,6 @@ export class ChicoController {
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const chico = await this.chicoService.findOne(id);
-    console.log(chico);
     return {
       success: true,
       data: chico,
@@ -119,7 +119,7 @@ export class ChicoController {
     const consultas = await this.chicoService.findChicosConsultas(id);
     return {
       success: true,
-      data: consultas,
+      data: arrayFormatDate(consultas),
       message: 'Consultas encontradas por chico con exito',
     };
   }

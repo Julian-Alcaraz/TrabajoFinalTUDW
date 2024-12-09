@@ -110,7 +110,7 @@
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id)"></tr>
+    <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id, dataSource.data.indexOf(row))"></tr>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
         <!-- @if (searching) {

@@ -6,6 +6,7 @@ import { ConsultaService } from './consulta.service';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { GraficosService } from './graficos.service';
+import { arrayFormatDate, objectFormatDate } from 'src/common/utils/dateFormat';
 
 @Controller('consulta')
 @UseGuards(JwtAuthGuard)
@@ -34,7 +35,7 @@ export class ConsultaController {
     const consultas = await this.consultaService.busquedaPersonalizada(data);
     return {
       success: true,
-      data: consultas,
+      data: arrayFormatDate(consultas),
       message: 'Consultas obtenidas con exito.',
     };
   }
@@ -70,13 +71,13 @@ export class ConsultaController {
     const consultas = await this.consultaService.findAllByYear(year);
     return {
       success: true,
-      data: consultas,
+      data: arrayFormatDate(consultas),
       message: 'Consultas obtenidas con exito.',
     };
   }
 
   @Get('primeraVezChico/:id/:tipoConsulta')
-  @ApiOperation({ summary: 'Devuelte si es la primera vez del chico en una consulta o no' })
+  @ApiOperation({ summary: 'Devuelve si es la primera vez del chico en una consulta o no' })
   @ApiResponse({ status: 201, description: 'Consulta obtenida con exito' })
   async esPrimeraVez(@Param('id', ParseIntPipe) id: number, @Param('tipoConsulta') tipoConsulta: string) {
     const respuesta = await this.consultaService.esPrimeraVez(id, tipoConsulta);
@@ -87,12 +88,14 @@ export class ConsultaController {
     };
   }
 
+  @ApiOperation({ summary: 'Modifica y devuelte la consulta con los cambios enviados' })
+  @ApiResponse({ status: 201, description: 'Consulta modificada con exito' })
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
     const respuesta = await this.consultaService.update(id, updateConsultaDto);
     return {
       success: true,
-      data: respuesta,
+      data: objectFormatDate(respuesta),
       message: 'Consulta acutualizada con exito.',
     };
   }

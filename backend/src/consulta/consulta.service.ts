@@ -258,7 +258,7 @@ export class ConsultaService {
       }
       return resultados;
     }
-    return formatearFecha(consultas);
+    return consultas;
   }
 
   prepararDataConsultaPersonalizada(data) {
@@ -299,7 +299,7 @@ export class ConsultaService {
       where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) },
       relations: ['chico', 'institucion', 'curso', 'usuario'],
     });
-    return formatearFecha(consultas);
+    return consultas;
   }
 
   async update(id: number, cambios: UpdateConsultaDto) {
@@ -413,20 +413,6 @@ export class ConsultaService {
     consulta.deshabilitado = true;
     return this.consultaORM.save(consulta);
   }
-}
-
-function formatearFecha(results: any[]): any[] {
-  const formatDate = (date: Date): string =>
-    [
-      date.getDate().toString().padStart(2, '0'), // Día
-      (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
-      date.getFullYear(), // Año
-    ].join('-');
-
-  return results.map((result) => ({
-    ...result,
-    created_at: result.created_at ? formatDate(new Date(result.created_at)) : null,
-  }));
 }
 
 function estadoNutricional(pcimc: number) {

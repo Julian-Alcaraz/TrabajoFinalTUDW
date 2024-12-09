@@ -1,7 +1,7 @@
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarSoloNumeros } from '../../../../utils/validadores';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
@@ -25,6 +25,7 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 export class NuevaOdontologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
   @Input() editar = true;
+  @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
 
   public odontologiaForm: FormGroup;
@@ -39,7 +40,6 @@ export class NuevaOdontologiaComponent implements OnInit {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos odontologia
-      // Campos odontologia
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
       cepillo: ['', [Validators.required]],
@@ -51,7 +51,6 @@ export class NuevaOdontologiaComponent implements OnInit {
       sellador: ['', [Validators.required, ValidarSoloNumeros]],
       dientes_recuperables: [null, [Validators.required, ValidarSoloNumeros]],
       dientes_irecuperables: [null, [Validators.required, ValidarSoloNumeros]],
-      // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       habitos: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
     });
   }
@@ -266,6 +265,9 @@ export class NuevaOdontologiaComponent implements OnInit {
           formValues.obra_social = formValues.obra_social === 'true';
           const derivaciones = {
             externa: formValues.derivacion_externa === 'true',
+            odontologia: false,
+            oftalmologia: false,
+            fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
           const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
@@ -278,7 +280,7 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(derivaciones.externa && { derivaciones }),
+            derivaciones,
             odontologia: {
               ...odontologicaValues,
             },
@@ -289,6 +291,8 @@ export class NuevaOdontologiaComponent implements OnInit {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
+                  const consultaMod = response.data;
+                  this.modificoConsulta.emit(consultaMod);
                 }
               },
               error: (err) => {
@@ -301,22 +305,3 @@ export class NuevaOdontologiaComponent implements OnInit {
     }
   }
 }
-
-/* FORMULARIO LIMPIO
-  // Campos comunes
-  observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
-  // Campos odontologia
-  primera_vez: ['', [Validators.required]],
-  ulterior: ['', [Validators.required]],
-  cepillo: ['', [Validators.required]],
-  cepillado: ['', [Validators.required]],
-  topificacion: ['', [Validators.required]],
-  derivacion_externa: ['', [Validators.required]],
-  dientes_permanentes: ['', [Validators.required, ValidarSoloNumeros]],
-  dientes_temporales: ['', [Validators.required, ValidarSoloNumeros]],
-  sellador: ['', [Validators.required, ValidarSoloNumeros]],
-  dientes_recuperables: ['', [Validators.required, ValidarSoloNumeros]],
-  dientes_irecuperables: ['', [Validators.required, ValidarSoloNumeros]],
-  // situacion_bucal: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-  habitos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-*/

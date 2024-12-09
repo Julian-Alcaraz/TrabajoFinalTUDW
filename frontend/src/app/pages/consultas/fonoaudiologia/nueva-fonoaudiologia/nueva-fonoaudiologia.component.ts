@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -23,6 +23,7 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 export class NuevaFonoaudiologicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
   @Input() editar = true;
+  @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
 
   public fonoaudiologiaForm: FormGroup;
@@ -98,7 +99,6 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
             derivaciones,
-            //...(derivaciones.externa && { derivaciones }),
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },
@@ -210,6 +210,9 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
           formValues.obra_social = formValues.obra_social === 'true';
           const derivaciones = {
             externa: formValues.derivacion_externa === 'true',
+            odontologia: false,
+            oftalmologia: false,
+            fonoaudiologia: false,
           };
           delete formValues.derivacion_externa;
           delete formValues.dni;
@@ -223,7 +226,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(derivaciones.externa && { derivaciones }),
+            derivaciones,
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },
@@ -235,6 +238,8 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
+                  const consultaMod = response.data;
+                  this.modificoConsulta.emit(consultaMod);
                 }
               },
               error: (err) => {

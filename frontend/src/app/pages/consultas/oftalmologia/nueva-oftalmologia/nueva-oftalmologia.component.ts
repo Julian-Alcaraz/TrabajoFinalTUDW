@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -11,7 +11,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CamposComunesComponent } from '../../components/campos-comunes/campos-comunes.component';
-import { InputTextComponent } from '../../../../components/inputs/input-text.component';
 import { InputTextareaComponent } from '../../../../components/inputs/input-textarea.component';
 import { InputSelectEnumComponent } from '../../../../components/inputs/input-select-enum.component';
 import { InputDateComponent } from '../../../../components/inputs/input-date.component';
@@ -22,13 +21,14 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 @Component({
   selector: 'app-nueva-oftalmologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
   templateUrl: './nueva-oftalmologia.component.html',
   styleUrl: './nueva-oftalmologia.component.css',
 })
 export class NuevaOftalmologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
   @Input() editar = true;
+  @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
 
   public oftalmologiaForm: FormGroup;
@@ -222,7 +222,6 @@ export class NuevaOftalmologiaComponent implements OnInit {
     }
     const receta = this.convertToBoolean(this.oftalmologiaForm.value.receta);
     const anteojos = this.convertToBoolean(this.oftalmologiaForm.value.anteojos);
-    // const asistencia = this.convertToBoolean(this.fonoaudiologiaForm.value.asistencia);
     if (hayCambios) {
       if (
         // cambios campos comunes
@@ -267,6 +266,9 @@ export class NuevaOftalmologiaComponent implements OnInit {
           formValues.obra_social = formValues.obra_social === 'true';
           const derivaciones = {
             externa: formValues.derivacion_externa === 'true',
+            odontologia: false,
+            oftalmologia: false,
+            fonoaudiologia: false,
           };
           delete formValues.dni;
           delete formValues.derivacion_externa;
@@ -280,7 +282,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(derivaciones.externa && { derivaciones }),
+            derivaciones,
             oftalmologia: {
               ...oftalmologiaValues,
             },
@@ -291,6 +293,8 @@ export class NuevaOftalmologiaComponent implements OnInit {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
+                  const consultaMod = response.data;
+                  this.modificoConsulta.emit(consultaMod);
                 }
               },
               error: (err) => {

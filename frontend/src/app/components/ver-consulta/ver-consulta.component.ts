@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConsultaService } from '../../services/consulta.service';
 import { Consulta } from '../../models/consulta.model';
 import { CommonModule } from '@angular/common';
@@ -22,10 +22,10 @@ export class VerConsultaComponent implements OnInit {
   editar = false;
   identidad: any;
   constructor(
+    public dialogRef: MatDialogRef<VerConsultaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _consultaService: ConsultaService,
     private _sessionService: SessionService,
-    private _dialog: MatDialog,
   ) {
     this.isDialog = !data;
   }
@@ -50,6 +50,10 @@ export class VerConsultaComponent implements OnInit {
     }
   }
   cerrarModal() {
-    this._dialog.closeAll();
+    this.dialogRef.close(false);
+  }
+
+  cerrarModalYrecargarListado(consultaMod: any) {
+    this.dialogRef.close(consultaMod)
   }
 }

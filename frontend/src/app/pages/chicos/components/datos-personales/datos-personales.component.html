@@ -1,0 +1,74 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre }} {{ chico?.apellido }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Completo</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.dni }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">DNI</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.fe_nacimiento | date: 'dd-MM-yyyy' }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Fecha de Nacimiento</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.sexo }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Sexo</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.telefono }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Teléfono</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.barrio?.localidad?.nombre }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Localidad</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.barrio?.nombre }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Barrio</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.direccion }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Dirección</p>
+    </div>
+  </div>
+  <div *ngIf="chico?.nombre_madre" class="lg:col-span-2 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre_madre }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Madre</p>
+    </div>
+  </div>
+  <div *ngIf="chico?.nombre_padre" class="lg:col-span-2 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">{{ chico?.nombre_padre }}</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Padre</p>
+    </div>
+  </div>
+  <div *ngIf="resultsLength > 0" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño</p>
+    <div class="flex items-center gap-2">
+      <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
+    </div>
+  </div>
+  <div *ngIf="!resultsLength && !searchingConsultas" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+    <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistió a ninguna consulta</p>
+  </div>
+  <div *ngIf="searchingConsultas" class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
+    <app-loading></app-loading>
+  </div>
+</div>

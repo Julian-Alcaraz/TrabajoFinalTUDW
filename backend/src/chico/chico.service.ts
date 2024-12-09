@@ -48,15 +48,8 @@ export class ChicoService {
 
   async findOne(id: number) {
     const chico = await this.chicoORM.findOne({ where: { id, deshabilitado: false }, relations: ['barrio', 'barrio.localidad'] });
-    //const fe_nacimiento = new Date(chico.fe_nacimiento);
-    //const fechaFormateada = [fe_nacimiento.getDate().toString().padStart(2, '0'), (fe_nacimiento.getMonth() + 1).toString().padStart(2, '0'), fe_nacimiento.getFullYear()].join('-');
-    //console.log(typeof fechaFormateada);
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     return chico;
-    //return {
-    //  ...chico,
-    //  fe_nacimiento: fe_nacimiento,
-    //};
   }
 
   async findOneByDni(dni: number) {
@@ -81,7 +74,6 @@ export class ChicoService {
       if (!barrioEncontrado) throw new NotFoundException(`Barrio con id ${updateChicoDto.id_barrio} no encontrado`);
     }
     if (barrioEncontrado !== null) {
-      console.log('cambie barrio', barrioEncontrado);
       const cambiosAplicados = {
         ...updateChicoDto,
         barrio: barrioEncontrado,
@@ -108,7 +100,6 @@ export class ChicoService {
     });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
     chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
-    chico.consultas = formatearFecha(chico.consultas);
     return chico.consultas;
   }
 
@@ -121,18 +112,4 @@ export class ChicoService {
     }
     return respuesta.reverse();
   }
-}
-
-function formatearFecha(results: any[]): any[] {
-  const formatDate = (date: Date): string =>
-    [
-      date.getDate().toString().padStart(2, '0'), // Día
-      (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
-      date.getFullYear(), // Año
-    ].join('-');
-
-  return results.map((result) => ({
-    ...result,
-    created_at: result.created_at ? formatDate(new Date(result.created_at)) : null,
-  }));
 }

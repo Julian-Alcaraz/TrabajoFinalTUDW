@@ -66,8 +66,15 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
     }
   }
 
-  verConsulta(id: number) {
-    this._dialog.open(VerConsultaComponent, { panelClass: 'full-screen-dialog', data: id });
+  verConsulta(id: number, index: number) {
+    const dialogRef = this._dialog.open(VerConsultaComponent, { panelClass: 'full-screen-dialog', data: id });
+    dialogRef.afterClosed().subscribe((consultaMod) => {
+      if (consultaMod) {
+        const newData = this.dataSource.data.slice(); // Crear una nueva copia del array
+        newData[index] = consultaMod;
+        this.dataSource.data = newData;
+      }
+    });
   }
 
   eliminar(event: Event, element: Consulta) {

@@ -7,16 +7,16 @@
 @if (consulta !== null) {
   @switch (consulta.type) {
     @case ('Clinica') {
-      <app-nueva-clinica [consulta]="consulta" [editar]="editar" />
+      <app-nueva-clinica [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
     }
     @case ('Odontologia') {
-      <app-nueva-odontologia [consulta]="consulta" [editar]="editar" />
+      <app-nueva-odontologia [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
     }
     @case ('Fonoaudiologia') {
-      <app-nueva-fonoaudiologia [consulta]="consulta" [editar]="editar" />
+      <app-nueva-fonoaudiologia [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
     }
     @case ('Oftalmologia') {
-      <app-nueva-oftalmologia [consulta]="consulta" [editar]="editar" />
+      <app-nueva-oftalmologia [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
     }
     @default {
       No existe el tipo de oonsulta ingresado.

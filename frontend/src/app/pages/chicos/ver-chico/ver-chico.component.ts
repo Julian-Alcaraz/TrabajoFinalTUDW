@@ -19,11 +19,12 @@ import { EditarChicoComponent } from '../editar-chico/editar-chico.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { Usuario } from '../../../models/usuario.model';
 import { SessionService } from '../../../services/session.service';
+import { DatosPersonalesComponent } from '../components/datos-personales/datos-personales.component';
 
 @Component({
   selector: 'app-ver-chico',
   standalone: true,
-  imports: [CommonModule, MatInputModule, MatFormFieldModule, RouterModule, LoadingComponent, ConsultasTableComponent, TooltipModule],
+  imports: [CommonModule, MatInputModule, MatFormFieldModule, RouterModule, LoadingComponent, ConsultasTableComponent, TooltipModule, DatosPersonalesComponent],
   templateUrl: './ver-chico.component.html',
   styleUrl: './ver-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -34,26 +35,24 @@ export class VerChicoComponent implements OnInit {
 
   public consultas: Consulta[] = [];
   public consultasComplete: Consulta[] = [];
-  // public consultas: MatTableDataSource<Consulta>;
   public resultsLength = 0;
   public consultasColumns: string[] = ['numero', 'type', 'fecha', 'obra_social', 'profesional', 'observaciones'];
   public searchingChico = false;
   public searchingConsultas = false;
   public identidad: Usuario | null = null;
-  public esEditor= false
+  public esEditor = false;
   constructor(
     private _chicoService: ChicoService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private _dialog: MatDialog,
     private location: Location,
-    private _sessionService: SessionService
+    private _sessionService: SessionService,
   ) {
-    // this.consultas = new MatTableDataSource<Consulta>([]);
     this.identidad = this._sessionService.getIdentidad();
     if (this.identidad && this.identidad?.roles_ids) {
       if (this.identidad?.roles_ids.includes(1) || this.identidad?.roles_ids?.includes(2)) {
-        this.esEditor=true
+        this.esEditor = true;
       }
     }
   }
@@ -179,7 +178,13 @@ export class VerChicoComponent implements OnInit {
       },
     });
   }
+
   editarChico(id: number) {
-    this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
+    const dialogRef = this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
+    dialogRef.afterClosed().subscribe((actualizar) => {
+      if (actualizar) {
+        this.obtenerChico(id);
+      }
+    });
   }
 }

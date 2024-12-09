@@ -1,5 +1,5 @@
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -27,6 +27,7 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 export class NuevaClinicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
   @Input() editar = true;
+  @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
 
   public clinicaForm: FormGroup;
@@ -113,7 +114,6 @@ export class NuevaClinicaComponent implements OnInit {
 
   enviarFormulario() {
     this.verErroresFormulario();
-    // console.log(this.clinicaForm.value);
     if (this.clinicaForm.valid) {
       Swal.fire({
         title: '¿Cargar nueva consulta medica clinica?',
@@ -133,7 +133,6 @@ export class NuevaClinicaComponent implements OnInit {
             fonoaudiologia: formValues.derivacion_fonoaudiologia,
             externa: formValues.derivacion_externa,
           };
-          //const derivaciones = Object.fromEntries(Object.entries(derivacionesSinFiltrar).filter(([, value]) => value === true));
           delete formValues.derivacion_externa;
           delete formValues.derivacion_fonoaudiologia;
           delete formValues.derivacion_odontologia;
@@ -155,6 +154,7 @@ export class NuevaClinicaComponent implements OnInit {
               ...clinicaValues,
             },
           };
+
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -373,13 +373,12 @@ export class NuevaClinicaComponent implements OnInit {
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivacionesSinFiltrar = {
+          const derivaciones = {
             odontologia: formValues.derivacion_odontologia,
             oftalmologia: formValues.derivacion_oftalmologia,
             fonoaudiologia: formValues.derivacion_fonoaudiologia,
             externa: formValues.derivacion_externa,
           };
-          const derivaciones = Object.fromEntries(Object.entries(derivacionesSinFiltrar).filter(([, value]) => value === true));
           delete formValues.derivacion_externa;
           delete formValues.derivacion_fonoaudiologia;
           delete formValues.derivacion_odontologia;
@@ -406,6 +405,8 @@ export class NuevaClinicaComponent implements OnInit {
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
+                  const consultaMod = response.data;
+                  this.modificoConsulta.emit(consultaMod);
                 }
               },
               error: (err) => {
@@ -418,43 +419,3 @@ export class NuevaClinicaComponent implements OnInit {
     }
   }
 }
-// FORMULARIO LIMPIO:
-/*
- // Campos comunes
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
-      // Campos Medica Clinica
-      peso: [45, [Validators.required, ValidarNumerosFloat]],
-      diabetes: [true, [Validators.required]],
-      hta: [false, [Validators.required]],
-      obesidad: [true, [Validators.required]],
-      consumo_alcohol: [false, [Validators.required]],
-      consumo_drogas: [false, [Validators.required]],
-      consumo_tabaco: [true, [Validators.required]],
-      antecedentes_perinatal: [false, [Validators.required]],
-      enfermedades_previas: [true, [Validators.required]],
-      vacunas: ['Completo', [Validators.required]],
-      talla: [170, [Validators.required, ValidarNumerosFloat]],
-      cc: [40, [Validators.required, ValidarNumerosFloat]],
-      tas: [70, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      tad: [120, [Validators.required, ValidarNumerosFloat]], // Deberia ser solo entero ?
-      examen_visual: ['Normal', [Validators.required]],
-      ortopedia_traumatologia: ['Normal', [Validators.required]],
-      lenguaje: ['Adecuado', [Validators.required]],
-      segto: [true, [Validators.required]],
-      leche: [true, [Validators.required]],
-      infusiones: ['Té', [Validators.required]],
-      cantidad_comidas: ['4', [Validators.required]],
-      alimentacion: ['Frituras', [Validators.required]],
-      hidratacion: ['Agua', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      horas_pantalla: ['Menor a 2hs', [Validators.required]],
-      horas_juego_aire_libre: ['Menos de 1h', [Validators.required]],
-      horas_suenio: ['Menos de 10hs', [Validators.required]],
-      derivacion_fonoaudiologia: [true, [Validators.required]],
-      derivacion_oftalmologia: [false, [Validators.required]],
-      derivacion_odontologia: [true, [Validators.required]],
-      derivacion_externa: [false, [Validators.required]],
-      // Ver maximos y minimos de estos valores:
-      pcta: [70, [Validators.required, ValidarNumerosFloat]],
-      pcimc: [90, [Validators.required, ValidarNumerosFloat]],
-      pct: [85, [Validators.required, ValidarNumerosFloat]],
-*/
