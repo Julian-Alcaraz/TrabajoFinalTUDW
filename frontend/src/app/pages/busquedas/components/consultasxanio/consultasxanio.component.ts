@@ -6,11 +6,12 @@ import { ConsultaService } from '@services/consulta.service';
 import { CommonModule } from '@angular/common';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { LoadingComponent } from '@components/loading/loading.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-consultasxanio',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, FormsModule, ReactiveFormsModule, IftaLabelModule, LoadingComponent],
+  imports: [CommonModule, ButtonModule, DatePickerModule, FormsModule, ReactiveFormsModule, IftaLabelModule,  LoadingComponent],
   templateUrl: './consultasxanio.component.html',
   styleUrl: './consultasxanio.component.css',
 })

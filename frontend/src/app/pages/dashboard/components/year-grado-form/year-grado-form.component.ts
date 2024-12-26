@@ -8,11 +8,12 @@ import { LoadingComponent } from '@components/loading/loading.component';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-year-grado-form',
   standalone: true,
-  imports: [CommonModule, SelectButton, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, ButtonModule, SelectButton, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent],
   templateUrl: './year-grado-form.component.html',
   styleUrl: './year-grado-form.component.css',
 })

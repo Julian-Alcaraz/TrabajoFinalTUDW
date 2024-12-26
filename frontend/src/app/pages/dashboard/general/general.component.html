@@ -10,14 +10,7 @@
       <div class="grid gap-6 grid-cols-2">
         <div class="mt-2">
           <p-iftaLabel>
-            <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" view="year" dateFormat="yy" idInput="year" [maxDate]="maxDate" [showButtonBar]="true" styleClass="w-full">
-              <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
-              <ng-template pTemplate="footer">
-                <p-button class="p-datepicker-prev hidden">Previous</p-button>
-                <p-button class="p-datepicker-next hidden">Next</p-button>
-              </ng-template>
-              <!-- end TODO -->
-            </p-datepicker>
+            <p-datepicker (onSelect)="seleccionarYear($event)" (onClear)="seleccionarYear(null)" [showClear]="true" view="year" dateFormat="yy" idInput="year" [maxDate]="maxDate" [showButtonBar]="true" styleClass="w-full" />
             <label for="year">Año</label>
           </p-iftaLabel>
         </div>

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -12,7 +13,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 @Component({
   selector: 'app-campos-oftalmologia',
   standalone: true,
-  imports: [SelectButtonModule, ReactiveFormsModule, IftaLabelModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule, SelectModule],
+  imports: [SelectButtonModule, ButtonModule, ReactiveFormsModule, IftaLabelModule, MultiSelectModule, InputNumberModule, KeyFilterModule, DatePickerModule, SelectModule],
   templateUrl: './campos-oftalmologia.component.html',
   styleUrl: './campos-oftalmologia.component.css',
 })

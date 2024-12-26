@@ -30,14 +30,7 @@
   <!-- Rango de fechas del proximo control -->
   <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-datepicker [showClear]="true" [showButtonBar]="true" [readonlyInput]="true" inputId="rangoFechasProxControl" formControlName="rangoFechasProxControl" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body">
-        <!-- TODO: Remove this on beta-4!!!!!!!!!! y borrar appendTo="body" -->
-        <ng-template pTemplate="footer">
-          <p-button class="p-datepicker-prev hidden">Previous</p-button>
-          <p-button class="p-datepicker-next hidden">Next</p-button>
-        </ng-template>
-        <!-- end TODO -->
-      </p-datepicker>
+      <p-datepicker [showClear]="true" [showButtonBar]="true" [readonlyInput]="true" inputId="rangoFechasProxControl" formControlName="rangoFechasProxControl" selectionMode="range" styleClass="w-full h-16" dateFormat="dd/mm/yy" appendTo="body" />
       <label for="rangoFechas">Rango de fechas del próximos controles</label>
     </p-iftalabel>
   </div>

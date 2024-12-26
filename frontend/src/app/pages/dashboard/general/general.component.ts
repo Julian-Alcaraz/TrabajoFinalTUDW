@@ -13,10 +13,13 @@ import { LoadingComponent } from '@components/loading/loading.component';
 import { Select } from 'primeng/select';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+
+
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
+  imports: [CommonModule, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
