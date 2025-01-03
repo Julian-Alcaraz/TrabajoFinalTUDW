@@ -39,7 +39,7 @@
 
   <p align="center">
   Este trabajo fue desarrollado para la materia "Trabajo Final" de la Tecnicatura Universitaria en Desarrollo Web de la Universidad Nacional del Comahue. <br>
-  La idea inicial surgió de una propuesta realizada por el Secretario Académico (¿SE LLAMABA ASI?) durante el primer día de clases, la cual consistía en un proyecto que una ONG le solicitó a la facultad para reemplazar el manejo de información en planillas Excel por un sistema web. <br>
+  La idea inicial surgió de una propuesta realizada por el Secretario Académico durante el primer día de clases, la cual consistía en un proyecto que una ONG le solicitó a la facultad para reemplazar el manejo de información en planillas Excel por un sistema web. <br>
   El proyecto se llevó a cabo teniendo reiteradas reuniones con miembros de la fundación, integrando sus opiniones y necesidades para desarrollar un sistema que fuera principalmente útil para ellos. Además, el desarrollo de este proyecto nos permitió aplicar los conocimientos adquiridos a lo largo de la carrera y cumplir con los objetivos académicos requeridos para aprobar la última materia de la Técnicatura.
     </p>
     <!-- 
@@ -83,27 +83,26 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
- El dominio del trabajo es un sitio web de uso interno para una ONG llamada Fundación Sol, esta se encarga de realizar controles médicos a todos los niños que ingresan al jardín, primario (y secunadrio ¿VA ESTO?) de escuelas con bajos recursos ubicadas en Cipolletti. 
- De cada niño que ingresa se hacen controles médicos al año por especialidades que son clinica, odontologia, oftalmologia y fonoaudiologia.
- Estos controles se guardan en planillas excel actualmente lo cual genera desfase de información errores de tipeo, dificultad de acceso y búsqueda. La idea es llevar todo esto a una aplicación web que le evite todos estos inconvenientes, les facilite la obtención de estadísticas de los niños, la carga de niños, sus consultas médicas y además, una gestion de usuarios mediante a roles para facilitar los permisos de cada usuario.
+ El dominio del trabajo es un sitio web de uso interno para una ONG llamada Fundación Sol, esta se encarga de realizar controles médicos a todos los niños que ingresan al jardín y primario de escuelas con bajos recursos ubicadas en Cipolletti. 
+ De cada niño que ingresa se hacen controles médicos al año por especialidades que son clinica, odontologia, oftalmologia y fonoaudiologia, estos controles se guardan en planillas excel actualmente lo cual genera desfase de información errores de tipeo, dificultad de acceso y búsqueda. El objetivo es llevar todo esto a una aplicación web que le evite todos estos inconvenientes, les facilite la obtención de estadísticas de los niños, la carga de niños, sus consultas médicas y además, una gestion de usuarios mediante a roles para facilitar los permisos de cada usuario.
 
-### Hecho Con
+### Desarrollado con
 
 * [![Angular][Angular.io]][Angular-url]
 * [![NestJs][nest.js]][Nest.js-url]
 
-<!-- ROADMAP -->
 ## Requerimientos funcionales del sistema
 
-- [ ] Iniciar sesión
-- [ ] Cargar informacion medica de un niño por especialidad
-- [ ] Consultar información personal de un niño
-- [ ] Consultar información medica de un niño
-- [ ] Ver lista de niños
-- [ ] Buscar un niño por DNI
-- [ ] Consultar datos poblacionales
-- [ ] Generar graficos segun una población seleccionada
-- [ ] Consultas personalizadas
+- [x] Iniciar sesión
+- [x] Cargar nuevos usuarios y administrar sus roles
+- [x] Cargar información medica de un niño por especialidad
+- [x] Consultar información personal de un niño
+- [x] Consultar historial médico de un niño
+- [x] Buscar y filtrar la lista de niños según varias características (como nombre, dni, edad, localidad, entre otras)
+- [x] Consultar datos poblacionales
+- [x] Generar graficos segun una población seleccionada
+- [x] Buscar y filtrar la lista de consultas según varias características (como medico que atendio, tipo de consulta, rango de fechas, entre otras)
+- [x] Exportar las consultas buscasdas a un archivo Excel
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

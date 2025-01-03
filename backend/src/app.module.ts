@@ -12,7 +12,6 @@ import { BarrioModule } from './barrio/barrio.module';
 import { LocalidadModule } from './localidad/localidad.module';
 import { CursoModule } from './curso/curso.module';
 import { InstitucionModule } from './institucion/institucion.module';
-import { CsvModule } from './csv/csv.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -33,7 +32,6 @@ import { join } from 'path';
     LocalidadModule,
     CursoModule,
     InstitucionModule,
-    CsvModule,
   ],
   controllers: [],
   providers: [],

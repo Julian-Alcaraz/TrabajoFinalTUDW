@@ -29,7 +29,7 @@ import { CamposClinicaComponent } from './components/campos-clinica/campos-clini
 import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
-import { CsvService } from '../../../../services/csv.service';
+import { XlsxService } from '../../../../services/excelJS.service';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
@@ -47,7 +47,7 @@ export class PersonalizadaComponent implements OnInit {
   public loadingProfesionales = false;
   public loading = false;
   public mostrarBotonDescarga = false;
-  public generandoCsv = false;
+  public generandoArchivo = false; // Aca faltaria usar esto para un spinner!!!
   public estaColapsadoComunes = false;
   public estaColapsadoEspecificos = false;
   public colapsarPaneles = false;
@@ -77,7 +77,7 @@ export class PersonalizadaComponent implements OnInit {
     private _institucionService: InstitucionService,
     private _usuarioService: UsuarioService,
     private _consultaService: ConsultaService,
-    private _csvService: CsvService,
+    private _xlsxService: XlsxService,
   ) {
     this.formBusqueda = this.fb.group({
       generales: this.fb.group({
@@ -188,7 +188,7 @@ export class PersonalizadaComponent implements OnInit {
             this.resultados = response.data;
             this.searching = false;
             this.enviarConsultas(response.data);
-            this.mostrarBotonDescarga = this.resultados && this.resultados.length > 0 && this.formBusqueda.get('consultasSeleccionadas')?.value !== null && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 1;
+            this.mostrarBotonDescarga = true;
             this.loading = false;
           }
         },
@@ -211,32 +211,11 @@ export class PersonalizadaComponent implements OnInit {
     }
   }
 
-  generarCsv() {
-    this.generandoCsv = true;
-    const resultado = prepararData(this.formBusqueda.value);
-    const dataLimpia = eliminarValoresNulosYVacios(resultado);
-    this._csvService.generarCsv(dataLimpia).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          // Descargar el archivo
-          const nombreArchivo = response.data;
-          this._csvService.descargarCsv(nombreArchivo).subscribe((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = nombreArchivo;
-            link.click();
-            window.URL.revokeObjectURL(url);
-            this.generandoCsv = false;
-          });
-        }
-      },
-      error: (err: any) => {
-        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        this.generandoCsv = false;
-      },
-    });
+  exportarXLS() {
+    // Falta hacer manejo de errores!!!!
+    this._xlsxService.generarXlsx(this.resultados);
   }
+
 }
 
 function prepararData(data: any): any {

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Between, EntityManager, IsNull, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { formatDate } from '../common/utils/dateFormat';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { Consulta } from './entities/consulta.entity';
@@ -122,7 +123,179 @@ export class ConsultaService {
     else return { primera_vez: true };
   }
 
+  // PODRIA MEJORARSE!!!!!!!!!!! O PASARSE A UTILS!!!!!!!!
+  darFormatoFechaNacChico(consultas: any) {
+    for (const consulta of consultas) {
+      const date = new Date(consulta.chico.fe_nacimiento);
+      consulta.chico.fe_nacimiento = formatDate(date);
+    }
+  }
+
+  // PODRIA MEJORARSE!!!!!!!!!!! O PASARSE A UTILS!!!!!!!!
+  darFormatoFechaProxControl(consultasOftalmologicas: any) {
+    if (consultasOftalmologicas) {
+      for (const consulta of consultasOftalmologicas) {
+        const date = new Date(consulta.prox_control);
+        consulta.prox_control = formatDate(date);
+      }
+    }
+  }
+
   async busquedaPersonalizada(data: any) {
+    const consulta = this.prepararDataConsultaPersonalizada(data);
+    const consultas = consulta.generales ? await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: consulta.generales }) : await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: { deshabilitado: false } });
+
+    this.darFormatoFechaNacChico(consultas);
+
+    if (!data.consultasSeleccionadas || data.consultasSeleccionadas.length === 0) {
+      return this.procesarConsultasSinSeleccion(consultas, consulta);
+    }
+    return this.procesarConsultasSeleccionadas(data.consultasSeleccionadas, consultas, consulta);
+  }
+
+  // SIN SELECCIONAR
+
+  private async procesarConsultasSinSeleccion(consultas: Consulta[], consulta: any) {
+    const resultados = [];
+
+    const consultasClinicas = [];
+    const consultasOdontologia = [];
+    const consultasFonoaudiologia = [];
+    const consultasOftalmologia = [];
+    for (const con of consultas) {
+      switch (con.type) {
+        case 'Clinica':
+          consultasClinicas.push(con);
+          break;
+        case 'Odontologia':
+          consultasOdontologia.push(con);
+          break;
+        case 'Oftalmologia':
+          consultasOftalmologia.push(con);
+          break;
+        case 'Fonoaudiologia':
+          consultasFonoaudiologia.push(con);
+          break;
+      }
+    }
+    if (consultasClinicas.length > 0) {
+      const clinicaData = await this.procesarClinica(consulta);
+      resultados.push(...this.combinarDatos(consultas, clinicaData, 'clinica', resultados));
+    }
+    if (consultasOdontologia.length > 0) {
+      const odontologiaData = await this.procesarOdontologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, odontologiaData, 'odontologia', resultados));
+    }
+    if (consultasOftalmologia.length > 0) {
+      const oftalmologiaData = await this.procesarOftalmologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, oftalmologiaData, 'oftalmologia', resultados));
+    }
+    if (consultasFonoaudiologia.length > 0) {
+      const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
+    }
+    return resultados;
+  }
+
+  // SELECCIONADAS
+
+  private async procesarConsultasSeleccionadas(seleccionadas: string[], consultas: Consulta[], consulta: any) {
+    const resultados = [];
+    if (seleccionadas.includes('Clinica')) {
+      const clinicaData = await this.procesarClinica(consulta);
+      resultados.push(...this.combinarDatos(consultas, clinicaData, 'clinica', resultados));
+    }
+    if (seleccionadas.includes('Odontologia')) {
+      const odontologiaData = await this.procesarOdontologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, odontologiaData, 'odontologia', resultados));
+    }
+    if (seleccionadas.includes('Oftalmologia')) {
+      const oftalmologiaData = await this.procesarOftalmologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, oftalmologiaData, 'oftalmologia', resultados));
+    }
+    if (seleccionadas.includes('Fonoaudiologia')) {
+      const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
+      resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
+    }
+    return resultados;
+  }
+
+  private combinarDatos(base: Consulta[], datos: any[], key: string, resultados: any[]) {
+    return base
+      .map((consulta) => {
+        const relacionado = datos.find((dato) => dato.id_consulta === consulta.id && !resultados.find((res) => consulta.id === res.id)); // Si esta relacionado y no esta incluido en resultado
+        if (relacionado) {
+          return { ...consulta, [key]: relacionado };
+        }
+        return null;
+      })
+      .filter((resultado) => resultado !== null);
+  }
+
+  private async procesarClinica(consulta: any) {
+    if (consulta.especificas?.rangoTalla) {
+      consulta.especificas = { ...consulta.especificas, talla: Between(consulta.especificas.rangoTalla.tallaMin, consulta.especificas.rangoTalla.tallaMax) };
+      delete consulta.especificas.rangoTalla;
+    }
+    if (consulta.especificas?.rangoCC) {
+      consulta.especificas = { ...consulta.especificas, cc: Between(consulta.especificas.rangoCC.ccMin, consulta.especificas.rangoCC.ccMax) };
+      delete consulta.especificas.rangoCC;
+    }
+    if (consulta.especificas?.rangoPeso) {
+      consulta.especificas = { ...consulta.especificas, peso: Between(consulta.especificas.rangoPeso.pesoMin, consulta.especificas.rangoPeso.pesoMax) };
+      delete consulta.especificas.rangoPeso;
+    }
+    if (consulta.especificas?.rangoPct) {
+      consulta.especificas = { ...consulta.especificas, pct: Between(consulta.especificas.rangoPct.pctMin, consulta.especificas.rangoPct.pctMax) };
+      delete consulta.especificas.rangoPct;
+    }
+    if (consulta.especificas?.rangoTas) {
+      consulta.especificas = { ...consulta.especificas, tas: Between(consulta.especificas.rangoTas.tasMin, consulta.especificas.rangoTas.tasMax) };
+      delete consulta.especificas.rangoTas;
+    }
+    if (consulta.especificas?.rangoTad) {
+      consulta.especificas = { ...consulta.especificas, tad: Between(consulta.especificas.rangoTad.tadMin, consulta.especificas.rangoTad.tadMax) };
+      delete consulta.especificas.rangoTad;
+    }
+    return this.clinicaORM.find({ where: consulta.especificas });
+  }
+
+  private async procesarOdontologia(consulta: any) {
+    if (consulta.especificas?.rangoDientesPermanentes) {
+      consulta.especificas = { ...consulta.especificas, dientes_permanentes: Between(consulta.especificas.rangoDientesPermanentes.dientesPermanentesMin, consulta.especificas.rangoDientesPermanentes.dientesPermanentesMax) };
+      delete consulta.especificas.rangoDientesPermanentes;
+    }
+    if (consulta.especificas?.rangoDientesPermanentes) {
+      consulta.especificas = { ...consulta.especificas, dientes_permanentes: Between(consulta.especificas.rangoDientesPermanentes.dientesPermanentesMin, consulta.especificas.rangoDientesPermanentes.dientesPermanentesMax) };
+      delete consulta.especificas.rangoDientesPermanentes;
+    }
+    if (consulta.especificas?.rangoDientesTemporales) {
+      consulta.especificas = { ...consulta.especificas, dientes_temporales: Between(consulta.especificas.rangoDientesTemporales.dientesTemporalesMin, consulta.especificas.rangoDientesTemporales.dientesTemporalesMax) };
+      delete consulta.especificas.rangoDientesTemporales;
+    }
+    if (consulta.especificas?.rangoSellador) {
+      consulta.especificas = { ...consulta.especificas, sellador: Between(consulta.especificas.rangoSellador.selladorMin, consulta.especificas.rangoSellador.selladorMax) };
+      delete consulta.especificas.sellador;
+    }
+    return this.odontologiaORM.find({ where: consulta.especificas });
+  }
+
+  private async procesarOftalmologia(consulta: any) {
+    if (consulta.especificas?.rangoFechasProxControl) {
+      consulta.especificas = { ...consulta.especificas, prox_control: Between(consulta.especificas.rangoFechasProxControl[0], consulta.especificas.rangoFechasProxControl[1]) };
+      delete consulta.especificas.rangoFechasProxControl;
+    }
+    const consultasOftalmologia = await this.oftalmologiaORM.find({ where: consulta.especificas });
+    this.darFormatoFechaProxControl(consultasOftalmologia);
+    return consultasOftalmologia;
+  }
+
+  private async procesarFonoaudiologia(consulta: any) {
+    return this.fonoaudiologiaORM.find({ where: consulta.especificas });
+  }
+
+  async busquedaPersonalizada2(data: any) {
+    console.log('busco');
     const consulta = this.prepararDataConsultaPersonalizada(data);
     let consultas: Consulta[];
     if (!consulta.generales) {
@@ -131,7 +304,7 @@ export class ConsultaService {
       consultas = await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario'], where: consulta.generales });
     }
     if (data.consultasSeleccionadas) {
-      const resultados = [];
+      const resultados = []; // Cambiar nombre !!!!!
       // De la forma en la que esta esto, si se seleccionan mas de 1 tipo de consulta, va a retornar mas data de la que se deberia mostrar
       if (data.consultasSeleccionadas.includes('Clinica')) {
         // Clinica
@@ -252,13 +425,141 @@ export class ConsultaService {
           })
           .filter((consulta) => consulta !== null);
         resultados.push(...resultadosFonoaudiologia);
-      } else {
-        // Deberia dar error esto!!!!
-        // console.log('No se especifico tipo.. ');
+      }
+      return resultados;
+    } else {
+      console.log('entre al else, no hay consulta seleccionadas');
+      const resultados = []; // Cambiar nombre !!!!!
+      for (const con of consultas) {
+        switch (con.type) {
+          case 'Clinica':
+            console.log('clinica');
+            // Clinica
+            if (consulta.especificas) {
+              if (consulta.especificas.rangoTalla) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  talla: Between(consulta.especificas.rangoTalla.tallaMin, consulta.especificas.rangoTalla.tallaMax),
+                };
+                delete consulta.especificas.rangoTalla;
+              }
+              if (consulta.especificas.rangoCC) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  cc: Between(consulta.especificas.rangoCC.ccMin, consulta.especificas.rangoCC.ccMax),
+                };
+                delete consulta.especificas.rangoCC;
+              }
+              if (consulta.especificas.rangoPeso) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  peso: Between(consulta.especificas.rangoPeso.pesoMin, consulta.especificas.rangoPeso.pesoMax),
+                };
+                delete consulta.especificas.rangoPeso;
+              }
+              if (consulta.especificas.rangoPct) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  pct: Between(consulta.especificas.rangoPct.pctMin, consulta.especificas.rangoPct.pctMax),
+                };
+                delete consulta.especificas.rangoPct;
+              }
+              if (consulta.especificas.rangoTas) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  tas: Between(consulta.especificas.rangoTas.tasMin, consulta.especificas.rangoTas.tasMax),
+                };
+                delete consulta.especificas.rangoTas;
+              }
+              if (consulta.especificas.rangoTad) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  tad: Between(consulta.especificas.rangoTad.tadMin, consulta.especificas.rangoTad.tadMax),
+                };
+                delete consulta.especificas.rangoTad;
+              }
+            }
+            const clinicaData = await this.clinicaORM.find({ where: consulta.especificas });
+            const resultadosClinica = consultas
+              .map((consulta) => {
+                const datosClinica = clinicaData.find((clinica) => clinica.id_consulta === consulta.id);
+                return datosClinica ? { ...consulta, clinica: datosClinica } : null;
+              })
+              .filter((consulta) => consulta !== null);
+            resultados.push(...resultadosClinica);
+            break;
+          case 'Odontologia':
+            console.log('Odontologia');
+            // Odontologia
+            if (consulta.especificas) {
+              if (consulta.especificas.rangoDientesPermanentes) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  dientes_permanentes: Between(consulta.especificas.rangoDientesPermanentes.dientesPermanentesMin, consulta.especificas.rangoDientesPermanentes.dientesPermanentesMax),
+                };
+                delete consulta.especificas.rangoDientesPermanentes;
+              }
+              if (consulta.especificas.rangoDientesTemporales) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  dientes_temporales: Between(consulta.especificas.rangoDientesTemporales.dientesTemporalesMin, consulta.especificas.rangoDientesTemporales.dientesTemporalesMax),
+                };
+                delete consulta.especificas.rangoDientesTemporales;
+              }
+              if (consulta.especificas.rangoSellador) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  sellador: Between(consulta.especificas.rangoSellador.selladorMin, consulta.especificas.rangoSellador.selladorMax),
+                };
+                delete consulta.especificas.sellador;
+              }
+            }
+            const odontologiaData = await this.odontologiaORM.find({ where: consulta.especificas });
+            const resultadosOdontologia = consultas
+              .map((consulta) => {
+                const datosOdontologia = odontologiaData.find((odontologia) => odontologia.id_consulta === consulta.id);
+                return datosOdontologia ? { ...consulta, odontologia: datosOdontologia } : null;
+              })
+              .filter((consulta) => consulta !== null);
+            resultados.push(...resultadosOdontologia);
+            break;
+          case 'Oftalmologia':
+            console.log('Oftalmologia');
+            // Oftalmologia
+            if (consulta.especificas) {
+              if (consulta.especificas.rangoFechasProxControl) {
+                consulta.especificas = {
+                  ...consulta.especificas,
+                  prox_control: Between(consulta.especificas.rangoFechasProxControl[0], consulta.especificas.rangoFechasProxControl[1]),
+                };
+                delete consulta.especificas.rangoFechasProxControl;
+              }
+            }
+            const oftalmologiaData = await this.oftalmologiaORM.find({ where: consulta.especificas });
+            const resultadosOftalmologia = consultas
+              .map((consulta) => {
+                const datosOftalmologia = oftalmologiaData.find((oftalmologia) => oftalmologia.id_consulta === consulta.id);
+                return datosOftalmologia ? { ...consulta, oftalmologia: datosOftalmologia } : null;
+              })
+              .filter((consulta) => consulta !== null);
+            resultados.push(...resultadosOftalmologia);
+            break;
+          case 'Fonoaudiologia':
+            console.log('Fonoaudiologia');
+            // Fonoaudiologia
+            const fonoaudiologiaData = await this.fonoaudiologiaORM.find({ where: consulta.especificas });
+            const resultadosFonoaudiologia = consultas
+              .map((consulta) => {
+                const datosFonoaudiologia = fonoaudiologiaData.find((fonoaudiologia) => fonoaudiologia.id_consulta === consulta.id);
+                return datosFonoaudiologia ? { ...consulta, fonoaudiologia: datosFonoaudiologia } : null;
+              })
+              .filter((consulta) => consulta !== null);
+            resultados.push(...resultadosFonoaudiologia);
+            break;
+        }
       }
       return resultados;
     }
-    return consultas;
   }
 
   prepararDataConsultaPersonalizada(data) {
