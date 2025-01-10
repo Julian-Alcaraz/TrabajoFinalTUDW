@@ -104,8 +104,6 @@
 - [x] Buscar y filtrar la lista de consultas según varias características (como medico que atendio, tipo de consulta, rango de fechas, entre otras)
 - [x] Exportar las consultas buscasdas a un archivo Excel
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- CONTACT -->
 ## Contacto
 

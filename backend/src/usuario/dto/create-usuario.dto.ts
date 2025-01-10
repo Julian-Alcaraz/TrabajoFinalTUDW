@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, Length, IsInt, IsEmail, Min, Max, IsOptional, IsPositive, IsArray, ArrayNotEmpty, IsNumber, IsDate } from 'class-validator';
+import { IsString, IsNotEmpty, Length, IsInt, IsEmail, Min, Max, IsPositive, IsArray, ArrayNotEmpty, IsNumber, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 
@@ -37,7 +37,7 @@ export class CreateUsuarioDto {
   @Transform(({ value }) => value.trim())
   contrasenia: string; // no la hago readonly para poder modificarla en el caso de editar contraseña asi puedo hashear el valor
 
-  @ApiProperty({ description: 'Fecha nacimiento del chico.' })
+  @ApiProperty({ description: 'Fecha nacimiento del usuario' })
   @IsNotEmpty({ message: 'La fecha de no puede estar vacia' })
   @Type(() => Date)
   @IsDate({ message: 'La fecha de nacimiento no tiene formato correcto' })

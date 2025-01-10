@@ -50,6 +50,7 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
     this.dataSource = new MatTableDataSource(this.consultas);
     this.dataSource.sort = this.sort;
     this.identidad = this._sessionService.getIdentidad();
+    console.log(this.consultas);
     if (this.identidad?.roles_ids?.includes(GLOBAL.ID_ADMIN) || this.identidad?.roles_ids?.includes(GLOBAL.ID_PROFESIONAL)) {
       this.displayedColumns.push('accion');
     }

@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, Delete, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
 
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { OutputUsuarioDto } from './dto/output-usuario.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('usuario')
@@ -43,10 +45,10 @@ export class UsuarioController {
   @ApiOperation({ summary: 'Devuelve todos los usuarios ' })
   @ApiResponse({ status: 200, description: 'Retorna todos los usuarios habilitados con exito' })
   async findAll() {
-    const colUsuarios = await this.usuarioService.findAll();
+    const usuarios = plainToInstance(OutputUsuarioDto, await this.usuarioService.findAll());
     return {
       success: true,
-      data: colUsuarios,
+      data: usuarios,
       message: 'Usuarios obtenidos con exito',
     };
   }

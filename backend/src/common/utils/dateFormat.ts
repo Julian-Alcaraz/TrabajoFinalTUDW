@@ -1,5 +1,5 @@
 /** Formatea una fecha al formato DD-MM-YYYY */
-export function formatDate(date: Date): string {
+export function formatDate2(date: Date): string {
   return [
     date.getDate().toString().padStart(2, '0'), // Día
     (date.getMonth() + 1).toString().padStart(2, '0'), // Mes
@@ -8,7 +8,7 @@ export function formatDate(date: Date): string {
 }
 
 /** Formatea las fechas de un arreglo de objetos, los cuales tengan current_at como atributo */
-export function arrayFormatDate(arrayObj: any[]): any[] {
+export function arrayFormatDate2(arrayObj: any[]): any[] {
   if (arrayObj.length === 0) return arrayObj;
   if (!arrayObj[0].created_at) {
     return arrayObj;
@@ -19,7 +19,7 @@ export function arrayFormatDate(arrayObj: any[]): any[] {
   }));
 }
 /** Formatea las fechas de un objeto, los cuales tengan current_at como atributo */
-export function objectFormatDate(obj: any): any {
+export function objectFormatDate2(obj: any): any {
   if (!obj.created_at) {
     return obj;
   }

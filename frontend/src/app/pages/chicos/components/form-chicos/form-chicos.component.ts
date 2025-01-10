@@ -188,11 +188,19 @@ export class FormChicosComponent implements OnInit {
 
   completarDatosForm() {
     const stringFecha = String(this.chico?.fe_nacimiento);
+    // Utils!!!
     const parseToLocalDate = (dateString: string): Date => {
-      const [year, month, day] = dateString.split('-').map(Number);
+      const [day, month, year] = dateString.split('-').map(Number);
       return new Date(year, month - 1, day);
     };
     const fechaFinal = parseToLocalDate(stringFecha);
+
+
+    /*
+    const fecha1 = String(this.chico?.fe_nacimiento);
+    const fecha = new Date(fecha1);
+    */
+
     this.chicoForm.patchValue({
       nombre: this.chico?.nombre,
       apellido: this.chico?.apellido,

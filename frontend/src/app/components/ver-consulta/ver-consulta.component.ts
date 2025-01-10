@@ -27,6 +27,7 @@ export class VerConsultaComponent implements OnInit {
     private _consultaService: ConsultaService,
     private _sessionService: SessionService,
   ) {
+    console.log(data);
     this.isDialog = !data;
   }
   ngOnInit() {

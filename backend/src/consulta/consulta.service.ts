@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Between, EntityManager, IsNull, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { formatDate } from '../common/utils/dateFormat';
+// import { formatDate } from '../common/utils/dateFormat';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { Consulta } from './entities/consulta.entity';
@@ -122,7 +122,7 @@ export class ConsultaService {
     if (consulta) return { primera_vez: false };
     else return { primera_vez: true };
   }
-
+  /*
   // PODRIA MEJORARSE!!!!!!!!!!! O PASARSE A UTILS!!!!!!!!
   darFormatoFechaNacChico(consultas: any) {
     for (const consulta of consultas) {
@@ -140,12 +140,12 @@ export class ConsultaService {
       }
     }
   }
-
+  */
   async busquedaPersonalizada(data: any) {
     const consulta = this.prepararDataConsultaPersonalizada(data);
     const consultas = consulta.generales ? await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: consulta.generales }) : await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: { deshabilitado: false } });
 
-    this.darFormatoFechaNacChico(consultas);
+    // this.darFormatoFechaNacChico(consultas);
 
     if (!data.consultasSeleccionadas || data.consultasSeleccionadas.length === 0) {
       return this.procesarConsultasSinSeleccion(consultas, consulta);
@@ -217,6 +217,7 @@ export class ConsultaService {
       const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
       resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
     }
+    console.log(resultados);
     return resultados;
   }
 
@@ -286,7 +287,7 @@ export class ConsultaService {
       delete consulta.especificas.rangoFechasProxControl;
     }
     const consultasOftalmologia = await this.oftalmologiaORM.find({ where: consulta.especificas });
-    this.darFormatoFechaProxControl(consultasOftalmologia);
+    //this.darFormatoFechaProxControl(consultasOftalmologia);
     return consultasOftalmologia;
   }
 

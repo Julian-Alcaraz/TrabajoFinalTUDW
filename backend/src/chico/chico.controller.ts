@@ -1,11 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { plainToInstance } from 'class-transformer';
 
 import { ChicoService } from './chico.service';
 import { CreateChicoDto } from './dto/create-chico.dto';
 import { UpdateChicoDto } from './dto/update-chico.dto';
-import { arrayFormatDate } from 'src/common/utils/dateFormat';
+import { OutputChicoDto } from './dto/output-chico.dto';
+
+import { OutputConsultaDto } from 'src/consulta/dto/output-consulta.dto';
 
 @Controller('chico')
 @UseGuards(JwtAuthGuard)
@@ -31,13 +34,14 @@ export class ChicoController {
   @ApiOperation({ summary: 'Devuelve todos los chicos' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
   async findAll() {
-    const chicos = await this.chicoService.findAll();
+    const chicos = plainToInstance(OutputChicoDto, await this.chicoService.findAll());
     return {
       success: true,
       data: chicos,
       message: 'Chicos encontrados con exito',
     };
   }
+
   @Get('/activity/:year')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
@@ -49,12 +53,13 @@ export class ChicoController {
       message: 'Chicos encontrados con exito',
     };
   }
+
   @Get(':id')
   @ApiOperation({ summary: 'Devuelve el chico buscado' })
   @ApiResponse({ status: 200, description: 'Retorna el chico buscado con exito' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const chico = await this.chicoService.findOne(id);
+    const chico = plainToInstance(OutputChicoDto, await this.chicoService.findOne(id));
     return {
       success: true,
       data: chico,
@@ -113,13 +118,13 @@ export class ChicoController {
 
   @Get(':id/consultas')
   @ApiOperation({ summary: 'Devuelve las consultas a las que asistio el niño' })
-  @ApiResponse({ status: 200, description: 'Retorna las consultas del chhico' })
+  @ApiResponse({ status: 200, description: 'Retorna las consultas del chico' })
   @ApiResponse({ status: 404, description: 'Chico no encontrado' })
   async findChicosConsultas(@Param('id', ParseIntPipe) id: number) {
-    const consultas = await this.chicoService.findChicosConsultas(id);
+    const consultas = plainToInstance(OutputConsultaDto, await this.chicoService.findChicosConsultas(id));
     return {
       success: true,
-      data: arrayFormatDate(consultas),
+      data: consultas,
       message: 'Consultas encontradas por chico con exito',
     };
   }
