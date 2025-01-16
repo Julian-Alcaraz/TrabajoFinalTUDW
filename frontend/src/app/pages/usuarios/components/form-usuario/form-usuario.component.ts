@@ -95,7 +95,7 @@ export class FormUsuarioComponent implements OnInit {
           if (response.data) {
             this.usuarioActual = response.data;
           }
-          const stringFecha = String(this.usuarioActual?.fe_nacimiento) + 'T12:00:00';
+          const stringFecha = String(this.usuarioActual?.fe_nacimiento);
           this.userForm.patchValue({
             nombre: this.usuarioActual?.nombre,
             apellido: this.usuarioActual?.apellido,
@@ -203,7 +203,7 @@ export class FormUsuarioComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed && this.usuario) {
-          const stringFechaActual = String(new Date(String(this.usuarioActual?.fe_nacimiento) + 'T12:00:00'));
+          const stringFechaActual = String(new Date(String(this.usuarioActual?.fe_nacimiento)));
           const stringFechaMod = String(this.userForm.value.fe_nacimiento);
           const valorFecha = this.userForm.value.fe_nacimiento.toISOString();
           const data = {

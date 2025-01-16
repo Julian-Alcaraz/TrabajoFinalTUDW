@@ -38,7 +38,8 @@
     <!-- Fecha Nac. -->
     <ng-container matColumnDef="fechaNac">
       <th mat-header-cell *matHeaderCellDef>Fecha Nac. chico</th>
-      <td mat-cell *matCellDef="let element">{{ element.chico.fe_nacimiento | date: 'dd-MM-yyyy' }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.chico.fe_nacimiento }}</td>
+      <!-- Esta fecha no tiene formato creo, no se usa igualmente -->
     </ng-container>
     <!-- Sexo -->
     <ng-container matColumnDef="sexo">

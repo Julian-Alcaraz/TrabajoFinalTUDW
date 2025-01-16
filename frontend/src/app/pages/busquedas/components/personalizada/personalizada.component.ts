@@ -215,7 +215,6 @@ export class PersonalizadaComponent implements OnInit {
     // Falta hacer manejo de errores!!!!
     this._xlsxService.generarXlsx(this.resultados);
   }
-
 }
 
 function prepararData(data: any): any {

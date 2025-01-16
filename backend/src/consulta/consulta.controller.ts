@@ -6,7 +6,7 @@ import { ConsultaService } from './consulta.service';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { GraficosService } from './graficos.service';
-import { OutputConsultaDto } from './dto/output-consulta.dto';
+import { ResponseConsultaDto } from './dto/response-consulta.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Controller('consulta')
@@ -33,7 +33,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelte todas las consultas de una busqueda personalizada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async busquedaPersonalizada(@Body() data: any) {
-    const consultas = plainToInstance(OutputConsultaDto, await this.consultaService.busquedaPersonalizada(data));
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizada(data));
     return {
       success: true,
       data: consultas,
@@ -69,7 +69,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelte todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async findAllByYear(@Param('year', ParseIntPipe) year: number) {
-    const consultas = plainToInstance(OutputConsultaDto, await this.consultaService.findAllByYear(year));
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.findAllByYear(year));
     return {
       success: true,
       data: consultas,
@@ -93,7 +93,7 @@ export class ConsultaController {
   @ApiResponse({ status: 201, description: 'Consulta modificada con exito' })
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateConsultaDto: UpdateConsultaDto) {
-    const respuesta = plainToInstance(OutputConsultaDto, await this.consultaService.update(id, updateConsultaDto));
+    const respuesta = plainToInstance(ResponseConsultaDto, await this.consultaService.update(id, updateConsultaDto));
     return {
       success: true,
       data: respuesta,

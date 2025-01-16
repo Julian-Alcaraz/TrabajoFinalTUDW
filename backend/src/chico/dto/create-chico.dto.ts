@@ -52,6 +52,12 @@ export class CreateChicoDto {
   // @Transform(({ value }) => value.trim())
   readonly telefono: string;
 
+  @ApiProperty({ description: 'Id del barrio' })
+  @IsNotEmpty({ message: 'El id del barrio no puede estar vacio' })
+  @IsInt({ message: 'El id del barrio debe ser un entero' })
+  @IsPositive({ message: 'El id del barrio debe ser un numero positivo' })
+  readonly id_barrio: number;
+
   @ApiProperty({ description: 'Nombre madre del chico' })
   @IsOptional()
   @IsNotEmpty({ message: 'El nombre de la madre no puede estar vacio' })
@@ -69,10 +75,4 @@ export class CreateChicoDto {
   // Este transform da error cuando no se envia este dato opcional
   @Transform(({ value }) => value.trim())
   readonly nombre_padre?: string;
-
-  @ApiProperty({ description: 'Id del barrio' })
-  @IsNotEmpty({ message: 'El id del barrio no puede estar vacio' })
-  @IsInt({ message: 'El id del barrio debe ser un entero' })
-  @IsPositive({ message: 'El id del barrio debe ser un numero positivo' })
-  readonly id_barrio: number;
 }
