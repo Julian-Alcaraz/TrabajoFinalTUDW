@@ -16,14 +16,14 @@ export class CreateChicoDto {
   @ApiProperty({ description: 'Nombre del chico' })
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
-  @Length(3, 50, { message: 'El nombre debe tener entre 3 y 50 caracteres' })
+  @Length(1, 50, { message: 'El nombre debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly nombre: string;
 
   @ApiProperty({ description: 'Apellido del chico' })
   @IsNotEmpty({ message: 'El apellido no puede estar vacio' })
   @IsString({ message: 'El apellido debe ser un string' })
-  @Length(3, 50, { message: 'El apellido debe tener entre 3 y 50 caracteres' })
+  @Length(1, 50, { message: 'El apellido debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly apellido: string;
 
@@ -48,7 +48,7 @@ export class CreateChicoDto {
   @ApiProperty({ description: 'Telefono del chico' })
   @IsNotEmpty({ message: 'El telefono no puede estar vacio' })
   @IsString({ message: 'El telefono debe ser un string' })
-  @Length(1, 15, { message: 'El telefono debe tener entre 1 y 15 caracteres' })
+  @Length(8, 30, { message: 'El telefono debe tener entre 8 y 15 caracteres' })
   // @Transform(({ value }) => value.trim())
   readonly telefono: string;
 

@@ -64,7 +64,7 @@ export class NuevaClinicaComponent implements OnInit {
       infusiones: ['', [Validators.required]],
       cantidad_comidas: ['', [Validators.required]],
       alimentacion: ['', [Validators.required]],
-      hidratacion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      hidratacion: ['', [Validators.required]],
       horas_pantalla: ['', [Validators.required]],
       horas_juego_aire_libre: ['', [Validators.required]],
       horas_suenio: ['', [Validators.required]],

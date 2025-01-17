@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class Localidad extends EntidadBasica {
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 50 })
   nombre: string;
 
   @OneToMany(() => Barrio, (barrio) => barrio.localidad)

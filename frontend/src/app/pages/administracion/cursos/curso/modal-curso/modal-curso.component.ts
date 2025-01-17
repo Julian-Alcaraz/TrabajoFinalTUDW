@@ -32,8 +32,8 @@ export class ModalCursoComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalCursoComponent>,
   ) {
     this.cursoForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      nivel: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
+      nivel: ['', [Validators.required]],
     });
   }
 

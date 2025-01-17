@@ -66,12 +66,12 @@ export class FormChicosComponent implements OnInit {
     private _barrioService: BarrioService,
   ) {
     this.chicoForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
-      apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
+      apellido: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
       dni: ['', [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['', [Validators.required]],
       fe_nacimiento: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15), ValidarSoloNumeros]],
+      telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), ValidarSoloNumeros]],
       direccion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],

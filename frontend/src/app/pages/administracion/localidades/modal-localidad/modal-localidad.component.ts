@@ -29,7 +29,7 @@ export class ModalLocalidadComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalLocalidadComponent>,
   ) {
     this.localidadForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
     });
   }
 

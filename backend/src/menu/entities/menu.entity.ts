@@ -5,16 +5,16 @@ import { Rol } from '../../rol/entities/rol.entity';
 
 @Entity({ name: 'menu' })
 export class Menu extends EntidadBasica {
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 50 })
   label: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 50 })
   url: string;
 
   @Column({ type: 'int' })
   orden: number;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   icon: string;
 
   // Relaciones

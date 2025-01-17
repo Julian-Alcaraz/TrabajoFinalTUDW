@@ -6,16 +6,16 @@ import { Consulta } from '../../consulta/entities/consulta.entity';
 
 @Entity({ name: 'usuario' })
 export class Usuario extends EntidadBasica {
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 50 })
   nombre: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 50 })
   apellido: string;
 
   @Column({ type: 'int', unique: true })
   dni: number;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
   @Column({ type: 'varchar', length: 255 })

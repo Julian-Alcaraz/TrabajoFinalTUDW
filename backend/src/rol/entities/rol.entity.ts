@@ -6,7 +6,7 @@ import { Usuario } from '../../usuario/entities/usuario.entity';
 
 @Entity({ name: 'rol' })
 export class Rol extends EntidadBasica {
-  @Column({ type: 'varchar', length: 100 }) // , unique: true
+  @Column({ type: 'varchar', length: 50 }) // , unique: true
   nombre: string;
 
   // Relaciones

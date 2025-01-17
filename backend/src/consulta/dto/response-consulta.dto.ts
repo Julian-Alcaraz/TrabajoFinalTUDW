@@ -8,7 +8,7 @@ import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';
 
 export class ResponseConsultaDto {
-  @Transform(({ value }) => (value ? DateTime.fromISO(value, { zone: 'utc' }).toFormat('dd-MM-yyyy') : null))
+  @Transform(({ value }) => (value ? DateTime.fromISO(value.toISOString().slice(0, 10), { zone: 'utc' }).toFormat('dd-MM-yyyy') : null))
   readonly created_at: string;
 
   readonly type: ConsultaType;

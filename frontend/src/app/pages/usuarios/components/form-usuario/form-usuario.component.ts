@@ -50,10 +50,10 @@ export class FormUsuarioComponent implements OnInit {
     private _sessionService: SessionService,
   ) {
     this.userForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30), ValidarCadenaSinEspacios]],
-      apellido: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40), ValidarCadenaSinEspacios]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
+      apellido: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
       dni: ['', [Validators.required, ValidarDni]],
-      email: ['', [Validators.required, ValidarEmail, ValidarCadenaSinEspacios]],
+      email: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarEmail, ValidarCadenaSinEspacios]],
       fe_nacimiento: ['', [Validators.required]],
       roles_ids: this.fb.array([], Validators.required), // FormArray para role
     });

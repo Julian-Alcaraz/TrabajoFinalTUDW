@@ -6,14 +6,14 @@ export class CreateMenuDto {
   @ApiProperty({ description: 'Label del menu' })
   @IsNotEmpty({ message: 'El label no puede estar vacio' })
   @IsString({ message: 'El label debe ser un string' })
-  @Length(1, 100, { message: 'El label debe tener entre 1 y 100 caracteres' })
+  @Length(1, 50, { message: 'El label debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly label: string;
 
   @ApiProperty({ description: 'URL del menu' })
   @IsNotEmpty({ message: 'La URL no puede estar vacía' })
   @IsString({ message: 'La URL debe ser un string' })
-  @Length(1, 100, { message: 'La URL debe tener entre 1 y 100 caracteres' })
+  @Length(1, 50, { message: 'La URL debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly url: string;
 
@@ -33,6 +33,7 @@ export class CreateMenuDto {
 
   @ApiProperty({ description: 'Icon del menu' })
   @IsString({ message: 'El icon debe ser un string' })
+  @Length(1, 50, { message: 'El Icon debe tener entre 1 y 50 caracteres' })
   @IsOptional()
   @Transform(({ value }) => value.trim())
   readonly icon?: string;

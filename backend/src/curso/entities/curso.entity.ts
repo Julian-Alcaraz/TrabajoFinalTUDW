@@ -10,7 +10,7 @@ export class Curso extends EntidadBasica {
   @Column({ type: 'enum', enum: ['Jardin', 'Primario', 'Secundario'], nullable: false })
   nivel: nivelCurso;
 
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
   @OneToMany(() => Consulta, (consulta) => consulta.curso)

@@ -44,7 +44,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos Oftalmologia
-      demanda: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      demanda: ['', [Validators.required]],
       primera_vez: ['', [Validators.required]],
       control: ['', [Validators.required]],
       receta: ['', [Validators.required]],

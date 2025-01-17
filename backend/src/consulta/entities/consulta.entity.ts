@@ -28,7 +28,7 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'int', nullable: false })
   edad: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', length: 1000, nullable: true })
   observaciones: string;
 
   @Column({ type: 'simple-json', nullable: false })

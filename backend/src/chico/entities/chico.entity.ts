@@ -28,7 +28,7 @@ export class Chico extends EntidadBasica {
   @Column({ type: 'varchar', length: 255, nullable: true })
   direccion: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 30, nullable: true })
   telefono: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true, default: null })

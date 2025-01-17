@@ -6,14 +6,14 @@ export class CreateUsuarioDto {
   @ApiProperty({ description: 'Nombre del usuario' })
   @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
   @IsString({ message: 'El nombre debe ser un string' })
-  @Length(1, 100, { message: 'El nombre debe tener entre 1 y 100 caracteres' })
+  @Length(1, 50, { message: 'El nombre debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly nombre: string;
 
   @ApiProperty({ description: 'Apellido del usuario' })
   @IsNotEmpty({ message: 'El apellido no puede estar vacio' })
   @IsString({ message: 'El apellido debe ser un string' })
-  @Length(1, 100, { message: 'El apellido debe tener entre 1 y 100 caracteres' })
+  @Length(1, 50, { message: 'El apellido debe tener entre 1 y 50 caracteres' })
   @Transform(({ value }) => value.trim())
   readonly apellido: string;
 
@@ -28,6 +28,7 @@ export class CreateUsuarioDto {
   @ApiProperty({ description: 'Email del usuario' })
   @IsNotEmpty({ message: 'El email no puede estar vacio' })
   @IsEmail({}, { message: 'El email debe ser un email' })
+  @Length(1, 255, { message: 'El email debe tener entre 1 y 100 caracteres' })
   readonly email: string;
 
   @ApiProperty({ description: 'Contrasenia del usuario' })
