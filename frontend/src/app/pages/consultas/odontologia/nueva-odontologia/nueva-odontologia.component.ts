@@ -112,14 +112,9 @@ export class NuevaOdontologiaComponent implements OnInit {
           formValues.cepillo = formValues.cepillo === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
-          delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+          const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, derivacion_externa, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',
             turno,
@@ -129,7 +124,10 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
+            derivacion_odontologia: false,
+            derivacion_oftalmologia: false,
+            derivacion_fonoaudiologia: false,
             odontologia: {
               ...(habitos && { habitos }),
               ...odontologicaValues,
@@ -171,7 +169,7 @@ export class NuevaOdontologiaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
-    const derivacion = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
+    const derivacion = this.consulta?.derivacion_externa ? true : false;
     this.odontologiaForm.patchValue({
       observaciones: this.consulta?.observaciones,
       derivacion_externa: derivacion,
@@ -210,8 +208,8 @@ export class NuevaOdontologiaComponent implements OnInit {
     }
     const derivacion_externaForm = this.convertToBoolean(this.odontologiaForm.value.derivacion_externa);
     let derivacion_externaConsulta = false;
-    if (this.consulta?.derivaciones) {
-      derivacion_externaConsulta = this.consulta?.derivaciones.externa;
+    if (this.consulta?.derivacion_externa) {
+      derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
     const cepillo = this.convertToBoolean(this.odontologiaForm.value.cepillo);
     const cepillado = this.convertToBoolean(this.odontologiaForm.value.cepillado);
@@ -263,14 +261,9 @@ export class NuevaOdontologiaComponent implements OnInit {
           formValues.cepillo = formValues.cepillo === 'true';
           formValues.topificacion = formValues.topificacion === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
-          delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...odontologicaValues } = formValues;
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...odontologicaValues } = formValues;
           const data = {
             type: 'Odontologia',
             turno,
@@ -280,7 +273,7 @@ export class NuevaOdontologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
             odontologia: {
               ...odontologicaValues,
             },

@@ -38,15 +38,8 @@ export class CamposOftalmologiaComponent implements OnInit {
       control: new FormControl(),
       primera_vez: new FormControl(),
       anteojos: new FormControl(),
+      derivaciones: new FormControl(),
     });
-    const generalesGroup = this.form.get('generales') as FormGroup;
-    if (generalesGroup) {
-      generalesGroup.addControl('derivaciones', new FormControl());
-    } else {
-      console.error("El grupo 'generales' no existe o no es un FormGroup en el formulario padre.");
-    }
-    // VER DE SACAR ESTAS DERIVACIONES:!!!!!!!
-    this.form.addControl('derivaciones', new FormControl());
     this.form.addControl('especificas', this.especificas);
   }
 

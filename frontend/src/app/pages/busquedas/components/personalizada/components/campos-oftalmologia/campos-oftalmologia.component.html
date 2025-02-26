@@ -37,7 +37,7 @@
   <!-- Derivacion externa-->
   <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-multiselect [options]="derivacionesOptions" [filter]="false" [showHeader]="false" [formControl]="controlDeInput('derivaciones')" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
+      <p-multiselect [options]="derivacionesOptions" [filter]="false" [showHeader]="false" formControlName="derivaciones" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" />
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>

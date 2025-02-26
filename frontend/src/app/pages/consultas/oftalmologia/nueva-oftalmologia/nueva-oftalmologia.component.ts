@@ -121,15 +121,10 @@ export class NuevaOftalmologiaComponent implements OnInit {
           formValues.receta = formValues.receta === 'true';
           if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
           delete formValues.dni;
-          delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...oftalmologiaValues } = formValues;
           const data = {
             type: 'Oftalmologia',
             turno,
@@ -139,7 +134,10 @@ export class NuevaOftalmologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
+            derivacion_odontologia: false,
+            derivacion_oftalmologia: false,
+            derivacion_fonoaudiologia: false,
             oftalmologia: {
               ...oftalmologiaValues,
             },
@@ -170,9 +168,8 @@ export class NuevaOftalmologiaComponent implements OnInit {
   }
 
   completarCampos() {
-    const derivacion = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
+    const derivacion = this.consulta?.derivacion_externa ? true : false;
     const anteojos = this.consulta?.oftalmologia?.anteojos;
-
     const proximoControl = this.devolverFechaReal(this.consulta?.oftalmologia?.prox_control) + 'T12:00:00';
     this.oftalmologiaForm.patchValue({
       observaciones: this.consulta?.observaciones,
@@ -217,8 +214,8 @@ export class NuevaOftalmologiaComponent implements OnInit {
 
     const derivacion_externaForm = this.convertToBoolean(this.oftalmologiaForm.value.derivacion_externa);
     let derivacion_externaConsulta = false;
-    if (this.consulta?.derivaciones) {
-      derivacion_externaConsulta = this.consulta?.derivaciones.externa;
+    if (this.consulta?.derivacion_externa) {
+      derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
     const receta = this.convertToBoolean(this.oftalmologiaForm.value.receta);
     const anteojos = this.convertToBoolean(this.oftalmologiaForm.value.anteojos);
@@ -264,15 +261,10 @@ export class NuevaOftalmologiaComponent implements OnInit {
           formValues.receta = formValues.receta === 'true';
           if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
           delete formValues.dni;
-          delete formValues.derivacion_externa;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...oftalmologiaValues } = formValues;
+
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...oftalmologiaValues } = formValues;
           const data = {
             type: 'Oftalmologia',
             turno,
@@ -282,7 +274,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
             oftalmologia: {
               ...oftalmologiaValues,
             },

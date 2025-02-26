@@ -127,18 +127,9 @@ export class NuevaClinicaComponent implements OnInit {
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            odontologia: formValues.derivacion_odontologia,
-            oftalmologia: formValues.derivacion_oftalmologia,
-            fonoaudiologia: formValues.derivacion_fonoaudiologia,
-            externa: formValues.derivacion_externa,
-          };
-          delete formValues.derivacion_externa;
-          delete formValues.derivacion_fonoaudiologia;
-          delete formValues.derivacion_odontologia;
-          delete formValues.derivacion_oftalmologia;
+
           delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_odontologia, derivacion_oftalmologia, derivacion_fonoaudiologia, ...clinicaValues } = formValues;
           const data = {
             type: 'Clinica',
             turno,
@@ -148,13 +139,14 @@ export class NuevaClinicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
-            //...(Object.keys(derivaciones).length > 0 && derivaciones.constructor === Object && { derivaciones }),
+            derivacion_externa,
+            derivacion_odontologia,
+            derivacion_fonoaudiologia,
+            derivacion_oftalmologia,
             clinica: {
               ...clinicaValues,
             },
           };
-
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
               if (response.success) {
@@ -212,10 +204,10 @@ export class NuevaClinicaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
-    const derivacion_externa = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
-    const derivacion_odontologia = this.consulta?.derivaciones ? this.consulta?.derivaciones.odontologia : false;
-    const derivacion_oftalmologia = this.consulta?.derivaciones ? this.consulta?.derivaciones.oftalmologia : false;
-    const derivacion_fonoaudiologia = this.consulta?.derivaciones ? this.consulta?.derivaciones.fonoaudiologia : false;
+    const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
+    const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
+    const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
+    const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
     this.clinicaForm.patchValue({
       observaciones: this.consulta?.observaciones,
       peso: this.consulta?.clinica?.peso,
@@ -278,20 +270,20 @@ export class NuevaClinicaComponent implements OnInit {
     const derivacion_fonoaudiologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_fonoaudiologia);
     const derivacion_oftalmologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_oftalmologia);
     let derivacion_externaConsulta = false;
-    if (this.consulta?.derivaciones.externa) {
-      derivacion_externaConsulta = this.consulta?.derivaciones.externa;
+    if (this.consulta?.derivacion_externa) {
+      derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
     let derivacion_odontologiaConsulta = false;
-    if (this.consulta?.derivaciones.odontologia) {
-      derivacion_odontologiaConsulta = this.consulta?.derivaciones.odontologia;
+    if (this.consulta?.derivacion_odontologia) {
+      derivacion_odontologiaConsulta = this.consulta?.derivacion_odontologia;
     }
     let derivacion_fonoaudiologiaConsulta = false;
-    if (this.consulta?.derivaciones.fonoaudiologia) {
-      derivacion_fonoaudiologiaConsulta = this.consulta?.derivaciones.fonoaudiologia;
+    if (this.consulta?.derivacion_fonoaudiologia) {
+      derivacion_fonoaudiologiaConsulta = this.consulta?.derivacion_fonoaudiologia;
     }
     let derivacion_oftalmologiaConsulta = false;
-    if (this.consulta?.derivaciones.oftalmologia) {
-      derivacion_oftalmologiaConsulta = this.consulta?.derivaciones.oftalmologia;
+    if (this.consulta?.derivacion_oftalmologia) {
+      derivacion_oftalmologiaConsulta = this.consulta?.derivacion_oftalmologia;
     }
     const segto = this.convertToBoolean(this.clinicaForm.value.segto);
     const diabetes = this.convertToBoolean(this.clinicaForm.value.diabetes);
@@ -373,18 +365,9 @@ export class NuevaClinicaComponent implements OnInit {
           formValues.segto = formValues.segto === 'true';
           formValues.leche = formValues.leche === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            odontologia: formValues.derivacion_odontologia,
-            oftalmologia: formValues.derivacion_oftalmologia,
-            fonoaudiologia: formValues.derivacion_fonoaudiologia,
-            externa: formValues.derivacion_externa,
-          };
-          delete formValues.derivacion_externa;
-          delete formValues.derivacion_fonoaudiologia;
-          delete formValues.derivacion_odontologia;
-          delete formValues.derivacion_oftalmologia;
           delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...clinicaValues } = formValues;
+
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, ...clinicaValues } = formValues;
           const data = {
             type: 'Clinica',
             turno,
@@ -394,7 +377,10 @@ export class NuevaClinicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            ...(Object.keys(derivaciones).length > 0 && derivaciones.constructor === Object && { derivaciones }),
+            derivacion_externa,
+            derivacion_fonoaudiologia,
+            derivacion_odontologia,
+            derivacion_oftalmologia,
             clinica: {
               ...clinicaValues,
             },

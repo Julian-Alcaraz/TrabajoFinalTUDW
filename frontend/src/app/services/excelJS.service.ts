@@ -12,68 +12,75 @@ export class XlsxService {
   private consultasOdontologicas: any[] = [];
 
   async generarXlsx(consultas: any) {
-    this.prepararConsultas(consultas);
-    const encabezadosComunes = ['NOMBRE Y APELLIDO', 'DNI', 'FECHA', 'FECHA NAC.', 'SEXO', 'OBRA SOCIAL', 'DIRECCIÓN', 'BARRIO', 'TELÉFONO', 'NOMBRE PADRE', 'NOMBRE MADRE', 'EDAD', 'INSTITUCIÓN', 'SALA/GRADO', 'TURNO', 'PROFESIONAL'];
-    const workbook = new ExcelJS.Workbook();
-    // Clinica
-    if (this.consultasClinicas.length !== 0) {
-      const worksheetClinica = workbook.addWorksheet('Clinica');
-      // Encabezados
-      worksheetClinica.addRow([]);
-      worksheetClinica.addRow(encabezadosComunes.concat('ODONTOLOGÍA', 'FONOAUDIOLOGÍA', 'OFTALMOLOGÍA', 'LECHE', 'SEGTO', 'TA', 'PCTA', 'TAS', 'TAD', 'ESTADO NUTRICIONAL', 'PCIMC', 'IMC', 'CC (cm)', 'PCT (T/E)', 'TALLA (cm)', 'PESO (kg)', 'CP-BQ', 'CP-D', 'O', 'CP-OH', 'HTA', 'DBT', 'HIDRATACIÓN', 'SUEÑO', 'JUEGO AL AIRE LIBRE', 'PANTALLA', 'Nº COMIDAS AL DÍA', 'INFUSIONES', 'ALIMENTACIÓN', 'LENGUAJE', 'O Y T', 'EX. VISUAL', 'VACUNAS', 'ENF. PREVIAS', 'ANT. PERINATALES', 'OBSERVACIONES'));
-      // Datos
-      this.consultasClinicas.forEach((consulta) => {
-        worksheetClinica.addRow(Object.values(consulta));
-      });
+    try {
+      this.prepararConsultas(consultas);
+      const encabezadosComunes = ['NOMBRE Y APELLIDO', 'DNI', 'FECHA', 'FECHA NAC.', 'SEXO', 'OBRA SOCIAL', 'DIRECCIÓN', 'BARRIO', 'TELÉFONO', 'NOMBRE PADRE', 'NOMBRE MADRE', 'EDAD', 'INSTITUCIÓN', 'SALA/GRADO', 'TURNO', 'PROFESIONAL'];
+      const workbook = new ExcelJS.Workbook();
+      // Clinica
+      if (this.consultasClinicas.length !== 0) {
+        const worksheetClinica = workbook.addWorksheet('Clinica');
+        // Encabezados
+        worksheetClinica.addRow([]);
+        worksheetClinica.addRow(encabezadosComunes.concat('ODONTOLOGÍA', 'FONOAUDIOLOGÍA', 'OFTALMOLOGÍA', 'LECHE', 'SEGTO', 'TA', 'PCTA', 'TAS', 'TAD', 'ESTADO NUTRICIONAL', 'PCIMC', 'IMC', 'CC (cm)', 'PCT (T/E)', 'TALLA (cm)', 'PESO (kg)', 'CP-BQ', 'CP-D', 'O', 'CP-OH', 'HTA', 'DBT', 'HIDRATACIÓN', 'SUEÑO', 'JUEGO AL AIRE LIBRE', 'PANTALLA', 'Nº COMIDAS AL DÍA', 'INFUSIONES', 'ALIMENTACIÓN', 'LENGUAJE', 'O Y T', 'EX. VISUAL', 'VACUNAS', 'ENF. PREVIAS', 'ANT. PERINATALES', 'OBSERVACIONES'));
+        // Datos
+        this.consultasClinicas.forEach((consulta) => {
+          worksheetClinica.addRow(Object.values(consulta));
+        });
+      }
+      // Odontologia
+      if (this.consultasOdontologicas.length !== 0) {
+        const worksheetOdontologia = workbook.addWorksheet('Odontologia');
+        // Encabezados
+        worksheetOdontologia.addRow([]);
+        worksheetOdontologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'ULTERIOR', 'TOTAL PERMANENTES', 'TOTAL TEMPORARIOS', 'SELLADOR', 'TOPIFICACIÓN', 'ENS. CEPILLADO', 'DIENTE RECUPERABLE', 'DIENTES NO RECUPERABLE', 'CEPILLO', 'CLASIFICACIÓN', 'HÁBITOS', 'OBSERVACIONES'));
+        // Datos
+        this.consultasOdontologicas.forEach((consulta) => {
+          worksheetOdontologia.addRow(Object.values(consulta));
+        });
+      }
+      // Fonoaudiologia
+      if (this.consultasFonoaudiologicas.length !== 0) {
+        const worksheetFonoaudiologia = workbook.addWorksheet('Fonoaudiologia');
+        // Encabezados
+        worksheetFonoaudiologia.addRow([]);
+        worksheetFonoaudiologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'ASISTENCIA', 'DIAGNÓSTICO PRESUNTIVO', 'CAUSAS', 'OBSERVACIONES'));
+        // Datos
+        this.consultasFonoaudiologicas.forEach((consulta) => {
+          worksheetFonoaudiologia.addRow(Object.values(consulta));
+        });
+      }
+      // Oftalmologia
+      if (this.consultasOftalmologicas.length !== 0) {
+        const worksheetOftalmologia = workbook.addWorksheet('Oftalmologia');
+        // Encabezados
+        worksheetOftalmologia.addRow([]);
+        worksheetOftalmologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'CONTROL', 'DEMANDA', 'RECETA', 'PRÓX. CONTROL', 'ANTEOJOS', 'OBSERVACIONES'));
+        // Datos
+        this.consultasOftalmologicas.forEach((consulta) => {
+          worksheetOftalmologia.addRow(Object.values(consulta));
+        });
+      }
+      this.aplicarEstilos(workbook);
+      const buffer = await workbook.xlsx.writeBuffer();
+      // Fecha
+      const hoy = new Date();
+      const dia = hoy.getDate().toString().padStart(2, '0');
+      const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+      const anio = hoy.getFullYear();
+      // Hora
+      const horas = hoy.getHours();
+      const minutos = hoy.getMinutes().toString().padStart(2, '0');
+      const ampm = horas >= 12 ? 'PM' : 'AM';
+      const horas12 = (horas % 12 || 12).toString();
+      const segundos = hoy.getSeconds().toString().padStart(2, '0');
+      const nombreArchivo = `Consultas-${dia}_${mes}_${anio}, ${horas12}_${minutos}_${segundos}_${ampm}.xlsx`;
+      // Guardar archivo
+      saveAs(new Blob([buffer]), nombreArchivo);
+      return { success: true, message: 'XLS descargado con éxito' };
+    } catch (err) {
+      console.error('Error al generar el Excel:', err);
+      return { success: false, message: 'Error al generar el XLS ', err };
     }
-    // Odontologia
-    if (this.consultasOdontologicas.length !== 0) {
-      const worksheetOdontologia = workbook.addWorksheet('Odontologia');
-      // Encabezados
-      worksheetOdontologia.addRow([]);
-      worksheetOdontologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'ULTERIOR', 'TOTAL PERMANENTES', 'TOTAL TEMPORARIOS', 'SELLADOR', 'TOPIFICACIÓN', 'ENS. CEPILLADO', 'DIENTE RECUPERABLE', 'DIENTES NO RECUPERABLE', 'CEPILLO', 'CLASIFICACIÓN', 'HÁBITOS', 'OBSERVACIONES'));
-      // Datos
-      this.consultasOdontologicas.forEach((consulta) => {
-        worksheetOdontologia.addRow(Object.values(consulta));
-      });
-    }
-    // Fonoaudiologia
-    if (this.consultasFonoaudiologicas.length !== 0) {
-      const worksheetFonoaudiologia = workbook.addWorksheet('Fonoaudiologia');
-      // Encabezados
-      worksheetFonoaudiologia.addRow([]);
-      worksheetFonoaudiologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'ASISTENCIA', 'DIAGNÓSTICO PRESUNTIVO', 'CAUSAS', 'OBSERVACIONES'));
-      // Datos
-      this.consultasFonoaudiologicas.forEach((consulta) => {
-        worksheetFonoaudiologia.addRow(Object.values(consulta));
-      });
-    }
-    // Oftalmologia
-    if (this.consultasOftalmologicas.length !== 0) {
-      const worksheetOftalmologia = workbook.addWorksheet('Oftalmologia');
-      // Encabezados
-      worksheetOftalmologia.addRow([]);
-      worksheetOftalmologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'CONTROL', 'DEMANDA', 'RECETA', 'PRÓX. CONTROL', 'ANTEOJOS', 'OBSERVACIONES'));
-      // Datos
-      this.consultasOftalmologicas.forEach((consulta) => {
-        worksheetOftalmologia.addRow(Object.values(consulta));
-      });
-    }
-    this.aplicarEstilos(workbook);
-    const buffer = await workbook.xlsx.writeBuffer();
-    // Fecha
-    const hoy = new Date();
-    const dia = hoy.getDate().toString().padStart(2, '0');
-    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
-    const anio = hoy.getFullYear();
-    // Hora
-    const horas = hoy.getHours();
-    const minutos = hoy.getMinutes().toString().padStart(2, '0');
-    const ampm = horas >= 12 ? 'PM' : 'AM';
-    const horas12 = (horas % 12 || 12).toString();
-    const nombreArchivo = `Consultas-${dia}_${mes}_${anio}, ${horas12}_${minutos}_${ampm}.xlsx`;
-    // Guardar archivo
-    saveAs(new Blob([buffer]), nombreArchivo);
   }
 
   aplicarEstilos(workbook: any): void {
@@ -205,7 +212,7 @@ export class XlsxService {
 
   prepararConsultas(consultas: any) {
     consultas.map((consulta: any) => {
-      const { id, updated_at, obra_social, derivaciones, created_at, type, turno, edad, observaciones, chico, institucion, curso, usuario, fe_nacimiento, ...datosEspecificos } = consulta;
+      const { id, updated_at, obra_social, created_at, type, turno, edad, observaciones, chico, institucion, curso, usuario, fe_nacimiento, ...datosEspecificos } = consulta;
       const generales = {
         nombreYApellido: chico.nombre + ' ' + chico.apellido,
         dni: chico.dni,
@@ -228,9 +235,9 @@ export class XlsxService {
       switch (consulta.type) {
         case 'Clinica':
           especificos = {
-            derivacionOdontologia: derivaciones.odontologia ? 'Si' : 'No',
-            derivacionFonoaudiologia: derivaciones.fonoaudiologia ? 'Si' : 'No',
-            derivacionOftalmologia: derivaciones.oftalmologia ? 'Si' : 'No',
+            derivacionOdontologia: datosEspecificos.derivacion_odontologia ? 'Si' : 'No',
+            derivacionFonoaudiologia: datosEspecificos.derivacion_fonoaudiologia ? 'Si' : 'No',
+            derivacionOftalmologia: datosEspecificos.derivacion_oftalmologia ? 'Si' : 'No',
             leche: datosEspecificos.clinica.leche ? 'Si' : 'No',
             segto: datosEspecificos.clinica.segto ? 'Si' : 'No',
             ta: datosEspecificos.clinica.tension_arterial,
@@ -269,7 +276,7 @@ export class XlsxService {
           break;
         case 'Odontologia':
           especificos = {
-            derivacionExterna: derivaciones.externa ? 'Si' : 'No',
+            derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             primeraVez: datosEspecificos.odontologia.primera_vez ? 'Si' : 'No',
             ulterior: datosEspecificos.odontologia.ulterior ? 'Si' : 'No',
             dientesPermanentes: datosEspecificos.odontologia.dientes_permanentes,
@@ -288,12 +295,12 @@ export class XlsxService {
           break;
         case 'Oftalmologia':
           especificos = {
-            derivacionExterna: derivaciones.externa ? 'Si' : 'No',
+            derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             primeraVez: datosEspecificos.oftalmologia.primera_vez ? 'Si' : 'No',
             control: datosEspecificos.oftalmologia.control ? 'Si' : 'No',
             demanda: datosEspecificos.oftalmologia.demanda,
             receta: datosEspecificos.oftalmologia.receta ? 'Si' : 'No',
-            proxControl: datosEspecificos.oftalmologia.prox_control,
+            proxControl: datosEspecificos.oftalmologia.prox_control, // DAR FORMATO A ESTA FECHA!!!
             anteojos: datosEspecificos.oftalmologia.anteojos !== null ? (datosEspecificos.oftalmologia.anteojos === true ? 'Si' : 'No') : '-',
             observaciones: observaciones || '-',
           };
@@ -301,7 +308,7 @@ export class XlsxService {
           break;
         case 'Fonoaudiologia':
           especificos = {
-            derivacionExterna: derivaciones.externa ? 'Si' : 'No',
+            derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             asistencia: datosEspecificos.fonoaudiologia.asistencia ? 'Si' : 'No',
             diagnosticoPresuntivo: datosEspecificos.fonoaudiologia.diagnostico_presuntivo,
             causas: datosEspecificos.fonoaudiologia.causas,

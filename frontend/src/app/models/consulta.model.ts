@@ -21,6 +21,10 @@ export class Consulta {
     public edad: number,
     public id_chico: number,
     public id_institucion: number,
+    public derivacion_externa: boolean,
+    public derivacion_oftalmologia: boolean,
+    public derivacion_fonoaudiologia: boolean,
+    public derivacion_odontologia: boolean,
     public odontologia?: Odontologia,
     public oftalmologia?: Oftalmologia,
     public fonoaudiologia?: Fonoaudiologia,
@@ -31,11 +35,10 @@ export class Consulta {
     public curso?: Curso,
     public observaciones?: string,
     public obra_social?: string,
-    public derivaciones?: any,
     // {externa:boolean,clinica:boolean}
   ) {}
 
   static overload_constructor() {
-    return new Consulta(0, new Date(), new Date(), false, 'Clinica', 'Mañana', 0, 0, 0);
+    return new Consulta(0, new Date(), new Date(), false, 'Clinica', 'Mañana', 0, 0, 0, false, false, false, false);
   }
 }

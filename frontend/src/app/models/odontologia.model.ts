@@ -8,7 +8,6 @@ export class Odontologia {
     public sellador: number,
     public topificacion: boolean,
     public cepillado: boolean,
-    // public derivacion: boolean,
     public dientes_recuperables: number,
     public dientes_irecuperables: number,
     public cepillo: boolean,

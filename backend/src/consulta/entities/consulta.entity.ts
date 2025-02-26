@@ -12,7 +12,6 @@ import { Curso } from '../../curso/entities/curso.entity';
 
 export type ConsultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
 export type TurnoType = 'Mañana' | 'Tarde' | 'Noche';
-export type DerivacionesType = { odontologia: boolean; oftalmologia: boolean; fonoaudiologia: boolean; externa: boolean };
 
 @Entity('consulta')
 export class Consulta extends EntidadBasica {
@@ -31,8 +30,17 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'varchar', length: 1000, nullable: true })
   observaciones: string;
 
-  @Column({ type: 'simple-json', nullable: false })
-  derivaciones: DerivacionesType;
+  @Column({ type: 'boolean' })
+  derivacion_oftalmologia: boolean;
+
+  @Column({ type: 'boolean' })
+  derivacion_odontologia: boolean;
+
+  @Column({ type: 'boolean' })
+  derivacion_fonoaudiologia: boolean;
+
+  @Column({ type: 'boolean' })
+  derivacion_externa: boolean;
 
   // Relaciones
 

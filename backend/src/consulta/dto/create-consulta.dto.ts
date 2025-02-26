@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsObject, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 
-import { ConsultaType, DerivacionesType, TurnoType } from '../entities/consulta.entity';
+import { ConsultaType, TurnoType } from '../entities/consulta.entity';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
 import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';
-import { DerivacionesDto } from './derivaciones.dto';
 
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
@@ -49,11 +48,25 @@ export class CreateConsultaDto {
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly id_curso: number;
 
-  @ApiProperty({ description: 'Derivaciones de la consulta' })
-  @IsObject({ message: 'Las derivaciones deben ser un objeto' })
-  @ValidateNested()
-  @Type(() => DerivacionesDto)
-  readonly derivaciones: DerivacionesType;
+  @ApiProperty({ description: 'Derivacion oftalmologia de la consulta' })
+  @IsNotEmpty({ message: 'La derivacion oftalmologia no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion oftalmologia debe ser un boolean' })
+  readonly derivacion_oftalmologia: boolean;
+
+  @ApiProperty({ description: 'Derivacion odontologia de la consulta' })
+  @IsNotEmpty({ message: 'La derivacion odontologia no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion odontologia debe ser un boolean' })
+  readonly derivacion_odontologia: boolean;
+
+  @ApiProperty({ description: 'Derivacion fonoaudiologia de la consulta' })
+  @IsNotEmpty({ message: 'La derivacion fonoaudiologia no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion fonoaudiologia debe ser un boolean' })
+  readonly derivacion_fonoaudiologia: boolean;
+
+  @ApiProperty({ description: 'Derivacion externa de la consulta' })
+  @IsNotEmpty({ message: 'La derivacion externa no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion externa debe ser un boolean' })
+  readonly derivacion_externa: boolean;
 
   @ApiProperty({ description: 'Observaciones de la consulta' })
   @IsString({ message: 'Las Observaciones debe ser un string' })

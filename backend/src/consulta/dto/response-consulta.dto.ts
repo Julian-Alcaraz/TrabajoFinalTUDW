@@ -1,11 +1,11 @@
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { DateTime } from 'luxon';
 
-import { ConsultaType, DerivacionesType, TurnoType } from '../entities/consulta.entity';
+import { ConsultaType, TurnoType } from '../entities/consulta.entity';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
-import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';
+import { ResponseOftalmologiaDto } from './response-oftalmologia.dto';
 
 export class ResponseConsultaDto {
   @Transform(({ value }) => (value ? DateTime.fromISO(value.toISOString().slice(0, 10), { zone: 'utc' }).toFormat('dd-MM-yyyy') : null))
@@ -18,11 +18,15 @@ export class ResponseConsultaDto {
   readonly id_chico: number;
   readonly id_institucion: number;
   readonly id_curso: number;
-  readonly derivaciones: DerivacionesType;
+  readonly derivacion_oftalmologia: boolean;
+  readonly derivacion_odontologia: boolean;
+  readonly derivacion_fonoaudiologia: boolean;
+  readonly derivacion_externa: boolean;
   readonly observaciones?: string;
 
+  @Type(() => ResponseOftalmologiaDto)
+  public oftalmologia?: ResponseOftalmologiaDto;
   public clinica?: CreateClinicaDto;
   public fonoaudiologia?: CreateFonoaudiologiaDto;
-  public oftalmologia?: CreateOftalmologiaDto;
   public odontologia?: CreateOdontologiaDto;
 }

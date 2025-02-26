@@ -3,13 +3,6 @@ import { setSeederFactory } from 'typeorm-extension';
 
 import { Consulta } from '../../consulta/entities/consulta.entity';
 
-type DerivacionesType = {
-  odontologia: boolean;
-  oftalmologia: boolean;
-  fonoaudiologia: boolean;
-  externa: boolean;
-};
-
 const observacionesClinica = [
   'No se dejó medir la TA',
   'No se dejó medir el abdomen',
@@ -222,12 +215,11 @@ export const ConsultaFactory = setSeederFactory(Consulta, async () => {
 
   const types = [ConsultaType.Clinica, ConsultaType.Fonoaudiologia, ConsultaType.Oftalmologia, ConsultaType.Odontologia];
   consulta.type = types[Math.floor(Math.random() * types.length)];
-  const derivaciones: DerivacionesType = {
-    odontologia: Math.random() > 0.5,
-    oftalmologia: Math.random() > 0.5,
-    fonoaudiologia: Math.random() > 0.5,
-    externa: Math.random() > 0.5,
-  };
+
+  consulta.derivacion_externa = Math.random() > 0.5;
+  consulta.derivacion_fonoaudiologia = Math.random() > 0.5;
+  consulta.derivacion_odontologia = Math.random() > 0.5;
+  consulta.derivacion_oftalmologia = Math.random() > 0.5;
 
   if (consulta.type === 'Clinica') {
     consulta.observaciones = Math.random() > 0.5 ? faker.helpers.arrayElement(observacionesClinica) : null;
@@ -238,8 +230,5 @@ export const ConsultaFactory = setSeederFactory(Consulta, async () => {
   } else if (consulta.type === 'Oftalmologia') {
     consulta.observaciones = Math.random() > 0.5 ? faker.helpers.arrayElement(observacionesOftalmologia) : null;
   }
-
-  // consulta.observaciones = Math.random() > 0.5 ? faker.word.words({ count: { min: 50, max: 1000 } }) : null;
-  consulta.derivaciones = derivaciones;
   return consulta;
 });

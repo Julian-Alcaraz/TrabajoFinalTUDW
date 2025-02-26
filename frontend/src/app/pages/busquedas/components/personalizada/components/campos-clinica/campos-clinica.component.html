@@ -180,7 +180,7 @@
   <!-- Derivaciones -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-multiselect [options]="derivacionesOptionsClinica" [formControl]="controlDeInput('derivaciones')" [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full h-16" [filter]="false" [showHeader]="false" />
+      <p-multiselect [options]="derivacionesOptionsClinica" formControlName="derivaciones" [maxSelectedLabels]="3" optionLabel="nombre" optionValue="valor" display="chip" styleClass="w-full h-16" [filter]="false" [showHeader]="false" />
       <label for="derivaciones">Derivaciones</label>
     </p-iftalabel>
   </div>

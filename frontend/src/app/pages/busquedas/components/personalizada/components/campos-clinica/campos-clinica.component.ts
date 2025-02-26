@@ -106,15 +106,8 @@ export class CamposClinicaComponent implements OnInit {
       horas_suenio: new FormControl(),
       tension_arterial: new FormControl(),
       estado_nutricional: new FormControl(),
+      derivaciones: new FormControl(),
     });
-    const generalesGroup = this.form.get('generales') as FormGroup;
-    if (generalesGroup) {
-      generalesGroup.addControl('derivaciones', new FormControl());
-    } else {
-      console.error("El grupo 'generales' no existe o no es un FormGroup en el formulario padre.");
-    }
-    // VER DE SACAR ESTAS DERIVACIONES:!!!!!!!
-    this.form.addControl('derivaciones', new FormControl());
     this.form.addControl('especificas', this.especificas);
   }
 

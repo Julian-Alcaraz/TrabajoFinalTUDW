@@ -31,6 +31,7 @@ import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologi
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 import { XlsxService } from '../../../../services/excelJS.service';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-personalizada',
@@ -122,7 +123,6 @@ export class PersonalizadaComponent implements OnInit {
 
   onChangeTipoConsulta() {
     this.formBusqueda.removeControl('especificas');
-    this.formBusqueda.get('derivaciones')?.reset();
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
     }
@@ -207,57 +207,54 @@ export class PersonalizadaComponent implements OnInit {
   limpiarFormsEspecificos() {
     if (this.formBusqueda.get('especificas')?.value !== null) {
       this.formBusqueda.get('especificas')?.reset();
-      this.formBusqueda.get('derivaciones')?.reset();
     }
   }
 
   exportarXLS() {
-    // Falta hacer manejo de errores!!!!
-    this._xlsxService.generarXlsx(this.resultados);
+    this.generandoArchivo = true;
+    from(this._xlsxService.generarXlsx(this.resultados)).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+          this.generandoArchivo = false;
+        }
+      },
+      error: (err) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.generandoArchivo = false;
+      },
+    });
   }
 }
 
 function prepararData(data: any): any {
-  let derivaciones;
-  if (data.derivaciones !== '' && data.derivaciones) {
-    derivaciones = data.derivaciones?.reduce((acc: any, item: any) => {
-      // FUNCIONA PERO COMPARA TODO.
-      acc.odontologia = acc.odontologia || item.odontologia || false;
-      acc.oftalmologia = acc.oftalmologia || item.oftalmologia || false;
-      acc.fonoaudiologia = acc.fonoaudiologia || item.fonoaudiologia || false;
-      acc.externa = acc.externa || item.externa || false;
+  if ((data.derivaciones !== '' && data.derivaciones) || (data.especificas?.derivaciones !== '' && data.especificas?.derivaciones)) {
+    let derivacion_odontologia, derivacion_oftalmologia, derivacion_fonoaudiologia, derivacion_externa;
+    for (const der of data.especificas.derivaciones) {
+      if (der.fonoaudiologia) {
+        derivacion_fonoaudiologia = der.fonoaudiologia;
+        console.log('fonoaudiologia', derivacion_fonoaudiologia);
+      }
+      if (der.odontologia) {
+        derivacion_odontologia = der.odontologia;
+        console.log('odontologia', derivacion_odontologia);
+      }
+      if (der.oftalmologia) {
+        derivacion_oftalmologia = der.oftalmologia;
+        console.log('oftalmologia', derivacion_oftalmologia);
+      }
+      if (der.externa) {
+        derivacion_externa = der.externa;
+        console.log('externa', derivacion_externa);
+      }
+    }
 
-      // Solo si no se selecciona clinica se incluye externa!!!!!!!!!!!!!
-      // if (!formValues.consultasSeleccionadas?.includes('Clinica')) {
-      //   acc.Externa = acc.Externa || item.Externa || false;
-      // }
-      return acc;
-    }, {});
-    // OTRO INTENTO:
-    /*
-      const derivaciones2 = data.derivaciones?.reduce((acc: any, item: any) => {
-        // Inicializamos `acc` como un objeto vacío si es la primera iteración
-        acc = acc || {};
-        // Solo agregamos al acumulador las propiedades con valor `true`
-        if (item.odontologia) {
-          acc.odontologia = true;
-        }
-        if (item.oftalmologia) {
-          acc.oftalmologia = true;
-        }
-        if (item.fonoaudiologia) {
-          acc.fonoaudiologia = true;
-        }
-        if (item.externa) {
-          acc.externa = true;
-        }
-        return acc;
-      }, {}); // Inicializamos `acc` como un objeto vacío al comienzo
-      */
-    data.generales.derivaciones = derivaciones;
-    delete data.derivaciones;
-  } else if (data.generales.derivaciones) {
-    delete data.generales.derivaciones;
+    data.generales.derivacion_odontologia = derivacion_odontologia;
+    data.generales.derivacion_oftalmologia = derivacion_oftalmologia;
+    data.generales.derivacion_fonoaudiologia = derivacion_fonoaudiologia;
+    data.generales.derivacion_externa = derivacion_externa;
+
+    delete data.especificas.derivaciones;
   }
   if (data.generales.rangoFechas) {
     const fechaFin = new Date(data.generales.rangoFechas[1]);

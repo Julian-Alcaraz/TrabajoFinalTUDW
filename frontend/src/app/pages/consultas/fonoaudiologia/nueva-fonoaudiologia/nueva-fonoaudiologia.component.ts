@@ -80,15 +80,9 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
-          delete formValues.derivacion_externa;
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
           delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
           const data = {
             type: 'Fonoaudiologia',
             turno,
@@ -98,7 +92,10 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
+            derivacion_odontologia: false,
+            derivacion_oftalmologia: false,
+            derivacion_fonoaudiologia: false,
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },
@@ -130,7 +127,8 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
-    const derivacion = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
+    // const derivacion = this.consulta?.derivaciones ? this.consulta?.derivaciones.externa : false;
+    const derivacion = this.consulta?.derivacion_externa ? true : false;
     this.fonoaudiologiaForm.patchValue({
       observaciones: this.consulta?.observaciones,
       derivacion_externa: derivacion,
@@ -164,8 +162,8 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
 
     const derivacion_externaForm = this.convertToBoolean(this.fonoaudiologiaForm.value.derivacion_externa);
     let derivacion_externaConsulta = false;
-    if (this.consulta?.derivaciones) {
-      derivacion_externaConsulta = this.consulta?.derivaciones.externa;
+    if (this.consulta?.derivacion_externa) {
+      derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
     const asistencia = this.convertToBoolean(this.fonoaudiologiaForm.value.asistencia);
     if (hayCambios) {
@@ -208,15 +206,10 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
           const formValues = this.fonoaudiologiaForm.value;
           formValues.asistencia = formValues.asistencia === 'true';
           formValues.obra_social = formValues.obra_social === 'true';
-          const derivaciones = {
-            externa: formValues.derivacion_externa === 'true',
-            odontologia: false,
-            oftalmologia: false,
-            fonoaudiologia: false,
-          };
-          delete formValues.derivacion_externa;
+          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
           delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, ...fonoaudiologiaValues } = formValues;
+          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
           const data = {
             type: 'Fonoaudiologia',
             turno,
@@ -226,7 +219,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
             id_chico: id_chico,
             id_institucion: parseInt(id_institucion),
             id_curso: parseInt(id_curso),
-            derivaciones,
+            derivacion_externa,
             fonoaudiologia: {
               ...fonoaudiologiaValues,
             },
