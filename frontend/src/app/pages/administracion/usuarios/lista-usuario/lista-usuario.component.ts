@@ -23,11 +23,12 @@ import { LoadingComponent } from '@components/loading/loading.component';
 import { Rol } from '@models/rol.model';
 import { ModalUsuarioComponent } from '../modal-usuario/modal-usuario.component';
 import { NuevoUsuarioComponent } from '../nuevo-usuario/nuevo-usuario.component';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-lista-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSortModule, TagModule, MatTableModule, MatPaginator, MatPaginatorModule, LoadingComponent, TooltipModule, IftaLabelModule, InputNumberModule, InputTextModule, SelectModule],
+  imports: [CommonModule, ReactiveFormsModule, PanelModule, MatSortModule, TagModule, MatTableModule, MatPaginator, MatPaginatorModule, LoadingComponent, TooltipModule, IftaLabelModule, InputNumberModule, InputTextModule, SelectModule],
   templateUrl: './lista-usuario.component.html',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
@@ -41,7 +42,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   public roles!: Rol[];
   public resultsLength = 0;
   public searching = false;
-
+  public colapsarPaneles = true;
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
     { nombre: 'Deshabilitado', valor: true },

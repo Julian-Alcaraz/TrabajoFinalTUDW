@@ -35,11 +35,12 @@ import { Usuario } from '@models/usuario.model';
 import { LocalidadService } from '@services/localidad.service';
 import { Localidad } from '@models/localidad.model';
 import { GLOBAL } from '@config/global';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-lista-chico',
   standalone: true,
-  imports: [CommonModule, IconFieldModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule, MatSortModule, TagModule],
+  imports: [CommonModule, IconFieldModule, PanelModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule, MatSortModule, TagModule],
   templateUrl: './lista-chico.component.html',
   styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -81,6 +82,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
   public mensajes = '';
+  public colapsarPaneles = true;
 
   constructor(
     private _localidadService: LocalidadService,

@@ -23,6 +23,6 @@ export class MiUsuarioComponent implements OnInit {
     this.identidad = this._sessionService.getIdentidad();
   }
   abrirModal() {
-    this._dialog.open(CambiarContraseniaComponent, { minWidth: '40%' });
+    this._dialog.open(CambiarContraseniaComponent, { minWidth: '40%', maxWidth: '100%' });
   }
 }

@@ -84,7 +84,7 @@ export class NavBarComponent implements OnInit {
   }
   obligarCambioContrasenia() {
     if (this.identidad?.cambioContrasenia) {
-      this._dialog.open(CambiarContraseniaComponent, { minWidth: '40%', disableClose: true, data: { cambioObligatorio: true } });
+      this._dialog.open(CambiarContraseniaComponent, { minWidth: '40%', maxWidth: '100%', disableClose: true, data: { cambioObligatorio: true } });
     }
   }
   toggleCollapsed() {

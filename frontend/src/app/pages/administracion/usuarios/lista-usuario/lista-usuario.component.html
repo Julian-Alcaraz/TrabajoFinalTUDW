@@ -1,46 +1,54 @@
 <div class="card">
-  <div class="card-header">Usuarios</div>
+  <div class="card-header">
+    <div class="flex justify-between items-center">
+      <span> Usuarios </span>
+      <button aria-label="Botón de nuevo barrio" type="button" (click)="crearUsuario()" class="flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-3 py-2 text-center disabled:bg-gray-400">
+        <i class="pi pi-plus"></i>
+      </button>
+    </div>
+  </div>
   <div class="card-body">
-    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-2 ml-1">
-      <p class="mb-4">Puedes usar los siguientes filtros para buscar los usuarios cargados en el sistema.</p>
-      <!-- Botón nuevo -->
-      <div class="flex justify-end items-center">
-        <button aria-label="Botón de nuevo barrio" type="button" (click)="crearUsuario()" class="flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-3 py-2 text-center disabled:bg-gray-400">
-          <i class="pi pi-plus"></i>
-        </button>
+    <!-- Botón nuevo -->
+
+    <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header">
+      <ng-template pTemplate="header">
+        <div class="flex justify-center w-full gap-2 cursor-pointer">
+          <h3 class="mr-auto text-lg font-semibold my-4">Filtros</h3>
+        </div>
+      </ng-template>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
+        <!-- DNI -->
+        <div class="sm:col-span-1 md:col-span-1">
+          <p-iftalabel>
+            <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full p-inputNumberSolution" />
+            <label for="filtroDni">DNI</label>
+          </p-iftalabel>
+        </div>
+        <!-- Nombre -->
+        <div class="sm:col-span-1 md:col-span-1">
+          <p-iftalabel>
+            <input type="text" pInputText (keyup)="applyFilter($event)" #filtroNombre id="filtroNombre" class="w-full" />
+            <label for="filtroNombre">Nombre</label>
+          </p-iftalabel>
+        </div>
+        <!-- Apellido -->
+        <div class="sm:col-span-1 md:col-span-1">
+          <p-iftalabel>
+            <input type="text" pInputText (keyup)="applyFilter($event)" #filtroApellido id="filtroApellido" class="w-full" />
+            <label for="filtroApellido">Apellido</label>
+          </p-iftalabel>
+        </div>
+        <!-- Estado -->
+        <div class="sm:col-span-1 md:col-span-1">
+          <p-iftalabel>
+            <p-select [options]="estadoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
+            <label for="filtroEstado">Estado</label>
+          </p-iftalabel>
+        </div>
       </div>
-    </div>
-    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 my-2 ml-1">
-      <!-- DNI -->
-      <div class="sm:col-span-1 md:col-span-1">
-        <p-iftalabel>
-          <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full p-inputNumberSolution" />
-          <label for="filtroDni">DNI</label>
-        </p-iftalabel>
-      </div>
-      <!-- Nombre -->
-      <div class="sm:col-span-1 md:col-span-1">
-        <p-iftalabel>
-          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroNombre id="filtroNombre" class="w-full" />
-          <label for="filtroNombre">Nombre</label>
-        </p-iftalabel>
-      </div>
-      <!-- Apellido -->
-      <div class="sm:col-span-1 md:col-span-1">
-        <p-iftalabel>
-          <input type="text" pInputText (keyup)="applyFilter($event)" #filtroApellido id="filtroApellido" class="w-full" />
-          <label for="filtroApellido">Apellido</label>
-        </p-iftalabel>
-      </div>
-      <!-- Estado -->
-      <div class="sm:col-span-1 md:col-span-1">
-        <p-iftalabel>
-          <p-select [options]="estadoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
-          <label for="filtroEstado">Estado</label>
-        </p-iftalabel>
-      </div>
-    </div>
-    <div class="scroll">
+    </p-panel>
+
+    <div class="scroll mt-2">
       <table mat-table [dataSource]="usuarios" class="mat-elevation-z8 table-auto scroll" matSort (matSortChange)="announceSortChange($event)">
         <!-- # -->
         <ng-container matColumnDef="numero">
