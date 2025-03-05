@@ -283,6 +283,14 @@ export class MainSeeder implements Seeder {
           roles: [roles[0]],
           menu_padre: menus[3],
         },
+        {
+          url: 'administracion/datos',
+          label: 'Datos',
+          orden: 12,
+          icon: 'fa-solid fa-file-import',
+          roles: [roles[0]],
+          menu_padre: menus[3],
+        },
       ]);
       await menuORM.save(menusAdmin);
 
