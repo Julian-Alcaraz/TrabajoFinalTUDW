@@ -3,30 +3,47 @@
     <span>Importar archivos</span>
   </div>
   <div class="card-body">
-    <h2>Cargue el archivo de consultas que desee</h2>
-    <div>
+    <h2 class="fs-10">Cargue el archivo de consultas que desee</h2>
+    <div class="flex">
       <app-input-file idInput="clinica" [control]="clinicaFileControl" label="Clinica" />
-      <button class="py-1 m-2 px-2 rounded bg-blue-600 disabled:bg-gray-400" [disabled]="clinicaFileControl.errors">Cargar</button>
+      <div class="mt-7">
+        <button (click)="cargarArchivoClinica()" [class]="loading ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="clinicaFileControl.errors || loading">
+          <span class="flex flex-row items-center">
+            Cargar
+            <div class="mx-1 w-5 absolute right-0" *ngIf="loading">
+              <app-loading />
+            </div>
+          </span>
+        </button>
+      </div>
     </div>
     <hr />
-    <div>
+    <div class="flex">
       <app-input-file idInput="odontologia" [control]="odontologiaFileControl" label="Odontologia" />
-      <button class=" py-1 m-2 px-2 rounded bg-blue-600 disabled:bg-gray-400" [disabled]="odontologiaFileControl.errors">Cargar</button>
+      <div class="mt-7">
+        <button class="font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="odontologiaFileControl.errors || loading">Cargar</button>
+      </div>
     </div>
     <hr />
-    <div>
+    <div class="flex">
       <app-input-file idInput="fonoaudiologia" [control]="fonoaudiologiaFileControl" label="Fonoaudiologia" />
-      <button class=" py-1 m-2 px-2 rounded bg-blue-600 disabled:bg-gray-400" [disabled]="fonoaudiologiaFileControl.errors">Cargar</button>
+      <div class="mt-7">
+        <button class="font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="fonoaudiologiaFileControl.errors || loading">Cargar</button>
+      </div>
     </div>
     <hr />
-    <div>
+    <div class="flex">
       <app-input-file idInput="oftalmologia" [control]="oftalmologiaFileControl" label="Oftalmologia" />
-      <button class=" py-1 m-2 px-2 rounded bg-blue-600 disabled:bg-gray-400" [disabled]="oftalmologiaFileControl.errors">Cargar</button>
+      <div class="mt-7">
+        <button class="font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="oftalmologiaFileControl.errors || loading">Cargar</button>
+      </div>
     </div>
     <!-- <hr />
     <div>
       <app-input-file idInput="adicciones" [control]="adiccionFileControl" label="Adicciones" />
-      <button class=" py-1 m-2 px-2 rounded bg-blue-600 disabled:bg-gray-400" [disabled]="adiccionFileControl.errors">Cargar</button>
+      <div class="mt-auto">
+        <button class="py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="adiccionFileControl.errors">Cargar</button>
+      </div>
     </div> -->
   </div>
 </div>
