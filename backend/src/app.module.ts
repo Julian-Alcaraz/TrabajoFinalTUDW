@@ -14,6 +14,8 @@ import { CursoModule } from './curso/curso.module';
 import { InstitucionModule } from './institucion/institucion.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ProcesamientoModule } from './procesamiento/procesamiento.module';
+import { ServiceModule } from './common/services/service.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { join } from 'path';
     LocalidadModule,
     CursoModule,
     InstitucionModule,
+    ProcesamientoModule,
+    ServiceModule,
   ],
   controllers: [],
   providers: [],
