@@ -1,11 +1,9 @@
-export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
-export type Turno = 'Mañana' | 'Tarde' | 'Noche';
-export type Demanda = 'Control niño sano' | 'Docente' | 'Familiar' | 'Otro';
+import { DemandaType } from '@app/common/const/const';
 
 export class Oftalmologia {
   constructor(
     public id: number,
-    public demanda: Demanda,
+    public demanda: DemandaType,
     public primera_vez: boolean,
     public control: boolean,
     public receta: boolean,

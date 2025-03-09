@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 import { DateTime } from 'luxon';
 
-import { ConsultaType, TurnoType } from '../entities/consulta.entity';
+import { ConsultaType, TurnoType } from '../../common/const/const';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';

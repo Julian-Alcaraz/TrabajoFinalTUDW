@@ -14,7 +14,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   standalone: true,
   imports: [CommonModule, SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule],
   templateUrl: './campos-clinica.component.html',
-  styleUrl: './campos-clinica.component.css',
 })
 export class CamposClinicaComponent implements OnInit {
   @Input() form!: FormGroup;

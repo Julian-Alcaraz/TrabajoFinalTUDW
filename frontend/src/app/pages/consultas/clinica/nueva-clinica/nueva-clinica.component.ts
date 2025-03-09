@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional, ValidarNumerosFloat } from '@utils/validadores';
 import { ConsultaService } from '@services/consulta.service';
@@ -22,7 +23,6 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
-  styleUrl: './nueva-clinica.component.css',
 })
 export class NuevaClinicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
@@ -31,7 +31,7 @@ export class NuevaClinicaComponent implements OnInit {
   habilitarModificar = false;
 
   public clinicaForm: FormGroup;
-  public opcionesVacunas: string[] = ['Completo', 'Incompleto', 'Se desconoce'];
+  public con = Constantes;
 
   constructor(
     private fb: FormBuilder,

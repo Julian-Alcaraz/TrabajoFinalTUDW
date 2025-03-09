@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const'
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '@utils/validadores';
 import { ChicoService } from '@services/chico.service';
@@ -29,12 +30,12 @@ LO SAQUE PARA QUE EL ADMIN SOLO PUEDA CARGAR LOCALIDADES Y BARRIOS.
 SI SE DESCOMENTA HAY QUE VALIDAR LOS ROLES DEL USUARIO ANTES DE DEJAR CARGAR.
 
 */
+
 @Component({
   selector: 'app-form-chicos',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, InputTextComponent, InputNumberComponent, InputDateComponent, InputDateComponent, LoadingComponent, InputRadioComponent],
   templateUrl: './form-chicos.component.html',
-  styleUrl: './form-chicos.component.css',
 })
 export class FormChicosComponent implements OnInit {
   @Input() esFormulario = true;
@@ -54,6 +55,8 @@ export class FormChicosComponent implements OnInit {
   public mensajeValidando = '';
   public searchingLocalidades = false;
   public searchingBarrios = false;
+  public con = Constantes;
+
   @ViewChild('localidadModal') localidadModal!: TemplateRef<any>;
   @ViewChild('barrioModal') barrioModal!: TemplateRef<any>;
 
@@ -194,7 +197,6 @@ export class FormChicosComponent implements OnInit {
       return new Date(year, month - 1, day);
     };
     const fechaFinal = parseToLocalDate(stringFecha);
-
 
     /*
     const fecha1 = String(this.chico?.fe_nacimiento);

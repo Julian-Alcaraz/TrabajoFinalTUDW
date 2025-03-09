@@ -1,64 +1,64 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
-import { AlimentacionType, CantidadComidasType, ExamenVisualType, HidratacionType, HsJuegoAireLibreType, HsPantallaType, HsSuenioType, InfusionesType, LenguajeType, OrtopediaYTraumatologiaType, VacunasType } from '../entities/clinica.entity';
+import { VacunasType, VacunasEnum, ExamenVisualType, ExamenVisualEnum, OrtopediaYTraumatologiaType, OrtopediaYTraumatologiaEnum, LenguajeType, LenguajeEnum, AlimentacionType, AlimentacionEnum, InfusionesType, InfusionesEnum, CantidadComidasType, CantidadComidasEnum, HsPantallaType, HsPantallaEnum, HsJuegoAireLibreType, HsJuegoAireLibreEnum, HsSuenioType, HsSuenioEnum, HidratacionType, HidratacionEnum } from '../../common/const/const';
 // TA se calcula
 // Estado nutricional se calcula y se guarda.
 // imc no lo agrego al dto por que lo calculamos en el back
 export class CreateClinicaDto {
   @ApiProperty({ description: 'Indica las vacunas que tiene el niño' })
   @IsNotEmpty({ message: 'Las vacunas no pueden estar vacias' })
-  @IsEnum(['Completo', 'Incompleto', 'Desconocido'], { message: 'El tipo no es una opcion valida. Completo, Incompleto, Desconocido' })
+  @IsEnum(VacunasEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(VacunasEnum).join(', ')}` })
   readonly vacunas: VacunasType;
 
   @ApiProperty({ description: 'Resultados del examen visual del niño que asiste' })
   @IsNotEmpty({ message: 'El examen visual no puede estar vacio' })
-  @IsEnum(['Normal', 'Anormal'], { message: 'El tipo no es una opcion valida. Normal, Anormal' })
+  @IsEnum(ExamenVisualEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(ExamenVisualEnum).join(', ')}` })
   readonly examen_visual: ExamenVisualType;
 
   @ApiProperty({ description: 'Ortopedia y traumatologia del niño que asiste' })
   @IsNotEmpty({ message: 'Ortopedia y traumatologia no puede estar vacio' })
-  @IsEnum(['Normal', 'Escoliosis', 'Pie Plano', 'Otras'], { message: 'El tipo no es una opcion valida. Normal, Escoliosis, Pie Plano, Otras' })
+  @IsEnum(OrtopediaYTraumatologiaEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(OrtopediaYTraumatologiaEnum).join(', ')}` })
   readonly ortopedia_traumatologia: OrtopediaYTraumatologiaType;
 
   @ApiProperty({ description: 'Lenguaje del niño que asiste' })
   @IsNotEmpty({ message: 'Lenguaje no puede estar vacio' })
-  @IsEnum(['Adecuado', 'Inadecuado'], { message: 'El tipo no es una opcion valida. Adecuado, Inadecuado' })
+  @IsEnum(LenguajeEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(LenguajeEnum).join(', ')}` })
   readonly lenguaje: LenguajeType;
 
   @ApiProperty({ description: 'Alimentacion del niño que asiste' })
   @IsNotEmpty({ message: 'Alimentacion no puede estar vacio' })
-  @IsEnum(['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'], { message: 'El tipo no es una opcion valida. Mixta y variada, Rica en HdC, Pobre en fibras, Fiambres, Frituras' })
+  @IsEnum(AlimentacionEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(AlimentacionEnum).join(', ')}` })
   readonly alimentacion: AlimentacionType;
 
   @ApiProperty({ description: 'Ingesta de infusiones del niño' })
   @IsNotEmpty({ message: 'Ingesta de infusiones no puede estar vacio' })
-  @IsEnum(['Té', 'Mate Cocido', 'Otras'], { message: 'El tipo no es una opcion valida. Té, Mate Cocido, Otras' })
+  @IsEnum(InfusionesEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(InfusionesEnum).join(', ')}` })
   readonly infusiones: InfusionesType;
 
   @ApiProperty({ description: 'Cantidad de comidas del niño que asiste' })
   @IsNotEmpty({ message: 'Cantidad de comidas  no puede estar vacio' })
-  @IsEnum(['Menor a 4', '4', 'Mayor a 4', 'Picoteo'], { message: 'El tipo no es una opcion valida. Menor a 4, 4, Mayor a 4, Picoteo' })
+  @IsEnum(CantidadComidasEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(CantidadComidasEnum).join(', ')}` })
   readonly cantidad_comidas: CantidadComidasType;
 
   @ApiProperty({ description: 'Horas de pantallas diarias' })
   @IsNotEmpty({ message: 'La hora no puede estar vacía' })
-  @IsEnum(['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'], { message: 'El tipo no es una opcion valida. Menor a 2hs, Entre 2hs y 4hs, Más de 6hs' })
+  @IsEnum(HsPantallaEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(HsPantallaEnum).join(', ')}` })
   readonly horas_pantalla: HsPantallaType;
 
   @ApiProperty({ description: 'Horas de juego al aire libre' })
   @IsNotEmpty({ message: 'Las horas de juego al aire libre no puede estar vacía' })
-  @IsEnum(['Menos de 1h', '1h', 'Más de 1h'], { message: 'El tipo no es una opcion valida. Menos de 1h, 1h, Más de 1h' })
+  @IsEnum(HsJuegoAireLibreEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(HsJuegoAireLibreEnum).join(', ')}` })
   readonly horas_juego_aire_libre: HsJuegoAireLibreType;
 
   @ApiProperty({ description: 'Horas de sueño' })
   @IsNotEmpty({ message: 'Las horas de sueño no puede estar vacía' })
-  @IsEnum(['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'], { message: 'El tipo no es una opcion valida. Menos de 10hs, Entre 10hs y 12hs, Más de 13hs' })
+  @IsEnum(HsSuenioEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(HsSuenioEnum).join(', ')}` })
   readonly horas_suenio: HsSuenioType;
 
   @ApiProperty({ description: 'Hidratacion del niño que asiste' })
   @IsNotEmpty({ message: 'Hidratacion no puede estar vacio' })
-  @IsEnum(['Agua', 'Bebidas Edulcoradas'], { message: 'El tipo no es una opcion valida. Agua, Bebidas Edulcoradas' })
+  @IsEnum(HidratacionEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(HidratacionEnum).join(', ')}` })
   readonly hidratacion: HidratacionType;
 
   @ApiProperty({ description: 'Tiene diabetes' })

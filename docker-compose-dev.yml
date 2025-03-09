@@ -30,6 +30,7 @@ services:
     volumes:
       - ./backend:/home/app/backend
       - /home/app/backend/node_modules
+      - ./const:/home/app/const
   # Contenedor frontend (Angular)
   # frontend:
   #   build:

@@ -7,8 +7,7 @@ import { Institucion } from './institucion.model';
 import { Curso } from './curso.model';
 import { Usuario } from './usuario.model';
 
-export type Type = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
-export type Turno = 'Mañana' | 'Tarde' | 'Noche';
+import { ConsultaType, TurnoType } from '@app/common/const/const';
 
 export class Consulta {
   constructor(
@@ -16,8 +15,8 @@ export class Consulta {
     public created_at: Date,
     public updated_at: Date,
     public deshabilitado: boolean,
-    public type: Type,
-    public turno: Turno,
+    public type: ConsultaType,
+    public turno: TurnoType,
     public edad: number,
     public id_chico: number,
     public id_institucion: number,

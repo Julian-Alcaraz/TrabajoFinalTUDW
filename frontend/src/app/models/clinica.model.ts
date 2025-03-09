@@ -1,14 +1,4 @@
-export type VacunasType = 'Completo' | 'Incompleto' | 'Desconocido';
-export type ExamenVisualType = 'Normal' | 'Anormal';
-export type OrtopediaYTraumatologiaType = 'Normal' | 'Escoliosis' | 'Pie Plano' | 'Otras';
-export type LenguajeType = 'Adecuado' | 'Inadecuado';
-export type AlimentacionType = 'Mixta y variada' | 'Rica en HdC' | 'Pobre en fibras' | 'Fiambres' | 'Frituras';
-export type InfusionesType = 'Té' | 'Mate Cocido' | 'Otras';
-export type CantidadComidasType = 'Mayor a 4' | '4' | 'Menor a 4' | 'Picoteo';
-export type HsPantallaType = 'Menor a 2hs' | 'Entre 2hs y 4hs' | 'Más de 6hs';
-export type HsJuegoAireLibreType = 'Menos de 1h' | '1h' | 'Más de 1h';
-export type HsSuenioType = 'Menos de 10hs' | 'Entre 10hs y 12hs' | 'Más de 13hs';
-export type HidratacionType = 'Agua' | 'Bebidas Edulcoradas';
+import { AlimentacionType, CantidadComidasType, ExamenVisualType, HidratacionType, HsJuegoAireLibreType, HsPantallaType, HsSuenioType, InfusionesType, LenguajeType, OrtopediaYTraumatologiaType, VacunasType } from "@app/common/const/const";
 
 export class Clinica {
   constructor(

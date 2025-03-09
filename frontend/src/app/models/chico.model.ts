@@ -1,7 +1,7 @@
 import { Barrio } from './barrio.model';
 import { Consulta } from './consulta.model';
 
-export type Sexo = 'Femenino' | 'Masculino' | 'Otro';
+import { SexoType } from '@app/common/const/const';
 
 export class Chico {
   constructor(
@@ -9,7 +9,7 @@ export class Chico {
     public dni: number,
     public nombre: string,
     public apellido: string,
-    public sexo: Sexo,
+    public sexo: SexoType,
     public telefono: number,
     public direccion: string,
     public nombre_padre: string,

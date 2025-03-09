@@ -22,7 +22,6 @@ import { TooltipModule } from 'primeng/tooltip';
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './barrios.component.html',
-  styleUrl: './barrios.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class BarriosComponent implements OnInit, AfterViewInit {

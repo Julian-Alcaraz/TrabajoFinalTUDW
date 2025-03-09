@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { DateTime } from 'luxon';
 
-import { sexoType } from '../entities/chico.entity';
+import { SexoType } from '../../common/const/const';
 
 export class ResponseChicoDto {
   @Transform(({ value }) => (value ? DateTime.fromISO(value, { zone: 'utc' }).toFormat('dd-MM-yyyy') : null))
@@ -10,7 +10,7 @@ export class ResponseChicoDto {
   readonly dni: number;
   readonly nombre: string;
   readonly apellido: string;
-  readonly sexo: sexoType;
+  readonly sexo: SexoType;
   readonly direccion: string;
   readonly telefono: string;
   readonly id_barrio: number;

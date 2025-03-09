@@ -38,7 +38,6 @@ import { from } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
   templateUrl: './personalizada.component.html',
-  styleUrl: './personalizada.component.css',
 })
 export class PersonalizadaComponent implements OnInit {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();

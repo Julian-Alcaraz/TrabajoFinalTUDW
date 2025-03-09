@@ -13,7 +13,6 @@ import { ButtonModule } from 'primeng/button';
   standalone: true,
   imports: [CommonModule, ButtonModule, DatePickerModule, FormsModule, ReactiveFormsModule, IftaLabelModule,  LoadingComponent],
   templateUrl: './consultasxanio.component.html',
-  styleUrl: './consultasxanio.component.css',
 })
 export class ConsultasxanioComponent {
   date: Date | undefined;

@@ -1,12 +1,12 @@
 import { Consulta } from './consulta.model';
 
-export type NivelCurso = 'Jardin' | 'Primario' | 'Secundario';
+import { NivelCursoType } from '@app/common/const/const';
 
 export class Curso {
   constructor(
     public id: number,
     public nombre: string,
-    public nivel: NivelCurso,
+    public nivel: NivelCursoType,
     public deshabilitado: boolean,
     public consultas?: Consulta[],
   ) {}

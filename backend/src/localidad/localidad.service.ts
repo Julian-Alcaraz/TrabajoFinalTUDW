@@ -5,14 +5,10 @@ import { Repository } from 'typeorm';
 import { Localidad } from './entities/localidad.entity';
 import { CreateLocalidadDto } from './dto/create-localidad.dto';
 import { UpdateLocalidadDto } from './dto/update-localidad.dto';
-import { Barrio } from 'src/barrio/entities/barrio.entity';
 
 @Injectable()
 export class LocalidadService {
-  constructor(
-    @InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>,
-    // @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
-  ) {}
+  constructor(@InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>) {}
 
   async create(createLocalidadDto: CreateLocalidadDto) {
     const localidad = await this.localidadORM.create(createLocalidadDto);

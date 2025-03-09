@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-import { tiposInstitucion } from '../entities/institucion.entity';
+import { TipoInstitucionType, TipoInstitucionEnum } from '../../common/const/const';
 
 export class CreateInstitucionDto {
   @ApiProperty({ description: 'Nombre de la insititucion' })
@@ -14,6 +14,6 @@ export class CreateInstitucionDto {
 
   @ApiProperty({ description: 'Tipo de insititucion' })
   @IsNotEmpty({ message: 'El tipo de institución no puede estar vacio' })
-  @IsEnum(['Jardin', 'Primario', 'Secundario'], { message: 'No es un nivel valido. Jardin, Primario, Secundario' })
-  readonly tipo: tiposInstitucion;
+  @IsEnum(TipoInstitucionEnum, { message: `No es un nivel valido. Valores permitidos: ${Object.values(TipoInstitucionEnum).join(', ')}` })
+  readonly tipo: TipoInstitucionType;
 }

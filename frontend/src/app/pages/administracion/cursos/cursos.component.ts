@@ -23,7 +23,6 @@ import { ModalCursoComponent } from './curso/modal-curso/modal-curso.component';
   standalone: true,
   imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
   templateUrl: './cursos.component.html',
-  styleUrl: './cursos.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class CursosComponent implements OnInit, AfterViewInit {

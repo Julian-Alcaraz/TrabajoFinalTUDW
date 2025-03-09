@@ -1,12 +1,12 @@
 import { Consulta } from './consulta.model';
 
-export type TiposInstitucion = 'Jardin' | 'Primario' | 'Secundario';
+import { TipoInstitucionType } from '@app/common/const/const';
 
 export class Institucion {
   constructor(
     public id: number,
     public nombre: string,
-    public tipo: TiposInstitucion,
+    public tipo: TipoInstitucionType,
     public deshabilitado: boolean,
     public consultas?: Consulta[],
   ) {}

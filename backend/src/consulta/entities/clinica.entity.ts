@@ -1,18 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 import { Consulta } from './consulta.entity';
-
-export type VacunasType = 'Completo' | 'Incompleto' | 'Desconocido';
-export type ExamenVisualType = 'Normal' | 'Anormal';
-export type OrtopediaYTraumatologiaType = 'Normal' | 'Escoliosis' | 'Pie Plano' | 'Otras';
-export type LenguajeType = 'Adecuado' | 'Inadecuado';
-export type AlimentacionType = 'Mixta y variada' | 'Rica en HdC' | 'Pobre en fibras' | 'Fiambres' | 'Frituras';
-export type InfusionesType = 'Té' | 'Mate Cocido' | 'Otras';
-export type CantidadComidasType = 'Mayor a 4' | '4' | 'Menor a 4' | 'Picoteo';
-export type HsPantallaType = 'Menor a 2hs' | 'Entre 2hs y 4hs' | 'Más de 6hs';
-export type HsJuegoAireLibreType = 'Menos de 1h' | '1h' | 'Más de 1h';
-export type HsSuenioType = 'Menos de 10hs' | 'Entre 10hs y 12hs' | 'Más de 13hs';
-export type HidratacionType = 'Agua' | 'Bebidas Edulcoradas';
+import { VacunasType, VacunasEnum, ExamenVisualType, ExamenVisualEnum, OrtopediaYTraumatologiaType, OrtopediaYTraumatologiaEnum, LenguajeType, LenguajeEnum, AlimentacionType, AlimentacionEnum, InfusionesType, InfusionesEnum, CantidadComidasType, CantidadComidasEnum, HsPantallaType, HsPantallaEnum, HsJuegoAireLibreType, HsJuegoAireLibreEnum, HsSuenioType, HsSuenioEnum, HidratacionType, HidratacionEnum } from '../../common/const/const';
 
 @Entity('clinica')
 export class Clinica {
@@ -21,37 +10,37 @@ export class Clinica {
 
   // Datos Clinica
 
-  @Column({ type: 'enum', enum: ['Completo', 'Incompleto', 'Desconocido'] })
+  @Column({ type: 'enum', enum: VacunasEnum })
   vacunas: VacunasType;
 
-  @Column({ type: 'enum', enum: ['Normal', 'Anormal'] })
+  @Column({ type: 'enum', enum: ExamenVisualEnum })
   examen_visual: ExamenVisualType;
 
-  @Column({ type: 'enum', enum: ['Normal', 'Escoliosis', 'Pie Plano', 'Otras'] })
+  @Column({ type: 'enum', enum: OrtopediaYTraumatologiaEnum })
   ortopedia_traumatologia: OrtopediaYTraumatologiaType;
 
-  @Column({ type: 'enum', enum: ['Adecuado', 'Inadecuado'] })
+  @Column({ type: 'enum', enum: LenguajeEnum })
   lenguaje: LenguajeType;
 
-  @Column({ type: 'enum', enum: ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'] })
+  @Column({ type: 'enum', enum: AlimentacionEnum })
   alimentacion: AlimentacionType;
 
-  @Column({ type: 'enum', enum: ['Té', 'Mate Cocido', 'Otras'] })
+  @Column({ type: 'enum', enum: InfusionesEnum })
   infusiones: InfusionesType;
 
-  @Column({ type: 'enum', enum: ['Menor a 4', '4', 'Mayor a 4', 'Picoteo'] })
+  @Column({ type: 'enum', enum: CantidadComidasEnum })
   cantidad_comidas: CantidadComidasType;
 
-  @Column({ type: 'enum', enum: ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'] })
+  @Column({ type: 'enum', enum: HsPantallaEnum })
   horas_pantalla: HsPantallaType;
 
-  @Column({ type: 'enum', enum: ['Menos de 1h', '1h', 'Más de 1h'] })
+  @Column({ type: 'enum', enum: HsJuegoAireLibreEnum })
   horas_juego_aire_libre: HsJuegoAireLibreType;
 
-  @Column({ type: 'enum', enum: ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'] })
+  @Column({ type: 'enum', enum: HsSuenioEnum })
   horas_suenio: HsSuenioType;
 
-  @Column({ type: 'enum', enum: ['Agua', 'Bebidas Edulcoradas'] })
+  @Column({ type: 'enum', enum: HidratacionEnum })
   hidratacion: HidratacionType;
 
   @Column({ type: 'boolean' })

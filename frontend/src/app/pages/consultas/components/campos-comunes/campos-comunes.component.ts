@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import * as Constantes from '@app/common/const/const'
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarDni, ValidarSoloNumeros } from '@utils/validadores';
 import { InputNumberComponent } from '@components/inputs/input-number.component';
@@ -24,7 +25,6 @@ import { LoadingComponent } from '@components/loading/loading.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, InputNumberComponent, InputSelectComponent, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './campos-comunes.component.html',
-  styleUrl: './campos-comunes.component.css',
 })
 export class CamposComunesComponent implements OnInit {
   @Input() form!: FormGroup;
@@ -36,6 +36,7 @@ export class CamposComunesComponent implements OnInit {
   public cursos: Curso[] = [];
   public edadAnios: number | null = null;
   public edadMeses: number | null = null;
+  public con = Constantes;
 
   public searching = false;
   public searchingInstituciones = true;

@@ -1,13 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { DemandaEnum } from '../entities/oftalmologia.entity';
+
+import { DemandaType, DemandaEnum } from '../../common/const/const';
 
 export class CreateOftalmologiaDto {
   @ApiProperty({ description: 'Demanada de la consulta' })
   @IsNotEmpty({ message: 'La demanda no puede estar vacia' })
-  @IsEnum(['Control niño sano', 'Docente', 'Familiar', 'Otro'], { message: 'El tipo no es una opcion valida. Control niño sano, Docente, Familiar, Otro' })
-  readonly demanda: DemandaEnum;
+  @IsEnum(DemandaEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(DemandaEnum).join(', ')}` })
+  readonly demanda: DemandaType;
 
   @ApiProperty({ description: 'Primera vez' })
   @IsNotEmpty({ message: 'Primera vez no puede estar vacia' })

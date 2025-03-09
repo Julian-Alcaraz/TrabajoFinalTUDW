@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, Max, Min } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 
-import { sexoType } from '../entities/chico.entity';
+import { SexoEnum, SexoType } from '../../common/const/const';
 
 export class CreateChicoDto {
   @ApiProperty({ description: 'Dni del chico' })
@@ -29,8 +29,8 @@ export class CreateChicoDto {
 
   @ApiProperty({ description: 'Sexo del chico' })
   @IsNotEmpty({ message: 'El sexo no puede estar vacio' })
-  @IsEnum(['Femenino', 'Masculino', 'Otro'], { message: 'El sexo no es valido. Femenino, Masculino, Otro' })
-  readonly sexo: sexoType;
+  @IsEnum(SexoEnum, { message: `No es un sexo válido. Valores permitidos: ${Object.values(SexoEnum).join(', ')}` })
+  readonly sexo: SexoType;
 
   @ApiProperty({ description: 'Fecha nacimiento del chico.' })
   @IsNotEmpty({ message: 'La fecha de no puede estar vacia' })

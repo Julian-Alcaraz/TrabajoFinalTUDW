@@ -117,49 +117,48 @@
         </div>
         <!-- Infusiones -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones" [opciones]="['Té', 'Mate Cocido', 'Otras']" [valores]="['Té', 'Mate Cocido', 'Otras']" />
+          <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones" [opciones]="con.InfusionesEnum" [valores]="con.InfusionesEnum" />
         </div>
         <!-- Vacunas -->
         <div class="mt-4 md:col-span-1">
-          <app-input-select-enum label="Vacunas" [control]="controlDeInput('vacunas')" idInput="vacunas" [opciones]="['Completo', 'Incompleto', 'Desconocido']" [valores]="['Completo', 'Incompleto', 'Desconocido']" />
+          <app-input-select-enum label="Vacunas" [control]="controlDeInput('vacunas')" idInput="vacunas" [opciones]="con.VacunasEnum" [valores]="con.VacunasEnum" />
         </div>
         <!-- Lenguaje -->
         <div class="mt-4 md:col-span-1">
-          <app-input-select-enum label="Lenguaje" [control]="controlDeInput('lenguaje')" idInput="lenguaje" [opciones]="['Adecuado', 'Inadecuado']" [valores]="['Adecuado', 'Inadecuado']" />
+          <app-input-select-enum label="Lenguaje" [control]="controlDeInput('lenguaje')" idInput="lenguaje" [opciones]="con.LenguajeEnum" [valores]="con.LenguajeEnum" />
         </div>
         <!-- Examen Visual -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Examen Visual" [control]="controlDeInput('examen_visual')" idInput="examen_visual" [opciones]="['Normal', 'Anormal']" [valores]="['Normal', 'Anormal']" />
+          <app-input-select-enum label="Examen Visual" [control]="controlDeInput('examen_visual')" idInput="examen_visual" [opciones]="con.ExamenVisualEnum" [valores]="con.ExamenVisualEnum" />
         </div>
         <!-- Ortopedia Traumatologia -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')" idInput="ortopedia_traumatologia" [opciones]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras']" [valores]="['Normal', 'Escoliosis', 'Pie Plano', 'Otras']" />
+          <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')" idInput="ortopedia_traumatologia" [opciones]="con.OrtopediaYTraumatologiaEnum" [valores]="con.OrtopediaYTraumatologiaEnum" />
         </div>
-
         <!-- Alimentacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Alimentacion" [control]="controlDeInput('alimentacion')" idInput="alimentacion" [opciones]="['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', ' Frituras']" [valores]="['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras']" />
+          <app-input-select-enum label="Alimentacion" [control]="controlDeInput('alimentacion')" idInput="alimentacion" [opciones]="con.AlimentacionEnum" [valores]="con.AlimentacionEnum" />
         </div>
         <!-- Cantidad de Comidas -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Cantidad de comidas" [control]="controlDeInput('cantidad_comidas')" idInput="cantidad_comidas" [opciones]="['4', 'Mayor a 4', 'Menor a 4', 'Picoteo']" [valores]="['4', 'Mayor a 4', 'Menor a 4', 'Picoteo']" />
+          <app-input-select-enum label="Cantidad de comidas" [control]="controlDeInput('cantidad_comidas')" idInput="cantidad_comidas" [opciones]="con.CantidadComidasEnum" [valores]="con.CantidadComidasEnum" />
         </div>
         <!-- Hidratacion -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="['Agua', 'Bebidas Edulcoradas']" [valores]="['Agua', 'Bebidas Edulcoradas']" />
+          <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="con.HidratacionEnum" [valores]="con.HidratacionEnum" />
         </div>
         <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs']" [valores]="['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs']" />
+          <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="con.HsPantallaEnum" [valores]="con.HsPantallaEnum" />
         </div>
         <!-- Horas de juego al aire libre -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de juego al aire libre" [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre" [opciones]="['Menos de 1h', '1h', 'Más de 1h']" [valores]="['Menos de 1h', '1h', 'Más de 1h']" />
+          <app-input-select-enum label="Horas de juego al aire libre" [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre" [opciones]="con.HsJuegoAireLibreEnum" [valores]="con.HsJuegoAireLibreEnum" />
         </div>
         <!-- Horas de sueño -->
         <div class="mt-4 md:col-span-2">
-          <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')" idInput="horas_suenio" [opciones]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']" [valores]="['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs']" />
+          <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')" idInput="horas_suenio" [opciones]="con.HsSuenioEnum" [valores]="con.HsSuenioEnum" />
         </div>
         <!-- Seguimiento (segto) -->
         <div class="mt-4 md:col-span-3">

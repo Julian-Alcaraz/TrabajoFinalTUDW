@@ -13,7 +13,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   standalone: true,
   imports: [SelectButtonModule, ReactiveFormsModule, IftaLabelModule, SelectModule, MultiSelectModule, InputNumberModule, KeyFilterModule],
   templateUrl: './campos-fonoaudiologia.component.html',
-  styleUrl: './campos-fonoaudiologia.component.css',
 })
 export class CamposFonoaudiologiaComponent implements OnInit {
   @Input() form!: FormGroup;

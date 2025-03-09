@@ -4,6 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios } from '@utils/validadores';
 import { InputTextComponent } from '@components/inputs/input-text.component';
@@ -21,6 +22,7 @@ export class ModalInstitucionComponent implements OnInit {
   public institucion: Institucion | null = null;
   public institucionForm: FormGroup;
   public habilitarModificar = true;
+  public con = Constantes;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

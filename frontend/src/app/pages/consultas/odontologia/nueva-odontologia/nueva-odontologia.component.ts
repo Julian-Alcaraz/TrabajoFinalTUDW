@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '@services/consulta.service';
 import { InputNumberComponent } from '@components/inputs/input-number.component';
@@ -20,7 +21,6 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-odontologia.component.html',
-  styleUrl: './nueva-odontologia.component.css',
 })
 export class NuevaOdontologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;

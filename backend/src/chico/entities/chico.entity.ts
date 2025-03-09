@@ -3,8 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Consulta } from '../../consulta/entities/consulta.entity';
 import { Barrio } from '../../barrio/entities/barrio.entity';
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
-
-export type sexoType = 'Femenino' | 'Masculino' | 'Otro';
+import { SexoEnum, SexoType } from '../../common/const/const';
 
 @Entity({ name: 'chico' })
 export class Chico extends EntidadBasica {
@@ -19,8 +18,8 @@ export class Chico extends EntidadBasica {
   @Column({ type: 'varchar', length: 50, nullable: false })
   apellido: string;
 
-  @Column({ type: 'enum', enum: ['Femenino', 'Masculino', 'Otro'], nullable: false })
-  sexo: sexoType;
+  @Column({ type: 'enum', enum: SexoEnum, nullable: false })
+  sexo: SexoType;
 
   @Column({ type: 'date', nullable: false })
   fe_nacimiento: Date;

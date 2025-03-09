@@ -25,7 +25,6 @@ import { LoadingComponent } from '@components/loading/loading.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule, LoadingComponent],
   templateUrl: './form-usuario.component.html',
-  styleUrl: './form-usuario.component.css',
 })
 export class FormUsuarioComponent implements OnInit {
   @Input() esFormulario = true;

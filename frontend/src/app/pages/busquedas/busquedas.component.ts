@@ -10,7 +10,6 @@ import { TabsComponent } from '@components/tabs/tabs.component';
   standalone: true,
   imports: [CommonModule, ConsultasTableComponent, ConsultasxanioComponent, PersonalizadaComponent, TabsComponent],
   templateUrl: './busquedas.component.html',
-  styleUrl: './busquedas.component.css',
 })
 export class BusquedasComponent {
   consultas: Consulta[] | undefined | null = null;

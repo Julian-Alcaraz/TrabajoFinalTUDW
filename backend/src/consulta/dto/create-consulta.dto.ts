@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, ValidateIf, ValidateNested } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 
-import { ConsultaType, TurnoType } from '../entities/consulta.entity';
+import { ConsultaType, ConsultaEnum, TurnoType, TurnoEnum } from '../../common/const/const';
 import { CreateClinicaDto } from './create-clinica.dto';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
 import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
@@ -11,12 +11,12 @@ import { CreateOdontologiaDto } from './create-odontologia.dto';
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
   @IsNotEmpty({ message: 'El tipo no puede estar vacio' })
-  @IsEnum(['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], { message: 'El tipo no es una opcion valida. Clinica, Fonoaudiologia, Oftalmologia, Odontologia' })
+  @IsEnum(ConsultaEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(ConsultaEnum).join(', ')}` })
   readonly type: ConsultaType;
 
   @ApiProperty({ description: 'Turno al que va el chico que asiste a la consulta' })
   @IsNotEmpty({ message: 'El turno no puede estar vacio' })
-  @IsEnum(['Mañana', 'Tarde', 'Noche'], { message: 'El turno no es una opcion valida. Mañana, Tarde, Noche' })
+  @IsEnum(TurnoEnum, { message: `No es una opcion válida. Valores permitidos: ${Object.values(TurnoEnum).join(', ')}` })
   readonly turno: TurnoType;
 
   @ApiProperty({ description: 'Obra social de la consulta' })

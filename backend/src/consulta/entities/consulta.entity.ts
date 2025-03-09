@@ -9,16 +9,14 @@ import { Oftalmologia } from './oftalmologia.entity';
 import { Chico } from '../../chico/entities/chico.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
-
-export type ConsultaType = 'Clinica' | 'Fonoaudiologia' | 'Oftalmologia' | 'Odontologia';
-export type TurnoType = 'Mañana' | 'Tarde' | 'Noche';
+import { ConsultaType, ConsultaEnum, TurnoType, TurnoEnum } from '../../common/const/const';
 
 @Entity('consulta')
 export class Consulta extends EntidadBasica {
-  @Column({ type: 'enum', enum: ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'], nullable: true })
+  @Column({ type: 'enum', enum: ConsultaEnum, nullable: true })
   type: ConsultaType;
 
-  @Column({ type: 'enum', enum: ['Mañana', 'Tarde', 'Noche'], nullable: true })
+  @Column({ type: 'enum', enum: TurnoEnum, nullable: true })
   turno: TurnoType;
 
   @Column({ type: 'boolean', nullable: true })

@@ -11,7 +11,6 @@ import { FormUsuarioComponent } from '../../../usuarios/components/form-usuario/
   imports: [FormUsuarioComponent],
   changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: './nuevo-usuario.component.html',
-  styleUrl: './nuevo-usuario.component.css',
 })
 export class NuevoUsuarioComponent {
   constructor(public dialogRef: MatDialogRef<NuevoUsuarioComponent>) {}

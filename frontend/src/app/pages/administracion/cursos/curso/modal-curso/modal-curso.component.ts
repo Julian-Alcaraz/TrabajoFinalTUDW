@@ -4,9 +4,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios } from '@utils/validadores';
-
 import { InputTextComponent } from '@components/inputs/input-text.component';
 import { Curso } from '@models/curso.model';
 import { CursoService } from '@services/curso.service';
@@ -17,12 +17,12 @@ import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.c
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule, InputSelectEnumComponent],
   templateUrl: './modal-curso.component.html',
-  styleUrl: './modal-curso.component.css',
 })
 export class ModalCursoComponent implements OnInit {
   public curso: Curso | null = null;
   public cursoForm: FormGroup;
   public habilitarModificar = true;
+  public con = Constantes;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Consulta } from './consulta.entity';
-export type DemandaEnum = 'Control niño sano' | 'Docente' | 'Familiar' | 'Otro';
+
+import { DemandaType, DemandaEnum } from '../../common/const/const';
+
 @Entity('oftalmologia')
 export class Oftalmologia {
   @PrimaryColumn({ type: 'int' })
@@ -10,8 +12,8 @@ export class Oftalmologia {
   @JoinColumn({ name: 'id_consulta' })
   consulta: Consulta;
 
-  @Column({ type: 'enum', enum: ['Control niño sano', 'Docente', 'Familiar', 'Otro'] })
-  demanda: DemandaEnum;
+  @Column({ type: 'enum', enum: DemandaEnum })
+  demanda: DemandaType;
 
   @Column({ type: 'boolean', nullable: false })
   primera_vez: boolean;

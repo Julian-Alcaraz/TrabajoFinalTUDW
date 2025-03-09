@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const'
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
 import { ConsultaService } from '@services/consulta.service';
@@ -18,7 +19,6 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
-  styleUrl: './nueva-fonoaudiologia.component.css',
 })
 export class NuevaFonoaudiologicaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
@@ -28,6 +28,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
 
   public fonoaudiologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
+  public con = Constantes;
 
   constructor(
     private fb: FormBuilder,

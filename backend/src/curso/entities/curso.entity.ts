@@ -2,13 +2,12 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { Consulta } from '../../consulta/entities/consulta.entity';
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
-
-export type nivelCurso = 'Jardin' | 'Primario' | 'Secundario';
+import { NivelCursoType, NivelCursoEnum } from '../../common/const/const';
 
 @Entity('curso')
 export class Curso extends EntidadBasica {
-  @Column({ type: 'enum', enum: ['Jardin', 'Primario', 'Secundario'], nullable: false })
-  nivel: nivelCurso;
+  @Column({ type: 'enum', enum: NivelCursoEnum, nullable: false })
+  nivel: NivelCursoType;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;

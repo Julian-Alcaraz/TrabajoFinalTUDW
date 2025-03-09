@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const'
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
 import { ConsultaService } from '@services/consulta.service';
@@ -23,7 +24,6 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
   templateUrl: './nueva-oftalmologia.component.html',
-  styleUrl: './nueva-oftalmologia.component.css',
 })
 export class NuevaOftalmologiaComponent implements OnInit {
   @Input() consulta: Consulta | null = null;
@@ -34,6 +34,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
   public oftalmologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
   public chico: Chico | null = null;
+  public con = Constantes;
 
   constructor(
     private fb: FormBuilder,

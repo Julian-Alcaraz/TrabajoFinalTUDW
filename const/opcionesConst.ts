@@ -1,0 +1,37 @@
+export const opcionesSexo = ['Femenino', 'Masculino', 'Otro'] as const;
+
+// Consulta
+
+export const opcionesConsulta = ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia'] as const;
+export const opcionesTurno = ['Mañana', 'Tarde', 'Noche'] as const;
+
+// Clinica
+
+export const opcionesVacunas = ['Completo', 'Incompleto', 'Desconocido'] as const;
+export const opcionesExamenVisual = ['Normal', 'Anormal'] as const;
+export const opcionesOrtopediaYTraumatologia = ['Normal', 'Escoliosis', 'Pie Plano', 'Otras'] as const;
+export const opcionesLenguaje = ['Adecuado', 'Inadecuado'] as const;
+export const opcionesAlimentacion = ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'] as const;
+export const opcionesInfusiones = ['Té', 'Mate Cocido', 'Otras'] as const;
+export const opcionesCantidadComidas = ['Mayor a 4', '4', 'Menor a 4', 'Picoteo'] as const;
+export const opcionesHsPantalla = ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'] as const;
+export const opcionesHsJuegoAireLibre = ['Menos de 1h', '1h', 'Más de 1h'] as const;
+export const opcionesHsSuenio = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'] as const;
+export const opcionesHidratacion = ['Agua', 'Bebidas Edulcoradas'] as const;
+
+// Fonoaudiologia
+
+export const opcionesDiagnosticoPresuntivo = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'] as const;
+export const opcionesCausas = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'] as const;
+
+// Oftalmologia
+
+export const opcionesDemanda = ['Control niño sano', 'Docente', 'Familiar', 'Otro'] as const;
+
+// Curso
+
+export const opcionesCurso = ['Jardin', 'Primario', 'Secundario'] as const;
+
+// Institucion
+
+export const opcionesTipoInstitucion = ['Jardin', 'Primario', 'Secundario', 'Terciario'] as const;

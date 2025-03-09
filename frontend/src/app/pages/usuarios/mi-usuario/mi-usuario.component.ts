@@ -11,7 +11,6 @@ import { CambiarContraseniaComponent } from '../components/cambioContrasenia/cam
   standalone: true,
   imports: [FormUsuarioComponent, CommonModule],
   templateUrl: './mi-usuario.component.html',
-  styleUrl: './mi-usuario.component.css',
 })
 export class MiUsuarioComponent implements OnInit {
   public identidad: Usuario | null = null;
