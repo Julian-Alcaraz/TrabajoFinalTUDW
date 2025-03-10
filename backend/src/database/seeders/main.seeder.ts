@@ -119,24 +119,6 @@ export class MainSeeder implements Seeder {
           roles: [roles[0]], // admin
         },
         {
-          nombre: 'Belen',
-          apellido: 'Casanova',
-          email: 'belencasanova@gmail.com',
-          contrasenia: codificarContrasenia('23456782'),
-          dni: 23456782,
-          fe_nacimiento: '2000-01-01',
-          roles: [roles[0]], // admin
-        },
-        {
-          nombre: 'Marcia',
-          apellido: 'Pichun',
-          email: 'marciapichun@gmail.com',
-          contrasenia: codificarContrasenia('23456789'),
-          dni: 23456789,
-          fe_nacimiento: '2000-01-01',
-          roles: [roles[0]], // admin
-        },
-        {
           nombre: 'Jorge',
           apellido: 'Rodriguez',
           email: 'jorgeRodriguez@gmail.com',
@@ -437,6 +419,103 @@ export class MainSeeder implements Seeder {
           nombre: 'Parque Norte',
           localidad: localidades[1],
         },
+        // barrios de la lista clinica
+        {
+          nombre: 'Obrero A',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Anai Mapu',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Barrio Nuevo',
+          localidad: localidades[0],
+        },
+        {
+          nombre: '2 de Febrero',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Santa Elena',
+          localidad: localidades[0],
+        },
+        {
+          nombre: '10 de Febrero',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Antártida Argentina',
+          localidad: localidades[0],
+        },
+        {
+          nombre: '130 Viviendas',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'La Alameda',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Puente 83',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'San Sebastián',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Luis Piedra Buena',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Nueva Esperanza',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Villarino',
+          localidad: localidades[0],
+        },
+        {
+          nombre: '1200 Viviendas',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Barrio Las Cabañitas',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Ferri',
+          localidad: localidades[0],
+        },
+        {
+          nombre: '4 de Agosto',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Santo Domingo',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Parque Industrial',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Colonia Santa Elena',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Don Bosco',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Ciudad de la Paz',
+          localidad: localidades[0],
+        },
+        {
+          nombre: 'Rincón de los Sauces',
+          localidad: localidades[0],
+        },
       ]);
       console.log('Seeding cursos...');
       const cursos = await cursoORM.save([
@@ -502,6 +581,19 @@ export class MainSeeder implements Seeder {
         {
           nombre: 'E.P.E.T N° 20',
           tipo: 'Secundario',
+        },
+        // escuelas planilla clinica
+        {
+          nombre: 'ESC. 294',
+          tipo: 'Primario',
+        },
+        {
+          nombre: 'JARDIN 118',
+          tipo: 'Jardin',
+        },
+        {
+          nombre: 'JARDIN 49',
+          tipo: 'Jardin',
         },
       ]);
       // Chicos

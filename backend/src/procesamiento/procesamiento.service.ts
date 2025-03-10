@@ -29,8 +29,11 @@ export class ProcesamientoService {
   }
 
   async procesarClinica(data: object) {
-    console.log(console.log(data));
-
+    const institucionCargadas = await this.institucionORM.find();
+    const cursosCargados = await this.cursoORM.find();
+    console.log(institucionCargadas, cursosCargados);
+    // console.log(console.log(data));
+    
     await this.delay(2900);
     return true;
   }
