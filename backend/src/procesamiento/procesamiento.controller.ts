@@ -14,8 +14,8 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
     const data = this.excelService.leerArchivoExcel(file);
-    await this.procesamientoService.procesarClinica(data);
-    return { succes: true, message: 'aaaa' };
+    const noCargados = await this.procesamientoService.procesarClinica(data);
+    return { succes: true, data: noCargados, message: 'aaaa' };
   }
 
   @Post('odontologia')
@@ -32,7 +32,7 @@ export class ProcesamientoController {
   async procesarOftalmologia(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
     const data = this.excelService.leerArchivoExcel(file);
     await this.procesamientoService.procesarOftalmologia(data);
-    console.log(body, file);
+    // console.log(body, file);
     return { succes: true, message: 'aaa' };
   }
 

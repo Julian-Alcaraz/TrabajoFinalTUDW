@@ -11,9 +11,10 @@ import { Chico } from 'src/chico/entities/chico.entity';
 import { Institucion } from 'src/institucion/entities/institucion.entity';
 import { Curso } from 'src/curso/entities/curso.entity';
 import { ExcelService } from 'src/common/services/excel.service';
+import { Barrio } from 'src/barrio/entities/barrio.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso])],
+  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso,Barrio])],
   controllers: [ProcesamientoController],
   providers: [ProcesamientoService, ExcelService],
   exports: [ProcesamientoService],

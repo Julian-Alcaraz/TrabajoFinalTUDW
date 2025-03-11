@@ -14,10 +14,10 @@ export class ExcelService {
     if (!validMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('El archivo debe ser de tipo Excel (.xls o .xlsx)');
     }
-    const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+    const workbook = XLSX.read(file.buffer, { type: 'buffer', cellDates: true });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: null, dateNF: 'yyyy-mm-dd' });
     return jsonData;
   }
 }
