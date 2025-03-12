@@ -15,7 +15,7 @@ export class ProcesamientoController {
   async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
     const data = this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarClinica(data);
-    return { succes: true, data: noCargados, message: 'aaaa' };
+    return { succes: true, data: noCargados, message: 'clinic' };
   }
 
   @Post('odontologia')
@@ -24,7 +24,7 @@ export class ProcesamientoController {
     const data = this.excelService.leerArchivoExcel(file);
     await this.procesamientoService.procesarOdontologia(data);
     console.log(body, file);
-    return { succes: true, message: 'aaaa' };
+    return { succes: true, message: 'odon' };
   }
 
   @Post('oftalmologia')
@@ -33,7 +33,7 @@ export class ProcesamientoController {
     const data = this.excelService.leerArchivoExcel(file);
     await this.procesamientoService.procesarOftalmologia(data);
     // console.log(body, file);
-    return { succes: true, message: 'aaa' };
+    return { succes: true, message: 'ofta' };
   }
 
   @Post('fonoaudiologia')
@@ -42,6 +42,6 @@ export class ProcesamientoController {
     const data = this.excelService.leerArchivoExcel(file);
     await this.procesamientoService.procesarFonoaudiologia(data);
     console.log(body, file);
-    return { succes: true, message: 'aaaa' };
+    return { succes: true, message: 'fono' };
   }
 }

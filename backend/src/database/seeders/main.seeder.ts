@@ -366,156 +366,63 @@ export class MainSeeder implements Seeder {
       // Localidades
       console.log('Seeding localidades...');
       const localidades = await localidadORM.save([
-        {
-          nombre: 'Neuquen',
-        },
-        {
-          nombre: 'Cipolleti',
-        },
+        //
+        { nombre: 'Neuquén' },
+        { nombre: 'Cipolletti' },
+        { nombre: 'Buenos Aires' },
+        { nombre: 'Misiones' },
       ]);
+      const neuquen = localidades[0];
+      const cipolletti = localidades[1];
+      const buenosAires = localidades[2];
+      const misiones = localidades[3];
       console.log('Seeding barrios...');
       const barrios = await barrioORM.save([
-        {
-          nombre: 'El Treinta',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'La Lor',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'María Elvira',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Puente 83',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Norte (Río Negro)',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Puente de Madera',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Centro',
-          localidad: localidades[1],
-        },
-        {
-          nombre: '12 de Septiembre',
-          localidad: localidades[1],
-        },
-        {
-          nombre: 'San Jorge',
-          localidad: localidades[1],
-        },
-        {
-          nombre: 'San Lorenzo',
-          localidad: localidades[1],
-        },
-        {
-          nombre: 'Parque Norte',
-          localidad: localidades[1],
-        },
-        // barrios de la lista clinica
-        {
-          nombre: 'Obrero A',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Anai Mapu',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Barrio Nuevo',
-          localidad: localidades[0],
-        },
-        {
-          nombre: '2 de Febrero',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Santa Elena',
-          localidad: localidades[0],
-        },
-        {
-          nombre: '10 de Febrero',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Antártida Argentina',
-          localidad: localidades[0],
-        },
-        {
-          nombre: '130 Viviendas',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'La Alameda',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Puente 83',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'San Sebastián',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Luis Piedra Buena',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Nueva Esperanza',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Villarino',
-          localidad: localidades[0],
-        },
-        {
-          nombre: '1200 Viviendas',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Barrio Las Cabañitas',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Ferri',
-          localidad: localidades[0],
-        },
-        {
-          nombre: '4 de Agosto',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Santo Domingo',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Parque Industrial',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Colonia Santa Elena',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Don Bosco',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Ciudad de la Paz',
-          localidad: localidades[0],
-        },
-        {
-          nombre: 'Rincón de los Sauces',
-          localidad: localidades[0],
-        },
+        // barrios sacados de la planilla clinica
+        { nombre: 'Nuevo', localidad: neuquen },
+        { nombre: 'Obrero A', localidad: neuquen },
+        { nombre: 'Obrero B', localidad: neuquen },
+        { nombre: 'Santa Elena', localidad: neuquen },
+        { nombre: '130 Viviendas', localidad: neuquen },
+        { nombre: 'La Alameda', localidad: neuquen },
+        { nombre: 'Nueva Esperanza', localidad: neuquen },
+        { nombre: 'Antartida Argentina', localidad: neuquen },
+        { nombre: 'Costa sur', localidad: neuquen },
+        { nombre: 'Puente 83', localidad: neuquen },
+        { nombre: 'San Sebastian', localidad: neuquen },
+        { nombre: '1200 viviendas', localidad: neuquen },
+        { nombre: 'Don bosco', localidad: neuquen },
+        { nombre: 'San Jose (lomas de Zamora, Bs As)', localidad: buenosAires },
+        { nombre: 'Seccion chacras', localidad: neuquen },
+        { nombre: 'Villa Dolores-Posadas-Misiones', localidad: misiones },
+        { nombre: 'Villarino', localidad: cipolletti },
+        { nombre: 'El treinta', localidad: neuquen },
+        { nombre: 'Rincon de los sauces-pehuenches (neuquen)', localidad: neuquen },
+        { nombre: 'Santa Elena', localidad: neuquen },
+        { nombre: '2 de Febrero', localidad: neuquen },
+        { nombre: '20 de Febrero', localidad: neuquen },
+        { nombre: '10 de febrero', localidad: neuquen },
+        { nombre: '4 de febrero', localidad: neuquen },
+        { nombre: '4 de agosto', localidad: neuquen },
+        { nombre: '1 de enero', localidad: neuquen },
+        { nombre: 'DVN', localidad: neuquen },
+        { nombre: 'Luis Piedra Buena', localidad: neuquen },
+        { nombre: 'Ferri', localidad: neuquen },
+        { nombre: 'Parque Norte', localidad: neuquen },
+        { nombre: 'San Sebastian D', localidad: neuquen },
+        { nombre: 'Nueva Esperanza', localidad: neuquen },
+        { nombre: 'Obrero Argentino', localidad: neuquen },
+        { nombre: 'puente 83', localidad: neuquen },
+        { nombre: 'Ciudad de laPaz', localidad: neuquen },
+        { nombre: 'El treinta', localidad: neuquen },
+        { nombre: 'Santo Domingo', localidad: neuquen },
+        { nombre: 'distrito noreste', localidad: neuquen },
+        { nombre: 'Las Cabañitas', localidad: neuquen },
+        { nombre: 'parque industrial', localidad: neuquen },
+        { nombre: 'Cinco Saltos', localidad: neuquen },
+        { nombre: 'Anahi Mapu', localidad: neuquen },
+        { nombre: 'Luis Piedra Buena', localidad: neuquen },
+        { nombre: 'Dvn', localidad: neuquen },
       ]);
       console.log('Seeding cursos...');
       const cursos = await cursoORM.save([
@@ -601,7 +508,7 @@ export class MainSeeder implements Seeder {
 
       // Crea 500 chicos
       const chicos = await Promise.all(
-        Array(500)
+        Array(10)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
@@ -611,6 +518,7 @@ export class MainSeeder implements Seeder {
           }),
       );
       await chicoORM.save(chicos);
+      
       const chicosPredeterminados = await chicoORM.save([
         {
           dni: 12345678,
