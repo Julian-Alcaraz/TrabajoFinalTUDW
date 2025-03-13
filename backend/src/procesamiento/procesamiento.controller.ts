@@ -1,9 +1,10 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, UploadedFile, UseGuards, Req } from '@nestjs/common';
 import { ProcesamientoService } from './procesamiento.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ExcelService } from 'src/common/services/excel.service';
-
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 @Controller('procesamiento')
+@UseGuards(JwtAuthGuard)
 export class ProcesamientoController {
   constructor(
     private readonly procesamientoService: ProcesamientoService,
@@ -12,9 +13,9 @@ export class ProcesamientoController {
 
   @Post('clinica')
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
-  async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+  async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
-    const noCargados = await this.procesamientoService.procesarClinica(data);
+    const noCargados = await this.procesamientoService.procesarClinica(data,req.user);
     return { succes: true, data: noCargados, message: 'clinic' };
   }
 

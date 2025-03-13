@@ -518,7 +518,7 @@ export class MainSeeder implements Seeder {
           }),
       );
       await chicoORM.save(chicos);
-      
+
       const chicosPredeterminados = await chicoORM.save([
         {
           dni: 12345678,
@@ -588,7 +588,7 @@ export class MainSeeder implements Seeder {
       // Crea 1500 consultas
       console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
-        Array(2500)
+        Array(10)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);

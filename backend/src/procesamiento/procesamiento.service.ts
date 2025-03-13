@@ -10,6 +10,7 @@ import { Clinica } from 'src/consulta/entities/clinica.entity';
 import { Consulta } from 'src/consulta/entities/consulta.entity';
 import { Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
 
 @Injectable()
 export class ProcesamientoService {
@@ -29,7 +30,7 @@ export class ProcesamientoService {
   delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  async procesarClinica(data: any) {
+  async procesarClinica(data: any, usuario: Usuario) {
     let log = true;
     // const institucionCargadas = await this.institucionORM.find();
     // const cursosCargados = await this.cursoORM.find();
@@ -85,13 +86,14 @@ export class ProcesamientoService {
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
         consulta.institucion = await this.verificarInstitucion(row['INSTITUCION']);
-        consulta.obra_social = convertirObraSocial(row['OBRA SOCIAL']);
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Clinica';
         consulta.observaciones = row['OBSERVACIONES'];
         consulta.derivacion_externa = false;
-        consulta.derivacion_fonoaudiologia = convertirDerivacion(row['FONOAUDIOLOGÍA']);
+        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
         consulta.derivacion_odontologia = false;
-        consulta.derivacion_oftalmologia = convertirDerivacion(row['OFTALMOLOGÍA']);
+        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.usuario = usuario;
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         // todavia falta......
@@ -108,35 +110,37 @@ export class ProcesamientoService {
         clinica.consumo_alcohol = !!row['CP-OH'];
         clinica.consumo_drogas = !!row['CP-D'];
         clinica.consumo_tabaco = !!row['CP-TBQ'];
-        clinica.antecedentes_perinatal = row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS'];
-        clinica.enfermedades_previas = row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS'];
-        clinica.vacunas = capitalize(row.VACUNAS.toLowerCase());
-        clinica.peso = row['PESO (kg)'];
+        clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+        clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+        clinica.vacunas = convertirVacunas(row.VACUNAS);
+        clinica.peso = row['PESO (Kg)'];
         clinica.talla = row['TALLA (cm)'];
-        clinica.pct = row['PCT (T/E))'];
-        clinica.cc = row['CC(cm)'];
+        clinica.pct = row['PCT (T/E)'];
+        clinica.cc = typeof row['CC(cm)'] == 'number' ? row['CC(cm)'] : 0;
         clinica.pcimc = row.PCIMC;
         clinica.imc = row.IMC;
         clinica.tas = row.TAS;
         clinica.tad = row.TAD;
         clinica.pcta = row.PCTA;
         clinica.examen_visual = row['EX.VISUAL'];
-        clinica.ortopedia_traumatologia = row['O Y T'];
+        clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
         clinica.lenguaje = row.LENGUAJE;
-        clinica.segto = row['SEGTO.'];
-        clinica.alimentacion = row['ALIMENTACIÓN'];
-        clinica.hidratacion = row['HIDRATACIÓN'];
-        clinica.leche = row['TOMA LECHE']; // convertir a boolean
-        clinica.infusiones = row['INFUSIÓNES'];
-        clinica.cantidad_comidas = row['Nº COMIDAS AL DÍA']; // lo tengo que convertir
-        clinica.horas_pantalla = row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']; // convertir a lo que corresponde
-        clinica.horas_juego_aire_libre = row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']; // convertir a lo que corresponde
-        clinica.horas_suenio = row['HORAS DIARIAS DE SUEÑO']; // convertir a lo que corresponde
+        clinica.segto = convertirSiNo(row['SEGTO.']);
+        clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+        clinica.hidratacion = capitalize(row['HIDRATACIÓN']);
+        clinica.leche = convertirSiNo(row['TOMA LECHE']);
+        clinica.infusiones = capitalize(row['INFUSIÓN']);
+        clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
+        clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
+        clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
+        clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
         clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
         clinica.tension_arterial = row['TA'];
-        // consulta.usuario= // esto tengo que ver
+        const clinicaNueva = this.clinicaORM.create(clinica);
+        await this.clinicaORM.save(clinicaNueva);
         if (log) console.log(chico);
         if (log) console.log(consulta);
+        if (log) console.log(clinica);
         log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
@@ -222,9 +226,13 @@ function calcularEdad(fechaNacimiento, fechaConsulta) {
 }
 
 function capitalize(str) {
-  return str.replace(/\b\w/g, function (char) {
-    return char.toUpperCase();
-  });
+  return str
+    .toLocaleLowerCase()
+    .split(' ')
+    .map(function (word, index) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 }
 
 function separarNombre(apellidoYnombre: string) {
@@ -234,6 +242,24 @@ function separarNombre(apellidoYnombre: string) {
   return apellidoYnombre.trim().split(/\s+/);
 }
 
+function convertirVacunas(param: string): any {
+  const conversiones: { [key: string]: any } = {
+    COMPLETO: 'Completo',
+    INCOMPLETO: 'Incompleto',
+    'SE DESCONOCE': 'Desconocido',
+  };
+
+  return conversiones[param] ?? null;
+}
+function converitirTrauma(param: string): any {
+  const conversiones: { [key: string]: any } = {
+    Normal: 'Normal',
+    Escoliosis: 'Escoliosis',
+    'Pie Plano': 'Pie Plano',
+  };
+
+  return conversiones[param] ?? 'Otras';
+}
 function convertirCurso(curso: string): string {
   const conversiones: { [key: string]: string } = {
     '1er Grado': 'Primer Grado',
@@ -304,9 +330,61 @@ function convertirBarrios(barrio: string): string {
   };
   return conversiones[barrio] || barrio;
 }
-function convertirObraSocial(obra) {
-  return obra === 'Si';
+function convertirAlimentacion(param: string) {
+  const conversiones: { [key: string]: any } = {
+    // '': 'Mixta y variada',
+    // '': 'Rica en HdC',
+    'Pobre en Fibras': 'Pobre en fibras',
+    // '': 'Fiambres',
+    // '': 'Frituras',
+  };
+
+  return conversiones[param] || param;
 }
-function convertirDerivacion(derivacion) {
-  return derivacion === 'SI';
+function convertirSiNo(value: string | null) {
+  if (value) return false;
+  return value.toLocaleLowerCase() == 'si';
+}
+function convertirComidas(params: string) {
+  //  Clinica.cantidad_comidas: "Picoteo" | "Mayor a 4" | "4" | "Menor a 4"
+  const conversiones: { [key: string]: any } = {
+    '>4': 'Mayor a 4',
+    '4': '4',
+    '<4': 'Menor a 4',
+    Picoteo: 'Picoteo',
+  };
+
+  return conversiones[params] ?? 'Menor a 4';
+}
+function convertirHorasPantalla(params: string) {
+  //  "Menor a 2hs" | "Entre 2hs y 4hs" | "Más de 6hs"
+  const conversiones: { [key: string]: any } = {
+    '>2h': 'Menor a 2hs',
+    '2h a 4h': 'Entre 2hs y 4hs',
+    '>6h': 'Más de 6hs',
+  };
+
+  return conversiones[params] ?? 'Menor a 2hs'; // esto es el caso nulo, tendria que mandarlo null y que no lo cargue?;
+}
+function convertirHorasAireLibre(params: string) {
+  //   "Menos de 1h" | "1h" | "Más de 1h"
+  const conversiones: { [key: string]: any } = {
+    '>1h': 'Más de 1h',
+    '1h': '1h',
+    '<1h': 'Menos de 1h',
+    Picoteo: 'Picoteo',
+  };
+
+  return conversiones[params] ?? 'Menos de 1h'; // esto es el caso nulo, tendria que mandarlo null y que no lo cargue?
+}
+function convertirHorasSuenio(params: string) {
+  //  Clinica.horas_suenio: "Menos de 10hs" | "Entre 10hs y 12hs" | "Más de 13hs"
+  const conversiones: { [key: string]: any } = {
+    '>13': 'Más de 13hs',
+    '10h a 12h': 'Entre 10hs y 12hs',
+    '<10': 'Menos de 10hs',
+    Picoteo: 'Picoteo',
+  };
+
+  return conversiones[params] ?? 'Menos de 10hs'; // esto es el caso nulo, tendria que mandarlo null y que no lo cargue?
 }
