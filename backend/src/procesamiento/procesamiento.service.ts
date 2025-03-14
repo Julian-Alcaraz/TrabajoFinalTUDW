@@ -8,7 +8,7 @@ import { Oftalmologia } from 'src/consulta/entities/oftalmologia.entity';
 import { Odontologia } from 'src/consulta/entities/odontologia.entity';
 import { Clinica } from 'src/consulta/entities/clinica.entity';
 import { Consulta } from 'src/consulta/entities/consulta.entity';
-import { Repository } from 'typeorm';
+import { Double, Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 
@@ -113,23 +113,23 @@ export class ProcesamientoService {
         clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
         clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
         clinica.vacunas = convertirVacunas(row.VACUNAS);
-        clinica.peso = row['PESO (Kg)'];
-        clinica.talla = row['TALLA (cm)'];
-        clinica.pct = row['PCT (T/E)'];
-        clinica.cc = typeof row['CC(cm)'] == 'number' ? row['CC(cm)'] : 0;
+        clinica.peso = pasarAnumero(row['PESO (Kg)']);
+        clinica.talla = pasarAnumero(row['TALLA (cm)']);
+        clinica.pct = pasarAnumero(row['PCT (T/E)']);
+        clinica.cc = pasarAnumero(row['CC(cm)']);
         clinica.pcimc = row.PCIMC;
-        clinica.imc = row.IMC;
-        clinica.tas = row.TAS;
-        clinica.tad = row.TAD;
-        clinica.pcta = row.PCTA;
+        clinica.imc = pasarAnumero(row.IMC);
+        clinica.tas = pasarAnumero(row.TAS);
+        clinica.tad = pasarAnumero(row.TAD);
+        clinica.pcta = pasarAnumero(row.PCTA);
         clinica.examen_visual = row['EX.VISUAL'];
         clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
         clinica.lenguaje = row.LENGUAJE;
         clinica.segto = convertirSiNo(row['SEGTO.']);
         clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
-        clinica.hidratacion = capitalize(row['HIDRATACIÓN']);
+        clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
         clinica.leche = convertirSiNo(row['TOMA LECHE']);
-        clinica.infusiones = capitalize(row['INFUSIÓN']);
+        clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
         clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
         clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
         clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
@@ -212,6 +212,10 @@ export class ProcesamientoService {
   }
 }
 
+function pasarAnumero(value: any) {
+  return +(!isNaN(parseFloat(value)) && isFinite(value) ? parseFloat(value) : 0);
+}
+
 function calcularEdad(fechaNacimiento, fechaConsulta) {
   const nacimiento = new Date(fechaNacimiento);
   let edad = fechaConsulta.getFullYear() - nacimiento.getFullYear();
@@ -226,6 +230,7 @@ function calcularEdad(fechaNacimiento, fechaConsulta) {
 }
 
 function capitalize(str) {
+  if (!str) return 'No hay dato';
   return str
     .toLocaleLowerCase()
     .split(' ')
@@ -260,6 +265,15 @@ function converitirTrauma(param: string): any {
 
   return conversiones[param] ?? 'Otras';
 }
+
+function convertirHidratacion(params: any) {
+  const conversiones: { [key: string]: string } = {
+    Si: 'Agua',
+  };
+
+  return conversiones[params] || params;
+}
+
 function convertirCurso(curso: string): string {
   const conversiones: { [key: string]: string } = {
     '1er Grado': 'Primer Grado',
@@ -342,7 +356,7 @@ function convertirAlimentacion(param: string) {
   return conversiones[param] || param;
 }
 function convertirSiNo(value: string | null) {
-  if (value) return false;
+  if (!value) return false;
   return value.toLocaleLowerCase() == 'si';
 }
 function convertirComidas(params: string) {
