@@ -490,18 +490,12 @@ export class MainSeeder implements Seeder {
           tipo: 'Secundario',
         },
         // escuelas planilla clinica
-        {
-          nombre: 'ESC. 294',
-          tipo: 'Primario',
-        },
-        {
-          nombre: 'JARDIN 118',
-          tipo: 'Jardin',
-        },
-        {
-          nombre: 'JARDIN 49',
-          tipo: 'Jardin',
-        },
+        { nombre: 'Esc. N°294', tipo: 'Primario' },
+        { nombre: 'Jardin N° 118', tipo: 'Jardin' },
+        { nombre: 'Jardín N° 49', tipo: 'Jardin' },
+        { nombre: 'CEM N° 147', tipo: 'Secundario' },
+        { nombre: 'CI Municipal N°3', tipo: 'Primario' },
+        { nombre: 'Otros', tipo: 'Primario' },
       ]);
       // Chicos
       console.log('Seeding chicos...');

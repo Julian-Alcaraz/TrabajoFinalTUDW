@@ -15,34 +15,34 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
-    const noCargados = await this.procesamientoService.procesarClinica(data,req.user);
+    const noCargados = await this.procesamientoService.procesarClinica(data, req.user);
     return { succes: true, data: noCargados, message: 'clinic' };
   }
 
   @Post('odontologia')
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
-  async procesarOdontologia(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+  async procesarOdontologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
-    await this.procesamientoService.procesarOdontologia(data);
+    const noCargados = await this.procesamientoService.procesarOdontologia(data, req.user);
     console.log(body, file);
-    return { succes: true, message: 'odon' };
+    return { succes: true, data: noCargados, message: 'odon' };
   }
 
   @Post('oftalmologia')
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
-  async procesarOftalmologia(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+  async procesarOftalmologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
-    await this.procesamientoService.procesarOftalmologia(data);
+    const noCargados = await this.procesamientoService.procesarOftalmologia(data, req.user);
     // console.log(body, file);
-    return { succes: true, message: 'ofta' };
+    return { succes: true, data: noCargados, message: 'ofta' };
   }
 
   @Post('fonoaudiologia')
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
-  async procesarFonoaudiologia(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+  async procesarFonoaudiologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
-    await this.procesamientoService.procesarFonoaudiologia(data);
+    const noCargados = await this.procesamientoService.procesarFonoaudiologia(data, req.user);
     console.log(body, file);
-    return { succes: true, message: 'fono' };
+    return { succes: true, data: noCargados, message: 'fono' };
   }
 }

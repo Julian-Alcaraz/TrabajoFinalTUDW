@@ -8,10 +8,10 @@ import { Oftalmologia } from 'src/consulta/entities/oftalmologia.entity';
 import { Odontologia } from 'src/consulta/entities/odontologia.entity';
 import { Clinica } from 'src/consulta/entities/clinica.entity';
 import { Consulta } from 'src/consulta/entities/consulta.entity';
-import { Double, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
-
+import { clasificacionDental } from '../consulta/consulta.service';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -41,51 +41,18 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         if (log) console.log(row);
-        if (!data.DNI) {
+        // esto no va aca, sacarlo y descomentarlo
+        if (!row.DNI) {
           row.DNI = 11111111 + i;
-          // esto es lo que va
-          // throw new Error('Dni no enviado');
-          // row.posicionExcel = i + 1;
-          // row.motivo = 'Dni no enviado';
-          // noCargados.push(row);
-          // continue;
         }
-        let chico = await this.chicoORM.findOneBy({ dni: row.DNI });
-        if (log) console.log('respuesta de chico si lo encuentra o no', chico);
-        if (!chico) {
-          // no se encontro el chico, insertar los datos
-          chico = new Chico();
-          chico.dni = row.DNI;
-          // ver como hago lo del nombre !!!!!!!!!!!
-          const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO']);
-          chico.nombre = arrayApyNo[1];
-          chico.apellido = arrayApyNo[0];
-          chico.created_at = new Date(row['FECHA']);
-          chico.barrio = await this.verificarBarrio(convertirBarrios(row['BARRIO']), true); // inserta el barrio si no lo encuentra, si devuelve null no podemos ingresar el chico
-          if (!chico.barrio) {
-            throw new Error('Barrio no existente ni cargado por el sistema ' + row['BARRIO']);
-            // row.posicionExcel = i + 1;
-            // row.motivo = 'Barrio no existen ni cargado por el sist';
-            // noCargados.push(row);
-            // continue;
-          }
-          chico.direccion = row['DIRECCION'];
-          chico.fe_nacimiento = row['FECHA DE NACIMIENTO'];
-          chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
-          chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
-          chico.sexo = row['SEXO'];
-          chico.telefono = row['TELEFONO'];
-          // guardo el chico, en teoria si da error se va al catch, descomentar para empezar a trabajar sobre la bd
-          chico = this.chicoORM.create(chico);
-          await this.chicoORM.save(chico);
-        }
+        const chico = await this.procesarChico(row);
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['INSTITUCION']);
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCION']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Clinica';
         consulta.observaciones = row['OBSERVACIONES'];
@@ -155,23 +122,179 @@ export class ProcesamientoService {
     return noCargados;
   }
 
-  async procesarOdontologia(data) {
-    console.log(data);
+  async procesarOdontologia(data, usuario) {
+    let log = true;
+    const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
-      console.log(row['NOMBRE Y APELLIDO']);
+      try {
+        if (log) console.log(row);
+        // esto no va aca, sacarlo y descomentarlo
+        if (!row.DNI) {
+          row.DNI = 11111111 + i;
+        }
+        const chico = await this.procesarChico(row);
+        const consulta = new Consulta();
+        consulta.chico = chico;
+        consulta.created_at = new Date(row['FECHA']);
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+        // consulta.edad = row.EDAD //pero hay que trabajar el dato
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+        consulta.type = 'Odontologia';
+        consulta.observaciones = row['OBSERVACIONES'];
+        consulta.derivacion_externa = false;
+        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
+        consulta.derivacion_odontologia = false;
+        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.usuario = usuario;
+        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
+        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
+        // todavia falta......
+        consulta.turno = capitalize(row['TURNO']);
+        const consultaNueva = this.consultaORM.create(consulta);
+        await this.consultaORM.save(consultaNueva);
+        // consulta hija  lacreo y pongo clinica.consulta = consulta
+        //
+        //
+        const odontologia = new Odontologia();
+        odontologia.consulta = consultaNueva;
+        odontologia.primera_vez = !!row['1RA VEZ'];
+        odontologia.ulterior = !!row['ULTERIOR'];
+        odontologia.dientes_permanentes = row['TOTAL PERMANENTES'];
+        odontologia.dientes_temporales = row['TOTAL TEMPORALES'];
+        odontologia.sellador = row['SELLADOR'];
+        odontologia.topificacion = !!row['TOPICACION'];
+        odontologia.cepillado = !!row['ENS. CEPILLADO'];
+        odontologia.dientes_irecuperables = row['DIENTE RECUPERABLE'];
+        odontologia.dientes_recuperables = row['DIENTE IRRECUPERABLE'];
+        odontologia.cepillo = !!row['CEPILLO'];
+        odontologia.habitos = row['HÁBITOS'];
+        odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables); //row['CLASIFICACIÓN'];
+        const odontologiaNueva = this.odontologiaORM.create(odontologia);
+        await this.odontologiaORM.save(odontologiaNueva);
+        log = false;
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        continue;
+      }
     }
-    return true;
+    // verfico el dni
+    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    return noCargados;
   }
 
-  async procesarFonoaudiologia(data: object) {
-    console.log(console.log(data));
-    return true;
+  async procesarFonoaudiologia(data, usuario) {
+    let log = true;
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      try {
+        if (log) console.log(row);
+        // esto no va aca, sacarlo y descomentarlo
+        if (!row.DNI) {
+          row.DNI = 11111111 + i;
+        }
+        const chico = await this.procesarChico(row);
+        const consulta = new Consulta();
+        consulta.chico = chico;
+        consulta.created_at = new Date(row['FECHA']);
+        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+        consulta.edad = typeof row.EDAD == 'number' ? row.EDAD : 0; //pero hay que trabajar el dato
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+        consulta.type = 'Fonoaudiologia';
+        consulta.observaciones = row['OBSERVACIÓN'];
+        consulta.derivacion_externa = false;
+        // consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
+        consulta.derivacion_fonoaudiologia = !!row['FONOAUDIOLOGÍA'];
+        consulta.derivacion_odontologia = !!row['ODONTOLOGÍA'];
+        consulta.derivacion_oftalmologia = !!row['OFTALMOLOGÍA'];
+        consulta.usuario = usuario;
+        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
+        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
+        // todavia falta......
+        consulta.turno = capitalize(row['TURNO']);
+        const consultaNueva = this.consultaORM.create(consulta);
+        await this.consultaORM.save(consultaNueva);
+        // consulta hija  lacreo y pongo clinica.consulta = consulta
+        //
+        //
+        const fonoaudiologia = new Fonoaudiologia();
+        fonoaudiologia.consulta = consultaNueva;
+        fonoaudiologia.asistencia = convertirSiNo(row['ASISTENCIA']);
+        fonoaudiologia.causas = row['CAUSAS'] ?? 'Otras';
+        fonoaudiologia.diagnostico_presuntivo = convertirDiagnostico(row['DIAGNÓSTICO PRESUNTIVO']);
+        const fonoaudiologiaNueva = await this.fonoaudiologiaORM.create(fonoaudiologia);
+        await this.fonoaudiologiaORM.save(fonoaudiologiaNueva);
+        log = false;
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        continue;
+      }
+    }
+    // verfico el dni
+    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    return noCargados;
   }
 
-  async procesarOftalmologia(data: object) {
-    console.log(console.log(data));
-    return true;
+  async procesarOftalmologia(data, usuario) {
+    let log = true;
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      try {
+        if (log) console.log(row);
+        // esto no va aca, sacarlo y descomentarlo
+        if (!row.DNI) {
+          row.DNI = 11111111 + i;
+        }
+        const chico = await this.procesarChico(row);
+        const consulta = new Consulta();
+        consulta.chico = chico;
+        consulta.created_at = new Date(row['FECHA']);
+        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+        consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+        // consulta.edad = row.EDAD //pero hay que trabajar el dato
+        consulta.institucion = await this.verificarInstitucion(row['INSTITUCION']);
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+        consulta.type = 'Clinica';
+        consulta.observaciones = row['OBSERVACIONES'];
+        consulta.derivacion_externa = false;
+        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
+        consulta.derivacion_odontologia = false;
+        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.usuario = usuario;
+        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
+        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
+        // todavia falta......
+        consulta.turno = capitalize(row['TURNO']);
+        const consultaNueva = this.consultaORM.create(consulta);
+        await this.consultaORM.save(consultaNueva);
+        // consulta hija  lacreo y pongo clinica.consulta = consulta
+        //
+        //
+
+        log = false;
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        continue;
+      }
+    }
+    // verfico el dni
+    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    return noCargados;
   }
 
   // verificaciones
@@ -209,6 +332,36 @@ export class ProcesamientoService {
       return null;
     }
     return cursoBd;
+  }
+
+  async procesarChico(row: any): Promise<Chico> {
+    if (!row.DNI) {
+      throw new Error('Dni no enviado');
+    }
+    let chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+    // console.log('respuesta de chico si lo encuentra o no', chico);
+    if (!chico) {
+      console.log('crea el chico');
+      chico = new Chico();
+      chico.dni = row.DNI;
+      const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO']);
+      chico.nombre = arrayApyNo[1];
+      chico.apellido = arrayApyNo[0];
+      chico.created_at = new Date(row['FECHA']);
+      chico.barrio = await this.verificarBarrio(convertirBarrios(row['BARRIO']), true);
+      if (!chico.barrio) {
+        throw new Error('Barrio no existente ni cargado por el sistema ' + row['BARRIO']);
+      }
+      chico.direccion = row['DIRECCIÓN'];
+      chico.fe_nacimiento = row['FECHA DE NACIMIENTO'];
+      chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
+      chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
+      chico.sexo = capitalize(row['SEXO']);
+      chico.telefono = row['TELEFONO'];
+      chico = this.chicoORM.create(chico);
+      await this.chicoORM.save(chico);
+    }
+    return chico;
   }
 }
 
@@ -273,6 +426,20 @@ function convertirHidratacion(params: any) {
 
   return conversiones[params] || params;
 }
+/**
+ * sirve para las instituciones existentes en clinica convertirlas
+ * @param inst
+ * @returns
+ */
+function convertirInstitucion(inst: string): string {
+  const conversiones: { [key: string]: string } = {
+    'ESC. 294': 'Esc. N°294',
+    'JARDIN 118': 'Jardin N° 118',
+    'JARDIN 49': 'Jardín N° 49',
+  };
+
+  return conversiones[inst] || inst;
+}
 
 function convertirCurso(curso: string): string {
   const conversiones: { [key: string]: string } = {
@@ -287,6 +454,21 @@ function convertirCurso(curso: string): string {
 
   return conversiones[curso] || curso;
 }
+function convertirDiagnostico(diagnostico: string) {
+  if (diagnostico) diagnostico = diagnostico.trim().toLocaleUpperCase();
+  else diagnostico = 'Otras patologías que dificulten el lenguaje y la comunicación';
+  const conversiones = {
+    'ORTODONCIA: PROTUSION LINGUAL,PALADAR HENDIDO.': 'Ortodoncia: Protrusión lingual, paladar hendido',
+    'RESPIRADOR BUCAL.': 'Respirador bucal',
+    'RETRASO EN EL LENGUAJE. DISLALIAS FUNCIONALES.': 'Retraso en el lenguaje, dislalias funcionales',
+    'OTRAS PATOLOGIAS QUE DIFICULTEN EL LENGUAJE Y LA COMUNICACIÓN.': 'Otras patologías que dificulten el lenguaje y la comunicación',
+    TEL: 'TEL',
+    TEA: 'TEA',
+  };
+
+  return conversiones[diagnostico] || diagnostico;
+}
+
 function convertirBarrios(barrio: string): string {
   if (typeof barrio == 'object') {
     const date = new Date(barrio);
@@ -315,6 +497,7 @@ function convertirBarrios(barrio: string): string {
     'Antartida argentina': 'Antartida Argentina',
     '02 de Feebrero': '2 de Febrero',
     '2 de Febrero': '2 de Febrero',
+    '2 de fefrero': '2 de Febrero',
     '10 de FEBRERO': '10 de Febrero',
     '10 FEBRERO': '10 de febrero',
     '2 de febrero': '2 de Febrero',
