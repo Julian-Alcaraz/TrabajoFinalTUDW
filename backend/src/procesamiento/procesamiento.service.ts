@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Chico } from 'src/chico/entities/chico.entity';
 import { Curso } from 'src/curso/entities/curso.entity';
 import { Institucion } from 'src/institucion/entities/institucion.entity';
@@ -8,7 +8,7 @@ import { Oftalmologia } from 'src/consulta/entities/oftalmologia.entity';
 import { Odontologia } from 'src/consulta/entities/odontologia.entity';
 import { Clinica } from 'src/consulta/entities/clinica.entity';
 import { Consulta } from 'src/consulta/entities/consulta.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
@@ -25,6 +25,7 @@ export class ProcesamientoService {
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
   // se va a ir
   delay(ms: number): Promise<void> {
@@ -38,6 +39,9 @@ export class ProcesamientoService {
     // console.log(data[0]); // esta data es un excel de carga
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
         if (log) console.log(row);
@@ -65,8 +69,10 @@ export class ProcesamientoService {
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = this.consultaORM.create(consulta);
-        await this.consultaORM.save(consultaNueva);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
+        // const consultaNueva = this.consultaORM.create(consulta);
+        // await this.consultaORM.save(consultaNueva);
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         const clinica = new Clinica();
         // verificar nulos importante y verificar nulos no importante(estos los seteo como desactivados)
@@ -103,8 +109,12 @@ export class ProcesamientoService {
         clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
         clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
         clinica.tension_arterial = row['TA'];
-        const clinicaNueva = this.clinicaORM.create(clinica);
-        await this.clinicaORM.save(clinicaNueva);
+        const clinicaNueva = queryRunner.manager.create(Clinica, clinica);
+        await queryRunner.manager.save(clinicaNueva);
+        // const clinicaNueva = this.clinicaORM.create(clinica);
+        // await this.clinicaORM.save(clinicaNueva);
+        // Confirmar la transacción de esta iteración
+        await queryRunner.commitTransaction();
         if (log) console.log(chico);
         if (log) console.log(consulta);
         if (log) console.log(clinica);
@@ -114,7 +124,11 @@ export class ProcesamientoService {
         row.posicionExcel = i + 1;
         row.motivo = `Error: ${error.message}`;
         noCargados.push(row);
+        await queryRunner.rollbackTransaction();
         continue;
+      } finally {
+        // Liberar el QueryRunner
+        await queryRunner.release();
       }
     }
     // verfico el dni
@@ -126,6 +140,9 @@ export class ProcesamientoService {
     let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
         if (log) console.log(row);
@@ -153,8 +170,10 @@ export class ProcesamientoService {
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = this.consultaORM.create(consulta);
-        await this.consultaORM.save(consultaNueva);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
+        // const consultaNueva = this.consultaORM.create(consulta);
+        // await this.consultaORM.save(consultaNueva);
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         //
         //
@@ -172,15 +191,22 @@ export class ProcesamientoService {
         odontologia.cepillo = !!row['CEPILLO'];
         odontologia.habitos = row['HÁBITOS'];
         odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables); //row['CLASIFICACIÓN'];
-        const odontologiaNueva = this.odontologiaORM.create(odontologia);
-        await this.odontologiaORM.save(odontologiaNueva);
+        // const odontologiaNueva = this.odontologiaORM.create(odontologia);
+        // await this.odontologiaORM.save(odontologiaNueva);
+        const odontologiaNueva = queryRunner.manager.create(Odontologia, odontologia);
+        await queryRunner.manager.save(odontologiaNueva);
+        await queryRunner.commitTransaction();
         log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
         row.motivo = `Error: ${error.message}`;
         noCargados.push(row);
+        await queryRunner.rollbackTransaction();
         continue;
+      } finally {
+        // Liberar el QueryRunner
+        await queryRunner.release();
       }
     }
     // verfico el dni
@@ -192,6 +218,9 @@ export class ProcesamientoService {
     let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
         if (log) console.log(row);
@@ -220,8 +249,10 @@ export class ProcesamientoService {
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = this.consultaORM.create(consulta);
-        await this.consultaORM.save(consultaNueva);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
+        // const consultaNueva = this.consultaORM.create(consulta);
+        // await this.consultaORM.save(consultaNueva);
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         //
         //
@@ -230,15 +261,22 @@ export class ProcesamientoService {
         fonoaudiologia.asistencia = convertirSiNo(row['ASISTENCIA']);
         fonoaudiologia.causas = row['CAUSAS'] ?? 'Otras';
         fonoaudiologia.diagnostico_presuntivo = convertirDiagnostico(row['DIAGNÓSTICO PRESUNTIVO']);
-        const fonoaudiologiaNueva = await this.fonoaudiologiaORM.create(fonoaudiologia);
-        await this.fonoaudiologiaORM.save(fonoaudiologiaNueva);
+        // const fonoaudiologiaNueva = await this.fonoaudiologiaORM.create(fonoaudiologia);
+        // await this.fonoaudiologiaORM.save(fonoaudiologiaNueva);
+        const fonoaudiologiaNueva = queryRunner.manager.create(Fonoaudiologia, fonoaudiologia);
+        await queryRunner.manager.save(fonoaudiologiaNueva);
+        await queryRunner.commitTransaction();
         log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
         row.motivo = `Error: ${error.message}`;
         noCargados.push(row);
+        await queryRunner.rollbackTransaction();
         continue;
+      } finally {
+        // Liberar el QueryRunner
+        await queryRunner.release();
       }
     }
     // verfico el dni
@@ -250,6 +288,9 @@ export class ProcesamientoService {
     let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
         if (log) console.log(row);
@@ -277,19 +318,36 @@ export class ProcesamientoService {
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = this.consultaORM.create(consulta);
-        await this.consultaORM.save(consultaNueva);
+        // const consultaNueva = this.consultaORM.create(consulta);
+        // await this.consultaORM.save(consultaNueva);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         //
         //
+        const oftalmologia = new Oftalmologia();
+        oftalmologia.consulta = consultaNueva;
+        oftalmologia.anteojos = row[''];
+        oftalmologia.control = row[''];
+        oftalmologia.demanda = row[''];
+        oftalmologia.primera_vez = row[''];
+        oftalmologia.prox_control = row[''];
+        oftalmologia.receta = row[''];
 
+        const oftalmologiaNueva = queryRunner.manager.create(Oftalmologia, oftalmologia);
+        await queryRunner.manager.save(oftalmologiaNueva);
         log = false;
+        await queryRunner.commitTransaction();
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
         row.motivo = `Error: ${error.message}`;
         noCargados.push(row);
+        await queryRunner.rollbackTransaction();
         continue;
+      } finally {
+        // Liberar el QueryRunner
+        await queryRunner.release();
       }
     }
     // verfico el dni
