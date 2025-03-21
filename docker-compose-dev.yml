@@ -1,36 +1,39 @@
-services: 
+services:
   # Contenedor postgres
-  postgres-db: 
-    image: postgres
-    ports: 
-      - "127.0.0.1:5432:5432"
+  postgres-db:
+    image: postgres:17
+    ports:
+      - '127.0.0.1:5432:5432'
+    container_name: postgres-fundacion-sol
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=fundacion_sol
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-data-fundacion-sol:/var/lib/postgresql/data
   # Contenedor pgadmin4
   pgadmin4:
     image: dpage/pgadmin4
-    ports: 
-      - "127.0.0.1:5050:80"
+    ports:
+      - '127.0.0.1:5050:80'
+    container_name: pgadmin4-fundacion-sol
     environment:
       - PGADMIN_DEFAULT_EMAIL=root@root.com
       - PGADMIN_DEFAULT_PASSWORD=root
   # Contenedor backend (Nest.js)
   backend:
-    ports: 
-      - "127.0.0.1:3000:3000"
-    build: 
+    ports:
+      - '127.0.0.1:3000:3000'
+    container_name: backend-fundacion-sol
+    build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    links:
-     - postgres-db
+    depends_on:
+      - postgres-db
     volumes:
       - ./backend:/home/app/backend
       - /home/app/backend/node_modules
-      - ./const:/home/app/const
+      ##############################- ./const:/home/app/const
   # Contenedor frontend (Angular)
   # frontend:
   #   build:
@@ -45,4 +48,4 @@ services:
   #     - backend
 # Definir volumenes
 volumes:
-  pg-data:
+  pg-data-fundacion-sol:

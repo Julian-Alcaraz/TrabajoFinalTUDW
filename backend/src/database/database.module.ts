@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
         username: configService.getOrThrow<string>('TYPE_ORM_USERNAME'),
         password: configService.getOrThrow<string>('TYPE_ORM_PASSWORD'),
         synchronize: configService.getOrThrow<string>('TYPE_ORM_SYNCHRONIZE') === 'true', // Convierte a booleano
-        entities: [configService.getOrThrow('TYPE_ORM_ENTITIES')], // CAMBIAR EN PRODUCION!!!!!!!!!!!
+        entities: [configService.getOrThrow/*<string>*/('TYPE_ORM_ENTITIES')], // CAMBIAR EN PRODUCION!!!!!!!!!!!
         autoLoadEntities: true,
         //seeds: [__dirname + '/seeds/**/*{.ts,.js}'],
         //factories: [__dirname + '/factories/**/*{.ts,.js}'],

@@ -1,0 +1,7 @@
+.gitignore
+frontend
+images
+package-lock.json
+package.json
+README.md
+backend/dist

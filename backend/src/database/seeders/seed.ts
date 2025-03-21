@@ -17,7 +17,8 @@ import { OdontologiaFactory } from '../factories/odontologia.factory';
 dotenv.config({ path: './config/.env' });
 
 const configService = new ConfigService();
-
+console.log('======================', configService.getOrThrow<string>('TYPE_ORM_ENTITIES'), '======================');
+console.log('======================', typeof configService.getOrThrow<string>('TYPE_ORM_ENTITIES'), '======================');
 const options: DataSourceOptions & SeederOptions = {
   type: configService.getOrThrow<any>('TYPE_ORM_TYPE'),
   host: configService.getOrThrow<string>('TYPE_ORM_HOST'),

@@ -1,5 +1,5 @@
 # Usar una imagen base de Node.js
-FROM node:22
+FROM node:22.14.0
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /home/app/backend
@@ -13,8 +13,15 @@ RUN npm ci
 # Copiar los archivos del proyecto al contenedor
 COPY . .
 
+# Copiar config. de app
+# Quiza no haga falta, probar sacarlo.
+COPY ./config/.env.prod /home/app/backend/config/.env
+
+# Compilar la app
+RUN npm run build
+
 # Exponer el puerto 3000
 EXPOSE 3000
 
-# Ejecutar la aplicación en modo desarrollo HAY QUE CAMBIARLO DESPUES
-CMD ["npm", "run", "start:dev"]
+# Ejecutar la app compilada
+CMD ["node", "dist/main.js"]

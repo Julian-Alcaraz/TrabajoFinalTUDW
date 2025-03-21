@@ -1,39 +1,55 @@
 services:
   # Contenedor postgres
-  postgres-db: 
-    image: postgres
-    ports: 
-      - "5432:5432"
+  postgres-db:
+    image: postgres:17
+    ports:
+      - '5432:5432'
+    container_name: postgres-fundacion-sol
+    restart: always
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=docker
+      - POSTGRES_DB=fundacion_sol
+      #################- POSTGRES_HOST_AUTH_METHOD=password
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-data-fundacion-sol:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Contenedor pgadmin4
   pgadmin4:
     image: dpage/pgadmin4
-    ports: 
-      - "5050:80"
+    ports:
+      - '5050:80'
+    container_name: pgadmin4-fundacion-sol
     environment:
       - PGADMIN_DEFAULT_EMAIL=root@root.com
       - PGADMIN_DEFAULT_PASSWORD=root
+
   # Contenedor backend (Nest.js)
   backend:
-    ports: 
-      - "3000:3000"
-    build: ./backend
-    links:
-     - postgres-db
-  # Contenedor frontend (Angular)
-  frontend:
-    build: ./frontend
     ports:
-      - "4200:4200" 
-    volumes:
-      - ./frontend:/home/app
+      - '3000:3000'
+    container_name: backend-fundacion-sol
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     depends_on:
-      - backend
+      postgres-db:
+        condition: service_healthy
+  # Contenedor frontend (Angular)
+  ##############frontend:
+  ##############  build: ./frontend
+  ##############  ports:
+  ##############    - "4200:4200"
+  ##############  volumes:
+  ##############    - ./frontend:/home/app
+  ##############  depends_on:
+  ##############    - backend
 # Definir volumenes
 volumes:
-  pg-data:
+  pg-data-fundacion-sol:
