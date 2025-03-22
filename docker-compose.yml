@@ -1,36 +1,42 @@
 services:
+
   # Contenedor postgres
+
   postgres-db:
     image: postgres:17
+    env_file:
+      - ./.env
     ports:
       - '5432:5432'
     container_name: postgres-fundacion-sol
     restart: always
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=fundacion_sol
-      #################- POSTGRES_HOST_AUTH_METHOD=password
+      POSTGRES_USER: ${PG_USERNAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
     volumes:
       - pg-data-fundacion-sol:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U root"]
+      test: ['CMD-SHELL', 'pg_isready -h postgres-db -U root -p 5432']
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 5    
 
   # Contenedor pgadmin4
+
   pgadmin4:
     image: dpage/pgadmin4
     ports:
       - '5050:80'
     container_name: pgadmin4-fundacion-sol
     environment:
-      - PGADMIN_DEFAULT_EMAIL=root@root.com
-      - PGADMIN_DEFAULT_PASSWORD=root
-
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+  
   # Contenedor backend (Nest.js)
+
   backend:
+    image: backend-fundacion-sol:latest
     ports:
       - '3000:3000'
     container_name: backend-fundacion-sol
@@ -41,15 +47,23 @@ services:
     depends_on:
       postgres-db:
         condition: service_healthy
+    volumes:
+      - shared_frontend:/home/app/backend/frontend
+
   # Contenedor frontend (Angular)
-  ##############frontend:
-  ##############  build: ./frontend
-  ##############  ports:
-  ##############    - "4200:4200"
-  ##############  volumes:
-  ##############    - ./frontend:/home/app
-  ##############  depends_on:
-  ##############    - backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-fundacion-sol
+    volumes:
+      - shared_frontend:/home/app/frontend/dist
+    # SACAR!!!:
+    ################command: npm run build -- --output-path=/home/app/frontend/dist
+
+
 # Definir volumenes
 volumes:
   pg-data-fundacion-sol:
+  shared_frontend:

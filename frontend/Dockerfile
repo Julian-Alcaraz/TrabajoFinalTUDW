@@ -1,23 +1,14 @@
-# Usar una imagen base de Node.js
-FROM node:22
+FROM node:22.14.0-alpine
 
-# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /home/app/frontend
 
-# Copiar solo package y package lock.json
 COPY package*.json ./
 
-# Instalar las dependencias del proyecto
 RUN npm ci
 
-# Instalar Angular CLI globalmente
-RUN npm install -g @angular/cli
-
-# Copiar los archivos del proyecto al contenedor
 COPY . .
 
-# Exponer el puerto 4200 para Angular en desarrollo
-EXPOSE 4200
+# No es necesario guardar los archivos, solo se construye en /home/app/frontend/dist
+RUN npm run build -- --output-path=/home/app/frontend/dist
 
-# Comando para iniciar la aplicación en modo desarrollo , CAMBIARLO DESPUES
-# CMD ["npm", "start"]
+CMD ["echo", "Frontend buildeado"]

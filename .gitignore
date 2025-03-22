@@ -22,8 +22,10 @@ backend/.env.production.local
 backend/.env.local
 backend/frontend
 
+.env
 # Miscellaneous
 frontend/.angular/cache
+backend/config/.env.prod
 
 # nodemodules
 frontend/node_modules

@@ -127,10 +127,17 @@ export class ConsultaService {
     const consulta = this.prepararDataConsultaPersonalizada(data);
     const consultas = consulta.generales ? await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: consulta.generales }) : await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: { deshabilitado: false } });
 
+    console.log('----------------- Consultas antes de procesar :', consultas.length); // Total consultas: 14282
+
     if (!data.consultasSeleccionadas || data.consultasSeleccionadas.length === 0) {
-      return this.procesarConsultasSinSeleccion(consultas, consulta);
+      const res = await this.procesarConsultasSinSeleccion(consultas, consulta);
+      console.log('----------------- Consultas despues de procesarConsultasSinSeleccion :', res.length); // Total consultas: ?????
+      return res;
     }
-    return this.procesarConsultasSeleccionadas(data.consultasSeleccionadas, consultas, consulta);
+    // Aca solo retorna 2878 consultas siempre!!!!!!!!!!!!
+    const res2 = await this.procesarConsultasSeleccionadas(data.consultasSeleccionadas, consultas, consulta);
+    console.log('----------------- Consultas despues de procesarConsultasSeleccionadas :', res2.length); // Total consultas: ?????
+    return res2;
   }
 
   // SIN SELECCIONAR
@@ -158,6 +165,13 @@ export class ConsultaService {
           break;
       }
     }
+
+    console.log('procesarConsultasSinSeleccion - CLINICA - ', consultasClinicas.length);
+    console.log('procesarConsultasSinSeleccion - ODONTOLOGIA - ', consultasOdontologia.length);
+    console.log('procesarConsultasSinSeleccion - OFTALMOLOGIA - ', consultasOftalmologia.length);
+    console.log('procesarConsultasSinSeleccion - FONOAUDIOLOGIA - ', consultasFonoaudiologia.length);
+    console.log('procesarConsultasSinSeleccion - TOTAL - ', consultasClinicas.length + consultasOdontologia.length + consultasOftalmologia.length + consultasFonoaudiologia.length);
+
     if (consultasClinicas.length > 0) {
       const clinicaData = await this.procesarClinica(consulta);
       resultados.push(...this.combinarDatos(consultas, clinicaData, 'clinica', resultados));
@@ -174,6 +188,9 @@ export class ConsultaService {
       const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
       resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
     }
+
+    console.log('procesarConsultasSinSeleccion - RETORNA ', resultados.length);
+
     return resultados;
   }
 

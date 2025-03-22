@@ -7,7 +7,7 @@ import { Rol } from '../../rol/entities/rol.entity';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 import { codificarContrasenia } from '../../common/utils/bcrypt';
 import { Localidad } from '../../localidad/entities/localidad.entity';
-import { Barrio } from '../..//barrio/entities/barrio.entity';
+import { Barrio } from '../../barrio/entities/barrio.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { Chico } from '../../chico/entities/chico.entity';
@@ -502,7 +502,7 @@ export class MainSeeder implements Seeder {
 
       // Crea 500 chicos
       const chicos = await Promise.all(
-        Array(10)
+        Array(5000)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
@@ -582,7 +582,7 @@ export class MainSeeder implements Seeder {
       // Crea 1500 consultas
       console.log('Seeding consultas...');
       const consultasSimples = await Promise.all(
-        Array(10)
+        Array(3000)
           .fill('')
           .map(async () => {
             const chicoSeleccionado = faker.helpers.arrayElement(chicos);
@@ -604,6 +604,110 @@ export class MainSeeder implements Seeder {
 
       await consultaORM.save(consultasSimples);
 
+            // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
+      const consultasSimples2 = await Promise.all(
+        Array(3000)
+          .fill('')
+          .map(async () => {
+            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
+            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+            const consulta = await consultaFactory.make({
+              curso: faker.helpers.arrayElement(cursos),
+              institucion: faker.helpers.arrayElement(instituciones),
+              chico: chicoSeleccionado,
+              usuario: usuarioConRol,
+              edad: edad,
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+              deshabilitado: faker.datatype.boolean(0.05),
+            });
+            return consulta;
+          }),
+      );
+
+      await consultaORM.save(consultasSimples2);
+
+
+            // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
+      const consultasSimples3 = await Promise.all(
+        Array(3000)
+          .fill('')
+          .map(async () => {
+            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
+            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+            const consulta = await consultaFactory.make({
+              curso: faker.helpers.arrayElement(cursos),
+              institucion: faker.helpers.arrayElement(instituciones),
+              chico: chicoSeleccionado,
+              usuario: usuarioConRol,
+              edad: edad,
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+              deshabilitado: faker.datatype.boolean(0.05),
+            });
+            return consulta;
+          }),
+      );
+
+      await consultaORM.save(consultasSimples3);
+
+                  // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
+      const consultasSimples4 = await Promise.all(
+        Array(3000)
+          .fill('')
+          .map(async () => {
+            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
+            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+            const consulta = await consultaFactory.make({
+              curso: faker.helpers.arrayElement(cursos),
+              institucion: faker.helpers.arrayElement(instituciones),
+              chico: chicoSeleccionado,
+              usuario: usuarioConRol,
+              edad: edad,
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+              deshabilitado: faker.datatype.boolean(0.05),
+            });
+            return consulta;
+          }),
+      );
+
+      await consultaORM.save(consultasSimples4);
+
+                        // Consultas
+      // Crea 1500 consultas
+      console.log('Seeding consultas...');
+      const consultasSimples5 = await Promise.all(
+        Array(3000)
+          .fill('')
+          .map(async () => {
+            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
+            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+            const consulta = await consultaFactory.make({
+              curso: faker.helpers.arrayElement(cursos),
+              institucion: faker.helpers.arrayElement(instituciones),
+              chico: chicoSeleccionado,
+              usuario: usuarioConRol,
+              edad: edad,
+              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+              deshabilitado: faker.datatype.boolean(0.05),
+            });
+            return consulta;
+          }),
+      );
+
+      await consultaORM.save(consultasSimples5);
       for (const consulta of consultasSimples) {
         switch (consulta.type) {
           case 'Clinica':
