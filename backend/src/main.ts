@@ -25,10 +25,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new NotFoundExceptionFilter());
   // Swagger:
-  const config = new DocumentBuilder().setTitle('API TPFinalTUDW').setDescription('API para la aplicación web de la Fundacion Sol').setVersion('1.0').build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-
+  // Solo disponible cuando la app esta en desarrollo
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder().setTitle('API TPFinalTUDW').setDescription('API para la aplicación web de la Fundacion Sol').setVersion('1.0').build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
   await app.listen(3000);
 }
 bootstrap();

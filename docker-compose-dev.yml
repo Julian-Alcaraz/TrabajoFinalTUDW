@@ -9,7 +9,6 @@ services:
     ports:
       - '127.0.0.1:5432:5432'
     container_name: postgres-fundacion-sol
-    restart: always
     environment:
       POSTGRES_USER: ${PG_USERNAME}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
@@ -39,7 +38,6 @@ services:
     ports:
       - '127.0.0.1:3000:3000'
     container_name: backend-fundacion-sol
-    restart: always
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
