@@ -502,7 +502,7 @@ export class MainSeeder implements Seeder {
 
       // Crea 500 chicos
       const chicos = await Promise.all(
-        Array(5000)
+        Array(500)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
