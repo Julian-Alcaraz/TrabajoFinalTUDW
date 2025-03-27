@@ -15,7 +15,7 @@ frontend/.env.test.local
 frontend/.env.production.local
 frontend/.env.local
 
-backend/config/.env
+backend/.env
 backend/.env.development.local
 backend/.env.test.local
 backend/.env.production.local
@@ -25,7 +25,7 @@ backend/frontend
 .env
 # Miscellaneous
 frontend/.angular/cache
-backend/config/.env.prod
+backend/.env.prod
 
 # nodemodules
 frontend/node_modules

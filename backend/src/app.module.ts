@@ -22,7 +22,7 @@ import { ServiceModule } from './common/services/service.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend', 'browser'), // Ruta a la carpeta con el build de Angular
     }),
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: './config/.env' }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: './.env' }),
     DatabaseModule,
     RolModule,
     MenuModule,

@@ -28,37 +28,37 @@ import { Clinica } from '../../consulta/entities/clinica.entity';
 import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 import { Odontologia } from '../../consulta/entities/odontologia.entity';
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
+import { SecretService } from '../../common/services/secret.service';
 
-dotenv.config({ path: './config/.env' });
-
+dotenv.config();
 const configService = new ConfigService();
+const secretService = new SecretService(configService);
 
-/*
+/* */
 console.log('====================== SEED.TS ======================');
 
-console.log('TYPE_ORM_TYPE:', configService.getOrThrow<any>('TYPE_ORM_TYPE'));
-console.log('TYPE_ORM_HOST:', configService.getOrThrow<string>('TYPE_ORM_HOST'));
-console.log('TYPE_ORM_PORT:', configService.getOrThrow<number>('TYPE_ORM_PORT'));
-console.log('TYPE_ORM_USERNAME:', configService.getOrThrow<string>('TYPE_ORM_USERNAME'));
-console.log('TYPE_ORM_PASSWORD:', configService.getOrThrow<string>('TYPE_ORM_PASSWORD'));
-console.log('TYPE_ORM_DATABASE:', configService.getOrThrow<string>('TYPE_ORM_DATABASE'));
-console.log('TYPE_ORM_SYNCHRONIZE:', configService.getOrThrow<string>('TYPE_ORM_SYNCHRONIZE'));
-console.log('TYPE_ORM_LOGGING:', configService.getOrThrow<string>('TYPE_ORM_LOGGING'));
-console.log('TYPE_ORM_ENTITIES:', configService.getOrThrow<string>('TYPE_ORM_ENTITIES'));
-console.log('TYPE_ORM_MIGRATIONS:', configService.getOrThrow<string>('TYPE_ORM_MIGRATIONS'));
-console.log('TYPE_ORM_MIGRATIONS_TABLE_NAME:', configService.getOrThrow<string>('TYPE_ORM_MIGRATIONS_TABLE_NAME'));
+console.log('DB_TYPE:', secretService.readSecret('DB_TYPE'));
+console.log('DB_HOST:', secretService.readSecret('DB_HOST'));
+console.log('DB_PORT:', secretService.readSecret('DB_PORT'));
+console.log('DB_USERNAME:', secretService.readSecret('DB_DATABASE'));
+console.log('DB_PASSWORD:', secretService.readSecret('DB_PASSWORD'));
+console.log('DB_DATABASE:', secretService.readSecret('DB_DATABASE'));
+console.log('DB_SYNCHRONIZE:', secretService.readSecret('DB_SYNCHRONIZE'));
+console.log('DB_LOGGING:', secretService.readSecret('DB_LOGGING'));
+console.log('DB_ENTITIES:', secretService.readSecret('DB_ENTITIES'));
+console.log('DB_MIGRATIONS:', secretService.readSecret('DB_MIGRATIONS'));
+console.log('DB_MIGRATIONS_TABLE_NAME:', secretService.readSecret('DB_MIGRATIONS_TABLE_NAME'));
 
 console.log('====================== SEED.TS ======================');
-*/
 
 const options: DataSourceOptions & SeederOptions = {
-  type: configService.getOrThrow<any>('TYPE_ORM_TYPE'),
-  host: configService.getOrThrow<string>('TYPE_ORM_HOST'),
-  port: +configService.getOrThrow<number>('TYPE_ORM_PORT'),
-  username: configService.getOrThrow<string>('TYPE_ORM_USERNAME'),
-  password: configService.getOrThrow<string>('TYPE_ORM_PASSWORD'),
-  database: configService.getOrThrow<string>('TYPE_ORM_DATABASE'),
-  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia],
+  type: secretService.readSecret('DB_TYPE'),
+  host: secretService.readSecret('DB_HOST'),
+  port: +secretService.readSecret('DB_PORT'),
+  database: secretService.readSecret('DB_DATABASE'),
+  username: secretService.readSecret('DB_USERNAME'),
+  password: secretService.readSecret('DB_PASSWORD'),
+  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia],
   factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
   seeds: [MainSeeder],
 };

@@ -4,10 +4,13 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { LocalGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { SecretService } from 'src/common/services/secret.service';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
+  constructor(private readonly secretService: SecretService) {}
+
   /**
    * Cuando hago una peticion post a "login" primero se invoca a el LocalGuard,
    * ejecuta el metodo canActivate() y este ejecuta el super.CanActivate() que va a local.strategy
@@ -19,8 +22,8 @@ export class AuthController {
     // Guardo token en cookie
     res.cookie('Authorization', token, {
       maxAge: 24 * 60 * 60 * 1000, // 24 horas
-      httpOnly: false,
-      secure: false,
+      httpOnly: this.secretService.readSecret('COOKIE_HTTP_ONLY') === 'true',
+      secure: this.secretService.readSecret('COOKIE_SECURE') === 'true',
     });
     let response;
     if (usuario) response = { success: true, data: usuario, message: 'Inicio de sesion correcto' };
@@ -38,8 +41,8 @@ export class AuthController {
   logout(@Res() res: Response) {
     // Elimina cookie de token
     res.clearCookie('Authorization', {
-      httpOnly: false,
-      secure: false,
+      httpOnly: this.secretService.readSecret('COOKIE_HTTP_ONLY') === 'true',
+      secure: this.secretService.readSecret('COOKIE_SECURE') === 'true',
     });
     return res.status(200).send({ success: true, message: 'Logout exitoso' });
   }

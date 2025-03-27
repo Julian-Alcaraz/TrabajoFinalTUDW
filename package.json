@@ -11,7 +11,7 @@
     "actualizar": "npm run detener-contenedores && npm run eliminar-contenedores && npm run eliminar-imagenes && npm run eliminar-volumenes && npm run iniciar:deatached && npm run migracion:generar && migracion:ejecutar",
     "migracion:generar": "docker exec -it backend npm run migration:generate --name=%npm_config_name%",
 
-    "borrar-todo": "docker stop backend postgres && docker rm backend postgres frontend && docker image rm fundacion-sol-backend fundacion-sol-frontend postgres && docker volume rm fundacion-sol_pg-data-fundacion-sol fundacion-sol_volumen_compartido",
+    "borrar-todo": "docker rm backend postgres frontend && docker image rm fundacion-sol-backend fundacion-sol-frontend && docker volume rm fundacion-sol_pg-data-fundacion-sol fundacion-sol_volumen_compartido",
 
     "detener-contenedores": "docker stop backend postgres",
     "eliminar-contenedores": "docker rm backend frontend",
