@@ -35,7 +35,8 @@ export default new DataSource({
   password: secretService.readSecret('DB_PASSWORD'),
   synchronize: secretService.readSecret('DB_SYNCHRONIZE') === 'true',
   logging: secretService.readSecret('DB_LOGGING') === 'true',
-  entities: ['dist/**/*.entity.js'],
+  entities: ['src/**/*.entity.ts'], // develop
+  // entities: ['dist/**/*.entity.js'], // production
   migrations: [secretService.readSecret('DB_MIGRATIONS')],
   migrationsTableName: secretService.readSecret('DB_MIGRATIONS_TABLE_NAME'),
   dropSchema: false,

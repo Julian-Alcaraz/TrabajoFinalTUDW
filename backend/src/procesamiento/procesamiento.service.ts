@@ -8,7 +8,7 @@ import { Oftalmologia } from 'src/consulta/entities/oftalmologia.entity';
 import { Odontologia } from 'src/consulta/entities/odontologia.entity';
 import { Clinica } from 'src/consulta/entities/clinica.entity';
 import { Consulta } from 'src/consulta/entities/consulta.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
@@ -32,11 +32,8 @@ export class ProcesamientoService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
   async procesarClinica(data: any, usuario: Usuario) {
-    let log = true;
     // const institucionCargadas = await this.institucionORM.find();
     // const cursosCargados = await this.cursoORM.find();
-    // console.log(institucionCargadas, cursosCargados);
-    // console.log(data[0]); // esta data es un excel de carga
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
@@ -44,12 +41,7 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        if (log) console.log(row);
-        // esto no va aca, sacarlo y descomentarlo
-        if (!row.DNI) {
-          row.DNI = 11111111 + i;
-        }
-        const chico = await this.procesarChico(row);
+        const chico = await this.procesarChico(row, queryRunner);
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
@@ -59,16 +51,15 @@ export class ProcesamientoService {
         consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCION']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Clinica';
+        consulta.usuario = usuario;
+        consulta.turno = capitalize(row['TURNO']);
         consulta.observaciones = row['OBSERVACIONES'];
         consulta.derivacion_externa = false;
         consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
         consulta.derivacion_odontologia = false;
         consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
-        consulta.usuario = usuario;
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
-        // todavia falta......
-        consulta.turno = capitalize(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
@@ -115,10 +106,6 @@ export class ProcesamientoService {
         // await this.clinicaORM.save(clinicaNueva);
         // Confirmar la transacción de esta iteración
         await queryRunner.commitTransaction();
-        if (log) console.log(chico);
-        if (log) console.log(consulta);
-        if (log) console.log(clinica);
-        log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -127,17 +114,13 @@ export class ProcesamientoService {
         await queryRunner.rollbackTransaction();
         continue;
       } finally {
-        // Liberar el QueryRunner
         await queryRunner.release();
       }
     }
-    // verfico el dni
-    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return noCargados;
   }
 
   async procesarOdontologia(data, usuario) {
-    let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
@@ -145,12 +128,7 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        if (log) console.log(row);
-        // esto no va aca, sacarlo y descomentarlo
-        if (!row.DNI) {
-          row.DNI = 11111111 + i;
-        }
-        const chico = await this.procesarChico(row);
+        const chico = await this.procesarChico(row, queryRunner);
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
@@ -161,22 +139,18 @@ export class ProcesamientoService {
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Odontologia';
         consulta.observaciones = row['OBSERVACIONES'];
+        consulta.turno = capitalize(row['TURNO']);
+        consulta.usuario = usuario;
         consulta.derivacion_externa = false;
         consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
         consulta.derivacion_odontologia = false;
         consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
-        consulta.usuario = usuario;
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
-        // todavia falta......
-        consulta.turno = capitalize(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
         // await this.consultaORM.save(consultaNueva);
-        // consulta hija  lacreo y pongo clinica.consulta = consulta
-        //
-        //
         const odontologia = new Odontologia();
         odontologia.consulta = consultaNueva;
         odontologia.primera_vez = !!row['1RA VEZ'];
@@ -196,7 +170,6 @@ export class ProcesamientoService {
         const odontologiaNueva = queryRunner.manager.create(Odontologia, odontologia);
         await queryRunner.manager.save(odontologiaNueva);
         await queryRunner.commitTransaction();
-        log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -205,17 +178,13 @@ export class ProcesamientoService {
         await queryRunner.rollbackTransaction();
         continue;
       } finally {
-        // Liberar el QueryRunner
         await queryRunner.release();
       }
     }
-    // verfico el dni
-    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return noCargados;
   }
 
   async procesarFonoaudiologia(data, usuario) {
-    let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
@@ -223,12 +192,7 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        if (log) console.log(row);
-        // esto no va aca, sacarlo y descomentarlo
-        if (!row.DNI) {
-          row.DNI = 11111111 + i;
-        }
-        const chico = await this.procesarChico(row);
+        const chico = await this.procesarChico(row, queryRunner);
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
@@ -247,15 +211,11 @@ export class ProcesamientoService {
         consulta.usuario = usuario;
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
-        // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
         // await this.consultaORM.save(consultaNueva);
-        // consulta hija  lacreo y pongo clinica.consulta = consulta
-        //
-        //
         const fonoaudiologia = new Fonoaudiologia();
         fonoaudiologia.consulta = consultaNueva;
         fonoaudiologia.asistencia = convertirSiNo(row['ASISTENCIA']);
@@ -266,7 +226,6 @@ export class ProcesamientoService {
         const fonoaudiologiaNueva = queryRunner.manager.create(Fonoaudiologia, fonoaudiologia);
         await queryRunner.manager.save(fonoaudiologiaNueva);
         await queryRunner.commitTransaction();
-        log = false;
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -275,17 +234,13 @@ export class ProcesamientoService {
         await queryRunner.rollbackTransaction();
         continue;
       } finally {
-        // Liberar el QueryRunner
         await queryRunner.release();
       }
     }
-    // verfico el dni
-    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return noCargados;
   }
 
   async procesarOftalmologia(data, usuario) {
-    let log = true;
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
@@ -293,12 +248,7 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        if (log) console.log(row);
-        // esto no va aca, sacarlo y descomentarlo
-        if (!row.DNI) {
-          row.DNI = 11111111 + i;
-        }
-        const chico = await this.procesarChico(row);
+        const chico = await this.procesarChico(row, queryRunner);
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
@@ -316,15 +266,12 @@ export class ProcesamientoService {
         consulta.usuario = usuario;
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
-        // todavia falta......
         consulta.turno = capitalize(row['TURNO']);
         // const consultaNueva = this.consultaORM.create(consulta);
         // await this.consultaORM.save(consultaNueva);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // consulta hija  lacreo y pongo clinica.consulta = consulta
-        //
-        //
         const oftalmologia = new Oftalmologia();
         oftalmologia.consulta = consultaNueva;
         oftalmologia.anteojos = row[''];
@@ -336,7 +283,6 @@ export class ProcesamientoService {
 
         const oftalmologiaNueva = queryRunner.manager.create(Oftalmologia, oftalmologia);
         await queryRunner.manager.save(oftalmologiaNueva);
-        log = false;
         await queryRunner.commitTransaction();
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
@@ -346,12 +292,10 @@ export class ProcesamientoService {
         await queryRunner.rollbackTransaction();
         continue;
       } finally {
-        // Liberar el QueryRunner
         await queryRunner.release();
       }
     }
     // verfico el dni
-    console.log('TERMINO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return noCargados;
   }
 
@@ -392,14 +336,12 @@ export class ProcesamientoService {
     return cursoBd;
   }
 
-  async procesarChico(row: any): Promise<Chico> {
+  async procesarChico(row: any, queryRunner: QueryRunner): Promise<Chico> {
     if (!row.DNI) {
       throw new Error('Dni no enviado');
     }
     let chico = await this.chicoORM.findOneBy({ dni: row.DNI });
-    // console.log('respuesta de chico si lo encuentra o no', chico);
     if (!chico) {
-      console.log('crea el chico');
       chico = new Chico();
       chico.dni = row.DNI;
       const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO']);
@@ -416,8 +358,10 @@ export class ProcesamientoService {
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
       chico.sexo = capitalize(row['SEXO']);
       chico.telefono = row['TELEFONO'];
-      chico = this.chicoORM.create(chico);
-      await this.chicoORM.save(chico);
+      // chico = this.chicoORM.create(chico);
+      // await this.chicoORM.save(chico);
+      chico = queryRunner.manager.create(Chico, chico);
+      await queryRunner.manager.save(chico);
     }
     return chico;
   }
@@ -455,7 +399,14 @@ function separarNombre(apellidoYnombre: string) {
   if (!apellidoYnombre) {
     return ['NO DEFINIDO', 'NO DEFINIDO']; // Devuelve un arreglo vacío si la cadena es null o undefined
   }
-  return apellidoYnombre.trim().split(/\s+/);
+  let arrayNombres = apellidoYnombre.trim().replace(',', '').split(/\s+/);
+  if (arrayNombres.length == 1) {
+    arrayNombres.push('NO DEFINIDO');
+  } else if (arrayNombres.length > 2) {
+    arrayNombres = [`${arrayNombres.slice(0, -1).join(' ')}`, arrayNombres[arrayNombres.length - 1]];
+  }
+
+  return arrayNombres;
 }
 
 function convertirVacunas(param: string): any {
@@ -565,6 +516,10 @@ function convertirBarrios(barrio: string): string {
     '2 cde febrero': '2 de Febrero',
     '2 e febrero': '2 de Febrero',
     '2 e Febrero': '2 de Febrero',
+    '2 de Febreo': '2 de Febrero',
+    'Bº 2 febrero': '2 de Febrero',
+    'B° 2 febrero': '2 de Febrero',
+    '2 de Ferbrero': '2 de Febrero',
     'colonia Santa Elena': 'Santa Elena',
     '130 viv': '130 Viviendas',
     'obrero A': 'Obrero A',
@@ -574,6 +529,7 @@ function convertirBarrios(barrio: string): string {
     'La Esperanza': 'Nueva Esperanza',
     'La esperanza': 'Nueva Esperanza',
     'nueva Esperanza': 'Nueva Esperanza',
+    'Nueva esperanza': 'Nueva Esperanza',
     'nueva esperanza': 'Nueva Esperanza',
     'Antàrtida Argentina': 'Antartida Argentina',
     villarino: 'Villarino',
@@ -581,7 +537,19 @@ function convertirBarrios(barrio: string): string {
     'luis piedrabuena': 'Luis Piedra Buena',
     'las Cabañitas': 'Las Cabañitas',
     nuevo: 'Nuevo',
-    // '7mo Grado': 'Septimo Grado',
+    DVN: 'Dvn',
+    'puente 83': 'Puente 83',
+    'San Sebastian D': 'San Sebastian',
+    'la esperanza': 'Nueva Esperanza',
+    'B° San Sebastian A': 'San Sebastian',
+    'Anai Mpau': 'Anahi Mapu',
+    'Luis Piedrabuena': 'Luis Piedra Buena',
+    'SAn Sebastian': 'San Sebastian',
+    'Don bosco': 'Don Bosco',
+    'Bº San Sebastian A': 'San Sebastian',
+    'Luis Pierda Buena': 'Luis Piedra Buena',
+    'parque industrial': 'Parque Industrial',
+    'Parque industrial': 'Parque Industrial',
   };
   return conversiones[barrio] || barrio;
 }

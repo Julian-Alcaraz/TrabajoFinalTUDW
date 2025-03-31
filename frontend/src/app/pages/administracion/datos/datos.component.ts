@@ -6,6 +6,8 @@ import { LoadingComponent } from '@app/components/loading/loading.component';
 import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notificacion';
 import { InputFileComponent } from '@components/inputs/input-file.component';
+import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-datos',
@@ -29,6 +31,7 @@ export class DatosComponent {
     oftalmologia: this.oftalmologiaFileControl,
   };
   formData: FormData = new FormData();
+  fileName = '';
   constructor(
     private _procesamientoService: ProcesamientoService,
     private snackBar: MatSnackBar,
@@ -56,9 +59,21 @@ export class DatosComponent {
       }
     });
   }
+
   controlResponse = {
     next: (response: any) => {
       console.log(response);
+      Swal.fire({
+        title: 'El proceso termino.',
+        text: `Hay ${response.data.length} filas no cargadas`,
+        icon: 'success',
+        showConfirmButton: true,
+        confirmButtonText: 'Descargar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.exportar(response.data);
+        }
+      });
       this.loading = false;
     },
     error: (err: any) => {
@@ -67,11 +82,17 @@ export class DatosComponent {
       this.loading = false;
     },
   };
-
+  exportar(data: any) {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
+    XLSX.writeFile(workbook, `${this.fileName}.xlsx`);
+  }
   cargarArchivoClinica() {
     this.loading = true;
     if (!this.clinicaFileControl.errors) {
       if (this.ultimoArchivo) {
+        this.fileName = 'ClinicaErrores';
         this._procesamientoService.procesarClinica(this.formData).subscribe(this.controlResponse);
       }
     }
@@ -80,6 +101,8 @@ export class DatosComponent {
     this.loading = true;
     if (!this.odontologiaFileControl.errors) {
       if (this.ultimoArchivo) {
+        this.fileName = 'OdontologiaErrores';
+
         this._procesamientoService.procesarOdontologia(this.formData).subscribe(this.controlResponse);
       }
     }
@@ -88,6 +111,7 @@ export class DatosComponent {
     this.loading = true;
     if (!this.fonoaudiologiaFileControl.errors) {
       if (this.ultimoArchivo) {
+        this.fileName = 'FonaudiologiaErrores';
         this._procesamientoService.procesarFonoaudiologia(this.formData).subscribe(this.controlResponse);
       }
     }
@@ -96,6 +120,7 @@ export class DatosComponent {
     this.loading = true;
     if (!this.oftalmologiaFileControl.errors) {
       if (this.ultimoArchivo) {
+        this.fileName = 'OftalmologiaErrores';
         this._procesamientoService.procesarOftalmologia(this.formData).subscribe(this.controlResponse);
       }
     }
