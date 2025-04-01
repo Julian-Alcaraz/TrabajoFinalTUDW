@@ -34,7 +34,7 @@ dotenv.config();
 const configService = new ConfigService();
 const secretService = new SecretService(configService);
 
-/* */
+/*
 console.log('====================== SEED.TS ======================');
 
 console.log('DB_TYPE:', secretService.readSecret('DB_TYPE'));
@@ -50,7 +50,7 @@ console.log('DB_MIGRATIONS:', secretService.readSecret('DB_MIGRATIONS'));
 console.log('DB_MIGRATIONS_TABLE_NAME:', secretService.readSecret('DB_MIGRATIONS_TABLE_NAME'));
 
 console.log('====================== SEED.TS ======================');
-
+*/
 const options: DataSourceOptions & SeederOptions = {
   type: secretService.readSecret('DB_TYPE'),
   host: secretService.readSecret('DB_HOST'),

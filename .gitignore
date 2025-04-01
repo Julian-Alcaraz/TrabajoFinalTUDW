@@ -22,6 +22,7 @@ backend/.env.production.local
 backend/.env.local
 backend/frontend
 dockerSecrets.txt
+backend/.env.prod
 
 .env
 # Miscellaneous

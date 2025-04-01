@@ -19,7 +19,7 @@ import { SecretService } from '../common/services/secret.service';
         username: secretService.readSecret('DB_USERNAME'),
         password: secretService.readSecret('DB_PASSWORD'),
         synchronize: secretService.readSecret('DB_SYNCHRONIZE') === 'true', // Convierte a booleano
-        entities: ['dist/**/*.entity.js'], // USAR .ENV!!!!!!!!!!!!!
+        entities: [secretService.readSecret('DB_ENTITIES')],
         autoLoadEntities: true,
         //seeds: [__dirname + '/seeds/**/*{.ts,.js}'],
         //factories: [__dirname + '/factories/**/*{.ts,.js}'],
