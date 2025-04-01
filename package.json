@@ -8,7 +8,8 @@
     "iniciar:dev": "npm run iniciar:deatached-dev && npm run migracion:generar --name=%npm_config_name% && npm run migracion:ejecutar",
     "iniciar:deatached": "npm run docker-up--d",
     "iniciar:deatached-dev": "npm run docker-up--d:dev",
-    "actualizar": "npm run detener-contenedores && npm run eliminar-contenedores && npm run eliminar-imagenes && npm run eliminar-volumenes && npm run iniciar:deatached && npm run migracion:generar && migracion:ejecutar",
+    "actualizar": "npm run detener-contenedores && npm run eliminar-contenedores && npm run eliminar-imagenes && npm run eliminar-volumenes && npm run iniciar:deatached && npm run migracion:generar",
+    "migracion:ejecutar": "docker exec -it backend npm run migration:run",
     "migracion:generar": "docker exec -it backend npm run migration:generate --name=%npm_config_name%",
 
     "borrar-todo": "docker rm backend postgres frontend && docker image rm fundacion-sol-backend fundacion-sol-frontend && docker volume rm fundacion-sol_pg-data-fundacion-sol fundacion-sol_volumen_compartido",
