@@ -211,18 +211,20 @@ export class PersonalizadaComponent implements OnInit {
 
   exportarXLS() {
     this.generandoArchivo = true;
-    from(this._xlsxService.generarXlsx(this.resultados)).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+    setTimeout(() => {
+      from(this._xlsxService.generarXlsx(this.resultados)).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+            this.generandoArchivo = false;
+          }
+        },
+        error: (err) => {
+          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
           this.generandoArchivo = false;
-        }
-      },
-      error: (err) => {
-        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-        this.generandoArchivo = false;
-      },
-    });
+        },
+      });
+    }, 100);
   }
 }
 

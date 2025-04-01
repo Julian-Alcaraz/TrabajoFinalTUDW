@@ -21,11 +21,12 @@ import { Usuario } from '@models/usuario.model';
 import { SessionService } from '@services/session.service';
 import { DatosPersonalesComponent } from '../components/datos-personales/datos-personales.component';
 import { GLOBAL } from '@config/global';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-ver-chico',
   standalone: true,
-  imports: [CommonModule, MatInputModule, MatFormFieldModule, RouterModule, LoadingComponent, ConsultasTableComponent, TooltipModule, DatosPersonalesComponent],
+  imports: [CommonModule, MatInputModule, MatFormFieldModule, RouterModule, LoadingComponent, ConsultasTableComponent, TooltipModule, DatosPersonalesComponent, PanelModule],
   templateUrl: './ver-chico.component.html',
   styleUrl: './ver-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -42,6 +43,8 @@ export class VerChicoComponent implements OnInit {
   public searchingConsultas = false;
   public identidad: Usuario | null = null;
   public esEditor = false;
+  public colapsarPaneles = true;
+  public estaColapsadoComunes = false;
   constructor(
     private _chicoService: ChicoService,
     private route: ActivatedRoute,

@@ -54,7 +54,7 @@
     <!-- Telefono -->
     <ng-container matColumnDef="telefono">
       <th mat-header-cell *matHeaderCellDef>Teléfono</th>
-      <td mat-cell *matCellDef="let element">{{ element.chico.telefono }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.chico.telefono ?? '--' }}</td>
     </ng-container>
     <!-- Derivaciones -->
     <ng-container matColumnDef="derivaciones">
