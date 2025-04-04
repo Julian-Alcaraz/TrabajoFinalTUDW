@@ -30,6 +30,16 @@ export class MainSeeder implements Seeder {
       console.log('Seeding usuarios...');
       await usuarioORM.save([
         {
+          nombre: 'Admin',
+          apellido: 'Admin',
+          email: 'Admin@gmail.com',
+          contrasenia: codificarContrasenia('11111111'),
+          dni: 11111111,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+        },
+        /*
+        {
           nombre: 'Lucas',
           apellido: 'Puyol',
           email: 'lucasPujol@gmail.com',
@@ -47,6 +57,7 @@ export class MainSeeder implements Seeder {
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
         },
+        */
       ]);
 
       // Menus

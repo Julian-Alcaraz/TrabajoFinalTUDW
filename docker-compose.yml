@@ -25,21 +25,9 @@ services:
       timeout: 5s
       retries: 5    
 
-  # Contenedor pgadmin4
-
-  #pgadmin4:
-  #  image: dpage/pgadmin4:9.1.0
-  #  ports:
-  #    - '5050:80'
-  #  container_name: pgadmin4-fundacion-sol
-  #  environment:
-  #    PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-  #    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-  
   # Contenedor backend (Nest.js)
 
   backend:
-    #image: backend-fundacion-sol
     ports:
       - '3000:3000'
     container_name: backend
@@ -56,17 +44,13 @@ services:
   # Contenedor frontend (Angular)
 
   frontend:
-    #image: frontend-fundacion-sol
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
     volumes:
       - volumen_compartido:/home/app/frontend/dist
-    # SACAR!!!:
-    ################command: npm run build -- --output-path=/home/app/frontend/dist
 
-#  && npm run migracion:generar --name=$npm_config_name && npm run migracion:ejecutar !!!!!!!!!!!!!!!!
 # Definir volumenes
 volumes:
   pg-data-fundacion-sol:
