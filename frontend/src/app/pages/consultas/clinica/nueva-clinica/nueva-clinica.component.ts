@@ -204,7 +204,7 @@ export class NuevaClinicaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
-    const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
+    // const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
     const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
     const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
     const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
@@ -239,7 +239,7 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia,
       derivacion_oftalmologia,
       derivacion_odontologia,
-      derivacion_externa,
+      // derivacion_externa,
       pcta: this.consulta?.clinica?.pcta,
       pcimc: this.consulta?.clinica?.pcimc,
       pct: this.consulta?.clinica?.pct,
@@ -265,14 +265,14 @@ export class NuevaClinicaComponent implements OnInit {
     if (typeof obra_social === 'string') {
       obra_social = this.convertToBoolean(obra_social);
     }
-    const derivacion_externaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_externa);
+    // const derivacion_externaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_externa);
     const derivacion_odontologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_odontologia);
     const derivacion_fonoaudiologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_fonoaudiologia);
     const derivacion_oftalmologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_oftalmologia);
-    let derivacion_externaConsulta = false;
-    if (this.consulta?.derivacion_externa) {
-      derivacion_externaConsulta = this.consulta?.derivacion_externa;
-    }
+    // let derivacion_externaConsulta = false;
+    // if (this.consulta?.derivacion_externa) {
+    //   derivacion_externaConsulta = this.consulta?.derivacion_externa;
+    // }
     let derivacion_odontologiaConsulta = false;
     if (this.consulta?.derivacion_odontologia) {
       derivacion_odontologiaConsulta = this.consulta?.derivacion_odontologia;
@@ -305,7 +305,7 @@ export class NuevaClinicaComponent implements OnInit {
         this.consulta?.turno === this.clinicaForm.value.turno &&
         this.consulta?.obra_social === obra_social &&
         //  cambios por especialidad
-        derivacion_externaConsulta === derivacion_externaForm &&
+        // derivacion_externaConsulta === derivacion_externaForm &&
         derivacion_odontologiaConsulta === derivacion_odontologiaForm &&
         derivacion_fonoaudiologiaConsulta === derivacion_fonoaudiologiaForm &&
         derivacion_oftalmologiaConsulta === derivacion_oftalmologiaForm &&
