@@ -10,7 +10,8 @@
     "iniciar:deatached-dev": "npm run docker-up--d:dev",
     "actualizar": "npm run detener-contenedores && npm run eliminar-contenedores && npm run eliminar-imagenes && npm run eliminar-volumenes && npm run iniciar:deatached && npm run migracion:generar",
     "migracion:ejecutar": "docker exec -it backend npm run migration:run",
-    "migracion:generar": "docker exec -it backend npm run migration:generate --name=%npm_config_name%",
+    "migracion:generar-w": "docker exec -it backend npm run migration:generate --name=%npm_config_name%",
+    "migracion:generar": "docker exec -it backend npm run migration:generate --name=$npm_config_name",
 
 
     "detener-contenedores": "docker stop backend postgres",
