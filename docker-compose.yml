@@ -9,8 +9,8 @@ services:
     image: postgres:17
     env_file:
       - ./.env
-    ports:
-      - '5432:5432'
+    #ports:
+    #  - '5432:5432'
     container_name: postgres
     restart: always
     environment:
@@ -24,12 +24,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5    
+    networks:
+      - webnet
 
   # Contenedor backend (Nest.js)
 
   backend:
-    ports:
-      - '3000:3000'
+    #ports:
+    #  - '3000:3000'
     container_name: backend
     restart: always
     build:
@@ -40,6 +42,8 @@ services:
         condition: service_healthy
     volumes:
       - volumen_compartido:/home/app/backend/frontend
+    networks:
+      - webnet
 
   # Contenedor frontend (Angular)
 
@@ -50,6 +54,21 @@ services:
     container_name: frontend
     volumes:
       - volumen_compartido:/home/app/frontend/dist
+
+  nginx:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+networks:
+  webnet:
+    driver: bridge
 
 # Definir volumenes
 volumes:
