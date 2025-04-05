@@ -61,6 +61,7 @@ services:
     ports:
       - '80:80'
       - '81:81'
+      - '3000:3000'
       - '443:443'
     volumes:
       - ./data:/data
