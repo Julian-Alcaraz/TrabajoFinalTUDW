@@ -68,6 +68,8 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - webnet
     #environment:
     #  # Postgres parameters:
     #  DB_POSTGRES_HOST: 'postgres-db'
