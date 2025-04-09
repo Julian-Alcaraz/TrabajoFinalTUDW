@@ -30,8 +30,6 @@ function mensajeError(snackBar: MatSnackBar, err: string) {
 
 function mensajeErrorServicio(snackBar: MatSnackBar, error: any) {
   const error_mje: any = error;
-  console.log('='.repeat(10));
-  console.log(error);
   if (error_mje != null) {
     let mensaje = '';
     if (error_mje.error) {

@@ -234,19 +234,15 @@ function prepararData(data: any): any {
     for (const der of data.especificas.derivaciones) {
       if (der.fonoaudiologia) {
         derivacion_fonoaudiologia = der.fonoaudiologia;
-        console.log('fonoaudiologia', derivacion_fonoaudiologia);
       }
       if (der.odontologia) {
         derivacion_odontologia = der.odontologia;
-        console.log('odontologia', derivacion_odontologia);
       }
       if (der.oftalmologia) {
         derivacion_oftalmologia = der.oftalmologia;
-        console.log('oftalmologia', derivacion_oftalmologia);
       }
       if (der.externa) {
         derivacion_externa = der.externa;
-        console.log('externa', derivacion_externa);
       }
     }
 

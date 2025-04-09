@@ -24,7 +24,6 @@ export class ProcesamientoController {
   async procesarOdontologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarOdontologia(data, req.user);
-    console.log(body, file);
     return { succes: true, data: noCargados, message: 'odon' };
   }
 
@@ -33,7 +32,6 @@ export class ProcesamientoController {
   async procesarOftalmologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarOftalmologia(data, req.user);
-    // console.log(body, file);
     return { succes: true, data: noCargados, message: 'ofta' };
   }
 
@@ -42,7 +40,6 @@ export class ProcesamientoController {
   async procesarFonoaudiologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarFonoaudiologia(data, req.user);
-    console.log(body, file);
     return { succes: true, data: noCargados, message: 'fono' };
   }
 }

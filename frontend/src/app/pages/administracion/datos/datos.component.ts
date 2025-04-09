@@ -62,7 +62,6 @@ export class DatosComponent {
 
   controlResponse = {
     next: (response: any) => {
-      console.log(response);
       Swal.fire({
         title: 'El proceso termino.',
         text: `Hay ${response.data.length} filas no cargadas`,
@@ -77,7 +76,6 @@ export class DatosComponent {
       this.loading = false;
     },
     error: (err: any) => {
-      console.log(err);
       mensajeErrorServicio(this.snackBar, err);
       this.loading = false;
     },
