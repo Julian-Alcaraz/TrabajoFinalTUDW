@@ -3,9 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { NotFoundExceptionFilter } from 'src/not-found-exception.filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
+  app.set('trust proxy', 1);
   // CORS
   app.enableCors({
     // Origenes permitidos: ['http://localhost:4200', 'http://localhost:4500', 'http://localhost:4300', '**']
