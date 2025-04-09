@@ -15,14 +15,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       } else if (info && info.name === 'JsonWebTokenError') {
         throw new UnauthorizedException('Token no válido. Por favor, inicia sesión nuevamente.');
       } else if (!info) {
-        console.log('err:', err);
-        console.log('user:', user);
-        console.log('info:', info);
         throw new UnauthorizedException('Por favor, inicie sesión.');
       } else {
-        console.log('err:', err);
-        console.log('user:', user);
-        console.log('info:', info);
         throw new UnauthorizedException('Por favor, inicie sesión.');
       }
     }

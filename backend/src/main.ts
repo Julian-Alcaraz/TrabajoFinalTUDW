@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { NotFoundExceptionFilter } from 'src/not-found-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -11,6 +12,7 @@ async function bootstrap() {
   });
   app.set('trust proxy', 1);
   // CORS
+  app.use(cookieParser());
   app.enableCors({
     // Origenes permitidos: ['http://localhost:4200', 'http://localhost:4500', 'http://localhost:4300', '**']
     origin: ['https://solpatagonia.com.ar'],
