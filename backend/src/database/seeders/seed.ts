@@ -3,6 +3,7 @@ import { runSeeders, SeederOptions } from 'typeorm-extension';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 
+import { DevSeeder } from './dev.seeder';
 import { MainSeeder } from './main.seeder';
 import { RolFactory } from '../factories/rol.factory';
 import { UsuarioFactory } from '../factories/usuario.factory';
@@ -60,9 +61,9 @@ const options: DataSourceOptions & SeederOptions = {
   password: secretService.readSecret('DB_PASSWORD'),
   entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia],
   factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
-  seeds: [MainSeeder],
+  seeds: secretService.readSecret('NODE_ENV') === 'production' ? [MainSeeder] : [DevSeeder],
 };
-
+console.log(secretService.readSecret('NODE_ENV') === 'production' ? '[MainSeeder]' : '[DevSeeder]');
 const datasource = new DataSource(options);
 datasource.initialize().then(async () => {
   await datasource.synchronize(true);
