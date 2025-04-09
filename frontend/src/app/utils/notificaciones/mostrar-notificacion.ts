@@ -30,18 +30,28 @@ function mensajeError(snackBar: MatSnackBar, err: string) {
 
 function mensajeErrorServicio(snackBar: MatSnackBar, error: any) {
   const error_mje: any = error;
-
+  console.log('='.repeat(10));
+  console.log(error);
   if (error_mje != null) {
     let mensaje = '';
-    if (error_mje.statusText === 'Unknown Error') {
-      mensaje = 'Servidor desconectado.';
-    } else {
+    if (error_mje.error) {
       if (error_mje.error.message) {
         mensaje = error_mje.error.message;
       } else {
         mensaje = error_mje.error;
       }
+    } else {
+      mensaje = 'Servidor desconectado.';
     }
+    // if (error_mje.statusText === 'Unknown Error') {
+    //   mensaje = 'Servidor desconectado.';
+    // } else {
+    //   if (error_mje.error.message) {
+    //     mensaje = error_mje.error.message;
+    //   } else {
+    //     mensaje = error_mje.error;
+    //   }
+    // }
     mensajeError(snackBar, mensaje);
   }
 }
