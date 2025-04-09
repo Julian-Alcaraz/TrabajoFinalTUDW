@@ -8,7 +8,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // obtener token y agregarlo a la consulta authenticator para proteccion
   const _sessionService = inject(SessionService);
   const _cookieService = inject(CookieService);
-
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const cookieValue = _cookieService.get('Authorization');
   const token = cookieValue ? `Bearer ${cookieValue}` : '';
   let headers = new HttpHeaders();
