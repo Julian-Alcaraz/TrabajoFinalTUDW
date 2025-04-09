@@ -30,8 +30,8 @@ services:
   # Contenedor backend (Nest.js)
 
   backend:
-    ports:
-      - '3000'
+    # ports:
+    #   - '3000'
     container_name: backend
     restart: always
     build:
