@@ -22,6 +22,7 @@ export class AuthController {
     // Guardo token en cookie
     res.cookie('Authorization', token, {
       maxAge: 24 * 60 * 60 * 1000, // 24 horas
+      sameSite: this.secretService.readSecret('COOKIE_SAME_SITE'),
       httpOnly: this.secretService.readSecret('COOKIE_HTTP_ONLY') === 'true',
       secure: this.secretService.readSecret('COOKIE_SECURE') === 'true',
     });
@@ -41,6 +42,7 @@ export class AuthController {
   logout(@Res() res: Response) {
     // Elimina cookie de token
     res.clearCookie('Authorization', {
+      sameSite: this.secretService.readSecret('COOKIE_SAME_SITE'),
       httpOnly: this.secretService.readSecret('COOKIE_HTTP_ONLY') === 'true',
       secure: this.secretService.readSecret('COOKIE_SECURE') === 'true',
     });
