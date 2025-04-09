@@ -11,6 +11,8 @@ export class MenuService {
     this.url = GLOBAL.URL_BACKEND;
   }
   traerUsuarioMenu(idUsuario: number) {
-    return this._http.get(this.url + 'usuario/menus/' + idUsuario);
+    return this._http.get(this.url + 'usuario/menus/' + idUsuario, {
+      withCredentials: true,
+    });
   }
 }
