@@ -11,7 +11,7 @@
   </span>
   <div class="card-body">
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="oftalmologiaForm">
-      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" />
+      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Calculos primera_vez y control -->
         <ng-container class="mt-4">

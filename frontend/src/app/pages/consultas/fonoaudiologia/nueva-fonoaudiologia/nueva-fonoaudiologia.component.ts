@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as Constantes from '@app/common/const/const'
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
 import { ConsultaService } from '@services/consulta.service';
@@ -13,6 +13,7 @@ import { CamposComunesComponent } from '../../components/campos-comunes/campos-c
 import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
@@ -29,12 +30,16 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
   public fonoaudiologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
   public con = Constantes;
+  dni: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _consultaService: ConsultaService,
+    private _router: Router,
   ) {
+    const navigation = this._router.getCurrentNavigation();
+    this.dni = navigation?.extras?.state ? navigation?.extras?.state['dni'] : null;
     this.fonoaudiologiaForm = this.fb.group({
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],

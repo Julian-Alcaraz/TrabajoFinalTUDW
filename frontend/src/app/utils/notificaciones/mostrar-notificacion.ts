@@ -1,9 +1,9 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificacionComponent } from './notificacion.component';
 
-function mensajeExito(snackBar: MatSnackBar, msj: string) {
+function mensajeExito(snackBar: MatSnackBar, msj: string, duration: number | null = null) {
   snackBar.openFromComponent(NotificacionComponent, {
-    duration: 3000,
+    duration: duration ? duration : 3000,
     data: [msj],
     panelClass: ['alert', 'alert-success'],
     verticalPosition: 'top',

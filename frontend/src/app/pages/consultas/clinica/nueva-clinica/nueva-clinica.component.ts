@@ -15,6 +15,7 @@ import { InputTextareaComponent } from '@components/inputs/input-textarea.compon
 import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
+import { Router } from '@angular/router';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
 
@@ -32,12 +33,17 @@ export class NuevaClinicaComponent implements OnInit {
 
   public clinicaForm: FormGroup;
   public con = Constantes;
-
+  dni: number | null = null;
+  
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _consultaService: ConsultaService,
+    private _router: Router,
   ) {
+    const navigation = this._router.getCurrentNavigation();
+    this.dni = navigation?.extras?.state ? navigation?.extras?.state['dni'] : null;
+
     this.clinicaForm = this.fb.group({
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],

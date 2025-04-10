@@ -11,7 +11,7 @@
   </span>
   <div class="card-body">
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="fonoaudiologiaForm">
-      <app-campos-comunes [form]="fonoaudiologiaForm" [values]="consulta" />
+      <app-campos-comunes [form]="fonoaudiologiaForm" [values]="consulta" [dni]="this.dni" />
       <!-- Campos fonoaudiologia -->
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- <div class="grid gap-6 md:grid-cols-8 sm:grid-cols-3"> -->

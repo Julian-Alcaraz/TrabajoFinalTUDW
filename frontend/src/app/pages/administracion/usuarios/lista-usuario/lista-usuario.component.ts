@@ -96,6 +96,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
         if (response.success) {
           this.usuarios.data = response.data;
           this.resultsLength = response.data.length;
+          if (this.resultsLength == 0) this.mensajes = 'No se encontraron usuarios.';
         }
         this.searching = false;
       },

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import * as Constantes from '@app/common/const/const'
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarDni, ValidarSoloNumeros } from '@utils/validadores';
 import { InputNumberComponent } from '@components/inputs/input-number.component';
@@ -29,6 +29,7 @@ import { LoadingComponent } from '@components/loading/loading.component';
 export class CamposComunesComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() values: Consulta | null = null;
+  @Input() dni: number | null = null;
 
   public chico: Chico | null = null;
   public instituciones: Institucion[] = [];
@@ -71,13 +72,6 @@ export class CamposComunesComponent implements OnInit {
     this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
     this.form.addControl('id_curso', new FormControl('', [Validators.required]));
     this.form.addControl('turno', new FormControl('', [Validators.required]));
-    // this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
-    // this.form.addControl('dni', new FormControl(1234567, [Validators.required, ValidarSoloNumeros, ValidarDni]));
-    // this.form.addControl('obra_social', new FormControl(true, [Validators.required]));
-    // this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
-    // this.form.addControl('id_institucion', new FormControl(1, [Validators.required]));
-    // this.form.addControl('id_curso', new FormControl(1, [Validators.required]));
-    // this.form.addControl('turno', new FormControl('Mañana', [Validators.required]));
 
     this.form.get('dni')?.valueChanges.subscribe(() => {
       this.onChangeDni();
@@ -86,6 +80,9 @@ export class CamposComunesComponent implements OnInit {
     // si la consulta existe completar los valores con esto
     if (this.values) {
       this.completarCampos();
+    }
+    if (this.dni) {
+      this.form.patchValue({ dni: this.dni });
     }
   }
 
@@ -199,13 +196,3 @@ export class CamposComunesComponent implements OnInit {
     this.form.disable();
   }
 }
-
-/* FORMULARIO LIMPIO
-    this.form.addControl('edad', new FormControl('', [Validators.required, ValidarSoloNumeros]));
-    this.form.addControl('dni', new FormControl('', [Validators.required, ValidarSoloNumeros, ValidarDni]));
-    this.form.addControl('obra_social', new FormControl('', [Validators.required]));
-    this.form.addControl('id_chico', new FormControl(null, [Validators.required]));
-    this.form.addControl('id_institucion', new FormControl('', [Validators.required]));
-    this.form.addControl('id_curso', new FormControl('', [Validators.required]));
-    this.form.addControl('turno', new FormControl('', [Validators.required]));
-*/

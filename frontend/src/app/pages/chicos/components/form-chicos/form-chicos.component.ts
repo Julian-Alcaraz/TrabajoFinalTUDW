@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as Constantes from '@app/common/const/const'
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '@utils/validadores';
 import { ChicoService } from '@services/chico.service';
@@ -377,7 +377,10 @@ export class FormChicosComponent implements OnInit {
           this._chicoService.cargarChico(data).subscribe({
             next: (response: any) => {
               if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                console.log(response);
+                const enlace = `<a class="underline font-bold" href="layout/chicos/ver/${response.data.id}">Ver chico</a>`;
+                const mensaje = response.message + ' ' + enlace;
+                MostrarNotificacion.mensajeExito(this.snackBar, mensaje, 5000);
                 this.chicoForm.reset();
               }
             },
