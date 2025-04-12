@@ -1,4 +1,4 @@
-import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion } from './opcionesConst';
+import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad } from './opcionesConst';
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum = opcionesSexo;
@@ -68,3 +68,22 @@ export const NivelCursoEnum = opcionesCurso;
 
 export type TipoInstitucionType = (typeof opcionesTipoInstitucion)[number];
 export const TipoInstitucionEnum = opcionesTipoInstitucion;
+
+// Taller
+
+export type DuracionType = (typeof opcionesDuracion)[number];
+export const DuracionEnum = opcionesDuracion;
+
+export type DestinatariosType = (typeof opcionesDestinatarios)[number];
+export const DestinatariosEnum = opcionesDestinatarios;
+
+export type TurnoTalleresType = (typeof opcionesTurnoTalleres)[number];
+export const TurnoTalleresEnum = opcionesTurnoTalleres;
+
+export type ConjuntoConType = (typeof opcionesConjuntoCon)[number];
+export const ConjuntoConEnum = opcionesConjuntoCon;
+
+// Especialidad
+
+export type OpcionesEspecialidadType = (typeof opcionesEspecialidad)[number];
+export const OpcionesEspecialidadEnum = opcionesEspecialidad;

@@ -9,7 +9,7 @@ dotenv.config();
 const configService = new ConfigService();
 const secretService = new SecretService(configService);
 
-/* */
+/*
 console.log('====================== DATASOURCE.TS ======================');
 
 console.log('DB_TYPE:', secretService.readSecret('DB_TYPE'));
@@ -25,7 +25,7 @@ console.log('DB_MIGRATIONS:', secretService.readSecret('DB_MIGRATIONS'));
 console.log('DB_MIGRATIONS_TABLE_NAME:', secretService.readSecret('DB_MIGRATIONS_TABLE_NAME'));
 
 console.log('====================== DATASOURCE.TS ======================');
-
+*/
 export default new DataSource({
   type: 'postgres',
   host: secretService.readSecret('DB_HOST'),
@@ -35,7 +35,8 @@ export default new DataSource({
   password: secretService.readSecret('DB_PASSWORD'),
   synchronize: secretService.readSecret('DB_SYNCHRONIZE') === 'true',
   logging: secretService.readSecret('DB_LOGGING') === 'true',
-  entities: ['src/**/*.entity.ts'], // develop
+  entities: [secretService.readSecret('DB_ENTITIES')],
+  // entities: ['src/**/*.entity.ts'], // develop
   // entities: ['dist/**/*.entity.js'], // production
   migrations: [secretService.readSecret('DB_MIGRATIONS')],
   migrationsTableName: secretService.readSecret('DB_MIGRATIONS_TABLE_NAME'),
