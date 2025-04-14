@@ -30,6 +30,9 @@ import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 import { Odontologia } from '../../consulta/entities/odontologia.entity';
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
 import { SecretService } from '../../common/services/secret.service';
+import { Taller } from '../../taller/entities/taller.entity';
+import { Especialidad } from '../../especialidad/entities/especialidad.entity';
+import { Marco } from '../../marco/entities/marco.entity';
 
 dotenv.config();
 const configService = new ConfigService();
@@ -59,7 +62,7 @@ const options: DataSourceOptions & SeederOptions = {
   database: secretService.readSecret('DB_DATABASE'),
   username: secretService.readSecret('DB_USERNAME'),
   password: secretService.readSecret('DB_PASSWORD'),
-  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia],
+  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia, Taller, Especialidad, Marco],
   factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
   seeds: secretService.readSecret('NODE_ENV') === 'production' ? [MainSeeder] : [DevSeeder],
 };

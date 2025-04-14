@@ -85,4 +85,10 @@ export class CreateTallerDto {
   @IsInt({ message: 'El id del curso debe ser un número' })
   @IsPositive({ message: 'El id del curso debe ser un numero positivo' })
   readonly id_curso: number;
+
+  @ApiProperty({ description: 'La especialidad del taller' })
+  @IsNotEmpty({ message: 'El id de la especialidad no puede estar vacio' })
+  @IsInt({ message: 'El id de la especialidad debe ser un número' })
+  @IsPositive({ message: 'El id de la especialidad debe ser un numero positivo' })
+  readonly id_especialidad: number;
 }
