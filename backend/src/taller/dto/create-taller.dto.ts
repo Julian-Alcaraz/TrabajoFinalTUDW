@@ -1,14 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length } from 'class-validator';
-import { ConjuntoConEnum, ConjuntoConType, DestinatariosEnum, DestinatariosType, DuracionEnum, DuracionType, TurnoTalleresEnum, TurnoTalleresType } from '../../common/const/const';
+import { IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length } from 'class-validator';
+import { ConjuntoConEnum, ConjuntoConType, DestinatariosEnum, DestinatariosType, DuracionEnum, DuracionType, FrecuenciaEnum, FrecuenciaType, TurnoTalleresEnum, TurnoTalleresType } from '../../common/const/const';
 
 export class CreateTallerDto {
-  @ApiProperty({ description: 'Si el taller es taller' })
-  @IsNotEmpty({ message: 'esTaller no puede estar vacio' })
-  @IsBoolean({ message: 'esTaller debe ser un boolean' })
-  readonly esTaller: boolean;
-
   @ApiProperty({ description: 'Nombre del taller' })
   @IsString({ message: 'El nombre del taller debe ser un string' })
   @Length(1, 100, { message: 'El nombre debe tener entre 1 y 100 caracteres' })
@@ -66,11 +61,10 @@ export class CreateTallerDto {
   @IsEnum(ConjuntoConEnum, { message: `No es un valor válido. Valores permitidos: ${Object.values(ConjuntoConEnum).join(', ')}` })
   readonly conjuntoCon: ConjuntoConType;
 
-  @ApiProperty({ description: 'Frecuencia del taller' })
-  @IsString({ message: 'La frecuencia del taller debe ser un string' })
-  @Length(1, 50, { message: 'La frecuencia debe tener entre 1 y 50 caracteres' })
-  @Transform(({ value }) => (value ? value.trim() : value))
-  readonly frecuencia: string;
+  @ApiProperty({ description: 'Frecuencia con del taller' })
+  @IsNotEmpty({ message: 'Frecuencia del taller no puede estar vacio' })
+  @IsEnum(FrecuenciaEnum, { message: `No es un valor válido. Valores permitidos: ${Object.values(FrecuenciaEnum).join(', ')}` })
+  readonly frecuencia: FrecuenciaType;
 
   // Relaciones
 
@@ -91,4 +85,10 @@ export class CreateTallerDto {
   @IsInt({ message: 'El id de la especialidad debe ser un número' })
   @IsPositive({ message: 'El id de la especialidad debe ser un numero positivo' })
   readonly id_especialidad: number;
+
+  @ApiProperty({ description: 'El marco del taller' })
+  @IsNotEmpty({ message: 'El id del marco no puede estar vacio' })
+  @IsInt({ message: 'El id del marco debe ser un número' })
+  @IsPositive({ message: 'El id del marco debe ser un numero positivo' })
+  readonly id_marco: number;
 }

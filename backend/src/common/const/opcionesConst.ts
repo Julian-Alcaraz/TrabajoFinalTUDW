@@ -42,6 +42,7 @@ export const opcionesDuracion = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const opcionesDestinatarios = ['Alumnos', 'Docentes', 'Familias', 'PSA', 'Todos'];
 export const opcionesTurnoTalleres = ['Mañana', 'Tarde', 'M y T', 'JC'];
 export const opcionesConjuntoCon = ['Odontologia', 'Nutricion', 'Medicina', 'Trabajo Social', 'Psicologia', 'Equipo tecnico de apoyo', 'Sin compania', 'Pasantes'];
+export const opcionesFrecuencia = ['Única vez', 'Diaria', 'Semanal', 'Mensual'];
 
 // Especialidad
 

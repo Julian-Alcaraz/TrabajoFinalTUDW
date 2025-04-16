@@ -7,9 +7,10 @@ import { Taller } from './entities/taller.entity';
 import { Especialidad } from '../especialidad/entities/especialidad.entity';
 import { Curso } from '../curso/entities/curso.entity';
 import { Institucion } from '../institucion/entities/institucion.entity';
+import { Marco } from '../marco/entities/marco.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Taller, Especialidad, Curso, Institucion])],
+  imports: [TypeOrmModule.forFeature([Taller, Especialidad, Curso, Institucion, Marco])],
   controllers: [TallerController],
   providers: [TallerService],
 })

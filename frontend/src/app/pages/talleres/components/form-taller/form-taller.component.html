@@ -1,0 +1,84 @@
+<form (ngSubmit)="cargarTaller()" [formGroup]="tallerForm">
+  <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+    <!-- Nombre: -->
+    <div class="md:col-span-4 lg:col-span-6">
+      <app-input-text label="Nombre" [control]="controlDeInput('nombre')" placeholder="" idInput="nombre" />
+    </div>
+    <!-- Institucion -->
+    <div class="md:col-span-1 lg:col-span-2">
+      @if (searchingInstituciones) {
+        <app-loading />
+      } @else {
+        <app-input-select label="Institucion" [control]="controlDeInput('id_institucion')" idInput="id_institucion" [opciones]="instituciones" (change)="onChangeInstitucion()" />
+      }
+    </div>
+    <!-- Curso -->
+    <div class="md:col-span-1 lg:col-span-2">
+      @if (searchingCursos) {
+        <app-loading />
+      } @else {
+        <app-input-select label="Curso" [control]="controlDeInput('id_curso')" idInput="id_curso" [opciones]="cursos" />
+      }
+    </div>
+    <!-- turno -->
+    <div class="md:col-span-1 lg:col-span-2">
+      <app-input-select-enum label="Turno" [control]="controlDeInput('turno')" idInput="turno" [opciones]="con.TurnoTalleresEnum" [valores]="con.TurnoTalleresEnum" />
+    </div>
+    <!-- Especialidad -->
+    <div class="md:col-span-2 lg:col-span-3">
+      @if (searchingEspecialidades) {
+        <app-loading />
+      } @else {
+        <app-input-select label="Especialidad" [control]="controlDeInput('id_especialidad')" idInput="id_especialidad" [opciones]="especialidades" (change)="onChangeEspecialidad()" />
+      }
+    </div>
+    <!-- Marco -->
+    <div class="md:col-span-2 lg:col-span-3">
+      @if (searchingMarcos) {
+        <app-loading />
+      } @else {
+        <app-input-select label="Marco" [control]="controlDeInput('id_marco')" idInput="id_marco" [opciones]="marcos" />
+      }
+    </div>
+    <!-- cantEncuentros -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-text label="Cantidad de Encuentros" [control]="controlDeInput('cantEncuentros')" placeholder="" idInput="cantEncuentros" />
+    </div>
+    <!-- cantParticipantes -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-text label="Cantidad de Participantes" [control]="controlDeInput('cantParticipantes')" placeholder="" idInput="cantParticipantes" />
+    </div>
+    <!-- duracion: -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-select-enum label="Duracion (hs)" [control]="controlDeInput('duracion')" idInput="duracion" [opciones]="con.DuracionEnum" [valores]="con.DuracionEnum" />
+    </div>
+    <!-- recursos: -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-text label="Recursos" idInput="recursos" [control]="controlDeInput('recursos')" />
+    </div>
+    <!-- destinatarios -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-select-enum label="Destinatarios" [control]="controlDeInput('destinatarios')" idInput="destinatarios" [opciones]="con.DestinatariosEnum" [valores]="con.DestinatariosEnum" />
+    </div>
+    <!-- conjuntoCon -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-select-enum label="En conjunto con" [control]="controlDeInput('conjuntoCon')" idInput="conjuntoCon" [opciones]="con.ConjuntoConEnum" [valores]="con.ConjuntoConEnum" />
+    </div>
+    <!-- Frecuencia -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-select-enum label="Frecuencia" [control]="controlDeInput('frecuencia')" idInput="frecuencia" [opciones]="con.FrecuenciaEnum" [valores]="con.FrecuenciaEnum" />
+    </div>
+    <!-- fecha: -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <app-input-date label="Fecha" [control]="controlDeInput('fecha')" idInput="fecha" [max]="fechaHoy" />
+    </div>
+    <!-- Observaciones -->
+    <div class="md:col-span-6">
+      <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
+    </div>
+  </div>
+  <!-- Enviar -->
+  <div class="flex my-auto mt-5">
+    <button type="submit" [disabled]="!tallerForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+  </div>
+</form>

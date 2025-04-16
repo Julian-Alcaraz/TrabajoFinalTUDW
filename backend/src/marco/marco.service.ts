@@ -23,7 +23,7 @@ export class MarcoService {
   }
 
   findAll() {
-    return this.marcoORM.find({ where: { deshabilitado: false } });
+    return this.marcoORM.find({ where: { deshabilitado: false }, relations: ['especialidad'] });
   }
 
   async findOne(id: number) {

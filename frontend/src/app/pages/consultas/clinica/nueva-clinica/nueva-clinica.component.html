@@ -11,7 +11,7 @@
   </span>
   <div class="card-body">
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="clinicaForm">
-      <app-campos-comunes [form]="clinicaForm" [values]="consulta" [dni]="this.dni"/>
+      <app-campos-comunes [form]="clinicaForm" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Peso -->
         <div class="mt-4 md:col">

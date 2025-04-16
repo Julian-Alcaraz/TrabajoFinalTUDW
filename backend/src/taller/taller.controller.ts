@@ -1,7 +1,9 @@
+import { plainToInstance } from 'class-transformer';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { ResponseTallerDto } from './dto/response-taller.dto';
 import { TallerService } from './taller.service';
 import { CreateTallerDto } from './dto/create-taller.dto';
 import { UpdateTallerDto } from './dto/update-taller.dto';
@@ -18,6 +20,8 @@ export class TallerController {
   @ApiResponse({ status: 404, description: 'Especialidad no encontrada' })
   @ApiResponse({ status: 404, description: 'Institucion no encontrada' })
   @ApiResponse({ status: 404, description: 'Curso no encontrado' })
+  @ApiResponse({ status: 404, description: 'Marco no encontrado' })
+  @ApiResponse({ status: 400, description: 'La especialidad de el taller debe coincidir con la del marco' })
   async create(@Body() createTallerDto: CreateTallerDto) {
     const taller = await this.tallerService.create(createTallerDto);
     return {
@@ -28,14 +32,26 @@ export class TallerController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Devuelve todos los talleres habilitados' })
-  @ApiResponse({ status: 200, description: 'Retorna todas los talleres habilitados con exito' })
+  @ApiOperation({ summary: 'Devuelve todos los talleres habilitados o deshabilitados' })
+  @ApiResponse({ status: 200, description: 'Retorna todas los talleres habilitados o deshabilitados con exito' })
   async findAll() {
-    const talleres = await this.tallerService.findAll();
+    const talleres = plainToInstance(ResponseTallerDto, await this.tallerService.findAll());
     return {
       success: true,
       data: talleres,
       message: 'Talleres obtenidos con exito',
+    };
+  }
+
+  @Get('habilitados')
+  @ApiOperation({ summary: 'Devuelve todos los talleres habilitados ' })
+  @ApiResponse({ status: 200, description: 'Retorna todas las barrios habilitados con exito' })
+  async findAllHabilitados() {
+    const talleres = plainToInstance(ResponseTallerDto, await this.tallerService.findAllHabilitados());
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con éxito',
     };
   }
 

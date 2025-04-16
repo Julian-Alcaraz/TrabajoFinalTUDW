@@ -21,7 +21,7 @@ export class InputSelectEnumComponent {
   @Input() label!: string;
   @Input() control!: FormControl;
   @Input() placeholder = 'Selecciona una opción';
-  @Input() opciones: string[] = [];
-  @Input() valores: string[] = [];
+  @Input() opciones: string[] | number[] | any[] = [];
+  @Input() valores: string[] | number[] | any[] = [];
   @Input() idInput = '';
 }

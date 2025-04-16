@@ -16,6 +16,9 @@ import { Clinica } from '../../consulta/entities/clinica.entity';
 import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 import { Odontologia } from '../../consulta/entities/odontologia.entity';
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
+import { Especialidad } from '../../especialidad/entities/especialidad.entity';
+import { Marco } from '../../marco/entities/marco.entity';
+import { Taller } from '../../taller/entities/taller.entity';
 
 export class DevSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -34,8 +37,9 @@ export class DevSeeder implements Seeder {
       const oftalmologiaORM = dataSource.getRepository(Oftalmologia);
       const odontologiaORM = dataSource.getRepository(Odontologia);
       const fonoaudiologiaORM = dataSource.getRepository(Fonoaudiologia);
-
-      // enums
+      const especialidadORM = dataSource.getRepository(Especialidad);
+      const marcoORM = dataSource.getRepository(Marco);
+      const tallerORM = dataSource.getRepository(Taller);
 
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
@@ -650,6 +654,74 @@ export class DevSeeder implements Seeder {
             throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
         }
       }
+
+      // Especialidades
+      console.log('Seeding especialidades...');
+
+      const especialidades = await especialidadORM.save([{ nombre: 'Fonoaudiologia' }, { nombre: 'Clinica' }, { nombre: 'Nutricion' }, { nombre: 'Odontologia' }, { nombre: 'Adicciones' }]);
+
+      // Marcos
+      console.log('Seeding marcos...');
+      const marcosFonoaudiologia = await marcoORM.save([
+        { nombre: 'Prevención y promoción', especialidad: especialidades[0] },
+        { nombre: 'Deteccion', especialidad: especialidades[0] },
+        { nombre: 'Higiene y Salud', especialidad: especialidades[0] },
+        { nombre: 'Indroducción Lectoescritura', especialidad: especialidades[0] },
+      ]);
+
+      const marcosClinica = await marcoORM.save([
+        { nombre: 'Prevencion y Promoción Integral', especialidad: especialidades[1] },
+        { nombre: 'Educación para la Salud', especialidad: especialidades[1] },
+        { nombre: 'Promoción de Salud', especialidad: especialidades[1] },
+        { nombre: 'Participación y Bienestar Infantil', especialidad: especialidades[1] },
+        { nombre: 'Prevención de Enfermedades', especialidad: especialidades[1] },
+      ]);
+
+      const marcosNutricion = await marcoORM.save([
+        { nombre: 'Imagen Corporal', especialidad: especialidades[2] },
+        { nombre: 'Alimentación Saludable', especialidad: especialidades[2] },
+        { nombre: 'Patología Alimentaria', especialidad: especialidades[2] },
+        { nombre: 'Estadística', especialidad: especialidades[2] },
+      ]);
+
+      const marcosOdontologia = await marcoORM.save([
+        { nombre: 'Motivación', especialidad: especialidades[3] },
+        { nombre: 'Prevención de Caries', especialidad: especialidades[3] },
+        { nombre: 'Prevención', especialidad: especialidades[3] },
+        { nombre: 'Teórico', especialidad: especialidades[3] },
+      ]);
+
+      const marcosAdicciones = await marcoORM.save([
+        { nombre: 'Identidad', especialidad: especialidades[4] },
+        { nombre: 'Elecciones', especialidad: especialidades[4] },
+        { nombre: 'Emociones', especialidad: especialidades[4] },
+        { nombre: 'Consumos Problemáticos', especialidad: especialidades[4] },
+        { nombre: 'Habilidades para la Vida', especialidad: especialidades[4] },
+        { nombre: 'Día Mundial sin Tabaco', especialidad: especialidades[4] },
+        { nombre: 'Día de la Lucha contra las Adicciones', especialidad: especialidades[4] },
+        { nombre: 'Día Mundial sin Alcohol', especialidad: especialidades[4] },
+      ]);
+
+      // Talleres
+      console.log('Seeding talleres...');
+      tallerORM.save([
+        {
+          nombre: faker.word.adjective(),
+          fecha: faker.date.between({ from: '1950-01-01T00:00:00.000Z', to: '2024-01-01T00:00:00.000Z' }),
+          cantEncuentros: faker.number.int({ min: 1, max: 10 }),
+          duracion: faker.number.int({ min: 1, max: 12 }),
+          cantParticipantes: faker.number.int({ min: 10, max: 50 }),
+          destinatarios: 'Alumnos',
+          recursos: 'Proyector',
+          turno: 'Mañana',
+          conjuntoCon: 'Odontologia',
+          frecuencia: 'Semanal',
+          institucion: instituciones[0],
+          curso: cursos[0],
+          especialidad: especialidades[0],
+          marco: marcosFonoaudiologia[0],
+        },
+      ]);
 
       // ==========================================================================================================================================
 

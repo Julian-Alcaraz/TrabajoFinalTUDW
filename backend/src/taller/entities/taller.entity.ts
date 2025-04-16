@@ -4,17 +4,15 @@ import { Curso } from '../../curso/entities/curso.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Especialidad } from '../../especialidad/entities/especialidad.entity';
 import { EntidadBasica } from '../../database/entities/EntidadBasica';
-import { DuracionEnum, DuracionType, DestinatariosEnum, DestinatariosType, TurnoTalleresEnum, TurnoTalleresType, ConjuntoConEnum, ConjuntoConType } from '../../common/const/const';
+import { Marco } from '../../marco/entities/marco.entity';
+import { DuracionEnum, DuracionType, DestinatariosEnum, DestinatariosType, TurnoTalleresEnum, TurnoTalleresType, ConjuntoConEnum, ConjuntoConType, FrecuenciaEnum, FrecuenciaType } from '../../common/const/const';
 
 @Entity({ name: 'taller' })
 export class Taller extends EntidadBasica {
-  @Column({ type: 'boolean' })
-  esTaller: boolean;
-
   @Column({ type: 'varchar', length: 100 })
   nombre: string;
 
-  @Column({ type: 'date' }) // !!!!
+  @Column({ type: 'date' })
   fecha: Date;
 
   @Column({ type: 'int' })
@@ -41,8 +39,8 @@ export class Taller extends EntidadBasica {
   @Column({ type: 'enum', enum: ConjuntoConEnum })
   conjuntoCon: ConjuntoConType;
 
-  @Column({ type: 'varchar', length: 50 })
-  frecuencia: string;
+  @Column({ type: 'enum', enum: FrecuenciaEnum })
+  frecuencia: FrecuenciaType;
 
   // Relaciones
 
@@ -57,4 +55,8 @@ export class Taller extends EntidadBasica {
   @ManyToOne(() => Especialidad, (especialidad) => especialidad.talleres)
   @JoinColumn({ name: 'id_especialidad' })
   especialidad: Especialidad;
+
+  @ManyToOne(() => Marco, (marco) => marco.talleres)
+  @JoinColumn({ name: 'id_marco' })
+  marco: Marco;
 }
