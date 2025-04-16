@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Between, EntityManager, IsNull, Not, Raw, Repository } from 'typeorm';
+import { Between, EntityManager, In, IsNull, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
 
@@ -123,97 +123,62 @@ export class ConsultaService {
     else return { primera_vez: true };
   }
 
-  async busquedaPersonalizada(data: any) {
-    const consulta = this.prepararDataConsultaPersonalizada(data);
-    const consultas = consulta.generales ? await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: consulta.generales }) : await this.consultaORM.find({ relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], where: { deshabilitado: false } });
+  async armarConsultaOrmPersonalizada(data: any, page: number = null, size: number = null) {
+    const consultasSeleccionadas = { ...data.consultasSeleccionadas };
+    const filtros = this.prepararDataConsultaPersonalizada(data); // Aquí generas los filtros generales.
 
-    if (!data.consultasSeleccionadas || data.consultasSeleccionadas.length === 0) {
-      const resultado = await this.procesarConsultasSinSeleccion(consultas, consulta);
-      return resultado;
+    const searchConsultas: any = {
+      relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], // Inicializa como un array de strings
+      where: filtros.generales,
+    };
+
+    if (page !== null && size !== null) {
+      searchConsultas.skip = page * size;
+      searchConsultas.take = size;
     }
 
-    const resultado = await this.procesarConsultasSeleccionadas(data.consultasSeleccionadas, consultas, consulta);
-    return resultado;
-  }
+    let filtrosEspecificos = null;
 
-  // SIN SELECCIONAR
-
-  private async procesarConsultasSinSeleccion(consultas: Consulta[], consulta: any) {
-    const resultados = [];
-
-    const consultasClinicas = [];
-    const consultasOdontologia = [];
-    const consultasFonoaudiologia = [];
-    const consultasOftalmologia = [];
-    for (const con of consultas) {
-      switch (con.type) {
+    if (filtros.especificas) {
+      switch (consultasSeleccionadas[0]) {
         case 'Clinica':
-          consultasClinicas.push(con);
+          filtrosEspecificos = { clinica: await this.procesarClinica(filtros) };
+          searchConsultas.relations.push('clinica'); // Agrega la relación específica
           break;
         case 'Odontologia':
-          consultasOdontologia.push(con);
+          filtrosEspecificos = { odontologia: await this.procesarOdontologia(filtros) };
+          searchConsultas.relations.push('odontologia'); // Agrega la relación específica
           break;
         case 'Oftalmologia':
-          consultasOftalmologia.push(con);
+          filtrosEspecificos = { oftalmologia: await this.procesarOftalmologia(filtros) };
+          searchConsultas.relations.push('oftalmologia'); // Agrega la relación específica
           break;
         case 'Fonoaudiologia':
-          consultasFonoaudiologia.push(con);
+          filtrosEspecificos = { fonoaudiologia: await this.procesarFonoaudiologia(filtros) };
+          searchConsultas.relations.push('fonoaudiologia'); // Agrega la relación específica
           break;
       }
     }
 
-    if (consultasClinicas.length > 0) {
-      const clinicaData = await this.procesarClinica(consulta);
-      resultados.push(...this.combinarDatos(consultas, clinicaData, 'clinica', resultados));
+    if (filtrosEspecificos) {
+      searchConsultas.where = { ...filtros.generales, ...filtrosEspecificos }; // Combina los filtros generales y específicos
     }
-    if (consultasOdontologia.length > 0) {
-      const odontologiaData = await this.procesarOdontologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, odontologiaData, 'odontologia', resultados));
-    }
-    if (consultasOftalmologia.length > 0) {
-      const oftalmologiaData = await this.procesarOftalmologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, oftalmologiaData, 'oftalmologia', resultados));
-    }
-    if (consultasFonoaudiologia.length > 0) {
-      const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
-    }
-    return resultados;
+
+    return searchConsultas;
   }
 
-  // SELECCIONADAS
-
-  private async procesarConsultasSeleccionadas(seleccionadas: string[], consultas: Consulta[], consulta: any) {
-    const resultados = [];
-    if (seleccionadas.includes('Clinica')) {
-      const clinicaData = await this.procesarClinica(consulta);
-      resultados.push(...this.combinarDatos(consultas, clinicaData, 'clinica', resultados));
-    }
-    if (seleccionadas.includes('Odontologia')) {
-      const odontologiaData = await this.procesarOdontologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, odontologiaData, 'odontologia', resultados));
-    }
-    if (seleccionadas.includes('Oftalmologia')) {
-      const oftalmologiaData = await this.procesarOftalmologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, oftalmologiaData, 'oftalmologia', resultados));
-    }
-    if (seleccionadas.includes('Fonoaudiologia')) {
-      const fonoaudiologiaData = await this.procesarFonoaudiologia(consulta);
-      resultados.push(...this.combinarDatos(consultas, fonoaudiologiaData, 'fonoaudiologia', resultados));
-    }
-    return resultados;
+  async countBusquedaPersonalizadaLimited(data: any) {
+    const searchConsultas = await this.armarConsultaOrmPersonalizada(data);
+    const consultas = await this.consultaORM.count(searchConsultas);
+    return consultas;
   }
 
-  private combinarDatos(base: Consulta[], datos: any[], key: string, resultados: any[]) {
-    return base
-      .map((consulta) => {
-        const relacionado = datos.find((dato) => dato.id_consulta === consulta.id && !resultados.find((res) => consulta.id === res.id)); // Si esta relacionado y no esta incluido en resultado
-        if (relacionado) {
-          return { ...consulta, [key]: relacionado };
-        }
-        return null;
-      })
-      .filter((resultado) => resultado !== null);
+  async busquedaPersonalizadaLimited(data: any, page: number, size: number) {
+    console.log(page, size);
+    const searchConsultas = await this.armarConsultaOrmPersonalizada(data, page, size);
+    console.log(searchConsultas);
+    const consultas = await this.consultaORM.find(searchConsultas);
+    return consultas;
   }
 
   private async procesarClinica(consulta: any) {
@@ -241,7 +206,7 @@ export class ConsultaService {
       consulta.especificas = { ...consulta.especificas, tad: Between(consulta.especificas.rangoTad.tadMin, consulta.especificas.rangoTad.tadMax) };
       delete consulta.especificas.rangoTad;
     }
-    return this.clinicaORM.find({ where: consulta.especificas });
+    return consulta.especificas;
   }
 
   private async procesarOdontologia(consulta: any) {
@@ -261,7 +226,7 @@ export class ConsultaService {
       consulta.especificas = { ...consulta.especificas, sellador: Between(consulta.especificas.rangoSellador.selladorMin, consulta.especificas.rangoSellador.selladorMax) };
       delete consulta.especificas.sellador;
     }
-    return this.odontologiaORM.find({ where: consulta.especificas });
+    return consulta.especificas;
   }
 
   private async procesarOftalmologia(consulta: any) {
@@ -269,46 +234,53 @@ export class ConsultaService {
       consulta.especificas = { ...consulta.especificas, prox_control: Between(consulta.especificas.rangoFechasProxControl[0], consulta.especificas.rangoFechasProxControl[1]) };
       delete consulta.especificas.rangoFechasProxControl;
     }
-    const consultasOftalmologia = await this.oftalmologiaORM.find({ where: consulta.especificas });
-    //this.darFormatoFechaProxControl(consultasOftalmologia);
-    return consultasOftalmologia;
+    return consulta.especificas; // devuevle el filtro
   }
 
   private async procesarFonoaudiologia(consulta: any) {
-    return this.fonoaudiologiaORM.find({ where: consulta.especificas });
+    return consulta.especificas; // devuevle el filtro
   }
 
+  /**
+   * devuevle todos los filtros generales incluidos el del type este va aestar incluido siempre que venga consultas seleccionadas
+   * @param data me trae la info que se manda desde el form
+   * @returns
+   */
   prepararDataConsultaPersonalizada(data) {
-    const consulta = { ...data };
-    if (!consulta.generales) return consulta;
-    consulta.generales = {
-      ...consulta.generales,
-      deshabilitado: false,
-    };
-    if (consulta.consultasSeleccionadas) delete consulta.consultasSeleccionadas;
-    if (consulta.generales.rangoFechas) {
-      // Formateo la fecha a Buenos Aires Arg. cuando llega al back se pasa a UTC lo que adelanta 1 dia la fechaFin
-      const fechaInicio = DateTime.fromISO(consulta.generales.rangoFechas[0], { zone: 'utc' }).setZone('America/Argentina/Buenos_Aires').toFormat('yyyy-MM-dd HH:mm:ss');
-      const fechaFin = DateTime.fromISO(consulta.generales.rangoFechas[1], { zone: 'utc' }).setZone('America/Argentina/Buenos_Aires').toFormat('yyyy-MM-dd HH:mm:ss');
+    const filtros = { ...data };
+    if (!filtros.generales) {
+      filtros.generales = { deshabilitado: false };
+    } else {
+      filtros.generales.deshabilitado = false;
+    }
 
-      consulta.generales = {
-        ...consulta.generales,
+    if (filtros.consultasSeleccionadas) {
+      filtros.generales.type = In(filtros.consultasSeleccionadas);
+      delete filtros.consultasSeleccionadas;
+    }
+    if (filtros.generales.rangoFechas) {
+      // Formateo la fecha a Buenos Aires Arg. cuando llega al back se pasa a UTC lo que adelanta 1 dia la fechaFin
+      const fechaInicio = DateTime.fromISO(filtros.generales.rangoFechas[0], { zone: 'utc' }).setZone('America/Argentina/Buenos_Aires').toFormat('yyyy-MM-dd HH:mm:ss');
+      const fechaFin = DateTime.fromISO(filtros.generales.rangoFechas[1], { zone: 'utc' }).setZone('America/Argentina/Buenos_Aires').toFormat('yyyy-MM-dd HH:mm:ss');
+
+      filtros.generales = {
+        ...filtros.generales,
         created_at: Between(fechaInicio, fechaFin),
       };
-      delete consulta.generales.rangoFechas;
+      delete filtros.generales.rangoFechas;
     }
-    if (consulta.generales.observaciones === true) {
-      consulta.generales = {
-        ...consulta.generales,
+    if (filtros.generales.observaciones === true) {
+      filtros.generales = {
+        ...filtros.generales,
         observaciones: Not(IsNull()),
       };
-    } else if (consulta.generales.observaciones === false) {
-      consulta.generales = {
-        ...consulta.generales,
+    } else if (filtros.generales.observaciones === false) {
+      filtros.generales = {
+        ...filtros.generales,
         observaciones: IsNull(),
       };
     }
-    return consulta;
+    return filtros;
   }
 
   findAll() {
@@ -319,6 +291,27 @@ export class ConsultaService {
     const consultas = await this.consultaORM.find({
       where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) },
       relations: ['chico', 'institucion', 'curso', 'usuario'],
+    });
+    return consultas;
+  }
+
+  async countTotalByYear(year: number) {
+    const consultasTotal = await this.consultaORM.count({
+      where: { deshabilitado: false, created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }) },
+    });
+    return consultasTotal;
+  }
+
+  async findAllByYearLimited(year: number, page: number, size: number) {
+    const skip = page * size;
+    const consultas = await this.consultaORM.find({
+      where: {
+        deshabilitado: false,
+        created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }),
+      },
+      relations: ['chico', 'institucion', 'curso', 'usuario'],
+      take: size,
+      skip: skip,
     });
     return consultas;
   }

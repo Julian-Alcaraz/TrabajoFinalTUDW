@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -31,7 +31,8 @@ import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologi
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
 import { XlsxService } from '../../../../services/excelJS.service';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
-import { from } from 'rxjs';
+import { forkJoin, from, Subscription } from 'rxjs';
+import { PaginatedTableService } from '@app/services/paginated-table.service';
 
 @Component({
   selector: 'app-personalizada',
@@ -39,13 +40,12 @@ import { from } from 'rxjs';
   imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule],
   templateUrl: './personalizada.component.html',
 })
-export class PersonalizadaComponent implements OnInit {
+export class PersonalizadaComponent implements OnInit, OnDestroy {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
 
   public loadingCursos = false;
   public loadingInstituciones = false;
   public loadingProfesionales = false;
-  public loading = false;
   public mostrarBotonDescarga = false;
   public generandoArchivo = false; // Aca faltaria usar esto para un spinner!!!
   public estaColapsadoComunes = false;
@@ -78,6 +78,7 @@ export class PersonalizadaComponent implements OnInit {
     private _usuarioService: UsuarioService,
     private _consultaService: ConsultaService,
     private _xlsxService: XlsxService,
+    private _tableService: PaginatedTableService,
   ) {
     this.formBusqueda = this.fb.group({
       generales: this.fb.group({
@@ -114,10 +115,27 @@ export class PersonalizadaComponent implements OnInit {
     this.formBusqueda.valueChanges.subscribe(() => {
       this.mostrarBotonDescarga = false;
     });
+
+    this.listenPager();
   }
 
-  enviarConsultas(data: Consulta[]) {
-    this.consultasEmitidas.emit(data);
+  listenerPaginator: Subscription = new Subscription();
+  page = 0;
+  size = 10;
+
+  listenPager() {
+    this.listenerPaginator = this._tableService.listenPaginated().subscribe((paginated) => {
+      // si hay cambios los busca
+      if (this.page !== paginated.pageIndex || this.size !== paginated.pageSize) {
+        this.page = paginated.pageIndex;
+        this.size = paginated.pageSize;
+        this.buscar();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.listenerPaginator.unsubscribe();
   }
 
   onChangeTipoConsulta() {
@@ -125,6 +143,11 @@ export class PersonalizadaComponent implements OnInit {
     if (this.formBusqueda.get('consultasSeleccionadas')?.value && this.formBusqueda.get('consultasSeleccionadas')?.value.length === 0) {
       this.formBusqueda.get('consultasSeleccionadas')?.reset();
     }
+  }
+
+  submit() {
+    this._tableService.resetService();
+    this.buscar();
   }
 
   obtenerCursos(): any {
@@ -174,26 +197,23 @@ export class PersonalizadaComponent implements OnInit {
     this.colapsarPaneles = false;
     this.estaColapsadoComunes = true;
     this.estaColapsadoEspecificos = true;
-    this.searching = true;
     if (this.formBusqueda.valid) {
-      this.loading = true;
+      this.searching = true;
       this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
-      this._consultaService.busquedaPersonalizada(dataLimpia).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            this.resultados = response.data;
-            this.searching = false;
-            this.enviarConsultas(response.data);
-            this.mostrarBotonDescarga = true;
-            this.loading = false;
-          }
+
+      forkJoin({
+        total: this._consultaService.obtenerTotalPersonalizada(dataLimpia),
+        limitedData: this._consultaService.busquedaPersonalizadaLimited(dataLimpia, this.page, this.size),
+      }).subscribe({
+        next: (responses: { total: any; limitedData: any }) => {
+          this._tableService.updateData({ array: responses.limitedData.data, total: responses.total.data });
+          this.searching = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-          this.loading = false;
+          this.searching = false;
         },
       });
     }
@@ -234,19 +254,15 @@ function prepararData(data: any): any {
     for (const der of data.especificas.derivaciones) {
       if (der.fonoaudiologia) {
         derivacion_fonoaudiologia = der.fonoaudiologia;
-        console.log('fonoaudiologia', derivacion_fonoaudiologia);
       }
       if (der.odontologia) {
         derivacion_odontologia = der.odontologia;
-        console.log('odontologia', derivacion_odontologia);
       }
       if (der.oftalmologia) {
         derivacion_oftalmologia = der.oftalmologia;
-        console.log('oftalmologia', derivacion_oftalmologia);
       }
       if (der.externa) {
         derivacion_externa = der.externa;
-        console.log('externa', derivacion_externa);
       }
     }
 

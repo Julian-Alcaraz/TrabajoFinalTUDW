@@ -3,18 +3,14 @@
   <div class="card-body">
     <div class="mb-2">
       @if (currentParam === 0 || !currentParam) {
-        <app-consultasxanio (consultasEmitidas)="mostrarConsultas($event)" />
+        <app-consultasxanio />
       }
       @if (currentParam === 1) {
-        <app-personalizada (consultasEmitidas)="mostrarConsultas($event)" />
+        <app-personalizada />
       }
     </div>
-    @if (consultas && consultas.length > 0) {
-      <app-consultas-table [consultas]="consultas" [displayedColumns]="['numero', 'type', 'fecha', 'nombre', 'documento', 'profesional', 'observaciones']" />
-    } @else if (consultas && consultas.length === 0) {
-      <div class="text-center font-semibold text-lg">
-        <h1>Consultas no encontradas</h1>
-      </div>
+    @if (busco) {
+      <app-consultas-table [displayedColumns]="['numero', 'type', 'fecha', 'nombre', 'documento', 'profesional', 'observaciones']" />
     }
   </div>
 </div>

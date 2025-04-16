@@ -1,4 +1,4 @@
-<form [formGroup]="buscarForm" (ngSubmit)="buscar()" class="flex items-center space-x-2">
+<form [formGroup]="buscarForm" (ngSubmit)="submit()" class="flex items-center space-x-2">
   <p-iftalabel class="my-4">
     <!-- SACAR ngModel, ESTA DEPRECADO!!!!!!!!! -->
     <p-datepicker [(ngModel)]="date" idInput="year" view="year" dateFormat="yy" [maxDate]="maxDate" formControlName="year" styleClass="h-16" />
