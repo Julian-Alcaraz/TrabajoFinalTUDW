@@ -74,7 +74,7 @@ export class FormChicosComponent implements OnInit {
       dni: ['', [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['', [Validators.required]],
       fe_nacimiento: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), ValidarSoloNumeros]],
+      telefono: ['', [Validators.minLength(8), Validators.maxLength(30), ValidarSoloNumeros]],
       direccion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],

@@ -127,4 +127,21 @@
     </div>
     <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons></mat-paginator>
   </div>
+  <div class="p-4 w-full ">
+    <h5 class="text-center text-lg font-semibold">INFORMACION ROLES</h5>
+    <div class="grid grid-cols-1 sm:grid-cols-3 border border-gray-300 rounded bg-gray-100 shadow-sm p-1">
+      <div class="p-2">
+        <div class="col font-semibold text-center">Administrador</div>
+        <div class="col">Tiene acceso a todo el sistema. Pudiendo realizar todas las acciones disponibles en el mismo.</div>
+      </div>
+      <div class="p-2">
+        <div class="col font-semibold text-center">Profesional</div>
+        <div class="col">Tendra acceso a graficos, niños, consultas, pudiendo cargar, editar, borrar y visualizar la información</div>
+      </div>
+      <div class="p-2">
+        <div class="font-semibold text-center">Acceso Información</div>
+        <div class="col">Solo podra visualizar la informacion sin realizar modificaciones ni cargas.</div>
+      </div>
+    </div>
+  </div>
 </div>

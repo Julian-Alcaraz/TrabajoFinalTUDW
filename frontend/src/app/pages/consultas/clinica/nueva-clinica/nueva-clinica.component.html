@@ -23,15 +23,15 @@
         </div>
         <!-- Circunferencia de la cintura (cc)-->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Circunferencia de la cintura" [control]="controlDeInput('cc')" placeholder="" idInput="cc" />
+          <app-input-number label="Circunferencia de la cintura (cm)" [control]="controlDeInput('cc')" placeholder="" idInput="cc" />
         </div>
         <!-- Tensión Arterial Sistolica (tas) -->
         <div class="mt-4 md:col-span-1">
-          <app-input-number label="Tensión Arterial Sistolica" [control]="controlDeInput('tas')" placeholder="" idInput="tas" />
+          <app-input-number label="Tensión Arterial Sistolica (Hg)" [control]="controlDeInput('tas')" placeholder="" idInput="tas" />
         </div>
         <!-- Tensión Arterial Diastolica (tad) -->
         <div class="mt-4 md:col-span-1">
-          <app-input-number label="Tensión Arterial Diastolica" [control]="controlDeInput('tad')" placeholder="" idInput="tad" />
+          <app-input-number label="Tensión Arterial Diastolica (Hg)" [control]="controlDeInput('tad')" placeholder="" idInput="tad" />
         </div>
         <!-- Percentil de Talla (PCT) -->
         <div class="mt-4 md:col-span-2">
@@ -39,7 +39,7 @@
         </div>
         <!-- Percentil de Tension Arterial (PCTA) -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Percentil de Tension Arterial" [control]="controlDeInput('pcta')" placeholder="" idInput="pcta" />
+          <app-input-number label="Percentil de Tensión Arterial" [control]="controlDeInput('pcta')" placeholder="" idInput="pcta" />
         </div>
         <!-- Percentil de Índice de Masa Corporal (PCIMC) -->
         <div class="mt-4 md:col-span-2">
@@ -61,7 +61,7 @@
             <!-- Calculo tension arterial (PCTA) -->
             <ng-container *ngIf="clinicaForm.get('pcta')?.value !== '' && clinicaForm.get('pcta')?.value > 0">
               <div class="md:col-span-6 sm:col-span-3">
-                <span class="font-bold">Tension arterial: </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
+                <span class="font-bold">Tensión arterial: </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
               </div>
             </ng-container>
           </div>
@@ -78,7 +78,7 @@
                     <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes" (change)="onChangeCheckbox($event)" />
                   </li>
                   <li class="w-full border-b border-gray-200 p-1">
-                    <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
+                    <app-input-checkbox label="Hipertensión Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
                   </li>
                   <li class="w-full border-b border-gray-200 p-1">
                     <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad" (change)="onChangeCheckbox($event)" />

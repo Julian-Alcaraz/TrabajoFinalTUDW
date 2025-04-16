@@ -4,7 +4,7 @@
     <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
       <!-- Rango Talla -->
       <div formGroupName="rangoTalla" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
-        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Talla</p>
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Talla (cm)</p>
         <div>
           <p-iftalabel>
             <p-inputnumber formControlName="tallaMin" inputId="tallaMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
@@ -20,7 +20,7 @@
       </div>
       <!-- Rango CC -->
       <div formGroupName="rangoCC" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
-        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Circunferencia de la Cintura</p>
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Circunferencia de la Cintura (cm)</p>
         <div>
           <p-iftalabel>
             <p-inputnumber formControlName="ccMin" inputId="ccMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
@@ -68,7 +68,7 @@
       </div>
       <!-- Rango Tension Arterial Sistolica (tas) -->
       <div formGroupName="rangoTas" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
-        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Sistolica</p>
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Sistolica (Hg)</p>
         <div>
           <p-iftalabel>
             <p-inputnumber formControlName="tasMin" inputId="tasMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
@@ -84,7 +84,7 @@
       </div>
       <!-- Rango Tension Arterial Diastolica (tad) Min -->
       <div formGroupName="rangoTad" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
-        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Diastolica</p>
+        <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Diastolica (Hg)</p>
         <div>
           <p-iftalabel>
             <p-inputnumber formControlName="tadMin" inputId="tadMin" pKeyFilter="num" mode="decimal" [maxFractionDigits]="2" [min]="0" class="w-full h-16" [locale]="'es'" />
