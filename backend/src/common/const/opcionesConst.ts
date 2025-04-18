@@ -46,4 +46,4 @@ export const opcionesFrecuencia = ['Única vez', 'Diaria', 'Semanal', 'Mensual']
 
 // Especialidad
 
-export const opcionesEspecialidad = ['Adicciones', 'Fonoaudiologia', 'Nutricion', 'Odontologia', 'Clinica'];
+export const opcionesEspecialidad = ['Prevencion', 'Fonoaudiologia', 'Nutricion', 'Odontologia', 'Clinica'];

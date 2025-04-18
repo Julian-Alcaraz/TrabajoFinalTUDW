@@ -85,29 +85,31 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por fecha">Fecha</th>
           <td mat-cell *matCellDef="let element">{{ element.fecha }}</td>
         </ng-container>
-        <!-- duracion -->
-        <ng-container matColumnDef="duracion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por duracion">Duración</th>
-          <td mat-cell *matCellDef="let element">{{ element.duracion + ' horas' }}</td>
+        <!-- esTaller -->
+        <ng-container matColumnDef="esTaller">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por esTaller">Es Taller</th>
+          <td mat-cell *matCellDef="let element">{{ element.esTaller ? 'Si' : 'No' }}</td>
         </ng-container>
         <!-- frecuencia -->
         <ng-container matColumnDef="frecuencia">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por frecuencia">Frecuencia</th>
           <td mat-cell *matCellDef="let element">{{ element.frecuencia }}</td>
         </ng-container>
+        <!-- duracion -->
+        <ng-container matColumnDef="duracion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por duracion">Duración</th>
+          <td mat-cell *matCellDef="let element">{{ element.duracion + ' horas' }}</td>
+        </ng-container>
         <!-- destinatarios -->
         <ng-container matColumnDef="destinatarios">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por destinatarios">Destinatarios</th>
           <td mat-cell *matCellDef="let element">{{ element.destinatarios }}</td>
         </ng-container>
-        <!-- turno -->
-        <!-- conjuntoCon -->
-        <!-- id_institucion -->
-        <!-- id_curso -->
-        <!-- id_especialidad -->
-        <!-- id_marco -->
-        <!-- observaciones -->
-
+        <!-- especialidad -->
+        <ng-container matColumnDef="especialidad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por especialidad">Especialidad</th>
+          <td mat-cell *matCellDef="let element">{{ element.especialidad.nombre }}</td>
+        </ng-container>
         <!-- Habilitado -->
         <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
@@ -126,9 +128,6 @@
                 } @else {
                   <i class="fa-solid fa-xmark fa-lg"></i>
                 }
-              </button>
-              <button [pTooltip]="'Editar'" tooltipPosition="top" aria-label="Botón de editar taller" (click)="element.deshabilitado ? notificar(element.id) : editarTaller(element.id); $event.stopPropagation()" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'">
-                <i class="fa-solid fa-pencil" style="color: #ffffff"></i>
               </button>
             </div>
           </td>

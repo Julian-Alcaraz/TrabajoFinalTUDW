@@ -25,6 +25,10 @@ export class TallerService {
     return this._http.get(this.url + 'taller');
   }
 
+  obtenerTallerxId(id: number): Observable<any> {
+    return this._http.get(this.url + 'taller/' + id);
+  }
+
   modificarTaller(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'taller/' + id, data);
   }

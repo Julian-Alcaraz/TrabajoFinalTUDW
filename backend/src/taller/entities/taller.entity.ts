@@ -16,19 +16,16 @@ export class Taller extends EntidadBasica {
   fecha: Date;
 
   @Column({ type: 'int' })
-  cantEncuentros: number;
+  cant_encuentros: number;
 
   @Column({ type: 'enum', enum: DuracionEnum })
   duracion: DuracionType;
 
   @Column({ type: 'int' })
-  cantParticipantes: number;
+  cant_participantes: number;
 
   @Column({ type: 'enum', enum: DestinatariosEnum })
   destinatarios: DestinatariosType;
-
-  @Column({ type: 'varchar', length: 1000, nullable: true })
-  observaciones: string;
 
   @Column({ type: 'varchar', length: 100 })
   recursos: string;
@@ -37,10 +34,19 @@ export class Taller extends EntidadBasica {
   turno: TurnoTalleresType;
 
   @Column({ type: 'enum', enum: ConjuntoConEnum })
-  conjuntoCon: ConjuntoConType;
+  conjunto_con: ConjuntoConType;
 
   @Column({ type: 'enum', enum: FrecuenciaEnum })
   frecuencia: FrecuenciaType;
+
+  @Column({ type: 'boolean' })
+  es_taller: boolean;
+
+  @Column({ type: 'varchar', length: 1000, nullable: true })
+  observaciones: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  entrega_cepillos?: boolean;
 
   // Relaciones
 

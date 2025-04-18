@@ -49,6 +49,7 @@ export class DevSeeder implements Seeder {
       const ClinicaFactory = factoryManager.get(Clinica);
       const OftalmologiaFactory = factoryManager.get(Oftalmologia);
       const OdontologiaFactory = factoryManager.get(Odontologia);
+      const tallerFactory = factoryManager.get(Taller);
 
       // Roles
       console.log('Seeding roles...');
@@ -520,9 +521,8 @@ export class DevSeeder implements Seeder {
       // Chicos
       console.log('Seeding chicos...');
 
-      // Crea 500 chicos
       const chicos = await Promise.all(
-        Array(200)
+        Array(1000)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
@@ -599,66 +599,66 @@ export class DevSeeder implements Seeder {
       }
 
       // Consultas
-      // Crea 1500 consultas
-      console.log('Seeding consultas...');
-      const consultasSimples = await Promise.all(
-        Array(3000)
-          .fill('')
-          .map(async () => {
-            const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-            const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-            const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-            const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-            const consulta = await consultaFactory.make({
-              curso: faker.helpers.arrayElement(cursos),
-              institucion: faker.helpers.arrayElement(instituciones),
-              chico: chicoSeleccionado,
-              usuario: usuarioConRol,
-              edad: edad,
-              created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-              deshabilitado: faker.datatype.boolean(0.05),
-            });
-            return consulta;
-          }),
-      );
+      for (let i = 0; i < 1; i++) {
+        console.log('Seeding consultas...');
+        const consultasSimples = await Promise.all(
+          Array(1000)
+            .fill('')
+            .map(async () => {
+              const chicoSeleccionado = faker.helpers.arrayElement(chicos);
+              const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
+              const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
+              const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
+              const consulta = await consultaFactory.make({
+                curso: faker.helpers.arrayElement(cursos),
+                institucion: faker.helpers.arrayElement(instituciones),
+                chico: chicoSeleccionado,
+                usuario: usuarioConRol,
+                edad: edad,
+                created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
+                deshabilitado: faker.datatype.boolean(0.05),
+              });
+              return consulta;
+            }),
+        );
 
-      await consultaORM.save(consultasSimples);
+        await consultaORM.save(consultasSimples);
 
-      for (const consulta of consultasSimples) {
-        switch (consulta.type) {
-          case 'Clinica':
-            const clinica = await ClinicaFactory.make({
-              consulta: consulta,
-            });
-            await clinicaORM.save(clinica);
-            break;
-          case 'Fonoaudiologia':
-            const fonoaudiologia = await FonoaudiologiaFactory.make({
-              consulta: consulta,
-            });
-            await fonoaudiologiaORM.save(fonoaudiologia);
-            break;
-          case 'Oftalmologia':
-            const oftalmologia = await OftalmologiaFactory.make({
-              consulta: consulta,
-            });
-            await oftalmologiaORM.save(oftalmologia);
-            break;
-          case 'Odontologia':
-            const odontologia = await OdontologiaFactory.make({
-              consulta: consulta,
-            });
-            await odontologiaORM.save(odontologia);
-            break;
-          default:
-            throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
+        for (const consulta of consultasSimples) {
+          switch (consulta.type) {
+            case 'Clinica':
+              const clinica = await ClinicaFactory.make({
+                consulta: consulta,
+              });
+              await clinicaORM.save(clinica);
+              break;
+            case 'Fonoaudiologia':
+              const fonoaudiologia = await FonoaudiologiaFactory.make({
+                consulta: consulta,
+              });
+              await fonoaudiologiaORM.save(fonoaudiologia);
+              break;
+            case 'Oftalmologia':
+              const oftalmologia = await OftalmologiaFactory.make({
+                consulta: consulta,
+              });
+              await oftalmologiaORM.save(oftalmologia);
+              break;
+            case 'Odontologia':
+              const odontologia = await OdontologiaFactory.make({
+                consulta: consulta,
+              });
+              await odontologiaORM.save(odontologia);
+              break;
+            default:
+              throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
+          }
         }
       }
-
       // Especialidades
       console.log('Seeding especialidades...');
 
-      const especialidades = await especialidadORM.save([{ nombre: 'Fonoaudiologia' }, { nombre: 'Clinica' }, { nombre: 'Nutricion' }, { nombre: 'Odontologia' }, { nombre: 'Adicciones' }]);
+      const especialidades = await especialidadORM.save([{ nombre: 'Fonoaudiologia' }, { nombre: 'Clinica' }, { nombre: 'Nutricion' }, { nombre: 'Odontologia' }, { nombre: 'Prevencion' }]);
 
       // Marcos
       console.log('Seeding marcos...');
@@ -691,7 +691,7 @@ export class DevSeeder implements Seeder {
         { nombre: 'Teórico', especialidad: especialidades[3] },
       ]);
 
-      const marcosAdicciones = await marcoORM.save([
+      const marcosPrevencion = await marcoORM.save([
         { nombre: 'Identidad', especialidad: especialidades[4] },
         { nombre: 'Elecciones', especialidad: especialidades[4] },
         { nombre: 'Emociones', especialidad: especialidades[4] },
@@ -702,310 +702,52 @@ export class DevSeeder implements Seeder {
         { nombre: 'Día Mundial sin Alcohol', especialidad: especialidades[4] },
       ]);
 
-      // Talleres
       console.log('Seeding talleres...');
-      tallerORM.save([
-        {
-          nombre: faker.word.adjective(),
-          fecha: faker.date.between({ from: '1950-01-01T00:00:00.000Z', to: '2024-01-01T00:00:00.000Z' }),
-          cantEncuentros: faker.number.int({ min: 1, max: 10 }),
-          duracion: faker.number.int({ min: 1, max: 12 }),
-          cantParticipantes: faker.number.int({ min: 10, max: 50 }),
-          destinatarios: 'Alumnos',
-          recursos: 'Proyector',
-          turno: 'Mañana',
-          conjuntoCon: 'Odontologia',
-          frecuencia: 'Semanal',
-          institucion: instituciones[0],
-          curso: cursos[0],
-          especialidad: especialidades[0],
-          marco: marcosFonoaudiologia[0],
-        },
-      ]);
-
-      // ==========================================================================================================================================
-
-      // // Consultas
-      // // Crea 1500 consultas
-      // console.log('Seeding consultas...');
-      // const consultasSimples3 = await Promise.all(
-      //   Array(3000)
-      //     .fill('')
-      //     .map(async () => {
-      //       const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-      //       const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-      //       const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-      //       const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-      //       const consulta = await consultaFactory.make({
-      //         curso: faker.helpers.arrayElement(cursos),
-      //         institucion: faker.helpers.arrayElement(instituciones),
-      //         chico: chicoSeleccionado,
-      //         usuario: usuarioConRol,
-      //         edad: edad,
-      //         created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-      //         deshabilitado: faker.datatype.boolean(0.05),
-      //       });
-      //       return consulta;
-      //     }),
-      // );
-      // await consultaORM.save(consultasSimples3);
-
-      // for (const consulta of consultasSimples3) {
-      //   switch (consulta.type) {
-      //     case 'Clinica':
-      //       const clinica = await ClinicaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await clinicaORM.save(clinica);
-      //       break;
-      //     case 'Fonoaudiologia':
-      //       const fonoaudiologia = await FonoaudiologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await fonoaudiologiaORM.save(fonoaudiologia);
-      //       break;
-      //     case 'Oftalmologia':
-      //       const oftalmologia = await OftalmologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await oftalmologiaORM.save(oftalmologia);
-      //       break;
-      //     case 'Odontologia':
-      //       const odontologia = await OdontologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await odontologiaORM.save(odontologia);
-      //       break;
-      //     default:
-      //       throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
-      //   }
-      // }
-
-      // // Consultas
-      // // Crea 1500 consultas
-      // console.log('Seeding consultas...');
-      // const consultasSimples4 = await Promise.all(
-      //   Array(3000)
-      //     .fill('')
-      //     .map(async () => {
-      //       const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-      //       const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-      //       const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-      //       const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-      //       const consulta = await consultaFactory.make({
-      //         curso: faker.helpers.arrayElement(cursos),
-      //         institucion: faker.helpers.arrayElement(instituciones),
-      //         chico: chicoSeleccionado,
-      //         usuario: usuarioConRol,
-      //         edad: edad,
-      //         created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-      //         deshabilitado: faker.datatype.boolean(0.05),
-      //       });
-      //       return consulta;
-      //     }),
-      // );
-      // await consultaORM.save(consultasSimples4);
-
-      // for (const consulta of consultasSimples4) {
-      //   switch (consulta.type) {
-      //     case 'Clinica':
-      //       const clinica = await ClinicaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await clinicaORM.save(clinica);
-      //       break;
-      //     case 'Fonoaudiologia':
-      //       const fonoaudiologia = await FonoaudiologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await fonoaudiologiaORM.save(fonoaudiologia);
-      //       break;
-      //     case 'Oftalmologia':
-      //       const oftalmologia = await OftalmologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await oftalmologiaORM.save(oftalmologia);
-      //       break;
-      //     case 'Odontologia':
-      //       const odontologia = await OdontologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await odontologiaORM.save(odontologia);
-      //       break;
-      //     default:
-      //       throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
-      //   }
-      // }
-
-      // // Consultas
-      // // Crea 1500 consultas
-      // console.log('Seeding consultas...');
-      // const consultasSimples5 = await Promise.all(
-      //   Array(3000)
-      //     .fill('')
-      //     .map(async () => {
-      //       const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-      //       const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-      //       const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-      //       const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-      //       const consulta = await consultaFactory.make({
-      //         curso: faker.helpers.arrayElement(cursos),
-      //         institucion: faker.helpers.arrayElement(instituciones),
-      //         chico: chicoSeleccionado,
-      //         usuario: usuarioConRol,
-      //         edad: edad,
-      //         created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-      //         deshabilitado: faker.datatype.boolean(0.05),
-      //       });
-      //       return consulta;
-      //     }),
-      // );
-      // await consultaORM.save(consultasSimples5);
-
-      // for (const consulta of consultasSimples5) {
-      //   switch (consulta.type) {
-      //     case 'Clinica':
-      //       const clinica = await ClinicaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await clinicaORM.save(clinica);
-      //       break;
-      //     case 'Fonoaudiologia':
-      //       const fonoaudiologia = await FonoaudiologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await fonoaudiologiaORM.save(fonoaudiologia);
-      //       break;
-      //     case 'Oftalmologia':
-      //       const oftalmologia = await OftalmologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await oftalmologiaORM.save(oftalmologia);
-      //       break;
-      //     case 'Odontologia':
-      //       const odontologia = await OdontologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await odontologiaORM.save(odontologia);
-      //       break;
-      //     default:
-      //       throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
-      //   }
-      // }
-
-      // // Consultas
-      // // Crea 1500 consultas
-      // console.log('Seeding consultas...');
-      // const consultasSimples6 = await Promise.all(
-      //   Array(3000)
-      //     .fill('')
-      //     .map(async () => {
-      //       const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-      //       const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-      //       const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-      //       const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-      //       const consulta = await consultaFactory.make({
-      //         curso: faker.helpers.arrayElement(cursos),
-      //         institucion: faker.helpers.arrayElement(instituciones),
-      //         chico: chicoSeleccionado,
-      //         usuario: usuarioConRol,
-      //         edad: edad,
-      //         created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-      //         deshabilitado: faker.datatype.boolean(0.05),
-      //       });
-      //       return consulta;
-      //     }),
-      // );
-      // await consultaORM.save(consultasSimples6);
-
-      // for (const consulta of consultasSimples6) {
-      //   switch (consulta.type) {
-      //     case 'Clinica':
-      //       const clinica = await ClinicaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await clinicaORM.save(clinica);
-      //       break;
-      //     case 'Fonoaudiologia':
-      //       const fonoaudiologia = await FonoaudiologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await fonoaudiologiaORM.save(fonoaudiologia);
-      //       break;
-      //     case 'Oftalmologia':
-      //       const oftalmologia = await OftalmologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await oftalmologiaORM.save(oftalmologia);
-      //       break;
-      //     case 'Odontologia':
-      //       const odontologia = await OdontologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await odontologiaORM.save(odontologia);
-      //       break;
-      //     default:
-      //       throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
-      //   }
-      // }
-
-      // // Consultas
-      // // Crea 1500 consultas
-      // console.log('Seeding consultas...');
-      // const consultasSimples2 = await Promise.all(
-      //   Array(3000)
-      //     .fill('')
-      //     .map(async () => {
-      //       const chicoSeleccionado = faker.helpers.arrayElement(chicos);
-      //       const usuarioConRol = faker.helpers.arrayElement(usuariosProfesionales);
-      //       const fechaNacimiento = chicoSeleccionado.fe_nacimiento;
-      //       const edad = new Date().getFullYear() - fechaNacimiento.getFullYear();
-      //       const consulta = await consultaFactory.make({
-      //         curso: faker.helpers.arrayElement(cursos),
-      //         institucion: faker.helpers.arrayElement(instituciones),
-      //         chico: chicoSeleccionado,
-      //         usuario: usuarioConRol,
-      //         edad: edad,
-      //         created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-      //         deshabilitado: faker.datatype.boolean(0.05),
-      //       });
-      //       return consulta;
-      //     }),
-      // );
-      // await consultaORM.save(consultasSimples2);
-
-      // for (const consulta of consultasSimples2) {
-      //   switch (consulta.type) {
-      //     case 'Clinica':
-      //       const clinica = await ClinicaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await clinicaORM.save(clinica);
-      //       break;
-      //     case 'Fonoaudiologia':
-      //       const fonoaudiologia = await FonoaudiologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await fonoaudiologiaORM.save(fonoaudiologia);
-      //       break;
-      //     case 'Oftalmologia':
-      //       const oftalmologia = await OftalmologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await oftalmologiaORM.save(oftalmologia);
-      //       break;
-      //     case 'Odontologia':
-      //       const odontologia = await OdontologiaFactory.make({
-      //         consulta: consulta,
-      //       });
-      //       await odontologiaORM.save(odontologia);
-      //       break;
-      //     default:
-      //       throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);
-      //   }
-      // }
-
-      // ==========================================================================================================================================
+      const batchSize = 1000;
+      for (let i = 0; i < 1000; i += batchSize) {
+        const talleres = await Promise.all(
+          Array(batchSize)
+            .fill('')
+            .map(async () => {
+              const especialidadSeleccionada = faker.helpers.arrayElement(especialidades);
+              let marcoSeleccionado;
+              let entregaCepillos;
+              switch (especialidadSeleccionada.nombre) {
+                case 'Fonoaudiologia':
+                  marcoSeleccionado = faker.helpers.arrayElement(marcosFonoaudiologia);
+                  entregaCepillos = null;
+                  break;
+                case 'Clinica':
+                  marcoSeleccionado = faker.helpers.arrayElement(marcosClinica);
+                  entregaCepillos = null;
+                  break;
+                case 'Nutricion':
+                  marcoSeleccionado = faker.helpers.arrayElement(marcosNutricion);
+                  entregaCepillos = null;
+                  break;
+                case 'Odontologia':
+                  marcoSeleccionado = faker.helpers.arrayElement(marcosOdontologia);
+                  entregaCepillos = faker.helpers.maybe(() => true, { probability: 0.05 }) ?? false;
+                  break;
+                case 'Prevencion':
+                  marcoSeleccionado = faker.helpers.arrayElement(marcosPrevencion);
+                  entregaCepillos = null;
+                  break;
+              }
+              const institucionSeleccionada = faker.helpers.arrayElement(instituciones);
+              const taller = await tallerFactory.make({
+                curso: cursos.find((curso) => curso.nivel === institucionSeleccionada.tipo),
+                institucion: institucionSeleccionada,
+                especialidad: especialidadSeleccionada,
+                marco: marcoSeleccionado,
+                entrega_cepillos: entregaCepillos,
+                deshabilitado: faker.helpers.maybe(() => true, { probability: 0.05 }) ?? false,
+              });
+              return taller;
+            }),
+        );
+        await tallerORM.save(talleres);
+      }
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
     }

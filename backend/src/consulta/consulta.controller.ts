@@ -33,7 +33,6 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelte el total de consultas de una busqueda personalizada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async countBusquedaPersonalizada(@Body() data: any) {
-    // const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizada(data));
     const total = await this.consultaService.countBusquedaPersonalizadaLimited(data);
     return {
       success: true,
@@ -46,8 +45,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelte todas las consultas de una busqueda personalizada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async busquedaPersonalizadaLimited(@Body() data: any, @Param('page', ParseIntPipe) page: number, @Param('size', ParseIntPipe) size: number) {
-    // const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizadaLimited(data, page, size));
-    const consultas = await this.consultaService.busquedaPersonalizadaLimited(data, page, size);
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizadaLimited(data, page, size));
     return {
       success: true,
       data: consultas,
@@ -107,7 +105,7 @@ export class ConsultaController {
   @ApiOperation({ summary: 'Devuelve todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad, limitada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async findAllByYearLimited(@Param('year', ParseIntPipe) year: number, @Param('page', ParseIntPipe) page: number, @Param('size', ParseIntPipe) size: number) {
-    const consultas = await this.consultaService.findAllByYearLimited(year, page, size);
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.findAllByYearLimited(year, page, size));
     return {
       success: true,
       data: consultas,

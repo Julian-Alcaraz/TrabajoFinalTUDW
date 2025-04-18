@@ -44,7 +44,7 @@ export class TallerService {
   }
 
   findAll() {
-    return this.tallerORM.find();
+    return this.tallerORM.find({ relations: ['especialidad'] });
   }
 
   findAllHabilitados() {
@@ -52,18 +52,15 @@ export class TallerService {
   }
 
   async findOne(id: number) {
-    const taller = await this.tallerORM.findOne({ where: { deshabilitado: false, id: id } });
+    const taller = await this.tallerORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['curso', 'institucion', 'especialidad', 'marco'] });
     if (!taller) throw new NotFoundException(`Taller con id ${id} no encontrado`);
     return taller;
   }
 
   // Faltaria revisar que si se quiere cambiar marco que la especialidad coincida con la del taller y al reves!!!!!!!!!!
   async update(id: number, cambios: UpdateTallerDto) {
-    console.log('ESOTY EN SERVICE');
-    console.log(id);
-    console.log(cambios);
     if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
-    const taller = await this.tallerORM.findOne({ where: { deshabilitado: false, id: id }, relations: ['especialidad', 'curso', 'institucion', 'marco'] });
+    const taller = await this.tallerORM.findOne({ where: { id: id }, relations: ['especialidad', 'curso', 'institucion', 'marco'] });
     if (!taller) throw new NotFoundException(`Taller con id ${id} no encontrado`);
 
     // Institucion

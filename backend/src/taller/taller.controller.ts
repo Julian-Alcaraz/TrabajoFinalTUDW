@@ -60,7 +60,7 @@ export class TallerController {
   @ApiResponse({ status: 200, description: 'Retorna el taller buscado con exito' })
   @ApiResponse({ status: 404, description: 'Taller no encontrado' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const taller = await this.tallerService.findOne(id);
+    const taller = plainToInstance(ResponseTallerDto, await this.tallerService.findOne(id));
     return {
       success: true,
       data: taller,

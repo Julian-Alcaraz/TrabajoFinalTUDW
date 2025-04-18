@@ -14,6 +14,7 @@ import { FonoaudiologiaFactory } from '../factories/fonoaudiologia.factory';
 import { ClinicaFactory } from '../factories/clinica.factory';
 import { OftalmologiaFactory } from '../factories/oftalmologia.factory';
 import { OdontologiaFactory } from '../factories/odontologia.factory';
+import { TallerFactory } from '../factories/taller.factory';
 
 // Entidades
 import { Menu } from '../../menu/entities/menu.entity';
@@ -63,7 +64,7 @@ const options: DataSourceOptions & SeederOptions = {
   username: secretService.readSecret('DB_USERNAME'),
   password: secretService.readSecret('DB_PASSWORD'),
   entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia, Taller, Especialidad, Marco],
-  factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
+  factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory, TallerFactory],
   seeds: secretService.readSecret('NODE_ENV') === 'production' ? [MainSeeder] : [DevSeeder],
 };
 console.log(secretService.readSecret('NODE_ENV') === 'production' ? '[MainSeeder]' : '[DevSeeder]');

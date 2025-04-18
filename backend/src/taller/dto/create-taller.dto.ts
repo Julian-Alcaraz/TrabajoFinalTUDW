@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length } from 'class-validator';
+
 import { ConjuntoConEnum, ConjuntoConType, DestinatariosEnum, DestinatariosType, DuracionEnum, DuracionType, FrecuenciaEnum, FrecuenciaType, TurnoTalleresEnum, TurnoTalleresType } from '../../common/const/const';
 
 export class CreateTallerDto {
@@ -20,7 +21,7 @@ export class CreateTallerDto {
   @IsNotEmpty({ message: 'La cantidad de encuentros de no puede estar vacio' })
   @IsPositive({ message: 'La cantidad de encuentros debe ser un numero positivo' })
   @IsInt({ message: 'La cantidad de encuentros debe ser un entero' })
-  readonly cantEncuentros: number;
+  readonly cant_encuentros: number;
 
   @ApiProperty({ description: 'Duracion del taller' })
   @IsNotEmpty({ message: 'La duracion del taller no puede estar vacia' })
@@ -31,7 +32,7 @@ export class CreateTallerDto {
   @IsNotEmpty({ message: 'La cantidad de participantes de no puede estar vacia' })
   @IsPositive({ message: 'La cantidad de participantes debe ser un numero positivo' })
   @IsInt({ message: 'La cantidad de participantes debe ser un entero' })
-  readonly cantParticipantes: number;
+  readonly cant_participantes: number;
 
   @ApiProperty({ description: 'Destinatarios del taller' })
   @IsNotEmpty({ message: 'Los destinatarios del taller no pueden estar vacios' })
@@ -59,12 +60,22 @@ export class CreateTallerDto {
   @ApiProperty({ description: 'En Conjunto con del taller' })
   @IsNotEmpty({ message: 'En Conjunto con del taller no puede estar vacio' })
   @IsEnum(ConjuntoConEnum, { message: `No es un valor válido. Valores permitidos: ${Object.values(ConjuntoConEnum).join(', ')}` })
-  readonly conjuntoCon: ConjuntoConType;
+  readonly conjunto_con: ConjuntoConType;
 
   @ApiProperty({ description: 'Frecuencia con del taller' })
   @IsNotEmpty({ message: 'Frecuencia del taller no puede estar vacio' })
   @IsEnum(FrecuenciaEnum, { message: `No es un valor válido. Valores permitidos: ${Object.values(FrecuenciaEnum).join(', ')}` })
   readonly frecuencia: FrecuenciaType;
+
+  @ApiProperty({ description: 'Indica si el taller es taller' })
+  @IsNotEmpty({ message: 'esTaller no puede estar vacio' })
+  @IsBoolean({ message: 'esTaller debe ser un boleano' })
+  readonly es_taller: boolean;
+
+  @ApiProperty({ description: 'Indica si se entregaron cepillos en el taller' })
+  @IsBoolean({ message: 'esTaller debe ser un boleano' })
+  @IsOptional()
+  readonly entrega_cepillos: boolean;
 
   // Relaciones
 
