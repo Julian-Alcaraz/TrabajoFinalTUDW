@@ -16,7 +16,7 @@ export class Taller {
     public destinatarios: DestinatariosType,
     public recursos: string,
     public turno: TurnoTalleresType,
-    public conjuntoCon: ConjuntoConType,
+    public conjunto_con: ConjuntoConType,
     public frecuencia: FrecuenciaType,
     public es_taller: boolean,
     public deshabilitado: boolean,

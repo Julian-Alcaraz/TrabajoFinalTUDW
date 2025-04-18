@@ -32,12 +32,6 @@
         <app-input-select label="Especialidad" [control]="controlDeInput('id_especialidad')" idInput="id_especialidad" [opciones]="especialidades" (change)="onChangeEspecialidad()" />
       }
     </div>
-    <!-- entrega_cepillos -->
-    <div class="md:col-span-2 lg:col-span-3">
-      @if (mostrarCepillos) {
-        <app-input-select-enum label="¿ Entregaron cepillos ?" [control]="controlDeInput('entrega_cepillos')" idInput="entrega_cepillos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-      }
-    </div>
     <!-- Marco -->
     <div class="md:col-span-2 lg:col-span-3">
       @if (searchingMarcos) {
@@ -78,8 +72,14 @@
     <div class="md:col-span-2 lg:col-span-3">
       <app-input-select-enum label="¿ Es Taller ?" [control]="controlDeInput('es_taller')" idInput="es_taller" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
     </div>
+    <!-- entrega_cepillos -->
+    @if (mostrarCepillos) {
+      <div class="md:col-span-1 lg:col-span-1">
+        <app-input-select-enum label="¿ Entregaron cepillos ?" [control]="controlDeInput('entrega_cepillos')" idInput="entrega_cepillos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+      </div>
+    }
     <!-- fecha: -->
-    <div class="md:col-span-2 lg:col-span-3">
+    <div class="md:col-span-1 lg:col-span-1">
       <app-input-date label="Fecha" [control]="controlDeInput('fecha')" idInput="fecha" [max]="fechaHoy" />
     </div>
     <!-- Observaciones -->

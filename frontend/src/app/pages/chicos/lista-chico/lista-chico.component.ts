@@ -22,6 +22,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TagModule } from 'primeng/tag';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { Chico } from '@models/chico.model';
 import { ChicoService } from '@services/chico.service';
@@ -52,6 +53,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild('filtroBarrio') filtroBarrio!: Select;
 
   private _liveAnnouncer = inject(LiveAnnouncer);
+  public con = Constantes;
   public chicos: MatTableDataSource<Chico>;
   public localidadesOriginales: Localidad[] | undefined = undefined;
   public localidadesFiltradas: Localidad[] | undefined = undefined;
@@ -75,14 +77,14 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     { nombre: '3 Especialidades visitadas', valor: 3 },
     { nombre: '4 Especialidades visitadas', valor: 4 },
   ];
-  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
+  public sexoOptions: string[] = this.con.SexoEnum;
   public estadoControl: FormControl = new FormControl(null);
   public localidadControl: FormControl = new FormControl(null);
   public sexoControl: FormControl = new FormControl(null);
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
   public mensajes = '';
-  public colapsarPaneles = true;
+  public colapsarFiltros = false;
 
   constructor(
     private _localidadService: LocalidadService,
@@ -138,7 +140,6 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   activateTableFilter() {
-    // SE PODRIA CAMBIAR A Chico PERO DA ERROR DE TYPE
     this.chicos.filterPredicate = (chico: any, filter: string) => {
       const searchTerms = JSON.parse(filter);
 
@@ -156,33 +157,29 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     };
   }
 
-  applyFilter(event: any) {
-    let idInput = '';
-    if (event.originalEvent) idInput = event.originalEvent.target.id;
-    else if (event.target) idInput = event.target.id;
-    else if (event.originalTarget.id) idInput = event.originalTarget.id;
-    if (idInput === 'filtroDni') {
+  applyFilter(event: any, filtro?: string) {
+    if (filtro === 'filtroDni') {
       const dniValue = event.target.value.replace(/[,.]/g, '');
       this.searchTerms.dni = dniValue;
-    } else if (idInput === 'filtroNombre') {
+    } else if (filtro === 'filtroNombre') {
       const nombreValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.nombre = nombreValue;
-    } else if (idInput === 'filtroApellido') {
+    } else if (filtro === 'filtroApellido') {
       const apellidoValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.apellido = apellidoValue;
-    } else if (idInput.includes('filtroSexo')) {
+    } else if (filtro === 'filtroSexo') {
       const sexoValue = event.value;
       this.searchTerms.sexo = sexoValue;
-    } else if (idInput.includes('filtroBarrio')) {
+    } else if (filtro === 'filtroBarrio') {
       const barrioValue = event.value;
       this.searchTerms.idBarrio = barrioValue;
-    } else if (idInput.includes('filtroActividad')) {
+    } else if (filtro === 'filtroActividad') {
       const actividadValue = event.value;
       this.searchTerms.actividad = actividadValue;
-    } else if (idInput.includes('filtroLocalidad')) {
+    } else if (filtro === 'filtroLocalidad') {
       const localidadValue = event.value;
       this.searchTerms.idLocalidad = localidadValue;
-    } else if (idInput.includes('filtroEstado')) {
+    } else if (filtro === 'filtroEstado') {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }

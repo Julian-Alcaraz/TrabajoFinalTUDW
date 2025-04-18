@@ -224,7 +224,7 @@ export class FormTallerComponent implements OnInit {
       turno: this.taller?.turno,
       es_taller: this.taller?.es_taller,
       frecuencia: this.taller?.frecuencia,
-      conjuntoCon: this.taller?.conjuntoCon,
+      conjunto_con: this.taller?.conjunto_con,
       entrega_cepillos: this.taller?.entrega_cepillos,
     });
   }
@@ -242,7 +242,7 @@ export class FormTallerComponent implements OnInit {
         this.taller?.cant_participantes == this.tallerForm.value.cant_participantes &&
         this.taller?.turno == this.tallerForm.value.turno &&
         this.taller?.frecuencia == this.tallerForm.value.frecuencia &&
-        this.taller?.conjuntoCon == this.tallerForm.value.conjuntoCon &&
+        this.taller?.conjunto_con == this.tallerForm.value.conjunto_con &&
         this.taller?.curso?.id == this.tallerForm.value.id_curso &&
         this.taller?.institucion?.id == this.tallerForm.value.id_institucion &&
         this.taller?.especialidad?.id == this.tallerForm.value.id_especialidad &&
@@ -376,7 +376,7 @@ export class FormTallerComponent implements OnInit {
       ...(this.taller?.turno !== this.tallerForm.value.turno && { turno: this.tallerForm.value.turno }),
       ...(this.taller?.frecuencia !== this.tallerForm.value.frecuencia && { frecuencia: this.tallerForm.value.frecuencia }),
       ...(this.taller?.es_taller !== this.tallerForm.value.es_taller && { es_taller: this.tallerForm.value.es_taller === 'true' }),
-      ...(this.taller?.conjuntoCon !== this.tallerForm.value.conjuntoCon && { conjuntoCon: this.tallerForm.value.conjuntoCon }),
+      ...(this.taller?.conjunto_con !== this.tallerForm.value.conjunto_con && { conjunto_con: this.tallerForm.value.conjunto_con }),
       ...(this.taller?.entrega_cepillos !== this.tallerForm.value.entrega_cepillos && { entrega_cepillos: this.tallerForm.value.entrega_cepillos }),
       ...(stringFechaActual !== stringFechaMod && { fecha: valorFecha }),
       ...(this.taller?.curso?.id !== +this.tallerForm.value.id_curso && { id_curso: parseInt(this.tallerForm.value.id_curso) }),

@@ -88,5 +88,5 @@ export const FrecuenciaEnum = opcionesFrecuencia;
 
 // Especialidad
 
-export type OpcionesEspecialidadType = (typeof opcionesEspecialidad)[number];
-export const OpcionesEspecialidadEnum = opcionesEspecialidad;
+export type EspecialidadType = (typeof opcionesEspecialidad)[number];
+export const EspecialidadEnum = opcionesEspecialidad;

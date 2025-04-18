@@ -42,7 +42,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   public roles!: Rol[];
   public resultsLength = 0;
   public searching = false;
-  public colapsarPaneles = true;
+  public colapsarFiltros = false;
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
     { nombre: 'Deshabilitado', valor: true },
@@ -123,10 +123,6 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
       const matchesDni = searchTerms.dni ? String(chico.dni).startsWith(searchTerms.dni) : true;
       const matchesNombre = searchTerms.nombre ? sacarAcentos(chico.nombre.toLowerCase()).includes(searchTerms.nombre.toLowerCase()) : true;
       const matchesApellido = searchTerms.apellido ? sacarAcentos(chico.apellido.toLowerCase()).includes(searchTerms.apellido.toLowerCase()) : true;
-      // const matchesSexo = searchTerms.sexo ? String(chico.sexo).startsWith(searchTerms.sexo) : true;
-      // const matchesBarrio = searchTerms.idBarrio ? chico.id_barrio === searchTerms.idBarrio : true;
-      // const matchesActividad = searchTerms.actividad !== undefined ? Number(chico.actividad) === Number(searchTerms.actividad) : true;
-      // const matchesLocalidad = searchTerms.idLocalidad ? chico.id_localidad === searchTerms.idLocalidad : true;
       const matchesEstado = searchTerms.estado !== undefined ? chico.deshabilitado === JSON.parse(searchTerms.estado) : true;
 
       this.actualizarMensajes(searchTerms.dni, searchTerms.nombre, searchTerms.apellido, searchTerms.estado);
@@ -142,21 +138,17 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     if (filtroEstado) this.mensajes += ` Estado: ${filtroEstado ? 'Deshabilitado' : 'Habilitado'}.`;
   }
 
-  applyFilter(event: any) {
-    let idInput = '';
-    if (event.originalEvent) idInput = event.originalEvent.target.id;
-    else if (event.target) idInput = event.target.id;
-    else if (event.originalTarget.id) idInput = event.originalTarget.id;
-    if (idInput === 'filtroDni') {
+  applyFilter(event: any, filtro: string) {
+    if (filtro === 'filtroDni') {
       const dniValue = event.target.value.replace(/[,.]/g, '');
       this.searchTerms.dni = dniValue || undefined;
-    } else if (idInput === 'filtroNombre') {
+    } else if (filtro === 'filtroNombre') {
       const nombreValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.nombre = nombreValue || undefined;
-    } else if (idInput === 'filtroApellido') {
+    } else if (filtro === 'filtroApellido') {
       const apellidoValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.apellido = apellidoValue || undefined;
-    } else if (idInput.includes('filtroEstado')) {
+    } else if (filtro === 'filtroEstado') {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }

@@ -9,8 +9,7 @@
   </div>
   <div class="card-body">
     <!-- Botón nuevo -->
-
-    <p-panel [toggleable]="true" [collapsed]="colapsarPaneles" toggler="header">
+    <p-panel [toggleable]="true" [collapsed]="colapsarFiltros" toggler="header">
       <ng-template pTemplate="header">
         <div class="flex justify-center w-full gap-2 cursor-pointer">
           <h3 class="mr-auto text-lg font-semibold my-4">Filtros</h3>
@@ -20,28 +19,28 @@
         <!-- DNI -->
         <div class="sm:col-span-1 md:col-span-1">
           <p-iftalabel>
-            <p-inputnumber (keyup)="applyFilter($event)" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full p-inputNumberSolution" />
+            <p-inputnumber (keyup)="applyFilter($event, 'filtroDni')" #filtroDni id="filtroDni" inputId="filtroDni" class="w-full p-inputNumberSolution" />
             <label for="filtroDni">DNI</label>
           </p-iftalabel>
         </div>
         <!-- Nombre -->
         <div class="sm:col-span-1 md:col-span-1">
           <p-iftalabel>
-            <input type="text" pInputText (keyup)="applyFilter($event)" #filtroNombre id="filtroNombre" class="w-full" />
+            <input type="text" pInputText (keyup)="applyFilter($event, 'filtroNombre')" #filtroNombre id="filtroNombre" class="w-full" />
             <label for="filtroNombre">Nombre</label>
           </p-iftalabel>
         </div>
         <!-- Apellido -->
         <div class="sm:col-span-1 md:col-span-1">
           <p-iftalabel>
-            <input type="text" pInputText (keyup)="applyFilter($event)" #filtroApellido id="filtroApellido" class="w-full" />
+            <input type="text" pInputText (keyup)="applyFilter($event, 'filtroApellido')" #filtroApellido id="filtroApellido" class="w-full" />
             <label for="filtroApellido">Apellido</label>
           </p-iftalabel>
         </div>
         <!-- Estado -->
         <div class="sm:col-span-1 md:col-span-1">
           <p-iftalabel>
-            <p-select [options]="estadoOptions" (onChange)="applyFilter($event)" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
+            <p-select [options]="estadoOptions" (onChange)="applyFilter($event, 'filtroEstado')" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
             <label for="filtroEstado">Estado</label>
           </p-iftalabel>
         </div>
