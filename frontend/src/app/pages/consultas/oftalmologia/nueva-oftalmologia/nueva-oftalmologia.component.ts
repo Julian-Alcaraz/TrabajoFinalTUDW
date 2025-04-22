@@ -19,11 +19,12 @@ import { Chico } from '@models/chico.model';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @Component({
   selector: 'app-nueva-oftalmologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, InputSelectEnumComponent, InputDateComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, LoadingComponent, InputSelectEnumComponent, InputDateComponent],
   templateUrl: './nueva-oftalmologia.component.html',
 })
 export class NuevaOftalmologiaComponent implements OnInit {
@@ -31,7 +32,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
   @Input() editar = true;
   @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
-
+  loading = false;
   public oftalmologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
   public chico: Chico | null = null;
@@ -114,6 +115,34 @@ export class NuevaOftalmologiaComponent implements OnInit {
     this.oftalmologiaForm.get(controlName)?.setValue(value);
   }
 
+  setData() {
+    const formValues = this.oftalmologiaForm.value;
+    formValues.receta = formValues.receta === 'true';
+    if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+    delete formValues.dni;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...oftalmologiaValues } = formValues;
+    const data = {
+      type: 'Oftalmologia',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_odontologia: false,
+      derivacion_oftalmologia: false,
+      derivacion_fonoaudiologia: false,
+      oftalmologia: {
+        ...oftalmologiaValues,
+      },
+    };
+    return data;
+  }
   enviarFormulario() {
     if (this.oftalmologiaForm.valid) {
       Swal.fire({
@@ -124,33 +153,11 @@ export class NuevaOftalmologiaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.oftalmologiaForm.value;
-          formValues.receta = formValues.receta === 'true';
-          if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...oftalmologiaValues } = formValues;
-          const data = {
-            type: 'Oftalmologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia: false,
-            derivacion_oftalmologia: false,
-            derivacion_fonoaudiologia: false,
-            oftalmologia: {
-              ...oftalmologiaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 // Estos set value son para que se mantegna el mensaje despues de enviar 1 consulta
@@ -166,11 +173,14 @@ export class NuevaOftalmologiaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.oftalmologiaForm.markAllAsTouched();
     }
   }
 
@@ -262,33 +272,12 @@ export class NuevaOftalmologiaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.oftalmologiaForm.value;
-          formValues.primera_vez = formValues.primera_vez === 'true';
-          formValues.control = formValues.control === 'true';
-          formValues.receta = formValues.receta === 'true';
-          if (formValues.anteojos !== null) formValues.anteojos = formValues.anteojos === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-          delete formValues.dni;
-
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...oftalmologiaValues } = formValues;
-          const data = {
-            type: 'Oftalmologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            oftalmologia: {
-              ...oftalmologiaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
+                this.loading = false;
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
@@ -297,6 +286,7 @@ export class NuevaOftalmologiaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });

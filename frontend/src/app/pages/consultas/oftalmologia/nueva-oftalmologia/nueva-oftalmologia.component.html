@@ -60,14 +60,28 @@
       <div class="flex mt-4">
         @if (consulta && editar) {
           @if (oftalmologiaForm.disabled) {
-            <button type="button" (click)="cambiarEstado()" [disabled]="false" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
+            <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
           } @else {
             <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-            <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+            <button type="submit" [disabled]="habilitarModificar || loading" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Confirmar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
           }
         } @else {
           @if (editar) {
-            <button type="submit" [disabled]="!oftalmologiaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+            <button type="submit" [disabled]="loading" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Agregar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
           }
         }
       </div>

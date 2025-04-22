@@ -16,13 +16,14 @@ import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.c
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
 
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, LoadingComponent, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
 })
 export class NuevaClinicaComponent implements OnInit {
@@ -30,11 +31,11 @@ export class NuevaClinicaComponent implements OnInit {
   @Input() editar = true;
   @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
-
+  loading = false;
   public clinicaForm: FormGroup;
   public con = Constantes;
   dni: number | null = null;
-  
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -129,32 +130,11 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.clinicaForm.value;
-          formValues.segto = formValues.segto === 'true';
-          formValues.leche = formValues.leche === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_odontologia, derivacion_oftalmologia, derivacion_fonoaudiologia, ...clinicaValues } = formValues;
-          const data = {
-            type: 'Clinica',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia,
-            derivacion_fonoaudiologia,
-            derivacion_oftalmologia,
-            clinica: {
-              ...clinicaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.clinicaForm.reset();
@@ -180,11 +160,14 @@ export class NuevaClinicaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.clinicaForm.markAllAsTouched();
     }
   }
 
@@ -367,33 +350,13 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.clinicaForm.value;
-          formValues.segto = formValues.segto === 'true';
-          formValues.leche = formValues.leche === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          delete formValues.dni;
+          const data = this.setData();
+          this.loading = true;
 
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, ...clinicaValues } = formValues;
-          const data = {
-            type: 'Clinica',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_fonoaudiologia,
-            derivacion_odontologia,
-            derivacion_oftalmologia,
-            clinica: {
-              ...clinicaValues,
-            },
-          };
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
+                this.loading = false;
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
@@ -402,12 +365,43 @@ export class NuevaClinicaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });
           }
         }
       });
+    } else {
+      this.clinicaForm.markAllAsTouched();
     }
+  }
+
+  setData() {
+    const formValues = this.clinicaForm.value;
+    formValues.segto = formValues.segto === 'true';
+    formValues.leche = formValues.leche === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    delete formValues.dni;
+
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, ...clinicaValues } = formValues;
+    const data = {
+      type: 'Clinica',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_fonoaudiologia,
+      derivacion_odontologia,
+      derivacion_oftalmologia,
+      clinica: {
+        ...clinicaValues,
+      },
+    };
+    return data;
   }
 }

@@ -66,7 +66,7 @@ export class FormChicosComponent implements OnInit {
     private _dialog: MatDialog,
     private _chicoService: ChicoService,
     private _localidadService: LocalidadService,
-    private _barrioService: BarrioService,
+    // private _barrioService: BarrioService,
   ) {
     this.chicoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
@@ -315,7 +315,7 @@ export class FormChicosComponent implements OnInit {
   editarChico() {
     if (this.chico && this.chicoForm.valid) {
       Swal.fire({
-        title: '¿Modificar chico?',
+        title: '¿Modificar niño?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',
@@ -361,7 +361,7 @@ export class FormChicosComponent implements OnInit {
   cargarChico() {
     if (this.chicoForm.valid) {
       Swal.fire({
-        title: '¿Cargar nuevo chico?',
+        title: '¿Cargar nuevo niño?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',

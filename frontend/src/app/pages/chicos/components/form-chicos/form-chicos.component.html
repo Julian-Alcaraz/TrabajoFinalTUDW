@@ -5,7 +5,7 @@
   </div>
 }
 @if (!chico && !esFormulario && !searching) {
-  <h2>El chico buscado no existe</h2>
+  <h2>El niño buscado no existe</h2>
 } @else {
   <form (ngSubmit)="estaEditando ? editarChico() : cargarChico()" [formGroup]="chicoForm">
     <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-4">

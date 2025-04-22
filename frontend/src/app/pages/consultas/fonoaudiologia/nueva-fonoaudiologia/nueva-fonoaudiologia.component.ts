@@ -14,11 +14,12 @@ import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.c
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
 })
 export class NuevaFonoaudiologicaComponent implements OnInit {
@@ -31,7 +32,7 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
   public con = Constantes;
   dni: number | null = null;
-
+  loading = false;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -83,31 +84,12 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.fonoaudiologiaForm.value;
-          formValues.asistencia = formValues.asistencia === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
-          const data = {
-            type: 'Fonoaudiologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia: false,
-            derivacion_oftalmologia: false,
-            derivacion_fonoaudiologia: false,
-            fonoaudiologia: {
-              ...fonoaudiologiaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
+
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.fonoaudiologiaForm.reset();
@@ -123,11 +105,14 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.fonoaudiologiaForm.markAllAsTouched();
     }
   }
 
@@ -199,6 +184,34 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
     return value === true || value === 'true';
   }
 
+  setData() {
+    const formValues = this.fonoaudiologiaForm.value;
+    formValues.asistencia = formValues.asistencia === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+    delete formValues.dni;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
+    const data = {
+      type: 'Fonoaudiologia',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_odontologia: false,
+      derivacion_oftalmologia: false,
+      derivacion_fonoaudiologia: false,
+      fonoaudiologia: {
+        ...fonoaudiologiaValues,
+      },
+    };
+    return data;
+  }
+
   modificarConsulta() {
     if (this.fonoaudiologiaForm.valid) {
       Swal.fire({
@@ -209,32 +222,13 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.fonoaudiologiaForm.value;
-          formValues.asistencia = formValues.asistencia === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
-          const data = {
-            type: 'Fonoaudiologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            fonoaudiologia: {
-              ...fonoaudiologiaValues,
-            },
-          };
-
+          this.loading = true;
+          const data = this.setData();
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
                 if (response.success) {
+                  this.loading = false;
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
                   const consultaMod = response.data;
@@ -242,12 +236,15 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });
           }
         }
       });
+    } else {
+      this.fonoaudiologiaForm.markAllAsTouched();
     }
   }
 }

@@ -25,7 +25,7 @@ export class ChicoController {
     return {
       success: true,
       data: chico,
-      message: 'Chico creado con exito',
+      message: 'Niño creado con exito',
     };
   }
 
@@ -98,20 +98,20 @@ export class ChicoController {
     return {
       success: true,
       data: chicoModificado,
-      message: 'Chico modificado con exito',
+      message: 'Niño modificado con exito',
     };
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de un chico' })
-  @ApiResponse({ status: 200, description: 'Chico borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Chico no encontrado' })
+  @ApiResponse({ status: 200, description: 'Niño borrado logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'Niño no encontrado' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const chicoEliminado = await this.chicoService.remove(id);
     return {
       success: true,
       data: chicoEliminado,
-      message: 'Chico eliminado con exito',
+      message: 'Niño eliminado con exito',
     };
   }
 
@@ -124,7 +124,7 @@ export class ChicoController {
     return {
       success: true,
       data: consultas,
-      message: 'Consultas encontradas por chico con exito',
+      message: 'Consultas encontradas por niño con exito',
     };
   }
 
