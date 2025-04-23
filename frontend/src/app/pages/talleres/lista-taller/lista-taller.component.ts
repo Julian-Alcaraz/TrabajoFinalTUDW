@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -25,11 +26,19 @@ import { Usuario } from '@app/models/usuario.model';
 import { SessionService } from '@app/services/session.service';
 import { GLOBAL } from '@config/global';
 import { PaginadorPersonalizado } from '@app/utils/paginador/paginador-personalizado';
+import { MarcoService } from '@app/services/marco.service';
+import { Marco } from '@app/models/marco.model';
+import { Especialidad } from '@app/models/especialidad.model';
+import { EspecialidadService } from '@app/services/especialidad.service';
+import { InstitucionService } from '@app/services/institucion.service';
+import { Institucion } from '@app/models/institucion.model';
+import { Curso } from '@app/models/curso.model';
+import { CursoService } from '@app/services/curso.service';
 
 @Component({
   selector: 'app-lista-taller',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, TagModule, TooltipModule, LoadingComponent, MatPaginator, MatPaginatorModule, PanelModule, IftaLabelModule, InputTextModule, InputNumberModule, SelectModule, ReactiveFormsModule],
+  imports: [CommonModule, MatTableModule, MatSortModule, TagModule, TooltipModule, LoadingComponent, MatPaginator, MatPaginatorModule, PanelModule, IftaLabelModule, InputTextModule, InputNumberModule, SelectModule, ReactiveFormsModule],
   templateUrl: './lista-taller.component.html',
   styleUrl: './lista-taller.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
@@ -43,10 +52,20 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   public displayedColumns: string[] = ['numero', 'nombre', 'fecha', 'esTaller', 'frecuencia', 'duracion', 'destinatarios', 'especialidad', 'action'];
 
   public con = Constantes;
+  public marcos: Marco[] = [];
+  public marcosOriginales: Marco[] = [];
+  public especialidades: Especialidad[] = [];
+  public especialidadesOriginales: Especialidad[] = [];
+  public instituciones: Institucion[] = [];
+  public cursos: Curso[] = [];
   public identidad: Usuario | null = null;
   public searchTerms: any = {};
-  public searching = true;
   public resultsLength = 0;
+  public loadingCursos = false;
+  public loadingInstituciones = false;
+  public loadingMarcos = false;
+  public loadingEspecialidades = false;
+  public searching = true;
   public colapsarFiltros = false;
 
   // Form controls solo para que no tenga valor al principio.
@@ -58,6 +77,9 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   public especialidadControl: FormControl = new FormControl(null);
   public conjuntoConControl: FormControl = new FormControl(null);
   public esTallerControl: FormControl = new FormControl(null);
+  public marcoControl: FormControl = new FormControl(null);
+  public institucionControl: FormControl = new FormControl(null);
+  public cursoControl: FormControl = new FormControl(null);
 
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
@@ -67,7 +89,6 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   public turnoOptions: string[] = this.con.TurnoTalleresEnum;
   public duracionOptions: number[] = this.con.DuracionEnum;
   public destinatariosOptions: string[] = this.con.DestinatariosEnum;
-  public especialidadOptions: string[] = this.con.EspecialidadEnum;
   public conjuntoConOptions: string[] = this.con.ConjuntoConEnum;
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
@@ -77,8 +98,12 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    private _tallerService: TallerService,
     private _dialog: MatDialog,
+    private _tallerService: TallerService,
+    private _institucionService: InstitucionService,
+    private _marcoService: MarcoService,
+    private _especialidadService: EspecialidadService,
+    private _cursoService: CursoService,
     private _sessionService: SessionService,
   ) {
     this.talleres = new MatTableDataSource<Taller>([]);
@@ -100,6 +125,10 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerTalleres();
+    this.obtenerEspecialidades();
+    this.obtenerMarcos();
+    this.obtenerInstituciones();
+    this.obtenerCursos();
     this.activateTableFilter();
   }
 
@@ -121,9 +150,12 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
       const matchesEspecialidad = searchTerms.especialidad ? taller.especialidad.nombre === searchTerms.especialidad : true;
       const matchesConjuntoCon = searchTerms.conjuntoCon ? taller.conjunto_con === searchTerms.conjuntoCon : true;
       const matchesEsTaller = searchTerms.esTaller !== undefined ? taller.es_taller === JSON.parse(searchTerms.esTaller) : true;
+      const matchesMarco = searchTerms.marco ? taller.marco.nombre === searchTerms.marco : true;
+      const matchesInstitucion = searchTerms.institucion ? taller.institucion.nombre === searchTerms.institucion : true;
+      const matchesCurso = searchTerms.curso ? taller.curso.nombre === searchTerms.curso : true;
 
-      this.actualizarMensajes(searchTerms.nombre, searchTerms.estado, searchTerms.frecuencia, searchTerms.turno, searchTerms.duracion, searchTerms.destinatarios, searchTerms.especialidad, searchTerms.conjuntoCon, searchTerms.esTaller);
-      return matchesNombre && matchesEstado && matchesFrecuencia && matchesTurno && matchesDuracion && matchesDestinatarios && matchesEspecialidad && matchesConjuntoCon && matchesEsTaller;
+      this.actualizarMensajes(searchTerms.nombre, searchTerms.estado, searchTerms.frecuencia, searchTerms.turno, searchTerms.duracion, searchTerms.destinatarios, searchTerms.especialidad, searchTerms.conjuntoCon, searchTerms.esTaller, searchTerms.marco, searchTerms.institucion, searchTerms.curso);
+      return matchesNombre && matchesEstado && matchesFrecuencia && matchesTurno && matchesDuracion && matchesDestinatarios && matchesEspecialidad && matchesConjuntoCon && matchesEsTaller && matchesMarco && matchesInstitucion && matchesCurso;
     };
   }
 
@@ -155,12 +187,21 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     } else if (filtro === 'filtroEsTaller') {
       const esTallerValue = event.value;
       this.searchTerms.esTaller = esTallerValue !== undefined ? esTallerValue : undefined;
+    } else if (filtro === 'filtroMarco') {
+      const marcoValue = event.value;
+      this.searchTerms.marco = marcoValue !== undefined ? marcoValue : undefined;
+    } else if (filtro === 'filtroInstitucion') {
+      const institucionValue = event.value;
+      this.searchTerms.institucion = institucionValue !== undefined ? institucionValue : undefined;
+    } else if (filtro === 'filtroCurso') {
+      const cursoValue = event.value;
+      this.searchTerms.curso = cursoValue !== undefined ? cursoValue : undefined;
     }
     this.talleres.filter = JSON.stringify(this.searchTerms);
     if (this.talleres.paginator) this.talleres.paginator.firstPage();
   }
 
-  actualizarMensajes(filtroNombre: any, filtroEstado: any, filtroFrecuencia: any, filtroTurno: any, filtroDuracion: any, filtroDestinatarios: any, filtroEspecialidad: any, filtroConjuntoCon: any, filtroEsTaller: any): void {
+  actualizarMensajes(filtroNombre: any, filtroEstado: any, filtroFrecuencia: any, filtroTurno: any, filtroDuracion: any, filtroDestinatarios: any, filtroEspecialidad: any, filtroConjuntoCon: any, filtroEsTaller: any, filtroMarco: any, filtroInstitucion: any, filtroCurso: any): void {
     this.mensajes = 'No se encontró un taller con:';
     if (filtroNombre) this.mensajes += ` Nombre: '${filtroNombre}'. `;
     if (filtroEstado) this.mensajes += ` Estado: ${filtroEstado ? 'Deshabilitado' : 'Habilitado'}.`;
@@ -170,6 +211,9 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     if (filtroDestinatarios) this.mensajes += ` Destinatarios: '${filtroDestinatarios}'. `;
     if (filtroConjuntoCon) this.mensajes += ` Conjunto con: '${filtroConjuntoCon}'. `;
     if (filtroEsTaller) this.mensajes += ` Es Taller: '${filtroEsTaller ? 'Si' : 'No'}'. `;
+    if (filtroMarco) this.mensajes += ` Marco: ${filtroMarco}`;
+    if (filtroInstitucion) this.mensajes += ` Institucion: ${filtroInstitucion}`;
+    if (filtroCurso) this.mensajes += ` Curso: ${filtroCurso}`;
     if (filtroTurno) this.mensajes += ` Turno: '${filtroTurno}'. `;
   }
 
@@ -194,6 +238,85 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
         this.searching = false;
       },
     });
+  }
+
+  obtenerMarcos() {
+    this.loadingMarcos = true;
+    this._marcoService.obtenerMarcos().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.marcosOriginales = response.data;
+          this.marcos = response.data;
+        }
+        this.loadingMarcos = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingMarcos = false;
+      },
+    });
+  }
+
+  obtenerInstituciones() {
+    this.loadingInstituciones = true;
+    this._institucionService.obtenerInstituciones().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.instituciones = response.data;
+        }
+        this.loadingInstituciones = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingInstituciones = false;
+      },
+    });
+  }
+
+  obtenerEspecialidades() {
+    this.loadingEspecialidades = true;
+    this._especialidadService.obtenerEspecialidades().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.especialidadesOriginales = response.data;
+          this.especialidades = response.data;
+        }
+        this.loadingEspecialidades = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingEspecialidades = false;
+      },
+    });
+  }
+
+  obtenerCursos() {
+    this.loadingCursos = true;
+    this._cursoService.obtenerCursos().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.cursos = response.data;
+        }
+        this.loadingCursos = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingCursos = false;
+      },
+    });
+  }
+
+  onChangeEspecialidad() {
+    const nombreSeleccionada = this.especialidadControl.value;
+    const idEspecialidad = this.especialidades.find((e) => e.nombre === nombreSeleccionada)?.id;
+    this.marcos = this.marcosOriginales.filter((m) => m.especialidad?.id === idEspecialidad);
+  }
+
+  limpiarMarcos() {
+    this.limpiarFiltro('filtroMarco');
+    this.limpiarFiltro('marco');
+    this.marcos = this.marcosOriginales;
+    this.marcoControl.setValue(null);
   }
 
   habilitar(id: number) {

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+
+import * as Constantes from '@app/common/const/const';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -19,20 +21,21 @@ export class CamposClinicaComponent implements OnInit {
   @Input() form!: FormGroup;
 
   public especificas!: FormGroup;
+  public con = Constantes;
 
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public vacunasOptions: string[] = ['Completo', 'Incompleto', 'Desconocido'];
-  public examenVisualOptions: string[] = ['Normal', 'Anormal'];
-  public lenguajeOptions: string[] = ['Adecuado', 'Inadecuado'];
-  public ortopediaTraumatologiaOptions: string[] = ['Normal', 'Escoliosis', 'Pie plano'];
-  public alimentacionOptions: string[] = ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'];
-  public hidratacionOptions: string[] = ['Agua', 'Bebidas edulcoradas'];
-  public horasPantallaOptions: string[] = ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'];
-  public horasJuegoAireLibreOptions: string[] = ['Menos de 1h', '1h', 'Más de 1h'];
-  public horasSuenioOptions: string[] = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'];
+  public vacunasOptions: string[] = this.con.VacunasEnum;
+  public examenVisualOptions: string[] = this.con.ExamenVisualEnum;
+  public lenguajeOptions: string[] = this.con.LenguajeEnum;
+  public ortopediaTraumatologiaOptions: string[] = this.con.OrtopediaYTraumatologiaEnum;
+  public alimentacionOptions: string[] = this.con.AlimentacionEnum;
+  public hidratacionOptions: string[] = this.con.HidratacionEnum;
+  public horasPantallaOptions: string[] = this.con.HsPantallaEnum;
+  public horasJuegoAireLibreOptions: string[] = this.con.HsJuegoAireLibreEnum;
+  public horasSuenioOptions: string[] = this.con.HsSuenioEnum;
   public tensionArterialOptions: string[] = ['Normotenso', 'Riesgo', 'Hipertenso'];
   public estadoNutricionalOptions: string[] = ['A Riesgo Nutricional', 'B Bajo peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   public derivacionesOptionsClinica: any[] = [

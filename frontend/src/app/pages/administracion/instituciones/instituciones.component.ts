@@ -41,7 +41,7 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   public searching = false;
   public resultsLength = 0;
   public searchTerms: any = {};
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
   public mensajes = '';
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },

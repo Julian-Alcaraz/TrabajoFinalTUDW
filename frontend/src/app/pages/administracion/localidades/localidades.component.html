@@ -7,9 +7,6 @@
     </button>
   </div>
   <div class="card-body">
-    <div class="flex flex-row justify-start items-center">
-      <input (keyup)="applyFilter($event)" placeholder="Buscar por nombre" #input type="text" id="filtro" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required />
-    </div>
     <div class="scroll">
       <table mat-table [dataSource]="localidades" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
@@ -63,7 +60,7 @@
               </div>
             } @else {
               <p class="py-5">
-                {{ input.value ? "No se encontraron localidades llamadas '" + input.value + "'" : 'No hay localidades cargadas.' }}
+                {{ 'No hay localidades cargadas.' }}
               </p>
             }
           </td>

@@ -42,7 +42,7 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
   public roles!: Rol[];
   public resultsLength = 0;
   public searching = false;
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
   public estadoOptions: any[] = [
     { nombre: 'Habilitado', valor: false },
     { nombre: 'Deshabilitado', valor: true },

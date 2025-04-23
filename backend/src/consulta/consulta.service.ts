@@ -129,6 +129,7 @@ export class ConsultaService {
 
     const searchConsultas: any = {
       relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio'], // Inicializa como un array de strings
+      order: { created_at: 'DESC' },
       where: filtros.generales,
     };
 
@@ -310,6 +311,7 @@ export class ConsultaService {
         created_at: Raw((alias) => `EXTRACT(YEAR FROM ${alias}) = :year`, { year }),
       },
       relations: ['chico', 'institucion', 'curso', 'usuario'],
+      order: { created_at: 'DESC' },
       take: size,
       skip: skip,
     });

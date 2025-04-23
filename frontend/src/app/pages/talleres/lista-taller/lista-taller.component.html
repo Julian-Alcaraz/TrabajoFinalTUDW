@@ -43,11 +43,32 @@
             <label for="filtroDestinatarios">Destinatarios</label>
           </p-iftalabel>
         </div>
+        <!-- Instituciones -->
+        <div class="sm:col-span-2 md:col-span-1">
+          <p-iftalabel>
+            <p-select [options]="instituciones" [loading]="loadingInstituciones" optionLabel="nombre" optionValue="nombre" (onChange)="applyFilter($event, 'filtroInstitucion')" (onClear)="limpiarFiltro('filtroInstitucion')" [checkmark]="true" [showClear]="true" [formControl]="institucionControl" #filtroInstitucion id="filtroInstitucion" inputId="filtroInstitucion" class="w-full" />
+            <label for="filtroInstitucion">Institución</label>
+          </p-iftalabel>
+        </div>
+        <!-- Curso -->
+        <div class="sm:col-span-2 md:col-span-1">
+          <p-iftalabel>
+            <p-select [options]="cursos" [loading]="loadingCursos" optionLabel="nombre" optionValue="nombre" (onChange)="applyFilter($event, 'filtroCurso')" (onClear)="limpiarFiltro('filtroCurso')" [checkmark]="true" [showClear]="true" [formControl]="cursoControl" #filtroCurso id="filtroCurso" inputId="filtroCurso" class="w-full" />
+            <label for="filtroCurso">Curso</label>
+          </p-iftalabel>
+        </div>
         <!-- Especialidad -->
         <div class="sm:col-span-2 md:col-span-1">
           <p-iftalabel>
-            <p-select [options]="especialidadOptions" (onChange)="applyFilter($event, 'filtroEspecialidad')" (onClear)="limpiarFiltro('especialidad')" [checkmark]="true" [showClear]="true" [formControl]="especialidadControl" #filtroEspecialidad id="filtroEspecialidad" inputId="filtroEspecialidad" class="w-full" />
+            <p-select [options]="especialidades" [loading]="loadingEspecialidades" optionLabel="nombre" optionValue="nombre" (onChange)="applyFilter($event, 'filtroEspecialidad')" (onChange)="onChangeEspecialidad()" (onClear)="limpiarFiltro('especialidad')" (onClear)="limpiarMarcos()" [checkmark]="true" [showClear]="true" [formControl]="especialidadControl" #filtroEspecialidad id="filtroEspecialidad" inputId="filtroEspecialidad" class="w-full" />
             <label for="filtroEspecialidad">Especialidad</label>
+          </p-iftalabel>
+        </div>
+        <!-- Marco -->
+        <div class="sm:col-span-2 md:col-span-1">
+          <p-iftalabel>
+            <p-select [options]="marcos" [loading]="loadingMarcos" optionLabel="nombre" optionValue="nombre" (onChange)="applyFilter($event, 'filtroMarco')" (onClear)="limpiarFiltro('filtroMarco')" [checkmark]="true" [showClear]="true" [formControl]="marcoControl" #filtroMarco id="filtroMarco" inputId="filtroMarco" class="w-full" />
+            <label for="filtroMarco">Marco</label>
           </p-iftalabel>
         </div>
         <!-- EnConjuntoCon -->

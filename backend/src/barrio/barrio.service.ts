@@ -23,7 +23,7 @@ export class BarrioService {
   }
 
   findAll() {
-    return this.barrioORM.find({ relations: ['localidad'] });
+    return this.barrioORM.find({ relations: ['localidad'], order: { created_at: 'DESC' } });
   }
 
   findAllHabilitados() {

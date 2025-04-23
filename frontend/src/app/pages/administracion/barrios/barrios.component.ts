@@ -40,7 +40,7 @@ export class BarriosComponent implements OnInit, AfterViewInit {
   public searchTerms: any = {};
   public localidadControl: FormControl = new FormControl(null);
   public estadoControl: FormControl = new FormControl(null);
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
   public barrios: MatTableDataSource<Barrio>;
   public resultsLength = 0;
   public searching = false;

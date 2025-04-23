@@ -16,13 +16,15 @@ export class InstitucionService {
 
   async findAll() {
     const instituciones = await this.institucionORM.find({ relations: ['consultas'] });
-    return instituciones.map((institucion) => {
-      const { consultas, ...datosInstitucion } = institucion;
-      return {
-        cantidadConsultas: consultas.length,
-        ...datosInstitucion,
-      };
-    });
+    return instituciones
+      .map((institucion) => {
+        const { consultas, ...datosInstitucion } = institucion;
+        return {
+          cantidadConsultas: consultas.length,
+          ...datosInstitucion,
+        };
+      })
+      .sort((b, a) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
   }
 
   findAllHabilitadas() {

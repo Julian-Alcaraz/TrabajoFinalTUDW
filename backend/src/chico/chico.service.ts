@@ -40,7 +40,7 @@ export class ChicoService {
       .addSelect((subQuery) => {
         return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado = false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
-      .orderBy('chico.nombre')
+      .orderBy('chico.created_at', 'DESC')
       .getRawMany();
 
     return result;
@@ -99,7 +99,7 @@ export class ChicoService {
       relations: ['consultas', 'consultas.usuario', 'consultas.institucion', 'consultas.curso'],
     });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
-    chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
+    chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false).sort((b, a) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
     return chico.consultas;
   }
 

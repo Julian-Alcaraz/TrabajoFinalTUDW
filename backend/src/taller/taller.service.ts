@@ -44,7 +44,7 @@ export class TallerService {
   }
 
   findAll() {
-    return this.tallerORM.find({ relations: ['especialidad'] });
+    return this.tallerORM.find({ relations: ['especialidad', 'marco', 'institucion', 'curso'], order: { fecha: 'DESC' } });
   }
 
   findAllHabilitados() {

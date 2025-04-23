@@ -40,7 +40,7 @@ export class UsuarioService {
     const usuarios = await this.usuarioORM.find({
       relations: ['roles'],
       order: {
-        apellido: 'ASC', // Orden ascendente por apellido
+        created_at: 'DESC', // Orden ascendente por apellido
       },
     });
     return usuarios;

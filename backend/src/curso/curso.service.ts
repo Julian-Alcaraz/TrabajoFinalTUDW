@@ -5,6 +5,8 @@ import { Curso } from './entities/curso.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { NivelCursoEnum } from '../common/const/const';
+
 @Injectable()
 export class CursoService {
   constructor(@InjectRepository(Curso) private readonly cursoORM: Repository<Curso>) {}
@@ -15,13 +17,20 @@ export class CursoService {
 
   async findAll() {
     const cursos = await this.cursoORM.find({ relations: ['consultas'] });
-    return cursos.map((curso) => {
+
+    const cursosConCantidad = cursos.map((curso) => {
       const { consultas, ...datosCursos } = curso;
       return {
         cantidadConsultas: consultas.length,
         ...datosCursos,
       };
     });
+
+    cursosConCantidad.sort((a, b) => {
+      return NivelCursoEnum.indexOf(a.nivel) - NivelCursoEnum.indexOf(b.nivel);
+    });
+
+    return cursosConCantidad;
   }
 
   findAllHabilitados() {

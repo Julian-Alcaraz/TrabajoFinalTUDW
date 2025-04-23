@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin, from, Subscription } from 'rxjs';
 
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -16,22 +17,22 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { PanelModule } from 'primeng/panel';
 
-import * as MostrarNotificacion from '../../../../utils/notificaciones/mostrar-notificacion';
-import { Usuario } from '../../../../models/usuario.model';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { InstitucionService } from '../../../../services/institucion.service';
-import { Institucion } from '../../../../models/institucion.model';
-import { Curso } from '../../../../models/curso.model';
-import { CursoService } from '../../../../services/curso.service';
-import { ConsultaService } from '../../../../services/consulta.service';
-import { Consulta } from '../../../../models/consulta.model';
+import * as Constantes from '@app/common/const/const';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { Usuario } from '@models/usuario.model';
+import { UsuarioService } from '@services/usuario.service';
+import { InstitucionService } from '@services/institucion.service';
+import { Institucion } from '@models/institucion.model';
+import { Curso } from '@models/curso.model';
+import { CursoService } from '@services/curso.service';
+import { ConsultaService } from '@services/consulta.service';
+import { Consulta } from '@models/consulta.model';
 import { CamposClinicaComponent } from './components/campos-clinica/campos-clinica.component';
 import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
-import { XlsxService } from '../../../../services/excelJS.service';
-import { LoadingComponent } from '../../../../components/loading/loading.component';
-import { forkJoin, from, Subscription } from 'rxjs';
+import { XlsxService } from '@services/excelJS.service';
+import { LoadingComponent } from '@components/loading/loading.component';
 import { PaginatedTableService } from '@app/services/paginated-table.service';
 
 @Component({
@@ -43,11 +44,12 @@ import { PaginatedTableService } from '@app/services/paginated-table.service';
 export class PersonalizadaComponent implements OnInit, OnDestroy {
   @Output() consultasEmitidas = new EventEmitter<Consulta[]>();
 
+  public con = Constantes;
   public loadingCursos = false;
   public loadingInstituciones = false;
   public loadingProfesionales = false;
   public mostrarBotonDescarga = false;
-  public generandoArchivo = false; // Aca faltaria usar esto para un spinner!!!
+  public generandoArchivo = false;
   public estaColapsadoComunes = false;
   public estaColapsadoEspecificos = false;
   public colapsarPaneles = false;
@@ -58,17 +60,13 @@ export class PersonalizadaComponent implements OnInit, OnDestroy {
   public cursos: Curso[] = [];
   public profesionales: Usuario[] = [];
   public searching = false;
-  public tipoConsulta = ['Clinica', 'Oftalmologia', 'Odontologia', 'Fonoaudiologia'];
+  public tipoConsulta: string[] = this.con.ConsultaEnum;
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public turnoOptions: any[] = [
-    { nombre: 'Mañana', valor: 'Mañana' },
-    { nombre: 'Tarde', valor: 'Tarde' },
-    { nombre: 'Noche', valor: 'Noche' },
-  ];
-  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
+  public turnoOptions: string[] = this.con.TurnoEnum;
+  public sexoOptions: string[] = this.con.SexoEnum;
 
   constructor(
     private fb: FormBuilder,

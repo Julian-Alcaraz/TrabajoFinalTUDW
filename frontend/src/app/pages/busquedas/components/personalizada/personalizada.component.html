@@ -66,7 +66,7 @@
       <!-- Turno -->
       <div class="col-span-2 sm:col-span-2 md:col-span-3 lg:col-span-2" formGroupName="generales">
         <p-iftalabel>
-          <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+          <p-select [options]="turnoOptions" idInput="turno" formControlName="turno" [checkmark]="true" [showClear]="true" class="w-full h-16" />
           <label for="turno">Turno</label>
         </p-iftalabel>
       </div>
@@ -81,7 +81,7 @@
       <div class="col-span-2 sm:col-span-2 md:col-span-3 lg:col-span-2" formGroupName="generales">
         <div formGroupName="chico">
           <p-iftalabel>
-            <p-select [options]="sexoOptions" idInput="sexo" formControlName="sexo" [checkmark]="true" optionLabel="nombre" optionValue="nombre" [showClear]="true" class="w-full h-16" />
+            <p-select [options]="sexoOptions" idInput="sexo" formControlName="sexo" [checkmark]="true" [showClear]="true" class="w-full h-16" />
             <label for="sexo">Sexo</label>
           </p-iftalabel>
         </div>

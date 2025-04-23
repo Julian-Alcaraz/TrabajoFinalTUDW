@@ -17,13 +17,15 @@ export class LocalidadService {
 
   async findAll() {
     const localidades = await this.localidadORM.find({ relations: ['barrios'] });
-    return localidades.map((localidad) => {
-      const { barrios, ...datosLocalidad } = localidad;
-      return {
-        cantidadBarrios: barrios.length,
-        ...datosLocalidad,
-      };
-    });
+    return localidades
+      .map((localidad) => {
+        const { barrios, ...datosLocalidad } = localidad;
+        return {
+          cantidadBarrios: barrios.length,
+          ...datosLocalidad,
+        };
+      })
+      .sort((b, a) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
   }
 
   findAllHabilitadas() {
