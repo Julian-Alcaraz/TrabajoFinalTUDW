@@ -7,6 +7,8 @@ import { CreateClinicaDto } from './create-clinica.dto';
 import { CreateFonoaudiologiaDto } from './create-fonoaudiologia.dto';
 import { CreateOftalmologiaDto } from './create-oftalmologia.dto';
 import { CreateOdontologiaDto } from './create-odontologia.dto';
+import { CreatePrevencionDto } from './create-prevencion.dto';
+import { CreateSocialDto } from './create-social.dto';
 
 export class CreateConsultaDto {
   @ApiProperty({ description: 'Tipo de consulta' })
@@ -49,24 +51,34 @@ export class CreateConsultaDto {
   readonly id_curso: number;
 
   @ApiProperty({ description: 'Derivacion oftalmologia de la consulta' })
-  @IsNotEmpty({ message: 'La derivacion oftalmologia no puede estar vacio' })
+  // @IsNotEmpty({ message: 'La derivacion oftalmologia no puede estar vacio' })
   @IsBoolean({ message: 'La derivacion oftalmologia debe ser un boolean' })
-  readonly derivacion_oftalmologia: boolean;
+  readonly derivacion_oftalmologia: boolean = false;
 
   @ApiProperty({ description: 'Derivacion odontologia de la consulta' })
-  @IsNotEmpty({ message: 'La derivacion odontologia no puede estar vacio' })
+  // @IsNotEmpty({ message: 'La derivacion odontologia no puede estar vacio' })
   @IsBoolean({ message: 'La derivacion odontologia debe ser un boolean' })
-  readonly derivacion_odontologia: boolean;
+  readonly derivacion_odontologia: boolean = false;
 
   @ApiProperty({ description: 'Derivacion fonoaudiologia de la consulta' })
-  @IsNotEmpty({ message: 'La derivacion fonoaudiologia no puede estar vacio' })
+  // @IsNotEmpty({ message: 'La derivacion fonoaudiologia no puede estar vacio' })
   @IsBoolean({ message: 'La derivacion fonoaudiologia debe ser un boolean' })
-  readonly derivacion_fonoaudiologia: boolean;
+  readonly derivacion_fonoaudiologia: boolean = false;
+
+  @ApiProperty({ description: 'Derivacion prevencion de la consulta' })
+  // @IsNotEmpty({ message: 'La derivacion prevencion no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion prevencion debe ser un boolean' })
+  readonly derivacion_prevencion: boolean = false;
+
+  @ApiProperty({ description: 'Derivacion social de la consulta' })
+  // @IsNotEmpty({ message: 'La derivacion social no puede estar vacio' })
+  @IsBoolean({ message: 'La derivacion social debe ser un boolean' })
+  readonly derivacion_social: boolean = false;
 
   @ApiProperty({ description: 'Derivacion externa de la consulta' })
-  @IsNotEmpty({ message: 'La derivacion externa no puede estar vacio' })
+  // @IsNotEmpty({ message: 'La derivacion externa no puede estar vacio' })
   @IsBoolean({ message: 'La derivacion externa debe ser un boolean' })
-  readonly derivacion_externa: boolean;
+  readonly derivacion_externa: boolean = false;
 
   @ApiProperty({ description: 'Observaciones de la consulta' })
   @IsString({ message: 'Las Observaciones debe ser un string' })
@@ -102,4 +114,18 @@ export class CreateConsultaDto {
   @ValidateNested()
   @Type(() => CreateOdontologiaDto)
   public odontologia?: CreateOdontologiaDto;
+
+  // Validación condicional para "Prevencion"
+  @ValidateIf((o) => o.type === 'Prevencion')
+  @IsNotEmpty({ message: 'Los datos de prevencion no pueden estar vacíos cuando el tipo es Prevencion' })
+  @ValidateNested()
+  @Type(() => CreatePrevencionDto)
+  public prevencion?: CreatePrevencionDto;
+
+  // Validación condicional para "trabajo social"
+  @ValidateIf((o) => o.type === 'Social')
+  @IsNotEmpty({ message: 'Los datos de trabajo social no pueden estar vacíos cuando el tipo es Prevencion' })
+  @ValidateNested()
+  @Type(() => CreateSocialDto)
+  public social?: CreateSocialDto;
 }

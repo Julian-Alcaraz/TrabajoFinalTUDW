@@ -78,6 +78,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia: [false, []],
       derivacion_oftalmologia: [false, []],
       derivacion_odontologia: [false, []],
+      derivacion_prevencion: [false, []],
+      derivacion_social: [false, []],
       derivacion_externa: [false, []],
       pcta: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
       pcimc: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
@@ -195,6 +197,8 @@ export class NuevaClinicaComponent implements OnInit {
   completarCampos() {
     // const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
     const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
+    const derivacion_prevencion = this.consulta?.derivacion_prevencion ? true : false;
+    const derivacion_social = this.consulta?.derivacion_social ? true : false;
     const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
     const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
     this.clinicaForm.patchValue({
@@ -228,6 +232,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia,
       derivacion_oftalmologia,
       derivacion_odontologia,
+      derivacion_prevencion,
+      derivacion_social,
       // derivacion_externa,
       pcta: this.consulta?.clinica?.pcta,
       pcimc: this.consulta?.clinica?.pcimc,
@@ -258,6 +264,8 @@ export class NuevaClinicaComponent implements OnInit {
     const derivacion_odontologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_odontologia);
     const derivacion_fonoaudiologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_fonoaudiologia);
     const derivacion_oftalmologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_oftalmologia);
+    const derivacion_prevencionForm = this.convertToBoolean(this.clinicaForm.value.derivacion_prevencion);
+    const derivacion_socialForm = this.convertToBoolean(this.clinicaForm.value.derivacion_social);
     // let derivacion_externaConsulta = false;
     // if (this.consulta?.derivacion_externa) {
     //   derivacion_externaConsulta = this.consulta?.derivacion_externa;
@@ -273,6 +281,14 @@ export class NuevaClinicaComponent implements OnInit {
     let derivacion_oftalmologiaConsulta = false;
     if (this.consulta?.derivacion_oftalmologia) {
       derivacion_oftalmologiaConsulta = this.consulta?.derivacion_oftalmologia;
+    }
+    let derivacion_prevencionConsulta = false;
+    if (this.consulta?.derivacion_prevencion) {
+      derivacion_prevencionConsulta = this.consulta?.derivacion_prevencion;
+    }
+    let derivacion_socialConsulta = false;
+    if (this.consulta?.derivacion_social) {
+      derivacion_socialConsulta = this.consulta?.derivacion_social;
     }
     const segto = this.convertToBoolean(this.clinicaForm.value.segto);
     const diabetes = this.convertToBoolean(this.clinicaForm.value.diabetes);
@@ -298,6 +314,8 @@ export class NuevaClinicaComponent implements OnInit {
         derivacion_odontologiaConsulta === derivacion_odontologiaForm &&
         derivacion_fonoaudiologiaConsulta === derivacion_fonoaudiologiaForm &&
         derivacion_oftalmologiaConsulta === derivacion_oftalmologiaForm &&
+        derivacion_prevencionConsulta === derivacion_prevencionForm &&
+        derivacion_socialConsulta === derivacion_socialForm &&
         this.consulta?.clinica?.peso === this.clinicaForm.value.peso &&
         this.consulta?.clinica?.talla === this.clinicaForm.value.talla &&
         this.consulta?.clinica?.tas === this.clinicaForm.value.tas &&
@@ -384,7 +402,7 @@ export class NuevaClinicaComponent implements OnInit {
     formValues.obra_social = formValues.obra_social === 'true';
     delete formValues.dni;
 
-    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, ...clinicaValues } = formValues;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, derivacion_prevencion, derivacion_social, ...clinicaValues } = formValues;
     const data = {
       type: 'Clinica',
       turno,
@@ -398,6 +416,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia,
       derivacion_odontologia,
       derivacion_oftalmologia,
+      derivacion_prevencion,
+      derivacion_social,
       clinica: {
         ...clinicaValues,
       },

@@ -9,11 +9,13 @@ import { NuevaFonoaudiologicaComponent } from '@pages/consultas/fonoaudiologia/n
 import { NuevaOftalmologiaComponent } from '@pages/consultas/oftalmologia/nueva-oftalmologia/nueva-oftalmologia.component';
 import { SessionService } from '@services/session.service';
 import { GLOBAL } from '@config/global';
+import { NuevaPrevencionComponent } from '@app/pages/consultas/prevencion/nueva-prevencion/nueva-prevencion.component';
+import { NuevaSocialComponent } from '@app/pages/consultas/social/nueva-social/nueva-social.component';
 
 @Component({
   selector: 'app-ver-consulta',
   standalone: true,
-  imports: [CommonModule, NuevaOdontologiaComponent, NuevaClinicaComponent, NuevaFonoaudiologicaComponent, NuevaOftalmologiaComponent],
+  imports: [CommonModule, NuevaOdontologiaComponent, NuevaClinicaComponent, NuevaFonoaudiologicaComponent, NuevaOftalmologiaComponent, NuevaPrevencionComponent, NuevaSocialComponent],
   templateUrl: './ver-consulta.component.html',
 })
 export class VerConsultaComponent implements OnInit {
@@ -27,7 +29,6 @@ export class VerConsultaComponent implements OnInit {
     private _consultaService: ConsultaService,
     private _sessionService: SessionService,
   ) {
-    console.log(data);
     this.isDialog = !data;
   }
   ngOnInit() {

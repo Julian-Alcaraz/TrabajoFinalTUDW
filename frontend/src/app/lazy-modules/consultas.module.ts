@@ -7,6 +7,8 @@ import { NuevaOdontologiaComponent } from '@pages/consultas/odontologia/nueva-od
 import { NuevaFonoaudiologicaComponent } from '@pages/consultas/fonoaudiologia/nueva-fonoaudiologia/nueva-fonoaudiologia.component';
 import { BusquedasComponent } from '@pages/busquedas/busquedas.component';
 import { profesionalGuard } from '../guards/auth.guard';
+import { NuevaPrevencionComponent } from '@app/pages/consultas/prevencion/nueva-prevencion/nueva-prevencion.component';
+import { NuevaSocialComponent } from '@app/pages/consultas/social/nueva-social/nueva-social.component';
 
 const routes: Routes = [
   { path: 'busqueda', component: BusquedasComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'oftalmologia/nueva', component: NuevaOftalmologiaComponent, canActivate: [profesionalGuard] },
   { path: 'odontologia/nueva', component: NuevaOdontologiaComponent, canActivate: [profesionalGuard] },
   { path: 'fonoaudiologia/nueva', component: NuevaFonoaudiologicaComponent, canActivate: [profesionalGuard] },
+  { path: 'prevencion/nueva', component: NuevaPrevencionComponent, canActivate: [profesionalGuard] },
+  { path: 'social/nueva', component: NuevaSocialComponent, canActivate: [profesionalGuard] },
 ];
 
 @NgModule({

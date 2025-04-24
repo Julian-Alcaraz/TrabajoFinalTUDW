@@ -2,64 +2,55 @@
   <span class="card-header">
     @if (consulta) {
       <div class="flex justify-between">
-        <div class="">Consulta Oftalmologia</div>
+        <div class="">Consulta trabajo social</div>
         <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
       </div>
     } @else {
-      Cargar una nueva consulta de oftalmologia
+      Cargar una nueva consulta de trabajo social
     }
   </span>
   <div class="card-body">
-    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="oftalmologiaForm">
-      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
-      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
-        <!-- Calculos primera_vez y control -->
-        <ng-container class="mt-4">
-          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 grid grid-cols-2">
-            <p>
-              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} su primera vez: </span><span>{{ this.oftalmologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
-            </p>
-            <p>
-              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} control: </span><span>{{ this.oftalmologiaForm.get('control')?.value ? 'Si' : 'No' }}</span>
-            </p>
-          </div>
-        </ng-container>
-        <!-- Receta -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="¿Necesita receta?" [control]="controlDeInput('receta')" idInput="receta" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
+    <!-- <span class="sm:text-red-400 md:text-green-400 lg:text-blue-700">Tamaño panta</span> -->
+    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="socialForm">
+      <app-campos-comunes [form]="socialForm" [values]="consulta" [dni]="this.dni" />
+      <!-- Campos  trabajo social -->
+      <div class="grid gap-6 sm:grid-cols-3 md:grid-cols-6">
         <!-- Demanda -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')" idInput="demanda" [opciones]="con.DemandaEnum" [valores]="con.DemandaEnum" />
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Demanda" [control]="controlDeInput('demanda')" placeholder="" idInput="demanda" />
+        </div>
+        <!-- Articulación -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Articulación" [control]="controlDeInput('articulacion')" placeholder="" idInput="articulacion" [opcional]="true" />
+        </div>
+        <!-- objeto_informe -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Objeto informe" [control]="controlDeInput('objeto_informe')" placeholder="" idInput="objeto_informe" />
+        </div>
+        <!-- Seguimiento -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Seguimiento" [control]="controlDeInput('seguimiento')" placeholder="" idInput="seguimiento" [opcional]="true" />
         </div>
         <!-- Derivacion -->
-        <div class="mt-4 md:col-span-3">
+        <div class="mt-4 col-span-full md:col-span-3">
           <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
-        <!-- Anteojos -->
-        <ng-container>
-          <div *ngIf="this.oftalmologiaForm.get('control')?.value" class="mt-4 md:col-span-3">
-            <app-input-select-enum label="¿Se le entregaron los anteojos?" [control]="controlDeInput('anteojos')" idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-          </div>
-        </ng-container>
-        <!-- Proximo Control -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-date label="Fecha del Próximo Control" [control]="controlDeInput('prox_control')" idInput="prox_control" [min]="fechaManana" />
         </div>
         <!-- Observaciones -->
         <div class="mt-4 col-span-full">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
-      @if (consulta) {
-        @if (consulta.usuario) {
-          <app-datos-medico [profesional]="consulta.usuario" />
+      <div>
+        @if (consulta && editar) {
+          @if (consulta.usuario) {
+            <app-datos-medico [profesional]="consulta.usuario" />
+          }
         }
-      }
+      </div>
       <!-- Enviar -->
       <div class="flex mt-4">
         @if (consulta && editar) {
-          @if (oftalmologiaForm.disabled) {
+          @if (socialForm.disabled) {
             <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
           } @else {
             <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>

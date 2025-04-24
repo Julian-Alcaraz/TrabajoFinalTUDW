@@ -2,49 +2,40 @@
   <span class="card-header">
     @if (consulta) {
       <div class="flex justify-between">
-        <div class="">Consulta Oftalmologia</div>
+        <div class="">Consulta Prevención</div>
         <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
       </div>
     } @else {
-      Cargar una nueva consulta de oftalmologia
+      Cargar una nueva consulta de prevención
     }
   </span>
   <div class="card-body">
-    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="oftalmologiaForm">
-      <app-campos-comunes [form]="oftalmologiaForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
+    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="prevencionForm">
+      <app-campos-comunes [form]="prevencionForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
-        <!-- Calculos primera_vez y control -->
-        <ng-container class="mt-4">
-          <div *ngIf="chico !== null" class="bg-blue-100 border border-blue-300 text-sm p-4 rounded-lg w-full md:col-span-6 grid grid-cols-2">
-            <p>
-              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} su primera vez: </span><span>{{ this.oftalmologiaForm.get('primera_vez')?.value ? 'Si' : 'No' }}</span>
-            </p>
-            <p>
-              <span class="font-bold">{{ consulta ? 'Fue' : 'Es' }} control: </span><span>{{ this.oftalmologiaForm.get('control')?.value ? 'Si' : 'No' }}</span>
-            </p>
-          </div>
-        </ng-container>
-        <!-- Receta -->
+        <!-- Edad Inicio -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="¿Necesita receta?" [control]="controlDeInput('receta')" idInput="receta" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+          <app-input-number label="Edad inicio de consumo" [control]="controlDeInput('edad_inicio_consumo')" idInput="demanda" />
         </div>
-        <!-- Demanda -->
+        <!-- motivo_consumo -->
         <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Motivo de la consulta (demanda)" [control]="controlDeInput('demanda')" idInput="demanda" [opciones]="con.DemandaEnum" [valores]="con.DemandaEnum" />
+          <app-input-select-enum label="Motivo de consumo" [control]="controlDeInput('motivo_consumo')" idInput="motivo_consumo" [opciones]="con.MotivoConsumoEnum" [valores]="con.MotivoConsumoEnum" />
+        </div>
+        <!-- frecuencia -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Frecuencia de consumo" [control]="controlDeInput('frecuencia')" idInput="frecuencia" [opciones]="con.FrecuenciaPrevencionEnum" [valores]="con.FrecuenciaPrevencionEnum" />
+        </div>
+        <!-- consumo_problematico -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Consumo problematico" [control]="controlDeInput('consumo_problematico')" idInput="consumo_problematico" [opciones]="con.ConsumoProblematicoEnum" [valores]="con.ConsumoProblematicoEnum" />
+        </div>
+        <!-- otra_problematica -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Otra problematica" [control]="controlDeInput('otra_problematica')" idInput="otra_problematica" [opciones]="con.OtraProblematicaEnum" [valores]="con.OtraProblematicaEnum" />
         </div>
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-        </div>
-        <!-- Anteojos -->
-        <ng-container>
-          <div *ngIf="this.oftalmologiaForm.get('control')?.value" class="mt-4 md:col-span-3">
-            <app-input-select-enum label="¿Se le entregaron los anteojos?" [control]="controlDeInput('anteojos')" idInput="anteojos" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
-          </div>
-        </ng-container>
-        <!-- Proximo Control -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-date label="Fecha del Próximo Control" [control]="controlDeInput('prox_control')" idInput="prox_control" [min]="fechaManana" />
         </div>
         <!-- Observaciones -->
         <div class="mt-4 col-span-full">
@@ -59,7 +50,7 @@
       <!-- Enviar -->
       <div class="flex mt-4">
         @if (consulta && editar) {
-          @if (oftalmologiaForm.disabled) {
+          @if (prevencionForm.disabled) {
             <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
           } @else {
             <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>

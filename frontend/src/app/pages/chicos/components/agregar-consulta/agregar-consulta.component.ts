@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 export class AgregarConsultaComponent {
   @Input() dni: number | undefined | null = null;
 
-  consultasTipos = ['clinica', 'odontologia', 'fonoaudiologia', 'oftalmologia'];
+  consultasTipos = ['clinica', 'odontologia', 'fonoaudiologia', 'oftalmologia', 'prevencion', 'social'];
 
   constructor(private _router: Router) {}
 
@@ -50,7 +50,6 @@ export class AgregarConsultaComponent {
     `;
   }
   redirigir(consulta: string) {
-    console.log(consulta, this.dni);
     this._router.navigate(['layout/consultas/' + consulta + '/nueva/'], { state: { dni: this.dni } });
   }
 }

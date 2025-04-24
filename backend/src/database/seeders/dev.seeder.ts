@@ -19,6 +19,8 @@ import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
 import { Especialidad } from '../../especialidad/entities/especialidad.entity';
 import { Marco } from '../../marco/entities/marco.entity';
 import { Taller } from '../../taller/entities/taller.entity';
+import { Social } from '../../consulta/entities/social.entity';
+import { Prevencion } from '../../consulta/entities/prevencion.entity';
 
 export class DevSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -40,6 +42,8 @@ export class DevSeeder implements Seeder {
       const especialidadORM = dataSource.getRepository(Especialidad);
       const marcoORM = dataSource.getRepository(Marco);
       const tallerORM = dataSource.getRepository(Taller);
+      const socialOrm = dataSource.getRepository(Social);
+      const prevencionOrm = dataSource.getRepository(Prevencion);
 
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
@@ -50,6 +54,8 @@ export class DevSeeder implements Seeder {
       const OftalmologiaFactory = factoryManager.get(Oftalmologia);
       const OdontologiaFactory = factoryManager.get(Odontologia);
       const tallerFactory = factoryManager.get(Taller);
+      const SocialFactory = factoryManager.get(Social);
+      const PrevencionFactory = factoryManager.get(Prevencion);
 
       // Roles
       console.log('Seeding roles...');
@@ -358,7 +364,7 @@ export class DevSeeder implements Seeder {
         {
           url: 'consultas/odontologia/nueva',
           label: 'Odontologica',
-          orden: 4,
+          orden: 5,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -366,7 +372,7 @@ export class DevSeeder implements Seeder {
         {
           url: 'consultas/oftalmologia/nueva',
           label: 'Oftalmologica',
-          orden: 4,
+          orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -374,7 +380,23 @@ export class DevSeeder implements Seeder {
         {
           url: 'consultas/fonoaudiologia/nueva',
           label: 'Fonoaudiologica',
-          orden: 4,
+          orden: 7,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/prevencion/nueva',
+          label: 'Prevención',
+          orden: 8,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/social/nueva',
+          label: 'Trabajo Social',
+          orden: 9,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -649,6 +671,18 @@ export class DevSeeder implements Seeder {
                 consulta: consulta,
               });
               await odontologiaORM.save(odontologia);
+              break;
+            case 'Prevencion':
+              const prevencion = await PrevencionFactory.make({
+                consulta: consulta,
+              });
+              await prevencionOrm.save(prevencion);
+              break;
+            case 'Social':
+              const social = await SocialFactory.make({
+                consulta: consulta,
+              });
+              await socialOrm.save(social);
               break;
             default:
               throw new Error(`Tipo de consulta desconocido: ${consulta.type}`);

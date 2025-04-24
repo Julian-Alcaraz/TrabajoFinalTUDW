@@ -18,6 +18,12 @@
     @case ('Oftalmologia') {
       <app-nueva-oftalmologia [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
     }
+    @case ('Prevencion') {
+      <app-nueva-prevencion [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
+    }
+    @case ('Social') {
+      <app-nueva-social [consulta]="consulta" [editar]="editar" (modificoConsulta)="cerrarModalYrecargarListado($event)" />
+    }
     @default {
       <div class="mt-12 text-center">No existe el tipo de oonsulta ingresado.</div>
     }

@@ -16,6 +16,8 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Institucion } from 'src/institucion/entities/institucion.entity';
 import { Curso } from 'src/curso/entities/curso.entity';
 import { Chico } from 'src/chico/entities/chico.entity';
+import { Prevencion } from './entities/prevencion.entity';
+import { Social } from './entities/social.entity';
 
 @Injectable()
 export class ConsultaService {
@@ -29,6 +31,8 @@ export class ConsultaService {
     @InjectRepository(Institucion) private readonly institucionORM: Repository<Institucion>,
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
+    @InjectRepository(Prevencion) private readonly prevencionOrm: Repository<Prevencion>,
+    @InjectRepository(Social) private readonly socialOrm: Repository<Social>,
   ) {}
 
   async create(createConsultaDto: CreateConsultaDto, usuario: Usuario) {
@@ -37,7 +41,7 @@ export class ConsultaService {
     }
 
     return await this.consultaORM.manager.transaction(async (manager: EntityManager) => {
-      const { clinica, oftalmologia, odontologia, fonoaudiologia, ...consultaCreate } = createConsultaDto;
+      const { clinica, oftalmologia, odontologia, fonoaudiologia, prevencion, social, ...consultaCreate } = createConsultaDto;
       const curso = await manager.findOne(Curso, { where: { id: consultaCreate.id_curso, deshabilitado: false } });
       if (!curso) throw new BadRequestException('El curso ingresado no existe');
       const institucion = await manager.findOne(Institucion, { where: { id: consultaCreate.id_institucion, deshabilitado: false } });
@@ -76,6 +80,15 @@ export class ConsultaService {
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
 
+      if (prevencion) {
+        nuevaConsultaHija = manager.create(Prevencion, { consulta: consultaGuardada, ...prevencion });
+        consultaHijaGuardada = await manager.save(nuevaConsultaHija);
+      }
+
+      if (social) {
+        nuevaConsultaHija = manager.create(Social, { consulta: consultaGuardada, ...social });
+        consultaHijaGuardada = await manager.save(nuevaConsultaHija);
+      }
       // Si no se creó ninguna consulta hija, lanzamos un error y se hace rollback
       if (!nuevaConsultaHija) {
         throw new BadRequestException('Fallo la carga de la consulta hija');
@@ -103,6 +116,12 @@ export class ConsultaService {
         break;
       case 'Odontologia':
         consultaHija = await this.odontologiaORM.findOne({ where: { id_consulta: id } });
+        break;
+      case 'Prevencion':
+        consultaHija = await this.prevencionOrm.findOne({ where: { id_consulta: id } });
+        break;
+      case 'Social':
+        consultaHija = await this.socialOrm.findOne({ where: { id_consulta: id } });
         break;
       default:
         throw new NotFoundException(`Consulta sin tipo especificado.`);
@@ -158,6 +177,14 @@ export class ConsultaService {
           filtrosEspecificos = { fonoaudiologia: await this.procesarFonoaudiologia(filtros) };
           searchConsultas.relations.push('fonoaudiologia'); // Agrega la relación específica
           break;
+        case 'Prevencion':
+          filtrosEspecificos = { prevencion: await this.procesarPrevencion(filtros) };
+          searchConsultas.relations.push('prevencion'); // Agrega la relación específica
+          break;
+        case 'Social':
+          filtrosEspecificos = { social: await this.procesarSocial(filtros) };
+          searchConsultas.relations.push('social'); // Agrega la relación específica
+          break;
       }
     }
 
@@ -175,9 +202,7 @@ export class ConsultaService {
   }
 
   async busquedaPersonalizadaLimited(data: any, page: number, size: number) {
-    console.log(page, size);
     const searchConsultas = await this.armarConsultaOrmPersonalizada(data, page, size);
-    console.log(searchConsultas);
     const consultas = await this.consultaORM.find(searchConsultas);
     return consultas;
   }
@@ -239,6 +264,14 @@ export class ConsultaService {
   }
 
   private async procesarFonoaudiologia(consulta: any) {
+    return consulta.especificas; // devuevle el filtro
+  }
+
+  private async procesarPrevencion(consulta: any) {
+    return consulta.especificas; // devuevle el filtro
+  }
+
+  private async procesarSocial(consulta: any) {
     return consulta.especificas; // devuevle el filtro
   }
 
@@ -348,7 +381,7 @@ export class ConsultaService {
       if (!chicoEncontrado) throw new NotFoundException(`Chico con id ${cambios.id_chico} no encontrado`);
     }
     // Aplica cambios generales
-    const { clinica, oftalmologia, odontologia, fonoaudiologia, ...cambiosConsulta } = cambios;
+    const { clinica, oftalmologia, odontologia, fonoaudiologia, prevencion, social, ...cambiosConsulta } = cambios;
     const cambiosAplicadosConsulta = {
       ...cambiosConsulta,
       ...(cursoEncontrado ? { curso: cursoEncontrado } : {}),
@@ -412,6 +445,16 @@ export class ConsultaService {
       if (!fonoaudiologiaEncontrada) throw new NotFoundException(`Fonoaudiologia asociada a consulta con id ${id} no encontrada`);
       const fonoaudiologiaModificada = this.fonoaudiologiaORM.merge(fonoaudiologiaEncontrada, fonoaudiologia);
       await this.fonoaudiologiaORM.save(fonoaudiologiaModificada);
+    } else if (prevencion) {
+      const prevencionEencontrada = await this.prevencionOrm.findOne({ where: { id_consulta: id } });
+      if (!prevencionEencontrada) throw new NotFoundException(`Prevencion asociada a consulta con id ${id} no encontrada`);
+      const prevencionModificada = this.prevencionOrm.merge(prevencionEencontrada, prevencion);
+      await this.prevencionOrm.save(prevencionModificada);
+    } else if (social) {
+      const socialEencontrada = await this.socialOrm.findOne({ where: { id_consulta: id } });
+      if (!socialEencontrada) throw new NotFoundException(`Trabajo social asociada a consulta con id ${id} no encontrada`);
+      const prevencionModificada = this.socialOrm.merge(socialEencontrada, social);
+      await this.socialOrm.save(prevencionModificada);
     }
     // Resultados
     return {
@@ -420,6 +463,8 @@ export class ConsultaService {
       ...(cambios.oftalmologia ? { oftalmologia: await this.oftalmologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
       ...(cambios.odontologia ? { odontologia: await this.odontologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
       ...(cambios.fonoaudiologia ? { fonoaudiologia: await this.fonoaudiologiaORM.findOne({ where: { id_consulta: id } }) } : {}),
+      ...(cambios.prevencion ? { prevencion: await this.prevencionOrm.findOne({ where: { id_consulta: id } }) } : {}),
+      ...(cambios.social ? { social: await this.socialOrm.findOne({ where: { id_consulta: id } }) } : {}),
     };
   }
 

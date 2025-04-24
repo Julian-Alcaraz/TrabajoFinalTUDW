@@ -1,4 +1,4 @@
-import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia } from './opcionesConst';
+import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia, otraProblematica, consumoProblematico, frecuenciaPrevencion, motivoConsumo } from './opcionesConst';
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum: string[] = [...opcionesSexo];
@@ -58,6 +58,20 @@ export const CausasEnum: string[] = [...opcionesCausas];
 
 export type DemandaType = (typeof opcionesDemanda)[number];
 export const DemandaEnum: string[] = [...opcionesDemanda];
+
+// Prevencion
+
+export type MotivoConsumoType = (typeof motivoConsumo)[number];
+export const MotivoConsumoEnum: string[] = [...motivoConsumo];
+
+export type FrecuenciaPrevencionType = (typeof frecuenciaPrevencion)[number];
+export const FrecuenciaPrevencionEnum: string[] = [...frecuenciaPrevencion];
+
+export type ConsumoProblematicoType = (typeof consumoProblematico)[number];
+export const ConsumoProblematicoEnum: string[] = [...consumoProblematico];
+
+export type OtraProblematicaType = (typeof otraProblematica)[number];
+export const OtraProblematicaEnum: string[] = [...otraProblematica];
 
 // Curso
 

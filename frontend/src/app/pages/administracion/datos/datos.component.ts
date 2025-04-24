@@ -62,7 +62,6 @@ export class DatosComponent {
 
   controlResponse = {
     next: (response: any) => {
-      console.log(response);
       Swal.fire({
         title: 'El proceso termino.',
         text: `Hay ${response.data.length} filas no cargadas`,

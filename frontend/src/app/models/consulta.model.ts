@@ -8,6 +8,8 @@ import { Curso } from './curso.model';
 import { Usuario } from './usuario.model';
 
 import { ConsultaType, TurnoType } from '@app/common/const/const';
+import { Prevencion } from './prevencion.model';
+import { Social } from './social.model';
 
 export class Consulta {
   constructor(
@@ -24,10 +26,14 @@ export class Consulta {
     public derivacion_oftalmologia: boolean,
     public derivacion_fonoaudiologia: boolean,
     public derivacion_odontologia: boolean,
+    public derivacion_prevencion: boolean,
+    public derivacion_social: boolean,
     public odontologia?: Odontologia,
     public oftalmologia?: Oftalmologia,
     public fonoaudiologia?: Fonoaudiologia,
     public clinica?: Clinica,
+    public prevencion?: Prevencion,
+    public social?: Social,
     public chico?: Chico,
     public institucion?: Institucion,
     public usuario?: Usuario,
@@ -38,6 +44,6 @@ export class Consulta {
   ) {}
 
   static overload_constructor() {
-    return new Consulta(0, new Date(), new Date(), false, 'Clinica', 'Mañana', 0, 0, 0, false, false, false, false);
+    return new Consulta(0, new Date(), new Date(), false, 'Clinica', 'Mañana', 0, 0, 0, false, false, false, false, false, false);
   }
 }

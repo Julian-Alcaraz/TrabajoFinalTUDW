@@ -212,7 +212,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/odontologia/nueva',
           label: 'Odontologica',
-          orden: 4,
+          orden: 5,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -220,7 +220,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/oftalmologia/nueva',
           label: 'Oftalmologica',
-          orden: 4,
+          orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -228,7 +228,23 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/fonoaudiologia/nueva',
           label: 'Fonoaudiologica',
-          orden: 4,
+          orden: 7,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/prevencion/nueva',
+          label: 'Prevención',
+          orden: 8,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/social/nueva',
+          label: 'Trabajo Social',
+          orden: 9,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],

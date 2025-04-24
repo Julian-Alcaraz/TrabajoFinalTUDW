@@ -10,6 +10,8 @@ import { Chico } from '../../chico/entities/chico.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { ConsultaType, ConsultaEnum, TurnoType, TurnoEnum } from '../../common/const/const';
+import { Prevencion } from './prevencion.entity';
+import { Social } from './social.entity';
 
 @Entity('consulta')
 export class Consulta extends EntidadBasica {
@@ -28,16 +30,22 @@ export class Consulta extends EntidadBasica {
   @Column({ type: 'varchar', length: 1000, nullable: true })
   observaciones: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   derivacion_oftalmologia: boolean;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   derivacion_odontologia: boolean;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   derivacion_fonoaudiologia: boolean;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
+  derivacion_prevencion: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  derivacion_social: boolean;
+
+  @Column({ type: 'boolean', default: false })
   derivacion_externa: boolean;
 
   // Relaciones
@@ -71,4 +79,10 @@ export class Consulta extends EntidadBasica {
 
   @OneToOne(() => Oftalmologia, (oftalmologia) => oftalmologia.consulta)
   oftalmologia: Oftalmologia;
+
+  @OneToOne(() => Prevencion, (prevencion) => prevencion.consulta)
+  prevencion: Prevencion;
+
+  @OneToOne(() => Social, (social) => social.consulta)
+  social: Social;
 }

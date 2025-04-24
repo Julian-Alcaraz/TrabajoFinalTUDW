@@ -377,7 +377,6 @@ export class FormChicosComponent implements OnInit {
           this._chicoService.cargarChico(data).subscribe({
             next: (response: any) => {
               if (response.success) {
-                console.log(response);
                 const enlace = `<a class="underline font-bold" href="layout/chicos/ver/${response.data.id}">Ver chico</a>`;
                 const mensaje = response.message + ' ' + enlace;
                 MostrarNotificacion.mensajeExito(this.snackBar, mensaje, 5000);

@@ -119,8 +119,8 @@
         <ng-container matColumnDef="consultasBar">
           <th mat-header-cell *matHeaderCellDef>Especialidades visitadas en el año</th>
           <td mat-cell *matCellDef="let element">
-            <div [pTooltip]="element.actividad + ' de 4'">
-              <p-progressbar [value]="element.actividad * 25" [showValue]="false" />
+            <div [pTooltip]="element.actividad + ' de 6'">
+              <p-progressbar [value]="element.actividad * (16.66)" [showValue]="false" />
             </div>
           </td>
         </ng-container>
