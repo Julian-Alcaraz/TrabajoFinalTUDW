@@ -1,6 +1,6 @@
 <div class="card">
   <!-- 'Fonoaudiologia' -->
-  <app-tabs [tabs]="['General', 'Clínica', 'Odontología', 'Oftalmología']" (positionEmitter)="escucharParam($event)"></app-tabs>
+  <app-tabs [tabs]="['General', 'Clínica', 'Odontología', 'Oftalmología', 'Talleres']" (positionEmitter)="escucharParam($event)"></app-tabs>
   <div class="sm:p-0 md:p-4">
     <div class="mb-2">
       @switch (currentParam) {
@@ -17,6 +17,9 @@
           <app-oftalmologia />
         }
         @case (4) {
+          <app-talleres />
+        }
+        @case (5) {
           <app-fonoaudiologia />
         }
         @default {

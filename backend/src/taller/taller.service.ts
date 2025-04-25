@@ -58,6 +58,7 @@ export class TallerService {
   }
 
   // Faltaria revisar que si se quiere cambiar marco que la especialidad coincida con la del taller y al reves!!!!!!!!!!
+  // Se valida en front pero aca no.
   async update(id: number, cambios: UpdateTallerDto) {
     if (Object.keys(cambios).length === 0) throw new BadRequestException(`No se enviaron cambios`);
     const taller = await this.tallerORM.findOne({ where: { id: id }, relations: ['especialidad', 'curso', 'institucion', 'marco'] });

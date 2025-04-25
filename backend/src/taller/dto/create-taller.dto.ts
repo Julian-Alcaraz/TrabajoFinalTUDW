@@ -73,7 +73,7 @@ export class CreateTallerDto {
   readonly es_taller: boolean;
 
   @ApiProperty({ description: 'Indica si se entregaron cepillos en el taller' })
-  @IsBoolean({ message: 'esTaller debe ser un boleano' })
+  @IsBoolean({ message: 'entrega_cepillos debe ser un boleano' })
   @IsOptional()
   readonly entrega_cepillos: boolean;
 

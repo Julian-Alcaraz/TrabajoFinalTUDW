@@ -32,4 +32,22 @@ export class TallerService {
   modificarTaller(id: number, data: any): Observable<any> {
     return this._http.patch(this.url + 'taller/' + id, data);
   }
+
+  // ============================ Graficos ============================
+
+  countTypeByYear(year: number, id_curso: number, porcentaje: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countTypeByYear/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+
+  countTallerLastYears(year: number): Observable<any> {
+    return this._http.get(`${this.url}taller/contarxAnios/${year}`);
+  }
+
+  countParticipantesxYear(year: number, id_curso: number, porcentaje: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countParticipantesxYear/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+
+  countCantEncuentrosxMarco(year: number, id_curso: number, porcentaje: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countCantEncuentrosxMarco/${year}/curso/${id_curso}/${porcentaje}`);
+  }
 }

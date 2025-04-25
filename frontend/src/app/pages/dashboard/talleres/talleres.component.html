@@ -1,0 +1,35 @@
+<div class="p-2">
+  <app-year-grado-form (cambioForm)="cambioForm($event)" />
+</div>
+<form>
+  <button>Boton!</button>
+</form>
+<div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Talleres por año" [labels]="lastFourYears" [sets]="dataTalleresxAnio" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Tipos de talleres por año" [labels]="this.con.EspecialidadEnum" [sets]="dataTalleresxAnioxEspecialidad" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Participantes por especialidad" [labels]="this.con.EspecialidadEnum" [sets]="dataParticipantesTalleresxAnio" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <!-- ----------- -->
+  <!-- NO CAMBIAR EL ORDEN DE LAS LABELS DE LOS GRAFICOS DE ABAJO, ALTERA EL ORDEN DE LOS MARCOS -->
+  <!-- ----------- -->
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Encuentros por marco de clinica" [labels]="['Educación para la Salud', 'Participación y Bienestar Infantil', 'Prevención de Enfermedades', 'Prevencion y Promoción Integral', 'Promoción de Salud']" [sets]="cantEncuentrosxMarcoClinica" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Encuentros por marco de prevencion" [labels]="['Consumos Problemáticos', 'Día de la Lucha contra las Adicciones', 'Día Mundial sin Alcohol', 'Día Mundial sin Tabaco', 'Elecciones', 'Emociones', 'Habilidades para la Vida', 'Identidad']" [sets]="cantEncuentrosxMarcoPrevencion" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Encuentros por marco de fonoaudiologia" [labels]="['Deteccion', 'Higiene y Salud', 'Indroducción Lectoescritura', 'Prevención y promoción']" [sets]="cantEncuentrosxMarcoFonoaudiologia" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Encuentros por marco de nutricion" [labels]="['Alimentación Saludable', 'Estadística', 'Imagen Corporal', 'Patología Alimentaria']" [sets]="cantEncuentrosxMarcoNutricion" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-bar-graph [loading]="loading" titulo="Encuentros por marco de odontologia" [labels]="['Motivación', 'Prevención', 'Prevención de Caries', 'Teórico']" [sets]="cantEncuentrosxMarcoOdontologia" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
+  </div>
+</div>

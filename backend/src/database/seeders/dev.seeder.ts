@@ -737,8 +737,8 @@ export class DevSeeder implements Seeder {
       ]);
 
       console.log('Seeding talleres...');
-      const batchSize = 1000;
-      for (let i = 0; i < 1000; i += batchSize) {
+      const batchSize = 100;
+      for (let i = 0; i < 100; i += batchSize) {
         const talleres = await Promise.all(
           Array(batchSize)
             .fill('')
@@ -768,9 +768,13 @@ export class DevSeeder implements Seeder {
                   entregaCepillos = null;
                   break;
               }
+
               const institucionSeleccionada = faker.helpers.arrayElement(instituciones);
+              const cursosFiltrados = cursos.filter((curso) => curso.nivel === institucionSeleccionada.tipo);
+              const cursoSeleccionado = faker.helpers.arrayElement(cursosFiltrados);
+
               const taller = await tallerFactory.make({
-                curso: cursos.find((curso) => curso.nivel === institucionSeleccionada.tipo),
+                curso: cursoSeleccionado,
                 institucion: institucionSeleccionada,
                 especialidad: especialidadSeleccionada,
                 marco: marcoSeleccionado,

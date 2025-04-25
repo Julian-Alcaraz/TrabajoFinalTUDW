@@ -100,6 +100,7 @@ export class BarGraphComponent implements OnInit, OnChanges {
     }
   }
   actualizarSets() {
+    /*
     const datasets = [];
     let color = 0;
     for (const set of this.sets) {
@@ -117,5 +118,26 @@ export class BarGraphComponent implements OnInit, OnChanges {
       labels: this.labels,
       datasets: datasets,
     };
+    */
+    // Esto es porque me quedaba sin colores para los graficos mas grandes.
+    const datasets = [];
+    let color = 0;
+    for (const set of this.sets) {
+      const colorIndex = color % this.barColors.length;
+      datasets.push({
+        label: set.label,
+        data: set.data,
+        backgroundColor: this.barColors[colorIndex].background,
+        borderColor: this.barColors[colorIndex].border,
+        borderWidth: 1,
+      });
+      color++;
+    }
+
+    this.basicData = {
+      labels: this.labels,
+      datasets: datasets,
+    };
+    /* */
   }
 }

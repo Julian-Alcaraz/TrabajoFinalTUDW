@@ -7,12 +7,16 @@ import { ResponseTallerDto } from './dto/response-taller.dto';
 import { TallerService } from './taller.service';
 import { CreateTallerDto } from './dto/create-taller.dto';
 import { UpdateTallerDto } from './dto/update-taller.dto';
+import { GraficosService } from './graficos.service';
 
 @Controller('taller')
 @UseGuards(JwtAuthGuard)
 @ApiTags('taller')
 export class TallerController {
-  constructor(private readonly tallerService: TallerService) {}
+  constructor(
+    private readonly tallerService: TallerService,
+    private readonly graficosService: GraficosService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Crea un nuevo taller' })
@@ -96,6 +100,48 @@ export class TallerController {
       success: true,
       data: tallerBorrado,
       message: 'Taller borrado logicamente con exito',
+    };
+  }
+
+  // ============================ Graficos ============================
+
+  @Get('countTypeByYear/:year/curso/:id_curso/:porcentaje')
+  async talleresxEspecialidad(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const talleres = await this.graficosService.countTypeByYear(year, id_curso, porcentaje);
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con exito',
+    };
+  }
+
+  @Get('contarxAnios/:year')
+  async contarxAnios(@Param('year', ParseIntPipe) year: number) {
+    const talleres = await this.graficosService.countByYear(year);
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con exito',
+    };
+  }
+
+  @Get('countParticipantesxYear/:year/curso/:id_curso/:porcentaje')
+  async contarParticipantesxAnio(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const talleres = await this.graficosService.countParticipantesxYear(year, id_curso, porcentaje);
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con exito',
+    };
+  }
+
+  @Get('countCantEncuentrosxMarco/:year/curso/:id_curso/:porcentaje')
+  async countCantEncuentrosxMarco(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const talleres = await this.graficosService.countCantEncuentrosxMarco(year, id_curso, porcentaje);
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con exito',
     };
   }
 }

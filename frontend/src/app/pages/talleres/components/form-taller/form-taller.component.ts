@@ -67,6 +67,27 @@ export class FormTallerComponent implements OnInit {
     private _marcoService: MarcoService,
   ) {
     this.tallerForm = this.fb.group({
+      nombre: ['test', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      fecha: ['', [Validators.required]],
+      duracion: ['1', [Validators.required]],
+      recursos: ['Al', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
+      cant_encuentros: ['1', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarSoloNumeros]],
+      destinatarios: ['PSA', [Validators.required]],
+      cant_participantes: ['1', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarSoloNumeros]],
+      turno: ['Tarde', [Validators.required]],
+      frecuencia: ['Semanal', [Validators.required]],
+      es_taller: ['', [Validators.required]],
+      conjunto_con: ['Pasantes', [Validators.required]],
+      entrega_cepillos: [''],
+      id_curso: [1, [Validators.required]],
+      id_institucion: [1, [Validators.required]],
+      id_especialidad: ['', [Validators.required]],
+      id_marco: ['', [Validators.required]],
+    });
+  }
+
+  /*
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       fecha: ['', [Validators.required]],
       duracion: ['', [Validators.required]],
@@ -79,14 +100,12 @@ export class FormTallerComponent implements OnInit {
       frecuencia: ['', [Validators.required]],
       es_taller: ['', [Validators.required]],
       conjunto_con: ['', [Validators.required]],
-      entrega_cepillos: ['', [Validators.required]],
+      entrega_cepillos: [''],
       id_curso: ['', [Validators.required]],
       id_institucion: ['', [Validators.required]],
       id_especialidad: ['', [Validators.required]],
       id_marco: ['', [Validators.required]],
-    });
-  }
-
+  */
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.tallerForm.get(input) as FormControl;
   }
@@ -375,14 +394,14 @@ export class FormTallerComponent implements OnInit {
       ...(this.taller?.cant_participantes !== this.tallerForm.value.cant_participantes && { cant_participantes: parseInt(this.tallerForm.value.cant_participantes) }),
       ...(this.taller?.turno !== this.tallerForm.value.turno && { turno: this.tallerForm.value.turno }),
       ...(this.taller?.frecuencia !== this.tallerForm.value.frecuencia && { frecuencia: this.tallerForm.value.frecuencia }),
-      ...(this.taller?.es_taller !== this.tallerForm.value.es_taller && { es_taller: this.tallerForm.value.es_taller === 'true' }),
       ...(this.taller?.conjunto_con !== this.tallerForm.value.conjunto_con && { conjunto_con: this.tallerForm.value.conjunto_con }),
-      ...(this.taller?.entrega_cepillos !== this.tallerForm.value.entrega_cepillos && { entrega_cepillos: this.tallerForm.value.entrega_cepillos }),
       ...(stringFechaActual !== stringFechaMod && { fecha: valorFecha }),
       ...(this.taller?.curso?.id !== +this.tallerForm.value.id_curso && { id_curso: parseInt(this.tallerForm.value.id_curso) }),
       ...(this.taller?.institucion?.id !== +this.tallerForm.value.id_institucion && { id_institucion: parseInt(this.tallerForm.value.id_institucion) }),
       ...(this.taller?.especialidad?.id !== +this.tallerForm.value.id_especialidad && { id_especialidad: parseInt(this.tallerForm.value.id_especialidad) }),
       ...(this.taller?.marco?.id !== +this.tallerForm.value.id_marco && { id_marco: parseInt(this.tallerForm.value.id_marco) }),
+      ...(this.taller?.entrega_cepillos !== this.tallerForm.value.entrega_cepillos && { entrega_cepillos: this.tallerForm.value.entrega_cepillos === 'true' }),
+      ...(this.taller?.es_taller !== this.tallerForm.value.es_taller && { es_taller: this.tallerForm.value.es_taller === 'true' }),
     };
 
     return data;
