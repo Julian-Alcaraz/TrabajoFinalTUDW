@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { validarRango } from '@app/utils/validadores';
 
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -37,21 +38,21 @@ export class CamposOdontologiaComponent implements OnInit {
           dientesPermanentesMin: new FormControl(),
           dientesPermanentesMax: new FormControl(),
         },
-        { validators: this.validarRango('dientesPermanentesMin', 'dientesPermanentesMax') },
+        { validators: validarRango('dientesPermanentesMin', 'dientesPermanentesMax') },
       ),
       rangoDientesTemporales: new FormGroup(
         {
           dientesTemporalesMin: new FormControl(),
           dientesTemporalesMax: new FormControl(),
         },
-        { validators: this.validarRango('dientesTemporalesMin', 'dientesTemporalesMax') },
+        { validators: validarRango('dientesTemporalesMin', 'dientesTemporalesMax') },
       ),
       rangoSellador: new FormGroup(
         {
           selladorMin: new FormControl(),
           selladorMax: new FormControl(),
         },
-        { validators: this.validarRango('selladorMin', 'selladorMax') },
+        { validators: validarRango('selladorMin', 'selladorMax') },
       ),
       topificacion: new FormControl(),
       cepillado: new FormControl(),
@@ -63,21 +64,6 @@ export class CamposOdontologiaComponent implements OnInit {
     });
     this.form.addControl('especificas', this.especificas);
   }
-
-  validarRango: (campoMin: string, campoMax: string) => ValidatorFn = (campoMin, campoMax) => {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const formGroup = control as FormGroup;
-      const valorMin = formGroup.get(campoMin)?.value;
-      const valorMax = formGroup.get(campoMax)?.value;
-      if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
-        return null;
-      }
-      if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
-        return null;
-      }
-      return { rangoInvalido: true };
-    };
-  };
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;

@@ -76,6 +76,8 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     { nombre: '2 Especialidades visitadas', valor: 2 },
     { nombre: '3 Especialidades visitadas', valor: 3 },
     { nombre: '4 Especialidades visitadas', valor: 4 },
+    { nombre: '5 Especialidades visitadas', valor: 5 },
+    { nombre: '6 Especialidades visitadas', valor: 6 },
   ];
   public sexoOptions: string[] = this.con.SexoEnum;
   public estadoControl: FormControl = new FormControl(null);

@@ -120,6 +120,12 @@
       <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Odontologia')">
         <app-campos-odontologia [form]="formBusqueda" />
       </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Prevencion')">
+        <app-campos-prevencion [form]="formBusqueda" />
+      </div>
+      <div *ngIf="this.formBusqueda.get('consultasSeleccionadas')?.value.includes('Social')">
+        <app-campos-social [form]="formBusqueda" />
+      </div>
     </p-panel>
   </div>
   <!-- Buscar -->

@@ -268,6 +268,10 @@ export class ConsultaService {
   }
 
   private async procesarPrevencion(consulta: any) {
+    if (consulta.especificas?.rangoEdadInicioconsumo) {
+      consulta.especificas = { ...consulta.especificas, edad_inicio_consumo: Between(consulta.especificas.rangoEdadInicioconsumo.edadInicioMin, consulta.especificas.rangoEdadInicioconsumo.edadInicioMax) };
+      delete consulta.especificas.rangoEdadInicioconsumo;
+    }
     return consulta.especificas; // devuevle el filtro
   }
 

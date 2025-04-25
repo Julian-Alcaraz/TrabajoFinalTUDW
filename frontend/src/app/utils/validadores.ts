@@ -100,3 +100,17 @@ export function ValidarHora(control: AbstractControl): ValidationErrors | null {
   }
   return null;
 }
+export function validarRango (campoMin: string, campoMax: string) : ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      // const formGroup = control as FormGroup;
+      const valorMin = control.get(campoMin)?.value;
+      const valorMax = control.get(campoMax)?.value;
+      if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
+        return null;
+      }
+      if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
+        return null;
+      }
+      return { rangoInvalido: true };
+    };
+  };

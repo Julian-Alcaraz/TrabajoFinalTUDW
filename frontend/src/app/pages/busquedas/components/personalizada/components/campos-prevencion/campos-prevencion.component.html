@@ -1,0 +1,57 @@
+<div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8" [formGroup]="especificas">
+  <!-- Rango de edad -->
+  <div formGroupName="rangoEdadInicioconsumo" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+    <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Edad Inicio Consumo</p>
+    <!-- Dientes Permanentes Min -->
+    <div>
+      <p-iftalabel>
+        <p-inputnumber formControlName="edadInicioMin" inputId="edadInicioMin" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+        <label for="edadInicioMin">Min.</label>
+      </p-iftalabel>
+    </div>
+    <!-- Dientes Permanentes Max -->
+    <div>
+      <p-iftalabel>
+        <p-inputnumber formControlName="edadInicioMax" inputId="edadInicioMax" pKeyFilter="num" mode="decimal" [min]="0" class="w-full h-16" [locale]="'es'" />
+        <label for="edadInicioMax">Max.</label>
+      </p-iftalabel>
+    </div>
+    <div *ngIf="especificas.get('rangoEdadInicioconsumo')?.errors" class="col-span-2 text-red-600 text-sm">Rango de edad inicio de consumo inválido.</div>
+  </div>
+  <!-- Motivo Consumo -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="motivoCon" idInput="motivo_consumo" formControlName="motivo_consumo" [checkmark]="true" [showClear]="true" class="w-full h-16" />
+      <label for="motivo_consumo">Motivo Consumo</label>
+    </p-iftalabel>
+  </div>
+  <!-- frecuencia -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="frecuenciaCon" idInput="frecuencia" formControlName="frecuencia" [checkmark]="true" [showClear]="true" class="w-full h-16" />
+      <label for="frecuencia">Frecuencia de consumo</label>
+    </p-iftalabel>
+  </div>
+  <!-- COnsumo problematico -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="consumoProblematicoCon" idInput="consumo_problematico" formControlName="consumo_problematico" [checkmark]="true" [showClear]="true" class="w-full h-16" />
+      <label for="consumo_problematico">Consumo problematico</label>
+    </p-iftalabel>
+  </div>
+  <!-- Otra problematica -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="otraProblematicaCon" idInput="otra_problematica" formControlName="otra_problematica" [checkmark]="true" [showClear]="true" class="w-full h-16" />
+      <label for="otra_problematica">Otra problematica</label>
+    </p-iftalabel>
+  </div>
+  <!-- Derivacion externa-->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="derivacionesOptions" formControlName="derivaciones" optionLabel="nombre" optionValue="valor" [checkmark]="true" [showClear]="true" styleClass="w-full h-16" />
+      <!-- <p-multiselect [options]="derivacionesOptions" [filter]="false" [showHeader]="false" formControlName="derivaciones" optionLabel="nombre" optionValue="valor" styleClass="w-full h-16" /> -->
+      <label for="derivaciones">Derivacion externa</label>
+    </p-iftalabel>
+  </div>
+</div>
