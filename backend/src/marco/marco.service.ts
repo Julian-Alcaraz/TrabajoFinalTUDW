@@ -22,8 +22,9 @@ export class MarcoService {
     return this.marcoORM.save(nuevoMarco);
   }
 
-  findAll() {
-    return this.marcoORM.find({ where: { deshabilitado: false }, relations: ['especialidad'] });
+  // Retorna todos los marcos ordenados por especialidad y por nombre
+  async findAll() {
+    return this.marcoORM.createQueryBuilder('marco').leftJoinAndSelect('marco.especialidad', 'especialidad').where('marco.deshabilitado = false').orderBy('especialidad.nombre', 'ASC').addOrderBy('marco.nombre', 'ASC').getMany();
   }
 
   async findOne(id: number) {

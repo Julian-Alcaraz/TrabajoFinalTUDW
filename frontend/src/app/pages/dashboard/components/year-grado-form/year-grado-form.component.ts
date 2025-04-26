@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CursoService } from '@services/curso.service';
@@ -9,26 +9,30 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
 import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-year-grado-form',
   standalone: true,
-  imports: [CommonModule, ButtonModule, SelectButton, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, ButtonModule, SelectButton, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent, RadioButtonModule],
   templateUrl: './year-grado-form.component.html',
   styleUrl: './year-grado-form.component.css',
 })
 export class YearGradoFormComponent implements OnInit {
+  @Input() esTaller?: boolean = false;
   @Output() cambioForm = new EventEmitter<any>();
+
   optionForm: FormGroup;
   cursos: Curso[] = [];
   maxDate: Date;
   searchingCursos = false;
   textoBoton = 'Porcentajes';
+  /*
   porcentajeOptions = [
     { nombre: 'Cantidades', valor: '0' },
     { nombre: 'Porcentajes', valor: '1' },
   ];
-
+  */
   constructor(
     private fb: FormBuilder,
     private _cursoService: CursoService,
@@ -38,6 +42,7 @@ export class YearGradoFormComponent implements OnInit {
       year: ['', []],
       id_curso: [null, [Validators.required]],
       porcentaje: ['0', [Validators.required]],
+      participantes: ['0', [Validators.required]],
     });
   }
 
@@ -48,7 +53,7 @@ export class YearGradoFormComponent implements OnInit {
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.optionForm.get(input) as FormControl;
   }
-
+  /*
   onClickPorcentajes() {
     const porcentaje = this.optionForm.get('porcentaje')?.value;
     if (porcentaje === '1') {
@@ -59,7 +64,7 @@ export class YearGradoFormComponent implements OnInit {
       this.textoBoton = 'Cantidades';
     }
   }
-
+  */
   obtenerCursos(): any {
     this.searchingCursos = true;
     this._cursoService.obtenerCursos().subscribe({
@@ -89,7 +94,12 @@ export class YearGradoFormComponent implements OnInit {
       nombreCurso = cursoSeleccionado[0].nombre;
     }
     const porcentaje = this.optionForm.value.porcentaje;
-    this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje });
+    if (this.esTaller) {
+      const participantes = this.optionForm.value.participantes;
+      this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje, participantes });
+    } else {
+      this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje });
+    }
   }
 
   resetearForm() {

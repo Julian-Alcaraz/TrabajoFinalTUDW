@@ -32,14 +32,14 @@ export class ConsultasxanioComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     const currentYear = new Date().getFullYear();
-    this.maxDate = new Date(currentYear, 11, 31); // 11 es diciembre (meses son 0 indexados)
+    this.maxDate = new Date(currentYear, 11, 31);
     this.buscarForm = this.fb.group({ year: [null, Validators.required] });
-
-    // comentar esto para que no busque automaticamente
-    this.date = new Date();
   }
 
   ngOnInit() {
+    const year2025 = new Date(2025, 0, 1);
+    this.buscarForm.patchValue({ year: year2025 });  // comentar esto para que no busque automaticamente
+    this.buscar();
     this.listenPager();
   }
 
@@ -57,14 +57,17 @@ export class ConsultasxanioComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   submit() {
     this._tableService.resetService();
     this.buscar();
   }
+
   buscar() {
     this.searching = true;
-    if (this.date) {
-      const anio = this.date.getFullYear();
+    const selectedDate = this.buscarForm.get('year')?.value;
+    if (selectedDate) {
+      const anio = new Date(selectedDate).getFullYear();
       if (anio) {
         forkJoin({
           total: this._consultasService.obtenerTotalxAnio(anio),

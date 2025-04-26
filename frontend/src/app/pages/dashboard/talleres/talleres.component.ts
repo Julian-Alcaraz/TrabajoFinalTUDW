@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnInit } from '@angular/core';
 
@@ -6,18 +7,26 @@ import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import { TallerService } from '@app/services/taller.service';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
+import { EspecialidadService } from '@app/services/especialidad.service';
+import { Especialidad } from '@app/models/especialidad.model';
+import { MarcoService } from '@app/services/marco.service';
+import { Marco } from '@app/models/marco.model';
+import { LoadingComponent } from '@components/loading/loading.component';
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 
 @Component({
   selector: 'app-talleres',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent],
+  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent],
   templateUrl: './talleres.component.html',
-  styleUrl: './talleres.component.css',
 })
 export class TalleresComponent implements OnInit {
   public con = Constantes;
 
+  public searchingMarcos = true;
+  public searchingEspecialidades = true;
   public loading = true;
+
   public porcentaje = 0;
   public year = 0;
   public id_curso = 0;
@@ -25,20 +34,22 @@ export class TalleresComponent implements OnInit {
   public cursoLabel = '';
   public lastFourYears: number[];
   public currentYear: number;
+  public participantes = 0;
+  public participantesOEncuentros = 'Encuentros';
+  public especialidades: Especialidad[] = [];
+  public marcos: Record<string, string[]> = {};
 
-  public cantEncuentrosxMarcoPrevencion: any = [];
-  public cantEncuentrosxMarcoFonoaudiologia: any = [];
-  public cantEncuentrosxMarcoNutricion: any = [];
-  public cantEncuentrosxMarcoOdontologia: any = [];
-  public cantEncuentrosxMarcoClinica: any = [];
   public dataCantEncuentrosxMarco: any = [];
   public dataParticipantesTalleresxAnio: any = [];
   public dataTalleresxAnioxEspecialidad: any = [];
   public dataTalleresxAnio: any = [];
+  public dataTipoTaller: any = [];
 
   constructor(
     private snackBar: MatSnackBar,
     private _tallerService: TallerService,
+    private _especialidadService: EspecialidadService,
+    private _marcoService: MarcoService,
   ) {
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
@@ -46,13 +57,18 @@ export class TalleresComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerGraficos();
+    this.obtenerEspecialidades();
+    this.obtenerMarcos();
   }
+
   async obtenerGraficos() {
     const promesas = [
+      //
       this.countTypeTalleresxanio(),
       this.countTalleresxAnio(),
-      this.countParticipantesxAnio(),
+      this.countParticipantesxEspecialidad(),
       this.countCantEncuentrosxMarco(),
+      this.countCantTalleresxTipo(),
     ];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
@@ -62,6 +78,41 @@ export class TalleresComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  obtenerEspecialidades() {
+    this.searchingEspecialidades = true;
+    this._especialidadService.obtenerEspecialidades().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.especialidades = response.data;
+        }
+        this.searchingEspecialidades = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
+  }
+
+  obtenerMarcos() {
+    this.searchingMarcos = true;
+    this._marcoService.obtenerMarcos().subscribe({
+      next: (response: any) => {
+        this.marcos = response.data.reduce((acc: Record<string, string[]>, marco: Marco) => {
+          const especialidad: string = marco.especialidad!.nombre.toLowerCase();
+          if (!acc[especialidad]) {
+            acc[especialidad] = [];
+          }
+          acc[especialidad].push(marco.nombre);
+          return acc;
+        }, {});
+        this.searchingMarcos = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 
   countTypeTalleresxanio() {
@@ -100,9 +151,10 @@ export class TalleresComponent implements OnInit {
       });
     });
   }
-  countParticipantesxAnio() {
+
+  countParticipantesxEspecialidad() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countParticipantesxYear(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._tallerService.countParticipantesxEspecialidad(this.currentYear, this.id_curso, this.porcentaje, this.participantes).subscribe({
         next: (response: any) => {
           this.dataParticipantesTalleresxAnio = [];
           if (response.success) {
@@ -118,21 +170,30 @@ export class TalleresComponent implements OnInit {
   }
 
   countCantEncuentrosxMarco() {
-    this.cantEncuentrosxMarcoClinica = [];
-    this.cantEncuentrosxMarcoPrevencion = [];
-    this.cantEncuentrosxMarcoFonoaudiologia = [];
-    this.cantEncuentrosxMarcoNutricion = [];
-    this.cantEncuentrosxMarcoOdontologia = [];
-
     return new Promise((resolve, reject) => {
-      this._tallerService.countCantEncuentrosxMarco(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._tallerService.countCantEncuentrosxMarco(this.currentYear, this.id_curso, this.porcentaje, this.participantes).subscribe({
         next: (response: any) => {
+          this.dataCantEncuentrosxMarco = [];
           if (response.success) {
-            this.cantEncuentrosxMarcoClinica = response.data.clinica;
-            this.cantEncuentrosxMarcoPrevencion = response.data.prevencion;
-            this.cantEncuentrosxMarcoFonoaudiologia = response.data.fonoaudiologia;
-            this.cantEncuentrosxMarcoNutricion = response.data.nutricion;
-            this.cantEncuentrosxMarcoOdontologia = response.data.odontologia;
+            this.dataCantEncuentrosxMarco = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+
+  countCantTalleresxTipo() {
+    return new Promise((resolve, reject) => {
+      this._tallerService.countCantTalleresxTipo(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.dataTipoTaller = [];
+          if (response.success) {
+            this.dataTipoTaller = { label: '', data: response.data };
+            console.log(this.dataTipoTaller)
           }
           resolve(true);
         },
@@ -168,7 +229,19 @@ export class TalleresComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
+    if (event.participantes !== '') {
+      this.participantes = +event.participantes;
+      if (this.participantes === 1) {
+        this.participantesOEncuentros = 'Participantes';
+      } else if (this.participantes === 0) {
+        this.participantesOEncuentros = 'Encuentros';
+      }
+    }
     this.subTitulo = '' + yearLabel + cursoLabel;
     this.cursoLabel = cursoLabel;
+  }
+
+  getMarcos(especialidad: string): string[] {
+    return this.marcos[especialidad] || [];
   }
 }

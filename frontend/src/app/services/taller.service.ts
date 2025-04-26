@@ -43,11 +43,15 @@ export class TallerService {
     return this._http.get(`${this.url}taller/contarxAnios/${year}`);
   }
 
-  countParticipantesxYear(year: number, id_curso: number, porcentaje: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countParticipantesxYear/${year}/curso/${id_curso}/${porcentaje}`);
+  countParticipantesxEspecialidad(year: number, id_curso: number, porcentaje: number, participantes: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countParticipantesxEspecialidad/${year}/curso/${id_curso}/${porcentaje}/${participantes}`);
   }
 
-  countCantEncuentrosxMarco(year: number, id_curso: number, porcentaje: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countCantEncuentrosxMarco/${year}/curso/${id_curso}/${porcentaje}`);
+  countCantEncuentrosxMarco(year: number, id_curso: number, porcentaje: number, participantes: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countCantEncuentrosxMarco/${year}/curso/${id_curso}/${porcentaje}/${participantes}`);
+  }
+
+  countCantTalleresxTipo(year: number, id_curso: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countCantTalleresxTipo/${year}/curso/${id_curso}`);
   }
 }

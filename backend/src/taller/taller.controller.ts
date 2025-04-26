@@ -125,9 +125,9 @@ export class TallerController {
     };
   }
 
-  @Get('countParticipantesxYear/:year/curso/:id_curso/:porcentaje')
-  async contarParticipantesxAnio(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const talleres = await this.graficosService.countParticipantesxYear(year, id_curso, porcentaje);
+  @Get('countParticipantesxEspecialidad/:year/curso/:id_curso/:porcentaje/:participantes')
+  async countParticipantesxEspecialidad(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number, @Param('participantes', ParseIntPipe) participantes: number) {
+    const talleres = await this.graficosService.countParticipantesxEspecialidad(year, id_curso, porcentaje, participantes);
     return {
       success: true,
       data: talleres,
@@ -135,9 +135,19 @@ export class TallerController {
     };
   }
 
-  @Get('countCantEncuentrosxMarco/:year/curso/:id_curso/:porcentaje')
-  async countCantEncuentrosxMarco(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
-    const talleres = await this.graficosService.countCantEncuentrosxMarco(year, id_curso, porcentaje);
+  @Get('countCantEncuentrosxMarco/:year/curso/:id_curso/:porcentaje/:participantes')
+  async countCantEncuentrosxMarco(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number, @Param('porcentaje', ParseIntPipe) porcentaje: number, @Param('participantes', ParseIntPipe) participantes: number) {
+    const talleres = await this.graficosService.countCantEncuentrosxMarco(year, id_curso, porcentaje, participantes);
+    return {
+      success: true,
+      data: talleres,
+      message: 'Talleres obtenidos con exito',
+    };
+  }
+
+  @Get('countCantTalleresxTipo/:year/curso/:id_curso')
+  async countCantTalleresxTipo(@Param('year', ParseIntPipe) year: number, @Param('id_curso', ParseIntPipe) id_curso: number) {
+    const talleres = await this.graficosService.countCantTalleresxTipo(year, id_curso);
     return {
       success: true,
       data: talleres,

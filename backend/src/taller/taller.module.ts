@@ -14,6 +14,5 @@ import { GraficosService } from './graficos.service';
   imports: [TypeOrmModule.forFeature([Taller, Especialidad, Curso, Institucion, Marco])],
   controllers: [TallerController],
   providers: [TallerService, GraficosService],
-  exports: [TallerService, GraficosService],
 })
 export class TallerModule {}
