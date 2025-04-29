@@ -28,7 +28,6 @@ import { Taller } from '@app/models/taller.model';
   standalone: true,
   imports: [InputTextComponent, ReactiveFormsModule, InputSelectEnumComponent, InputDateComponent, InputTextareaComponent, LoadingComponent, InputSelectComponent],
   templateUrl: './form-taller.component.html',
-  styleUrl: './form-taller.component.css',
 })
 export class FormTallerComponent implements OnInit {
   @Input() esFormulario = true;
@@ -67,27 +66,6 @@ export class FormTallerComponent implements OnInit {
     private _marcoService: MarcoService,
   ) {
     this.tallerForm = this.fb.group({
-      nombre: ['test', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      fecha: ['', [Validators.required]],
-      duracion: ['1', [Validators.required]],
-      recursos: ['Al', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
-      observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
-      cant_encuentros: ['1', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarSoloNumeros]],
-      destinatarios: ['PSA', [Validators.required]],
-      cant_participantes: ['1', [Validators.required, Validators.minLength(1), Validators.maxLength(5), ValidarSoloNumeros]],
-      turno: ['Tarde', [Validators.required]],
-      frecuencia: ['Semanal', [Validators.required]],
-      es_taller: ['', [Validators.required]],
-      conjunto_con: ['Pasantes', [Validators.required]],
-      entrega_cepillos: [''],
-      id_curso: [1, [Validators.required]],
-      id_institucion: [1, [Validators.required]],
-      id_especialidad: ['', [Validators.required]],
-      id_marco: ['', [Validators.required]],
-    });
-  }
-
-  /*
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
       fecha: ['', [Validators.required]],
       duracion: ['', [Validators.required]],
@@ -105,7 +83,9 @@ export class FormTallerComponent implements OnInit {
       id_institucion: ['', [Validators.required]],
       id_especialidad: ['', [Validators.required]],
       id_marco: ['', [Validators.required]],
-  */
+    });
+  }
+
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.tallerForm.get(input) as FormControl;
   }

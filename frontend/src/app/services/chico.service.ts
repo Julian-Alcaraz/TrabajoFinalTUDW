@@ -29,10 +29,11 @@ export class ChicoService {
     return this._http.post(this.url + 'chico', data);
   }
 
-  obtenerChicos(): Observable<any> {
+  obtenerChicos(deshabilitado: number): Observable<any> {
     const fecha = new Date();
     const anio = fecha.getFullYear();
-    return this._http.get(this.url + 'chico/activity/' + anio);
+    console.log(this.url + 'chico/activity/' + anio + '/' + deshabilitado)
+    return this._http.get(this.url + 'chico/activity/' + anio + '/' + deshabilitado);
   }
 
   modificarChico(id: number, data: any): Observable<any> {

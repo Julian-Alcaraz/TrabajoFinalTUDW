@@ -41,11 +41,11 @@ export class ChicoController {
     };
   }
 
-  @Get('/activity/:year')
+  @Get('/activity/:year/:deshabilitado')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
-  async findAllByActivity(@Param('year', ParseIntPipe) year: number) {
-    const chicos = await this.chicoService.findAllWithActivity(year);
+  async findAllByActivity(@Param('year', ParseIntPipe) year: number, @Param('deshabilitado', ParseIntPipe) deshabilitado: number) {
+    const chicos = await this.chicoService.findAllWithActivity(year, deshabilitado);
     return {
       success: true,
       data: chicos,

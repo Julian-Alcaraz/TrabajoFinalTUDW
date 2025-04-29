@@ -34,7 +34,7 @@ export class MainSeeder implements Seeder {
           apellido: 'Admin',
           email: 'Admin@gmail.com',
           contrasenia: codificarContrasenia('11111111'),
-          dni: 11111111,
+          dni: 11111112,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
         },

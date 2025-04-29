@@ -31,8 +31,8 @@ export class ChicoService {
     return this.chicoORM.find();
   }
 
-  async findAllWithActivity(year: number) {
-    const result = await this.chicoORM
+  async findAllWithActivity(year: number, deshabilitado: number) {
+    const query = this.chicoORM
       .createQueryBuilder('chico')
       .leftJoin('chico.barrio', 'barrio')
       .leftJoin('barrio.localidad', 'localidad')
@@ -40,10 +40,13 @@ export class ChicoService {
       .addSelect((subQuery) => {
         return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado = false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
-      .orderBy('chico.created_at', 'DESC')
-      .getRawMany();
+      .orderBy('chico.created_at', 'DESC');
 
-    return result;
+    if (deshabilitado !== 1) {
+      query.where('chico.deshabilitado = false');
+    }
+
+    return await query.getRawMany();
   }
 
   async findOne(id: number) {

@@ -40,7 +40,6 @@ import { CursoService } from '@app/services/curso.service';
   standalone: true,
   imports: [CommonModule, MatTableModule, MatSortModule, TagModule, TooltipModule, LoadingComponent, MatPaginator, MatPaginatorModule, PanelModule, IftaLabelModule, InputTextModule, InputNumberModule, SelectModule, ReactiveFormsModule],
   templateUrl: './lista-taller.component.html',
-  styleUrl: './lista-taller.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaTallerComponent implements OnInit, AfterViewInit {
@@ -225,7 +224,7 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
 
   obtenerTalleres() {
     this.searching = true;
-    this._tallerService.obtenerTodosTalleres().subscribe({
+    this._tallerService.obtenerTalleres().subscribe({
       next: (response: any) => {
         if (response.success) {
           this.talleres.data = response.data;
@@ -319,24 +318,10 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     this.marcoControl.setValue(null);
   }
 
-  habilitar(id: number) {
-    Swal.fire({
-      title: '¿Habilitar taller?',
-      showDenyButton: true,
-      confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Confirmar',
-      denyButtonText: 'Cancelar',
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        const edit = { deshabilitado: false };
-        this.modificarTaller(id, edit);
-      }
-    });
-  }
-
   inhabilitar(id: number) {
     Swal.fire({
-      title: '¿Deshabilitar taller?',
+      title: '¿Eliminar taller?',
+      text: 'El taller se borrara permantenmente.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -362,22 +347,6 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
       error: (err: any) => {
         MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
       },
-    });
-  }
-
-  notificar(id: number) {
-    Swal.fire({
-      title: 'Error',
-      text: 'Para poder ver o editar el taller, usted debe habilitarlo',
-      icon: 'warning',
-      showDenyButton: true,
-      confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Habilitar taller',
-      denyButtonText: 'Cancelar',
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.habilitar(id);
-      }
     });
   }
 

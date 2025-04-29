@@ -193,7 +193,6 @@ export class TalleresComponent implements OnInit {
           this.dataTipoTaller = [];
           if (response.success) {
             this.dataTipoTaller = { label: '', data: response.data };
-            console.log(this.dataTipoTaller)
           }
           resolve(true);
         },

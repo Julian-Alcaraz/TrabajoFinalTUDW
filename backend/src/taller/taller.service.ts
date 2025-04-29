@@ -48,7 +48,7 @@ export class TallerService {
   }
 
   findAllHabilitados() {
-    return this.tallerORM.find({ where: { deshabilitado: false } });
+    return this.tallerORM.find({ relations: ['especialidad', 'marco', 'institucion', 'curso'], order: { fecha: 'DESC' }, where: { deshabilitado: false } });
   }
 
   async findOne(id: number) {

@@ -9,7 +9,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   standalone: true,
   imports: [FormChicosComponent, RouterModule, CommonModule],
   templateUrl: './editar-chico.component.html',
-  styleUrl: './editar-chico.component.css',
 })
 export class EditarChicoComponent {
   public id_chico!: number;

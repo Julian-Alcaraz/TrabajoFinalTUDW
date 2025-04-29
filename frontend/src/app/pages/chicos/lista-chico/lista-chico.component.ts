@@ -43,7 +43,6 @@ import { PanelModule } from 'primeng/panel';
   standalone: true,
   imports: [CommonModule, IconFieldModule, PanelModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule, MatSortModule, TagModule],
   templateUrl: './lista-chico.component.html',
-  styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaChicoComponent implements OnInit, AfterViewInit {
@@ -63,6 +62,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public loadingLocalidades = false;
   public loadingBarrios = false;
   public searching = true;
+  public deshabilitado: number | null = null;
   public resultsLength = 0;
   public searchTerms: any = {};
   public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action']; //'estado',
@@ -115,7 +115,20 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.obtenerChicos();
+    if (this.identidad && this.identidad?.roles_ids) {
+      if (this.identidad?.roles_ids.includes(GLOBAL.ID_ADMIN)) {
+        this.deshabilitado = 1;
+        console.log(this.deshabilitado);
+        this.obtenerChicos(this.deshabilitado);
+        console.log('sos admin');
+      } else {
+        this.deshabilitado = 0;
+        console.log(this.deshabilitado);
+        this.obtenerChicos(this.deshabilitado);
+        console.log('NO sos admin');
+      }
+    }
+
     this.obtenerBarrios();
     this.obtenerLocalidades();
     this.activateTableFilter();
@@ -243,9 +256,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  obtenerChicos() {
+  obtenerChicos(deshabilitado: number) {
     this.searching = true;
-    this._chicoService.obtenerChicos().subscribe({
+    this._chicoService.obtenerChicos(deshabilitado).subscribe({
       next: (response: any) => {
         if (response.success) {
           this.chicos.data = response.data;
@@ -370,7 +383,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     const dialogRef = this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
     dialogRef.afterClosed().subscribe((recargar) => {
       if (recargar) {
-        this.obtenerChicos();
+        this.obtenerChicos(this.deshabilitado!);
       }
     });
   }

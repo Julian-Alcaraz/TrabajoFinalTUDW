@@ -6,7 +6,6 @@ import { FormTallerComponent } from "../components/form-taller/form-taller.compo
   standalone: true,
   imports: [FormTallerComponent],
   templateUrl: './nuevo-taller.component.html',
-  styleUrl: './nuevo-taller.component.css'
 })
 export class NuevoTallerComponent {
 

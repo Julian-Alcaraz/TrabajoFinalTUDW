@@ -10,7 +10,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   standalone: true,
   imports: [FormTallerComponent, RouterModule, CommonModule],
   templateUrl: './ver-taller.component.html',
-  styleUrl: './ver-taller.component.css',
 })
 export class VerTallerComponent {
   public id_taller!: number;

@@ -14,7 +14,7 @@ import { ChicoService } from '@services/chico.service';
 import { Barrio } from '@models/barrio.model';
 import { Localidad } from '@models/localidad.model';
 import { LocalidadService } from '@services/localidad.service';
-import { BarrioService } from '@services/barrio.service';
+// import { BarrioService } from '@services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '@models/chico.model';
 import { InputTextComponent } from '@components/inputs/input-text.component';
