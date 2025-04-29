@@ -31,14 +31,13 @@ import { Taller } from '@app/models/taller.model';
 })
 export class FormTallerComponent implements OnInit {
   @Input() esFormulario = true;
-  @Input() id_taller: number | null = null;
+  @Input() taller: Taller | null = null;
   @Output() editoTaller: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public tallerForm: FormGroup;
   public fechaHoy = new Date();
   public con = Constantes;
 
-  public taller: Taller | null = null;
   public cursos: Curso[] = [];
   public cursosOriginales: Curso[] = [];
   public marcos: Marco[] = [];
@@ -123,7 +122,7 @@ export class FormTallerComponent implements OnInit {
       next: (response: any) => {
         this.searchingInstituciones = false;
         this.instituciones = response.data;
-        if (!this.esFormulario && this.id_taller) {
+        if (!this.esFormulario && this.taller) {
           this.tallerForm.patchValue({
             id_institucion: this.taller?.institucion?.id,
           });
@@ -141,7 +140,7 @@ export class FormTallerComponent implements OnInit {
       next: (response: any) => {
         this.searchingEspecialidades = false;
         this.especialidades = response.data;
-        if (!this.esFormulario && this.id_taller) {
+        if (!this.esFormulario && this.taller) {
           this.tallerForm.patchValue({
             id_especialidad: this.taller?.especialidad?.id,
           });
@@ -160,7 +159,7 @@ export class FormTallerComponent implements OnInit {
       next: (response: any) => {
         this.searchingMarcos = false;
         this.marcosOriginales = response.data;
-        if (!this.esFormulario && this.id_taller) {
+        if (!this.esFormulario && this.taller) {
           const marcosFiltrados = this.marcosOriginales.filter((marco) => marco.especialidad?.id === this.taller?.especialidad?.id);
           this.marcos = marcosFiltrados;
           this.tallerForm.patchValue({
@@ -175,28 +174,12 @@ export class FormTallerComponent implements OnInit {
   }
 
   esCargaOedicion() {
-    if (!this.esFormulario && this.id_taller) {
-      this.searching = true;
-      this._tallerService.obtenerTallerxId(this.id_taller).subscribe({
-        next: (response: any) => {
-          if (response.data) {
-            this.taller = response.data;
-            this.completarDatosForm();
-            // NO es la mejor solucion estas 4 llamdas al back
-            // Si no lo hago no estan seteados las variables: marcos, cursos, instituciones etc...
-            // Lo que hace que aunque sete el id_marco, etc... en completarDatosForm() no se vean en el front
-            this.obtenerMarcos();
-            this.obtenerInstituciones();
-            this.obtenerCursos();
-            this.obtenerEspecialidades();
-            this.tallerForm.disable();
-            this.searching = false;
-            this.tallerForm.valueChanges.subscribe({
-              next: () => {
-                this.habilitarModificar = this.existenCambios();
-              },
-            });
-          }
+    if (!this.esFormulario && this.taller) {
+      this.completarDatosForm();
+      this.tallerForm.disable();
+      this.tallerForm.valueChanges.subscribe({
+        next: () => {
+          this.habilitarModificar = this.existenCambios();
         },
       });
     }
@@ -260,7 +243,7 @@ export class FormTallerComponent implements OnInit {
   formatearFecha(fecha: any) {
     const aux = new Date(String(fecha));
     aux.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
-    return `${aux.getFullYear()}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getDate().toString().padStart(2, '0')}`;
+    return `${aux.getDate().toString().padStart(2, '0')}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getFullYear()}`;
   }
 
   activarFormulario() {
@@ -326,35 +309,41 @@ export class FormTallerComponent implements OnInit {
           });
         }
       });
+    } else {
+      this.tallerForm.markAllAsTouched();
     }
   }
 
   editarTaller() {
-    if (this.taller && this.tallerForm.valid) {
-      Swal.fire({
-        title: '¿Modificar taller?',
-        showDenyButton: true,
-        confirmButtonColor: '#3f77b4',
-        confirmButtonText: 'Confirmar',
-        denyButtonText: `Cancelar`,
-      }).then((result: any) => {
-        if (result.isConfirmed && this.taller) {
-          const dataLimpia = this.prepararDataEditar();
-          this._tallerService.modificarTaller(this.taller.id, dataLimpia).subscribe({
-            next: (response: any) => {
-              this.editoTaller.emit(true);
-              if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-              } else {
-                MostrarNotificacion.mensajeError(this.snackBar, response.message);
-              }
-            },
-            error: (err: any) => {
-              MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-            },
-          });
-        }
-      });
+    if (this.taller) {
+      if (this.tallerForm.valid) {
+        Swal.fire({
+          title: '¿Modificar taller?',
+          showDenyButton: true,
+          confirmButtonColor: '#3f77b4',
+          confirmButtonText: 'Confirmar',
+          denyButtonText: `Cancelar`,
+        }).then((result: any) => {
+          if (result.isConfirmed && this.taller) {
+            const dataLimpia = this.prepararDataEditar();
+            this._tallerService.modificarTaller(this.taller.id, dataLimpia).subscribe({
+              next: (response: any) => {
+                this.editoTaller.emit(true);
+                if (response.success) {
+                  MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                } else {
+                  MostrarNotificacion.mensajeError(this.snackBar, response.message);
+                }
+              },
+              error: (err: any) => {
+                MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+              },
+            });
+          }
+        });
+      } else {
+        this.tallerForm.markAllAsTouched();
+      }
     } else {
       MostrarNotificacion.mensajeError(this.snackBar, 'No se esta editando ningun chico.');
     }

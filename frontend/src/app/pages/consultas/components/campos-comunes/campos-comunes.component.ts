@@ -107,6 +107,7 @@ export class CamposComunesComponent implements OnInit {
           if (response?.success) {
             this.chico = response.data;
             this.actualizarChico(this.chico);
+            this.buscarEstudios(this.chico!.dni);
             this.form.get('id_chico')?.setValue(response.data.id);
             this.calcularEdad();
           } else {
@@ -131,6 +132,28 @@ export class CamposComunesComponent implements OnInit {
         }),
       )
       .subscribe();
+  }
+
+  buscarEstudios(dni: number) {
+    console.log('Buscar estudios');
+    this._chicoService.obtenerUltimosEstudios(dni).subscribe({
+      next: (response: any) => {
+        console.log('Buscar estudios response', response);
+        if (response.success) {
+          this.form.patchValue({
+            id_institucion: response.data.id_institucion,
+          });
+          // setTimeout
+          this.onChangeInstitucion();
+          this.form.patchValue({
+            id_curso: response.data.id_curso,
+          });
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
   onChangeInstitucion() {

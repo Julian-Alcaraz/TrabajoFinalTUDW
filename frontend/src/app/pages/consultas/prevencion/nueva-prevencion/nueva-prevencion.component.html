@@ -13,26 +13,28 @@
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="prevencionForm">
       <app-campos-comunes [form]="prevencionForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
-        <!-- Edad Inicio -->
+        <!-- problematica -->
         <div class="mt-4 md:col-span-3">
-          <app-input-number label="Edad inicio de consumo" [control]="controlDeInput('edad_inicio_consumo')" idInput="demanda" />
+          <app-input-select-enum label="Problematica" [control]="controlDeInput('otra_problematica')" idInput="otra_problematica" [opciones]="con.OtraProblematicaEnum" [valores]="con.OtraProblematicaEnum" />
         </div>
-        <!-- motivo_consumo -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Motivo de consumo" [control]="controlDeInput('motivo_consumo')" idInput="motivo_consumo" [opciones]="con.MotivoConsumoEnum" [valores]="con.MotivoConsumoEnum" />
-        </div>
-        <!-- frecuencia -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Frecuencia de consumo" [control]="controlDeInput('frecuencia')" idInput="frecuencia" [opciones]="con.FrecuenciaPrevencionEnum" [valores]="con.FrecuenciaPrevencionEnum" />
-        </div>
-        <!-- consumo_problematico -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Consumo problematico" [control]="controlDeInput('consumo_problematico')" idInput="consumo_problematico" [opciones]="con.ConsumoProblematicoEnum" [valores]="con.ConsumoProblematicoEnum" />
-        </div>
-        <!-- otra_problematica -->
-        <div class="mt-4 md:col-span-3">
-          <app-input-select-enum label="Otra problematica" [control]="controlDeInput('otra_problematica')" idInput="otra_problematica" [opciones]="con.OtraProblematicaEnum" [valores]="con.OtraProblematicaEnum" />
-        </div>
+        @if (valueProblematica === 'Consumo problematico') {
+          <!-- que consumo_problematico -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Consumo problematico" [control]="controlDeInput('consumo_problematico')" idInput="consumo_problematico" [opciones]="con.ConsumoProblematicoEnum" [valores]="con.ConsumoProblematicoEnum" />
+          </div>
+          <!-- Edad Inicio -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-number label="Edad inicio de consumo" [control]="controlDeInput('edad_inicio_consumo')" idInput="demanda" />
+          </div>
+          <!-- motivo_consumo -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Motivo de consumo" [control]="controlDeInput('motivo_consumo')" idInput="motivo_consumo" [opciones]="con.MotivoConsumoEnum" [valores]="con.MotivoConsumoEnum" />
+          </div>
+          <!-- frecuencia -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Frecuencia de consumo" [control]="controlDeInput('frecuencia')" idInput="frecuencia" [opciones]="con.FrecuenciaPrevencionEnum" [valores]="con.FrecuenciaPrevencionEnum" />
+          </div>
+        }
         <!-- Derivacion -->
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />

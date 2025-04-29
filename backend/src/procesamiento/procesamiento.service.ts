@@ -299,6 +299,13 @@ export class ProcesamientoService {
     return noCargados;
   }
 
+  async procesarPrevencion(data, usuario) {
+    return [];
+  }
+
+  async procesarSocial(data, usuario) {
+    return [];
+  }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
     let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });

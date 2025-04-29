@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { FormTallerComponent } from '../components/form-taller/form-taller.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Taller } from '@app/models/taller.model';
 
 @Component({
   selector: 'app-ver-taller',
@@ -12,13 +13,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './ver-taller.component.html',
 })
 export class VerTallerComponent {
-  public id_taller!: number;
+  public taller!: Taller;
 
   constructor(
     public dialogRef: MatDialogRef<VerTallerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.id_taller = data.id;
+    this.taller = data.taller;
   }
 
   cerrarModal(actualizar: boolean) {

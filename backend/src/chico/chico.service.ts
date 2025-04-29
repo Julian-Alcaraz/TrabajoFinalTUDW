@@ -12,6 +12,7 @@ export class ChicoService {
   constructor(
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
+    @InjectRepository(Consulta) private readonly consultaOrm: Repository<Consulta>,
   ) {}
 
   async create(createChicoDto: CreateChicoDto) {
@@ -59,6 +60,15 @@ export class ChicoService {
     const chico = await this.chicoORM.findOne({ where: { dni }, relations: ['barrio', 'barrio.localidad'] });
     // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);!!!! deberia estar descomentado creo
     return chico;
+  }
+
+  async findOneByDniAndEstudios(dni: number) {
+    const consultaEstudios = await this.consultaOrm.findOne({ where: { chico: { dni }, deshabilitado: false }, order: { created_at: 'DESC' }, relations: ['chico', 'institucion', 'curso'] });
+    if (consultaEstudios) {
+      return { id_institucion: consultaEstudios.institucion.id, id_curso: consultaEstudios.curso.id };
+    }
+
+    return consultaEstudios;
   }
 
   async update(id: number, updateChicoDto: UpdateChicoDto) {

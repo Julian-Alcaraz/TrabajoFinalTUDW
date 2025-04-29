@@ -2,17 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingComponent } from '@app/components/loading/loading.component';
 import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notificacion';
-import { InputFileComponent } from '@components/inputs/input-file.component';
+
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import { SelectFileComponent } from './select-file/select-file.component';
 
 @Component({
   selector: 'app-datos',
   standalone: true,
-  imports: [CommonModule, InputFileComponent, FormsModule, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectFileComponent],
   templateUrl: './datos.component.html',
   styleUrl: './datos.component.css',
 })
@@ -21,7 +21,8 @@ export class DatosComponent {
   fonoaudiologiaFileControl: FormControl = new FormControl('', [Validators.required]);
   odontologiaFileControl: FormControl = new FormControl('', [Validators.required]);
   oftalmologiaFileControl: FormControl = new FormControl('', [Validators.required]);
-  // adiccionFileControl: FormControl = new FormControl('',[Validators.required])
+  prevencionFileControl: FormControl = new FormControl('', [Validators.required]);
+  socialFileControl: FormControl = new FormControl('', [Validators.required]);
   loading = false;
   ultimoArchivo: File | null = null;
   controls: Record<string, FormControl> = {
@@ -29,9 +30,12 @@ export class DatosComponent {
     fonoaudiologia: this.fonoaudiologiaFileControl,
     odontologia: this.odontologiaFileControl,
     oftalmologia: this.oftalmologiaFileControl,
+    prevencion: this.prevencionFileControl,
+    social: this.socialFileControl,
   };
   formData: FormData = new FormData();
   fileName = '';
+
   constructor(
     private _procesamientoService: ProcesamientoService,
     private snackBar: MatSnackBar,
@@ -51,10 +55,9 @@ export class DatosComponent {
   }
 
   limpiarControladores(changedId: string) {
-    const controls = ['clinica', 'fonoaudiologia', 'odontologia', 'oftalmologia'];
+    const controls = ['clinica', 'fonoaudiologia', 'odontologia', 'oftalmologia', 'prevencion', 'social'];
     controls.forEach((control) => {
       if (control !== changedId) {
-        console.log('set false', changedId, control);
         this.controls[control].setValue(null);
       }
     });
@@ -81,47 +84,38 @@ export class DatosComponent {
       this.loading = false;
     },
   };
+
   exportar(data: any) {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
     XLSX.writeFile(workbook, `${this.fileName}.xlsx`);
   }
-  cargarArchivoClinica() {
-    this.loading = true;
-    if (!this.clinicaFileControl.errors) {
-      if (this.ultimoArchivo) {
-        this.fileName = 'ClinicaErrores';
-        this._procesamientoService.procesarClinica(this.formData).subscribe(this.controlResponse);
-      }
-    }
-  }
-  cargarArchivoOdontologia() {
-    this.loading = true;
-    if (!this.odontologiaFileControl.errors) {
-      if (this.ultimoArchivo) {
-        this.fileName = 'OdontologiaErrores';
 
-        this._procesamientoService.procesarOdontologia(this.formData).subscribe(this.controlResponse);
-      }
-    }
-  }
-  cargarArchivoFonoaudiologia() {
-    this.loading = true;
-    if (!this.fonoaudiologiaFileControl.errors) {
-      if (this.ultimoArchivo) {
-        this.fileName = 'FonaudiologiaErrores';
+  cargarArchivo(event: any) {
+    this.fileName = event + 'Errores';
+    switch (event) {
+      case 'Clinica':
+        this._procesamientoService.procesarClinica(this.formData).subscribe(this.controlResponse);
+        break;
+      case 'Fonoaudiologia':
         this._procesamientoService.procesarFonoaudiologia(this.formData).subscribe(this.controlResponse);
-      }
-    }
-  }
-  cargarArchivoOftalmologia() {
-    this.loading = true;
-    if (!this.oftalmologiaFileControl.errors) {
-      if (this.ultimoArchivo) {
-        this.fileName = 'OftalmologiaErrores';
+        break;
+      case 'Odontologia':
+        this._procesamientoService.procesarOdontologia(this.formData).subscribe(this.controlResponse);
+        break;
+      case 'Oftalmologia':
         this._procesamientoService.procesarOftalmologia(this.formData).subscribe(this.controlResponse);
-      }
+        break;
+      case 'Prevencion':
+        this._procesamientoService.procesarPrevencion(this.formData).subscribe(this.controlResponse);
+        break;
+      case 'Social':
+        this._procesamientoService.procesarSocial(this.formData).subscribe(this.controlResponse);
+        break;
+      default:
+        console.log('Tipo de evento no reconocido:', event.type);
+        break;
     }
   }
 }

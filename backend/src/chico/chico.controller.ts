@@ -87,6 +87,19 @@ export class ChicoController {
     }
   }
 
+  @Get('estudios/dni/:dni')
+  @ApiOperation({ summary: 'Devuelve los ultimos estudios si existen del chico buscado por dni' })
+  @ApiResponse({ status: 200, description: 'Retorna los estudios del chico buscado con exito' })
+  @ApiResponse({ status: 404, description: 'Estudios no encontrados' })
+  async findOneByDniAndEstudios(@Param('dni', ParseIntPipe) dni: number) {
+    const estudios = await this.chicoService.findOneByDniAndEstudios(dni);
+    return {
+      success: estudios ? true : false,
+      data: estudios,
+      message: estudios ? 'Estudios encontrado con exito' : 'Estudios no encontrados',
+    };
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un chico' })
   @ApiResponse({ status: 200, description: 'Chico actualizado con exito' })

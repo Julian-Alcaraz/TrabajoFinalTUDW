@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, Min } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
 
 import { MotivoConsumoType, MotivoConsumoEnum, FrecuenciaPrevencionType, FrecuenciaPrevencionEnum, ConsumoProblematicoType, ConsumoProblematicoEnum, OtraProblematicaType, OtraProblematicaEnum } from '../../common/const/const';
 
 export class CreatePrevencionDto {
   @ApiProperty({ description: 'Edad inicio de consumo' })
+  @IsOptional()
   @IsNotEmpty({ message: 'La edad de inicio de consumo no puede estar vacia' })
   @IsInt({ message: 'La edad de inicio de consumo debe ser un número' })
   @Min(0, { message: 'La edad de incio de consumo debe ser un positivo o cero' })

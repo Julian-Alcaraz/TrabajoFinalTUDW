@@ -407,7 +407,7 @@ export class FormChicosComponent implements OnInit {
   formatearFecha(fecha: any) {
     const aux = new Date(String(fecha));
     aux.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
-    return `${aux.getFullYear()}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getDate().toString().padStart(2, '0')}`;
+    return `${aux.getDate().toString().padStart(2, '0')}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getFullYear()}`;
   }
 
   // Modal Barrio

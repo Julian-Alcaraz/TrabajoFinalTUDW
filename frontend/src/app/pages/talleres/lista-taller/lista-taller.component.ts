@@ -350,8 +350,8 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     });
   }
 
-  verDetallesTaller(id: number) {
-    const dialogRef = this._dialog.open(VerTallerComponent, { panelClass: 'full-screen-dialog', data: { id } });
+  verDetallesTaller(taller: Taller) {
+    const dialogRef = this._dialog.open(VerTallerComponent, { panelClass: 'full-screen-dialog', data: { taller } });
     dialogRef.afterClosed().subscribe((recargar) => {
       if (recargar) {
         this.obtenerTalleres();

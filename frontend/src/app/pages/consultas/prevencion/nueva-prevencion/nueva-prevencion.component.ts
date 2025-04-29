@@ -50,12 +50,13 @@ export class NuevaPrevencionComponent implements OnInit {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos prevencion
+      otra_problematica: ['', Validators.required],
+      derivacion_externa: ['', [Validators.required]],
+
       edad_inicio_consumo: ['', [Validators.required]],
       motivo_consumo: ['', [Validators.required]],
       frecuencia: ['', [Validators.required]],
       consumo_problematico: ['', [Validators.required]],
-      otra_problematica: ['', Validators.required],
-      derivacion_externa: ['', [Validators.required]],
     });
   }
 
@@ -69,14 +70,44 @@ export class NuevaPrevencionComponent implements OnInit {
         },
       });
     }
+    this.listenOtraProblematica();
   }
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.prevencionForm.get(input) as FormControl;
   }
-
+  get valueProblematica() {
+    return this.prevencionForm.get('otra_problematica')?.value;
+  }
   recibirChico(chicoRecibido: Chico | null) {
     this.chico = chicoRecibido;
+  }
+  listenOtraProblematica() {
+    this.prevencionForm.get('otra_problematica')?.valueChanges.subscribe((value: any) => {
+      if (value === 'Consumo problematico') {
+        // setear como estan los ultimos 4 controls
+        if (!this.consulta) {
+          this.prevencionForm.patchValue({
+            edad_inicio_consumo: '',
+            motivo_consumo: '',
+            frecuencia: '',
+            consumo_problematico: '',
+          });
+          this.prevencionForm.get('edad_inicio_consumo')?.addValidators(Validators.required);
+        }
+      } else {
+        if (!this.consulta) {
+          this.prevencionForm.get('edad_inicio_consumo')?.removeValidators(Validators.required);
+          // setear valores por defecto
+          this.prevencionForm.patchValue({
+            edad_inicio_consumo: null,
+            motivo_consumo: 'Otro',
+            frecuencia: 'Otro',
+            consumo_problematico: 'Otra',
+          });
+        }
+      }
+    });
   }
 
   setData() {
@@ -105,6 +136,7 @@ export class NuevaPrevencionComponent implements OnInit {
     };
     return data;
   }
+
   enviarFormulario() {
     if (this.prevencionForm.valid) {
       Swal.fire({

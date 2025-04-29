@@ -42,4 +42,20 @@ export class ProcesamientoController {
     const noCargados = await this.procesamientoService.procesarFonoaudiologia(data, req.user);
     return { succes: true, data: noCargados, message: 'fono' };
   }
+
+  @Post('prevencion')
+  @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
+  async procesarPrevencion(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
+    const data = this.excelService.leerArchivoExcel(file);
+    const noCargados = await this.procesamientoService.procesarPrevencion(data, req.user);
+    return { succes: true, data: noCargados, message: 'fono' };
+  }
+
+  @Post('social')
+  @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
+  async procesarSocial(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
+    const data = this.excelService.leerArchivoExcel(file);
+    const noCargados = await this.procesamientoService.procesarSocial(data, req.user);
+    return { succes: true, data: noCargados, message: 'fono' };
+  }
 }

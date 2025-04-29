@@ -4,67 +4,16 @@
   </div>
   <div class="card-body">
     <h2 class="fs-10">Cargue el archivo de consultas que desee</h2>
-    <div class="flex">
-      <app-input-file idInput="clinica" (change)="onFileSelected($event)" [control]="clinicaFileControl" label="Clinica" />
-      <div class="mt-7">
-        <button (click)="cargarArchivoClinica()" [class]="loading && !clinicaFileControl.errors ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="clinicaFileControl.errors || loading">
-          <span class="flex flex-row items-center">
-            Cargar
-            <div class="mx-1 w-5 absolute right-0" *ngIf="loading && !clinicaFileControl.errors">
-              <app-loading />
-            </div>
-          </span>
-        </button>
-      </div>
-    </div>
+    <app-select-file [control]="clinicaFileControl" [type]="'Clinica'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <div class="flex">
-      <app-input-file idInput="odontologia" (change)="onFileSelected($event)" [control]="odontologiaFileControl" label="Odontologia" />
-      <div class="mt-7">
-        <button (click)="cargarArchivoOdontologia()" [class]="loading && !odontologiaFileControl.errors ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="odontologiaFileControl.errors || loading">
-          <span class="flex flex-row items-center">
-            Cargar
-            <div class="mx-1 w-5 absolute right-0" *ngIf="loading && !odontologiaFileControl.errors">
-              <app-loading />
-            </div>
-          </span>
-        </button>
-      </div>
-    </div>
+    <app-select-file [control]="odontologiaFileControl" [type]="'Odontologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <div class="flex">
-      <app-input-file idInput="fonoaudiologia" (change)="onFileSelected($event)" [control]="fonoaudiologiaFileControl" label="Fonoaudiologia" />
-      <div class="mt-7">
-        <button (click)="cargarArchivoFonoaudiologia()" [class]="loading && !fonoaudiologiaFileControl.errors ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="fonoaudiologiaFileControl.errors || loading">
-          <span class="flex flex-row items-center">
-            Cargar
-            <div class="mx-1 w-5 absolute right-0" *ngIf="loading && !fonoaudiologiaFileControl.errors">
-              <app-loading />
-            </div>
-          </span>
-        </button>
-      </div>
-    </div>
+    <app-select-file [control]="fonoaudiologiaFileControl" [type]="'Fonoaudiologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <div class="flex">
-      <app-input-file idInput="oftalmologia" (change)="onFileSelected($event)" [control]="oftalmologiaFileControl" label="Oftalmologia" />
-      <div class="mt-7">
-        <button (click)="cargarArchivoOftalmologia()" [class]="loading && !oftalmologiaFileControl.errors ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="oftalmologiaFileControl.errors || loading">
-          <span class="flex flex-row items-center">
-            Cargar
-            <div class="mx-1 w-5 absolute right-0" *ngIf="loading && !oftalmologiaFileControl.errors">
-              <app-loading />
-            </div>
-          </span>
-        </button>
-      </div>
-    </div>
+    <app-select-file [control]="oftalmologiaFileControl" [type]="'Oftalmologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <!-- <hr />
-    <div>
-      <app-input-file idInput="adicciones" [control]="adiccionFileControl" label="Adicciones" />
-      <div class="mt-auto">
-        <button class="py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="adiccionFileControl.errors">Cargar</button>
-      </div>
-    </div> -->
+    <app-select-file [control]="prevencionFileControl" [type]="'Prevencion'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <hr />
+    <app-select-file [control]="socialFileControl" [type]="'Social'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" /> -->
   </div>
 </div>

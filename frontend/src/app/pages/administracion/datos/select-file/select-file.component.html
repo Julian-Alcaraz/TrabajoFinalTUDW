@@ -1,0 +1,13 @@
+<div class="flex">
+  <app-input-file [idInput]="type.toLocaleLowerCase()" (change)="onFileSelected($event)" [control]="control" [label]="type" />
+  <div class="mt-7">
+    <button (click)="cargar()" [class]="loading && !control.errors ? 'pr-8' : ''" class="relative font-medium text-white py-1 m-2 px-2 rounded bg-blue-700 disabled:bg-gray-400" [disabled]="control.errors || loading">
+      <span class="flex flex-row items-center">
+        Cargar
+        <div class="mx-1 w-5 absolute right-0" *ngIf="loading && !control.errors">
+          <app-loading />
+        </div>
+      </span>
+    </button>
+  </div>
+</div>

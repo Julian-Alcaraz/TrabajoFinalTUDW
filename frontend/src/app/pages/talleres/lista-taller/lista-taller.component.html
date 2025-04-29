@@ -155,7 +155,7 @@
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr [pTooltip]="'Ver taller'" tooltipPosition="top" mat-row *matRowDef="let row; columns: displayedColumns" (click)="verDetallesTaller(row.id)" class="cursor-pointer hover:bg-gray-300"></tr>
+        <tr [pTooltip]="'Ver taller'" tooltipPosition="top" mat-row *matRowDef="let row; columns: displayedColumns" (click)="verDetallesTaller(row)" class="cursor-pointer hover:bg-gray-300"></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
