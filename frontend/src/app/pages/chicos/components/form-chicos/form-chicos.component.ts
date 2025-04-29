@@ -7,14 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as Constantes from '@app/common/const/const'
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarDni, ValidarSoloLetras, ValidarSoloNumeros, ValidarCampoOpcional } from '@utils/validadores';
 import { ChicoService } from '@services/chico.service';
 import { Barrio } from '@models/barrio.model';
 import { Localidad } from '@models/localidad.model';
 import { LocalidadService } from '@services/localidad.service';
-import { BarrioService } from '@services/barrio.service';
+// import { BarrioService } from '@services/barrio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Chico } from '@models/chico.model';
 import { InputTextComponent } from '@components/inputs/input-text.component';
@@ -66,7 +66,7 @@ export class FormChicosComponent implements OnInit {
     private _dialog: MatDialog,
     private _chicoService: ChicoService,
     private _localidadService: LocalidadService,
-    private _barrioService: BarrioService,
+    // private _barrioService: BarrioService,
   ) {
     this.chicoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios, ValidarSoloLetras]],
@@ -74,7 +74,7 @@ export class FormChicosComponent implements OnInit {
       dni: ['', [Validators.required, ValidarDni, ValidarSoloNumeros]],
       sexo: ['', [Validators.required]],
       fe_nacimiento: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), ValidarSoloNumeros]],
+      telefono: ['', [Validators.minLength(8), Validators.maxLength(30), ValidarSoloNumeros]],
       direccion: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarCadenaSinEspacios]],
       nombre_padre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
       nombre_madre: ['', ValidarCampoOpcional(Validators.minLength(0), Validators.maxLength(100), ValidarCadenaSinEspacios, ValidarSoloLetras)],
@@ -315,7 +315,7 @@ export class FormChicosComponent implements OnInit {
   editarChico() {
     if (this.chico && this.chicoForm.valid) {
       Swal.fire({
-        title: '¿Modificar chico?',
+        title: '¿Modificar niño?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',
@@ -361,7 +361,7 @@ export class FormChicosComponent implements OnInit {
   cargarChico() {
     if (this.chicoForm.valid) {
       Swal.fire({
-        title: '¿Cargar nuevo chico?',
+        title: '¿Cargar nuevo niño?',
         showDenyButton: true,
         confirmButtonColor: '#3f77b4',
         confirmButtonText: 'Confirmar',
@@ -377,7 +377,9 @@ export class FormChicosComponent implements OnInit {
           this._chicoService.cargarChico(data).subscribe({
             next: (response: any) => {
               if (response.success) {
-                MostrarNotificacion.mensajeExito(this.snackBar, response.message);
+                const enlace = `<a class="underline font-bold" href="layout/chicos/ver/${response.data.id}">Ver chico</a>`;
+                const mensaje = response.message + ' ' + enlace;
+                MostrarNotificacion.mensajeExito(this.snackBar, mensaje, 5000);
                 this.chicoForm.reset();
               }
             },
@@ -405,7 +407,7 @@ export class FormChicosComponent implements OnInit {
   formatearFecha(fecha: any) {
     const aux = new Date(String(fecha));
     aux.setHours(0, 0, 0, 0); // Establecer hora en 00:00:00
-    return `${aux.getFullYear()}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getDate().toString().padStart(2, '0')}`;
+    return `${aux.getDate().toString().padStart(2, '0')}-${(aux.getMonth() + 1).toString().padStart(2, '0')}-${aux.getFullYear()}`;
   }
 
   // Modal Barrio

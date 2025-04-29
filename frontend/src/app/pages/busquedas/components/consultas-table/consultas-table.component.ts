@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -17,6 +17,8 @@ import { SessionService } from '@services/session.service';
 import { Usuario } from '@models/usuario.model';
 import Swal from 'sweetalert2';
 import { GLOBAL } from '@config/global';
+import { PaginatedTableService, TableData } from '@app/services/paginated-table.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-consultas-table',
@@ -26,37 +28,60 @@ import { GLOBAL } from '@config/global';
   styleUrl: './consultas-table.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
-export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges {
+export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
 
-  @Input() consultas: Consulta[] = [];
+  @Input() consultas: any[] | null = null;
   @Input() displayedColumns: string[] = ['numero', 'type', 'nombre', 'documento', 'sexo', 'edad', 'fecha', 'obra_social', 'fechaNac', 'direccionChico', 'telefono', 'derivaciones', 'institucion', 'curso', 'observaciones', 'profesional', 'accion'];
+
   // por defecto todas las columnas
-  public dataSource: MatTableDataSource<Consulta>;
+  pageSize = 10;
+  page = 0;
+
+  public dataSource: MatTableDataSource<any[]> = new MatTableDataSource<any[]>([]);
+  listenerData: Subscription = new Subscription();
   identidad: Usuario | null = null;
+
   constructor(
     private _dialog: MatDialog,
     private _consultaService: ConsultaService,
     private _sessionService: SessionService,
     private snackBar: MatSnackBar,
-  ) {
-    this.dataSource = new MatTableDataSource(this.consultas);
-    this.dataSource.sort = this.sort;
-  }
+    private _tableService: PaginatedTableService,
+  ) {}
   private _liveAnnouncer = inject(LiveAnnouncer);
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.consultas);
-    this.dataSource.sort = this.sort;
     this.identidad = this._sessionService.getIdentidad();
+
     if (this.identidad?.roles_ids?.includes(GLOBAL.ID_ADMIN) || this.identidad?.roles_ids?.includes(GLOBAL.ID_PROFESIONAL)) {
       this.displayedColumns.push('accion');
     }
+    if (!this.consultas) {
+      this.listenData();
+    }
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginador;
+  ngAfterViewInit(): void {
+    if (this.consultas) {
+      this.dataSource.data = this.consultas;
+      this.dataSource.paginator = this.paginador;
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (!this.consultas) this._tableService.resetService();
+    this.listenerData.unsubscribe();
+  }
+
+  listenData() {
+    this.listenerData = this._tableService.listenData().subscribe((data: TableData) => {
+      this.dataSource.data = data.array;
+      setTimeout(() => {
+        if (this.paginador) this.paginador!.length = data.total;
+      }, 100);
+    });
   }
 
   announceSortChange(sortState: Sort) {
@@ -97,11 +122,6 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
   borrarConsulta(element: Consulta) {
     this._consultaService.borrarLogico(element.id).subscribe({
       next: (response: any) => {
-        const index = this.dataSource.data.indexOf(element);
-        if (index > -1) {
-          this.dataSource.data.splice(index, 1);
-          this.dataSource.data = [...this.dataSource.data];
-        }
         MostrarNotificacion.mensajeExito(this.snackBar, response.message);
       },
       error: (err) => {
@@ -109,9 +129,18 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
       },
     });
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['consultas']) {
       this.dataSource.data = changes['consultas'].currentValue;
+    }
+  }
+
+  onPageChange(event: PageEvent) {
+    if (!this.consultas) {
+      this.pageSize = event.pageSize;
+      this.page = event.pageIndex;
+      this._tableService.updatePaginated(event);
     }
   }
 }

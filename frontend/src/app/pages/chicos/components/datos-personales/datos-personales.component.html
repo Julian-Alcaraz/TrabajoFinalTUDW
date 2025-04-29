@@ -59,14 +59,18 @@
       <p class="text-slate-500 text-sm font-normal leading-normal">Nombre Padre</p>
     </div>
   </div>
-  <div *ngIf="resultsLength > 0" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
-    <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas Por el niño</p>
-    <div class="flex items-center gap-2">
-      <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
+  <div *ngIf="!searchingConsultas" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full relative">
+    <div class="md:absolute md:left-0">
+      <app-agregar-consulta [dni]="chico?.dni"></app-agregar-consulta>
     </div>
-  </div>
-  <div *ngIf="!resultsLength && !searchingConsultas" class="md:col-span-2 lg:col-span-4 flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
-    <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistió a ninguna consulta</p>
+    @if (resultsLength > 0) {
+      <p class="text-black tracking-light text-2xl font-medium leading-tight">Consultas Asistidas</p>
+      <div class="flex items-center gap-2">
+        <p class="text-slate-500 text-sm font-normal leading-normal">{{ resultsLength }}</p>
+      </div>
+    } @else if (!resultsLength && !searchingConsultas) {
+      <p class="text-black tracking-light text-2xl font-medium leading-tight">El niño no asistió a ninguna consulta</p>
+    }
   </div>
   <div *ngIf="searchingConsultas" class="flex flex-col gap-2 rounded-lg border border-gray-300 p-3 items-center text-center w-full">
     <app-loading></app-loading>

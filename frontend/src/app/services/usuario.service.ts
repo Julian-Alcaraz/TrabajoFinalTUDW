@@ -11,7 +11,6 @@ export class UsuarioService {
 
   constructor(
     private _http: HttpClient,
-    // private _router: Router,
   ) {
     this.url = GLOBAL.URL_BACKEND;
   }

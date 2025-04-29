@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
-
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import * as Constantes from '@app/common/const/const';
+import { validarRango } from '@app/utils/validadores';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -19,26 +20,29 @@ export class CamposClinicaComponent implements OnInit {
   @Input() form!: FormGroup;
 
   public especificas!: FormGroup;
+  public con = Constantes;
 
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public vacunasOptions: string[] = ['Completo', 'Incompleto', 'Desconocido'];
-  public examenVisualOptions: string[] = ['Normal', 'Anormal'];
-  public lenguajeOptions: string[] = ['Adecuado', 'Inadecuado'];
-  public ortopediaTraumatologiaOptions: string[] = ['Normal', 'Escoliosis', 'Pie plano'];
-  public alimentacionOptions: string[] = ['Mixta y variada', 'Rica en HdC', 'Pobre en fibras', 'Fiambres', 'Frituras'];
-  public hidratacionOptions: string[] = ['Agua', 'Bebidas edulcoradas'];
-  public horasPantallaOptions: string[] = ['Menor a 2hs', 'Entre 2hs y 4hs', 'Más de 6hs'];
-  public horasJuegoAireLibreOptions: string[] = ['Menos de 1h', '1h', 'Más de 1h'];
-  public horasSuenioOptions: string[] = ['Menos de 10hs', 'Entre 10hs y 12hs', 'Más de 13hs'];
+  public vacunasOptions: string[] = this.con.VacunasEnum;
+  public examenVisualOptions: string[] = this.con.ExamenVisualEnum;
+  public lenguajeOptions: string[] = this.con.LenguajeEnum;
+  public ortopediaTraumatologiaOptions: string[] = this.con.OrtopediaYTraumatologiaEnum;
+  public alimentacionOptions: string[] = this.con.AlimentacionEnum;
+  public hidratacionOptions: string[] = this.con.HidratacionEnum;
+  public horasPantallaOptions: string[] = this.con.HsPantallaEnum;
+  public horasJuegoAireLibreOptions: string[] = this.con.HsJuegoAireLibreEnum;
+  public horasSuenioOptions: string[] = this.con.HsSuenioEnum;
   public tensionArterialOptions: string[] = ['Normotenso', 'Riesgo', 'Hipertenso'];
   public estadoNutricionalOptions: string[] = ['A Riesgo Nutricional', 'B Bajo peso/Desnutrido', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   public derivacionesOptionsClinica: any[] = [
     { nombre: 'Fonoaudiologia', valor: { fonoaudiologia: true } },
     { nombre: 'Odontologia', valor: { odontologia: true } },
     { nombre: 'Oftalmologia', valor: { oftalmologia: true } },
+    { nombre: 'Prevención', valor: { prevencion: true } },
+    { nombre: 'Trabajo Social', valor: { social: true } },
   ];
 
   ngOnInit(): void {
@@ -48,42 +52,42 @@ export class CamposClinicaComponent implements OnInit {
           tallaMin: new FormControl(),
           tallaMax: new FormControl(),
         },
-        { validators: this.validarRango('tallaMin', 'tallaMax') },
+        { validators: validarRango('tallaMin', 'tallaMax') },
       ),
       rangoCC: new FormGroup(
         {
           ccMin: new FormControl(),
           ccMax: new FormControl(),
         },
-        { validators: this.validarRango('ccMin', 'ccMax') },
+        { validators: validarRango('ccMin', 'ccMax') },
       ),
       rangoPeso: new FormGroup(
         {
           pesoMin: new FormControl(),
           pesoMax: new FormControl(),
         },
-        { validators: this.validarRango('pesoMin', 'pesoMax') },
+        { validators: validarRango('pesoMin', 'pesoMax') },
       ),
       rangoPct: new FormGroup(
         {
           pctMin: new FormControl(),
           pctMax: new FormControl(),
         },
-        { validators: this.validarRango('pctMin', 'pctMax') },
+        { validators: validarRango('pctMin', 'pctMax') },
       ),
       rangoTas: new FormGroup(
         {
           tasMin: new FormControl(),
           tasMax: new FormControl(),
         },
-        { validators: this.validarRango('tasMin', 'tasMax') },
+        { validators: validarRango('tasMin', 'tasMax') },
       ),
       rangoTad: new FormGroup(
         {
           tadMin: new FormControl(),
           tadMax: new FormControl(),
         },
-        { validators: this.validarRango('tadMin', 'tadMax') },
+        { validators: validarRango('tadMin', 'tadMax') },
       ),
       diabetes: new FormControl(),
       hta: new FormControl(),
@@ -109,21 +113,6 @@ export class CamposClinicaComponent implements OnInit {
     });
     this.form.addControl('especificas', this.especificas);
   }
-
-  validarRango: (campoMin: string, campoMax: string) => ValidatorFn = (campoMin, campoMax) => {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const formGroup = control as FormGroup;
-      const valorMin = formGroup.get(campoMin)?.value;
-      const valorMax = formGroup.get(campoMax)?.value;
-      if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
-        return null;
-      }
-      if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
-        return null;
-      }
-      return { rangoInvalido: true };
-    };
-  };
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.form.get(input) as FormControl;

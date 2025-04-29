@@ -8,7 +8,13 @@ import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { inject } from '@angular/core';
 import Swal from 'sweetalert2';
+import { TooltipModule } from 'primeng/tooltip';
+import { PanelModule } from 'primeng/panel';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { SelectModule } from 'primeng/select';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginadorPersonalizado } from '@utils/paginador/paginador-personalizado';
@@ -16,21 +22,32 @@ import { LoadingComponent } from '@components/loading/loading.component';
 import { Institucion } from '@models/institucion.model';
 import { InstitucionService } from '@services/institucion.service';
 import { ModalInstitucionComponent } from './modal-institucion/modal-institucion.component';
-import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-instituciones',
   standalone: true,
-  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule],
+  imports: [CommonModule, TagModule, MatTableModule, MatPaginatorModule, LoadingComponent, MatSortModule, TooltipModule, PanelModule, IftaLabelModule, SelectModule, ReactiveFormsModule, InputTextModule],
   templateUrl: './instituciones.component.html',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class InstitucionesComponent implements OnInit, AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
 
+  public con = Constantes;
+  public tipoControl: FormControl = new FormControl(null);
+  public estadoControl: FormControl = new FormControl(null);
   public instituciones: MatTableDataSource<Institucion>;
-  public resultsLength = 0;
   public searching = false;
+  public resultsLength = 0;
+  public searchTerms: any = {};
+  public colapsarFiltros = true;
+  public mensajes = '';
+  public estadoOptions: any[] = [
+    { nombre: 'Habilitado', valor: false },
+    { nombre: 'Deshabilitado', valor: true },
+  ];
+  public tipoOptions: string[] = this.con.TipoInstitucionEnum;
 
   @ViewChild(MatPaginator) paginador: MatPaginator | null = null;
   @ViewChild('institucionModal') institucionModal!: TemplateRef<any>;
@@ -38,8 +55,8 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['numero', 'nombre', 'tipo', 'cantidadConsultas', 'estado', 'action'];
   constructor(
-    private _institucionService: InstitucionService,
     private snackBar: MatSnackBar,
+    private _institucionService: InstitucionService,
     private _dialog: MatDialog,
   ) {
     this.instituciones = new MatTableDataSource<Institucion>([]);
@@ -55,6 +72,7 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerInstituciones();
+    this.activateTableFilter();
   }
 
   ngAfterViewInit() {
@@ -79,9 +97,51 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.instituciones.filter = filterValue.trim().toLowerCase();
+  activateTableFilter() {
+    this.instituciones.filterPredicate = (institucion: any, filter: string) => {
+      const searchTerms = JSON.parse(filter);
+
+      const matchesEstado = searchTerms.estado !== undefined ? institucion.deshabilitado === JSON.parse(searchTerms.estado) : true;
+      const matchesTipo = searchTerms.tipo ? String(institucion.tipo) === searchTerms.tipo : true;
+      const matchesNombre = searchTerms.nombre ? sacarAcentos(institucion.nombre.toLowerCase()).includes(searchTerms.nombre.toLowerCase()) : true;
+
+      this.actualizarMensajes(searchTerms.nombre, searchTerms.estado, searchTerms.tipo);
+      return matchesNombre && matchesEstado && matchesTipo;
+    };
+  }
+
+  applyFilter(event: any, filtro: string) {
+    if (filtro === 'filtroNombre') {
+      const nombreValue = sacarAcentos(event.target.value.trim().toLowerCase());
+      this.searchTerms.nombre = nombreValue || undefined;
+    } else if (filtro === 'filtroTipo') {
+      const tipoValue = event.value;
+      this.searchTerms.tipo = tipoValue !== undefined ? tipoValue : undefined;
+    } else if (filtro === 'filtroEstado') {
+      const estadoValue = event.value;
+      this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
+    }
+    this.instituciones.filter = JSON.stringify(this.searchTerms);
+    if (this.instituciones.paginator) this.instituciones.paginator.firstPage();
+  }
+
+  actualizarMensajes(filtroNombre: any, filtroEstado: any, filtroTipo: any): void {
+    this.mensajes = 'No se encontró una institución con:';
+    if (filtroNombre) this.mensajes += ` Nombre: '${filtroNombre}'. `;
+    if (filtroTipo) this.mensajes += ` Tipo: ${filtroTipo}. `;
+    if (filtroEstado) this.mensajes += ` Estado: ${filtroEstado ? 'Deshabilitado' : 'Habilitado'}.`;
+  }
+
+  limpiarFiltroEstado() {
+    this.searchTerms.estado = undefined;
+    this.instituciones.filter = JSON.stringify(this.searchTerms);
+    if (this.instituciones.paginator) this.instituciones.paginator.firstPage();
+  }
+
+  limpiarFiltroTipo() {
+    this.searchTerms.tipo = undefined;
+    this.instituciones.filter = JSON.stringify(this.searchTerms);
+    if (this.instituciones.paginator) this.instituciones.paginator.firstPage();
   }
 
   habilitar(id: number) {
@@ -171,4 +231,8 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
     if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
     else this._liveAnnouncer.announce('Orden eliminado');
   }
+}
+
+function sacarAcentos(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }

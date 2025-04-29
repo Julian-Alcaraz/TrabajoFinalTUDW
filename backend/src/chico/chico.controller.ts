@@ -25,7 +25,7 @@ export class ChicoController {
     return {
       success: true,
       data: chico,
-      message: 'Chico creado con exito',
+      message: 'Niño creado con exito',
     };
   }
 
@@ -41,11 +41,11 @@ export class ChicoController {
     };
   }
 
-  @Get('/activity/:year')
+  @Get('/activity/:year/:deshabilitado')
   @ApiOperation({ summary: 'Devuelve todos los chicos con actividad' })
   @ApiResponse({ status: 200, description: 'Retorna todos los chicos con exito' })
-  async findAllByActivity(@Param('year', ParseIntPipe) year: number) {
-    const chicos = await this.chicoService.findAllWithActivity(year);
+  async findAllByActivity(@Param('year', ParseIntPipe) year: number, @Param('deshabilitado', ParseIntPipe) deshabilitado: number) {
+    const chicos = await this.chicoService.findAllWithActivity(year, deshabilitado);
     return {
       success: true,
       data: chicos,
@@ -87,6 +87,19 @@ export class ChicoController {
     }
   }
 
+  @Get('estudios/dni/:dni')
+  @ApiOperation({ summary: 'Devuelve los ultimos estudios si existen del chico buscado por dni' })
+  @ApiResponse({ status: 200, description: 'Retorna los estudios del chico buscado con exito' })
+  @ApiResponse({ status: 404, description: 'Estudios no encontrados' })
+  async findOneByDniAndEstudios(@Param('dni', ParseIntPipe) dni: number) {
+    const estudios = await this.chicoService.findOneByDniAndEstudios(dni);
+    return {
+      success: estudios ? true : false,
+      data: estudios,
+      message: estudios ? 'Estudios encontrado con exito' : 'Estudios no encontrados',
+    };
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza los datos de un chico' })
   @ApiResponse({ status: 200, description: 'Chico actualizado con exito' })
@@ -98,20 +111,20 @@ export class ChicoController {
     return {
       success: true,
       data: chicoModificado,
-      message: 'Chico modificado con exito',
+      message: 'Niño modificado con exito',
     };
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Borrado logico de un chico' })
-  @ApiResponse({ status: 200, description: 'Chico borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Chico no encontrado' })
+  @ApiResponse({ status: 200, description: 'Niño borrado logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'Niño no encontrado' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const chicoEliminado = await this.chicoService.remove(id);
     return {
       success: true,
       data: chicoEliminado,
-      message: 'Chico eliminado con exito',
+      message: 'Niño eliminado con exito',
     };
   }
 
@@ -124,7 +137,7 @@ export class ChicoController {
     return {
       success: true,
       data: consultas,
-      message: 'Consultas encontradas por chico con exito',
+      message: 'Consultas encontradas por niño con exito',
     };
   }
 

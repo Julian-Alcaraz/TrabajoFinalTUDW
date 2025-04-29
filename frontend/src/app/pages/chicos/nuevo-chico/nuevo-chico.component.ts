@@ -7,6 +7,5 @@ import { FormChicosComponent } from '../components/form-chicos/form-chicos.compo
   standalone: true,
   imports: [FormChicosComponent],
   templateUrl: './nuevo-chico.component.html',
-  styleUrl: './nuevo-chico.component.css',
 })
 export class NuevoChicoComponent {}

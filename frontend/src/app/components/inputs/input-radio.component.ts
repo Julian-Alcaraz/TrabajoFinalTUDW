@@ -13,8 +13,9 @@ import { CommonModule } from '@angular/common';
       <mat-radio-group [formControl]="control" [name]="nombre" class="w-full">
         <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
           <li *ngFor="let item of items" class="w-full sm:flex-1 sm:border-b-0 sm:border-r px-2">
-            <label for="horizontal-list-{{ item }}" class="flex items-center cursor-pointer py-2 w-full">
-              <mat-radio-button id="horizontal-list-{{ item }}" [value]="item" class=""></mat-radio-button> <span class="ml-2 text-sm font-medium text-gray-900">{{ item }}</span>
+            <label class="flex items-center cursor-pointer py-2 w-full">
+              <mat-radio-button [value]="item" class="mr-2"></mat-radio-button>
+              <span class="text-sm font-medium text-gray-900">{{ item }}</span>
             </label>
           </li>
         </ul>

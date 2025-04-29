@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-import * as Constantes from '@app/common/const/const'
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ValidarCadenaSinEspacios, ValidarCampoOpcional } from '@utils/validadores';
 import { ConsultaService } from '@services/consulta.service';
@@ -13,11 +13,13 @@ import { CamposComunesComponent } from '../../components/campos-comunes/campos-c
 import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
+import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @Component({
   selector: 'app-nueva-fonoaudiologia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent, CamposComunesComponent, DatosMedicoComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-fonoaudiologia.component.html',
 })
 export class NuevaFonoaudiologicaComponent implements OnInit {
@@ -29,12 +31,16 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
   public fonoaudiologiaForm: FormGroup;
   public fechaManana = new Date(new Date().setDate(new Date().getDate() + 1));
   public con = Constantes;
-
+  dni: number | null = null;
+  loading = false;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _consultaService: ConsultaService,
+    private _router: Router,
   ) {
+    const navigation = this._router.getCurrentNavigation();
+    this.dni = navigation?.extras?.state ? navigation?.extras?.state['dni'] : null;
     this.fonoaudiologiaForm = this.fb.group({
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
@@ -78,31 +84,12 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.fonoaudiologiaForm.value;
-          formValues.asistencia = formValues.asistencia === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
-          const data = {
-            type: 'Fonoaudiologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia: false,
-            derivacion_oftalmologia: false,
-            derivacion_fonoaudiologia: false,
-            fonoaudiologia: {
-              ...fonoaudiologiaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
+
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.fonoaudiologiaForm.reset();
@@ -118,11 +105,14 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.fonoaudiologiaForm.markAllAsTouched();
     }
   }
 
@@ -194,6 +184,34 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
     return value === true || value === 'true';
   }
 
+  setData() {
+    const formValues = this.fonoaudiologiaForm.value;
+    formValues.asistencia = formValues.asistencia === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+    delete formValues.dni;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
+    const data = {
+      type: 'Fonoaudiologia',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_odontologia: false,
+      derivacion_oftalmologia: false,
+      derivacion_fonoaudiologia: false,
+      fonoaudiologia: {
+        ...fonoaudiologiaValues,
+      },
+    };
+    return data;
+  }
+
   modificarConsulta() {
     if (this.fonoaudiologiaForm.valid) {
       Swal.fire({
@@ -204,32 +222,13 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.fonoaudiologiaForm.value;
-          formValues.asistencia = formValues.asistencia === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...fonoaudiologiaValues } = formValues;
-          const data = {
-            type: 'Fonoaudiologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            fonoaudiologia: {
-              ...fonoaudiologiaValues,
-            },
-          };
-
+          this.loading = true;
+          const data = this.setData();
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
                 if (response.success) {
+                  this.loading = false;
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
                   const consultaMod = response.data;
@@ -237,12 +236,15 @@ export class NuevaFonoaudiologicaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });
           }
         }
       });
+    } else {
+      this.fonoaudiologiaForm.markAllAsTouched();
     }
   }
 }

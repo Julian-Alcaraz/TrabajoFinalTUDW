@@ -1,4 +1,35 @@
-import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion } from './opcionesConst';
+import {
+  //
+  opcionesSexo,
+  opcionesVacunas,
+  opcionesExamenVisual,
+  opcionesOrtopediaYTraumatologia,
+  opcionesLenguaje,
+  opcionesAlimentacion,
+  opcionesInfusiones,
+  opcionesCantidadComidas,
+  opcionesHsPantalla,
+  opcionesHsJuegoAireLibre,
+  opcionesHsSuenio,
+  opcionesHidratacion,
+  opcionesConsulta,
+  opcionesTurno,
+  opcionesDiagnosticoPresuntivo,
+  opcionesCausas,
+  opcionesDemanda,
+  opcionesCurso,
+  opcionesTipoInstitucion,
+  opcionesDuracion,
+  opcionesDestinatarios,
+  opcionesTurnoTalleres,
+  opcionesConjuntoCon,
+  opcionesEspecialidad,
+  opcionesFrecuencia,
+  motivoConsumo,
+  frecuenciaPrevencion,
+  otraProblematica,
+  consumoProblematico,
+} from './opcionesConst';
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum = opcionesSexo;
@@ -59,6 +90,19 @@ export const CausasEnum = opcionesCausas;
 export type DemandaType = (typeof opcionesDemanda)[number];
 export const DemandaEnum = opcionesDemanda;
 
+// Prevencion
+export type MotivoConsumoType = (typeof motivoConsumo)[number];
+export const MotivoConsumoEnum = motivoConsumo;
+
+export type FrecuenciaPrevencionType = (typeof frecuenciaPrevencion)[number];
+export const FrecuenciaPrevencionEnum = frecuenciaPrevencion;
+
+export type ConsumoProblematicoType = (typeof consumoProblematico)[number];
+export const ConsumoProblematicoEnum = consumoProblematico;
+
+export type OtraProblematicaType = (typeof otraProblematica)[number];
+export const OtraProblematicaEnum = otraProblematica;
+
 // Curso
 
 export type NivelCursoType = (typeof opcionesCurso)[number];
@@ -68,3 +112,25 @@ export const NivelCursoEnum = opcionesCurso;
 
 export type TipoInstitucionType = (typeof opcionesTipoInstitucion)[number];
 export const TipoInstitucionEnum = opcionesTipoInstitucion;
+
+// Taller
+
+export type DuracionType = (typeof opcionesDuracion)[number];
+export const DuracionEnum = opcionesDuracion;
+
+export type DestinatariosType = (typeof opcionesDestinatarios)[number];
+export const DestinatariosEnum = opcionesDestinatarios;
+
+export type TurnoTalleresType = (typeof opcionesTurnoTalleres)[number];
+export const TurnoTalleresEnum = opcionesTurnoTalleres;
+
+export type ConjuntoConType = (typeof opcionesConjuntoCon)[number];
+export const ConjuntoConEnum = opcionesConjuntoCon;
+
+export type FrecuenciaType = (typeof opcionesFrecuencia)[number];
+export const FrecuenciaEnum = opcionesFrecuencia;
+
+// Especialidad
+
+export type EspecialidadType = (typeof opcionesEspecialidad)[number];
+export const EspecialidadEnum = opcionesEspecialidad;

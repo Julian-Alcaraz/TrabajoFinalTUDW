@@ -205,6 +205,8 @@ enum ConsultaType {
   Fonoaudiologia = 'Fonoaudiologia',
   Oftalmologia = 'Oftalmologia',
   Odontologia = 'Odontologia',
+  Prevencion = 'Prevencion',
+  Social = 'Social',
 }
 
 export const ConsultaFactory = setSeederFactory(Consulta, async () => {
@@ -213,7 +215,7 @@ export const ConsultaFactory = setSeederFactory(Consulta, async () => {
   const turnos = [TurnoType.Mañana, TurnoType.Tarde, TurnoType.Noche];
   consulta.turno = turnos[Math.floor(Math.random() * turnos.length)];
 
-  const types = [ConsultaType.Clinica, ConsultaType.Fonoaudiologia, ConsultaType.Oftalmologia, ConsultaType.Odontologia];
+  const types = [ConsultaType.Clinica, ConsultaType.Fonoaudiologia, ConsultaType.Oftalmologia, ConsultaType.Odontologia, ConsultaType.Prevencion, ConsultaType.Social];
   consulta.type = types[Math.floor(Math.random() * types.length)];
 
   consulta.derivacion_externa = Math.random() > 0.5;

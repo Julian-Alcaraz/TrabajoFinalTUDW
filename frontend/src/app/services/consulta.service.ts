@@ -16,13 +16,29 @@ export class ConsultaService {
     return this._http.post(this.url + 'consulta/busquedaPersonalizada', data);
   }
 
+  obtenerTotalPersonalizada(data:any): Observable<any> {
+    return this._http.post(this.url + 'consulta/countBusquedaPersonalizada', data);
+  }
+
+  busquedaPersonalizadaLimited(data: any, page: number, size: number): Observable<any> {
+    return this._http.post(this.url + 'consulta/busquedaPersonalizada/limited/' + page + '/' + size, data);
+  }
   // Obtiene todas las consultas y sus relaciones con chico, curso e institucion
   obtenerConsultas(): Observable<any> {
     return this._http.get(this.url + 'consulta/');
   }
+
   obtenerConsultasxAnio(anio: number): Observable<any> {
     return this._http.get(this.url + 'consulta/year/' + anio);
   }
+  obtenerTotalxAnio(anio: number) {
+    return this._http.get(this.url + `consulta/countTotalYear/${anio}`);
+  }
+
+  obtenerConsultasxAnioLimited(anio: number, page: number, size: number): Observable<any> {
+    return this._http.get(this.url + `consulta/year/${anio}/limited/${page}/${size}`);
+  }
+
   cargarConsulta(data: any): Observable<any> {
     return this._http.post(this.url + 'consulta', data);
   }
@@ -39,7 +55,7 @@ export class ConsultaService {
     return this._http.get(this.url + 'consulta/primeraVezChico/' + id + '/' + tipoConsulta);
   }
 
-  // Graficos
+  // ============================ Graficos ============================
   countConsultaLastYears(year: number) {
     return this._http.get(this.url + 'consulta/contarXanios/' + year);
   }

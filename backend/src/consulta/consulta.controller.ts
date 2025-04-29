@@ -29,11 +29,23 @@ export class ConsultaController {
     };
   }
 
-  @Post('busquedaPersonalizada')
+  @Post('countBusquedaPersonalizada')
+  @ApiOperation({ summary: 'Devuelte el total de consultas de una busqueda personalizada' })
+  @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
+  async countBusquedaPersonalizada(@Body() data: any) {
+    const total = await this.consultaService.countBusquedaPersonalizadaLimited(data);
+    return {
+      success: true,
+      data: total,
+      message: 'Consultas contadas con exito.',
+    };
+  }
+
+  @Post('busquedaPersonalizada/limited/:page/:size')
   @ApiOperation({ summary: 'Devuelte todas las consultas de una busqueda personalizada' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
-  async busquedaPersonalizada(@Body() data: any) {
-    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizada(data));
+  async busquedaPersonalizadaLimited(@Body() data: any, @Param('page', ParseIntPipe) page: number, @Param('size', ParseIntPipe) size: number) {
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.busquedaPersonalizadaLimited(data, page, size));
     return {
       success: true,
       data: consultas,
@@ -66,10 +78,34 @@ export class ConsultaController {
   }
 
   @Get('year/:year')
-  @ApiOperation({ summary: 'Devuelte todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad' })
+  @ApiOperation({ summary: 'Devuelve todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad' })
   @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
   async findAllByYear(@Param('year', ParseIntPipe) year: number) {
     const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.findAllByYear(year));
+    return {
+      success: true,
+      data: consultas,
+      message: 'Consultas obtenidas con exito.',
+    };
+  }
+
+  @Get('countTotalYear/:year')
+  @ApiOperation({ summary: 'Devuelve el total por consulta' })
+  @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
+  async getTotalByYear(@Param('year', ParseIntPipe) year: number) {
+    const total = await this.consultaService.countTotalByYear(year);
+    return {
+      success: true,
+      data: total,
+      message: 'Consultas obtenidas con exito.',
+    };
+  }
+
+  @Get('year/:year/limited/:page/:size')
+  @ApiOperation({ summary: 'Devuelve todas las consultas de un año especifico relacionadas con chico, curso e institución pero sin los datos por especialidad, limitada' })
+  @ApiResponse({ status: 201, description: 'Consultas obtenidas con exito' })
+  async findAllByYearLimited(@Param('year', ParseIntPipe) year: number, @Param('page', ParseIntPipe) page: number, @Param('size', ParseIntPipe) size: number) {
+    const consultas = plainToInstance(ResponseConsultaDto, await this.consultaService.findAllByYearLimited(year, page, size));
     return {
       success: true,
       data: consultas,

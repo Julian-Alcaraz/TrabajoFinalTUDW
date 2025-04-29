@@ -15,13 +15,15 @@ import { InputTextareaComponent } from '@components/inputs/input-textarea.compon
 import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.component';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
+import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 // ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
 
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, LoadingComponent, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputCheckboxComponent, InputTextareaComponent, InputSelectEnumComponent],
   templateUrl: './nueva-clinica.component.html',
 })
 export class NuevaClinicaComponent implements OnInit {
@@ -29,15 +31,20 @@ export class NuevaClinicaComponent implements OnInit {
   @Input() editar = true;
   @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
-
+  loading = false;
   public clinicaForm: FormGroup;
   public con = Constantes;
+  dni: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _consultaService: ConsultaService,
+    private _router: Router,
   ) {
+    const navigation = this._router.getCurrentNavigation();
+    this.dni = navigation?.extras?.state ? navigation?.extras?.state['dni'] : null;
+
     this.clinicaForm = this.fb.group({
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
@@ -71,6 +78,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia: [false, []],
       derivacion_oftalmologia: [false, []],
       derivacion_odontologia: [false, []],
+      derivacion_prevencion: [false, []],
+      derivacion_social: [false, []],
       derivacion_externa: [false, []],
       pcta: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
       pcimc: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
@@ -123,32 +132,11 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.clinicaForm.value;
-          formValues.segto = formValues.segto === 'true';
-          formValues.leche = formValues.leche === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-
-          delete formValues.dni;
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_odontologia, derivacion_oftalmologia, derivacion_fonoaudiologia, ...clinicaValues } = formValues;
-          const data = {
-            type: 'Clinica',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia,
-            derivacion_fonoaudiologia,
-            derivacion_oftalmologia,
-            clinica: {
-              ...clinicaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.clinicaForm.reset();
@@ -174,11 +162,14 @@ export class NuevaClinicaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.clinicaForm.markAllAsTouched();
     }
   }
 
@@ -206,6 +197,8 @@ export class NuevaClinicaComponent implements OnInit {
   completarCampos() {
     // const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
     const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
+    const derivacion_prevencion = this.consulta?.derivacion_prevencion ? true : false;
+    const derivacion_social = this.consulta?.derivacion_social ? true : false;
     const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
     const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
     this.clinicaForm.patchValue({
@@ -239,6 +232,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_fonoaudiologia,
       derivacion_oftalmologia,
       derivacion_odontologia,
+      derivacion_prevencion,
+      derivacion_social,
       // derivacion_externa,
       pcta: this.consulta?.clinica?.pcta,
       pcimc: this.consulta?.clinica?.pcimc,
@@ -269,6 +264,8 @@ export class NuevaClinicaComponent implements OnInit {
     const derivacion_odontologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_odontologia);
     const derivacion_fonoaudiologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_fonoaudiologia);
     const derivacion_oftalmologiaForm = this.convertToBoolean(this.clinicaForm.value.derivacion_oftalmologia);
+    const derivacion_prevencionForm = this.convertToBoolean(this.clinicaForm.value.derivacion_prevencion);
+    const derivacion_socialForm = this.convertToBoolean(this.clinicaForm.value.derivacion_social);
     // let derivacion_externaConsulta = false;
     // if (this.consulta?.derivacion_externa) {
     //   derivacion_externaConsulta = this.consulta?.derivacion_externa;
@@ -284,6 +281,14 @@ export class NuevaClinicaComponent implements OnInit {
     let derivacion_oftalmologiaConsulta = false;
     if (this.consulta?.derivacion_oftalmologia) {
       derivacion_oftalmologiaConsulta = this.consulta?.derivacion_oftalmologia;
+    }
+    let derivacion_prevencionConsulta = false;
+    if (this.consulta?.derivacion_prevencion) {
+      derivacion_prevencionConsulta = this.consulta?.derivacion_prevencion;
+    }
+    let derivacion_socialConsulta = false;
+    if (this.consulta?.derivacion_social) {
+      derivacion_socialConsulta = this.consulta?.derivacion_social;
     }
     const segto = this.convertToBoolean(this.clinicaForm.value.segto);
     const diabetes = this.convertToBoolean(this.clinicaForm.value.diabetes);
@@ -309,6 +314,8 @@ export class NuevaClinicaComponent implements OnInit {
         derivacion_odontologiaConsulta === derivacion_odontologiaForm &&
         derivacion_fonoaudiologiaConsulta === derivacion_fonoaudiologiaForm &&
         derivacion_oftalmologiaConsulta === derivacion_oftalmologiaForm &&
+        derivacion_prevencionConsulta === derivacion_prevencionForm &&
+        derivacion_socialConsulta === derivacion_socialForm &&
         this.consulta?.clinica?.peso === this.clinicaForm.value.peso &&
         this.consulta?.clinica?.talla === this.clinicaForm.value.talla &&
         this.consulta?.clinica?.tas === this.clinicaForm.value.tas &&
@@ -361,33 +368,13 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.clinicaForm.value;
-          formValues.segto = formValues.segto === 'true';
-          formValues.leche = formValues.leche === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          delete formValues.dni;
+          const data = this.setData();
+          this.loading = true;
 
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, ...clinicaValues } = formValues;
-          const data = {
-            type: 'Clinica',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_fonoaudiologia,
-            derivacion_odontologia,
-            derivacion_oftalmologia,
-            clinica: {
-              ...clinicaValues,
-            },
-          };
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
+                this.loading = false;
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
@@ -396,12 +383,45 @@ export class NuevaClinicaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });
           }
         }
       });
+    } else {
+      this.clinicaForm.markAllAsTouched();
     }
+  }
+
+  setData() {
+    const formValues = this.clinicaForm.value;
+    formValues.segto = formValues.segto === 'true';
+    formValues.leche = formValues.leche === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    delete formValues.dni;
+
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, derivacion_prevencion, derivacion_social, ...clinicaValues } = formValues;
+    const data = {
+      type: 'Clinica',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_fonoaudiologia,
+      derivacion_odontologia,
+      derivacion_oftalmologia,
+      derivacion_prevencion,
+      derivacion_social,
+      clinica: {
+        ...clinicaValues,
+      },
+    };
+    return data;
   }
 }

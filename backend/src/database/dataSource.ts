@@ -10,6 +10,7 @@ const configService = new ConfigService();
 const secretService = new SecretService(configService);
 
 /*
+/*
 console.log('====================== DATASOURCE.TS ======================');
 
 console.log('DB_TYPE:', secretService.readSecret('DB_TYPE'));

@@ -14,6 +14,7 @@ import { FonoaudiologiaFactory } from '../factories/fonoaudiologia.factory';
 import { ClinicaFactory } from '../factories/clinica.factory';
 import { OftalmologiaFactory } from '../factories/oftalmologia.factory';
 import { OdontologiaFactory } from '../factories/odontologia.factory';
+import { TallerFactory } from '../factories/taller.factory';
 
 // Entidades
 import { Menu } from '../../menu/entities/menu.entity';
@@ -30,6 +31,13 @@ import { Oftalmologia } from '../../consulta/entities/oftalmologia.entity';
 import { Odontologia } from '../../consulta/entities/odontologia.entity';
 import { Fonoaudiologia } from '../../consulta/entities/fonoaudiologia.entity';
 import { SecretService } from '../../common/services/secret.service';
+import { Taller } from '../../taller/entities/taller.entity';
+import { Especialidad } from '../../especialidad/entities/especialidad.entity';
+import { Marco } from '../../marco/entities/marco.entity';
+import { Prevencion } from '../../consulta/entities/prevencion.entity';
+import { Social } from '../../consulta/entities/social.entity';
+import { PrevencionFactory } from '../factories/prevencion.factory';
+import { SocialFactory } from '../factories/social.factory';
 
 dotenv.config();
 const configService = new ConfigService();
@@ -59,8 +67,8 @@ const options: DataSourceOptions & SeederOptions = {
   database: secretService.readSecret('DB_DATABASE'),
   username: secretService.readSecret('DB_USERNAME'),
   password: secretService.readSecret('DB_PASSWORD'),
-  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia],
-  factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory],
+  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia, Prevencion, Social, Taller, Especialidad, Marco],
+  factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory, TallerFactory, PrevencionFactory, SocialFactory],
   seeds: secretService.readSecret('NODE_ENV') === 'production' ? [MainSeeder] : [DevSeeder],
 };
 console.log(secretService.readSecret('NODE_ENV') === 'production' ? '[MainSeeder]' : '[DevSeeder]');

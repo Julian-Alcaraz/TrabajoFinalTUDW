@@ -18,9 +18,37 @@
         </div>
       }
     </div>
+    <!--
     <div class="flex-2">
-      <!-- <app-input-select-enum label="Vista grafico de barras" [control]="controlDeInput('porcentaje')" idInput="porcentaje" [opciones]="['Porcentajes', 'Cantidades']" [valores]="['1', '0']" /> -->
-      <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" />
+      <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" required />
+    </div>
+    -->
+    <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg">
+      <div class="flex flex-wrap gap-4">
+        <div class="flex items-center">
+          <p-radiobutton name="porcentaje" value="0" [formControl]="controlDeInput('porcentaje')" inputId="cantidades" />
+          <label for="cantidades" class="ml-2">Cantidades</label>
+        </div>
+        <div class="flex items-center">
+          <p-radiobutton name="porcentaje" value="1" [formControl]="controlDeInput('porcentaje')" inputId="porcentajes" />
+          <label for="porcentajes" class="ml-2">Porcentajes</label>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="esTaller">
+      <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg">
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center">
+            <p-radiobutton name="cantEncuentrosOCantParticipantes" value="0" [formControl]="controlDeInput('participantes')" inputId="cantEncuentros" />
+            <label for="cantEncuentros" class="ml-2">Encuentros</label>
+          </div>
+          <div class="flex items-center">
+            <p-radiobutton name="cantEncuentrosOCantParticipantes" value="1" [formControl]="controlDeInput('participantes')" inputId="cantParticipantes" />
+            <label for="cantParticipantes" class="ml-2">Participantes</label>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col">
       <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>

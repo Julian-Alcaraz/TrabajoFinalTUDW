@@ -12,6 +12,7 @@ export class ChicoService {
   constructor(
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
+    @InjectRepository(Consulta) private readonly consultaOrm: Repository<Consulta>,
   ) {}
 
   async create(createChicoDto: CreateChicoDto) {
@@ -31,8 +32,8 @@ export class ChicoService {
     return this.chicoORM.find();
   }
 
-  async findAllWithActivity(year: number) {
-    const result = await this.chicoORM
+  async findAllWithActivity(year: number, deshabilitado: number) {
+    const query = this.chicoORM
       .createQueryBuilder('chico')
       .leftJoin('chico.barrio', 'barrio')
       .leftJoin('barrio.localidad', 'localidad')
@@ -40,10 +41,13 @@ export class ChicoService {
       .addSelect((subQuery) => {
         return subQuery.select('CAST(COUNT(DISTINCT consulta.type) AS INTEGER)', 'actividad').from(Consulta, 'consulta').where('consulta.id_chico = chico.id').andWhere('consulta.deshabilitado = false AND EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }, 'actividad')
-      .orderBy('chico.nombre')
-      .getRawMany();
+      .orderBy('chico.created_at', 'DESC');
 
-    return result;
+    if (deshabilitado !== 1) {
+      query.where('chico.deshabilitado = false');
+    }
+
+    return await query.getRawMany();
   }
 
   async findOne(id: number) {
@@ -56,6 +60,15 @@ export class ChicoService {
     const chico = await this.chicoORM.findOne({ where: { dni }, relations: ['barrio', 'barrio.localidad'] });
     // if (!chico) throw new NotFoundException(`Chico con dni ${dni} no encontrado`);!!!! deberia estar descomentado creo
     return chico;
+  }
+
+  async findOneByDniAndEstudios(dni: number) {
+    const consultaEstudios = await this.consultaOrm.findOne({ where: { chico: { dni }, deshabilitado: false }, order: { created_at: 'DESC' }, relations: ['chico', 'institucion', 'curso'] });
+    if (consultaEstudios) {
+      return { id_institucion: consultaEstudios.institucion.id, id_curso: consultaEstudios.curso.id };
+    }
+
+    return consultaEstudios;
   }
 
   async update(id: number, updateChicoDto: UpdateChicoDto) {
@@ -99,7 +112,7 @@ export class ChicoService {
       relations: ['consultas', 'consultas.usuario', 'consultas.institucion', 'consultas.curso'],
     });
     if (!chico) throw new NotFoundException(`Chico con id ${id} no encontrado`);
-    chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false);
+    chico.consultas = chico.consultas.filter((consulta) => consulta.deshabilitado === false).sort((b, a) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
     return chico.consultas;
   }
 

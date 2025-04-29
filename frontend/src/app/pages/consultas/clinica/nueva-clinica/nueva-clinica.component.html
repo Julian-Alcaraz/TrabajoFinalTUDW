@@ -11,7 +11,7 @@
   </span>
   <div class="card-body">
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="clinicaForm">
-      <app-campos-comunes [form]="clinicaForm" [values]="consulta" />
+      <app-campos-comunes [form]="clinicaForm" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
         <!-- Peso -->
         <div class="mt-4 md:col">
@@ -23,15 +23,15 @@
         </div>
         <!-- Circunferencia de la cintura (cc)-->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Circunferencia de la cintura" [control]="controlDeInput('cc')" placeholder="" idInput="cc" />
+          <app-input-number label="Circunferencia de la cintura (cm)" [control]="controlDeInput('cc')" placeholder="" idInput="cc" />
         </div>
         <!-- Tensión Arterial Sistolica (tas) -->
         <div class="mt-4 md:col-span-1">
-          <app-input-number label="Tensión Arterial Sistolica" [control]="controlDeInput('tas')" placeholder="" idInput="tas" />
+          <app-input-number label="Tensión Arterial Sistolica (Hg)" [control]="controlDeInput('tas')" placeholder="" idInput="tas" />
         </div>
         <!-- Tensión Arterial Diastolica (tad) -->
         <div class="mt-4 md:col-span-1">
-          <app-input-number label="Tensión Arterial Diastolica" [control]="controlDeInput('tad')" placeholder="" idInput="tad" />
+          <app-input-number label="Tensión Arterial Diastolica (Hg)" [control]="controlDeInput('tad')" placeholder="" idInput="tad" />
         </div>
         <!-- Percentil de Talla (PCT) -->
         <div class="mt-4 md:col-span-2">
@@ -39,7 +39,7 @@
         </div>
         <!-- Percentil de Tension Arterial (PCTA) -->
         <div class="mt-4 md:col-span-2">
-          <app-input-number label="Percentil de Tension Arterial" [control]="controlDeInput('pcta')" placeholder="" idInput="pcta" />
+          <app-input-number label="Percentil de Tensión Arterial" [control]="controlDeInput('pcta')" placeholder="" idInput="pcta" />
         </div>
         <!-- Percentil de Índice de Masa Corporal (PCIMC) -->
         <div class="mt-4 md:col-span-2">
@@ -61,7 +61,7 @@
             <!-- Calculo tension arterial (PCTA) -->
             <ng-container *ngIf="clinicaForm.get('pcta')?.value !== '' && clinicaForm.get('pcta')?.value > 0">
               <div class="md:col-span-6 sm:col-span-3">
-                <span class="font-bold">Tension arterial: </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
+                <span class="font-bold">Tensión arterial: </span><span>{{ calcularTensionArterial(clinicaForm.get('pcta')?.value) }}</span>
               </div>
             </ng-container>
           </div>
@@ -72,13 +72,13 @@
             <!-- Grupo de antecedentes familiares -->
             <div class="md:col-span-3">
               <div class="flex flex-col mx-2">
-                <label for="" class="block mb-2 text-lg font-medium text-gray-900">Indica si el chico presenta alguno de los siguientes antecedentes familiares:</label>
+                <label for="" class="block mb-2 text-lg font-medium text-gray-900">Indica si el niño presenta alguno de los siguientes antecedentes familiares:</label>
                 <ul class="flex flex-row flex-wrap items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mt-2">
                   <li class="w-full border-b border-gray-200 p-1">
                     <app-input-checkbox label="Diabetes" [control]="controlDeInput('diabetes')" idInput="diabetes" (change)="onChangeCheckbox($event)" />
                   </li>
                   <li class="w-full border-b border-gray-200 p-1">
-                    <app-input-checkbox label="Hipertension Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
+                    <app-input-checkbox label="Hipertensión Arterial" [control]="controlDeInput('hta')" idInput="hta" (change)="onChangeCheckbox($event)" />
                   </li>
                   <li class="w-full border-b border-gray-200 p-1">
                     <app-input-checkbox label="Obesidad" [control]="controlDeInput('obesidad')" idInput="obesidad" (change)="onChangeCheckbox($event)" />
@@ -97,7 +97,7 @@
             </div>
             <div class="md:col-span-3">
               <div class="flex flex-col">
-                <label for="" class="block mb-2 font-medium text-lg text-gray-900">Indica si el chico tuvo alguna de las siguientes condiciones:</label>
+                <label for="" class="block mb-2 font-medium text-lg text-gray-900">Indica si el niño tuvo alguna de las siguientes condiciones:</label>
                 <ul class="flex flex-row flex-wrap items-center w-full font-medium text-lg text-gray-900 bg-white border border-gray-200 rounded-lg mt-2 mx-2">
                   <li class="w-full border-b border-gray-200 p-1">
                     <app-input-checkbox label="Antecedentes Perinatales" [control]="controlDeInput('antecedentes_perinatal')" idInput="antecedentes_perinatal" (change)="onChangeCheckbox($event)" />
@@ -111,7 +111,7 @@
           </div>
         </div>
         <!-- Lacteos -->
-        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica si el chico toma:</h3>
+        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica si el niño toma:</h3>
         <div class="mt-4 md:col-span-3">
           <app-input-select-enum label="Leche" [control]="controlDeInput('leche')" idInput="leche" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
@@ -147,7 +147,7 @@
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="con.HidratacionEnum" [valores]="con.HidratacionEnum" />
         </div>
-        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica las horas diarias que el chico dedica a las siguientes actividades:</h3>
+        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica las horas diarias que el niño dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
         <div class="mt-4 md:col-span-2">
           <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="con.HsPantallaEnum" [valores]="con.HsPantallaEnum" />
@@ -165,9 +165,9 @@
           <app-input-select-enum label="Necesita Seguimiento" [control]="controlDeInput('segto')" idInput="segto" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Derivaciones -->
-        <div class="mt-4 md:col-span-3">
+        <div class="mt-4 md:col-span-3 sm:col-span-2">
           <div class="flex flex-col">
-            <label for="" class="block mb-2 text-gray-900 font-medium text-lg">Indica si hace falta derivar el chico a:</label>
+            <label for="" class="block text-gray-900 font-medium text-sm">Indica si hace falta derivar el niño a:</label>
             <ul class="flex flex-row flex-wrap items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mt-2">
               <li class="w-full sm:w-1/2 lg:w-1/3 border-b lg:border-r sm:border-r border-gray-200 sm:border-b">
                 <div class="flex items-center p-1"><app-input-checkbox label="Odontologia" [control]="controlDeInput('derivacion_odontologia')" idInput="derivacion_odontologia" (change)="onChangeCheckbox($event)" /></div>
@@ -175,8 +175,14 @@
               <li class="w-full sm:w-1/2 lg:w-1/3 lg:border-r border-b border-gray-200 sm:border-b">
                 <div class="flex items-center p-1"><app-input-checkbox label="Oftalmologia" [control]="controlDeInput('derivacion_oftalmologia')" idInput="derivacion_oftalmologia" (change)="onChangeCheckbox($event)" /></div>
               </li>
-              <li class="w-full sm:w-1/2 lg:w-1/3 border-b border-gray-200 sm:border-b-0">
+              <li class="w-full sm:w-1/2 lg:w-1/3 lg:border-r border-b sm:border-r border-gray-200 sm:border-b">
                 <div class="flex items-center p-1"><app-input-checkbox label="Fonoaudiologia" [control]="controlDeInput('derivacion_fonoaudiologia')" idInput="derivacion_fonoaudiologia" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+              <li class="w-full sm:w-1/2 lg:w-1/3 lg:border-r border-b border-gray-200 sm:border-b">
+                <div class="flex items-center p-1"><app-input-checkbox label="Prevención" [control]="controlDeInput('derivacion_prevencion')" idInput="derivacion_prevencion" (change)="onChangeCheckbox($event)" /></div>
+              </li>
+              <li class="w-full sm:w-1/2 lg:w-1/3 border-b border-gray-200 sm:border-b-0">
+                <div class="flex items-center p-1"><app-input-checkbox label="Trabajo Social" [control]="controlDeInput('derivacion_social')" idInput="derivacion_social" (change)="onChangeCheckbox($event)" /></div>
               </li>
               <!-- <li class="w-full sm:w-1/2 lg:w-1/4 border-b border-gray-200 sm:border-b-0">
                 <div class="flex items-center p-1"><app-input-checkbox label="Externa" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" (change)="onChangeCheckbox($event)" /></div>
@@ -185,7 +191,7 @@
           </div>
         </div>
         <!-- Observaciones -->
-        <div class="md:col-span-6">
+        <div class="col-span-full">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
         </div>
       </div>
@@ -201,11 +207,25 @@
             <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
           } @else {
             <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
-            <button type="submit" [disabled]="habilitarModificar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Confirmar</button>
+            <button type="submit" [disabled]="habilitarModificar || loading" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Confirmar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
           }
         } @else {
           @if (editar) {
-            <button type="submit" [disabled]="!clinicaForm.valid" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Agregar</button>
+            <button type="submit" [disabled]="loading" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Agregar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
           }
         }
       </div>

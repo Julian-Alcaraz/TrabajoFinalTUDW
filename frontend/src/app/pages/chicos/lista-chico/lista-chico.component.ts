@@ -22,6 +22,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TagModule } from 'primeng/tag';
 import Swal from 'sweetalert2';
 
+import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { Chico } from '@models/chico.model';
 import { ChicoService } from '@services/chico.service';
@@ -42,7 +43,6 @@ import { PanelModule } from 'primeng/panel';
   standalone: true,
   imports: [CommonModule, IconFieldModule, PanelModule, InputIconModule, MatSliderModule, SelectModule, InputTextModule, InputNumberModule, IftaLabelModule, MatTableModule, MatInputModule, MatFormFieldModule, MatPaginator, MatPaginatorModule, RouterModule, LoadingComponent, ProgressBarModule, TooltipModule, ReactiveFormsModule, MatSortModule, TagModule],
   templateUrl: './lista-chico.component.html',
-  styleUrl: './lista-chico.component.css',
   providers: [{ provide: MatPaginatorIntl, useClass: PaginadorPersonalizado }],
 })
 export class ListaChicoComponent implements OnInit, AfterViewInit {
@@ -52,6 +52,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   @ViewChild('filtroBarrio') filtroBarrio!: Select;
 
   private _liveAnnouncer = inject(LiveAnnouncer);
+  public con = Constantes;
   public chicos: MatTableDataSource<Chico>;
   public localidadesOriginales: Localidad[] | undefined = undefined;
   public localidadesFiltradas: Localidad[] | undefined = undefined;
@@ -61,6 +62,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public loadingLocalidades = false;
   public loadingBarrios = false;
   public searching = true;
+  public deshabilitado: number | null = null;
   public resultsLength = 0;
   public searchTerms: any = {};
   public displayedColumns: string[] = ['numero', 'nombre', 'apellido', 'documento', 'fechaNac', 'sexo', 'direccion', 'telefono', 'consultasBar', 'action']; //'estado',
@@ -74,15 +76,17 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     { nombre: '2 Especialidades visitadas', valor: 2 },
     { nombre: '3 Especialidades visitadas', valor: 3 },
     { nombre: '4 Especialidades visitadas', valor: 4 },
+    { nombre: '5 Especialidades visitadas', valor: 5 },
+    { nombre: '6 Especialidades visitadas', valor: 6 },
   ];
-  public sexoOptions: any[] = [{ nombre: 'Masculino' }, { nombre: 'Femenino' }, { nombre: 'Otro' }];
+  public sexoOptions: string[] = this.con.SexoEnum;
   public estadoControl: FormControl = new FormControl(null);
   public localidadControl: FormControl = new FormControl(null);
   public sexoControl: FormControl = new FormControl(null);
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
   public mensajes = '';
-  public colapsarPaneles = true;
+  public colapsarFiltros = false;
 
   constructor(
     private _localidadService: LocalidadService,
@@ -111,7 +115,20 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.obtenerChicos();
+    if (this.identidad && this.identidad?.roles_ids) {
+      if (this.identidad?.roles_ids.includes(GLOBAL.ID_ADMIN)) {
+        this.deshabilitado = 1;
+        console.log(this.deshabilitado);
+        this.obtenerChicos(this.deshabilitado);
+        console.log('sos admin');
+      } else {
+        this.deshabilitado = 0;
+        console.log(this.deshabilitado);
+        this.obtenerChicos(this.deshabilitado);
+        console.log('NO sos admin');
+      }
+    }
+
     this.obtenerBarrios();
     this.obtenerLocalidades();
     this.activateTableFilter();
@@ -138,7 +155,6 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   }
 
   activateTableFilter() {
-    // SE PODRIA CAMBIAR A Chico PERO DA ERROR DE TYPE
     this.chicos.filterPredicate = (chico: any, filter: string) => {
       const searchTerms = JSON.parse(filter);
 
@@ -156,33 +172,29 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     };
   }
 
-  applyFilter(event: any) {
-    let idInput = '';
-    if (event.originalEvent) idInput = event.originalEvent.target.id;
-    else if (event.target) idInput = event.target.id;
-    else if (event.originalTarget.id) idInput = event.originalTarget.id;
-    if (idInput === 'filtroDni') {
+  applyFilter(event: any, filtro?: string) {
+    if (filtro === 'filtroDni') {
       const dniValue = event.target.value.replace(/[,.]/g, '');
       this.searchTerms.dni = dniValue;
-    } else if (idInput === 'filtroNombre') {
+    } else if (filtro === 'filtroNombre') {
       const nombreValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.nombre = nombreValue;
-    } else if (idInput === 'filtroApellido') {
+    } else if (filtro === 'filtroApellido') {
       const apellidoValue = sacarAcentos(event.target.value.trim().toLowerCase());
       this.searchTerms.apellido = apellidoValue;
-    } else if (idInput.includes('filtroSexo')) {
+    } else if (filtro === 'filtroSexo') {
       const sexoValue = event.value;
       this.searchTerms.sexo = sexoValue;
-    } else if (idInput.includes('filtroBarrio')) {
+    } else if (filtro === 'filtroBarrio') {
       const barrioValue = event.value;
       this.searchTerms.idBarrio = barrioValue;
-    } else if (idInput.includes('filtroActividad')) {
+    } else if (filtro === 'filtroActividad') {
       const actividadValue = event.value;
       this.searchTerms.actividad = actividadValue;
-    } else if (idInput.includes('filtroLocalidad')) {
+    } else if (filtro === 'filtroLocalidad') {
       const localidadValue = event.value;
       this.searchTerms.idLocalidad = localidadValue;
-    } else if (idInput.includes('filtroEstado')) {
+    } else if (filtro === 'filtroEstado') {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }
@@ -244,9 +256,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  obtenerChicos() {
+  obtenerChicos(deshabilitado: number) {
     this.searching = true;
-    this._chicoService.obtenerChicos().subscribe({
+    this._chicoService.obtenerChicos(deshabilitado).subscribe({
       next: (response: any) => {
         if (response.success) {
           this.chicos.data = response.data;
@@ -371,7 +383,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     const dialogRef = this._dialog.open(EditarChicoComponent, { panelClass: 'full-screen-dialog', data: { id } });
     dialogRef.afterClosed().subscribe((recargar) => {
       if (recargar) {
-        this.obtenerChicos();
+        this.obtenerChicos(this.deshabilitado!);
       }
     });
   }

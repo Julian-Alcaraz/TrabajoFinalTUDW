@@ -5,7 +5,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
-
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '@services/consulta.service';
 import { InputNumberComponent } from '@components/inputs/input-number.component';
@@ -15,11 +14,13 @@ import { InputSelectEnumComponent } from '@components/inputs/input-select-enum.c
 import { Chico } from '@models/chico.model';
 import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
+import { Router } from '@angular/router';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @Component({
   selector: 'app-nueva-odontologia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, CamposComunesComponent, InputNumberComponent, InputTextareaComponent, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './nueva-odontologia.component.html',
 })
 export class NuevaOdontologiaComponent implements OnInit {
@@ -30,12 +31,16 @@ export class NuevaOdontologiaComponent implements OnInit {
 
   public odontologiaForm: FormGroup;
   public chico: Chico | null = null;
-
+  dni: number | null = null;
+  loading = false;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private _consultaService: ConsultaService,
+    private _router: Router,
   ) {
+    const navigation = this._router.getCurrentNavigation();
+    this.dni = navigation?.extras?.state ? navigation?.extras?.state['dni'] : null;
     this.odontologiaForm = this.fb.group({
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
@@ -96,6 +101,37 @@ export class NuevaOdontologiaComponent implements OnInit {
     this.odontologiaForm.get(controlName)?.setValue(value);
   }
 
+  setData() {
+    const formValues = this.odontologiaForm.value;
+    delete formValues.dni;
+    formValues.cepillado = formValues.cepillado === 'true';
+    formValues.cepillo = formValues.cepillo === 'true';
+    formValues.topificacion = formValues.topificacion === 'true';
+    formValues.obra_social = formValues.obra_social === 'true';
+    formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+
+    const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, derivacion_externa, ...odontologicaValues } = formValues;
+    const data = {
+      type: 'Odontologia',
+      turno,
+      obra_social,
+      ...(observaciones && { observaciones }),
+      edad: parseInt(edad),
+      id_chico: id_chico,
+      id_institucion: parseInt(id_institucion),
+      id_curso: parseInt(id_curso),
+      derivacion_externa,
+      derivacion_odontologia: false,
+      derivacion_oftalmologia: false,
+      derivacion_fonoaudiologia: false,
+      odontologia: {
+        ...(habitos && { habitos }),
+        ...odontologicaValues,
+      },
+    };
+    return data;
+  }
+
   enviarFormulario() {
     if (this.odontologiaForm.valid) {
       Swal.fire({
@@ -106,35 +142,11 @@ export class NuevaOdontologiaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.odontologiaForm.value;
-          delete formValues.dni;
-          formValues.cepillado = formValues.cepillado === 'true';
-          formValues.cepillo = formValues.cepillo === 'true';
-          formValues.topificacion = formValues.topificacion === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
-
-          const { turno, edad, obra_social, observaciones, habitos, id_institucion, id_curso, id_chico, derivacion_externa, ...odontologicaValues } = formValues;
-          const data = {
-            type: 'Odontologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            derivacion_odontologia: false,
-            derivacion_oftalmologia: false,
-            derivacion_fonoaudiologia: false,
-            odontologia: {
-              ...(habitos && { habitos }),
-              ...odontologicaValues,
-            },
-          };
+          this.loading = true;
+          const data = this.setData();
           this._consultaService.cargarConsulta(data).subscribe({
             next: (response: any) => {
+              this.loading = false;
               if (response.success) {
                 MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                 this.odontologiaForm.reset();
@@ -151,11 +163,14 @@ export class NuevaOdontologiaComponent implements OnInit {
               }
             },
             error: (err) => {
+              this.loading = false;
               MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
             },
           });
         }
       });
+    } else {
+      this.odontologiaForm.markAllAsTouched();
     }
   }
 
@@ -242,9 +257,11 @@ export class NuevaOdontologiaComponent implements OnInit {
     }
     return !(this.odontologiaForm.valid && hayCambios);
   }
+
   convertToBoolean(value: string | boolean): boolean {
     return value === true || value === 'true';
   }
+
   modificarConsulta() {
     if (this.odontologiaForm.valid) {
       Swal.fire({
@@ -255,32 +272,13 @@ export class NuevaOdontologiaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const formValues = this.odontologiaForm.value;
-          delete formValues.dni;
-          formValues.cepillado = formValues.cepillado === 'true';
-          formValues.cepillo = formValues.cepillo === 'true';
-          formValues.topificacion = formValues.topificacion === 'true';
-          formValues.obra_social = formValues.obra_social === 'true';
-          formValues.derivacion_externa = formValues.derivacion_externa === 'true';
+          this.loading = true;
+          const data = this.setData();
 
-          const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...odontologicaValues } = formValues;
-          const data = {
-            type: 'Odontologia',
-            turno,
-            obra_social,
-            ...(observaciones && { observaciones }),
-            edad: parseInt(edad),
-            id_chico: id_chico,
-            id_institucion: parseInt(id_institucion),
-            id_curso: parseInt(id_curso),
-            derivacion_externa,
-            odontologia: {
-              ...odontologicaValues,
-            },
-          };
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
+                this.loading = false;
                 if (response.success) {
                   MostrarNotificacion.mensajeExito(this.snackBar, response.message);
                   this.cambiarEstado();
@@ -289,12 +287,15 @@ export class NuevaOdontologiaComponent implements OnInit {
                 }
               },
               error: (err) => {
+                this.loading = false;
                 MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
               },
             });
           }
         }
       });
+    } else {
+      this.odontologiaForm.markAllAsTouched();
     }
   }
 }

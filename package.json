@@ -5,14 +5,13 @@
   "main": "index.js",
   "scripts": {
     "iniciar": "npm run docker-up",
-    "iniciar:dev": "npm run iniciar:deatached-dev && npm run migracion:generar --name=%npm_config_name% && npm run migracion:ejecutar",
     "iniciar:deatached": "npm run docker-up--d",
-    "iniciar:deatached-dev": "npm run docker-up--d:dev",
     "actualizar": "npm run detener-contenedores && npm run eliminar-contenedores && npm run eliminar-imagenes && npm run eliminar-volumenes && npm run iniciar:deatached && npm run migracion:generar",
     "migracion:ejecutar": "docker exec -it backend npm run migration:run",
     "migracion:generar-w": "docker exec -it backend npm run migration:generate --name=%npm_config_name%",
     "migracion:generar": "docker exec -it backend npm run migration:generate --name=$npm_config_name",
 
+    "seed": "docker exec -it backend npm run seed",
 
     "detener-contenedores": "docker stop backend postgres",
     "eliminar-contenedores": "docker rm backend frontend",

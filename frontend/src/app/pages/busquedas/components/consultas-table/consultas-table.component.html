@@ -3,7 +3,7 @@
     <!-- # -->
     <ng-container matColumnDef="numero">
       <th mat-header-cell *matHeaderCellDef>#</th>
-      <td mat-cell *matCellDef="let element">{{ dataSource.data.indexOf(element) + 1 }}</td>
+      <td mat-cell *matCellDef="let element">{{ page * pageSize + dataSource.data.indexOf(element) + 1 }}</td>
     </ng-container>
     <!-- Tipo -->
     <ng-container matColumnDef="type">
@@ -71,6 +71,12 @@
         }
         @if (element.derivacion_oftalmologia) {
           {{ 'Oftalmologia' }}
+        }
+        @if (element.derivacion_prevencion) {
+          {{ 'Prevencion' }}
+        }
+        @if (element.derivacion_social) {
+          {{ 'Trabajo Social' }}
         } @else {
           {{ 'Ninguna' }}
         }
@@ -112,11 +118,9 @@
     <tr mat-row [pTooltip]="'Ver consulta'" tooltipPosition="top" *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-300 cursor-pointer" (click)="verConsulta(row.id, dataSource.data.indexOf(row))"></tr>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell text-center font-bold text-blue-800 text-xl" [attr.colspan]="displayedColumns.length">
-        <!-- @if (searching) {
-          <app-loading />
-        } -->
+        <p class="py-5">No se encontraron consultas.</p>
       </td>
     </tr>
   </table>
 </div>
-<mat-paginator [length]="dataSource" [pageSize]="10" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+<mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons (page)="onPageChange($event)"></mat-paginator>

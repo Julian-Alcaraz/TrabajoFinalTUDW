@@ -10,10 +10,37 @@
   </div>
 
   <div class="card-body">
-    <div class="flex flex-row justify-start items-center">
-      <input (keyup)="applyFilter($event)" placeholder="Buscar por nombre" #input type="text" id="filtro" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required />
-    </div>
-    <div class="scroll">
+    <p-panel [toggleable]="true" [collapsed]="colapsarFiltros" toggler="header">
+      <ng-template pTemplate="header">
+        <div class="flex justify-center w-full gap-2 cursor-pointer">
+          <h3 class="mr-auto text-lg font-semibold my-4">Filtros</h3>
+        </div>
+      </ng-template>
+      <div class="grid gap-6 sm:grid-cols-3 md:grid-cols-6 my-2 ml-1">
+        <!-- Nombre -->
+        <div class="sm:col-span-3 md:col-span-2">
+          <p-iftalabel>
+            <input type="text" pInputText (keyup)="applyFilter($event, 'filtroNombre')" #filtroNombre id="filtroNombre" class="w-full" />
+            <label for="filtroNombre">Nombre</label>
+          </p-iftalabel>
+        </div>
+        <!-- Tipo -->
+        <div class="sm:col-span-3 md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="tipoOptions" (onChange)="applyFilter($event, 'filtroTipo')" (onClear)="limpiarFiltroTipo()" [checkmark]="true" [showClear]="true" [formControl]="tipoControl" #filtroTipo id="filtroTipo" inputId="filtroTipo" class="w-full" />
+            <label for="filtroTipo">Tipo</label>
+          </p-iftalabel>
+        </div>
+        <!-- Estado -->
+        <div class="sm:col-span-3 md:col-span-2">
+          <p-iftalabel>
+            <p-select [options]="estadoOptions" (onChange)="applyFilter($event, 'filtroEstado')" (onClear)="limpiarFiltroEstado()" [checkmark]="true" [showClear]="true" [formControl]="estadoControl" #filtroEstado id="filtroEstado" inputId="filtroEstado" optionLabel="nombre" optionValue="valor" class="w-full" />
+            <label for="filtroEstado">Estado</label>
+          </p-iftalabel>
+        </div>
+      </div>
+    </p-panel>
+    <div class="scroll mt-2">
       <table mat-table [dataSource]="instituciones" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8 table-auto scroll">
         <!-- # -->
         <ng-container matColumnDef="numero">
@@ -70,14 +97,12 @@
                 <app-loading />
               </div>
             } @else {
-              <p class="py-5">
-                {{ input.value ? "No se encontraron instituciones llamadas '" + input.value + "'" : 'No hay instituciones cargadas.' }}
-              </p>
+              <p class="py-5">{{ mensajes }}</p>
             }
           </td>
         </tr>
       </table>
     </div>
-    <mat-paginator [length]="resultsLength" [pageSize]="15" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons />
+    <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[10, 15, 25, 50, 100]" showFirstLastButtons />
   </div>
 </div>

@@ -79,11 +79,6 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.localidades.filter = filterValue.trim().toLowerCase();
-  }
-
   habilitar(id: number) {
     Swal.fire({
       title: '¿Habilitar localidad?',

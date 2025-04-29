@@ -34,30 +34,10 @@ export class MainSeeder implements Seeder {
           apellido: 'Admin',
           email: 'Admin@gmail.com',
           contrasenia: codificarContrasenia('11111111'),
-          dni: 11111111,
+          dni: 11111112,
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
         },
-        /*
-        {
-          nombre: 'Lucas',
-          apellido: 'Puyol',
-          email: 'lucasPujol@gmail.com',
-          contrasenia: codificarContrasenia('12345678'),
-          dni: 12345678,
-          fe_nacimiento: '2000-01-01',
-          roles: [roles[0]], // admin
-        },
-        {
-          nombre: 'Fernando',
-          apellido: 'Lascano',
-          email: 'fernandoLascano@gmail.com',
-          contrasenia: codificarContrasenia('12345679'),
-          dni: 12345679,
-          fe_nacimiento: '2000-01-01',
-          roles: [roles[0]], // admin
-        },
-        */
       ]);
 
       // Menus
@@ -86,22 +66,27 @@ export class MainSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
         },
         {
+          url: 'talleres',
+          label: 'Talleres',
+          orden: 5,
+          icon: 'fa-solid fa-person-chalkboard',
+          roles: [roles[0], roles[1], roles[2]],
+        },
+        {
           url: 'administracion',
           label: 'Administración',
-          orden: 5,
+          orden: 6,
           icon: 'fa-solid fa-shield',
           roles: [roles[0]],
         },
-        /*
         {
           url: 'miUsuario',
           label: 'Mi Usuario',
-          orden: 6,
+          orden: 7,
           icon: 'fa-solid fa-user',
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: true,
         },
-        */
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
@@ -110,50 +95,50 @@ export class MainSeeder implements Seeder {
         {
           url: 'administracion/usuarios',
           label: 'Usuarios',
-          orden: 7,
+          orden: 8,
           icon: 'fa-solid fa-users',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
         {
           url: 'administracion/instituciones',
           label: 'Instituciones',
-          orden: 8,
+          orden: 9,
           icon: 'fa-solid fa-school',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
         {
           url: 'administracion/cursos',
           label: 'Cursos',
-          orden: 9,
+          orden: 10,
           icon: 'fa-solid fa-graduation-cap',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
         {
           url: 'administracion/localidades',
           label: 'Localidades',
-          orden: 10,
+          orden: 11,
           icon: 'fa-solid fa-earth-americas',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
         {
           url: 'administracion/barrios',
           label: 'Barrios',
-          orden: 11,
+          orden: 12,
           icon: 'fa-solid fa-location-dot',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
         {
           url: 'administracion/datos',
           label: 'Datos',
-          orden: 12,
+          orden: 13,
           icon: 'fa-solid fa-file-import',
           roles: [roles[0]],
-          menu_padre: menus[3],
+          menu_padre: menus[4],
         },
       ]);
       await menuORM.save(menusAdmin);
@@ -174,6 +159,22 @@ export class MainSeeder implements Seeder {
           icon: 'fa-solid fa-list-ol',
           roles: [roles[0], roles[1], roles[2]],
           menu_padre: menus[1],
+        },
+        {
+          url: 'talleres/nuevo',
+          label: 'Nuevo',
+          orden: 6,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[3],
+        },
+        {
+          url: 'talleres/list',
+          label: 'Lista',
+          orden: 7,
+          icon: 'fa-solid fa-list-ol',
+          roles: [roles[0], roles[1], roles[2]],
+          menu_padre: menus[3],
         },
         {
           url: 'chicos/:id',
@@ -212,7 +213,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/odontologia/nueva',
           label: 'Odontologica',
-          orden: 4,
+          orden: 5,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -220,7 +221,7 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/oftalmologia/nueva',
           label: 'Oftalmologica',
-          orden: 4,
+          orden: 6,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -228,7 +229,23 @@ export class MainSeeder implements Seeder {
         {
           url: 'consultas/fonoaudiologia/nueva',
           label: 'Fonoaudiologica',
-          orden: 4,
+          orden: 7,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/prevencion/nueva',
+          label: 'Prevención',
+          orden: 8,
+          icon: 'fa-solid fa-plus',
+          roles: [roles[0], roles[1]],
+          menu_padre: menus[2],
+        },
+        {
+          url: 'consultas/social/nueva',
+          label: 'Trabajo Social',
+          orden: 9,
           icon: 'fa-solid fa-plus',
           roles: [roles[0], roles[1]],
           menu_padre: menus[2],
@@ -238,14 +255,19 @@ export class MainSeeder implements Seeder {
 
       // Localidades
       console.log('Seeding localidades...');
-      const localidades = await localidadORM.save([{ nombre: 'Neuquén' }, { nombre: 'Cipolletti' }, { nombre: 'Buenos Aires' }, { nombre: 'Misiones' }]);
-
+      const localidades = await localidadORM.save([
+        //
+        { nombre: 'Neuquén' },
+        { nombre: 'Cipolletti' },
+        { nombre: 'Buenos Aires' },
+        { nombre: 'Misiones' },
+      ]);
       const neuquen = localidades[0];
       const cipolletti = localidades[1];
       const buenosAires = localidades[2];
       const misiones = localidades[3];
-
       console.log('Seeding barrios...');
+
       await barrioORM.save([
         // barrios sacados de la planilla clinica
         { nombre: 'Nuevo', localidad: neuquen },
@@ -298,16 +320,6 @@ export class MainSeeder implements Seeder {
         { nivel: 'Primario', nombre: 'Quinto Grado' },
         { nivel: 'Primario', nombre: 'Sexto Grado' },
         { nivel: 'Primario', nombre: 'Septimo Grado' },
-        /*
-        {
-          nivel: 'Secundario',
-          nombre: 'Primer Año',
-        },
-        {
-          nivel: 'Secundario',
-          nombre: 'Segundo Año',
-        },
-        */
       ]);
       console.log('Seeding instituciones...');
       await institucionORM.save([

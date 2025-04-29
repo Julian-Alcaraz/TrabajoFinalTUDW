@@ -1,0 +1,81 @@
+<div class="card">
+  <span class="card-header">
+    @if (consulta) {
+      <div class="flex justify-between">
+        <div class="">Consulta trabajo social</div>
+        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
+      </div>
+    } @else {
+      Cargar una nueva consulta de trabajo social
+    }
+  </span>
+  <div class="card-body">
+    <!-- <span class="sm:text-red-400 md:text-green-400 lg:text-blue-700">Tamaño panta</span> -->
+    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="socialForm">
+      <app-campos-comunes [form]="socialForm" [values]="consulta" [dni]="this.dni" />
+      <!-- Campos  trabajo social -->
+      <div class="grid gap-6 sm:grid-cols-3 md:grid-cols-6">
+        <!-- Demanda -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Demanda" [control]="controlDeInput('demanda')" placeholder="" idInput="demanda" />
+        </div>
+        <!-- Articulación -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Articulación" [control]="controlDeInput('articulacion')" placeholder="" idInput="articulacion" [opcional]="true" />
+        </div>
+        <!-- objeto_informe -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Objeto informe" [control]="controlDeInput('objeto_informe')" placeholder="" idInput="objeto_informe" />
+        </div>
+        <!-- Seguimiento -->
+        <div class="mt-4 sm:col-span-3">
+          <app-input-textarea label="Seguimiento" [control]="controlDeInput('seguimiento')" placeholder="" idInput="seguimiento" [opcional]="true" />
+        </div>
+        <!-- Derivacion -->
+        <div class="mt-4 col-span-full md:col-span-3">
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Observaciones -->
+        <div class="mt-4 col-span-full">
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
+        </div>
+      </div>
+      <div>
+        @if (consulta && editar) {
+          @if (consulta.usuario) {
+            <app-datos-medico [profesional]="consulta.usuario" />
+          }
+        }
+      </div>
+      <!-- Enviar -->
+      <div class="flex mt-4">
+        @if (consulta && editar) {
+          @if (socialForm.disabled) {
+            <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
+          } @else {
+            <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+            <button type="submit" [disabled]="habilitarModificar || loading" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Confirmar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
+          }
+        } @else {
+          @if (editar) {
+            <button type="submit" [disabled]="loading" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Agregar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
+          }
+        }
+      </div>
+    </form>
+  </div>
+</div>

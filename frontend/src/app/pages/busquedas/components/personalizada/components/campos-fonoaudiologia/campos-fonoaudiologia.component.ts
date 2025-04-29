@@ -8,6 +8,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
+import * as Constantes from '@app/common/const/const';
+
 @Component({
   selector: 'app-campos-fonoaudiologia',
   standalone: true,
@@ -17,14 +19,15 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 export class CamposFonoaudiologiaComponent implements OnInit {
   @Input() form!: FormGroup;
 
+  public con = Constantes;
   public especificas!: FormGroup;
 
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
     { nombre: 'No', valor: false },
   ];
-  public diagnosticoPresuntivoOptions: string[] = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
-  public casuasOptions: string[] = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
+  public diagnosticoPresuntivoOptions: string[] = this.con.DiagnosticoPresuntivoEnum;
+  public casuasOptions: string[] = this.con.CausasEnum;
   public derivacionesOptions: any[] = [
     { nombre: 'Si', valor: { externa: true } },
     { nombre: 'No', valor: { externa: false } },

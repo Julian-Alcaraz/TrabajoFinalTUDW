@@ -13,7 +13,7 @@ export class ProcesamientoService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  procesarClinica(formData: FormData, ): Observable<any> {
+  procesarClinica(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/clinica', formData);
   }
 
@@ -24,8 +24,16 @@ export class ProcesamientoService {
   procesarOdontologia(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/odontologia', formData);
   }
-  
+
   procesarFonoaudiologia(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/fonoaudiologia', formData);
+  }
+
+  procesarPrevencion(formData: FormData): Observable<any> {
+    return this._http.post(this.url + 'procesamiento/prevencion', formData);
+  }
+
+  procesarSocial(formData: FormData): Observable<any> {
+    return this._http.post(this.url + 'procesamiento/social', formData);
   }
 }

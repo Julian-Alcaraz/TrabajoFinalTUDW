@@ -1,0 +1,83 @@
+<div class="card">
+  <span class="card-header">
+    @if (consulta) {
+      <div class="flex justify-between">
+        <div class="">Consulta Prevención</div>
+        <div class="">Fecha realizada: {{ consulta.created_at | date: 'dd-MM-yyyy' }}</div>
+      </div>
+    } @else {
+      Cargar una nueva consulta de prevención
+    }
+  </span>
+  <div class="card-body">
+    <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="prevencionForm">
+      <app-campos-comunes [form]="prevencionForm" (chicoChange)="this.recibirChico($event)" [values]="consulta" [dni]="this.dni" />
+      <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- problematica -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="Problematica" [control]="controlDeInput('otra_problematica')" idInput="otra_problematica" [opciones]="con.OtraProblematicaEnum" [valores]="con.OtraProblematicaEnum" />
+        </div>
+        @if (valueProblematica === 'Consumo problematico') {
+          <!-- que consumo_problematico -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Consumo problematico" [control]="controlDeInput('consumo_problematico')" idInput="consumo_problematico" [opciones]="con.ConsumoProblematicoEnum" [valores]="con.ConsumoProblematicoEnum" />
+          </div>
+          <!-- Edad Inicio -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-number label="Edad inicio de consumo" [control]="controlDeInput('edad_inicio_consumo')" idInput="demanda" />
+          </div>
+          <!-- motivo_consumo -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Motivo de consumo" [control]="controlDeInput('motivo_consumo')" idInput="motivo_consumo" [opciones]="con.MotivoConsumoEnum" [valores]="con.MotivoConsumoEnum" />
+          </div>
+          <!-- frecuencia -->
+          <div class="mt-4 md:col-span-3">
+            <app-input-select-enum label="Frecuencia de consumo" [control]="controlDeInput('frecuencia')" idInput="frecuencia" [opciones]="con.FrecuenciaPrevencionEnum" [valores]="con.FrecuenciaPrevencionEnum" />
+          </div>
+        }
+        <!-- Derivacion -->
+        <div class="mt-4 md:col-span-3">
+          <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
+        </div>
+        <!-- Observaciones -->
+        <div class="mt-4 col-span-full">
+          <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />
+        </div>
+      </div>
+      @if (consulta) {
+        @if (consulta.usuario) {
+          <app-datos-medico [profesional]="consulta.usuario" />
+        }
+      }
+      <!-- Enviar -->
+      <div class="flex mt-4">
+        @if (consulta && editar) {
+          @if (prevencionForm.disabled) {
+            <button type="button" (click)="cambiarEstado()" class="flex my-auto mr-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Modificar</button>
+          } @else {
+            <button type="button" (click)="cambiarEstado()" class="ml-auto mr-2 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">Cancelar</button>
+            <button type="submit" [disabled]="habilitarModificar || loading" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Confirmar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
+          }
+        } @else {
+          @if (editar) {
+            <button type="submit" [disabled]="loading" class="flex my-auto ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center -700 -800 disabled:bg-gray-400">
+              <span class="flex row align-middle justify-center">
+                Agregar
+                @if (loading) {
+                  <app-loading class="ml-2 -mt-3.5 w-5 h-0" />
+                }
+              </span>
+            </button>
+          }
+        }
+      </div>
+    </form>
+  </div>
+</div>
