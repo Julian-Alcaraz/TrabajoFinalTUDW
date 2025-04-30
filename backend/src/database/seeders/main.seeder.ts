@@ -9,6 +9,8 @@ import { Localidad } from '../../localidad/entities/localidad.entity';
 import { Barrio } from '../../barrio/entities/barrio.entity';
 import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
+import { Especialidad } from '../../especialidad/entities/especialidad.entity';
+import { Marco } from '../../marco/entities/marco.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
@@ -21,6 +23,8 @@ export class MainSeeder implements Seeder {
       const barrioORM = dataSource.getRepository(Barrio);
       const cursoORM = dataSource.getRepository(Curso);
       const institucionORM = dataSource.getRepository(Institucion);
+      const especialidadORM = dataSource.getRepository(Especialidad);
+      const marcoORM = dataSource.getRepository(Marco);
 
       // Roles
       console.log('Seeding roles...');
@@ -330,6 +334,52 @@ export class MainSeeder implements Seeder {
         { nombre: 'CEM N° 147', tipo: 'Secundario' },
         { nombre: 'CI Municipal N°3', tipo: 'Primario' },
         { nombre: 'Otros', tipo: 'Primario' },
+      ]);
+      // Especialidades
+      console.log('Seeding especialidades...');
+
+      const especialidades = await especialidadORM.save([{ nombre: 'Fonoaudiologia' }, { nombre: 'Clinica' }, { nombre: 'Nutricion' }, { nombre: 'Odontologia' }, { nombre: 'Prevencion' }]);
+
+      // Marcos
+      console.log('Seeding marcos...');
+      const marcosFonoaudiologia = await marcoORM.save([
+        { nombre: 'Prevención y promoción', especialidad: especialidades[0] },
+        { nombre: 'Deteccion', especialidad: especialidades[0] },
+        { nombre: 'Higiene y Salud', especialidad: especialidades[0] },
+        { nombre: 'Indroducción Lectoescritura', especialidad: especialidades[0] },
+      ]);
+
+      const marcosClinica = await marcoORM.save([
+        { nombre: 'Prevencion y Promoción Integral', especialidad: especialidades[1] },
+        { nombre: 'Educación para la Salud', especialidad: especialidades[1] },
+        { nombre: 'Promoción de Salud', especialidad: especialidades[1] },
+        { nombre: 'Participación y Bienestar Infantil', especialidad: especialidades[1] },
+        { nombre: 'Prevención de Enfermedades', especialidad: especialidades[1] },
+      ]);
+
+      const marcosNutricion = await marcoORM.save([
+        { nombre: 'Imagen Corporal', especialidad: especialidades[2] },
+        { nombre: 'Alimentación Saludable', especialidad: especialidades[2] },
+        { nombre: 'Patología Alimentaria', especialidad: especialidades[2] },
+        { nombre: 'Estadística', especialidad: especialidades[2] },
+      ]);
+
+      const marcosOdontologia = await marcoORM.save([
+        { nombre: 'Motivación', especialidad: especialidades[3] },
+        { nombre: 'Prevención de Caries', especialidad: especialidades[3] },
+        { nombre: 'Prevención', especialidad: especialidades[3] },
+        { nombre: 'Teórico', especialidad: especialidades[3] },
+      ]);
+
+      const marcosPrevencion = await marcoORM.save([
+        { nombre: 'Identidad', especialidad: especialidades[4] },
+        { nombre: 'Elecciones', especialidad: especialidades[4] },
+        { nombre: 'Emociones', especialidad: especialidades[4] },
+        { nombre: 'Consumos Problemáticos', especialidad: especialidades[4] },
+        { nombre: 'Habilidades para la Vida', especialidad: especialidades[4] },
+        { nombre: 'Día Mundial sin Tabaco', especialidad: especialidades[4] },
+        { nombre: 'Día de la Lucha contra las Adicciones', especialidad: especialidades[4] },
+        { nombre: 'Día Mundial sin Alcohol', especialidad: especialidades[4] },
       ]);
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
