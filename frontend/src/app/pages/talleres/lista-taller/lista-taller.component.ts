@@ -65,7 +65,7 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   public loadingMarcos = false;
   public loadingEspecialidades = false;
   public searching = true;
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
 
   // Form controls solo para que no tenga valor al principio.
   public duracionControl: FormControl = new FormControl(null);
