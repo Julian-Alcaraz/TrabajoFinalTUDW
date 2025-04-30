@@ -118,14 +118,10 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     if (this.identidad && this.identidad?.roles_ids) {
       if (this.identidad?.roles_ids.includes(GLOBAL.ID_ADMIN)) {
         this.deshabilitado = 1;
-        console.log(this.deshabilitado);
         this.obtenerChicos(this.deshabilitado);
-        console.log('sos admin');
       } else {
         this.deshabilitado = 0;
-        console.log(this.deshabilitado);
         this.obtenerChicos(this.deshabilitado);
-        console.log('NO sos admin');
       }
     }
 
