@@ -15,7 +15,6 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 
-
 @Component({
   selector: 'app-general',
   standalone: true,
@@ -41,6 +40,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   dataConsultaxAnio: any = [];
   dataTipoConsultaxanio: any = [];
   searchingInstituciones = false;
+  arrayConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevención', 'Trabajo Social'];
   constructor(
     private _consultaService: ConsultaService,
     private _chicoService: ChicoService,

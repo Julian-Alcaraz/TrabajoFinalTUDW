@@ -19,7 +19,7 @@ export class GraficosService {
     return respuesta.reverse();
   }
   async countTypeByYear(year: number) {
-    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'];
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
       const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
@@ -29,7 +29,7 @@ export class GraficosService {
     return respuesta;
   }
   async countTypeByYearAndInstitucion(year: number, id_institucion: number) {
-    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia'];
+    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'];
     const respuesta = await Promise.all(
       types.map(async (type) => {
         let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND consulta.type = :type', { type });

@@ -5,12 +5,14 @@ import { ClinicaComponent } from './clinica/clinica.component';
 import { FonoaudiologiaComponent } from './fonoaudiologia/fonoaudiologia.component';
 import { OdontologiaComponent } from './odontologia/odontologia.component';
 import { OftalmologiaComponent } from './oftalmologia/oftalmologia.component';
-import { TalleresComponent } from "./talleres/talleres.component";
+import { TalleresComponent } from './talleres/talleres.component';
+import { PrevencionComponent } from './prevencion/prevencion.component';
+import { SocialComponent } from './social/social.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [GeneralComponent, TabsComponent, ClinicaComponent, FonoaudiologiaComponent, OdontologiaComponent, OftalmologiaComponent, TalleresComponent],
+  imports: [GeneralComponent, TabsComponent, ClinicaComponent, FonoaudiologiaComponent, OdontologiaComponent, OftalmologiaComponent, TalleresComponent, PrevencionComponent, SocialComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
