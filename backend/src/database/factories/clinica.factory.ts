@@ -115,6 +115,7 @@ export const ClinicaFactory = setSeederFactory(Clinica, async () => {
   clinica.horas_pantalla = hsPantallaOptions[Math.floor(Math.random() * hsPantallaOptions.length)];
   clinica.horas_juego_aire_libre = hsAireLibreOptions[Math.floor(Math.random() * hsAireLibreOptions.length)];
   clinica.horas_suenio = hsSuenioOptions[Math.floor(Math.random() * hsSuenioOptions.length)];
+  clinica.es_clinica = Math.random() > 0.5 ? true : false;
   return clinica;
 });
 

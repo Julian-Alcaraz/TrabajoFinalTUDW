@@ -490,10 +490,12 @@ function estadoNutricional(pcimc: number) {
 }
 
 function tensionArterial(pcta: number) {
-  if (pcta < 90) return 'Normotenso';
-  if (pcta >= 90 && pcta < 95) return 'Riesgo';
-  if (pcta >= 95) return 'Hipertenso';
-  else return 'Sin clasificación';
+  if (pcta !== null) {
+    if (pcta < 90) return 'Normotenso';
+    if (pcta >= 90 && pcta < 95) return 'Riesgo';
+    if (pcta >= 95) return 'Hipertenso';
+    else return 'Sin clasificación';
+  }
 }
 
 export function clasificacionDental(dR: number, dIr: number) {

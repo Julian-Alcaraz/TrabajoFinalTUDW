@@ -191,6 +191,13 @@
       <label for="segto">Seguimiento</label>
     </p-iftalabel>
   </div>
+  <!-- Es Clinica -->
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel>
+      <p-select [options]="siNoOptions" idInput="es_clinica" formControlName="es_clinica" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+      <label for="es_clinica">Es clinica</label>
+    </p-iftalabel>
+  </div>
   <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Antecedentes familiares:</p>
   <!-- Diabetes -->
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">

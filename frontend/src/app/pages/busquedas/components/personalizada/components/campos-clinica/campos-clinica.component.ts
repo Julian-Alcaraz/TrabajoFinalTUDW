@@ -104,6 +104,7 @@ export class CamposClinicaComponent implements OnInit {
       alimentacion: new FormControl(),
       hidratacion: new FormControl(),
       segto: new FormControl(),
+      es_clinica: new FormControl(),
       horas_pantalla: new FormControl(),
       horas_juego_aire_libre: new FormControl(),
       horas_suenio: new FormControl(),

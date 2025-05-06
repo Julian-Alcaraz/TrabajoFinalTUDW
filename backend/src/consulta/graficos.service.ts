@@ -50,7 +50,7 @@ export class GraficosService {
   async tensionxEstadoData(year: number, id: number, estado: string) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.estado_nutricional = :estado  AND clinica.tension_arterial = :type', { estado, type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false').andWhere('clinica.es_clinica = true').andWhere('clinica.estado_nutricional = :estado AND clinica.tension_arterial = :type', { estado, type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -70,7 +70,7 @@ export class GraficosService {
   async estadoNutricionalData(year: number, id: number) {
     const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.estado_nutricional = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.estado_nutricional = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -105,7 +105,7 @@ export class GraficosService {
   async tensionArterialData(year: number, id: number) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.tension_arterial = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.tension_arterial = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -139,7 +139,7 @@ export class GraficosService {
   async examenVisualData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.examen_visual = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.examen_visual = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -173,7 +173,7 @@ export class GraficosService {
   async vacunacionData(year: number, id: number) {
     const types = ['Completo', 'Incompleto', 'Desconocido'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND  clinica.vacunas = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.vacunas = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
@@ -208,11 +208,11 @@ export class GraficosService {
   async ortopediaData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false ');
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false');
       if (type === 'Normal') {
-        query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' });
+        query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
       } else if (type === 'Anormal') {
-        query.where('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' });
+        query.where('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
       }
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
@@ -248,7 +248,7 @@ export class GraficosService {
   async lenguajeData(year: number, id: number) {
     const types = ['Adecuado', 'Inadecuado'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.lenguaje = :type', { type });
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.lenguaje = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
