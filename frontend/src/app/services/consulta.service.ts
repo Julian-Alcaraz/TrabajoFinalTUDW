@@ -147,4 +147,17 @@ export class ConsultaService {
   porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeFrecuenciaConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
+  // Fonouadiologia
+  countCausasByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/causasPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeCausasPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeCausasPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  countDaignosticoPresuntivoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/diagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDiagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
 }

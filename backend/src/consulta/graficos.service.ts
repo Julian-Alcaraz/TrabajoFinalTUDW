@@ -504,7 +504,76 @@ export class GraficosService {
   }
 
   // FONOAUDIOLOGIA
+  async diagnosticoPresuntivo(year: number, id: number) {
+    const types = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'] as const;
 
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.fonoaudiologia', 'fonoaudiologia').where('consulta.deshabilitado=false AND fonoaudiologia.diagnostico_presuntivo = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeDiagnosticoPresuntivo(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.diagnosticoPresuntivo(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  async causas(year: number, id: number) {
+    const types = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'] as const;
+
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.fonoaudiologia', 'fonoaudiologia').where('consulta.deshabilitado=false AND fonoaudiologia.causas = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeCausas(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.causas(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
   // PREVENCION
   async problematica(year: number, id: number) {
     const types = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];

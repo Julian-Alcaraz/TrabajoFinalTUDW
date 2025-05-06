@@ -4,11 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 
 @Component({
   selector: 'app-fonoaudiologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
   templateUrl: './fonoaudiologia.component.html',
 })
 export class FonoaudiologiaComponent implements OnInit {
@@ -20,7 +21,14 @@ export class FonoaudiologiaComponent implements OnInit {
   cursoLabel = '';
   currentYear: number;
   lastFourYears: number[];
-
+  tituloCausas = 'Causas';
+  tituloDiagnosticoPresuntivo = 'Diagnostico Presuntivo';
+  porcentajeCausas: any = [];
+  porcentajeDiagnosticoPresuntivo: any = [];
+  countCausas = [];
+  countDiagnosticoPresuntivo = [];
+  labelCausas = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
+  labelDiagnosticoPresuntivo = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -33,7 +41,7 @@ export class FonoaudiologiaComponent implements OnInit {
     this.obtenerGraficos();
   }
   async obtenerGraficos() {
-    const promesas = [this.obtenerGraficosx()];
+    const promesas = [this.obtenerGraficosPorcentajesCausas(), this.obtenerGraficosPorcentajesDiagnosticoPresuntivo(), this.obtenerGraficosCausas(), this.obtenerGraficosDiagnosticoPresuntivo()];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
       await Promise.all(promesas);
@@ -45,18 +53,69 @@ export class FonoaudiologiaComponent implements OnInit {
     }
   }
 
-  obtenerGraficosx() {
+  obtenerGraficosPorcentajesCausas() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeCausasPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
-            // this.porcentajesOrtopedia = [];
-            // for (const year of this.lastFourYears) {
-            //   // this.porcentajesOrtopedia.push({
-            //     label: '' + year,
-            //     data: response.data[year],
-            //   });
-            // }
+            this.porcentajeCausas = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajeCausas.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  obtenerGraficosPorcentajesDiagnosticoPresuntivo() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.porcentajeDiagnosticoPresuntivo = [];
+            for (const year of this.lastFourYears) {
+              this.porcentajeDiagnosticoPresuntivo.push({
+                label: '' + year,
+                data: response.data[year],
+              });
+            }
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  obtenerGraficosCausas() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countCausasByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.countCausas = response.data;
+          }
+          resolve(true);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  obtenerGraficosDiagnosticoPresuntivo() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countDaignosticoPresuntivoByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.countDiagnosticoPresuntivo = response.data;
           }
           resolve(true);
         },
