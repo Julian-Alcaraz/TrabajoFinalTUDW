@@ -363,4 +363,95 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
+
+  // PREVENCION
+  @Get('drogaHabitualPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async drogaHabitual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.drogasHabituales(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('problematicaPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async problematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.problematica(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('frecuenciaPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async frecuencia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.frecuenciaConsumo(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('motivoPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async motivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.motivoConsumo(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
+  @Get('porcentajeFrecuenciaConsumoPorAnio/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeFrecuenciaConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const cantByYearList = await this.graficosService.porcentajeFrecuenciaConsumo(year, id, porcentaje);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeMotivoConsumoPorAnio/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeMotivoConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const cantByYearList = await this.graficosService.porcentajeMotivoConsumo(year, id, porcentaje);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeDrogasHabitualesPorAnio/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeDrogasHabituales(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const cantByYearList = await this.graficosService.porcentajeDrogasHabituales(year, id, porcentaje);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('porcentajeProblematicaPorAnio/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async porcentajeProblematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const cantByYearList = await this.graficosService.porcentajeProblematica(year, id, porcentaje);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 }

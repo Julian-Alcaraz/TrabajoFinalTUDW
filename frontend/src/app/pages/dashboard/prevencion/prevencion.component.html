@@ -3,8 +3,13 @@
 </div>
 
 <div class="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-  <!-- <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloCepillado" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si', 'No']" [sets]="porcentajesCepillado" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloSituacionBucal" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="situacionBucales" [sets]="porcentajesSituacionBucal" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloTopificacion" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si', 'No']" [sets]="porcentajesTopificacion" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloSellador" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si', 'No']" [sets]="porcentajesSellador" /></div> -->
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloProblematica" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="problematica" [sets]="porcentajeProblematica" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloMotivoConsumo" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="motivoConsumo" [sets]="porcentajeMotivoConsumo" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloFrecuenciaCosumo" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="frecuenciaConsumo" [sets]="porcentajeFrecuenciaCosumo" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloDrogaHabitual" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="drogaHabitual" [sets]="porcentajeDrogaHabitual" /></div>
+
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloProblematica" [subTitulo]="subTitulo" [labels]="problematica" [set]="{ label: '', data: countProblematica }" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloMotivoConsumo" [subTitulo]="subTitulo" [labels]="motivoConsumo" [set]="{ label: '', data: countMotivoConsumo }" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloFrecuenciaCosumo" [subTitulo]="subTitulo" [labels]="frecuenciaConsumo" [set]="{ label: '', data: countFrecuenciaCosumo }" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloDrogaHabitual" [subTitulo]="subTitulo" [labels]="drogaHabitual" [set]="{ label: '', data: countDrogaHabitual }" /></div>
 </div>

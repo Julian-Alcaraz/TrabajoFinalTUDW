@@ -45,6 +45,8 @@ export class GraficosService {
     // const respuesta = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type AND consulta.id_institucion = :id_institucion ', { year, type, id_institucion }).getCount()));
     return respuesta;
   }
+
+  // CLINICA
   async tensionxEstadoData(year: number, id: number, estado: string) {
     const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
@@ -134,7 +136,6 @@ export class GraficosService {
     }
     return respuesta;
   }
-
   async examenVisualData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
@@ -501,6 +502,155 @@ export class GraficosService {
     }
     return respuesta;
   }
+
+  // FONOAUDIOLOGIA
+
+  // PREVENCION
+  async problematica(year: number, id: number) {
+    const types = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.prevencion', 'prevencion').where('consulta.deshabilitado=false AND prevencion.otra_problematica = :clasificacion', { clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeProblematica(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.problematica(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+
+  // cosumo problematico
+  async drogasHabituales(year: number, id: number) {
+    const types = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      const consumo = 'Consumo problematico';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.prevencion', 'prevencion').where('consulta.deshabilitado=false AND prevencion.otra_problematica = :consumo AND prevencion.consumo_problematico = :clasificacion', { consumo, clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeDrogasHabituales(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.drogasHabituales(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  // frecuencia consumo
+  async frecuenciaConsumo(year: number, id: number) {
+    const types = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      const consumo = 'Consumo problematico';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.prevencion', 'prevencion').where('consulta.deshabilitado=false AND prevencion.otra_problematica = :consumo AND prevencion.frecuencia = :clasificacion', { consumo, clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeFrecuenciaConsumo(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.frecuenciaConsumo(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  // motivo consumo
+  async motivoConsumo(year: number, id: number) {
+    const types = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
+    const createQuery = (type: string) => {
+      const clasificacion = type;
+      const consumo = 'Consumo problematico';
+
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.prevencion', 'prevencion').where('consulta.deshabilitado=false AND prevencion.otra_problematica = :consumo AND prevencion.motivo_consumo = :clasificacion', { consumo, clasificacion });
+      if (year) {
+        query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+      }
+      if (id) {
+        query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      return query.getCount();
+    };
+    const counts = await Promise.all(
+      types.map(async (type) => {
+        return await createQuery(type);
+      }),
+    );
+    return counts;
+  }
+  async porcentajeMotivoConsumo(year: number, id: number, porcentaje: number) {
+    const respuesta = {};
+    for (let i = 0; i < 4; i++) {
+      const data = await this.motivoConsumo(year, id);
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(data);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = data;
+      }
+      year--;
+    }
+    return respuesta;
+  }
+  // TRABAJO SOCIAL
 }
 
 function calcularPorcentaje(data: number[]) {

@@ -16,7 +16,7 @@ export class ConsultaService {
     return this._http.post(this.url + 'consulta/busquedaPersonalizada', data);
   }
 
-  obtenerTotalPersonalizada(data:any): Observable<any> {
+  obtenerTotalPersonalizada(data: any): Observable<any> {
     return this._http.post(this.url + 'consulta/countBusquedaPersonalizada', data);
   }
 
@@ -119,5 +119,32 @@ export class ConsultaService {
   }
   porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+
+  // Prevencion
+  countProblematicaByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/problematicaPorAnio/${year}/curso/${id_curso}`);
+  }
+  countFrecuenciaConsumoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/frecuenciaPorAnio/${year}/curso/${id_curso}`);
+  }
+  countMotivoConsumoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/motivoPorAnio/${year}/curso/${id_curso}`);
+  }
+  countDrogasHabitualesByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/drogaHabitualPorAnio/${year}/curso/${id_curso}`);
+  }
+
+  porcentajeProblematicaByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeProblematicaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeDrogasHabitualesPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDrogasHabitualesPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeMotivoaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeMotivoConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeFrecuenciaConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
 }
