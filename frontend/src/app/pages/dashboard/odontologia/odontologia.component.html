@@ -7,4 +7,9 @@
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloSituacionBucal" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="situacionBucales" [sets]="porcentajesSituacionBucal" /></div>
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloTopificacion" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si', 'No']" [sets]="porcentajesTopificacion" /></div>
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloSellador" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="['Si', 'No']" [sets]="porcentajesSellador" /></div>
+
+  <app-pie-graph class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md" [loading]="loading" [titulo]="tituloCepillado" [subTitulo]="subTitulo + cursoLabel" [labels]="['Si', 'No']" [set]="{ label: '', data: countCepillado }" />
+  <app-pie-graph class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md" [loading]="loading" [titulo]="tituloSituacionBucal" [subTitulo]="subTitulo + cursoLabel" [labels]="situacionBucales" [set]="{ label: '', data: countSituacionBucal }" />
+  <app-pie-graph class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md" [loading]="loading" [titulo]="tituloTopificacion" [subTitulo]="subTitulo + cursoLabel" [labels]="['Si', 'No']" [set]="{ label: '', data: countTopificacion }" />
+  <app-pie-graph class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md" [loading]="loading" [titulo]="tituloSellador" [subTitulo]="subTitulo + cursoLabel" [labels]="['Si', 'No']" [set]="{ label: '', data: countSellador }" />
 </div>

@@ -293,6 +293,63 @@ export class ConsultaController {
   }
 
   // !!!!!!!!!!!!!!!! ODONTOLOGIA
+  // @Get('countAnteojosPorAnio/:year/curso/:id')
+  // @ApiOperation({ summary: '' })
+  // @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  // async countAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  //   const cantByYearList = await this.graficosService.anteojosData(year, id);
+  //   return {
+  //     success: true,
+  //     data: cantByYearList,
+  //     message: 'Datos obtenidos con exito.',
+  //   };
+  // }
+
+  @Get('countCepilladoPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.cepilladoData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('countTopificacionPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.topificacionData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('countSituacionBucalPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.situacionBucalData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  // A preguntar
+  @Get('countSelladoPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.selladoData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 
   @Get('porcentajeCepilladoPorAnio/:year/curso/:id/:porcentaje')
   @ApiOperation({ summary: '' })
@@ -341,6 +398,29 @@ export class ConsultaController {
   }
 
   // !!!!!!!!!! OFTALMOLOGIA
+  @Get('countAnteojosPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.anteojosData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+  @Get('countDemandaPorAnio/:year/curso/:id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+    const cantByYearList = await this.graficosService.demandaData(year, id);
+    return {
+      success: true,
+      data: cantByYearList,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
+
   @Get('porcentajeAnteojosPorAnio/:year/curso/:id/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })

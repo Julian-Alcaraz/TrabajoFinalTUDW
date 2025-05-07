@@ -112,6 +112,18 @@ export class ConsultaService {
   porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeSelladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
+  countCepilladoPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countCepilladoPorAnio/${year}/curso/${id_curso}`);
+  }
+  countTopificacionPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countTopificacionPorAnio/${year}/curso/${id_curso}`);
+  }
+  countSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countSituacionBucalPorAnio/${year}/curso/${id_curso}`);
+  }
+  countSelladorPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countSelladoPorAnio/${year}/curso/${id_curso}`);
+  }
 
   // Ofatlmologia
   porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
@@ -119,6 +131,12 @@ export class ConsultaService {
   }
   porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  countAnteojosByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countAnteojosPorAnio/${year}/curso/${id_curso}`);
+  }
+  countDemandaByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countDemandaPorAnio/${year}/curso/${id_curso}`);
   }
 
   // Prevencion

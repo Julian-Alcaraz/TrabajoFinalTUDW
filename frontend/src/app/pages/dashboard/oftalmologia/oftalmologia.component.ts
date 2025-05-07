@@ -4,11 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { DemandaEnum } from '../../../common/const/const';
 @Component({
   selector: 'app-oftalmologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
   templateUrl: './oftalmologia.component.html',
 })
 export class OftalmologiaComponent implements OnInit {
@@ -24,6 +25,9 @@ export class OftalmologiaComponent implements OnInit {
   tituloAnteojos = 'Anteojos entregados';
   porcentajeDemanda: any = [];
   porcentajeAnteojos: any = [];
+  arrayDemanda = DemandaEnum; // ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
+  countDemanda: any = [];
+  countAnteojos: any = [];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -35,8 +39,9 @@ export class OftalmologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
+
   async obtenerGraficos() {
-    const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos()];
+    const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos(), this.graficoCountAnteojos(), this.graficoCountADemanda()];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
       await Promise.all(promesas);
@@ -47,6 +52,39 @@ export class OftalmologiaComponent implements OnInit {
     }
   }
 
+  graficoCountAnteojos() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countAnteojosByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countAnteojos = [];
+          if (response.success) {
+            this.countAnteojos = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+
+  graficoCountADemanda() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countDemandaByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countDemanda = [];
+          if (response.success) {
+            this.countDemanda = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
   obtenerGraficosDemanda() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeDemandaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({

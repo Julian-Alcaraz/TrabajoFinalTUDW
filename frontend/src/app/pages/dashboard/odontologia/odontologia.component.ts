@@ -4,10 +4,12 @@ import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { ConsultaService } from '@services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+
 @Component({
   selector: 'app-odontologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
   templateUrl: './odontologia.component.html',
 })
 export class OdontologiaComponent implements OnInit {
@@ -27,7 +29,12 @@ export class OdontologiaComponent implements OnInit {
   situacionBucales = ['Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries', 'Boca sana', 'Sin clasificación'];
   tituloSituacionBucal = 'Situación bucal';
   porcentajesSituacionBucal: any = [];
-
+  tituloSellador = 'Sellador';
+  porcentajesSellador: any = [];
+  countCepillado: any = [];
+  countSituacionBucal: any = [];
+  countTopificacion: any = [];
+  countSellador: any = [];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -45,6 +52,10 @@ export class OdontologiaComponent implements OnInit {
       this.obtenerGraficoSitaucionBucal(),
       this.obtenerGraficoTopificacion(),
       this.obtenerGraficoSellador(),
+      this.graficoCountCepillado(),
+      this.graficoCountSellador(),
+      this.graficoCountSituacionBucal(),
+      this.graficoCountTopificacion(),
       //
     ];
     Promise.all(promesas).then(() => (this.loading = false));
@@ -57,7 +68,70 @@ export class OdontologiaComponent implements OnInit {
       this.loading = false;
     }
   }
-
+  graficoCountCepillado() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countCepilladoPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countCepillado = [];
+          if (response.success) {
+            this.countCepillado = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  graficoCountSituacionBucal() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countSituacionBucalPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countSituacionBucal = [];
+          if (response.success) {
+            this.countSituacionBucal = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  graficoCountTopificacion() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countTopificacionPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countTopificacion = [];
+          if (response.success) {
+            this.countTopificacion = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+  graficoCountSellador() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countSelladorPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countSellador = [];
+          if (response.success) {
+            this.countSellador = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
   obtenerGraficoCepillado() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeCepilladoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
@@ -122,8 +196,6 @@ export class OdontologiaComponent implements OnInit {
     });
   }
 
-  tituloSellador = 'Sellador';
-  porcentajesSellador: any = [];
   obtenerGraficoSellador() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
