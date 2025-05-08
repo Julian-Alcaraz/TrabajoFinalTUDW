@@ -12,6 +12,8 @@ import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
+import { Prevencion } from 'src/consulta/entities/prevencion.entity';
+import { Social } from 'src/consulta/entities/social.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -58,6 +60,7 @@ export class ProcesamientoService {
         consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
         consulta.derivacion_odontologia = false;
         consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.derivacion_social = convertirSiNo(row['TRABAJO SOCIAL']);
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
@@ -141,12 +144,7 @@ export class ProcesamientoService {
         consulta.observaciones = row['OBSERVACIONES'];
         consulta.turno = capitalize(row['TURNO']);
         consulta.usuario = usuario;
-        consulta.derivacion_externa = false;
-        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_odontologia = false;
-        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
@@ -203,14 +201,8 @@ export class ProcesamientoService {
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Fonoaudiologia';
         consulta.observaciones = row['OBSERVACIÓN'];
-        consulta.derivacion_externa = false;
-        // consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_fonoaudiologia = !!row['FONOAUDIOLOGÍA'];
-        consulta.derivacion_odontologia = !!row['ODONTOLOGÍA'];
-        consulta.derivacion_oftalmologia = !!row['OFTALMOLOGÍA'];
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         consulta.usuario = usuario;
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         consulta.turno = capitalize(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
@@ -252,20 +244,15 @@ export class ProcesamientoService {
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['INSTITUCION']);
+        consulta.institucion = await this.verificarInstitucion(row['ESTABLECIMIENTO ESCOLAR']);
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-        consulta.type = 'Clinica';
+        consulta.type = 'Oftalmologia';
         consulta.observaciones = row['OBSERVACIONES'];
-        consulta.derivacion_externa = false;
-        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_odontologia = false;
-        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         consulta.usuario = usuario;
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         consulta.turno = capitalize(row['TURNO']);
         // const consultaNueva = this.consultaORM.create(consulta);
         // await this.consultaORM.save(consultaNueva);
@@ -274,12 +261,12 @@ export class ProcesamientoService {
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         const oftalmologia = new Oftalmologia();
         oftalmologia.consulta = consultaNueva;
-        oftalmologia.anteojos = row[''];
-        oftalmologia.control = row[''];
-        oftalmologia.demanda = row[''];
-        oftalmologia.primera_vez = row[''];
-        oftalmologia.prox_control = row[''];
-        oftalmologia.receta = row[''];
+        oftalmologia.anteojos = !!row['ANTEOJOS'];
+        oftalmologia.control = !!row['CONTROL'];
+        oftalmologia.demanda = row['DEMANDA'] ?? 'Otro';
+        oftalmologia.primera_vez = !!row['1RA VEZ'];
+        oftalmologia.prox_control = calcularProximoControl(row['PROX. CONTROL'], consulta.created_at);
+        oftalmologia.receta = !!row['RECETA'];
 
         const oftalmologiaNueva = queryRunner.manager.create(Oftalmologia, oftalmologia);
         await queryRunner.manager.save(oftalmologiaNueva);
@@ -300,11 +287,106 @@ export class ProcesamientoService {
   }
 
   async procesarPrevencion(data, usuario) {
-    return [];
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        const chico = await this.procesarChico(row, queryRunner);
+        const consulta = new Consulta();
+        consulta.chico = chico;
+        consulta.created_at = new Date(row['FECHA']);
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+        consulta.edad = row.EDAD ?? null; //pero hay que trabajar el dato
+        consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+        consulta.type = 'Prevencion';
+        consulta.observaciones = row['OBSERVACIONES'];
+        consulta.derivacion_externa = row['DERIVACIÓN'];
+        consulta.usuario = usuario;
+        consulta.turno = capitalize(row['TURNO']);
+        // const consultaNueva = this.consultaORM.create(consulta);
+        // await this.consultaORM.save(consultaNueva);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
+        // consulta hija  lacreo y pongo clinica.consulta = consulta
+        const prevencion = new Prevencion();
+        prevencion.consulta = consultaNueva;
+        prevencion.otra_problematica = row['OTRAS PROBLEMÁTICAS'];
+        prevencion.consumo_problematico = row['CONSUMO PROBLEMATICO'] ?? 'Otras';
+        prevencion.edad_inicio_consumo = row['EDAD DE INICIO DE CONSUMO'];
+        prevencion.frecuencia = convertirFrecuenciaConsumo(row['FRECUENCIA']);
+        prevencion.motivo_consumo = row['MOTIVO DE CONSUMO'];
+
+        const prevencionNueva = queryRunner.manager.create(Prevencion, prevencion);
+        await queryRunner.manager.save(prevencionNueva);
+        await queryRunner.commitTransaction();
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
   }
 
   async procesarSocial(data, usuario) {
-    return [];
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        const chico = await this.procesarChico(row, queryRunner);
+        const consulta = new Consulta();
+        consulta.chico = chico;
+        consulta.usuario = usuario;
+        consulta.created_at = new Date(row['fecha']);
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+        consulta.edad = row.EDAD ?? null; //pero hay que trabajar el dato
+        consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+        consulta.type = 'Social';
+        consulta.observaciones = row['OBSERVACIONES'];
+        consulta.derivacion_externa = false;
+        consulta.turno = capitalize(row['TURNO']);
+        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+        await queryRunner.manager.save(consultaNueva);
+        // consulta hija  lacreo y pongo clinica.consulta = consulta
+        const social = new Social();
+        social.consulta = consultaNueva;
+        social.articulacion = row['Articulación con:'];
+        social.demanda = row['Demanda de:'];
+        social.objeto_informe = row['Objeto de Informe'];
+        social.seguimiento = row['Seguimiento'];
+
+        const socialNueva = queryRunner.manager.create(Social, social);
+        await queryRunner.manager.save(socialNueva);
+        await queryRunner.commitTransaction();
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
   }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
@@ -351,7 +433,7 @@ export class ProcesamientoService {
     if (!chico) {
       chico = new Chico();
       chico.dni = row.DNI;
-      const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO']);
+      const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO'] || row['Nombre y Apellido']);
       chico.nombre = arrayApyNo[1];
       chico.apellido = arrayApyNo[0];
       chico.created_at = new Date(row['FECHA']);
@@ -364,7 +446,7 @@ export class ProcesamientoService {
       chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
       chico.sexo = capitalize(row['SEXO']);
-      chico.telefono = row['TELEFONO'];
+      chico.telefono = row['TELÉFONO'] || row['TELEFONO']; // !! Puede no ser un numero
       // chico = this.chicoORM.create(chico);
       // await this.chicoORM.save(chico);
       chico = queryRunner.manager.create(Chico, chico);
@@ -376,6 +458,40 @@ export class ProcesamientoService {
 
 function pasarAnumero(value: any) {
   return +(!isNaN(parseFloat(value)) && isFinite(value) ? parseFloat(value) : 0);
+}
+function convertirFrecuenciaConsumo(frecuencia) {
+  const equivalencias = {
+    'Todos días': 'Todos los dias',
+    '2 veces x sem': '2 veces por semana',
+    '3 veces x sem': '3 veces por semana',
+    'fines de semana': 'Fines de semana',
+    esporádico: 'Esporádico',
+  };
+
+  return equivalencias[frecuencia] || 'Otro';
+}
+function calcularProximoControl(prox: any, created_at: any) {
+  if (!prox || !created_at) {
+    return null;
+  }
+
+  const meses = {
+    '3 meses': 3,
+    '6 meses': 6,
+    '12 meses': 12,
+    '1 mes y medio': 1.5,
+    '2 meses': 2,
+  };
+
+  const cantidadMeses = meses[prox];
+  if (cantidadMeses === undefined) {
+    return null;
+  }
+
+  const fecha = new Date(created_at);
+  fecha.setMonth(fecha.getMonth() + cantidadMeses);
+
+  return fecha;
 }
 
 function calcularEdad(fechaNacimiento, fechaConsulta) {

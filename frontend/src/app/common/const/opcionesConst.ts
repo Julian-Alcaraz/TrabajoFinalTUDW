@@ -31,7 +31,7 @@ export const opcionesDemanda = ['Control niño sano', 'Docente', 'Familiar', 'Ot
 // Prevencion
 
 export const motivoConsumo = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'] as const;
-export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'] as const;
+export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Esporádico', 'Otro'] as const;
 export const consumoProblematico = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'] as const;
 export const otraProblematica = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'] as const;
 
