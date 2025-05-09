@@ -1,7 +1,10 @@
-import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia, otraProblematica, consumoProblematico, frecuenciaPrevencion, motivoConsumo } from './opcionesConst';
+import { opcionesSexo, estadoNutricional, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia, otraProblematica, consumoProblematico, frecuenciaPrevencion, motivoConsumo } from './opcionesConst';
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum: string[] = [...opcionesSexo];
+
+export type EstadoNutricionalType = (typeof estadoNutricional)[number];
+export const EstadoNutricionalEnum: string[] = [...estadoNutricional];
 
 // Consulta
 

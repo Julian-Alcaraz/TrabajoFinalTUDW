@@ -29,10 +29,14 @@ import {
   frecuenciaPrevencion,
   otraProblematica,
   consumoProblematico,
+  estadoNutricional,
 } from './opcionesConst';
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum = opcionesSexo;
+
+export type EstadoNutricionalType = (typeof estadoNutricional)[number];
+export const EstadoNutricionalEnum: string[] = [...estadoNutricional];
 
 // Consulta
 

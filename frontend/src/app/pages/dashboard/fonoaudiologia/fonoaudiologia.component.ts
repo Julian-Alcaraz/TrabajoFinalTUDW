@@ -7,6 +7,7 @@ import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
+import * as con from '../../../common/const/const';
 
 @Component({
   selector: 'app-fonoaudiologia',
@@ -30,8 +31,10 @@ export class FonoaudiologiaComponent implements OnInit {
   porcentajeDiagnosticoPresuntivo: any = [];
   countCausas = [];
   countDiagnosticoPresuntivo = [];
-  labelCausas = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
-  labelDiagnosticoPresuntivo = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
+  labelCausas = con.CausasEnum;
+  // labelCausas = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'];
+  labelDiagnosticoPresuntivo = con.DiagnosticoPresuntivoEnum;
+  // labelDiagnosticoPresuntivo = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,

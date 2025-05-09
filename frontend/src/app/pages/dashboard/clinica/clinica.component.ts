@@ -7,7 +7,7 @@ import { ConsultaService } from '@services/consulta.service';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
-
+import * as con from '../../../common/const/const'
 @Component({
   selector: 'app-clinica',
   standalone: true,
@@ -17,7 +17,8 @@ import { GridChangerComponent } from '../components/grid-changer/grid-changer.co
 export class ClinicaComponent implements OnInit {
   loading = true;
   grid = 3;
-  estadosNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+  // estadosNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+  estadosNutricional = con.EstadoNutricionalEnum;
   tituloTensionArterial = 'Tensión arterial';
   tituloEstadoNutricional = 'Estado nutricional';
   tituloTensionxEstado = 'Tensión por estado nutricional';

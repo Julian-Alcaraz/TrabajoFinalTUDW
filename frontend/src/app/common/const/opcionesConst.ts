@@ -1,5 +1,5 @@
 export const opcionesSexo = ['Femenino', 'Masculino', 'Otro'] as const;
-
+export const estadoNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'] as const;
 // Consulta
 
 export const opcionesConsulta = ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia', 'Prevencion', 'Social'] as const;

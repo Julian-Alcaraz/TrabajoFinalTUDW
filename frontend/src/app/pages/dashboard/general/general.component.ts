@@ -42,6 +42,7 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   dataConsultaxAnio: any = [];
   dataTipoConsultaxanio: any = [];
   searchingInstituciones = false;
+  // este no lo cambio por que sino pierdo el trabajo social
   arrayConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevención', 'Trabajo Social'];
   constructor(
     private _consultaService: ConsultaService,
