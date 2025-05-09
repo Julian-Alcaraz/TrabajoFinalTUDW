@@ -3,15 +3,18 @@ import { YearGradoFormComponent } from '../components/year-grado-form/year-grado
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '@app/services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-social',
   standalone: true,
-  imports: [YearGradoFormComponent],
+  imports: [YearGradoFormComponent, GridChangerComponent, CommonModule],
   templateUrl: './social.component.html',
 })
 export class SocialComponent implements OnInit {
   loading = true;
+  grid = 3;
   year = 0;
   id_curso = 0;
   porcentaje = 0;
@@ -35,7 +38,10 @@ export class SocialComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-
+  setearGrid(event: any) {
+    this.grid = event;
+    this.obtenerGraficos();
+  }
   async obtenerGraficos() {
     const promesas = [
       // agrego todos los graficos que correspondan

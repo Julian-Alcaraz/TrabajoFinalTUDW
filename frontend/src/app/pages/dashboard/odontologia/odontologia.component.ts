@@ -5,16 +5,19 @@ import { ConsultaService } from '@services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { CommonModule } from '@angular/common';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 
 @Component({
   selector: 'app-odontologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, CommonModule, GridChangerComponent],
   templateUrl: './odontologia.component.html',
 })
 export class OdontologiaComponent implements OnInit {
   loading = true;
   year = 0;
+  grid = 3;
   id_curso = 0;
   porcentaje = 0;
   subTitulo = '';
@@ -44,6 +47,10 @@ export class OdontologiaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerGraficos();
+  }
+  setearGrid(event: any) {
+    this.grid = event;
     this.obtenerGraficos();
   }
   async obtenerGraficos() {

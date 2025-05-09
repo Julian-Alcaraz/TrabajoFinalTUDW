@@ -1,18 +1,18 @@
 <form [formGroup]="optionForm" (ngSubmit)="traerDatosGraficos()">
   <div class="flex flex-col sm:flex-row gap-4 items-center">
-    <div class="flex-2">
+    <div class="">
       <p-iftaLabel>
         <p-datepicker formControlName="year" view="year" dateFormat="yy" [maxDate]="maxDate" class="w-full" [showButtonBar]="true" />
         <label for="year" class="block mb-4 text-sm font-medium text-gray-900">Año</label>
       </p-iftaLabel>
     </div>
-    <div class="flex-2">
+    <div class="w-100">
       @if (searchingCursos) {
         <app-loading />
       } @else {
-        <div class="w-full">
-          <p-iftaLabel>
-            <p-select [options]="cursos" optionLabel="nombre" optionValue="id" [checkmark]="true" [showClear]="true" [formControl]="controlDeInput('id_curso')" idInput="id_curso" class="w-full md:w-56" />
+        <div class="w-100">
+          <p-iftaLabel class="w-100">
+            <p-select [options]="cursos" optionLabel="nombre" optionValue="id" [checkmark]="true" [showClear]="true" [formControl]="controlDeInput('id_curso')" idInput="id_curso" class="w-52 md:w-" />
             <label for="id_curso">Curso</label>
           </p-iftaLabel>
         </div>
@@ -23,7 +23,7 @@
       <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" required />
     </div>
     -->
-    <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg">
+    <div class="border p-4 z-2 bg-gray-100 rounded-lg">
       <div class="flex flex-wrap gap-4">
         <div class="flex items-center">
           <p-radiobutton name="porcentaje" value="0" [formControl]="controlDeInput('porcentaje')" inputId="cantidades" />
@@ -37,7 +37,7 @@
     </div>
 
     <div *ngIf="esTaller">
-      <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg">
+      <div class="border p-4 z-2 bg-gray-100 rounded-lg">
         <div class="flex flex-wrap gap-4">
           <div class="flex items-center">
             <p-radiobutton name="cantEncuentrosOCantParticipantes" value="0" [formControl]="controlDeInput('participantes')" inputId="cantEncuentros" />
@@ -50,9 +50,9 @@
         </div>
       </div>
     </div>
-    <div class="col">
-      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
-      <button type="button" class="ml-2 text-blue-700 underline cursor-pointer" (click)="resetearForm()">Limpiar</button>
+    <div class="col text-center">
+      <button type="submit" class="sm:mx-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center disabled:bg-gray-400">Buscar</button>
+      <button type="button" class="text-blue-700 underline cursor-pointer" (click)="resetearForm()">Limpiar</button>
     </div>
   </div>
 </form>

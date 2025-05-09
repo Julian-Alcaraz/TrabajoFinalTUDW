@@ -13,6 +13,8 @@ body {
   position: relative;
   /* agregar font familyu */
   background: #f4f7fa;
+  max-height: 100dvh;
+
 }
 .card {
   display: flex;

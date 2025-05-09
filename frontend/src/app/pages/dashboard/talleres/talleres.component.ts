@@ -13,16 +13,17 @@ import { MarcoService } from '@app/services/marco.service';
 import { Marco } from '@app/models/marco.model';
 import { LoadingComponent } from '@components/loading/loading.component';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 
 @Component({
   selector: 'app-talleres',
   standalone: true,
-  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent],
+  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent, GridChangerComponent],
   templateUrl: './talleres.component.html',
 })
 export class TalleresComponent implements OnInit {
   public con = Constantes;
-
+  public grid = 3;
   public searchingMarcos = true;
   public searchingEspecialidades = true;
   public loading = true;
@@ -60,7 +61,10 @@ export class TalleresComponent implements OnInit {
     this.obtenerEspecialidades();
     this.obtenerMarcos();
   }
-
+  setearGrid(event: any) {
+    this.grid = event;
+    this.obtenerGraficos();
+  }
   async obtenerGraficos() {
     const promesas = [
       //

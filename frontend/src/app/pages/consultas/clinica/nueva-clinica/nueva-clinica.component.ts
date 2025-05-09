@@ -196,14 +196,12 @@ export class NuevaClinicaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
-    console.log(this.consulta);
     // const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
     const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
     const derivacion_prevencion = this.consulta?.derivacion_prevencion ? true : false;
     const derivacion_social = this.consulta?.derivacion_social ? true : false;
     const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
     const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
-    console.log(this.consulta?.clinica?.es_clinica, typeof this.consulta?.clinica?.es_clinica);
     if (this.consulta?.clinica?.es_clinica) {
       this.mostrarClinica = true;
     } else {
@@ -310,7 +308,6 @@ export class NuevaClinicaComponent implements OnInit {
     const hta = this.convertToBoolean(this.clinicaForm.value.hta);
     const leche = this.convertToBoolean(this.clinicaForm.value.leche);
     const es_clinica = this.convertToBoolean(this.clinicaForm.value.es_clinica);
-    console.log(this.clinicaForm.value.es_clinica);
     if (hayCambios) {
       if (
         // cambios campos comunes
@@ -380,9 +377,7 @@ export class NuevaClinicaComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          console.log(this.clinicaForm.value);
           const data = this.setData();
-          console.log(data);
           this.loading = true;
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
