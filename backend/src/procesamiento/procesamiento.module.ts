@@ -12,11 +12,16 @@ import { Institucion } from 'src/institucion/entities/institucion.entity';
 import { Curso } from 'src/curso/entities/curso.entity';
 import { ExcelService } from 'src/common/services/excel.service';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
+import { ExportService } from './export.service';
+import { ConsultaService } from 'src/consulta/consulta.service';
+import { Prevencion } from 'src/consulta/entities/prevencion.entity';
+import { Social } from 'src/consulta/entities/social.entity';
+import { ArchivoService } from 'src/common/services/archivo.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso,Barrio])],
+  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso, Barrio, Prevencion, Social])],
   controllers: [ProcesamientoController],
-  providers: [ProcesamientoService, ExcelService],
+  providers: [ProcesamientoService, ExcelService, ExportService, ConsultaService, ArchivoService],
   exports: [ProcesamientoService],
 })
 export class ProcesamientoModule {}

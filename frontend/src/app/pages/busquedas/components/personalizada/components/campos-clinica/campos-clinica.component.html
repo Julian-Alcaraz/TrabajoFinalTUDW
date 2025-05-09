@@ -2,6 +2,13 @@
 <div class="grid gap-6 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8" [formGroup]="especificas">
   <div class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">
     <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
+      <!-- Es Clinica -->
+      <div class="col-span-3 sm:col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-6">
+        <p-iftalabel>
+          <p-select [options]="siNoOptions" (onChange)="onChangeEsClinica($event)" idInput="es_clinica" formControlName="es_clinica" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
+          <label for="es_clinica">Es clinica</label>
+        </p-iftalabel>
+      </div>
       <!-- Rango Talla -->
       <div formGroupName="rangoTalla" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
         <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Talla (cm)</p>
@@ -67,7 +74,7 @@
         </div>
       </div>
       <!-- Rango Tension Arterial Sistolica (tas) -->
-      <div formGroupName="rangoTas" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+      <div *ngIf="mostrarClinica" formGroupName="rangoTas" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
         <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Sistolica (Hg)</p>
         <div>
           <p-iftalabel>
@@ -83,7 +90,7 @@
         </div>
       </div>
       <!-- Rango Tension Arterial Diastolica (tad) Min -->
-      <div formGroupName="rangoTad" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
+      <div *ngIf="mostrarClinica" formGroupName="rangoTad" class="grid sm:col-span-2 md:col-span-1 lg:col-span-2 gap-3">
         <p class="col-span-2 text-sm text-gray-500 mb-1 text-center border-b border-gray-300">Tension Arterial Diastolica (Hg)</p>
         <div>
           <p-iftalabel>
@@ -108,56 +115,56 @@
   </div>
   <!-- <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Condiciones:</p> -->
   <!-- Antecedentes perinatales -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="antecedentes_perinatal" formControlName="antecedentes_perinatal" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="antecedentes_perinatal">Antecedentes perinatales</label>
     </p-iftalabel>
   </div>
   <!-- Enfermedades previas -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="enfermedades_previas" formControlName="enfermedades_previas" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="enfermedades_previas">Enfermedades previas</label>
     </p-iftalabel>
   </div>
   <!-- Vacunas -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="vacunasOptions" formControlName="vacunas" idInput="vacunas" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="vacunas">Vacunas</label>
     </p-iftalabel>
   </div>
   <!-- Examen visual -->
-  <div class="mcol-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="mcol-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="examenVisualOptions" formControlName="examen_visual" idInput="examen_visual" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="examen_visual">Examen Visual</label>
     </p-iftalabel>
   </div>
   <!-- Lenguaje -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="lenguajeOptions" formControlName="lenguaje" idInput="lenguaje" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="lenguaje">Lenguaje</label>
     </p-iftalabel>
   </div>
   <!-- Ortopedia y traumatologia -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="ortopediaTraumatologiaOptions" formControlName="ortopedia_traumatologia" idInput="ortopedia_traumatologia" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="ortopedia_traumatologia">Ortopedia y Traumatologia</label>
     </p-iftalabel>
   </div>
   <!-- Alimentacion -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="alimentacionOptions" formControlName="alimentacion" idInput="alimentacion" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="alimentacion">Alimentación</label>
     </p-iftalabel>
   </div>
   <!-- Hidratacion -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="hidratacionOptions" formControlName="hidratacion" idInput="hidratacion" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="hidratacion">Hidratación</label>
@@ -171,7 +178,7 @@
     </p-iftalabel>
   </div>
   <!-- Tension arterial -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="tensionArterialOptions" formControlName="tension_arterial" idInput="tension_arterial" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="tension_arterial">Tension arterial</label>
@@ -191,51 +198,44 @@
       <label for="segto">Seguimiento</label>
     </p-iftalabel>
   </div>
-  <!-- Es Clinica -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
-    <p-iftalabel>
-      <p-select [options]="siNoOptions" idInput="es_clinica" formControlName="es_clinica" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
-      <label for="es_clinica">Es clinica</label>
-    </p-iftalabel>
-  </div>
-  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Antecedentes familiares:</p>
+  <p *ngIf="mostrarClinica" class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Antecedentes familiares:</p>
   <!-- Diabetes -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="diabetes" formControlName="diabetes" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="diabetes">Diabetes</label>
     </p-iftalabel>
   </div>
   <!-- Obesidad -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="obesidad" formControlName="obesidad" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="obesidad">Obesidad</label>
     </p-iftalabel>
   </div>
   <!-- HTA -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="hta" formControlName="hta" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="hta">Hipertension arterial</label>
     </p-iftalabel>
   </div>
   <!-- Consumo Alcohol -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="consumo_alcohol" formControlName="consumo_alcohol" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="consumo_alcohol">Consumo alcohol</label>
     </p-iftalabel>
   </div>
   <!-- Consumo Drogas -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="consumo_drogas" formControlName="consumo_drogas" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="consumo_drogas">Consumo drogas</label>
     </p-iftalabel>
   </div>
   <!-- Consumo Tabaco -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="siNoOptions" idInput="consumo_tabaco" formControlName="consumo_tabaco" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
       <label for="consumo_tabaco">Consumo tabaco</label>
@@ -243,23 +243,23 @@
   </div>
 
   <!-- <span class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">****</span> -->
-  <p class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Horas diarias dedicadas a:</p>
+  <p *ngIf="mostrarClinica" class="col-span-2 sm:col-span-4 md:col-span-6 lg:col-span-8">Horas diarias dedicadas a:</p>
   <!-- Horas pantalla -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="horasPantallaOptions" formControlName="horas_pantalla" idInput="horas_pantalla" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="horas_pantalla">Pantalla</label>
     </p-iftalabel>
   </div>
   <!-- Horas juego aire libre -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="horasJuegoAireLibreOptions" formControlName="horas_juego_aire_libre" idInput="horas_juego_aire_libre" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="horas_juego_aire_libre">Juego aire libre</label>
     </p-iftalabel>
   </div>
   <!-- Horas sueño -->
-  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+  <div *ngIf="mostrarClinica" class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
       <p-select [options]="horasSuenioOptions" formControlName="horas_suenio" idInput="horas_suenio" [checkmark]="true" [showClear]="true" placeholder="" class="w-full h-16" />
       <label for="horas_suenio">Sueño</label>

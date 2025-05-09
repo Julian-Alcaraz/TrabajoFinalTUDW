@@ -207,7 +207,7 @@ export class ConsultaService {
     return consultas;
   }
 
-  private async procesarClinica(consulta: any) {
+  async procesarClinica(consulta: any) {
     if (consulta.especificas?.rangoTalla) {
       consulta.especificas = { ...consulta.especificas, talla: Between(consulta.especificas.rangoTalla.tallaMin, consulta.especificas.rangoTalla.tallaMax) };
       delete consulta.especificas.rangoTalla;
@@ -235,7 +235,7 @@ export class ConsultaService {
     return consulta.especificas;
   }
 
-  private async procesarOdontologia(consulta: any) {
+  async procesarOdontologia(consulta: any) {
     if (consulta.especificas?.rangoDientesPermanentes) {
       consulta.especificas = { ...consulta.especificas, dientes_permanentes: Between(consulta.especificas.rangoDientesPermanentes.dientesPermanentesMin, consulta.especificas.rangoDientesPermanentes.dientesPermanentesMax) };
       delete consulta.especificas.rangoDientesPermanentes;
@@ -255,7 +255,7 @@ export class ConsultaService {
     return consulta.especificas;
   }
 
-  private async procesarOftalmologia(consulta: any) {
+  async procesarOftalmologia(consulta: any) {
     if (consulta.especificas?.rangoFechasProxControl) {
       consulta.especificas = { ...consulta.especificas, prox_control: Between(consulta.especificas.rangoFechasProxControl[0], consulta.especificas.rangoFechasProxControl[1]) };
       delete consulta.especificas.rangoFechasProxControl;
@@ -263,11 +263,11 @@ export class ConsultaService {
     return consulta.especificas; // devuevle el filtro
   }
 
-  private async procesarFonoaudiologia(consulta: any) {
+  async procesarFonoaudiologia(consulta: any) {
     return consulta.especificas; // devuevle el filtro
   }
 
-  private async procesarPrevencion(consulta: any) {
+  async procesarPrevencion(consulta: any) {
     if (consulta.especificas?.rangoEdadInicioconsumo) {
       consulta.especificas = { ...consulta.especificas, edad_inicio_consumo: Between(consulta.especificas.rangoEdadInicioconsumo.edadInicioMin, consulta.especificas.rangoEdadInicioconsumo.edadInicioMax) };
       delete consulta.especificas.rangoEdadInicioconsumo;
@@ -275,7 +275,7 @@ export class ConsultaService {
     return consulta.especificas; // devuevle el filtro
   }
 
-  private async procesarSocial(consulta: any) {
+  async procesarSocial(consulta: any) {
     return consulta.especificas; // devuevle el filtro
   }
 

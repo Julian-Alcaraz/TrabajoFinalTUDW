@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { forkJoin, from, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -31,7 +31,7 @@ import { CamposClinicaComponent } from './components/campos-clinica/campos-clini
 import { CamposOftalmologiaComponent } from './components/campos-oftalmologia/campos-oftalmologia.component';
 import { CamposFonoaudiologiaComponent } from './components/campos-fonoaudiologia/campos-fonoaudiologia.component';
 import { CamposOdontologiaComponent } from './components/campos-odontologia/campos-odontologia.component';
-import { XlsxService } from '@services/excelJS.service';
+import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { LoadingComponent } from '@components/loading/loading.component';
 import { PaginatedTableService } from '@app/services/paginated-table.service';
 import { CamposPrevencionComponent } from './components/campos-prevencion/campos-prevencion.component';
@@ -77,7 +77,7 @@ export class PersonalizadaComponent implements OnInit, OnDestroy {
     private _institucionService: InstitucionService,
     private _usuarioService: UsuarioService,
     private _consultaService: ConsultaService,
-    private _xlsxService: XlsxService,
+    private _procesamientoService: ProcesamientoService,
     private _tableService: PaginatedTableService,
   ) {
     this.formBusqueda = this.fb.group({
@@ -202,17 +202,19 @@ export class PersonalizadaComponent implements OnInit, OnDestroy {
       this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
-
+      console.log(dataLimpia);
       forkJoin({
         total: this._consultaService.obtenerTotalPersonalizada(dataLimpia),
         limitedData: this._consultaService.busquedaPersonalizadaLimited(dataLimpia, this.page, this.size),
       }).subscribe({
         next: (responses: { total: any; limitedData: any }) => {
           this._tableService.updateData({ array: responses.limitedData.data, total: responses.total.data });
+          this.mostrarBotonDescarga = true;
           this.searching = false;
         },
         error: (err: any) => {
           MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+          this.mostrarBotonDescarga = false;
           this.searching = false;
         },
       });
@@ -229,22 +231,28 @@ export class PersonalizadaComponent implements OnInit, OnDestroy {
     }
   }
 
-  exportarXLS() {
+  exportarXLS(): void {
+    const resultado = prepararData(this.formBusqueda.value);
+    const dataLimpia = eliminarValoresNulosYVacios(resultado);
     this.generandoArchivo = true;
-    setTimeout(() => {
-      from(this._xlsxService.generarXlsx(this.resultados)).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            MostrarNotificacion.mensajeExito(this.snackBar, response.message);
-            this.generandoArchivo = false;
-          }
-        },
-        error: (err) => {
-          MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-          this.generandoArchivo = false;
-        },
-      });
-    }, 100);
+    this._procesamientoService.exportarConsultas(dataLimpia).subscribe({
+      next: (res: any) => {
+        const nombreArchivo = res.headers.get('Content-Disposition').match(/filename="(.+)"/)[1];
+        const blob = res.body;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombreArchivo;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        MostrarNotificacion.mensajeExito(this.snackBar, 'Archivo XLS descargado');
+        this.generandoArchivo = false;
+      },
+      error: (err: any) => {
+        this.generandoArchivo = false;
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 }
 

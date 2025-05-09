@@ -21,6 +21,7 @@ export class CamposClinicaComponent implements OnInit {
 
   public especificas!: FormGroup;
   public con = Constantes;
+  public mostrarClinica = true;
 
   public siNoOptions: any[] = [
     { nombre: 'Si', valor: true },
@@ -104,7 +105,7 @@ export class CamposClinicaComponent implements OnInit {
       alimentacion: new FormControl(),
       hidratacion: new FormControl(),
       segto: new FormControl(),
-      es_clinica: new FormControl(),
+      es_clinica: new FormControl(true),
       horas_pantalla: new FormControl(),
       horas_juego_aire_libre: new FormControl(),
       horas_suenio: new FormControl(),
@@ -113,6 +114,15 @@ export class CamposClinicaComponent implements OnInit {
       derivaciones: new FormControl(),
     });
     this.form.addControl('especificas', this.especificas);
+  }
+
+  onChangeEsClinica(event: any) {
+    const esClinica = event.value;
+    if (esClinica) {
+      this.mostrarClinica = true;
+    } else {
+      this.mostrarClinica = false;
+    }
   }
 
   get controlDeInput(): (input: string) => FormControl {
