@@ -49,7 +49,7 @@ export class Clinica {
   @Column({ type: 'boolean', nullable: true })
   hta: boolean;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: true })
   es_clinica: boolean;
 
   @Column({ type: 'boolean', nullable: true })

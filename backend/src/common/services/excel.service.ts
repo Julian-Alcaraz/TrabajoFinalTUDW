@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
+import * as XLSX from 'xlsx';
+import { PassThrough, Readable } from 'stream';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class ExcelService {
@@ -10,16 +12,55 @@ export class ExcelService {
    * @returns array json
    *
    */
-  leerArchivoExcel(file: Express.Multer.File): any[] {
+
+  //
+  async leerArchivoExcel(file: Express.Multer.File): Promise<any[]> {
     const validMimeTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
     if (!validMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('El archivo debe ser de tipo Excel (.xls o .xlsx)');
     }
+
     const workbook = XLSX.read(file.buffer, { type: 'buffer', cellDates: true });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: null, dateNF: 'yyyy-mm-dd' });
     return jsonData;
+    /*
+
+    const stream = Readable.from(file.buffer); // Convertimos el buffer a stream
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.read(stream); // Leemos desde el stream
+
+    const worksheet = workbook.worksheets[0];
+    const jsonData: any[] = [];
+
+    // Extraemos encabezados desde la primera fila
+    const headers: string[] = [];
+    worksheet.getRow(1).eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      headers.push(cell.text?.trim() ?? `col${colNumber}`);
+    });
+
+    // Recorremos las filas restantes y construimos objetos
+    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+      if (rowNumber === 1) return; // Saltamos encabezados
+      const rowData: Record<string, any> = {};
+
+      // Luego en tu loop:
+      row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
+        rowData[headers[colNumber - 1]] = this.getCellValue(cell);
+      });
+
+      jsonData.push(rowData);
+    });
+    console.log(jsonData);
+    */
+  }
+
+  getCellValue(cell: ExcelJS.Cell): any {
+    if (cell.type === ExcelJS.ValueType.Formula) {
+      return cell.result ?? null;
+    }
+    return cell.value ?? null;
   }
 
   private consultasClinica: any[] = [];
@@ -29,8 +70,82 @@ export class ExcelService {
   private consultasPrevencion: any[] = [];
   private consultasSocial: any[] = [];
 
+  // ============= CHICOS =============
+
+  async generarExcelChicos(chicos: any) {
+    try {
+      const datosChicos = this.prepararDataChicos(chicos);
+      const encabezados = ['NOMBRE Y APELLIDO', 'EDAD', 'DNI', 'FECHA NAC.', 'SEXO', 'DIRECCIÓN', 'LOCALIDAD', 'BARRIO', 'TELÉFONO', 'NOMBRE PADRE', 'NOMBRE MADRE'];
+      const workbook = new ExcelJS.Workbook();
+      const worksheetChicos = workbook.addWorksheet('Chicos');
+
+      worksheetChicos.addRow(encabezados);
+      datosChicos.forEach((chico) => {
+        worksheetChicos.addRow(Object.values(chico));
+      });
+
+      // Estilos
+      this.aplicarEstilosChicos(worksheetChicos);
+
+      const buffer = await workbook.xlsx.writeBuffer();
+
+      const nombreArchivo = nombrarArchivo('Chicos');
+
+      // Retorno nombre y buffer
+      return { success: true, nombreArchivo, buffer };
+    } catch (err) {
+      console.error('Error al generar el Excel:', err);
+      return { success: false, err };
+    }
+  }
+
+  prepararDataChicos(chicos: any[]) {
+    const arrayChicos = [];
+    Object.values(chicos).forEach((chico) => {
+      const { id, updated_at, created_at, deshabilitado, dni, nombre, apellido, sexo, fe_nacimiento, direccion, telefono, nombre_madre, nombre_padre, barrio } = chico;
+      const fechaNacimientoDate = new Date(chico.fe_nacimiento);
+      const fechaNacimiento = DateTime.fromISO(fechaNacimientoDate.toISOString(), { zone: 'utc' }).toFormat('dd-MM-yyyy');
+      const edad = calcularEdad(fe_nacimiento, new Date());
+      const datosChico = {
+        nombreYApellido: nombre + ' ' + apellido,
+        edad: edad,
+        dni: dni,
+        fechaNac: fechaNacimiento,
+        sexo: sexo,
+        direccion: direccion,
+        localidad: barrio.localidad.nombre,
+        barrio: barrio.nombre,
+        telefono: existeItem(telefono) ? '-' : chico.telefono,
+        nombrePadre: nombre_padre ? nombre_padre : '-',
+        nombreMadre: nombre_madre ? nombre_madre : '-',
+      };
+      arrayChicos.push(datosChico);
+    });
+    return arrayChicos;
+  }
+
+  aplicarEstilosChicos(worksheet) {
+    const celdasARotar = [];
+    const celdasChicas = [];
+    const filaCabecera = worksheet.getRow(1);
+    filaCabecera.height = 150;
+    filaCabecera.eachCell((cell: any) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      this.procesarCeldaSegunHoja(worksheet, cell, celdasARotar, celdasChicas);
+    });
+  }
+
+  // ============= CONSULTAS =============
+
   async generarExcelConsultas(consultas: any) {
     try {
+      this.consultasClinica = [];
+      this.consultasFonoaudiologia = [];
+      this.consultasOftalmologia = [];
+      this.consultasOdontologia = [];
+      this.consultasPrevencion = [];
+      this.consultasSocial = [];
+
       this.prepararConsultas(consultas);
       const encabezadosComunes = ['NOMBRE Y APELLIDO', 'DNI', 'FECHA', 'FECHA NAC.', 'SEXO', 'OBRA SOCIAL', 'DIRECCIÓN', 'BARRIO', 'TELÉFONO', 'NOMBRE PADRE', 'NOMBRE MADRE', 'EDAD', 'INSTITUCIÓN', 'SALA/GRADO', 'TURNO', 'PROFESIONAL'];
       const workbook = new ExcelJS.Workbook();
@@ -83,7 +198,7 @@ export class ExcelService {
         const worksheetPrevencion = workbook.addWorksheet('Prevencion');
         // Encabezados
         worksheetPrevencion.addRow([]);
-        worksheetPrevencion.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PROBLEMATICA', 'CONSUMO', 'EDAD INICIO', 'MOTIVO', 'FRECUENCIA', 'OBSERVACIONES'));
+        worksheetPrevencion.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PROBLEMATICA', 'CONSUMO', 'FRECUENCIA', 'MOTIVO', 'EDAD INICIO', 'OBSERVACIONES'));
         // Datos
         this.consultasPrevencion.forEach((consulta) => {
           worksheetPrevencion.addRow(Object.values(consulta));
@@ -100,20 +215,11 @@ export class ExcelService {
           worksheetSocial.addRow(Object.values(consulta));
         });
       }
-      this.aplicarEstilos(workbook);
+      this.aplicarEstilosConsultas(workbook);
       const buffer = await workbook.xlsx.writeBuffer();
-      // Fecha
-      const hoy = new Date();
-      const dia = hoy.getDate().toString().padStart(2, '0');
-      const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
-      const anio = hoy.getFullYear();
-      // Hora
-      const horas = hoy.getHours();
-      const minutos = hoy.getMinutes().toString().padStart(2, '0');
-      const ampm = horas >= 12 ? 'PM' : 'AM';
-      const horas12 = (horas % 12 || 12).toString();
-      const segundos = hoy.getSeconds().toString().padStart(2, '0');
-      const nombreArchivo = `Consultas-${dia}_${mes}_${anio}, ${horas12}_${minutos}_${segundos}_${ampm}.xlsx`;
+
+      const nombreArchivo = nombrarArchivo('Consultas');
+
       // Retorno nombre y buffer
       return { success: true, nombreArchivo, buffer };
     } catch (err) {
@@ -122,7 +228,7 @@ export class ExcelService {
     }
   }
 
-  aplicarEstilos(workbook: any): void {
+  aplicarEstilosConsultas(workbook: any): void {
     for (const worksheet of workbook.worksheets) {
       const filaCabecera = worksheet.getRow(2);
       filaCabecera.height = 150;
@@ -249,11 +355,11 @@ export class ExcelService {
     const address = cell.address;
     const columnLetter = address.replace(/\d/g, '');
 
-    if (celdasARotar.includes(address)) {
+    if (celdasARotar.length > 0 && celdasARotar.includes(address)) {
       const col = worksheet.getColumn(columnLetter);
       cell.alignment.textRotation = 90;
       col.width = 6;
-    } else if (celdasChicas.includes(address)) {
+    } else if (celdasChicas.length > 0 && celdasChicas.includes(address)) {
       const col = worksheet.getColumn(columnLetter);
       col.width = 7;
     } else {
@@ -263,12 +369,16 @@ export class ExcelService {
 
   prepararConsultas(consultas: any[]) {
     Object.values(consultas).forEach((consulta) => {
-      const { id, updated_at, obra_social, created_at, type, turno, edad, observaciones, chico, institucion, curso, usuario, fe_nacimiento, ...datosEspecificos } = consulta;
+      const { id, updated_at, obra_social, created_at, type, turno, edad, observaciones, chico, institucion, curso, usuario, ...datosEspecificos } = consulta;
+      const fechaConsulta = DateTime.fromISO(created_at.toISOString().slice(0, 10), { zone: 'utc' }).toFormat('dd-MM-yyyy');
+      const fechaNacimientoDate = new Date(chico.fe_nacimiento);
+      const fechaNacimiento = DateTime.fromISO(fechaNacimientoDate.toISOString(), { zone: 'utc' }).toFormat('dd-MM-yyyy');
+
       const generales = {
         nombreYApellido: chico.nombre + ' ' + chico.apellido,
         dni: chico.dni,
-        fecha: created_at,
-        fechaNac: chico.fe_nacimiento,
+        fecha: fechaConsulta,
+        fechaNac: fechaNacimiento,
         sexo: chico.sexo,
         obraSocial: obra_social ? 'Si' : 'No',
         direccion: chico.direccion,
@@ -346,13 +456,15 @@ export class ExcelService {
           this.consultasOdontologia.push(Object.assign({}, generales, especificos));
           break;
         case 'Oftalmologia':
+          const fechaProxControlDate = new Date(datosEspecificos.oftalmologia.prox_control);
+          const fechaProxControl = DateTime.fromISO(fechaProxControlDate.toISOString(), { zone: 'utc' }).toFormat('dd-MM-yyyy');
           especificos = {
             derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             primeraVez: datosEspecificos.oftalmologia.primera_vez ? 'Si' : 'No',
             control: datosEspecificos.oftalmologia.control ? 'Si' : 'No',
             demanda: datosEspecificos.oftalmologia.demanda,
             receta: datosEspecificos.oftalmologia.receta ? 'Si' : 'No',
-            proxControl: datosEspecificos.oftalmologia.prox_control, // DAR FORMATO A ESTA FECHA!!!
+            proxControl: fechaProxControl,
             anteojos: datosEspecificos.oftalmologia.anteojos !== null ? (datosEspecificos.oftalmologia.anteojos === true ? 'Si' : 'No') : '-',
             observaciones: observaciones || '-',
           };
@@ -371,11 +483,11 @@ export class ExcelService {
         case 'Prevencion':
           especificos = {
             derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
-            problematica: datosEspecificos.otra_problematica,
-            consumoProblematico: datosEspecificos.consumo_problematico === null || datosEspecificos.consumo_problematico === undefined ? '-' : datosEspecificos.consumo_problematico,
-            frecuencia: datosEspecificos.frecuencia === null || datosEspecificos.frecuencia === undefined ? '-' : datosEspecificos.frecuencia,
-            motivoConsumo: datosEspecificos.motivo_consumo === null || datosEspecificos.motivo_consumo === undefined ? '-' : datosEspecificos.motivo_consumo,
-            edadInicioConsumo: datosEspecificos.edad_inicio_consumo === null || datosEspecificos.edad_inicio_consumo === undefined ? '-' : datosEspecificos.edad_inicio_consumo,
+            problematica: datosEspecificos.prevencion.otra_problematica,
+            consumoProblematico: existeItem(datosEspecificos.prevencion.consumo_problematico) ? '-' : datosEspecificos.prevencion.consumo_problematico,
+            frecuencia: existeItem(datosEspecificos.prevencion.frecuencia) ? '-' : datosEspecificos.prevencion.frecuencia,
+            motivoConsumo: existeItem(datosEspecificos.prevencion.motivo_consumo) ? '-' : datosEspecificos.prevencion.motivo_consumo,
+            edadInicioConsumo: existeItem(datosEspecificos.prevencion.edad_inicio_consumo) ? '-' : datosEspecificos.prevencion.edad_inicio_consumo,
             observaciones: observaciones || '-',
           };
           this.consultasPrevencion.push(Object.assign({}, generales, especificos));
@@ -383,10 +495,10 @@ export class ExcelService {
         case 'Social':
           especificos = {
             derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
-            demanda: datosEspecificos.demanda,
-            objetoInforme: datosEspecificos.objeto_informe,
-            articulacion: datosEspecificos.articulacion === null || datosEspecificos.articulacion === undefined ? '-' : datosEspecificos.articulacion,
-            seguimiento: datosEspecificos.seguimiento === null || datosEspecificos.seguimiento === undefined ? '-' : datosEspecificos.seguimiento,
+            demanda: datosEspecificos.social.demanda,
+            objetoInforme: datosEspecificos.social.objeto_informe,
+            articulacion: existeItem(datosEspecificos.social.articulacion) ? '-' : datosEspecificos.social.articulacion,
+            seguimiento: existeItem(datosEspecificos.social.seguimiento) ? '-' : datosEspecificos.social.seguimiento,
             observaciones: observaciones || '-',
           };
           this.consultasSocial.push(Object.assign({}, generales, especificos));
@@ -398,4 +510,32 @@ export class ExcelService {
 
 function existeItem(valor: any): boolean {
   return valor === null || valor === undefined;
+}
+
+function calcularEdad(fechaNacimiento, fechaConsulta) {
+  const nacimiento = new Date(fechaNacimiento);
+  let edad = fechaConsulta.getFullYear() - nacimiento.getFullYear();
+  const mes = fechaConsulta.getMonth() - nacimiento.getMonth();
+
+  // Ajusta la edad si el mes o el día de hoy es menor que el mes o el día de nacimiento
+  if (mes < 0 || (mes === 0 && fechaConsulta.getDate() < nacimiento.getDate())) {
+    edad--;
+  }
+
+  return edad;
+}
+
+function nombrarArchivo(tipoArchivo) {
+  const hoy = new Date();
+  const dia = hoy.getDate().toString().padStart(2, '0');
+  const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+  const anio = hoy.getFullYear();
+  // Hora
+  const horas = hoy.getHours();
+  const minutos = hoy.getMinutes().toString().padStart(2, '0');
+  const ampm = horas >= 12 ? 'PM' : 'AM';
+  const horas12 = (horas % 12 || 12).toString();
+  const segundos = hoy.getSeconds().toString().padStart(2, '0');
+  const nombreArchivo = `${tipoArchivo}-${dia}_${mes}_${anio}, ${horas12}_${minutos}_${segundos}_${ampm}.xlsx`;
+  return nombreArchivo;
 }

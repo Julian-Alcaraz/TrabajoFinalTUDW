@@ -41,14 +41,17 @@ export class ProcesamientoService {
 
   // ============ EXPORTS ============
 
-  exportarConsultas(nombreArchivo: string): Observable<HttpResponse<any>> {
-    return this._http.post(
-      this.url + 'procesamiento/export/consultas',
-      { nombreArchivo },
-      {
-        observe: 'response',
-        responseType: 'blob',
-      },
-    );
+  exportarConsultas(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/consultas', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
+  }
+
+  exportarChicos(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/chicos', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
   }
 }

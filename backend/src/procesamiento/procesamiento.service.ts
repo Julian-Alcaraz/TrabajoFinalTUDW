@@ -85,7 +85,7 @@ export class ProcesamientoService {
         clinica.pct = pasarAnumero(row['PCT (T/E)']);
         clinica.cc = pasarAnumero(row['CC(cm)']);
         clinica.pcimc = row.PCIMC;
-        clinica.imc = pasarAnumero(row.IMC);
+        clinica.imc = pasarAnumero(row.IMC.result);
         clinica.tas = pasarAnumero(row.TAS);
         clinica.tad = pasarAnumero(row.TAD);
         clinica.pcta = pasarAnumero(row.PCTA);
@@ -101,7 +101,7 @@ export class ProcesamientoService {
         clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
         clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
         clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
-        clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
+        clinica.estado_nutricional = row['ESTADO NUTRICIONAL'].result;
         clinica.tension_arterial = row['TA'];
         const clinicaNueva = queryRunner.manager.create(Clinica, clinica);
         await queryRunner.manager.save(clinicaNueva);
