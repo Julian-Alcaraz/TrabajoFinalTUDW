@@ -5,15 +5,18 @@ import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-fonoaudiologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
   templateUrl: './fonoaudiologia.component.html',
 })
 export class FonoaudiologiaComponent implements OnInit {
   loading = true;
+  grid = 3;
   year = 0;
   id_curso = 0;
   porcentaje = 0;
@@ -38,6 +41,10 @@ export class FonoaudiologiaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerGraficos();
+  }
+  setearGrid(event: any) {
+    this.grid = event;
     this.obtenerGraficos();
   }
   async obtenerGraficos() {

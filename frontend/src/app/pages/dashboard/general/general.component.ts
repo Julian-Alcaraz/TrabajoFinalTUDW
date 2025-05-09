@@ -14,14 +14,16 @@ import { Select } from 'primeng/select';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
+  imports: [CommonModule, GridChangerComponent, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
+  grid = 3;
   currentYear: number;
   lastFourYears: number[];
   loading = true;
@@ -54,11 +56,17 @@ export class GeneralComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerInstituciones();
-    this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
+    // this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
   }
   ngAfterViewInit() {
     this.obtenerGraficos();
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+    this.obtenerGraficos();
+  }
+
   async obtenerGraficos() {
     const promesas = [this.countChicosCargados(), this.countConsultasxanio(), this.countTypeConsultaxanio(), this.obtenerGraficoByYearAndInstitucion()];
     Promise.all(promesas).then(() => (this.loading = false));

@@ -6,15 +6,17 @@ import { YearGradoFormComponent } from '../components/year-grado-form/year-grado
 import { ConsultaService } from '@services/consulta.service';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 
 @Component({
   selector: 'app-clinica',
   standalone: true,
-  imports: [CommonModule, PieGraphComponent, BarGraphComponent, YearGradoFormComponent],
+  imports: [CommonModule, PieGraphComponent, BarGraphComponent, YearGradoFormComponent, GridChangerComponent],
   templateUrl: './clinica.component.html',
 })
 export class ClinicaComponent implements OnInit {
   loading = true;
+  grid = 3;
   estadosNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
   tituloTensionArterial = 'Tensión arterial';
   tituloEstadoNutricional = 'Estado nutricional';
@@ -50,6 +52,10 @@ export class ClinicaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerGraficos();
+  }
+  setearGrid(event: any) {
+    this.grid = event;
     this.obtenerGraficos();
   }
   async obtenerGraficos() {

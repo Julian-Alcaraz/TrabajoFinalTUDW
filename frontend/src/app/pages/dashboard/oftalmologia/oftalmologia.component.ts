@@ -6,14 +6,17 @@ import { YearGradoFormComponent } from '../components/year-grado-form/year-grado
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { DemandaEnum } from '../../../common/const/const';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-oftalmologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
   templateUrl: './oftalmologia.component.html',
 })
 export class OftalmologiaComponent implements OnInit {
   loading = true;
+  grid = 3;
   year = 0;
   id_curso = 0;
   porcentaje = 0;
@@ -39,7 +42,10 @@ export class OftalmologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-
+  setearGrid(event: any) {
+    this.grid = event;
+    this.obtenerGraficos();
+  }
   async obtenerGraficos() {
     const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos(), this.graficoCountAnteojos(), this.graficoCountADemanda()];
     Promise.all(promesas).then(() => (this.loading = false));

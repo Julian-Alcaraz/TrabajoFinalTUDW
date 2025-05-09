@@ -5,15 +5,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-prevencion',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
   templateUrl: './prevencion.component.html',
 })
 export class PrevencionComponent implements OnInit {
   loading = true;
+  grid = 3;
   year = 0;
   id_curso = 0;
   porcentaje = 0;
@@ -71,7 +74,10 @@ export class PrevencionComponent implements OnInit {
       this.loading = false;
     }
   }
-
+  setearGrid(event: any) {
+    this.grid = event;
+    this.obtenerGraficos();
+  }
   obtenerGraficosFrecuenciaConsumo() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
