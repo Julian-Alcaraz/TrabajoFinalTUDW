@@ -88,7 +88,8 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
   public mensajes = '';
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
+  public mostrarBotonDescarga = true;
 
   constructor(
     private _localidadService: LocalidadService,
@@ -141,14 +142,9 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   exportarXLS() {
     const filtrosJson = this.searchTerms;
     let filtros;
-    if (Object.keys(filtrosJson).length === 0) {
-      console.log('filtros nulos');
-      filtros = null;
-    } else {
-      console.log('hay algo');
-      filtros = eliminarValoresNulosYVacios(filtrosJson);
-    }
-    console.log('mande estos filtros', filtros);
+    if (Object.keys(filtrosJson).length === 0) filtros = null;
+    else filtros = eliminarValoresNulosYVacios(filtrosJson);
+    
     this.generandoArchivo = true;
     this._procesamientoService.exportarChicos(filtros).subscribe({
       next: (res: any) => {
@@ -229,8 +225,15 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }
+
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
+
+    setTimeout(() => {
+      const cantChicos = this.chicos.filteredData.length;
+      if (cantChicos === 0) this.mostrarBotonDescarga = false;
+      else this.mostrarBotonDescarga = true;
+    });
   }
 
   limpiarFiltroSexo() {

@@ -34,6 +34,7 @@ import { InstitucionService } from '@app/services/institucion.service';
 import { Institucion } from '@app/models/institucion.model';
 import { Curso } from '@app/models/curso.model';
 import { CursoService } from '@app/services/curso.service';
+import { ProcesamientoService } from '@app/services/procesamiento.service';
 
 @Component({
   selector: 'app-lista-taller',
@@ -66,6 +67,8 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   public loadingEspecialidades = false;
   public searching = true;
   public colapsarFiltros = true;
+  public generandoArchivo = false;
+  public mostrarBotonDescarga = true;
 
   // Form controls solo para que no tenga valor al principio.
   public duracionControl: FormControl = new FormControl(null);
@@ -104,6 +107,7 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     private _especialidadService: EspecialidadService,
     private _cursoService: CursoService,
     private _sessionService: SessionService,
+    private _procesamientoService: ProcesamientoService,
   ) {
     this.talleres = new MatTableDataSource<Taller>([]);
     this.talleres.sortingDataAccessor = (item, property) => {
@@ -146,12 +150,12 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
       const matchesTurno = searchTerms.turno ? taller.turno === searchTerms.turno : true;
       const matchesDuracion = searchTerms.duracion ? taller.duracion === searchTerms.duracion : true;
       const matchesDestinatarios = searchTerms.destinatarios ? taller.destinatarios === searchTerms.destinatarios : true;
-      const matchesEspecialidad = searchTerms.especialidad ? taller.especialidad.nombre === searchTerms.especialidad : true;
+      const matchesEspecialidad = searchTerms.especialidad ? taller.especialidad.id === searchTerms.especialidad : true;
       const matchesConjuntoCon = searchTerms.conjuntoCon ? taller.conjunto_con === searchTerms.conjuntoCon : true;
       const matchesEsTaller = searchTerms.esTaller !== undefined ? taller.es_taller === JSON.parse(searchTerms.esTaller) : true;
-      const matchesMarco = searchTerms.marco ? taller.marco.nombre === searchTerms.marco : true;
-      const matchesInstitucion = searchTerms.institucion ? taller.institucion.nombre === searchTerms.institucion : true;
-      const matchesCurso = searchTerms.curso ? taller.curso.nombre === searchTerms.curso : true;
+      const matchesMarco = searchTerms.marco ? taller.marco.id === searchTerms.marco : true;
+      const matchesInstitucion = searchTerms.institucion ? taller.institucion.id === searchTerms.institucion : true;
+      const matchesCurso = searchTerms.curso ? taller.curso.id === searchTerms.curso : true;
 
       this.actualizarMensajes(searchTerms.nombre, searchTerms.estado, searchTerms.frecuencia, searchTerms.turno, searchTerms.duracion, searchTerms.destinatarios, searchTerms.especialidad, searchTerms.conjuntoCon, searchTerms.esTaller, searchTerms.marco, searchTerms.institucion, searchTerms.curso);
       return matchesNombre && matchesEstado && matchesFrecuencia && matchesTurno && matchesDuracion && matchesDestinatarios && matchesEspecialidad && matchesConjuntoCon && matchesEsTaller && matchesMarco && matchesInstitucion && matchesCurso;
@@ -196,8 +200,15 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
       const cursoValue = event.value;
       this.searchTerms.curso = cursoValue !== undefined ? cursoValue : undefined;
     }
+
     this.talleres.filter = JSON.stringify(this.searchTerms);
     if (this.talleres.paginator) this.talleres.paginator.firstPage();
+
+    setTimeout(() => {
+      const cantTalleres = this.talleres.filteredData.length;
+      if (cantTalleres === 0) this.mostrarBotonDescarga = false;
+      else this.mostrarBotonDescarga = true;
+    });
   }
 
   actualizarMensajes(filtroNombre: any, filtroEstado: any, filtroFrecuencia: any, filtroTurno: any, filtroDuracion: any, filtroDestinatarios: any, filtroEspecialidad: any, filtroConjuntoCon: any, filtroEsTaller: any, filtroMarco: any, filtroInstitucion: any, filtroCurso: any): void {
@@ -205,7 +216,7 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     if (filtroNombre) this.mensajes += ` Nombre: '${filtroNombre}'. `;
     if (filtroEstado) this.mensajes += ` Estado: ${filtroEstado ? 'Deshabilitado' : 'Habilitado'}.`;
     if (filtroFrecuencia) this.mensajes += ` Frecuencia: '${filtroFrecuencia}'. `;
-    if (filtroDuracion) this.mensajes += ` Duracion: '${filtroDuracion}'. `;
+    if (filtroDuracion) this.mensajes += ` Duracion: '${filtroDuracion}' hs. `;
     if (filtroEspecialidad) this.mensajes += ` Especialidad: '${filtroEspecialidad}'. `;
     if (filtroDestinatarios) this.mensajes += ` Destinatarios: '${filtroDestinatarios}'. `;
     if (filtroConjuntoCon) this.mensajes += ` Conjunto con: '${filtroConjuntoCon}'. `;
@@ -305,9 +316,35 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
     });
   }
 
+  exportarXLS() {
+    const filtrosJson = this.searchTerms;
+    let filtros;
+    if (Object.keys(filtrosJson).length === 0) filtros = null;
+    else filtros = eliminarValoresNulosYVacios(filtrosJson);
+
+    this.generandoArchivo = true;
+    this._procesamientoService.exportarTalleres(filtros).subscribe({
+      next: (res: any) => {
+        const nombreArchivo = res.headers.get('Content-Disposition').match(/filename="(.+)"/)[1];
+        const blob = res.body;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombreArchivo;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        MostrarNotificacion.mensajeExito(this.snackBar, 'Archivo XLS descargado');
+        this.generandoArchivo = false;
+      },
+      error: (err: any) => {
+        this.generandoArchivo = false;
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
+  }
+
   onChangeEspecialidad() {
-    const nombreSeleccionada = this.especialidadControl.value;
-    const idEspecialidad = this.especialidades.find((e) => e.nombre === nombreSeleccionada)?.id;
+    const idEspecialidad = this.especialidadControl.value;
     this.marcos = this.marcosOriginales.filter((m) => m.especialidad?.id === idEspecialidad);
   }
 
@@ -367,4 +404,24 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
 
 function sacarAcentos(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function eliminarValoresNulosYVacios(obj: any): any {
+  const cleanedObj: any = {};
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key];
+    if (key === 'created_at' || key === 'updated_at') {
+      cleanedObj[key] = value;
+      return;
+    }
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const nestedCleanedObj = eliminarValoresNulosYVacios(value);
+      if (Object.keys(nestedCleanedObj).length > 0) {
+        cleanedObj[key] = nestedCleanedObj;
+      }
+    } else if (value !== null && value !== undefined && value !== '') {
+      cleanedObj[key] = value;
+    }
+  });
+  return cleanedObj;
 }

@@ -208,11 +208,11 @@ export class GraficosService {
   async ortopediaData(year: number, id: number) {
     const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false');
+      let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false').leftJoin('consulta.clinica', 'clinica');
       if (type === 'Normal') {
-        query.where('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
+        query.andWhere('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
       } else if (type === 'Anormal') {
-        query.where('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
+        query.andWhere('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
       }
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
@@ -227,6 +227,7 @@ export class GraficosService {
         return await createQuery(type);
       }),
     );
+    console.log(counts);
     return counts;
   }
 

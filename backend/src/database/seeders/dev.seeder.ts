@@ -638,7 +638,6 @@ export class DevSeeder implements Seeder {
                 usuario: usuarioConRol,
                 edad: edad,
                 created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-                deshabilitado: faker.datatype.boolean(0.05),
               });
               return consulta;
             }),
@@ -779,7 +778,6 @@ export class DevSeeder implements Seeder {
                 especialidad: especialidadSeleccionada,
                 marco: marcoSeleccionado,
                 entrega_cepillos: entregaCepillos,
-                deshabilitado: faker.helpers.maybe(() => true, { probability: 0.05 }) ?? false,
               });
               return taller;
             }),

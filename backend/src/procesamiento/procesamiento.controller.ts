@@ -75,7 +75,6 @@ export class ProcesamientoController {
   @Post('export/consultas')
   async exportarConsultas(@Body() consulta: any, @Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
     const datosConsultas = await this.exportService.exportarConsultas(consulta);
-    console.log(Object.keys(datosConsultas).length);
     const { nombreArchivo, buffer } = await this.excelService.generarExcelConsultas(datosConsultas);
     const { success, stream } = this.archivoService.crearStream(buffer);
     if (success) {
@@ -92,6 +91,22 @@ export class ProcesamientoController {
   async exportarChicos(@Body() consulta: any, @Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
     const datosChicos = await this.exportService.exportarChicos(consulta);
     const { nombreArchivo, buffer } = await this.excelService.generarExcelChicos(datosChicos);
+    const { success, stream } = this.archivoService.crearStream(buffer);
+    if (success) {
+      res.set({
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename="${path.basename(nombreArchivo)}"`,
+        'Access-Control-Expose-Headers': 'Content-Disposition',
+      });
+      return new StreamableFile(stream);
+    }
+  }
+
+  @Post('export/talleres')
+  async exportarTalleres(@Body() consulta: any, @Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
+    const datosTalleres = await this.exportService.exportarTalleres(consulta);
+    const { nombreArchivo, buffer } = await this.excelService.generarExcelTalleres(datosTalleres);
+    // console.log(Object.keys(datosTalleres).length);
     const { success, stream } = this.archivoService.crearStream(buffer);
     if (success) {
       res.set({

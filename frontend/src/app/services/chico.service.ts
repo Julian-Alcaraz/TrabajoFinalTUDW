@@ -34,7 +34,6 @@ export class ChicoService {
   obtenerChicos(deshabilitado: number): Observable<any> {
     const fecha = new Date();
     const anio = fecha.getFullYear();
-    console.log(this.url + 'chico/activity/' + anio + '/' + deshabilitado)
     return this._http.get(this.url + 'chico/activity/' + anio + '/' + deshabilitado);
   }
 

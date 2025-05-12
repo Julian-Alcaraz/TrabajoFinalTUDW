@@ -70,6 +70,88 @@ export class ExcelService {
   private consultasPrevencion: any[] = [];
   private consultasSocial: any[] = [];
 
+  // ============= TALLERES =============
+
+  async generarExcelTalleres(talleres: any) {
+    try {
+      const datosTalleres = this.prepararDataTalleres(talleres);
+      const incluirEntregaCepillos = datosTalleres.some((t) => 'entrega_cepillos' in t && t.entrega_cepillos !== '-');
+
+      const encabezados = ['NOMBRE', 'FECHA', 'ES TALLER', 'ESPECIALIDAD', 'MARCO', 'ENCUENTROS', 'DURACION', 'PARTICIPANTES', 'DESTINATARIOS', 'RECURSOS', 'TURNO', 'CONJUNTO CON', 'FRECUENCIA', 'INSTITUCION', 'CURSO', 'OBSERVACIONES'];
+      if (incluirEntregaCepillos) {
+        encabezados.push('ENTREGA CEPILLOS');
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheetTalleres = workbook.addWorksheet('Talleres');
+
+      worksheetTalleres.addRow(encabezados);
+      datosTalleres.forEach((taller) => {
+        if (taller.entrega_cepillos === '-') delete taller.entrega_cepillos;
+        worksheetTalleres.addRow(Object.values(taller));
+      });
+
+      // Estilos
+      this.aplicarEstilosTalleres(worksheetTalleres);
+      const buffer = await workbook.xlsx.writeBuffer();
+      const nombreArchivo = nombrarArchivo('Talleres');
+      // Retorno nombre y buffer
+
+      return { success: true, nombreArchivo, buffer };
+    } catch (err) {
+      console.error('Error al generar el Excel:', err);
+      return { success: false, err };
+    }
+  }
+
+  prepararDataTalleres(talleres: any[]) {
+    const arrayTalleres = [];
+    Object.values(talleres).forEach((taller) => {
+      const { id, updated_at, created_at, deshabilitado, nombre, cant_encuentros, duracion, cant_participantes, destinatarios, recursos, turno, conjunto_con, frecuencia, es_taller, entrega_cepillos, observaciones, institucion, marco, especialidad, curso } = taller;
+      const objDateTaller = new Date(taller.fecha);
+      const fechaTaller = DateTime.fromISO(objDateTaller.toISOString(), { zone: 'utc' }).toFormat('dd-MM-yyyy');
+      const datosTaller: any = {
+        nombre: nombre,
+        fecha: fechaTaller,
+        es_taller: es_taller ? 'Si' : 'No',
+        especialidad: especialidad.nombre,
+        marco: marco.nombre,
+        cantEncuentros: cant_encuentros,
+        duracion: duracion,
+        cantParticipantes: cant_participantes,
+        destinatarios: destinatarios,
+        recursos: recursos,
+        turno: turno,
+        conjuntoCon: conjunto_con,
+        frecuencia: frecuencia,
+        institucion: institucion.nombre,
+        curso: curso.nombre,
+        observaciones: existeItem(observaciones) ? '-' : observaciones,
+        entrega_cepillos: existeItem(entrega_cepillos) ? '-' : entrega_cepillos === true ? 'Si' : 'No',
+      };
+      /*
+      if (especialidad.nombre === 'Odontologia') {
+        datosTaller.entrega_cepillos = existeItem(entrega_cepillos) ? '-' : entrega_cepillos === true ? 'Si' : 'No';
+      }
+
+      datosTaller.observaciones = existeItem(observaciones) ? '-' : observaciones;
+      */
+      arrayTalleres.push(datosTaller);
+    });
+    return arrayTalleres;
+  }
+
+  aplicarEstilosTalleres(worksheet) {
+    const celdasARotar = ['C1', 'G1', 'H1', 'F1'];
+    const celdasChicas = [];
+    const filaCabecera = worksheet.getRow(1);
+    filaCabecera.height = 150;
+    filaCabecera.eachCell((cell: any) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      this.procesarCeldaSegunHoja(worksheet, cell, celdasARotar, celdasChicas);
+    });
+  }
+
   // ============= CHICOS =============
 
   async generarExcelChicos(chicos: any) {
@@ -115,7 +197,7 @@ export class ExcelService {
         direccion: direccion,
         localidad: barrio.localidad.nombre,
         barrio: barrio.nombre,
-        telefono: existeItem(telefono) ? '-' : chico.telefono,
+        telefono: existeItem(telefono) ? '-' : telefono,
         nombrePadre: nombre_padre ? nombre_padre : '-',
         nombreMadre: nombre_madre ? nombre_madre : '-',
       };
@@ -527,15 +609,16 @@ function calcularEdad(fechaNacimiento, fechaConsulta) {
 
 function nombrarArchivo(tipoArchivo) {
   const hoy = new Date();
+  const horaLocal = new Intl.DateTimeFormat('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }).formatToParts(hoy);
+  const horas12 = horaLocal.find((p) => p.type === 'hour').value.padStart(2, '0');
+  const minutos = horaLocal.find((p) => p.type === 'minute').value.padStart(2, '0');
+  const segundos = horaLocal.find((p) => p.type === 'second').value.padStart(2, '0');
+  const ampm = horaLocal.find((p) => p.type === 'dayPeriod').value.toUpperCase();
+
   const dia = hoy.getDate().toString().padStart(2, '0');
   const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
   const anio = hoy.getFullYear();
-  // Hora
-  const horas = hoy.getHours();
-  const minutos = hoy.getMinutes().toString().padStart(2, '0');
-  const ampm = horas >= 12 ? 'PM' : 'AM';
-  const horas12 = (horas % 12 || 12).toString();
-  const segundos = hoy.getSeconds().toString().padStart(2, '0');
+
   const nombreArchivo = `${tipoArchivo}-${dia}_${mes}_${anio}, ${horas12}_${minutos}_${segundos}_${ampm}.xlsx`;
   return nombreArchivo;
 }

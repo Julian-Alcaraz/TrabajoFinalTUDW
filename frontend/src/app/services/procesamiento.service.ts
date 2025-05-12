@@ -54,4 +54,11 @@ export class ProcesamientoService {
       responseType: 'blob',
     });
   }
+
+  exportarTalleres(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/talleres', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
+  }
 }

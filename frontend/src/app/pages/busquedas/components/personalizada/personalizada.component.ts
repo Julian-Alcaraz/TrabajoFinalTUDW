@@ -202,7 +202,6 @@ export class PersonalizadaComponent implements OnInit, OnDestroy {
       this.colapsarPaneles = true;
       const resultado = prepararData(this.formBusqueda.value);
       const dataLimpia = eliminarValoresNulosYVacios(resultado);
-      console.log(dataLimpia);
       forkJoin({
         total: this._consultaService.obtenerTotalPersonalizada(dataLimpia),
         limitedData: this._consultaService.busquedaPersonalizadaLimited(dataLimpia, this.page, this.size),
