@@ -130,7 +130,7 @@ export class CursosComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder editar el curso, usted debe habilitarlo',
+      text: 'Para poder editar el curso, usted debe habilitarlo.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',

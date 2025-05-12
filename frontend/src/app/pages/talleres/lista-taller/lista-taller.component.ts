@@ -358,7 +358,7 @@ export class ListaTallerComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Eliminar taller?',
-      text: 'El taller se borrara permantenmente.',
+      text: 'Esta acción es irreversible.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

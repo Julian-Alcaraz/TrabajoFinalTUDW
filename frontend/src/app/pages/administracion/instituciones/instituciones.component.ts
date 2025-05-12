@@ -195,7 +195,7 @@ export class InstitucionesComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder editar la institucion, usted debe habilitarla',
+      text: 'Para poder editar la institucion, usted debe habilitarla.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',

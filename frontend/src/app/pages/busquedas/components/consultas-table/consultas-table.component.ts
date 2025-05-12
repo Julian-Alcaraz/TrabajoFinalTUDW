@@ -106,8 +106,8 @@ export class ConsultasTableComponent implements OnInit, AfterViewInit, OnChanges
   eliminar(event: Event, element: Consulta) {
     event.stopPropagation();
     Swal.fire({
-      title: '¿Deseas borrar consulta?',
-      text: 'La consulta se borrara permantenmente.',
+      title: '¿Eliminar consulta?',
+      text: 'Esta acción es irreversible.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

@@ -144,7 +144,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
     let filtros;
     if (Object.keys(filtrosJson).length === 0) filtros = null;
     else filtros = eliminarValoresNulosYVacios(filtrosJson);
-    
+
     this.generandoArchivo = true;
     this._procesamientoService.exportarChicos(filtros).subscribe({
       next: (res: any) => {
@@ -344,7 +344,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder ver sus consultas o editar los datos personales del chico, usted debe habilitar al chico',
+      text: 'Para poder ver sus consultas o editar los datos personales del niño, usted debe habilitar al niño.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
@@ -375,6 +375,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar chico?',
+      text: 'El chico dejará de ser visible para los usuarios y no se podrán cargar más consultas a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',

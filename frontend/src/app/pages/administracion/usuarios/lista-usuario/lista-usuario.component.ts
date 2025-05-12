@@ -230,6 +230,22 @@ export class ListaUsuarioComponent implements OnInit, AfterViewInit {
     if (sortState.direction) this._liveAnnouncer.announce(`Ordenado ${sortState.direction}`);
     else this._liveAnnouncer.announce('Orden eliminado');
   }
+
+  notificar(id: number) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Para poder editar los roles del usuario, usted debe habilitarlo.',
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#3f77b4',
+      confirmButtonText: 'Habilitar usuario',
+      denyButtonText: 'Cancelar',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.habilitar(id);
+      }
+    });
+  }
 }
 
 function sacarAcentos(text: string): string {
