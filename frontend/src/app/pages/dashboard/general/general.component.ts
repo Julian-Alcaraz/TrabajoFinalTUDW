@@ -15,6 +15,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import * as Constantes from '@app/common/const/const';
 
 @Component({
   selector: 'app-general',
@@ -43,7 +44,8 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   dataTipoConsultaxanio: any = [];
   searchingInstituciones = false;
   // este no lo cambio por que sino pierdo el trabajo social
-  arrayConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevención', 'Trabajo Social'];
+  arrayConsultas: string[] = [...Constantes.typeConsultasEnum];
+  // arrayConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevención', 'Trabajo Social'];
   constructor(
     private _consultaService: ConsultaService,
     private _chicoService: ChicoService,

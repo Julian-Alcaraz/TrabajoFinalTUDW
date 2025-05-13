@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Consulta } from './entities/consulta.entity';
+import * as Constantes from '../common/const/const';
 
 @Injectable()
 export class GraficosService {
@@ -19,7 +20,7 @@ export class GraficosService {
     return respuesta.reverse();
   }
   async countTypeByYear(year: number) {
-    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'];
+    const types = Constantes.typeConsultasEnum;
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
       const counts = await Promise.all(types.map((type) => this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND EXTRACT(YEAR FROM consulta.created_at) = :year AND consulta.type = :type', { year, type }).getCount()));
@@ -29,7 +30,8 @@ export class GraficosService {
     return respuesta;
   }
   async countTypeByYearAndInstitucion(year: number, id_institucion: number) {
-    const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'];
+    const types = Constantes.typeConsultasEnum;
+    // const types = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'];
     const respuesta = await Promise.all(
       types.map(async (type) => {
         let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false AND consulta.type = :type', { type });
@@ -48,7 +50,7 @@ export class GraficosService {
 
   // CLINICA
   async tensionxEstadoData(year: number, id: number, estado: string) {
-    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const types = Constantes.TensionArterialEnum;
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false').andWhere('clinica.es_clinica = true').andWhere('clinica.estado_nutricional = :estado AND clinica.tension_arterial = :type', { estado, type });
       if (year) {
@@ -68,7 +70,8 @@ export class GraficosService {
   }
 
   async estadoNutricionalData(year: number, id: number) {
-    const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
+    const types = Constantes.EstadoNutricionalEnum;
+    // const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.estado_nutricional = :type', { type });
       if (year) {
@@ -103,7 +106,8 @@ export class GraficosService {
   }
 
   async tensionArterialData(year: number, id: number) {
-    const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
+    const types = Constantes.TensionArterialEnum;
+    // const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.tension_arterial = :type', { type });
       if (year) {
@@ -137,7 +141,8 @@ export class GraficosService {
     return respuesta;
   }
   async examenVisualData(year: number, id: number) {
-    const types = ['Normal', 'Anormal'];
+    const types = Constantes.ExamenVisualEnum;
+    // const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.examen_visual = :type', { type });
       if (year) {
@@ -171,7 +176,8 @@ export class GraficosService {
   }
 
   async vacunacionData(year: number, id: number) {
-    const types = ['Completo', 'Incompleto', 'Desconocido'];
+    const types = Constantes.VacunasEnum;
+    // const types = ['Completo', 'Incompleto', 'Desconocido'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.vacunas = :type', { type });
       if (year) {
@@ -206,7 +212,8 @@ export class GraficosService {
   }
 
   async ortopediaData(year: number, id: number) {
-    const types = ['Normal', 'Anormal'];
+    const types = Constantes.OrtopediaYTraumatologiaEnum;
+    // const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false').leftJoin('consulta.clinica', 'clinica');
       if (type === 'Normal') {
@@ -227,7 +234,6 @@ export class GraficosService {
         return await createQuery(type);
       }),
     );
-    console.log(counts);
     return counts;
   }
 
@@ -247,7 +253,8 @@ export class GraficosService {
   }
 
   async lenguajeData(year: number, id: number) {
-    const types = ['Adecuado', 'Inadecuado'];
+    const types = Constantes.LenguajeEnum;
+    // const types = ['Adecuado', 'Inadecuado'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true AND clinica.lenguaje = :type', { type });
       if (year) {
@@ -469,7 +476,8 @@ export class GraficosService {
     return respuesta;
   }
   async demandaData(year: number, id: number) {
-    const types = ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
+    const types = Constantes.DemandaEnum;
+    // const types = ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
     const createQuery = (type: string) => {
       const clasificacion = type;
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.oftalmologia', 'oftalmologia').where('consulta.deshabilitado=false AND oftalmologia.demanda = :clasificacion', { clasificacion });
@@ -506,7 +514,8 @@ export class GraficosService {
 
   // FONOAUDIOLOGIA
   async diagnosticoPresuntivo(year: number, id: number) {
-    const types = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'] as const;
+    const types = Constantes.DiagnosticoPresuntivoEnum;
+    // const types = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'] as const;
 
     const createQuery = (type: string) => {
       const clasificacion = type;
@@ -541,7 +550,8 @@ export class GraficosService {
     return respuesta;
   }
   async causas(year: number, id: number) {
-    const types = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'] as const;
+    const types = Constantes.CausasEnum;
+    // const types = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'] as const;
 
     const createQuery = (type: string) => {
       const clasificacion = type;
@@ -577,7 +587,8 @@ export class GraficosService {
   }
   // PREVENCION
   async problematica(year: number, id: number) {
-    const types = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
+    const types = Constantes.OtraProblematicaEnum;
+    // const types = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
     const createQuery = (type: string) => {
       const clasificacion = type;
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.prevencion', 'prevencion').where('consulta.deshabilitado=false AND prevencion.otra_problematica = :clasificacion', { clasificacion });
@@ -613,7 +624,8 @@ export class GraficosService {
 
   // cosumo problematico
   async drogasHabituales(year: number, id: number) {
-    const types = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
+    const types = Constantes.ConsumoProblematicoEnum;
+    // const types = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
     const createQuery = (type: string) => {
       const clasificacion = type;
       const consumo = 'Consumo problematico';
@@ -649,7 +661,8 @@ export class GraficosService {
   }
   // frecuencia consumo
   async frecuenciaConsumo(year: number, id: number) {
-    const types = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'];
+    const types = Constantes.FrecuenciaPrevencionEnum;
+    // const types = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'];
     const createQuery = (type: string) => {
       const clasificacion = type;
       const consumo = 'Consumo problematico';
@@ -685,7 +698,8 @@ export class GraficosService {
   }
   // motivo consumo
   async motivoConsumo(year: number, id: number) {
-    const types = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
+    const types = Constantes.MotivoConsumoEnum;
+    // const types = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
     const createQuery = (type: string) => {
       const clasificacion = type;
       const consumo = 'Consumo problematico';

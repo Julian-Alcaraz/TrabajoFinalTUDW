@@ -7,6 +7,7 @@ import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
+import * as Constantes from '@app/common/const/const';
 
 @Component({
   selector: 'app-prevencion',
@@ -29,10 +30,14 @@ export class PrevencionComponent implements OnInit {
   tituloMotivoConsumo = 'Motivo Consumo';
   tituloFrecuenciaCosumo = 'Frecuencia Consumo';
   tituloDrogaHabitual = 'Droga Habitual';
-  problematica = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
-  motivoConsumo = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
-  frecuenciaConsumo = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'];
-  drogaHabitual = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
+  // problematica = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
+  problematica = Constantes.OtraProblematicaEnum;
+  // motivoConsumo = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
+  motivoConsumo = Constantes.MotivoConsumoEnum;
+  // frecuenciaConsumo = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Esporadico', 'Otro'];
+  frecuenciaConsumo = Constantes.FrecuenciaPrevencionEnum;
+  // drogaHabitual = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
+  drogaHabitual = Constantes.ConsumoProblematicoEnum
   countProblematica = [];
   countMotivoConsumo = [];
   countFrecuenciaCosumo = [];
