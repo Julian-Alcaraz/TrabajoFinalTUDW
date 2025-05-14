@@ -289,6 +289,28 @@ function prepararData(data: any): any {
       data.generales.derivacion_externa = derivacion_externa;
       data.generales.derivacion_prevencion = derivacion_prevencion;
       data.generales.derivacion_social = derivacion_social;
+    } else if (typeof data.especificas?.derivaciones === 'object') {
+      console.log(data.especificas);
+      console.log(data.especificas?.derivaciones);
+      const derivaciones = data.especificas.derivaciones;
+      if (derivaciones.fonoaudiologia !== undefined) {
+        data.generales.derivacion_fonoaudiologia = derivaciones.fonoaudiologia;
+      }
+      if (derivaciones.odontologia !== undefined) {
+        data.generales.derivacion_odontologia = derivaciones.odontologia;
+      }
+      if (derivaciones.oftalmologia !== undefined) {
+        data.generales.derivacion_oftalmologia = derivaciones.oftalmologia;
+      }
+      if (derivaciones.externa !== undefined) {
+        data.generales.derivacion_externa = derivaciones.externa;
+      }
+      if (derivaciones.prevencion !== undefined) {
+        data.generales.derivacion_prevencion = derivaciones.prevencion;
+      }
+      if (derivaciones.social !== undefined) {
+        data.generales.derivacion_social = derivaciones.social;
+      }
     }
 
     delete data.especificas.derivaciones;
