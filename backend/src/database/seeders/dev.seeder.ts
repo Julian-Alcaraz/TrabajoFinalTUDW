@@ -524,7 +524,7 @@ export class DevSeeder implements Seeder {
       console.log('Seeding chicos...');
 
       const chicos = await Promise.all(
-        Array(1000)
+        Array(1)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
@@ -604,7 +604,7 @@ export class DevSeeder implements Seeder {
       for (let i = 0; i < 1; i++) {
         console.log('Seeding consultas...');
         const consultasSimples = await Promise.all(
-          Array(1000)
+          Array(1)
             .fill('')
             .map(async () => {
               const chicoSeleccionado = faker.helpers.arrayElement(chicos);

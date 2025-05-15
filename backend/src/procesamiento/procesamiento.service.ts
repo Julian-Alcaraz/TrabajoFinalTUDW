@@ -70,39 +70,59 @@ export class ProcesamientoService {
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         const clinica = new Clinica();
         // verificar nulos importante y verificar nulos no importante(estos los seteo como desactivados)
+        const esClinica = this.obtenerTipoConsulta(row);
+
+        clinica.es_clinica = esClinica;
         clinica.consulta = consultaNueva;
-        clinica.diabetes = !!row.DBT;
-        clinica.hta = !!row.HTA;
-        clinica.obesidad = !!row.O;
-        clinica.consumo_alcohol = !!row['CP-OH'];
-        clinica.consumo_drogas = !!row['CP-D'];
-        clinica.consumo_tabaco = !!row['CP-TBQ'];
-        clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-        clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-        clinica.vacunas = convertirVacunas(row.VACUNAS);
         clinica.peso = pasarAnumero(row['PESO (Kg)']);
         clinica.talla = pasarAnumero(row['TALLA (cm)']);
         clinica.pct = pasarAnumero(row['PCT (T/E)']);
         clinica.cc = pasarAnumero(row['CC(cm)']);
+        clinica.imc = pasarAnumero(row.IMC);
         clinica.pcimc = row.PCIMC;
-        clinica.imc = pasarAnumero(row.IMC.result);
-        clinica.tas = pasarAnumero(row.TAS);
-        clinica.tad = pasarAnumero(row.TAD);
-        clinica.pcta = pasarAnumero(row.PCTA);
-        clinica.examen_visual = row['EX.VISUAL'];
-        clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
-        clinica.lenguaje = row.LENGUAJE;
         clinica.segto = convertirSiNo(row['SEGTO.']);
-        clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
-        clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
-        clinica.leche = convertirSiNo(row['TOMA LECHE']);
-        clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
-        clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
-        clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
-        clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
-        clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
-        clinica.estado_nutricional = row['ESTADO NUTRICIONAL'].result;
-        clinica.tension_arterial = row['TA'];
+        clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
+
+        if (esClinica) {
+          //clinica.consulta = consultaNueva;
+          clinica.diabetes = !!row.DBT;
+          clinica.hta = !!row.HTA;
+          clinica.obesidad = !!row.O;
+          clinica.consumo_alcohol = !!row['CP-OH'];
+          clinica.consumo_drogas = !!row['CP-D'];
+          clinica.consumo_tabaco = !!row['CP-TBQ'];
+          clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+          clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+          clinica.vacunas = convertirVacunas(row.VACUNAS);
+          // clinica.peso = pasarAnumero(row['PESO (Kg)']);
+          // clinica.talla = pasarAnumero(row['TALLA (cm)']);
+          // clinica.pct = pasarAnumero(row['PCT (T/E)']);
+          // clinica.cc = pasarAnumero(row['CC(cm)']);
+          // clinica.pcimc = row.PCIMC;
+          // clinica.imc = pasarAnumero(row.IMC);
+          clinica.tas = pasarAnumero(row.TAS);
+          clinica.tad = pasarAnumero(row.TAD);
+          clinica.pcta = pasarAnumero(row.PCTA);
+          clinica.examen_visual = row['EX.VISUAL'];
+          clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
+          clinica.lenguaje = row.LENGUAJE;
+          // clinica.segto = convertirSiNo(row['SEGTO.']);
+          clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
+          clinica.leche = convertirSiNo(row['TOMA LECHE']);
+          clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
+          clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
+          clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
+          clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
+          clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
+          // clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
+          clinica.tension_arterial = row['TA'];
+        } else {
+          clinica.tension_arterial = null;
+          clinica.tas = null;
+          clinica.tad = null;
+          clinica.pcta = null;
+        }
         const clinicaNueva = queryRunner.manager.create(Clinica, clinica);
         await queryRunner.manager.save(clinicaNueva);
         // const clinicaNueva = this.clinicaORM.create(clinica);
@@ -121,6 +141,55 @@ export class ProcesamientoService {
       }
     }
     return noCargados;
+  }
+
+  obtenerTipoConsulta(row) {
+    let esClinica;
+
+    if (
+      // Campos que pertenecen a Clinica
+      row.VACUNAS === null &&
+      row['EX.VISUAL'] === null &&
+      row['O Y T'] === null &&
+      row.LENGUAJE === null &&
+      row['ALIMENTACIÓN'] === null &&
+      row['INFUSIÓN'] === null &&
+      row['Nº COMIDAS AL DÍA'] === null &&
+      row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA'] === null &&
+      row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA'] === null &&
+      row['HORAS DIARIAS DE SUEÑO'] === null &&
+      row['HIDRATACIÓN'] === null &&
+      row.DBT === null &&
+      row.HTA === null &&
+      row.O === null &&
+      row['CP-OH'] === null &&
+      row['CP-D'] === null &&
+      row['CP-TBQ'] === null &&
+      row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS'] === null &&
+      row['TOMA LECHE'] === null &&
+      // Campos que no deberian estar en nutricion, luego se setean en nulo
+      // Estan aca porque estos campos estan siempre en el excel
+      row['TA'] !== null &&
+      row.TAS !== null &&
+      row.TAD !== null &&
+      row.PCTA !== null &&
+      // campos obligatorios de nutricion
+      row['PESO (Kg)'] !== null &&
+      row['TALLA (cm)'] !== null &&
+      row['PCT (T/E)'] !== null &&
+      row['CC(cm)'] !== null &&
+      row.IMC !== null &&
+      row.PCIMC !== null &&
+      row['ESTADO NUTRICIONAL'] !== null &&
+      row['SEGTO.'] !== null
+    ) {
+      esClinica = false;
+      console.log('Es Nutricion');
+    } else {
+      esClinica = true;
+      console.log('Es Clinica');
+    }
+    return esClinica;
   }
 
   async procesarOdontologia(data, usuario) {
