@@ -14,6 +14,8 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
 import { Prevencion } from 'src/consulta/entities/prevencion.entity';
 import { Social } from 'src/consulta/entities/social.entity';
+import { Taller } from 'src/taller/entities/taller.entity';
+import { Marco } from 'src/marco/entities/marco.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -24,6 +26,7 @@ export class ProcesamientoService {
     @InjectRepository(Fonoaudiologia) private readonly fonoaudiologiaORM: Repository<Fonoaudiologia>,
     // chico,institucion, curso
     @InjectRepository(Institucion) private readonly institucionORM: Repository<Institucion>,
+    @InjectRepository(Institucion) private readonly marcoORM: Repository<Marco>,
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
@@ -457,6 +460,75 @@ export class ProcesamientoService {
     // verfico el dni
     return noCargados;
   }
+  // el mes viene en enero febrero
+  devolverFecha(anio, mes) {
+    const meses = {
+      enero: 0,
+      febrero: 1,
+      marzo: 2,
+      abril: 3,
+      mayo: 4,
+      junio: 5,
+      julio: 6,
+      agosto: 7,
+      septiembre: 8,
+      octubre: 9,
+      noviembre: 10,
+      diciembre: 11,
+    };
+
+    if (!meses.hasOwnProperty(mes.toLowerCase())) {
+      throw new Error('Mes no válido');
+    }
+
+    return new Date(anio, meses[mes.toLowerCase()], 1); // Primer día del mes
+  }
+
+  // Ejemplo de uso:
+  async procesarTalleres(data, usuario) {
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        const taller = new Taller();
+        taller.marco = await this.verificarMarco(row['MARCO']); // !!!!!! REVISAR
+        taller.especialidad = row['ESPECIALIDAD']; // !!!!!! REVISAR
+        taller.cant_encuentros = row['CANT ENCUENTROS'] || row['ENCUENTROS'];
+        taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
+        taller.cant_participantes = row['CANT. DE PARTICIPANTES'] || row['Nº DE ASISTENTES'] || row['ASISTENTES'] || row['Nº de ASISTENTES'];
+        taller.es_taller = row['TALLER'] ? convertirSiNo(row['TALLER']) : convertirSiNo(row['ES TALLER?']);
+        taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'No hay dato';
+        taller.destinatarios = row['DESTINATARIOS'];
+        taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato
+        taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
+        taller.frecuencia = row['FRECUENCIA'] ?? 'NO HAY DATO'; // no viene en todos
+        taller.curso = await this.verificarCurso(row['SALA/GRADO']);
+        taller.institucion = await this.verificarInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']);
+        taller.created_at = new Date();
+        taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER']) ?? 'No definido';
+        taller.observaciones = row['OBSERVACIONES'];
+        taller.recursos = row['RECURSOS'] ?? 'No hay dato';
+        taller.turno = row['TURNO'];
+        const consultaNueva = queryRunner.manager.create(Taller, taller);
+        await queryRunner.manager.save(consultaNueva);
+        await queryRunner.commitTransaction();
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
+  }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
     let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });
@@ -480,6 +552,18 @@ export class ProcesamientoService {
       return null;
     }
     return institucionBd;
+  }
+
+  async verificarMarco(marco: string, insertar: boolean = false): Promise<null | Marco> {
+    let marcoBd: any = this.marcoORM.findOneBy({ nombre: marco });
+    if (!marcoBd && insertar) {
+      marcoBd = this.marcoORM.create({ nombre: marco }); // !!!!! REVISAR
+      await this.institucionORM.save(marcoBd);
+    }
+    if (!marcoBd) {
+      return null;
+    }
+    return marcoBd;
   }
 
   async verificarCurso(curso: string, insertar: boolean = false): Promise<null | Curso> {

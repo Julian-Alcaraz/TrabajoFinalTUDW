@@ -59,7 +59,7 @@ export class ProcesamientoController {
   async procesarPrevencion(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = await this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarPrevencion(data, req.user);
-    return { succes: true, data: noCargados, message: 'fono' };
+    return { succes: true, data: noCargados, message: 'preve' };
   }
 
   @Post('social')
@@ -67,9 +67,16 @@ export class ProcesamientoController {
   async procesarSocial(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const data = await this.excelService.leerArchivoExcel(file);
     const noCargados = await this.procesamientoService.procesarSocial(data, req.user);
-    return { succes: true, data: noCargados, message: 'fono' };
+    return { succes: true, data: noCargados, message: 'soc' };
   }
-
+  
+  @Post('talleres')
+  @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
+  async procesarTalleres(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
+    const data = await this.excelService.leerArchivoExcel(file);
+    const noCargados = await this.procesamientoService.procesarTalleres(data, req.user);
+    return { succes: true, data: noCargados, message: 'tall' };
+  }
   // ============ EXPORTS ============
 
   @Post('export/consultas')

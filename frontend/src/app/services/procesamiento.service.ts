@@ -38,7 +38,10 @@ export class ProcesamientoService {
   procesarSocial(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/social', formData);
   }
-
+  
+  procesarTalleres(formData: FormData): Observable<any> {
+    return this._http.post(this.url + 'procesamiento/talleres', formData);
+  }
   // ============ EXPORTS ============
 
   exportarConsultas(filtros: any): Observable<HttpResponse<any>> {
