@@ -716,8 +716,8 @@ export class DevSeeder implements Seeder {
       ]);
 
       console.log('Seeding talleres...');
-      const batchSize = 100;
-      for (let i = 0; i < 100; i += batchSize) {
+      const batchSize = 1;
+      for (let i = 0; i < 1; i += batchSize) {
         const talleres = await Promise.all(
           Array(batchSize)
             .fill('')

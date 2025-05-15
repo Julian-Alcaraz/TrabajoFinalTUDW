@@ -14,8 +14,10 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
 import { Prevencion } from 'src/consulta/entities/prevencion.entity';
 import { Social } from 'src/consulta/entities/social.entity';
+
 import { Taller } from 'src/taller/entities/taller.entity';
 import { Marco } from 'src/marco/entities/marco.entity';
+import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -25,8 +27,9 @@ export class ProcesamientoService {
     @InjectRepository(Oftalmologia) private readonly oftalmologiaORM: Repository<Oftalmologia>,
     @InjectRepository(Fonoaudiologia) private readonly fonoaudiologiaORM: Repository<Fonoaudiologia>,
     // chico,institucion, curso
+    @InjectRepository(Especialidad) private readonly especialidadORM: Repository<Especialidad>,
     @InjectRepository(Institucion) private readonly institucionORM: Repository<Institucion>,
-    @InjectRepository(Institucion) private readonly marcoORM: Repository<Marco>,
+    @InjectRepository(Marco) private readonly marcoORM: Repository<Marco>,
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
@@ -366,36 +369,42 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        const chico = await this.procesarChico(row, queryRunner);
-        const consulta = new Consulta();
-        consulta.chico = chico;
-        consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
-        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
-        consulta.edad = row.EDAD ?? null; //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
-        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-        consulta.type = 'Prevencion';
-        consulta.observaciones = row['OBSERVACIONES'];
-        consulta.derivacion_externa = row['DERIVACIÓN'];
-        consulta.usuario = usuario;
-        consulta.turno = capitalize(row['TURNO']);
-        // const consultaNueva = this.consultaORM.create(consulta);
-        // await this.consultaORM.save(consultaNueva);
-        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
-        await queryRunner.manager.save(consultaNueva);
-        // consulta hija  lacreo y pongo clinica.consulta = consulta
-        const prevencion = new Prevencion();
-        prevencion.consulta = consultaNueva;
-        prevencion.otra_problematica = row['OTRAS PROBLEMÁTICAS'];
-        prevencion.consumo_problematico = row['CONSUMO PROBLEMATICO'] ?? 'Otras';
-        prevencion.edad_inicio_consumo = row['EDAD DE INICIO DE CONSUMO'];
-        prevencion.frecuencia = convertirFrecuenciaConsumo(row['FRECUENCIA']);
-        prevencion.motivo_consumo = row['MOTIVO DE CONSUMO'];
+        if (row.DNI) {
+          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          if (chico !== null) {
+            const consulta = new Consulta();
+            consulta.chico = chico;
+            consulta.usuario = usuario;
 
-        const prevencionNueva = queryRunner.manager.create(Prevencion, prevencion);
-        await queryRunner.manager.save(prevencionNueva);
-        await queryRunner.commitTransaction();
+            consulta.created_at = new Date(row['FECHA']);
+            consulta.curso = await this.verificarCurso(convertirCurso(row['GRADO']));
+            consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
+            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+            consulta.type = 'Social';
+            consulta.observaciones = row['OBSERVACIONES'];
+            consulta.derivacion_externa = false;
+            consulta.turno = capitalize(row['TURNO']);
+            const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+            await queryRunner.manager.save(consultaNueva);
+            // consulta hija  lacreo y pongo clinica.consulta = consulta
+            const prevencion = new Prevencion();
+            prevencion.consulta = consultaNueva;
+            prevencion.otra_problematica = row['OTRAS PROBLEMÁTICAS'];
+            prevencion.consumo_problematico = row['CONSUMO PROBLEMATICO'] ?? 'Otras';
+            prevencion.edad_inicio_consumo = row['EDAD DE INICIO DE CONSUMO'];
+            prevencion.frecuencia = convertirFrecuenciaConsumo(row['FRECUENCIA']);
+            prevencion.motivo_consumo = row['MOTIVO DE CONSUMO'];
+
+            const prevencionNueva = queryRunner.manager.create(Prevencion, prevencion);
+            await queryRunner.manager.save(prevencionNueva);
+            await queryRunner.commitTransaction();
+          } else {
+            throw new Error('No hay chico cargado con ese DNI. Cargarlo antes.');
+          }
+        } else {
+          throw new Error('No se envio el DNI');
+        }
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -419,33 +428,41 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        const chico = await this.procesarChico(row, queryRunner);
-        const consulta = new Consulta();
-        consulta.chico = chico;
-        consulta.usuario = usuario;
-        consulta.created_at = new Date(row['fecha']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
-        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
-        consulta.edad = row.EDAD ?? null; //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
-        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-        consulta.type = 'Social';
-        consulta.observaciones = row['OBSERVACIONES'];
-        consulta.derivacion_externa = false;
-        consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
-        await queryRunner.manager.save(consultaNueva);
-        // consulta hija  lacreo y pongo clinica.consulta = consulta
-        const social = new Social();
-        social.consulta = consultaNueva;
-        social.articulacion = row['Articulación con:'];
-        social.demanda = row['Demanda de:'];
-        social.objeto_informe = row['Objeto de Informe'];
-        social.seguimiento = row['Seguimiento'];
+        if (row.DNI) {
+          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          if (chico !== null) {
+            const consulta = new Consulta();
+            consulta.chico = chico;
+            consulta.usuario = usuario;
+            const anio = Number(row.fecha);
+            consulta.created_at = new Date(anio, 1, 2);
+            consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+            consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
+            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+            consulta.type = 'Social';
+            consulta.observaciones = row['OBSERVACIONES'];
+            consulta.derivacion_externa = false;
+            consulta.turno = capitalize(row['TURNO']);
+            const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+            await queryRunner.manager.save(consultaNueva);
+            // consulta hija  lacreo y pongo clinica.consulta = consulta
+            const social = new Social();
+            social.consulta = consultaNueva;
+            social.articulacion = row['Articulación con:'];
+            social.demanda = row['Demanda de:'];
+            social.objeto_informe = row['Objeto de Informe'];
+            social.seguimiento = row['Seguimiento'];
 
-        const socialNueva = queryRunner.manager.create(Social, social);
-        await queryRunner.manager.save(socialNueva);
-        await queryRunner.commitTransaction();
+            const socialNueva = queryRunner.manager.create(Social, social);
+            await queryRunner.manager.save(socialNueva);
+            await queryRunner.commitTransaction();
+          } else {
+            throw new Error('No hay chico cargado con ese DNI. Cargarlo antes.');
+          }
+        } else {
+          throw new Error('No se envio el DNI');
+        }
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -494,24 +511,25 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         const taller = new Taller();
-        taller.marco = await this.verificarMarco(row['MARCO']); // !!!!!! REVISAR
-        taller.especialidad = row['ESPECIALIDAD']; // !!!!!! REVISAR
+        taller.marco = await this.verificarMarco(row['MARCO'], row['ESPECIALIDAD']); // !!!!!! REVISAR
+        taller.especialidad = await this.especialidadORM.findOneBy({ nombre: 'Prevencion' }); // !!!!!! REVISAR
         taller.cant_encuentros = row['CANT ENCUENTROS'] || row['ENCUENTROS'];
-        taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
+        // taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
+        taller.fecha = row['FECHA DE REALIZACIÓN'];
         taller.cant_participantes = row['CANT. DE PARTICIPANTES'] || row['Nº DE ASISTENTES'] || row['ASISTENTES'] || row['Nº de ASISTENTES'];
         taller.es_taller = row['TALLER'] ? convertirSiNo(row['TALLER']) : convertirSiNo(row['ES TALLER?']);
-        taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'No hay dato';
-        taller.destinatarios = row['DESTINATARIOS'];
-        taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato
+        taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'Otros';
+        taller.destinatarios = verificarDestinatarios(row['DESTINATARIOS']);
+        taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato. USO 0 SI NO ESTA, NO SE USA EN GRAFICOS NO ES TAN IMPORTANTE
         taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
-        taller.frecuencia = row['FRECUENCIA'] ?? 'NO HAY DATO'; // no viene en todos
-        taller.curso = await this.verificarCurso(row['SALA/GRADO']);
+        taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
+        taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         taller.institucion = await this.verificarInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']);
         taller.created_at = new Date();
-        taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER']) ?? 'No definido';
+        taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER'] || row['TALLER/TEMAS desplegable']) ?? 'No definido';
         taller.observaciones = row['OBSERVACIONES'];
         taller.recursos = row['RECURSOS'] ?? 'No hay dato';
-        taller.turno = row['TURNO'];
+        taller.turno = verificarTurno(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Taller, taller);
         await queryRunner.manager.save(consultaNueva);
         await queryRunner.commitTransaction();
@@ -532,6 +550,7 @@ export class ProcesamientoService {
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
     let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });
+    //let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
     if (!barrioBd && insertar) {
       barrioBd = this.barrioORM.create({ nombre: barrio }); // puede que le falte la localidad !!!!!!!!!!
       await this.barrioORM.save(barrioBd);
@@ -543,7 +562,8 @@ export class ProcesamientoService {
   }
 
   async verificarInstitucion(institucion: string, insertar: boolean = false): Promise<null | Institucion> {
-    let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    //let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    let institucionBd = await this.institucionORM.createQueryBuilder('institucion').where('institucion.nombre ILIKE :nombre', { nombre: institucion }).getOne();
     if (!institucionBd && insertar) {
       institucionBd = this.institucionORM.create({ nombre: institucion, tipo: 'Primario' }); // lo pongo fijo, se puede cambiar!!!!!!!!!!
       await this.institucionORM.save(institucionBd);
@@ -554,11 +574,13 @@ export class ProcesamientoService {
     return institucionBd;
   }
 
-  async verificarMarco(marco: string, insertar: boolean = false): Promise<null | Marco> {
-    let marcoBd: any = this.marcoORM.findOneBy({ nombre: marco });
-    if (!marcoBd && insertar) {
-      marcoBd = this.marcoORM.create({ nombre: marco }); // !!!!! REVISAR
-      await this.institucionORM.save(marcoBd);
+  async verificarMarco(marco: string, nombreEspecialidad, insertar: boolean = false): Promise<null | Marco> {
+    // Cambie esto para que sea mas exacto y no cree marcos de mas
+    let marcoBd = await this.marcoORM.createQueryBuilder('marco').where('marco.nombre ILIKE :nombre', { nombre: marco }).getOne();
+    const especialidad = await this.especialidadORM.findOneBy({ nombre: nombreEspecialidad });
+    if (!marcoBd && insertar && especialidad) {
+      marcoBd = this.marcoORM.create({ nombre: marco, especialidad: especialidad }); // !!!!! REVISAR
+      await this.marcoORM.save(marcoBd);
     }
     if (!marcoBd) {
       return null;
@@ -567,7 +589,8 @@ export class ProcesamientoService {
   }
 
   async verificarCurso(curso: string, insertar: boolean = false): Promise<null | Curso> {
-    let cursoBd: any = this.cursoORM.findOneBy({ nombre: curso });
+    // Cambie esto para que sea mas exacto y no cree cursos de mas
+    let cursoBd = await this.cursoORM.createQueryBuilder('curso').where('curso.nombre ILIKE :nombre', { nombre: curso }).getOne();
     if (!cursoBd && insertar) {
       cursoBd = this.cursoORM.create({ nombre: curso });
       await this.cursoORM.save(cursoBd);
@@ -886,4 +909,33 @@ function convertirHorasSuenio(params: string) {
   };
 
   return conversiones[params] ?? 'Menos de 10hs'; // esto es el caso nulo, tendria que mandarlo null y que no lo cargue?
+}
+function verificarDestinatarios(destinatario) {
+  const equivalencias = {
+    ALUMNOS: 'Alumnos',
+    DOCENTES: 'Docentes',
+    FAMILIAS: 'Familias',
+  };
+
+  return equivalencias[destinatario];
+}
+function verificarTurno(destinatario) {
+  const equivalencias = {
+    MAÑANA: 'Mañana',
+    TARDE: 'Tarde',
+    'M y T': 'M y T',
+    JC: 'JC',
+  };
+
+  return equivalencias[destinatario];
+}
+function verificarFrecuencia(destinatario) {
+  const equivalencias = {
+    'UNICA VEZ': 'Única vez',
+    DIARIA: 'Diaria',
+    SEMANAL: 'Semanal',
+    MENSUAL: 'Mensual',
+  };
+
+  return equivalencias[destinatario];
 }

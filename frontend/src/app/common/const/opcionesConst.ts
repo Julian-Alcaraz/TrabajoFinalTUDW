@@ -6,7 +6,7 @@ export const tensionArterial = ['Normotenso', 'Riesgo', 'Hipertenso'] as const;
 // Consulta
 
 export const opcionesConsulta = ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia', 'Prevencion', 'Social'] as const;
-export const opcionesTurno = ['Mañana', 'Tarde', 'Noche'] as const;
+export const opcionesTurno = ['Mañana', 'Tarde', 'Noche', 'Jornada Completa'] as const;
 
 // Clinica
 

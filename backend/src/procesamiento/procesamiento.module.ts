@@ -19,9 +19,10 @@ import { Social } from 'src/consulta/entities/social.entity';
 import { ArchivoService } from 'src/common/services/archivo.service';
 import { Taller } from 'src/taller/entities/taller.entity';
 import { Marco } from 'src/marco/entities/marco.entity';
+import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso, Barrio, Prevencion, Social, Taller, Marco])],
+  imports: [TypeOrmModule.forFeature([Consulta, Clinica, Oftalmologia, Odontologia, Fonoaudiologia, Chico, Institucion, Curso, Barrio, Prevencion, Social, Taller, Marco, Especialidad])],
   controllers: [ProcesamientoController],
   providers: [ProcesamientoService, ExcelService, ExportService, ConsultaService, ArchivoService],
   exports: [ProcesamientoService],
