@@ -291,10 +291,10 @@ export class GraficosService {
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ODONOTOLOGIA
 
   async cepilladoData(year: number, id: number) {
-    const types = ['Si', 'No'];
-    const createQuery = (type: string) => {
-      const cepilladoBoolean = type === 'Si';
-      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.cepillado = :cepilladoBoolean', { cepilladoBoolean });
+    const types = [0, 1, 2, 3, 4, 5];
+    const createQuery = (type: number) => {
+      // const cepilladoBoolean = type === 'Si';
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false AND odontologia.cant_cepillado = :type', { type });
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }

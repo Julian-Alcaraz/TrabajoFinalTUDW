@@ -55,7 +55,7 @@ export class CamposOdontologiaComponent implements OnInit {
         { validators: validarRango('selladorMin', 'selladorMax') },
       ),
       topificacion: new FormControl(),
-      cepillado: new FormControl(),
+      cant_cepillado: new FormControl(),
       cepillo: new FormControl(),
       clasificacion: new FormControl(),
       ulterior: new FormControl(),

@@ -24,8 +24,8 @@ export class OdontologiaComponent implements OnInit {
   cursoLabel = '';
   currentYear: number;
   lastFourYears: number[];
-
-  tituloCepillado = 'Cepillado';
+  labelVeces = ['Ninguna', 'Una vez', 'Dos veces', 'Tres veces', ' Cuatro veces', 'Cinco veces'];
+  tituloCepillado = 'Cantidad cepillado';
   porcentajesCepillado: any = [];
   tituloTopificacion = 'Topificacion';
   porcentajesTopificacion: any = [];

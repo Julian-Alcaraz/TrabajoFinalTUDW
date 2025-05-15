@@ -70,8 +70,8 @@
   <!-- Se cepilla -->
   <div class="col-span-2 sm:col-span-4 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-select [options]="siNoOptions" idInput="cepillado" formControlName="cepillado" [checkmark]="true" optionLabel="nombre" optionValue="valor" [showClear]="true" class="w-full h-16" />
-      <label for="cepillado">Se cepilla los dientes</label>
+      <p-select [options]="[0, 1, 2, 3, 4, 5]" idInput="cant_cepillado" formControlName="cant_cepillado" [checkmark]="true" [showClear]="true" class="w-full h-16" />
+      <label for="cant_cepillado">Cuantas veces cepilla sus dientes</label>
     </p-iftalabel>
   </div>
   <!-- Cepillo -->
@@ -105,7 +105,7 @@
   <!-- Derivacion externa-->
   <div class="col-span-2 sm:col-span-4 md:col-span-2 lg:col-span-2">
     <p-iftalabel>
-      <p-select [options]="derivacionesOptions" optionLabel="nombre" optionValue="valor" formControlName="derivaciones"  [checkmark]="true" [showClear]="true" idInput="derivaciones" placeholder="" class="w-full h-16" />
+      <p-select [options]="derivacionesOptions" optionLabel="nombre" optionValue="valor" formControlName="derivaciones" [checkmark]="true" [showClear]="true" idInput="derivaciones" placeholder="" class="w-full h-16" />
       <label for="derivaciones">Derivación externa</label>
     </p-iftalabel>
   </div>

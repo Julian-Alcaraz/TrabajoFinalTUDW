@@ -501,6 +501,8 @@ function tensionArterial(pcta: number) {
 export function clasificacionDental(dR: number, dIr: number) {
   if (dR == 0 && dIr == 0) return 'Boca sana';
   else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
+  else if (dR >= 5 && dR <= 6 && dIr == 0) return 'Moderado índice de caries';
+  else if (dR >= 7 && dIr == 0) return 'Alto índice de caries';
   else if (dIr == 1) return 'Moderado índice de caries';
   else if (dIr > 1) return 'Alto índice de caries';
   else return 'Sin clasificación';

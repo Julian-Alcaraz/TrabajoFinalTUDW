@@ -48,7 +48,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       primera_vez: ['', [Validators.required]],
       ulterior: ['', [Validators.required]],
       cepillo: ['', [Validators.required]],
-      cepillado: ['', [Validators.required]],
+      cant_cepillado: ['', [Validators.required]],
       topificacion: ['', [Validators.required]],
       derivacion_externa: ['', [Validators.required]],
       dientes_permanentes: [null, [Validators.required, ValidarSoloNumeros]],
@@ -104,7 +104,7 @@ export class NuevaOdontologiaComponent implements OnInit {
   setData() {
     const formValues = this.odontologiaForm.value;
     delete formValues.dni;
-    formValues.cepillado = formValues.cepillado === 'true';
+    formValues.cant_cepillado = Number(formValues.cant_cepillado);
     formValues.cepillo = formValues.cepillo === 'true';
     formValues.topificacion = formValues.topificacion === 'true';
     formValues.obra_social = formValues.obra_social === 'true';
@@ -157,7 +157,7 @@ export class NuevaOdontologiaComponent implements OnInit {
                 this.odontologiaForm.get('obra_social')?.setValue('');
 
                 this.odontologiaForm.get('cepillo')?.setValue('');
-                this.odontologiaForm.get('cepillado')?.setValue('');
+                this.odontologiaForm.get('cant_cepillado')?.setValue('');
                 this.odontologiaForm.get('topificacion')?.setValue('');
                 this.odontologiaForm.get('derivacion_externa')?.setValue('');
               }
@@ -177,6 +177,8 @@ export class NuevaOdontologiaComponent implements OnInit {
   clasificacionDental(dR: number, dIr: number) {
     if (dR == 0 && dIr == 0) return 'Boca sana';
     else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
+    else if (dR >= 5 && dR <= 6 && dIr == 0) return 'Moderado índice de caries';
+    else if (dR >= 7 && dIr == 0) return 'Alto índice de caries';
     else if (dIr == 1) return 'Moderado índice de caries';
     else if (dIr > 1) return 'Alto índice de caries';
     else return 'Sin clasificación';
@@ -191,7 +193,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       primera_vez: this.consulta?.odontologia?.primera_vez,
       ulterior: this.consulta?.odontologia?.ulterior,
       cepillo: this.consulta?.odontologia?.cepillo,
-      cepillado: this.consulta?.odontologia?.cepillado,
+      cant_cepillado: this.consulta?.odontologia?.cant_cepillado,
       topificacion: this.consulta?.odontologia?.topificacion,
       dientes_permanentes: this.consulta?.odontologia?.dientes_permanentes,
       dientes_temporales: this.consulta?.odontologia?.dientes_temporales,
@@ -227,7 +229,7 @@ export class NuevaOdontologiaComponent implements OnInit {
       derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
     const cepillo = this.convertToBoolean(this.odontologiaForm.value.cepillo);
-    const cepillado = this.convertToBoolean(this.odontologiaForm.value.cepillado);
+    const cant_cepillado = this.odontologiaForm.value.cant_cepillado;
     const topificacion = this.convertToBoolean(this.odontologiaForm.value.topificacion);
     if (hayCambios) {
       if (
@@ -241,7 +243,7 @@ export class NuevaOdontologiaComponent implements OnInit {
         //  cambios por especialidad
         derivacion_externaConsulta === derivacion_externaForm &&
         this.consulta?.odontologia?.cepillo === cepillo &&
-        this.consulta?.odontologia?.cepillado === cepillado &&
+        this.consulta?.odontologia?.cant_cepillado === cant_cepillado &&
         this.consulta?.odontologia?.topificacion === topificacion &&
         this.consulta?.odontologia?.dientes_permanentes === this.odontologiaForm.value.dientes_permanentes &&
         this.consulta?.odontologia?.dientes_temporales === this.odontologiaForm.value.dientes_temporales &&
@@ -274,7 +276,6 @@ export class NuevaOdontologiaComponent implements OnInit {
         if (result.isConfirmed) {
           this.loading = true;
           const data = this.setData();
-
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {

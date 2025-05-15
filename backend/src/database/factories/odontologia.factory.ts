@@ -34,7 +34,7 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
   odontologia.dientes_irecuperables = faker.number.int({ min: 0, max: 14 });
   odontologia.dientes_recuperables = faker.number.int({ min: 0, max: 7 });
   odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables);
-  odontologia.cepillado = Math.random() > 0.5 ? true : false;
+  odontologia.cant_cepillado = faker.number.int({ min: 0, max: 5 });
   odontologia.topificacion = Math.random() > 0.5 ? true : false;
   odontologia.sellador = faker.number.int({ min: 0, max: 10 });
   odontologia.dientes_temporales = faker.number.int({ min: 0, max: 20 });
@@ -45,9 +45,11 @@ export const OdontologiaFactory = setSeederFactory(Odontologia, async () => {
   return odontologia;
 });
 
-function clasificacionDental(dR: number, dIr: number) {
+export function clasificacionDental(dR: number, dIr: number) {
   if (dR == 0 && dIr == 0) return 'Boca sana';
   else if (dR <= 4 && dIr == 0) return 'Bajo índice de caries';
+  else if (dR >= 5 && dR <= 6 && dIr == 0) return 'Moderado índice de caries';
+  else if (dR >= 7 && dIr == 0) return 'Alto índice de caries';
   else if (dIr == 1) return 'Moderado índice de caries';
   else if (dIr > 1) return 'Alto índice de caries';
   else return 'Sin clasificación';

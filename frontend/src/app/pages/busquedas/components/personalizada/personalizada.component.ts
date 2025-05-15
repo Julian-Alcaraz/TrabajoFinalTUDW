@@ -290,8 +290,6 @@ function prepararData(data: any): any {
       data.generales.derivacion_prevencion = derivacion_prevencion;
       data.generales.derivacion_social = derivacion_social;
     } else if (typeof data.especificas?.derivaciones === 'object') {
-      console.log(data.especificas);
-      console.log(data.especificas?.derivaciones);
       const derivaciones = data.especificas.derivaciones;
       if (derivaciones.fonoaudiologia !== undefined) {
         data.generales.derivacion_fonoaudiologia = derivaciones.fonoaudiologia;

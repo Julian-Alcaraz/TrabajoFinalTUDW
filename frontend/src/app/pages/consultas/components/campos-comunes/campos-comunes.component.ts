@@ -135,10 +135,8 @@ export class CamposComunesComponent implements OnInit {
   }
 
   buscarEstudios(dni: number) {
-    console.log('Buscar estudios');
     this._chicoService.obtenerUltimosEstudios(dni).subscribe({
       next: (response: any) => {
-        console.log('Buscar estudios response', response);
         if (response.success) {
           this.form.patchValue({
             id_institucion: response.data.id_institucion,

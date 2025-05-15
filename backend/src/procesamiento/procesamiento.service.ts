@@ -157,7 +157,7 @@ export class ProcesamientoService {
         odontologia.dientes_temporales = row['TOTAL TEMPORALES'];
         odontologia.sellador = row['SELLADOR'];
         odontologia.topificacion = !!row['TOPICACION'];
-        odontologia.cepillado = !!row['ENS. CEPILLADO'];
+        // odontologia.cant_cepillado = !!row['ENS. CEPILLADO']; // !!!!!!!!!!!! VER LO descarto
         odontologia.dientes_irecuperables = row['DIENTE RECUPERABLE'];
         odontologia.dientes_recuperables = row['DIENTE IRRECUPERABLE'];
         odontologia.cepillo = !!row['CEPILLO'];
