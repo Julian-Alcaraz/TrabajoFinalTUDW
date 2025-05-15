@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -10,11 +10,13 @@ import { Usuario } from '@models/usuario.model';
 import { Rol } from '@models/rol.model';
 import { RolesService } from '@services/roles.service';
 import { UsuarioService } from '@services/usuario.service';
+import { InputSelectEnumComponent } from '@app/components/inputs/input-select-enum.component';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @Component({
   selector: 'app-modal-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, InputSelectEnumComponent, LoadingComponent],
   templateUrl: './modal-usuario.component.html',
 })
 export class ModalUsuarioComponent implements OnInit {
@@ -24,7 +26,6 @@ export class ModalUsuarioComponent implements OnInit {
   public searching = false;
   public habilitarModificar = true;
   public selectCheckbox = true;
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { usuario: Usuario },
     private _usuarioService: UsuarioService,
@@ -34,17 +35,16 @@ export class ModalUsuarioComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalUsuarioComponent>,
   ) {
     this.usuarioForm = this.fb.group({
-      roles_ids: this.fb.array([], Validators.required),
+      roles_ids: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
     if (this.data) {
       this.usuario = this.data.usuario;
-      const rolesArray: FormArray = this.usuarioForm.get('roles_ids') as FormArray;
-      this.usuario?.roles?.forEach((rol) => {
-        rolesArray.push(this.fb.control(rol.id));
-      });
+      if (this.usuario?.roles) {
+        this.usuarioForm.value.roles_ids = this.usuario?.roles[0];
+      }
       this.usuarioForm.valueChanges.subscribe({
         next: () => {
           this.habilitarModificar = this.existenCambios();
@@ -54,18 +54,16 @@ export class ModalUsuarioComponent implements OnInit {
     this.obtenerRoles();
   }
 
-  onCheckboxChange(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    const rolesArray: FormArray = this.usuarioForm.get('roles_ids') as FormArray;
-    if (inputElement.checked) {
-      rolesArray.push(this.fb.control(+inputElement.value));
-    } else {
-      const index = rolesArray.controls.findIndex((control) => +control.value === +inputElement.value);
-      if (index !== -1) {
-        rolesArray.removeAt(index);
-      }
-    }
-    this.selectCheckbox = this.usuarioForm.get('roles_ids')?.value.length === 0;
+  get controlDeInput(): (input: string) => FormControl {
+    return (input: string) => this.usuarioForm.get(input) as FormControl;
+  }
+
+  get rolesNombres() {
+    return this.roles.map((rol: Rol) => rol.nombre);
+  }
+
+  get rolesIds() {
+    return this.roles.map((rol: Rol) => rol.id);
   }
 
   tieneElRol(usuario: Usuario, idRol: number): boolean {
@@ -107,8 +105,7 @@ export class ModalUsuarioComponent implements OnInit {
         denyButtonText: `Cancelar`,
       }).then((result: any) => {
         if (result.isConfirmed) {
-          const rolesOrdenados = this.usuarioForm.value.roles_ids.sort();
-          const roles = rolesOrdenados.map((idRol: string) => parseInt(idRol));
+          const roles = [Number(this.usuarioForm.value.roles_ids)];
           this._usuarioService.administrarRoles(this.usuario!.id, roles).subscribe({
             next: (response: any) => {
               if (response.success) {

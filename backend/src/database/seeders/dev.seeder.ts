@@ -102,22 +102,13 @@ export class DevSeeder implements Seeder {
           roles: [roles[2]], // AccesoInfo
         },
         {
-          nombre: 'ProfesionalYAdmin',
-          apellido: 'ProfesionalYAdmin',
-          email: 'ProfesionalYAdmin@ProfesionalYAdmin.com',
-          contrasenia: codificarContrasenia('1234567'),
-          dni: 12345670,
-          fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // ProfesionalYAdmin
-        },
-        {
           nombre: 'usuarioDeshabilitado',
           apellido: 'usuarioDeshabilitado',
           email: 'deshabilitado@deshabilitado.com',
           contrasenia: codificarContrasenia('1234567'),
           dni: 10345670,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // ProfesionalYAdmin
+          roles: [roles[0]], // ProfesionalYAdmin
           deshabilitado: true,
         },
         {
@@ -164,24 +155,13 @@ export class DevSeeder implements Seeder {
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
-              roles: [faker.helpers.arrayElement(roles)],
+              roles: [roles[faker.number.int({ min: 0, max: 2 })]], // Selecciona un rol aleatorio dentro del rango 0-2
             });
             return usuario;
           }),
       );
-      // Crea 40 usuarios con 2 roles cada uno
-      const usuariosCon2Roles = await Promise.all(
-        Array(40)
-          .fill('')
-          .map(async () => {
-            const usuario = await usuarioFactory.make({
-              roles: [roles[0], roles[1]],
-            });
-            return usuario;
-          }),
-      );
+
       await usuarioORM.save(usuarios);
-      await usuarioORM.save(usuariosCon2Roles);
 
       // Menus
       // Menus que tienen hijos

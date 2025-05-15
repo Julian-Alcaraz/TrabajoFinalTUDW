@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -19,11 +19,12 @@ import { InputTextComponent } from '@components/inputs/input-text.component';
 import { InputNumberComponent } from '@components/inputs/input-number.component';
 import { InputDateComponent } from '@components/inputs/input-date.component';
 import { LoadingComponent } from '@components/loading/loading.component';
+import { InputSelectEnumComponent } from '@app/components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-form-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputNumberComponent, InputDateComponent, MatRadioModule, LoadingComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, InputTextComponent, InputSelectEnumComponent, InputNumberComponent, InputDateComponent, MatRadioModule, LoadingComponent],
   templateUrl: './form-usuario.component.html',
 })
 export class FormUsuarioComponent implements OnInit {
@@ -54,7 +55,7 @@ export class FormUsuarioComponent implements OnInit {
       dni: ['', [Validators.required, ValidarDni]],
       email: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarEmail, ValidarCadenaSinEspacios]],
       fe_nacimiento: ['', [Validators.required]],
-      roles_ids: this.fb.array([], Validators.required), // FormArray para role
+      roles_ids: ['', Validators.required], // FormArray para role
     });
   }
 
@@ -66,6 +67,14 @@ export class FormUsuarioComponent implements OnInit {
 
   get controlDeInput(): (input: string) => FormControl {
     return (input: string) => this.userForm.get(input) as FormControl;
+  }
+
+  get rolesNombres() {
+    return this.roles.map((rol: Rol) => rol.nombre);
+  }
+
+  get rolesIds() {
+    return this.roles.map((rol: Rol) => rol.id);
   }
 
   obtenerRoles() {
@@ -105,21 +114,6 @@ export class FormUsuarioComponent implements OnInit {
           this.userForm.disable();
         },
       });
-    }
-  }
-
-  onCheckboxChange(e: any) {
-    const rolesArray: FormArray = this.userForm.get('roles_ids') as FormArray;
-    if (e.target.checked) {
-      rolesArray.push(this.fb.control(e.target.value));
-    } else {
-      const index = rolesArray.controls.findIndex((x) => x.value === e.target.value);
-      rolesArray.removeAt(index);
-    }
-    if (this.userForm.get('roles_ids')?.value.length == 0) {
-      this.selectCheckbox = true;
-    } else {
-      this.selectCheckbox = false;
     }
   }
 
@@ -174,7 +168,7 @@ export class FormUsuarioComponent implements OnInit {
         if (result.isConfirmed) {
           const data = this.userForm.value;
           data.contrasenia = String(this.userForm.value.dni);
-          data.roles_ids = data.roles_ids.map(Number);
+          data.roles_ids = [Number(data.roles_ids)];
           this._usuarioService.cargarUsuario(data).subscribe({
             next: (response: any) => {
               if (response.success) {
