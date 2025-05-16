@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GLOBAL } from '@app/config/global';
 import { Observable } from 'rxjs';
@@ -12,6 +12,8 @@ export class ProcesamientoService {
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.URL_BACKEND;
   }
+
+  // ============ IMPORTS ============
 
   procesarClinica(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/clinica', formData);
@@ -35,5 +37,31 @@ export class ProcesamientoService {
 
   procesarSocial(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/social', formData);
+  }
+  
+  procesarTalleres(formData: FormData): Observable<any> {
+    return this._http.post(this.url + 'procesamiento/talleres', formData);
+  }
+  // ============ EXPORTS ============
+
+  exportarConsultas(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/consultas', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
+  }
+
+  exportarChicos(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/chicos', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
+  }
+
+  exportarTalleres(filtros: any): Observable<HttpResponse<any>> {
+    return this._http.post(this.url + 'procesamiento/export/talleres', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
   }
 }

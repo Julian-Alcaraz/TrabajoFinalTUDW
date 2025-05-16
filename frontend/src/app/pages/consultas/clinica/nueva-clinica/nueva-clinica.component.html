@@ -13,36 +13,40 @@
     <form (ngSubmit)="consulta ? modificarConsulta() : enviarFormulario()" [formGroup]="clinicaForm">
       <app-campos-comunes [form]="clinicaForm" [values]="consulta" [dni]="this.dni" />
       <div class="grid gap-6 md:grid-cols-6 sm:grid-cols-3">
+        <!-- Es Clinica -->
+        <div class="mt-4 md:col-span-1">
+          <app-input-select-enum label="¿ Es Clinica ?" [control]="controlDeInput('es_clinica')" idInput="es_clinica" [opciones]="['Si', 'No']" [valores]="['true', 'false']" (change)="onChangeEsClinica($event)" />
+        </div>
         <!-- Peso -->
-        <div class="mt-4 md:col">
+        <div [ngClass]="mostrarClinica ? 'mt-4 md:col-span-1' : 'mt-4 md:col-span-1'">
           <app-input-number label="Peso (kg)" [control]="controlDeInput('peso')" placeholder="" idInput="peso" />
         </div>
         <!-- Talla -->
-        <div class="mt-4 md:col">
+        <div class="mt-4 md:col-span-1">
           <app-input-number label="Talla (cm)" [control]="controlDeInput('talla')" placeholder="" idInput="talla" />
         </div>
         <!-- Circunferencia de la cintura (cc)-->
-        <div class="mt-4 md:col-span-2">
+        <div [ngClass]="mostrarClinica ? 'mt-4 md:col-span-1' : 'mt-4 md:col-span-1'">
           <app-input-number label="Circunferencia de la cintura (cm)" [control]="controlDeInput('cc')" placeholder="" idInput="cc" />
         </div>
         <!-- Tensión Arterial Sistolica (tas) -->
-        <div class="mt-4 md:col-span-1">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-1">
           <app-input-number label="Tensión Arterial Sistolica (Hg)" [control]="controlDeInput('tas')" placeholder="" idInput="tas" />
         </div>
         <!-- Tensión Arterial Diastolica (tad) -->
-        <div class="mt-4 md:col-span-1">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-1">
           <app-input-number label="Tensión Arterial Diastolica (Hg)" [control]="controlDeInput('tad')" placeholder="" idInput="tad" />
         </div>
         <!-- Percentil de Talla (PCT) -->
-        <div class="mt-4 md:col-span-2">
+        <div [ngClass]="mostrarClinica ? 'mt-4 md:col-span-2' : 'mt-4 md:col-span-1'">
           <app-input-number label="Percentil de Talla (T/E)" [control]="controlDeInput('pct')" placeholder="" idInput="pct" />
         </div>
         <!-- Percentil de Tension Arterial (PCTA) -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-number label="Percentil de Tensión Arterial" [control]="controlDeInput('pcta')" placeholder="" idInput="pcta" />
         </div>
         <!-- Percentil de Índice de Masa Corporal (PCIMC) -->
-        <div class="mt-4 md:col-span-2">
+        <div [ngClass]="mostrarClinica ? 'mt-4 md:col-span-2' : 'mt-4 md:col-span-1'">
           <app-input-number label="Percentil de Índice de Masa Corporal" [control]="controlDeInput('pcimc')" placeholder="" idInput="pcimc" />
         </div>
         <!-- Calculos -->
@@ -67,7 +71,7 @@
           </div>
         </ng-container>
         <!-- Grupos de checkbox -->
-        <div class="md:col-span-6 sm:col-span-3">
+        <div *ngIf="this.mostrarClinica" class="md:col-span-6 sm:col-span-3">
           <div class="grid gap-0 md:grid-cols-6">
             <!-- Grupo de antecedentes familiares -->
             <div class="md:col-span-3">
@@ -111,53 +115,53 @@
           </div>
         </div>
         <!-- Lacteos -->
-        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica si el niño toma:</h3>
-        <div class="mt-4 md:col-span-3">
+        <h3 *ngIf="this.mostrarClinica" class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica si el niño toma:</h3>
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-3">
           <app-input-select-enum label="Leche" [control]="controlDeInput('leche')" idInput="leche" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
         <!-- Infusiones -->
-        <div class="mt-4 md:col-span-3">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-3">
           <app-input-select-enum label="Infusiones" [control]="controlDeInput('infusiones')" idInput="infusiones" [opciones]="con.InfusionesEnum" [valores]="con.InfusionesEnum" />
         </div>
         <!-- Vacunas -->
-        <div class="mt-4 md:col-span-1">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-1">
           <app-input-select-enum label="Vacunas" [control]="controlDeInput('vacunas')" idInput="vacunas" [opciones]="con.VacunasEnum" [valores]="con.VacunasEnum" />
         </div>
         <!-- Lenguaje -->
-        <div class="mt-4 md:col-span-1">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-1">
           <app-input-select-enum label="Lenguaje" [control]="controlDeInput('lenguaje')" idInput="lenguaje" [opciones]="con.LenguajeEnum" [valores]="con.LenguajeEnum" />
         </div>
         <!-- Examen Visual -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Examen Visual" [control]="controlDeInput('examen_visual')" idInput="examen_visual" [opciones]="con.ExamenVisualEnum" [valores]="con.ExamenVisualEnum" />
         </div>
         <!-- Ortopedia Traumatologia -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Ortopedia y Traumatologia" [control]="controlDeInput('ortopedia_traumatologia')" idInput="ortopedia_traumatologia" [opciones]="con.OrtopediaYTraumatologiaEnum" [valores]="con.OrtopediaYTraumatologiaEnum" />
         </div>
         <!-- Alimentacion -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Alimentacion" [control]="controlDeInput('alimentacion')" idInput="alimentacion" [opciones]="con.AlimentacionEnum" [valores]="con.AlimentacionEnum" />
         </div>
         <!-- Cantidad de Comidas -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Cantidad de comidas" [control]="controlDeInput('cantidad_comidas')" idInput="cantidad_comidas" [opciones]="con.CantidadComidasEnum" [valores]="con.CantidadComidasEnum" />
         </div>
         <!-- Hidratacion -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Hidratacion" [control]="controlDeInput('hidratacion')" idInput="hidratacion" [opciones]="con.HidratacionEnum" [valores]="con.HidratacionEnum" />
         </div>
-        <h3 class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica las horas diarias que el niño dedica a las siguientes actividades:</h3>
+        <h3 *ngIf="this.mostrarClinica" class="mt-4 sm:col-span-3 md:col-span-6 font-medium text-lg">Indica las horas diarias que el niño dedica a las siguientes actividades:</h3>
         <!-- Horas de Pantalla -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Horas de pantalla" [control]="controlDeInput('horas_pantalla')" idInput="horas_pantalla" [opciones]="con.HsPantallaEnum" [valores]="con.HsPantallaEnum" />
         </div>
         <!-- Horas de juego al aire libre -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Horas de juego al aire libre" [control]="controlDeInput('horas_juego_aire_libre')" idInput="horas_juego_aire_libre" [opciones]="con.HsJuegoAireLibreEnum" [valores]="con.HsJuegoAireLibreEnum" />
         </div>
         <!-- Horas de sueño -->
-        <div class="mt-4 md:col-span-2">
+        <div *ngIf="this.mostrarClinica" class="mt-4 md:col-span-2">
           <app-input-select-enum label="Horas de sueño" [control]="controlDeInput('horas_suenio')" idInput="horas_suenio" [opciones]="con.HsSuenioEnum" [valores]="con.HsSuenioEnum" />
         </div>
         <!-- Seguimiento (segto) -->

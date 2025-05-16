@@ -30,8 +30,8 @@ export class Odontologia {
   @Column({ type: 'boolean' })
   topificacion: boolean;
 
-  @Column({ type: 'boolean' })
-  cepillado: boolean;
+  @Column({ type: 'int' })
+  cant_cepillado: number;
 
   @Column({ type: 'int', nullable: true })
   dientes_recuperables: number;

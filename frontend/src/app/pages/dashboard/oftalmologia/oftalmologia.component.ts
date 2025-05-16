@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ConsultaService } from '../../../services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import * as MostrarNotificacion from '../../../utils/notificaciones/mostrar-notificacion';
-
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { DemandaEnum } from '../../../common/const/const';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-oftalmologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
   templateUrl: './oftalmologia.component.html',
 })
 export class OftalmologiaComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
+  grid = 3;
   year = 0;
   id_curso = 0;
   porcentaje = 0;
@@ -24,6 +30,9 @@ export class OftalmologiaComponent implements OnInit {
   tituloAnteojos = 'Anteojos entregados';
   porcentajeDemanda: any = [];
   porcentajeAnteojos: any = [];
+  arrayDemanda = DemandaEnum; // ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
+  countDemanda: any = [];
+  countAnteojos: any = [];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -35,8 +44,17 @@ export class OftalmologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
+  setearGrid(event: any) {
+    this.grid = event;
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+  }
   async obtenerGraficos() {
-    const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos()];
+    const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos(), this.graficoCountAnteojos(), this.graficoCountADemanda()];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
       await Promise.all(promesas);
@@ -47,6 +65,39 @@ export class OftalmologiaComponent implements OnInit {
     }
   }
 
+  graficoCountAnteojos() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countAnteojosByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countAnteojos = [];
+          if (response.success) {
+            this.countAnteojos = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
+
+  graficoCountADemanda() {
+    return new Promise((resolve, reject) => {
+      this._consultaService.countDemandaByYearAndCurso(this.year, this.id_curso).subscribe({
+        next: (response: any) => {
+          this.countDemanda = [];
+          if (response.success) {
+            this.countDemanda = response.data;
+          }
+          resolve(true);
+        },
+        error: (err: any) => {
+          reject(err);
+        },
+      });
+    });
+  }
   obtenerGraficosDemanda() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeDemandaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({

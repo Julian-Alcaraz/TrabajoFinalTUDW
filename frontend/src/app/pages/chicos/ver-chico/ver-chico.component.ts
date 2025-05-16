@@ -141,11 +141,11 @@ export class VerChicoComponent implements OnInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder ver sus consultas o editar los datos personales del chico, usted debe habilitar al chico',
+      text: 'Para poder ver sus consultas o editar los datos personales del niño, usted debe habilitar al niño.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
-      confirmButtonText: 'Habilitar chico',
+      confirmButtonText: 'Habilitar niño',
       denyButtonText: 'Cancelar',
     }).then((result: any) => {
       if (result.isConfirmed) {

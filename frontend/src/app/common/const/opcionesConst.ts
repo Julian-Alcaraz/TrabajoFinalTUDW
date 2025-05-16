@@ -1,9 +1,12 @@
 export const opcionesSexo = ['Femenino', 'Masculino', 'Otro'] as const;
+export const estadoNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'] as const;
+export const typeConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'] as const;
+export const tensionArterial = ['Normotenso', 'Riesgo', 'Hipertenso'] as const;
 
 // Consulta
 
 export const opcionesConsulta = ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia', 'Prevencion', 'Social'] as const;
-export const opcionesTurno = ['Mañana', 'Tarde', 'Noche'] as const;
+export const opcionesTurno = ['Mañana', 'Tarde', 'Noche', 'Jornada Completa'] as const;
 
 // Clinica
 
@@ -31,7 +34,7 @@ export const opcionesDemanda = ['Control niño sano', 'Docente', 'Familiar', 'Ot
 // Prevencion
 
 export const motivoConsumo = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'] as const;
-export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'] as const;
+export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Esporádico', 'Otro'] as const;
 export const consumoProblematico = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'] as const;
 export const otraProblematica = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'] as const;
 

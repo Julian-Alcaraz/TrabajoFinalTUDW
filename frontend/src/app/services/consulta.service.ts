@@ -16,7 +16,7 @@ export class ConsultaService {
     return this._http.post(this.url + 'consulta/busquedaPersonalizada', data);
   }
 
-  obtenerTotalPersonalizada(data:any): Observable<any> {
+  obtenerTotalPersonalizada(data: any): Observable<any> {
     return this._http.post(this.url + 'consulta/countBusquedaPersonalizada', data);
   }
 
@@ -112,6 +112,18 @@ export class ConsultaService {
   porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeSelladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
+  countCepilladoPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countCepilladoPorAnio/${year}/curso/${id_curso}`);
+  }
+  countTopificacionPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countTopificacionPorAnio/${year}/curso/${id_curso}`);
+  }
+  countSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countSituacionBucalPorAnio/${year}/curso/${id_curso}`);
+  }
+  countSelladorPorAnioByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countSelladoPorAnio/${year}/curso/${id_curso}`);
+  }
 
   // Ofatlmologia
   porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
@@ -119,5 +131,51 @@ export class ConsultaService {
   }
   porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  countAnteojosByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countAnteojosPorAnio/${year}/curso/${id_curso}`);
+  }
+  countDemandaByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/countDemandaPorAnio/${year}/curso/${id_curso}`);
+  }
+
+  // Prevencion
+  countProblematicaByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/problematicaPorAnio/${year}/curso/${id_curso}`);
+  }
+  countFrecuenciaConsumoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/frecuenciaPorAnio/${year}/curso/${id_curso}`);
+  }
+  countMotivoConsumoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/motivoPorAnio/${year}/curso/${id_curso}`);
+  }
+  countDrogasHabitualesByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/drogaHabitualPorAnio/${year}/curso/${id_curso}`);
+  }
+
+  porcentajeProblematicaByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeProblematicaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeDrogasHabitualesPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDrogasHabitualesPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeMotivoaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeMotivoConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeFrecuenciaConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  // Fonouadiologia
+  countCausasByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/causasPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeCausasPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeCausasPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  }
+  countDaignosticoPresuntivoByYearAndCurso(year: number, id_curso: number) {
+    return this._http.get(`${this.url}consulta/diagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}`);
+  }
+  porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDiagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
 }

@@ -37,6 +37,7 @@ import { LocalidadService } from '@services/localidad.service';
 import { Localidad } from '@models/localidad.model';
 import { GLOBAL } from '@config/global';
 import { PanelModule } from 'primeng/panel';
+import { ProcesamientoService } from '@app/services/procesamiento.service';
 
 @Component({
   selector: 'app-lista-chico',
@@ -62,6 +63,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public loadingLocalidades = false;
   public loadingBarrios = false;
   public searching = true;
+  public generandoArchivo = false;
   public deshabilitado: number | null = null;
   public resultsLength = 0;
   public searchTerms: any = {};
@@ -86,12 +88,14 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   public barrioControl: FormControl = new FormControl(null);
   public actividadControl: FormControl = new FormControl();
   public mensajes = '';
-  public colapsarFiltros = false;
+  public colapsarFiltros = true;
+  public mostrarBotonDescarga = true;
 
   constructor(
     private _localidadService: LocalidadService,
     private _chicoService: ChicoService,
     private _barrioService: BarrioService,
+    private _procesamientoService: ProcesamientoService,
     private _sessionService: SessionService,
     private _router: Router,
     private _dialog: MatDialog,
@@ -133,6 +137,33 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.chicos.paginator = this.paginador;
     this.chicos.sort = this.sort;
+  }
+
+  exportarXLS() {
+    const filtrosJson = this.searchTerms;
+    let filtros;
+    if (Object.keys(filtrosJson).length === 0) filtros = null;
+    else filtros = eliminarValoresNulosYVacios(filtrosJson);
+
+    this.generandoArchivo = true;
+    this._procesamientoService.exportarChicos(filtros).subscribe({
+      next: (res: any) => {
+        const nombreArchivo = res.headers.get('Content-Disposition').match(/filename="(.+)"/)[1];
+        const blob = res.body;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombreArchivo;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        MostrarNotificacion.mensajeExito(this.snackBar, 'Archivo XLS descargado');
+        this.generandoArchivo = false;
+      },
+      error: (err: any) => {
+        this.generandoArchivo = false;
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 
   actualizarMensajes(filtroDni: any, filtroNombre: any, filtroApellido: any, filtroSexo: any, filtroBarrio: any, filtroActividad: any, filtroLocalidad: any, filtroEstado: any): void {
@@ -194,8 +225,15 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
       const estadoValue = event.value;
       this.searchTerms.estado = estadoValue !== undefined ? estadoValue : undefined;
     }
+
     this.chicos.filter = JSON.stringify(this.searchTerms);
     if (this.chicos.paginator) this.chicos.paginator.firstPage();
+
+    setTimeout(() => {
+      const cantChicos = this.chicos.filteredData.length;
+      if (cantChicos === 0) this.mostrarBotonDescarga = false;
+      else this.mostrarBotonDescarga = true;
+    });
   }
 
   limpiarFiltroSexo() {
@@ -306,7 +344,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder ver sus consultas o editar los datos personales del chico, usted debe habilitar al chico',
+      text: 'Para poder ver sus consultas o editar los datos personales del niño, usted debe habilitar al niño.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
@@ -337,6 +375,7 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
   inhabilitar(id: number) {
     Swal.fire({
       title: '¿Deshabilitar chico?',
+      text: 'El chico dejará de ser visible para los usuarios y no se podrán cargar más consultas a este.',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',
       confirmButtonText: 'Confirmar',
@@ -391,4 +430,24 @@ export class ListaChicoComponent implements OnInit, AfterViewInit {
 
 function sacarAcentos(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function eliminarValoresNulosYVacios(obj: any): any {
+  const cleanedObj: any = {};
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key];
+    if (key === 'created_at' || key === 'updated_at') {
+      cleanedObj[key] = value;
+      return;
+    }
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const nestedCleanedObj = eliminarValoresNulosYVacios(value);
+      if (Object.keys(nestedCleanedObj).length > 0) {
+        cleanedObj[key] = nestedCleanedObj;
+      }
+    } else if (value !== null && value !== undefined && value !== '') {
+      cleanedObj[key] = value;
+    }
+  });
+  return cleanedObj;
 }

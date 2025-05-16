@@ -7,14 +7,14 @@ import { Curso } from '@models/curso.model';
 import { LoadingComponent } from '@components/loading/loading.component';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { Select } from 'primeng/select';
-import { SelectButton } from 'primeng/selectbutton';
+// import { SelectButton } from 'primeng/selectbutton';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-year-grado-form',
   standalone: true,
-  imports: [CommonModule, ButtonModule, SelectButton, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent, RadioButtonModule],
+  imports: [CommonModule, ButtonModule, IftaLabelModule, DatePickerModule, Select, ReactiveFormsModule, LoadingComponent, RadioButtonModule],
   templateUrl: './year-grado-form.component.html',
   styleUrl: './year-grado-form.component.css',
 })

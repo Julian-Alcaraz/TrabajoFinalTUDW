@@ -12,6 +12,12 @@ import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { Barrio } from 'src/barrio/entities/barrio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { clasificacionDental } from '../consulta/consulta.service';
+import { Prevencion } from 'src/consulta/entities/prevencion.entity';
+import { Social } from 'src/consulta/entities/social.entity';
+
+import { Taller } from 'src/taller/entities/taller.entity';
+import { Marco } from 'src/marco/entities/marco.entity';
+import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -21,7 +27,9 @@ export class ProcesamientoService {
     @InjectRepository(Oftalmologia) private readonly oftalmologiaORM: Repository<Oftalmologia>,
     @InjectRepository(Fonoaudiologia) private readonly fonoaudiologiaORM: Repository<Fonoaudiologia>,
     // chico,institucion, curso
+    @InjectRepository(Especialidad) private readonly especialidadORM: Repository<Especialidad>,
     @InjectRepository(Institucion) private readonly institucionORM: Repository<Institucion>,
+    @InjectRepository(Marco) private readonly marcoORM: Repository<Marco>,
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
@@ -58,6 +66,7 @@ export class ProcesamientoService {
         consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
         consulta.derivacion_odontologia = false;
         consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.derivacion_social = convertirSiNo(row['TRABAJO SOCIAL']);
         // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
         // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
@@ -67,39 +76,59 @@ export class ProcesamientoService {
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         const clinica = new Clinica();
         // verificar nulos importante y verificar nulos no importante(estos los seteo como desactivados)
+        const esClinica = this.obtenerTipoConsulta(row);
+
+        clinica.es_clinica = esClinica;
         clinica.consulta = consultaNueva;
-        clinica.diabetes = !!row.DBT;
-        clinica.hta = !!row.HTA;
-        clinica.obesidad = !!row.O;
-        clinica.consumo_alcohol = !!row['CP-OH'];
-        clinica.consumo_drogas = !!row['CP-D'];
-        clinica.consumo_tabaco = !!row['CP-TBQ'];
-        clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-        clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-        clinica.vacunas = convertirVacunas(row.VACUNAS);
         clinica.peso = pasarAnumero(row['PESO (Kg)']);
         clinica.talla = pasarAnumero(row['TALLA (cm)']);
         clinica.pct = pasarAnumero(row['PCT (T/E)']);
         clinica.cc = pasarAnumero(row['CC(cm)']);
-        clinica.pcimc = row.PCIMC;
         clinica.imc = pasarAnumero(row.IMC);
-        clinica.tas = pasarAnumero(row.TAS);
-        clinica.tad = pasarAnumero(row.TAD);
-        clinica.pcta = pasarAnumero(row.PCTA);
-        clinica.examen_visual = row['EX.VISUAL'];
-        clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
-        clinica.lenguaje = row.LENGUAJE;
+        clinica.pcimc = row.PCIMC;
         clinica.segto = convertirSiNo(row['SEGTO.']);
-        clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
-        clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
-        clinica.leche = convertirSiNo(row['TOMA LECHE']);
-        clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
-        clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
-        clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
-        clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
-        clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
         clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
-        clinica.tension_arterial = row['TA'];
+
+        if (esClinica) {
+          //clinica.consulta = consultaNueva;
+          clinica.diabetes = !!row.DBT;
+          clinica.hta = !!row.HTA;
+          clinica.obesidad = !!row.O;
+          clinica.consumo_alcohol = !!row['CP-OH'];
+          clinica.consumo_drogas = !!row['CP-D'];
+          clinica.consumo_tabaco = !!row['CP-TBQ'];
+          clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+          clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
+          clinica.vacunas = convertirVacunas(row.VACUNAS);
+          // clinica.peso = pasarAnumero(row['PESO (Kg)']);
+          // clinica.talla = pasarAnumero(row['TALLA (cm)']);
+          // clinica.pct = pasarAnumero(row['PCT (T/E)']);
+          // clinica.cc = pasarAnumero(row['CC(cm)']);
+          // clinica.pcimc = row.PCIMC;
+          // clinica.imc = pasarAnumero(row.IMC);
+          clinica.tas = pasarAnumero(row.TAS);
+          clinica.tad = pasarAnumero(row.TAD);
+          clinica.pcta = pasarAnumero(row.PCTA);
+          clinica.examen_visual = row['EX.VISUAL'];
+          clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
+          clinica.lenguaje = row.LENGUAJE;
+          // clinica.segto = convertirSiNo(row['SEGTO.']);
+          clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
+          clinica.leche = convertirSiNo(row['TOMA LECHE']);
+          clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
+          clinica.cantidad_comidas = convertirComidas(row['Nº COMIDAS AL DÍA']); // lo tengo que convertir
+          clinica.horas_pantalla = convertirHorasPantalla(row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA']); // convertir a lo que corresponde
+          clinica.horas_juego_aire_libre = convertirHorasAireLibre(row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA']); // convertir a lo que corresponde
+          clinica.horas_suenio = convertirHorasSuenio(row['HORAS DIARIAS DE SUEÑO']); // convertir a lo que corresponde
+          // clinica.estado_nutricional = row['ESTADO NUTRICIONAL'];
+          clinica.tension_arterial = row['TA'];
+        } else {
+          clinica.tension_arterial = null;
+          clinica.tas = null;
+          clinica.tad = null;
+          clinica.pcta = null;
+        }
         const clinicaNueva = queryRunner.manager.create(Clinica, clinica);
         await queryRunner.manager.save(clinicaNueva);
         // const clinicaNueva = this.clinicaORM.create(clinica);
@@ -118,6 +147,55 @@ export class ProcesamientoService {
       }
     }
     return noCargados;
+  }
+
+  obtenerTipoConsulta(row) {
+    let esClinica;
+
+    if (
+      // Campos que pertenecen a Clinica
+      row.VACUNAS === null &&
+      row['EX.VISUAL'] === null &&
+      row['O Y T'] === null &&
+      row.LENGUAJE === null &&
+      row['ALIMENTACIÓN'] === null &&
+      row['INFUSIÓN'] === null &&
+      row['Nº COMIDAS AL DÍA'] === null &&
+      row['TIEMPO DEDICADO AL USO DE PANTALLAS DURANTE EL DÍA'] === null &&
+      row['TIEMPO DE JUEGO AL AIRE LIBRE DURANTE EL DÍA'] === null &&
+      row['HORAS DIARIAS DE SUEÑO'] === null &&
+      row['HIDRATACIÓN'] === null &&
+      row.DBT === null &&
+      row.HTA === null &&
+      row.O === null &&
+      row['CP-OH'] === null &&
+      row['CP-D'] === null &&
+      row['CP-TBQ'] === null &&
+      row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS'] === null &&
+      row['TOMA LECHE'] === null &&
+      // Campos que no deberian estar en nutricion, luego se setean en nulo
+      // Estan aca porque estos campos estan siempre en el excel
+      row['TA'] !== null &&
+      row.TAS !== null &&
+      row.TAD !== null &&
+      row.PCTA !== null &&
+      // campos obligatorios de nutricion
+      row['PESO (Kg)'] !== null &&
+      row['TALLA (cm)'] !== null &&
+      row['PCT (T/E)'] !== null &&
+      row['CC(cm)'] !== null &&
+      row.IMC !== null &&
+      row.PCIMC !== null &&
+      row['ESTADO NUTRICIONAL'] !== null &&
+      row['SEGTO.'] !== null
+    ) {
+      esClinica = false;
+      console.log('Es Nutricion');
+    } else {
+      esClinica = true;
+      console.log('Es Clinica');
+    }
+    return esClinica;
   }
 
   async procesarOdontologia(data, usuario) {
@@ -141,12 +219,7 @@ export class ProcesamientoService {
         consulta.observaciones = row['OBSERVACIONES'];
         consulta.turno = capitalize(row['TURNO']);
         consulta.usuario = usuario;
-        consulta.derivacion_externa = false;
-        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_odontologia = false;
-        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
@@ -159,7 +232,7 @@ export class ProcesamientoService {
         odontologia.dientes_temporales = row['TOTAL TEMPORALES'];
         odontologia.sellador = row['SELLADOR'];
         odontologia.topificacion = !!row['TOPICACION'];
-        odontologia.cepillado = !!row['ENS. CEPILLADO'];
+        // odontologia.cant_cepillado = !!row['ENS. CEPILLADO']; // !!!!!!!!!!!! VER LO descarto
         odontologia.dientes_irecuperables = row['DIENTE RECUPERABLE'];
         odontologia.dientes_recuperables = row['DIENTE IRRECUPERABLE'];
         odontologia.cepillo = !!row['CEPILLO'];
@@ -203,14 +276,8 @@ export class ProcesamientoService {
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Fonoaudiologia';
         consulta.observaciones = row['OBSERVACIÓN'];
-        consulta.derivacion_externa = false;
-        // consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_fonoaudiologia = !!row['FONOAUDIOLOGÍA'];
-        consulta.derivacion_odontologia = !!row['ODONTOLOGÍA'];
-        consulta.derivacion_oftalmologia = !!row['OFTALMOLOGÍA'];
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         consulta.usuario = usuario;
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         consulta.turno = capitalize(row['TURNO']);
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
@@ -252,20 +319,15 @@ export class ProcesamientoService {
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['INSTITUCION']);
+        consulta.institucion = await this.verificarInstitucion(row['ESTABLECIMIENTO ESCOLAR']);
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-        consulta.type = 'Clinica';
+        consulta.type = 'Oftalmologia';
         consulta.observaciones = row['OBSERVACIONES'];
-        consulta.derivacion_externa = false;
-        consulta.derivacion_fonoaudiologia = convertirSiNo(row['FONOAUDIOLOGÍA']);
-        consulta.derivacion_odontologia = false;
-        consulta.derivacion_oftalmologia = convertirSiNo(row['OFTALMOLOGÍA']);
+        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
         consulta.usuario = usuario;
-        // consulta.derivacion_trabajoSocial // esto nose que onda hay que desarrollarlo
-        // consulta.derivacion_pediatria // esto nunca existio !!!!!!!!!!
         consulta.turno = capitalize(row['TURNO']);
         // const consultaNueva = this.consultaORM.create(consulta);
         // await this.consultaORM.save(consultaNueva);
@@ -274,12 +336,12 @@ export class ProcesamientoService {
         // consulta hija  lacreo y pongo clinica.consulta = consulta
         const oftalmologia = new Oftalmologia();
         oftalmologia.consulta = consultaNueva;
-        oftalmologia.anteojos = row[''];
-        oftalmologia.control = row[''];
-        oftalmologia.demanda = row[''];
-        oftalmologia.primera_vez = row[''];
-        oftalmologia.prox_control = row[''];
-        oftalmologia.receta = row[''];
+        oftalmologia.anteojos = !!row['ANTEOJOS'];
+        oftalmologia.control = !!row['CONTROL'];
+        oftalmologia.demanda = row['DEMANDA'] ?? 'Otro';
+        oftalmologia.primera_vez = !!row['1RA VEZ'];
+        oftalmologia.prox_control = calcularProximoControl(row['PROX. CONTROL'], consulta.created_at);
+        oftalmologia.receta = !!row['RECETA'];
 
         const oftalmologiaNueva = queryRunner.manager.create(Oftalmologia, oftalmologia);
         await queryRunner.manager.save(oftalmologiaNueva);
@@ -300,15 +362,195 @@ export class ProcesamientoService {
   }
 
   async procesarPrevencion(data, usuario) {
-    return [];
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        if (row.DNI) {
+          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          if (chico !== null) {
+            const consulta = new Consulta();
+            consulta.chico = chico;
+            consulta.usuario = usuario;
+
+            consulta.created_at = new Date(row['FECHA']);
+            consulta.curso = await this.verificarCurso(convertirCurso(row['GRADO']));
+            consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
+            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+            consulta.type = 'Social';
+            consulta.observaciones = row['OBSERVACIONES'];
+            consulta.derivacion_externa = false;
+            consulta.turno = capitalize(row['TURNO']);
+            const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+            await queryRunner.manager.save(consultaNueva);
+            // consulta hija  lacreo y pongo clinica.consulta = consulta
+            const prevencion = new Prevencion();
+            prevencion.consulta = consultaNueva;
+            prevencion.otra_problematica = row['OTRAS PROBLEMÁTICAS'];
+            prevencion.consumo_problematico = row['CONSUMO PROBLEMATICO'] ?? 'Otras';
+            prevencion.edad_inicio_consumo = row['EDAD DE INICIO DE CONSUMO'];
+            prevencion.frecuencia = convertirFrecuenciaConsumo(row['FRECUENCIA']);
+            prevencion.motivo_consumo = row['MOTIVO DE CONSUMO'];
+
+            const prevencionNueva = queryRunner.manager.create(Prevencion, prevencion);
+            await queryRunner.manager.save(prevencionNueva);
+            await queryRunner.commitTransaction();
+          } else {
+            throw new Error('No hay chico cargado con ese DNI. Cargarlo antes.');
+          }
+        } else {
+          throw new Error('No se envio el DNI');
+        }
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
   }
 
   async procesarSocial(data, usuario) {
-    return [];
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        if (row.DNI) {
+          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          if (chico !== null) {
+            const consulta = new Consulta();
+            consulta.chico = chico;
+            consulta.usuario = usuario;
+            const anio = Number(row.fecha);
+            consulta.created_at = new Date(anio, 1, 2);
+            consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+            consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
+            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+            consulta.type = 'Social';
+            consulta.observaciones = row['OBSERVACIONES'];
+            consulta.derivacion_externa = false;
+            consulta.turno = capitalize(row['TURNO']);
+            const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+            await queryRunner.manager.save(consultaNueva);
+            // consulta hija  lacreo y pongo clinica.consulta = consulta
+            const social = new Social();
+            social.consulta = consultaNueva;
+            social.articulacion = row['Articulación con:'];
+            social.demanda = row['Demanda de:'];
+            social.objeto_informe = row['Objeto de Informe'];
+            social.seguimiento = row['Seguimiento'];
+
+            const socialNueva = queryRunner.manager.create(Social, social);
+            await queryRunner.manager.save(socialNueva);
+            await queryRunner.commitTransaction();
+          } else {
+            throw new Error('No hay chico cargado con ese DNI. Cargarlo antes.');
+          }
+        } else {
+          throw new Error('No se envio el DNI');
+        }
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
+  }
+  // el mes viene en enero febrero
+  devolverFecha(anio, mes) {
+    const meses = {
+      enero: 0,
+      febrero: 1,
+      marzo: 2,
+      abril: 3,
+      mayo: 4,
+      junio: 5,
+      julio: 6,
+      agosto: 7,
+      septiembre: 8,
+      octubre: 9,
+      noviembre: 10,
+      diciembre: 11,
+    };
+
+    if (!meses.hasOwnProperty(mes.toLowerCase())) {
+      throw new Error('Mes no válido');
+    }
+
+    return new Date(anio, meses[mes.toLowerCase()], 1); // Primer día del mes
+  }
+
+  // Ejemplo de uso:
+  async procesarTalleres(data, usuario) {
+    const noCargados = [];
+    for (let i = 0; i < data.length; i++) {
+      const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
+      await queryRunner.connect(); // Conectar el QueryRunner a la base de datos
+      await queryRunner.startTransaction(); // Iniciar la transacción
+      const row = data[i];
+      try {
+        const taller = new Taller();
+        taller.marco = await this.verificarMarco(row['MARCO'], row['ESPECIALIDAD']); // !!!!!! REVISAR
+        taller.especialidad = await this.especialidadORM.findOneBy({ nombre: 'Prevencion' }); // !!!!!! REVISAR
+        taller.cant_encuentros = row['CANT ENCUENTROS'] || row['ENCUENTROS'];
+        // taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
+        taller.fecha = row['FECHA DE REALIZACIÓN'];
+        taller.cant_participantes = row['CANT. DE PARTICIPANTES'] || row['Nº DE ASISTENTES'] || row['ASISTENTES'] || row['Nº de ASISTENTES'];
+        taller.es_taller = row['TALLER'] ? convertirSiNo(row['TALLER']) : convertirSiNo(row['ES TALLER?']);
+        taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'Otros';
+        taller.destinatarios = verificarDestinatarios(row['DESTINATARIOS']);
+        taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato. USO 0 SI NO ESTA, NO SE USA EN GRAFICOS NO ES TAN IMPORTANTE
+        taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
+        taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
+        taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        taller.institucion = await this.verificarInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']);
+        taller.created_at = new Date();
+        taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER'] || row['TALLER/TEMAS desplegable']) ?? 'No definido';
+        taller.observaciones = row['OBSERVACIONES'];
+        taller.recursos = row['RECURSOS'] ?? 'No hay dato';
+        taller.turno = verificarTurno(row['TURNO']);
+        const consultaNueva = queryRunner.manager.create(Taller, taller);
+        await queryRunner.manager.save(consultaNueva);
+        await queryRunner.commitTransaction();
+      } catch (error) {
+        console.error(`Error al procesar la fila ${i + 1}:`, error.message);
+        row.posicionExcel = i + 1;
+        row.motivo = `Error: ${error.message}`;
+        noCargados.push(row);
+        await queryRunner.rollbackTransaction();
+        continue;
+      } finally {
+        await queryRunner.release();
+      }
+    }
+    // verfico el dni
+    return noCargados;
   }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
     let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });
+    //let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
     if (!barrioBd && insertar) {
       barrioBd = this.barrioORM.create({ nombre: barrio }); // puede que le falte la localidad !!!!!!!!!!
       await this.barrioORM.save(barrioBd);
@@ -320,7 +562,8 @@ export class ProcesamientoService {
   }
 
   async verificarInstitucion(institucion: string, insertar: boolean = false): Promise<null | Institucion> {
-    let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    //let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    let institucionBd = await this.institucionORM.createQueryBuilder('institucion').where('institucion.nombre ILIKE :nombre', { nombre: institucion }).getOne();
     if (!institucionBd && insertar) {
       institucionBd = this.institucionORM.create({ nombre: institucion, tipo: 'Primario' }); // lo pongo fijo, se puede cambiar!!!!!!!!!!
       await this.institucionORM.save(institucionBd);
@@ -331,8 +574,23 @@ export class ProcesamientoService {
     return institucionBd;
   }
 
+  async verificarMarco(marco: string, nombreEspecialidad, insertar: boolean = false): Promise<null | Marco> {
+    // Cambie esto para que sea mas exacto y no cree marcos de mas
+    let marcoBd = await this.marcoORM.createQueryBuilder('marco').where('marco.nombre ILIKE :nombre', { nombre: marco }).getOne();
+    const especialidad = await this.especialidadORM.findOneBy({ nombre: nombreEspecialidad });
+    if (!marcoBd && insertar && especialidad) {
+      marcoBd = this.marcoORM.create({ nombre: marco, especialidad: especialidad }); // !!!!! REVISAR
+      await this.marcoORM.save(marcoBd);
+    }
+    if (!marcoBd) {
+      return null;
+    }
+    return marcoBd;
+  }
+
   async verificarCurso(curso: string, insertar: boolean = false): Promise<null | Curso> {
-    let cursoBd: any = this.cursoORM.findOneBy({ nombre: curso });
+    // Cambie esto para que sea mas exacto y no cree cursos de mas
+    let cursoBd = await this.cursoORM.createQueryBuilder('curso').where('curso.nombre ILIKE :nombre', { nombre: curso }).getOne();
     if (!cursoBd && insertar) {
       cursoBd = this.cursoORM.create({ nombre: curso });
       await this.cursoORM.save(cursoBd);
@@ -351,7 +609,7 @@ export class ProcesamientoService {
     if (!chico) {
       chico = new Chico();
       chico.dni = row.DNI;
-      const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO']);
+      const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO'] || row['Nombre y Apellido']);
       chico.nombre = arrayApyNo[1];
       chico.apellido = arrayApyNo[0];
       chico.created_at = new Date(row['FECHA']);
@@ -364,7 +622,7 @@ export class ProcesamientoService {
       chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
       chico.sexo = capitalize(row['SEXO']);
-      chico.telefono = row['TELEFONO'];
+      chico.telefono = row['TELÉFONO'] || row['TELEFONO']; // !! Puede no ser un numero
       // chico = this.chicoORM.create(chico);
       // await this.chicoORM.save(chico);
       chico = queryRunner.manager.create(Chico, chico);
@@ -376,6 +634,40 @@ export class ProcesamientoService {
 
 function pasarAnumero(value: any) {
   return +(!isNaN(parseFloat(value)) && isFinite(value) ? parseFloat(value) : 0);
+}
+function convertirFrecuenciaConsumo(frecuencia) {
+  const equivalencias = {
+    'Todos días': 'Todos los dias',
+    '2 veces x sem': '2 veces por semana',
+    '3 veces x sem': '3 veces por semana',
+    'fines de semana': 'Fines de semana',
+    esporádico: 'Esporádico',
+  };
+
+  return equivalencias[frecuencia] || 'Otro';
+}
+function calcularProximoControl(prox: any, created_at: any) {
+  if (!prox || !created_at) {
+    return null;
+  }
+
+  const meses = {
+    '3 meses': 3,
+    '6 meses': 6,
+    '12 meses': 12,
+    '1 mes y medio': 1.5,
+    '2 meses': 2,
+  };
+
+  const cantidadMeses = meses[prox];
+  if (cantidadMeses === undefined) {
+    return null;
+  }
+
+  const fecha = new Date(created_at);
+  fecha.setMonth(fecha.getMonth() + cantidadMeses);
+
+  return fecha;
 }
 
 function calcularEdad(fechaNacimiento, fechaConsulta) {
@@ -617,4 +909,33 @@ function convertirHorasSuenio(params: string) {
   };
 
   return conversiones[params] ?? 'Menos de 10hs'; // esto es el caso nulo, tendria que mandarlo null y que no lo cargue?
+}
+function verificarDestinatarios(destinatario) {
+  const equivalencias = {
+    ALUMNOS: 'Alumnos',
+    DOCENTES: 'Docentes',
+    FAMILIAS: 'Familias',
+  };
+
+  return equivalencias[destinatario];
+}
+function verificarTurno(destinatario) {
+  const equivalencias = {
+    MAÑANA: 'Mañana',
+    TARDE: 'Tarde',
+    'M y T': 'M y T',
+    JC: 'JC',
+  };
+
+  return equivalencias[destinatario];
+}
+function verificarFrecuencia(destinatario) {
+  const equivalencias = {
+    'UNICA VEZ': 'Única vez',
+    DIARIA: 'Diaria',
+    SEMANAL: 'Semanal',
+    MENSUAL: 'Mensual',
+  };
+
+  return equivalencias[destinatario];
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { ConsultaService } from '@services/consulta.service';
 import { ChicoService } from '@services/chico.service';
@@ -14,15 +14,17 @@ import { Select } from 'primeng/select';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import * as Constantes from '@app/common/const/const';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
+  imports: [CommonModule, GridChangerComponent, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
+  grid = 3;
   currentYear: number;
   lastFourYears: number[];
   loading = true;
@@ -41,24 +43,41 @@ export class GeneralComponent implements OnInit, AfterViewInit {
   dataConsultaxAnio: any = [];
   dataTipoConsultaxanio: any = [];
   searchingInstituciones = false;
+  // este no lo cambio por que sino pierdo el trabajo social
+  arrayConsultas: string[] = [...Constantes.typeConsultasEnum];
+  // arrayConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevención', 'Trabajo Social'];
   constructor(
     private _consultaService: ConsultaService,
     private _chicoService: ChicoService,
     private snackBar: MatSnackBar,
     private _institucionService: InstitucionService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.maxDate = new Date();
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
   }
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
 
   ngOnInit(): void {
     this.obtenerInstituciones();
-    this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
+    // this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
   }
   ngAfterViewInit() {
     this.obtenerGraficos();
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+  }
+
   async obtenerGraficos() {
     const promesas = [this.countChicosCargados(), this.countConsultasxanio(), this.countTypeConsultaxanio(), this.obtenerGraficoByYearAndInstitucion()];
     Promise.all(promesas).then(() => (this.loading = false));

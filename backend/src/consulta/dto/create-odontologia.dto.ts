@@ -36,10 +36,10 @@ export class CreateOdontologiaDto {
   @IsBoolean({ message: 'Topificacion debe ser un boleano' })
   readonly topificacion: boolean;
 
-  @ApiProperty({ description: 'Cepillado del niño que asiste a la consulta' })
-  @IsNotEmpty({ message: ' Cepillado no puede estar vacio' })
-  @IsBoolean({ message: 'Cepillado debe ser un boleano' })
-  readonly cepillado: boolean;
+  @ApiProperty({ description: 'Cantidad cepillado del niño que asiste a la consulta' })
+  @IsNotEmpty({ message: 'Cantidad cepillado no puede estar vacio' })
+  @IsInt({ message: 'Cantidad cepillado debe ser un número' })
+  readonly cant_cepillado: number;
 
   @ApiProperty({ description: 'Dientes recuperables del niño que asiste' })
   @IsNotEmpty({ message: 'Dientes recuperables no puede estar vacio' })

@@ -119,7 +119,7 @@ export class ChicoService {
   async countChicosUpxYear(year: number) {
     const respuesta = [];
     for (let i = 0; i < 4; i++) {
-      const countChicos = await this.chicoORM.createQueryBuilder('chico').where('EXTRACT(YEAR FROM chico.created_at) = :year', { year }).getCount();
+      const countChicos = await this.chicoORM.createQueryBuilder('chico').where('chico.deshabilitado = false').andWhere('EXTRACT(YEAR FROM chico.created_at) = :year', { year }).getCount();
       respuesta.push(countChicos);
       year--;
     }

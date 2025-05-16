@@ -18,8 +18,6 @@ import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico
 import { Router } from '@angular/router';
 import { LoadingComponent } from '@app/components/loading/loading.component';
 
-// ACA FALTARIA AGREGAR ENUMS SI SE CONFIRMARON CON LA FUNDACION
-
 @Component({
   selector: 'app-nueva-clinica',
   standalone: true,
@@ -31,6 +29,7 @@ export class NuevaClinicaComponent implements OnInit {
   @Input() editar = true;
   @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
+  mostrarClinica = true;
   loading = false;
   public clinicaForm: FormGroup;
   public con = Constantes;
@@ -80,7 +79,8 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_odontologia: [false, []],
       derivacion_prevencion: [false, []],
       derivacion_social: [false, []],
-      derivacion_externa: [false, []],
+      //derivacion_externa: [false, []],
+      es_clinica: [true, [Validators.required]],
       pcta: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
       pcimc: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
       pct: ['', [Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]],
@@ -159,6 +159,7 @@ export class NuevaClinicaComponent implements OnInit {
                 this.clinicaForm.get('horas_juego_aire_libre')?.setValue('');
                 this.clinicaForm.get('horas_suenio')?.setValue('');
                 this.clinicaForm.get('segto')?.setValue('');
+                // this.clinicaForm.get('es_clinica')?.setValue(true);
               }
             },
             error: (err) => {
@@ -201,6 +202,11 @@ export class NuevaClinicaComponent implements OnInit {
     const derivacion_social = this.consulta?.derivacion_social ? true : false;
     const derivacion_oftalmologia = this.consulta?.derivacion_oftalmologia ? true : false;
     const derivacion_fonoaudiologia = this.consulta?.derivacion_fonoaudiologia ? true : false;
+    if (this.consulta?.clinica?.es_clinica) {
+      this.mostrarClinica = true;
+    } else {
+      this.mostrarClinica = false;
+    }
     this.clinicaForm.patchValue({
       observaciones: this.consulta?.observaciones,
       peso: this.consulta?.clinica?.peso,
@@ -235,6 +241,7 @@ export class NuevaClinicaComponent implements OnInit {
       derivacion_prevencion,
       derivacion_social,
       // derivacion_externa,
+      es_clinica: this.consulta?.clinica?.es_clinica,
       pcta: this.consulta?.clinica?.pcta,
       pcimc: this.consulta?.clinica?.pcimc,
       pct: this.consulta?.clinica?.pct,
@@ -300,6 +307,7 @@ export class NuevaClinicaComponent implements OnInit {
     const enfermedades_previas = this.convertToBoolean(this.clinicaForm.value.enfermedades_previas);
     const hta = this.convertToBoolean(this.clinicaForm.value.hta);
     const leche = this.convertToBoolean(this.clinicaForm.value.leche);
+    const es_clinica = this.convertToBoolean(this.clinicaForm.value.es_clinica);
     if (hayCambios) {
       if (
         // cambios campos comunes
@@ -345,7 +353,8 @@ export class NuevaClinicaComponent implements OnInit {
         this.consulta?.clinica?.antecedentes_perinatal === antecedentes_perinatal &&
         this.consulta?.clinica?.enfermedades_previas === enfermedades_previas &&
         this.consulta?.clinica?.hta === hta &&
-        this.consulta?.clinica?.leche === leche
+        this.consulta?.clinica?.leche === leche &&
+        this.consulta?.clinica?.es_clinica === es_clinica
       ) {
         hayCambios = false;
       } else {
@@ -370,7 +379,6 @@ export class NuevaClinicaComponent implements OnInit {
         if (result.isConfirmed) {
           const data = this.setData();
           this.loading = true;
-
           if (this.consulta) {
             this._consultaService.modficarConsulta(this.consulta?.id, data).subscribe({
               next: (response: any) => {
@@ -402,7 +410,7 @@ export class NuevaClinicaComponent implements OnInit {
     formValues.obra_social = formValues.obra_social === 'true';
     delete formValues.dni;
 
-    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, derivacion_prevencion, derivacion_social, ...clinicaValues } = formValues;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_fonoaudiologia, derivacion_odontologia, derivacion_oftalmologia, derivacion_prevencion, derivacion_social, ...clinicaValues } = formValues;
     const data = {
       type: 'Clinica',
       turno,
@@ -412,16 +420,234 @@ export class NuevaClinicaComponent implements OnInit {
       id_chico: id_chico,
       id_institucion: parseInt(id_institucion),
       id_curso: parseInt(id_curso),
-      derivacion_externa,
-      derivacion_fonoaudiologia,
-      derivacion_odontologia,
-      derivacion_oftalmologia,
-      derivacion_prevencion,
-      derivacion_social,
+      ...(derivacion_fonoaudiologia && { derivacion_fonoaudiologia }),
+      ...(derivacion_odontologia && { derivacion_odontologia }),
+      ...(derivacion_oftalmologia && { derivacion_oftalmologia }),
+      ...(derivacion_prevencion && { derivacion_prevencion }),
+      ...(derivacion_social && { derivacion_social }),
       clinica: {
         ...clinicaValues,
       },
     };
     return data;
+  }
+
+  onChangeEsClinica(event: any) {
+    const esClinica = event.target.value === 'true';
+    if (esClinica) {
+      this.mostrarClinica = true;
+      this.clinicaForm.get('es_clinica')?.setValue(true);
+    } else {
+      this.mostrarClinica = false;
+      this.clinicaForm.get('es_clinica')?.setValue(false);
+    }
+    this.cambiarValidaciones(this.mostrarClinica);
+  }
+
+  cambiarValidaciones(esClinica: boolean) {
+    if (esClinica) {
+      const pesoControl = this.clinicaForm.get('peso');
+      pesoControl?.setValidators([Validators.required]);
+
+      const observacionesControl = this.clinicaForm.get('observaciones');
+      observacionesControl?.setValidators([ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]);
+
+      const vacunasControl = this.clinicaForm.get('vacunas');
+      vacunasControl?.setValidators([Validators.required]);
+
+      const tallaControl = this.clinicaForm.get('talla');
+      tallaControl?.setValidators([Validators.required, ValidarNumerosFloat]);
+
+      const ccControl = this.clinicaForm.get('cc');
+      ccControl?.setValidators([Validators.required, ValidarNumerosFloat]);
+
+      const tasControl = this.clinicaForm.get('tas');
+      tasControl?.setValidators([Validators.required, ValidarNumerosFloat]);
+
+      const tadControl = this.clinicaForm.get('tad');
+      tadControl?.setValidators([Validators.required, ValidarNumerosFloat]);
+
+      const examenVisualControl = this.clinicaForm.get('examen_visual');
+      examenVisualControl?.setValidators([Validators.required]);
+
+      const ortopediaTraumatologiaControl = this.clinicaForm.get('ortopedia_traumatologia');
+      ortopediaTraumatologiaControl?.setValidators([Validators.required]);
+
+      const lenguajeControl = this.clinicaForm.get('lenguaje');
+      lenguajeControl?.setValidators([Validators.required]);
+
+      const segtoControl = this.clinicaForm.get('segto');
+      segtoControl?.setValidators([Validators.required]);
+
+      const lecheControl = this.clinicaForm.get('leche');
+      lecheControl?.setValidators([Validators.required]);
+
+      const infusionesControl = this.clinicaForm.get('infusiones');
+      infusionesControl?.setValidators([Validators.required]);
+
+      const cantidadComidasControl = this.clinicaForm.get('cantidad_comidas');
+      cantidadComidasControl?.setValidators([Validators.required]);
+
+      const alimentacionControl = this.clinicaForm.get('alimentacion');
+      alimentacionControl?.setValidators([Validators.required]);
+
+      const hidratacionControl = this.clinicaForm.get('hidratacion');
+      hidratacionControl?.setValidators([Validators.required]);
+
+      const horasPantallaControl = this.clinicaForm.get('horas_pantalla');
+      horasPantallaControl?.setValidators([Validators.required]);
+
+      const horasJuegoAireLibreControl = this.clinicaForm.get('horas_juego_aire_libre');
+      horasJuegoAireLibreControl?.setValidators([Validators.required]);
+
+      const horasSuenioControl = this.clinicaForm.get('horas_suenio');
+      horasSuenioControl?.setValidators([Validators.required]);
+
+      const derivacionFonoaudiologiaControl = this.clinicaForm.get('derivacion_fonoaudiologia');
+      derivacionFonoaudiologiaControl?.setValidators([]);
+
+      const derivacionOftalmologiaControl = this.clinicaForm.get('derivacion_oftalmologia');
+      derivacionOftalmologiaControl?.setValidators([]);
+
+      const derivacionOdontologiaControl = this.clinicaForm.get('derivacion_odontologia');
+      derivacionOdontologiaControl?.setValidators([]);
+
+      const derivacionPrevencionControl = this.clinicaForm.get('derivacion_prevencion');
+      derivacionPrevencionControl?.setValidators([]);
+
+      const derivacionSocialControl = this.clinicaForm.get('derivacion_social');
+      derivacionSocialControl?.setValidators([]);
+
+      const derivacionExternaControl = this.clinicaForm.get('derivacion_externa');
+      derivacionExternaControl?.setValidators([]);
+
+      const esClinicaControl = this.clinicaForm.get('es_clinica');
+      esClinicaControl?.setValidators([Validators.required]);
+
+      const pctaControl = this.clinicaForm.get('pcta');
+      pctaControl?.setValidators([Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]);
+
+      const pcimcControl = this.clinicaForm.get('pcimc');
+      pcimcControl?.setValidators([Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]);
+
+      const pctControl = this.clinicaForm.get('pct');
+      pctControl?.setValidators([Validators.required, Validators.min(0), Validators.max(100), ValidarNumerosFloat]);
+    } else {
+      const diabetesControl = this.clinicaForm.get('diabetes');
+      diabetesControl?.clearValidators();
+      diabetesControl?.setValue(null);
+
+      const htaControl = this.clinicaForm.get('hta');
+      htaControl?.clearValidators();
+      htaControl?.setValue(null);
+
+      const obesidadControl = this.clinicaForm.get('obesidad');
+      obesidadControl?.clearValidators();
+      obesidadControl?.setValue(null);
+
+      const consumoAlcoholControl = this.clinicaForm.get('consumo_alcohol');
+      consumoAlcoholControl?.clearValidators();
+      consumoAlcoholControl?.setValue(null);
+
+      const consumoDrogasControl = this.clinicaForm.get('consumo_drogas');
+      consumoDrogasControl?.clearValidators();
+      consumoDrogasControl?.setValue(null);
+
+      const consumoTabacoControl = this.clinicaForm.get('consumo_tabaco');
+      consumoTabacoControl?.clearValidators();
+      consumoTabacoControl?.setValue(null);
+
+      const antecedentesPerinatalControl = this.clinicaForm.get('antecedentes_perinatal');
+      antecedentesPerinatalControl?.clearValidators();
+      antecedentesPerinatalControl?.setValue(null);
+
+      const enfermedadesPreviasControl = this.clinicaForm.get('enfermedades_previas');
+      enfermedadesPreviasControl?.clearValidators();
+      enfermedadesPreviasControl?.setValue(null);
+
+      const vacunasControl = this.clinicaForm.get('vacunas');
+      vacunasControl?.clearValidators();
+      vacunasControl?.setValue(null);
+
+      const tasControl = this.clinicaForm.get('tas');
+      tasControl?.clearValidators();
+      tasControl?.setValue(null);
+
+      const tadControl = this.clinicaForm.get('tad');
+      tadControl?.clearValidators();
+      tadControl?.setValue(null);
+
+      const examenVisualControl = this.clinicaForm.get('examen_visual');
+      examenVisualControl?.clearValidators();
+      examenVisualControl?.setValue(null);
+
+      const ortopediaTraumatologiaControl = this.clinicaForm.get('ortopedia_traumatologia');
+      ortopediaTraumatologiaControl?.clearValidators();
+      ortopediaTraumatologiaControl?.setValue(null);
+
+      const lenguajeControl = this.clinicaForm.get('lenguaje');
+      lenguajeControl?.clearValidators();
+      lenguajeControl?.setValue(null);
+
+      const lecheControl = this.clinicaForm.get('leche');
+      lecheControl?.clearValidators();
+      lecheControl?.setValue(null);
+
+      const infusionesControl = this.clinicaForm.get('infusiones');
+      infusionesControl?.clearValidators();
+      infusionesControl?.setValue(null);
+
+      const cantidadComidasControl = this.clinicaForm.get('cantidad_comidas');
+      cantidadComidasControl?.clearValidators();
+      cantidadComidasControl?.setValue(null);
+
+      const alimentacionControl = this.clinicaForm.get('alimentacion');
+      alimentacionControl?.clearValidators();
+      alimentacionControl?.setValue(null);
+
+      const hidratacionControl = this.clinicaForm.get('hidratacion');
+      hidratacionControl?.clearValidators();
+      hidratacionControl?.setValue(null);
+
+      const horasPantallaControl = this.clinicaForm.get('horas_pantalla');
+      horasPantallaControl?.clearValidators();
+      horasPantallaControl?.setValue(null);
+
+      const horasJuegoAireLibreControl = this.clinicaForm.get('horas_juego_aire_libre');
+      horasJuegoAireLibreControl?.clearValidators();
+      horasJuegoAireLibreControl?.setValue(null);
+
+      const horasSuenioControl = this.clinicaForm.get('horas_suenio');
+      horasSuenioControl?.clearValidators();
+      horasSuenioControl?.setValue(null);
+      /*
+      const derivacionFonoaudiologiaControl = this.clinicaForm.get('derivacion_fonoaudiologia');
+      derivacionFonoaudiologiaControl?.clearValidators();
+      derivacionFonoaudiologiaControl?.setValue(null);
+
+      const derivacionOftalmologiaControl = this.clinicaForm.get('derivacion_oftalmologia');
+      derivacionOftalmologiaControl?.clearValidators();
+      derivacionOftalmologiaControl?.setValue(null);
+
+      const derivacionOdontologiaControl = this.clinicaForm.get('derivacion_odontologia');
+      derivacionOdontologiaControl?.clearValidators();
+      derivacionOdontologiaControl?.setValue(null);
+
+      const derivacionPrevencionControl = this.clinicaForm.get('derivacion_prevencion');
+      derivacionPrevencionControl?.clearValidators();
+      derivacionPrevencionControl?.setValue(null);
+
+      const derivacionSocialControl = this.clinicaForm.get('derivacion_social');
+      derivacionSocialControl?.clearValidators();
+      derivacionSocialControl?.setValue(null);
+
+      const derivacionExternaControl = this.clinicaForm.get('derivacion_externa');
+      derivacionExternaControl?.clearValidators();
+      derivacionExternaControl?.setValue(null);
+      */
+      const pctaControl = this.clinicaForm.get('pcta');
+      pctaControl?.clearValidators();
+      pctaControl?.setValue(null);
+    }
   }
 }

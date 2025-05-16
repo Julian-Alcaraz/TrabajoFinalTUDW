@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { join } from 'path';
 
 import { DatabaseModule } from './database/database.module';
 import { RolModule } from './rol/rol.module';
@@ -12,10 +14,7 @@ import { BarrioModule } from './barrio/barrio.module';
 import { LocalidadModule } from './localidad/localidad.module';
 import { CursoModule } from './curso/curso.module';
 import { InstitucionModule } from './institucion/institucion.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { ProcesamientoModule } from './procesamiento/procesamiento.module';
-import { ServiceModule } from './common/services/service.module';
 import { TallerModule } from './taller/taller.module';
 import { MarcoModule } from './marco/marco.module';
 import { EspecialidadModule } from './especialidad/especialidad.module';
@@ -38,7 +37,6 @@ import { EspecialidadModule } from './especialidad/especialidad.module';
     CursoModule,
     InstitucionModule,
     ProcesamientoModule,
-    ServiceModule,
     TallerModule,
     EspecialidadModule,
     MarcoModule,

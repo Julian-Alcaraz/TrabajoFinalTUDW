@@ -23,6 +23,7 @@ export class DatosComponent {
   oftalmologiaFileControl: FormControl = new FormControl('', [Validators.required]);
   prevencionFileControl: FormControl = new FormControl('', [Validators.required]);
   socialFileControl: FormControl = new FormControl('', [Validators.required]);
+  talleresFileControl: FormControl = new FormControl('', [Validators.required]);
   loading = false;
   ultimoArchivo: File | null = null;
   controls: Record<string, FormControl> = {
@@ -32,6 +33,7 @@ export class DatosComponent {
     oftalmologia: this.oftalmologiaFileControl,
     prevencion: this.prevencionFileControl,
     social: this.socialFileControl,
+    talleres: this.talleresFileControl,
   };
   formData: FormData = new FormData();
   fileName = '';
@@ -55,7 +57,7 @@ export class DatosComponent {
   }
 
   limpiarControladores(changedId: string) {
-    const controls = ['clinica', 'fonoaudiologia', 'odontologia', 'oftalmologia', 'prevencion', 'social'];
+    const controls = ['clinica', 'fonoaudiologia', 'odontologia', 'oftalmologia', 'prevencion', 'social', 'talleres'];
     controls.forEach((control) => {
       if (control !== changedId) {
         this.controls[control].setValue(null);
@@ -111,6 +113,9 @@ export class DatosComponent {
         break;
       case 'Social':
         this._procesamientoService.procesarSocial(this.formData).subscribe(this.controlResponse);
+        break;
+      case 'Talleres':
+        this._procesamientoService.procesarTalleres(this.formData).subscribe(this.controlResponse);
         break;
       default:
         console.log('Tipo de evento no reconocido:', event.type);

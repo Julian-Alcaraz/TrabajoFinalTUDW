@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 
 import * as Constantes from '@app/common/const/const';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
@@ -13,16 +13,19 @@ import { MarcoService } from '@app/services/marco.service';
 import { Marco } from '@app/models/marco.model';
 import { LoadingComponent } from '@components/loading/loading.component';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 
 @Component({
   selector: 'app-talleres',
   standalone: true,
-  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent],
+  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent, GridChangerComponent],
   templateUrl: './talleres.component.html',
 })
 export class TalleresComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   public con = Constantes;
-
+  public grid = 3;
   public searchingMarcos = true;
   public searchingEspecialidades = true;
   public loading = true;
@@ -60,7 +63,15 @@ export class TalleresComponent implements OnInit {
     this.obtenerEspecialidades();
     this.obtenerMarcos();
   }
-
+  setearGrid(event: any) {
+    this.grid = event;
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+  }
   async obtenerGraficos() {
     const promesas = [
       //

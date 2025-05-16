@@ -1,8 +1,16 @@
-import { opcionesSexo, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia, otraProblematica, consumoProblematico, frecuenciaPrevencion, motivoConsumo } from './opcionesConst';
+import { opcionesSexo, estadoNutricional, opcionesVacunas, opcionesExamenVisual, opcionesOrtopediaYTraumatologia, opcionesLenguaje, opcionesAlimentacion, opcionesInfusiones, opcionesCantidadComidas, opcionesHsPantalla, opcionesHsJuegoAireLibre, opcionesHsSuenio, opcionesHidratacion, opcionesConsulta, opcionesTurno, opcionesDiagnosticoPresuntivo, opcionesCausas, opcionesDemanda, opcionesCurso, opcionesTipoInstitucion, opcionesDuracion, opcionesDestinatarios, opcionesTurnoTalleres, opcionesConjuntoCon, opcionesEspecialidad, opcionesFrecuencia, otraProblematica, consumoProblematico, frecuenciaPrevencion, motivoConsumo, typeConsultas, tensionArterial } from './opcionesConst';
+
+export type typeConsultasType = (typeof typeConsultas)[number];
+export const typeConsultasEnum = typeConsultas;
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum: string[] = [...opcionesSexo];
 
+export type EstadoNutricionalType = (typeof estadoNutricional)[number];
+export const EstadoNutricionalEnum: string[] = [...estadoNutricional];
+
+export type TensionArterialType = (typeof tensionArterial)[number];
+export const TensionArterialEnum: string[] = [...tensionArterial];
 // Consulta
 
 export type ConsultaType = (typeof opcionesConsulta)[number];

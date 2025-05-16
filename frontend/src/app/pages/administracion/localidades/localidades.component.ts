@@ -130,7 +130,7 @@ export class LocalidadesComponent implements OnInit, AfterViewInit {
   notificar(id: number) {
     Swal.fire({
       title: 'Error',
-      text: 'Para poder editar la localidad, usted debe habilitarla',
+      text: 'Para poder editar la localidad, usted debe habilitarla.',
       icon: 'warning',
       showDenyButton: true,
       confirmButtonColor: '#3f77b4',

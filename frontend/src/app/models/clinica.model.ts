@@ -1,4 +1,4 @@
-import { AlimentacionType, CantidadComidasType, ExamenVisualType, HidratacionType, HsJuegoAireLibreType, HsPantallaType, HsSuenioType, InfusionesType, LenguajeType, OrtopediaYTraumatologiaType, VacunasType } from "@app/common/const/const";
+import { AlimentacionType, CantidadComidasType, ExamenVisualType, HidratacionType, HsJuegoAireLibreType, HsPantallaType, HsSuenioType, InfusionesType, LenguajeType, OrtopediaYTraumatologiaType, VacunasType } from '@app/common/const/const';
 
 export class Clinica {
   constructor(
@@ -32,9 +32,10 @@ export class Clinica {
     public horas_pantalla: HsPantallaType,
     public horas_juego_aire_libre: HsJuegoAireLibreType,
     public horas_suenio: HsSuenioType,
+    public es_clinica: boolean,
   ) {}
 
   static overload_constructor() {
-    return new Clinica(0, false, false, false, false, false, false, false, false, 'Completo', 0, 0, 0, 0, 0, 0, 0, 0, 'Normal', 'Normal', 'Adecuado', false, 'Frituras', 'Agua', false, 'Té', '4', 'Menor a 2hs', '1h', 'Menos de 10hs');
+    return new Clinica(0, false, false, false, false, false, false, false, false, 'Completo', 0, 0, 0, 0, 0, 0, 0, 0, 'Normal', 'Normal', 'Adecuado', false, 'Frituras', 'Agua', false, 'Té', '4', 'Menor a 2hs', '1h', 'Menos de 10hs', false);
   }
 }

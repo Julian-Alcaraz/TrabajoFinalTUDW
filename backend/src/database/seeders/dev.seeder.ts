@@ -102,22 +102,13 @@ export class DevSeeder implements Seeder {
           roles: [roles[2]], // AccesoInfo
         },
         {
-          nombre: 'ProfesionalYAdmin',
-          apellido: 'ProfesionalYAdmin',
-          email: 'ProfesionalYAdmin@ProfesionalYAdmin.com',
-          contrasenia: codificarContrasenia('1234567'),
-          dni: 12345670,
-          fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // ProfesionalYAdmin
-        },
-        {
           nombre: 'usuarioDeshabilitado',
           apellido: 'usuarioDeshabilitado',
           email: 'deshabilitado@deshabilitado.com',
           contrasenia: codificarContrasenia('1234567'),
           dni: 10345670,
           fe_nacimiento: '2000-12-30',
-          roles: [roles[0], roles[1]], // ProfesionalYAdmin
+          roles: [roles[0]], // ProfesionalYAdmin
           deshabilitado: true,
         },
         {
@@ -164,24 +155,13 @@ export class DevSeeder implements Seeder {
           .fill('')
           .map(async () => {
             const usuario = await usuarioFactory.make({
-              roles: [faker.helpers.arrayElement(roles)],
+              roles: [roles[faker.number.int({ min: 0, max: 2 })]], // Selecciona un rol aleatorio dentro del rango 0-2
             });
             return usuario;
           }),
       );
-      // Crea 40 usuarios con 2 roles cada uno
-      const usuariosCon2Roles = await Promise.all(
-        Array(40)
-          .fill('')
-          .map(async () => {
-            const usuario = await usuarioFactory.make({
-              roles: [roles[0], roles[1]],
-            });
-            return usuario;
-          }),
-      );
+
       await usuarioORM.save(usuarios);
-      await usuarioORM.save(usuariosCon2Roles);
 
       // Menus
       // Menus que tienen hijos
@@ -544,7 +524,7 @@ export class DevSeeder implements Seeder {
       console.log('Seeding chicos...');
 
       const chicos = await Promise.all(
-        Array(1000)
+        Array(1)
           .fill('')
           .map(async () => {
             const chico = await chicoFactory.make({
@@ -624,7 +604,7 @@ export class DevSeeder implements Seeder {
       for (let i = 0; i < 1; i++) {
         console.log('Seeding consultas...');
         const consultasSimples = await Promise.all(
-          Array(1000)
+          Array(1)
             .fill('')
             .map(async () => {
               const chicoSeleccionado = faker.helpers.arrayElement(chicos);
@@ -638,7 +618,6 @@ export class DevSeeder implements Seeder {
                 usuario: usuarioConRol,
                 edad: edad,
                 created_at: faker.date.between({ from: '2021-01-01T00:00:00.000Z', to: new Date().toISOString() }),
-                deshabilitado: faker.datatype.boolean(0.05),
               });
               return consulta;
             }),
@@ -737,8 +716,8 @@ export class DevSeeder implements Seeder {
       ]);
 
       console.log('Seeding talleres...');
-      const batchSize = 100;
-      for (let i = 0; i < 100; i += batchSize) {
+      const batchSize = 1;
+      for (let i = 0; i < 1; i += batchSize) {
         const talleres = await Promise.all(
           Array(batchSize)
             .fill('')
@@ -779,7 +758,6 @@ export class DevSeeder implements Seeder {
                 especialidad: especialidadSeleccionada,
                 marco: marcoSeleccionado,
                 entrega_cepillos: entregaCepillos,
-                deshabilitado: faker.helpers.maybe(() => true, { probability: 0.05 }) ?? false,
               });
               return taller;
             }),

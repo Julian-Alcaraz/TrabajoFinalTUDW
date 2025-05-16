@@ -29,11 +29,22 @@ import {
   frecuenciaPrevencion,
   otraProblematica,
   consumoProblematico,
+  estadoNutricional,
+  tensionArterial,
+  typeConsultas,
 } from './opcionesConst';
+
+export type typeConsultasype = (typeof typeConsultas)[number];
+export const typeConsultasEnum = typeConsultas;
 
 export type SexoType = (typeof opcionesSexo)[number];
 export const SexoEnum = opcionesSexo;
 
+export type EstadoNutricionalType = (typeof estadoNutricional)[number];
+export const EstadoNutricionalEnum: string[] = [...estadoNutricional];
+
+export type TensionArterialType = (typeof tensionArterial)[number];
+export const TensionArterialEnum: string[] = [...tensionArterial];
 // Consulta
 
 export type ConsultaType = (typeof opcionesConsulta)[number];

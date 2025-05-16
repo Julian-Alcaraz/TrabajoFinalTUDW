@@ -81,7 +81,7 @@
               @for (rol of element.roles; track $index) {
                 <p-tag [value]="rol.nombre" styleClass="mr-1" />
               }
-              <button aria-label="Botón de editar roles" (click)="editarRoles(element)" [pTooltip]="'Editar roles'" tooltipPosition="top" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'"><i class="fa-solid fa-pencil" style="color: #ffffff"></i></button>
+              <button aria-label="Botón de editar roles" (click)="element.deshabilitado ? notificar(element.id) : editarRoles(element)" [pTooltip]="'Editar roles'" tooltipPosition="top" class="'text-white bg-sky-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-2 py-1 text-center -700 -800 disabled:bg-gray-400'"><i class="fa-solid fa-pencil" style="color: #ffffff"></i></button>
             </div>
           </td>
         </ng-container>

@@ -1,9 +1,12 @@
 export const opcionesSexo = ['Femenino', 'Masculino', 'Otro'] as const;
+export const typeConsultas = ['Clinica', 'Odontologia', 'Oftalmologia', 'Fonoaudiologia', 'Prevencion', 'Social'] as const;
+export const estadoNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'] as const;
+export const tensionArterial = ['Normotenso', 'Riesgo', 'Hipertenso'] as const;
 
 // Consulta
 
 export const opcionesConsulta = ['Clinica', 'Fonoaudiologia', 'Oftalmologia', 'Odontologia', 'Prevencion', 'Social'] as const;
-export const opcionesTurno = ['Mañana', 'Tarde', 'Noche'] as const;
+export const opcionesTurno = ['Mañana', 'Tarde', 'Noche', 'Jornada Completa'] as const;
 
 // Clinica
 
@@ -31,7 +34,7 @@ export const opcionesDemanda = ['Control niño sano', 'Docente', 'Familiar', 'Ot
 // Prevencion
 
 export const motivoConsumo = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'] as const;
-export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'] as const;
+export const frecuenciaPrevencion = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Esporádico', 'Otro'] as const;
 export const consumoProblematico = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'] as const;
 export const otraProblematica = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'] as const;
 
@@ -45,10 +48,13 @@ export const opcionesTipoInstitucion = ['Jardin', 'Primario', 'Secundario', 'Ter
 
 // Taller
 
-export const opcionesDuracion = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+// Duracion puede ser 0 solo aca, no cambiarlo en el frontend.
+// Se hace para que los talleres importados que no tengan duracion se pueda asignar 0.
+export const opcionesDuracion = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const opcionesDestinatarios = ['Alumnos', 'Docentes', 'Familias', 'PSA', 'Todos'];
 export const opcionesTurnoTalleres = ['Mañana', 'Tarde', 'M y T', 'JC'];
-export const opcionesConjuntoCon = ['Odontologia', 'Nutricion', 'Medicina', 'Trabajo Social', 'Psicologia', 'Equipo tecnico de apoyo', 'Sin compania', 'Pasantes'];
+// Pasa lo mismo con 'Otros' de conjunto con.
+export const opcionesConjuntoCon = ['Odontologia', 'Nutricion', 'Medicina', 'Trabajo Social', 'Psicologia', 'Equipo tecnico de apoyo', 'Sin compania', 'Pasantes', 'Otros'];
 export const opcionesFrecuencia = ['Única vez', 'Diaria', 'Semanal', 'Mensual'];
 
 // Especialidad
