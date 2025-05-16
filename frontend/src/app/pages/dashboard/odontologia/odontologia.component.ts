@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { ConsultaService } from '@services/consulta.service';
@@ -15,6 +15,8 @@ import { GridChangerComponent } from '../components/grid-changer/grid-changer.co
   templateUrl: './odontologia.component.html',
 })
 export class OdontologiaComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
   year = 0;
   grid = 3;
@@ -51,7 +53,12 @@ export class OdontologiaComponent implements OnInit {
   }
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
   async obtenerGraficos() {
     const promesas = [

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import { ConsultaService } from '@app/services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,6 +16,8 @@ import * as Constantes from '@app/common/const/const';
   templateUrl: './prevencion.component.html',
 })
 export class PrevencionComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
   grid = 3;
   year = 0;
@@ -37,7 +39,7 @@ export class PrevencionComponent implements OnInit {
   // frecuenciaConsumo = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Esporadico', 'Otro'];
   frecuenciaConsumo = Constantes.FrecuenciaPrevencionEnum;
   // drogaHabitual = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
-  drogaHabitual = Constantes.ConsumoProblematicoEnum
+  drogaHabitual = Constantes.ConsumoProblematicoEnum;
   countProblematica = [];
   countMotivoConsumo = [];
   countFrecuenciaCosumo = [];
@@ -81,7 +83,12 @@ export class PrevencionComponent implements OnInit {
   }
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
   obtenerGraficosFrecuenciaConsumo() {
     return new Promise((resolve, reject) => {

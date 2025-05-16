@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { ConsultaService } from '@services/consulta.service';
 import { ChicoService } from '@services/chico.service';
@@ -51,11 +51,14 @@ export class GeneralComponent implements OnInit, AfterViewInit {
     private _chicoService: ChicoService,
     private snackBar: MatSnackBar,
     private _institucionService: InstitucionService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.maxDate = new Date();
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
   }
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
 
   ngOnInit(): void {
     this.obtenerInstituciones();
@@ -67,7 +70,12 @@ export class GeneralComponent implements OnInit, AfterViewInit {
 
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
 
   async obtenerGraficos() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { ConsultaService } from '@services/consulta.service';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
-import * as con from '../../../common/const/const'
+import * as con from '../../../common/const/const';
 @Component({
   selector: 'app-clinica',
   standalone: true,
@@ -15,6 +15,8 @@ import * as con from '../../../common/const/const'
   templateUrl: './clinica.component.html',
 })
 export class ClinicaComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
   grid = 3;
   // estadosNutricional = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
@@ -57,7 +59,12 @@ export class ClinicaComponent implements OnInit {
   }
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
   async obtenerGraficos() {
     const promesas = [

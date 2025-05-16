@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { YearGradoFormComponent } from '../components/year-grado-form/year-grado-form.component';
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 import { ConsultaService } from '@app/services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
+import { PieGraphComponent } from '../components/graphs/pie-graph.component';
+import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 
 @Component({
   selector: 'app-social',
@@ -13,6 +15,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './social.component.html',
 })
 export class SocialComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
   grid = 3;
   year = 0;
@@ -40,7 +44,12 @@ export class SocialComponent implements OnInit {
   }
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
   async obtenerGraficos() {
     const promesas = [

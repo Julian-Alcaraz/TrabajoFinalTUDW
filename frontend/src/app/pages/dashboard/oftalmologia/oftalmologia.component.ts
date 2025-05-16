@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ConsultaService } from '../../../services/consulta.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './oftalmologia.component.html',
 })
 export class OftalmologiaComponent implements OnInit {
+  @ViewChildren(BarGraphComponent) barGraphs!: QueryList<BarGraphComponent>;
+  @ViewChildren(PieGraphComponent) pieGraphs!: QueryList<PieGraphComponent>;
   loading = true;
   grid = 3;
   year = 0;
@@ -44,7 +46,12 @@ export class OftalmologiaComponent implements OnInit {
   }
   setearGrid(event: any) {
     this.grid = event;
-    this.obtenerGraficos();
+    this.barGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
+    this.pieGraphs.forEach((graph) => {
+      graph.actualizarSets(); // Llama al método del hijo
+    });
   }
   async obtenerGraficos() {
     const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos(), this.graficoCountAnteojos(), this.graficoCountADemanda()];
