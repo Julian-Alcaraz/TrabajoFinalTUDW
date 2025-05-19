@@ -8,11 +8,12 @@ import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
 import * as Constantes from '@app/common/const/const';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 
 @Component({
   selector: 'app-prevencion',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule, ExpandCompressButtonComponent],
   templateUrl: './prevencion.component.html',
 })
 export class PrevencionComponent implements OnInit {
@@ -81,8 +82,8 @@ export class PrevencionComponent implements OnInit {
       this.loading = false;
     }
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -90,6 +91,11 @@ export class PrevencionComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
+  
+  setearGrid(event: any) {
+    this.grid = event;
+  }
+
   obtenerGraficosFrecuenciaConsumo() {
     return new Promise((resolve, reject) => {
       this._consultaService.porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({

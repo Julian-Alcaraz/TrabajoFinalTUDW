@@ -16,11 +16,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import * as Constantes from '@app/common/const/const';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, GridChangerComponent, ButtonModule, ReactiveFormsModule, IftaLabelModule, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
+  imports: [CommonModule, GridChangerComponent, ButtonModule, ReactiveFormsModule, IftaLabelModule, ExpandCompressButtonComponent, DatePickerModule, BarGraphComponent, PieGraphComponent, LoadingComponent, Select],
   templateUrl: './general.component.html',
 })
 export class GeneralComponent implements OnInit, AfterViewInit {
@@ -64,18 +65,23 @@ export class GeneralComponent implements OnInit, AfterViewInit {
     this.obtenerInstituciones();
     // this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
   }
+
   ngAfterViewInit() {
     this.obtenerGraficos();
   }
 
-  setearGrid(event: any) {
-    this.grid = event;
+  actualizarGraficos() {
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
     this.pieGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
+  }
+
+  setearGrid(event: any) {
+    this.grid = event;
+    this.actualizarGraficos();
   }
 
   async obtenerGraficos() {

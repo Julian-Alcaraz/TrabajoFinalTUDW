@@ -11,16 +11,20 @@
   }"
 >
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <app-bar-graph [loading]="loading" titulo="Talleres por año" [labels]="lastFourYears" [sets]="dataTalleresxAnio" [porcentaje]="porcentaje === 1" />
   </div>
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <app-bar-graph [loading]="loading" titulo="Tipos de talleres por año" [labels]="this.con.EspecialidadEnum" [sets]="dataTalleresxAnioxEspecialidad" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
   </div>
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <app-bar-graph [loading]="loading" titulo="{{ participantesOEncuentros }} por especialidad" [labels]="this.con.EspecialidadEnum" [sets]="dataParticipantesTalleresxAnio" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
   </div>
 
   <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <div class="flex flex-col h-full justify-center">
       <!-- No deberia hacer falta esto pero da error si no esta -->
       <div *ngIf="this.loading === false">
@@ -36,6 +40,7 @@
   <ng-template #elseBlock>
     <div *ngFor="let especialidad of especialidades" class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
       <ng-container *ngIf="dataCantEncuentrosxMarco[especialidad.nombre.toLowerCase()]">
+        <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
         <app-bar-graph [loading]="loading" titulo="{{ participantesOEncuentros }} por marco de {{ especialidad.nombre }}" [labels]="getMarcos(especialidad.nombre.toLowerCase())" [sets]="dataCantEncuentrosxMarco[especialidad.nombre.toLowerCase()]" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" />
       </ng-container>
     </div>

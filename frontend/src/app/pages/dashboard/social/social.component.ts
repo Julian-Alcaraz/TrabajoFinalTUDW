@@ -42,14 +42,17 @@ export class SocialComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
     this.pieGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
+  }
+  setearGrid(event: any) {
+    this.grid = event;
   }
   async obtenerGraficos() {
     const promesas = [

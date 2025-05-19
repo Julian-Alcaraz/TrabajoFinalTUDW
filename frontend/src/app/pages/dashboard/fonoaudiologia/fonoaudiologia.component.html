@@ -10,8 +10,20 @@
     'grid-cols-3  ': grid === 3,
   }"
 >
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloCausas" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="labelCausas" [sets]="porcentajeCausas" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-bar-graph [loading]="loading" [titulo]="tituloDiagnosticoPresuntivo" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="labelDiagnosticoPresuntivo" [sets]="porcentajeDiagnosticoPresuntivo" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloCausas" [subTitulo]="subTitulo" [labels]="labelCausas" [set]="{ label: '', data: countCausas }" /></div>
-  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md"><app-pie-graph [loading]="loading" [titulo]="tituloDiagnosticoPresuntivo" [subTitulo]="subTitulo" [labels]="labelDiagnosticoPresuntivo" [set]="{ label: '', data: countDiagnosticoPresuntivo }" /></div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
+    <app-bar-graph [loading]="loading" [titulo]="tituloCausas" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="labelCausas" [sets]="porcentajeCausas" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
+    <app-bar-graph [loading]="loading" [titulo]="tituloDiagnosticoPresuntivo" [subTitulo]="cursoLabel" [porcentaje]="porcentaje === 1" [labels]="labelDiagnosticoPresuntivo" [sets]="porcentajeDiagnosticoPresuntivo" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
+    <app-pie-graph [loading]="loading" [titulo]="tituloCausas" [subTitulo]="subTitulo" [labels]="labelCausas" [set]="{ label: '', data: countCausas }" />
+  </div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
+    <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
+    <app-pie-graph [loading]="loading" [titulo]="tituloDiagnosticoPresuntivo" [subTitulo]="subTitulo" [labels]="labelDiagnosticoPresuntivo" [set]="{ label: '', data: countDiagnosticoPresuntivo }" />
+  </div>
 </div>
