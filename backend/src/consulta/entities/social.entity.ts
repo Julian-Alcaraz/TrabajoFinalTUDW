@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Consulta } from './consulta.entity';
+import { Categoria } from '../../categoria/entities/categoria.entity';
 
 @Entity('social')
 export class Social {
@@ -21,4 +22,20 @@ export class Social {
 
   @Column({ type: 'varchar', length: 1000, nullable: true })
   seguimiento: string;
+
+  // Relaciones
+
+  @ManyToMany(() => Categoria, (categoria) => categoria.consultas)
+  @JoinTable({
+    name: 'categoria-social',
+    joinColumn: {
+      name: 'id_consulta',
+      referencedColumnName: 'id_consulta',
+    },
+    inverseJoinColumn: {
+      name: 'id_categoria',
+      referencedColumnName: 'id',
+    },
+  })
+  categorias: Categoria[];
 }

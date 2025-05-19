@@ -5,13 +5,14 @@ import { GLOBAL } from '@config/global';
 @Injectable({
   providedIn: 'root',
 })
-export class MarcoService {
+export class CategoriaService {
   private url: string;
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  obtenerMarcos() {
-    return this._http.get(this.url + 'marco');
+  obtenerCategorias() {
+    return this._http.get(this.url + 'categoria');
   }
 }
+

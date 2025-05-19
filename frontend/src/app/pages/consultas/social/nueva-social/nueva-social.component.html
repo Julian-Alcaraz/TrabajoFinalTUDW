@@ -35,6 +35,13 @@
         <div class="mt-4 col-span-full md:col-span-3">
           <app-input-select-enum label="¿Derivacion externa?" [control]="controlDeInput('derivacion_externa')" idInput="derivacion_externa" [opciones]="['Si', 'No']" [valores]="['true', 'false']" />
         </div>
+        <!-- Categorias -->
+        <div class="mt-4 col-span-full md:col-span-3 flex items-center">
+          <p-iftalabel class="w-full">
+            <p-multiselect [loading]="loadingCategorias" [options]="categorias" formControlName="categoriasSeleccionadas" optionLabel="nombre" [filter]="false" optionValue="id" inputId="ms_categorias" placeholder="Selecciona por lo menos una categoria" styleClass="w-full h-16" />
+            <label for="ms_categorias">Categoria</label>
+          </p-iftalabel>
+        </div>
         <!-- Observaciones -->
         <div class="mt-4 col-span-full">
           <app-input-textarea label="Observaciones" [control]="controlDeInput('observaciones')" placeholder="" idInput="observaciones" [opcional]="true" />

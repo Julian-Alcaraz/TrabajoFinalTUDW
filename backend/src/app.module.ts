@@ -18,6 +18,8 @@ import { ProcesamientoModule } from './procesamiento/procesamiento.module';
 import { TallerModule } from './taller/taller.module';
 import { MarcoModule } from './marco/marco.module';
 import { EspecialidadModule } from './especialidad/especialidad.module';
+import { CategoriaModule } from './categoria/categoria.module';
+
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { EspecialidadModule } from './especialidad/especialidad.module';
     TallerModule,
     EspecialidadModule,
     MarcoModule,
+    CategoriaModule,
   ],
   controllers: [],
   providers: [],

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { IftaLabelModule } from 'primeng/iftalabel';
 import Swal from 'sweetalert2';
 
 import * as Constantes from '@app/common/const/const';
@@ -18,11 +20,13 @@ import { Consulta } from '@models/consulta.model';
 import { DatosMedicoComponent } from '../../components/datos-medico/datos-medico.component';
 import { Router } from '@angular/router';
 import { LoadingComponent } from '@app/components/loading/loading.component';
+import { Categoria } from '@app/models/categoria.model';
+import { CategoriaService } from '@app/services/categoria.service';
 
 @Component({
   selector: 'app-nueva-social',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, LoadingComponent, InputSelectEnumComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatosMedicoComponent, MatFormFieldModule, MatInputModule, CamposComunesComponent, InputTextareaComponent, LoadingComponent, InputSelectEnumComponent, MultiSelectModule, IftaLabelModule],
   templateUrl: './nueva-social.component.html',
 })
 export class NuevaSocialComponent implements OnInit {
@@ -31,6 +35,8 @@ export class NuevaSocialComponent implements OnInit {
   @Output() modificoConsulta = new EventEmitter<any>();
   habilitarModificar = false;
   loading = false;
+  loadingCategorias = false;
+  categorias: Categoria[] = [];
   public socialForm: FormGroup;
   public chico: Chico | null = null;
   public con = Constantes;
@@ -39,6 +45,7 @@ export class NuevaSocialComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
+    private _categoriaService: CategoriaService,
     private _consultaService: ConsultaService,
     private _router: Router,
   ) {
@@ -49,6 +56,7 @@ export class NuevaSocialComponent implements OnInit {
       // Campos comunes
       observaciones: ['', [ValidarCampoOpcional(Validators.minLength(1), Validators.maxLength(1000), ValidarCadenaSinEspacios)]],
       // Campos prevencion
+      categoriasSeleccionadas: ['', [Validators.required]],
       derivacion_externa: ['', [Validators.required]],
       demanda: ['', [Validators.minLength(0), Validators.maxLength(100)]],
       articulacion: ['', [Validators.minLength(0), Validators.maxLength(1000)]],
@@ -58,6 +66,7 @@ export class NuevaSocialComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.obtenerCategorias();
     if (this.consulta) {
       // llenar form y deshabilitarlo
       this.completarCampos();
@@ -67,6 +76,22 @@ export class NuevaSocialComponent implements OnInit {
         },
       });
     }
+  }
+
+  obtenerCategorias() {
+    this.loadingCategorias = true;
+    this._categoriaService.obtenerCategorias().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.categorias = response.data;
+        }
+        this.loadingCategorias = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loadingCategorias = false;
+      },
+    });
   }
 
   get controlDeInput(): (input: string) => FormControl {
@@ -83,7 +108,7 @@ export class NuevaSocialComponent implements OnInit {
     formValues.derivacion_externa = formValues.derivacion_externa === 'true';
 
     delete formValues.dni;
-    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, ...socialValues } = formValues;
+    const { turno, edad, obra_social, observaciones, id_institucion, id_curso, id_chico, derivacion_externa, categoriasSeleccionadas, ...socialValues } = formValues;
     const data = {
       type: 'Social',
       turno,
@@ -98,6 +123,7 @@ export class NuevaSocialComponent implements OnInit {
       derivacion_oftalmologia: false,
       derivacion_fonoaudiologia: false,
       social: {
+        categorias_ids: categoriasSeleccionadas,
         ...socialValues,
       },
     };
@@ -149,6 +175,7 @@ export class NuevaSocialComponent implements OnInit {
 
   completarCampos() {
     const derivacion = this.consulta?.derivacion_externa ? true : false;
+    const idsCatSeleccionadas = this.consulta?.social?.categorias?.map((cat) => cat.id);
     this.socialForm.patchValue({
       observaciones: this.consulta?.observaciones,
       derivacion_externa: derivacion,
@@ -156,6 +183,7 @@ export class NuevaSocialComponent implements OnInit {
       articulacion: this.consulta?.social?.articulacion,
       objeto_informe: this.consulta?.social?.objeto_informe,
       seguimiento: this.consulta?.social?.seguimiento,
+      categoriasSeleccionadas: idsCatSeleccionadas,
     });
   }
 
@@ -186,6 +214,7 @@ export class NuevaSocialComponent implements OnInit {
       derivacion_externaConsulta = this.consulta?.derivacion_externa;
     }
 
+    const idsCatSeleccionadas = this.consulta?.social?.categorias?.map((cat) => cat.id);
     if (hayCambios) {
       if (
         // cambios campos comunes
@@ -195,6 +224,7 @@ export class NuevaSocialComponent implements OnInit {
         this.consulta?.curso?.id === +this.socialForm.value.id_curso &&
         this.consulta?.turno === this.socialForm.value.turno &&
         this.consulta?.obra_social === obra_social &&
+        idsCatSeleccionadas === this.socialForm.value.categoriasSeleccionadas &&
         //  cambios por especialidad
         derivacion_externaConsulta === derivacion_externaForm &&
         this.consulta?.social?.articulacion === this.socialForm.value.articulacion &&

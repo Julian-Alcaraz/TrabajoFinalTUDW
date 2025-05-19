@@ -549,8 +549,7 @@ export class ProcesamientoService {
   }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
-    let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });
-    //let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
+    let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
     if (!barrioBd && insertar) {
       barrioBd = this.barrioORM.create({ nombre: barrio }); // puede que le falte la localidad !!!!!!!!!!
       await this.barrioORM.save(barrioBd);

@@ -38,6 +38,7 @@ import { Prevencion } from '../../consulta/entities/prevencion.entity';
 import { Social } from '../../consulta/entities/social.entity';
 import { PrevencionFactory } from '../factories/prevencion.factory';
 import { SocialFactory } from '../factories/social.factory';
+import { Categoria } from '../../categoria/entities/categoria.entity';
 
 dotenv.config();
 const configService = new ConfigService();
@@ -67,7 +68,7 @@ const options: DataSourceOptions & SeederOptions = {
   database: secretService.readSecret('DB_DATABASE'),
   username: secretService.readSecret('DB_USERNAME'),
   password: secretService.readSecret('DB_PASSWORD'),
-  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia, Prevencion, Social, Taller, Especialidad, Marco],
+  entities: [Menu, Rol, Usuario, Localidad, Barrio, Institucion, Curso, Chico, Consulta, Clinica, Oftalmologia, Fonoaudiologia, Odontologia, Prevencion, Social, Taller, Especialidad, Marco, Categoria],
   factories: [RolFactory, UsuarioFactory, MenuFactory, ChicoFactory, ConsultaFactory, FonoaudiologiaFactory, ClinicaFactory, OftalmologiaFactory, OdontologiaFactory, TallerFactory, PrevencionFactory, SocialFactory],
   seeds: secretService.readSecret('NODE_ENV') === 'production' ? [MainSeeder] : [DevSeeder],
 };
