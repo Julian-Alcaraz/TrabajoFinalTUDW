@@ -18,6 +18,7 @@ import { Social } from 'src/consulta/entities/social.entity';
 import { Taller } from 'src/taller/entities/taller.entity';
 import { Marco } from 'src/marco/entities/marco.entity';
 import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -33,6 +34,7 @@ export class ProcesamientoService {
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
+    @InjectRepository(Categoria) private readonly categoriaORM: Repository<Categoria>,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
   // se va a ir
@@ -449,6 +451,7 @@ export class ProcesamientoService {
             // consulta hija  lacreo y pongo clinica.consulta = consulta
             const social = new Social();
             social.consulta = consultaNueva;
+            social.categorias = await this.convertirCategorias(row['Categorias']);
             social.articulacion = row['Articulación con:'];
             social.demanda = row['Demanda de:'];
             social.objeto_informe = row['Objeto de Informe'];
@@ -476,6 +479,34 @@ export class ProcesamientoService {
     }
     // verfico el dni
     return noCargados;
+  }
+
+  async convertirCategorias(categorias): Promise<Categoria[]> {
+    if (!categorias) return [];
+    const arrayCategorias = categorias.split(',').map((cat) =>
+      cat
+        .trim()
+        .toLowerCase()
+        .replace(/(^|\s)([a-záéíóúüñ])/g, (match) => match.toUpperCase()),
+    );
+
+    const array = [];
+    for (const cat of arrayCategorias) {
+      array.push(await this.verificarCategoria(cat, false));
+    }
+    return array;
+  }
+  async verificarCategoria(categoria: string, insertar: boolean = false): Promise<null | Categoria> {
+    //let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    let categoriaBd = await this.categoriaORM.createQueryBuilder('categoria').where('categoria.nombre ILIKE :nombre', { nombre: categoria }).getOne();
+    if (!categoriaBd && insertar) {
+      categoriaBd = this.categoriaORM.create({ nombre: categoria });
+      await this.categoriaORM.save(categoriaBd);
+    }
+    if (!categoriaBd) {
+      return null;
+    }
+    return categoriaBd;
   }
   // el mes viene en enero febrero
   devolverFecha(anio, mes) {

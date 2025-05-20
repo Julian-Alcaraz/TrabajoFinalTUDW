@@ -385,7 +385,7 @@ export class MainSeeder implements Seeder {
       ]);
 
       console.log('Seeding categorias...');
-      const categoriasSocial = await categoriaORM.save([{ nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Publica' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
+      const categoriasSocial = await categoriaORM.save([{ nombre: 'Asistencial' }, { nombre: 'Interinstitucional' }, { nombre: 'Contexto Sociofamiliar' }, { nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Pública' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
     }

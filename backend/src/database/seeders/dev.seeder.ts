@@ -603,7 +603,7 @@ export class DevSeeder implements Seeder {
       }
 
       console.log('Seeding categorias...');
-      const categoriasSocial = await categoriaORM.save([{ nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Publica' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
+      const categoriasSocial = await categoriaORM.save([{ nombre: 'Asistencial' }, { nombre: 'Interinstitucional' }, { nombre: 'Contexto Sociofamiliar' }, { nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Pública' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
 
       // Consultas
       for (let i = 1; i < 1; i++) {
