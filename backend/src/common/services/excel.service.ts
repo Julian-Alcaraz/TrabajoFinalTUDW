@@ -291,7 +291,7 @@ export class ExcelService {
         const worksheetSocial = workbook.addWorksheet('Social');
         // Encabezados
         worksheetSocial.addRow([]);
-        worksheetSocial.addRow(encabezadosComunes.concat('DER. EXTERNA', 'DEMANDA', 'OBJ. INFORME', 'ARTICULACION', 'SEGUIMIENTO', 'OBSERVACIONES'));
+        worksheetSocial.addRow(encabezadosComunes.concat('DER. EXTERNA', 'DEMANDA', 'OBJ. INFORME', 'ARTICULACION', 'SEGUIMIENTO', 'CATEGORIA', 'OBSERVACIONES'));
         // Datos
         this.consultasSocial.forEach((consulta) => {
           worksheetSocial.addRow(Object.values(consulta));
@@ -575,12 +575,14 @@ export class ExcelService {
           this.consultasPrevencion.push(Object.assign({}, generales, especificos));
           break;
         case 'Social':
+          const categorias = datosEspecificos.social.categorias.map((cat) => cat.nombre).join(', ');
           especificos = {
             derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             demanda: datosEspecificos.social.demanda,
             objetoInforme: datosEspecificos.social.objeto_informe,
             articulacion: existeItem(datosEspecificos.social.articulacion) ? '-' : datosEspecificos.social.articulacion,
             seguimiento: existeItem(datosEspecificos.social.seguimiento) ? '-' : datosEspecificos.social.seguimiento,
+            categorias: categorias,
             observaciones: observaciones || '-',
           };
           this.consultasSocial.push(Object.assign({}, generales, especificos));

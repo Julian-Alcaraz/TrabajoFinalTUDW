@@ -285,7 +285,16 @@ export class ConsultaService {
   }
 
   async procesarSocial(consulta: any) {
-    return consulta.especificas; // devuevle el filtro
+    const filtros: any = {};
+    if (consulta.especificas?.categorias?.length > 0) {
+      filtros.categorias = {
+        id: In(consulta.especificas.categorias),
+      };
+    }
+    consulta.especificas = { ...consulta.especificas };
+    delete consulta.especificas.categorias;
+
+    return filtros;
   }
 
   /**

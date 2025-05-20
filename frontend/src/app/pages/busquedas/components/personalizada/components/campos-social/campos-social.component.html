@@ -7,4 +7,11 @@
       <label for="derivaciones">Derivacion externa</label>
     </p-iftalabel>
   </div>
+  <!-- Categorias -->
+  <div class="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2">
+    <p-iftalabel class="w-full">
+      <p-multiselect [loading]="loadingCategorias" [options]="categorias" formControlName="categoriasSeleccionadas" optionLabel="nombre" [filter]="false" optionValue="id" inputId="ms_categorias" styleClass="w-full h-16" />
+      <label for="ms_categorias">Categoria</label>
+    </p-iftalabel>
+  </div>
 </div>

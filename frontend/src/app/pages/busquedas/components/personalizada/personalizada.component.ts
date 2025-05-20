@@ -326,6 +326,10 @@ function prepararData(data: any): any {
     fechaFin.setHours(23, 59, 59, 999);
     data.generales.rangoFechas[1] = fechaFin;
   }
+  if (data.especificas?.categoriasSeleccionadas) {
+    data.especificas.categorias = data.especificas.categoriasSeleccionadas;
+    delete data.especificas.categoriasSeleccionadas;
+  }
   return data;
 }
 

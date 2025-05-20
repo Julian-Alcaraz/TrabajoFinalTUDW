@@ -117,7 +117,7 @@ export class ExportService {
     const filtros = await this.consultaService.prepararDataConsultaPersonalizada(data);
     const consultasSeleccionadas = { ...data.consultasSeleccionadas };
     const searchConsultas: any = {
-      relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio', 'clinica', 'odontologia', 'oftalmologia', 'fonoaudiologia', 'prevencion', 'social'],
+      relations: ['chico', 'institucion', 'curso', 'usuario', 'chico.barrio', 'clinica', 'odontologia', 'oftalmologia', 'fonoaudiologia', 'prevencion', 'social', 'social.categorias'],
       order: { created_at: 'DESC' },
       where: filtros.generales,
     };
