@@ -7,11 +7,14 @@ import { GridChangerComponent } from '../components/grid-changer/grid-changer.co
 import { CommonModule } from '@angular/common';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
+import { CategoriaService } from '@app/services/categoria.service';
+import { Categoria } from '@app/models/categoria.model';
 
 @Component({
   selector: 'app-social',
   standalone: true,
-  imports: [YearGradoFormComponent, GridChangerComponent, CommonModule],
+  imports: [YearGradoFormComponent, GridChangerComponent, CommonModule, ExpandCompressButtonComponent, BarGraphComponent],
   templateUrl: './social.component.html',
 })
 export class SocialComponent implements OnInit {
@@ -27,13 +30,12 @@ export class SocialComponent implements OnInit {
   currentYear: number;
   lastFourYears: number[];
 
-  tituloDemanda = 'Demanda';
-  tituloAnteojos = 'Anteojos entregados';
-  porcentajeDemanda: any = [];
-  porcentajeAnteojos: any = [];
+  categorias: Categoria[] = [];
+  dataTipoConsultaPorCategoria: any = [];
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
+    private _categoriaService: CategoriaService,
   ) {
     this.currentYear = new Date().getFullYear();
     this.lastFourYears = [this.currentYear - 3, this.currentYear - 2, this.currentYear - 1, this.currentYear];
@@ -41,6 +43,7 @@ export class SocialComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerGraficos();
+    this.obtenerCategorias();
   }
 
   actualizarGraficos() {
@@ -58,7 +61,7 @@ export class SocialComponent implements OnInit {
   async obtenerGraficos() {
     const promesas = [
       // agrego todos los graficos que correspondan
-      this.obtenerGraficosDemanda(), //grafico de porcentajes
+      this.obtenerGraficoConsultasxCategoria(),
     ];
     Promise.all(promesas).then(() => (this.loading = false));
     try {
@@ -70,18 +73,19 @@ export class SocialComponent implements OnInit {
     }
   }
 
-  obtenerGraficosDemanda() {
+  obtenerGraficoConsultasxCategoria() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeDemandaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.countConsultasByCategoria(this.currentYear, this.id_curso, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
-            this.porcentajeDemanda = [];
+            this.dataTipoConsultaPorCategoria = [];
             for (const year of this.lastFourYears) {
-              this.porcentajeDemanda.push({
+              this.dataTipoConsultaPorCategoria.push({
                 label: '' + year,
                 data: response.data[year],
               });
             }
+            console.log(this.dataTipoConsultaPorCategoria);
           }
           resolve(true);
         },
@@ -89,6 +93,23 @@ export class SocialComponent implements OnInit {
           reject(err);
         },
       });
+    });
+  }
+
+  obtenerCategorias() {
+    this.loading = true;
+    this._categoriaService.obtenerCategorias().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.categorias = response.data;
+          this.categorias = response.data.map((cat: Categoria) => cat.nombre)
+        }
+        this.loading = false;
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+        this.loading = false;
+      },
     });
   }
 

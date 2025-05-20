@@ -12,7 +12,7 @@ import { SocialComponent } from './social/social.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [GeneralComponent, TabsComponent, ClinicaComponent, FonoaudiologiaComponent, OdontologiaComponent, OftalmologiaComponent, TalleresComponent, PrevencionComponent, SocialComponent],
+  imports: [GeneralComponent, TabsComponent, ClinicaComponent, FonoaudiologiaComponent, OdontologiaComponent, OftalmologiaComponent, PrevencionComponent, SocialComponent, TalleresComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {

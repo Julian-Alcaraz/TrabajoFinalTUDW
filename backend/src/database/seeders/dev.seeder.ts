@@ -606,10 +606,10 @@ export class DevSeeder implements Seeder {
       const categoriasSocial = await categoriaORM.save([{ nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Publica' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
 
       // Consultas
-      for (let i = 0; i < 1; i++) {
+      for (let i = 1; i < 1; i++) {
         console.log('Seeding consultas...');
         const consultasSimples = await Promise.all(
-          Array(2000)
+          Array(1)
             .fill('')
             .map(async () => {
               const chicoSeleccionado = faker.helpers.arrayElement(chicos);
@@ -665,7 +665,7 @@ export class DevSeeder implements Seeder {
             case 'Social':
               const social = await SocialFactory.make({
                 consulta: consulta,
-                categorias: [categoriasSocial[1]],
+                categorias: faker.helpers.arrayElements(categoriasSocial),
                 //           roles: [roles[0]], // Admin
               });
               await socialOrm.save(social);

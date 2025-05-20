@@ -4,10 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Consulta } from './entities/consulta.entity';
 import * as Constantes from '../common/const/const';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 
 @Injectable()
 export class GraficosService {
-  constructor(@InjectRepository(Consulta) private readonly consultaORM: Repository<Consulta>) {}
+  constructor(
+    @InjectRepository(Consulta) private readonly consultaORM: Repository<Consulta>,
+    @InjectRepository(Categoria) private readonly categoriaORM: Repository<Categoria>,
+  ) {}
 
   // GRAFICOS GENERALES
   async countByYear(year: number) {
@@ -735,6 +739,33 @@ export class GraficosService {
     return respuesta;
   }
   // TRABAJO SOCIAL
+  async countConsultasByCategoria(year: number, id: number, porcentaje: number) {
+    const categorias = await this.categoriaORM.find();
+    const respuesta = {};
+
+    for (let i = 0; i < 4; i++) {
+      const counts = await Promise.all(
+        categorias.map((categoria) => {
+          const qb = this.consultaORM.createQueryBuilder('consulta').innerJoin('consulta.social', 'social').innerJoin('social.categorias', 'categoria').where('consulta.deshabilitado = false').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).andWhere('categoria.id = :idCategoria', { idCategoria: categoria.id });
+          if (id) {
+            qb.andWhere('consulta.id_curso = :id', { id });
+          }
+          return qb.getCount();
+        }),
+      );
+
+      if (porcentaje === 1) {
+        const porcentajes = calcularPorcentaje(counts);
+        respuesta[year] = porcentajes;
+      } else {
+        respuesta[year] = counts;
+      }
+
+      year--;
+    }
+
+    return respuesta;
+  }
 }
 
 function calcularPorcentaje(data: number[]) {
