@@ -58,7 +58,7 @@ export class ProcesamientoService {
         consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCION']));
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Clinica';
         consulta.usuario = usuario;
@@ -192,10 +192,8 @@ export class ProcesamientoService {
       row['SEGTO.'] !== null
     ) {
       esClinica = false;
-      console.log('Es Nutricion');
     } else {
       esClinica = true;
-      console.log('Es Clinica');
     }
     return esClinica;
   }
@@ -775,7 +773,8 @@ function convertirInstitucion(inst: string): string {
     'JARDIN 118': 'Jardin N° 118',
     'JARDIN 49': 'Jardín N° 49',
   };
-
+  console.log(inst);
+  console.log(conversiones[inst], ' O ESTO: ', inst);
   return conversiones[inst] || inst;
 }
 
