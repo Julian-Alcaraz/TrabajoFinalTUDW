@@ -111,7 +111,7 @@ export class ProcesamientoService {
           clinica.tas = pasarAnumero(row.TAS);
           clinica.tad = pasarAnumero(row.TAD);
           clinica.pcta = pasarAnumero(row.PCTA);
-          clinica.examen_visual = row['EX.VISUAL'];
+          clinica.examen_visual = row['EX.VISUAL'] ?? 'Desconocido';
           clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
           clinica.lenguaje = row.LENGUAJE;
           // clinica.segto = convertirSiNo(row['SEGTO.']);
@@ -324,7 +324,7 @@ export class ProcesamientoService {
         consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['ESTABLECIMIENTO ESCOLAR']);
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Oftalmologia';
         consulta.observaciones = row['OBSERVACIONES'];
@@ -381,7 +381,7 @@ export class ProcesamientoService {
             consulta.created_at = new Date(row['FECHA']);
             consulta.curso = await this.verificarCurso(convertirCurso(row['GRADO']));
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -440,7 +440,7 @@ export class ProcesamientoService {
             consulta.created_at = new Date(anio, 1, 2);
             consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -555,7 +555,7 @@ export class ProcesamientoService {
         taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
         taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
         taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
-        taller.institucion = await this.verificarInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']);
+        taller.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
         taller.created_at = new Date();
         taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER'] || row['TALLER/TEMAS desplegable']) ?? 'No definido';
         taller.observaciones = row['OBSERVACIONES'];
