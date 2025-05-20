@@ -66,6 +66,7 @@ export class TalleresComponent implements OnInit {
   }
 
   actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -77,7 +78,7 @@ export class TalleresComponent implements OnInit {
   setearGrid(event: any) {
     this.grid = event;
   }
-  
+
   async obtenerGraficos() {
     const promesas = [
       //

@@ -84,6 +84,7 @@ export class PrevencionComponent implements OnInit {
   }
 
   actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -91,7 +92,7 @@ export class PrevencionComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
-  
+
   setearGrid(event: any) {
     this.grid = event;
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-grid-changer',
@@ -11,23 +11,32 @@ export class GridChangerComponent implements OnInit {
   grid = 3;
   @Output() gridChange: EventEmitter<number> = new EventEmitter<number>();
   maxCol = 3;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.verificaGrid(event.target.innerWidth);
+  }
+
   cambiarGrid(number: number) {
     this.grid = number;
     this.gridChange.emit(number);
   }
 
-  verificaGrid() {
-    if (window.innerWidth < 640) {
+  verificaGrid(width: number = window.innerWidth) {
+    if (width < 640) {
       this.maxCol = 1;
       this.cambiarGrid(1);
-    } else if (window.innerWidth < 768) {
-      this.cambiarGrid(2);
+    } else if (width < 1024) {
       this.maxCol = 2;
+      this.cambiarGrid(2);
+    } else {
+      this.maxCol = 3;
+      this.cambiarGrid(3);
     }
   }
 
   ngOnInit(): void {
-    this.verificaGrid();
+    this.verificaGrid(); // Inicializa el grid según el tamaño de pantalla actual
   }
 
   deshabilitarSegunTamanio(tamanio: number) {

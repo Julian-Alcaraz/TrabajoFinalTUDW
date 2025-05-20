@@ -59,6 +59,7 @@ export class ClinicaComponent implements OnInit {
     this.obtenerGraficos();
   }
   actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -70,7 +71,7 @@ export class ClinicaComponent implements OnInit {
   setearGrid(event: any) {
     this.grid = event;
   }
-  
+
   async obtenerGraficos() {
     const promesas = [
       this.obtenerGraficoTensionArterial(),

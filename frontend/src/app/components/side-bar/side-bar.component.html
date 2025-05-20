@@ -25,6 +25,12 @@
           <app-sublevel-menu [data]="data" [collapsed]="collapsed" [multiple]="multiple" [expanded]="data.expanded" (llamarPadre)="eventoHijo()" />
         </div>
       </li>
+      <li class="sidenav-nav-item" style="margin: 0px !important; padding-bottom: 5px">
+        <a class="sidenav-nav-link" (click)="download()" tabindex (keydown)="download()">
+          <i class="sidenav-link-icon fa-solid fa-question"></i>
+          <span class="sidenav-link-text" @fadeinOut *ngIf="collapsed">Manual usuarios</span>
+        </a>
+      </li>
     </ul>
   </div>
   <div class="relative flex justify-center">

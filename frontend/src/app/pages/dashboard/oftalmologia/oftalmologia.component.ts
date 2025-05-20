@@ -47,6 +47,7 @@ export class OftalmologiaComponent implements OnInit {
   }
 
   actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });

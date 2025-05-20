@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile, UseGuards, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, UploadedFile, UseGuards, Req, Res, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StreamableFile } from '@nestjs/common';
 import type { Response } from 'express';
@@ -9,6 +9,7 @@ import { ArchivoService } from 'src/common/services/archivo.service';
 import { ProcesamientoService } from './procesamiento.service';
 import { ExportService } from './export.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { createReadStream } from 'fs';
 
 @Controller('procesamiento')
 @UseGuards(JwtAuthGuard)
@@ -69,7 +70,7 @@ export class ProcesamientoController {
     const noCargados = await this.procesamientoService.procesarSocial(data, req.user);
     return { succes: true, data: noCargados, message: 'soc' };
   }
-  
+
   @Post('talleres')
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarTalleres(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
@@ -123,5 +124,17 @@ export class ProcesamientoController {
       });
       return new StreamableFile(stream);
     }
+  }
+  @Get('downloadManual')
+  async downloadManual(@Res() res): Promise<void> {
+    const filePath = path.join(__dirname, '..', '..', 'public', 'files', 'manual.pdf'); // Ruta del archivo estático
+    const stream = createReadStream(filePath);
+    console.log(stream);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="Manual_Usuarios_SolPatagonia.pdf"`,
+      'Access-Control-Expose-Headers': 'Content-Disposition',
+    });
+    stream.pipe(res);
   }
 }

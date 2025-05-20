@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { BarGraphComponent } from '../components/graphs/bar-graph.component';
 import { ConsultaService } from '@services/consulta.service';
 import { ChicoService } from '@services/chico.service';
@@ -63,14 +63,30 @@ export class GeneralComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerInstituciones();
-    // this.obtenerGraficos(); //esta dos veces para que se vea bien, nose por que es esto
+    this.onResize({ target: window });
   }
 
   ngAfterViewInit() {
     this.obtenerGraficos();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    const width = event.target.innerWidth;
+
+    if (width < 640) {
+      this.grid = 1; // `sm`
+    } else if (width < 1024) {
+      this.grid = 2; // `md`
+    } else {
+      this.grid = 3; // `lg`
+    }
+
+    this.actualizarGraficos();
+  }
+
   actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });

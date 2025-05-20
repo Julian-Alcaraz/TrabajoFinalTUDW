@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-expand-compress-button',
@@ -6,13 +6,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [],
   templateUrl: './expand-compress-button.component.html',
 })
-export class ExpandCompressButtonComponent {
+export class ExpandCompressButtonComponent implements OnChanges {
   @Input() grid = 3;
   @Output() actualizarGraficos: EventEmitter<any> = new EventEmitter<any>();
-
+  divElement!: HTMLElement;
   toggleGraph(event: Event) {
     const divElement = (event.currentTarget as HTMLElement).closest('div');
     if (!divElement) return;
+    this.divElement = divElement;
     divElement.classList.toggle('col-span-' + this.grid);
     // maneja el icono del boton
     const iconElement = divElement.querySelector('i');
@@ -23,7 +24,18 @@ export class ExpandCompressButtonComponent {
         iconElement.className = 'fa-solid fa-up-right-and-down-left-from-center';
       }
     }
-
     this.actualizarGraficos.emit('');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['grid']) {
+      this.resetGraphColumns();
+    }
+  }
+  
+  resetGraphColumns() {
+    if (this.divElement) {
+      this.divElement.classList.remove('col-span-1', 'col-span-2', 'col-span-3');
+    }
   }
 }
