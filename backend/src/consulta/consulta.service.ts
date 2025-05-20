@@ -18,6 +18,7 @@ import { Curso } from 'src/curso/entities/curso.entity';
 import { Chico } from 'src/chico/entities/chico.entity';
 import { Prevencion } from './entities/prevencion.entity';
 import { Social } from './entities/social.entity';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 
 @Injectable()
 export class ConsultaService {
@@ -33,6 +34,7 @@ export class ConsultaService {
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
     @InjectRepository(Prevencion) private readonly prevencionOrm: Repository<Prevencion>,
     @InjectRepository(Social) private readonly socialOrm: Repository<Social>,
+    @InjectRepository(Categoria) private readonly categoriaORM: Repository<Categoria>,
   ) {}
 
   async create(createConsultaDto: CreateConsultaDto, usuario: Usuario) {
@@ -86,7 +88,14 @@ export class ConsultaService {
       }
 
       if (social) {
-        nuevaConsultaHija = manager.create(Social, { consulta: consultaGuardada, ...social });
+        // FALTA VERIFICAR CATEGORIAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        const categorias = await this.categoriaORM.findBy({ id: In(social.categorias_ids), deshabilitado: false });
+        const categoriasEncontradasIds = categorias.map((cat) => cat.id);
+        const categoriasFaltantes = social.categorias_ids.filter((id) => !categoriasEncontradasIds.includes(id));
+        if (categoriasFaltantes.length > 0) throw new NotFoundException(`Las categorias con los siguientes ids no fueron encontrados: ${categoriasFaltantes.join(', ')}`);
+
+        nuevaConsultaHija = manager.create(Social, { consulta: consultaGuardada, categorias: categorias, ...social });
         consultaHijaGuardada = await manager.save(nuevaConsultaHija);
       }
       // Si no se creó ninguna consulta hija, lanzamos un error y se hace rollback
@@ -121,7 +130,7 @@ export class ConsultaService {
         consultaHija = await this.prevencionOrm.findOne({ where: { id_consulta: id } });
         break;
       case 'Social':
-        consultaHija = await this.socialOrm.findOne({ where: { id_consulta: id } });
+        consultaHija = await this.socialOrm.findOne({ where: { id_consulta: id }, relations: ['categorias'] });
         break;
       default:
         throw new NotFoundException(`Consulta sin tipo especificado.`);
@@ -276,7 +285,16 @@ export class ConsultaService {
   }
 
   async procesarSocial(consulta: any) {
-    return consulta.especificas; // devuevle el filtro
+    const filtros: any = {};
+    if (consulta.especificas?.categorias?.length > 0) {
+      filtros.categorias = {
+        id: In(consulta.especificas.categorias),
+      };
+    }
+    consulta.especificas = { ...consulta.especificas };
+    delete consulta.especificas.categorias;
+
+    return filtros;
   }
 
   /**

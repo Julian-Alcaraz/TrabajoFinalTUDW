@@ -14,11 +14,12 @@ import { Marco } from '@app/models/marco.model';
 import { LoadingComponent } from '@components/loading/loading.component';
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 
 @Component({
   selector: 'app-talleres',
   standalone: true,
-  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent, GridChangerComponent],
+  imports: [CommonModule, YearGradoFormComponent, BarGraphComponent, LoadingComponent, PieGraphComponent, GridChangerComponent, ExpandCompressButtonComponent],
   templateUrl: './talleres.component.html',
 })
 export class TalleresComponent implements OnInit {
@@ -63,8 +64,9 @@ export class TalleresComponent implements OnInit {
     this.obtenerEspecialidades();
     this.obtenerMarcos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -72,6 +74,11 @@ export class TalleresComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+  }
+
   async obtenerGraficos() {
     const promesas = [
       //

@@ -8,11 +8,12 @@ import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
 import * as con from '../../../common/const/const';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 
 @Component({
   selector: 'app-fonoaudiologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule, ExpandCompressButtonComponent],
   templateUrl: './fonoaudiologia.component.html',
 })
 export class FonoaudiologiaComponent implements OnInit {
@@ -48,14 +49,19 @@ export class FonoaudiologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
     this.pieGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
+  }
+
+  setearGrid(event: any) {
+    this.grid = event;
   }
   async obtenerGraficos() {
     const promesas = [this.obtenerGraficosPorcentajesCausas(), this.obtenerGraficosPorcentajesDiagnosticoPresuntivo(), this.obtenerGraficosCausas(), this.obtenerGraficosDiagnosticoPresuntivo()];

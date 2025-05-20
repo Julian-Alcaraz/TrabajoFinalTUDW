@@ -11,6 +11,7 @@ import { Institucion } from '../../institucion/entities/institucion.entity';
 import { Curso } from '../../curso/entities/curso.entity';
 import { Especialidad } from '../../especialidad/entities/especialidad.entity';
 import { Marco } from '../../marco/entities/marco.entity';
+import { Categoria } from '../../categoria/entities/categoria.entity';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
@@ -25,6 +26,7 @@ export class MainSeeder implements Seeder {
       const institucionORM = dataSource.getRepository(Institucion);
       const especialidadORM = dataSource.getRepository(Especialidad);
       const marcoORM = dataSource.getRepository(Marco);
+      const categoriaORM = dataSource.getRepository(Categoria);
 
       // Roles
       console.log('Seeding roles...');
@@ -381,6 +383,9 @@ export class MainSeeder implements Seeder {
         { nombre: 'Día de la Lucha contra las Adicciones', especialidad: especialidades[4] },
         { nombre: 'Día Mundial sin Alcohol', especialidad: especialidades[4] },
       ]);
+
+      console.log('Seeding categorias...');
+      const categoriasSocial = await categoriaORM.save([{ nombre: 'Asistencial' }, { nombre: 'Interinstitucional' }, { nombre: 'Contexto Sociofamiliar' }, { nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Pública' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
     } catch (error) {
       console.error('Error durante la ejecución de los seeders:', error);
     }

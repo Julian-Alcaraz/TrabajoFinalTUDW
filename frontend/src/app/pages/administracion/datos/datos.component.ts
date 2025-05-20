@@ -24,7 +24,7 @@ export class DatosComponent {
   prevencionFileControl: FormControl = new FormControl('', [Validators.required]);
   socialFileControl: FormControl = new FormControl('', [Validators.required]);
   talleresFileControl: FormControl = new FormControl('', [Validators.required]);
-  loading = false;
+  loading!: any;
   ultimoArchivo: File | null = null;
   controls: Record<string, FormControl> = {
     clinica: this.clinicaFileControl,
@@ -79,13 +79,18 @@ export class DatosComponent {
         }
       });
       this.loading = false;
+      this.eliminarValorLoading();
     },
     error: (err: any) => {
       mensajeErrorServicio(this.snackBar, err);
       this.loading = false;
     },
   };
-
+  eliminarValorLoading() {
+    setTimeout(() => {
+      this.loading = undefined;
+    }, 100);
+  }
   exportar(data: any) {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
@@ -94,6 +99,8 @@ export class DatosComponent {
   }
 
   cargarArchivo(event: any) {
+    // this.loading = true;
+
     this.fileName = event + 'Errores';
     switch (event) {
       case 'Clinica':

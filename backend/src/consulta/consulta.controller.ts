@@ -579,4 +579,16 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
+
+  @Get('countConsultasByCategoria/:year/curso/:id/:porcentaje')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
+  async countConsultasByCategoria(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+    const resultado = await this.graficosService.countConsultasByCategoria(year, id, porcentaje);
+    return {
+      success: true,
+      data: resultado,
+      message: 'Datos obtenidos con exito.',
+    };
+  }
 }

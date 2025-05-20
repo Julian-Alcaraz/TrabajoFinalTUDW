@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 
 export class CreateSocialDto {
   @ApiProperty({ description: 'Demanda del niño que asiste' })
@@ -18,4 +18,12 @@ export class CreateSocialDto {
   @ApiProperty({ description: 'Seguimiento realizado para el caso' })
   @IsString({ message: 'El seguimiento debe ser un texto' })
   readonly seguimiento: string;
+
+  @ApiProperty({ description: 'IDS de los roles relacionados con el menu' })
+  @IsArray({ message: 'Los roles_ids deben ser un arreglo' })
+  @ArrayNotEmpty({ message: 'El arreglo no puede estar vacio' })
+  @IsNumber({}, { each: true, message: 'Cada elemento del arreglo debe ser un numero' })
+  @IsPositive({ each: true, message: 'Cada elemento del arreglo debe ser un numero positivo' })
+  @IsInt({ each: true, message: 'Cada elemento del arreglo debe ser un numero entero' })
+  readonly categorias_ids: number[];
 }

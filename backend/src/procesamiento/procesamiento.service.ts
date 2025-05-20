@@ -18,6 +18,7 @@ import { Social } from 'src/consulta/entities/social.entity';
 import { Taller } from 'src/taller/entities/taller.entity';
 import { Marco } from 'src/marco/entities/marco.entity';
 import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -33,6 +34,7 @@ export class ProcesamientoService {
     @InjectRepository(Curso) private readonly cursoORM: Repository<Curso>,
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
+    @InjectRepository(Categoria) private readonly categoriaORM: Repository<Categoria>,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
   // se va a ir
@@ -56,7 +58,7 @@ export class ProcesamientoService {
         consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCION']));
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Clinica';
         consulta.usuario = usuario;
@@ -109,7 +111,7 @@ export class ProcesamientoService {
           clinica.tas = pasarAnumero(row.TAS);
           clinica.tad = pasarAnumero(row.TAD);
           clinica.pcta = pasarAnumero(row.PCTA);
-          clinica.examen_visual = row['EX.VISUAL'];
+          clinica.examen_visual = row['EX.VISUAL'] ?? 'Desconocido';
           clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
           clinica.lenguaje = row.LENGUAJE;
           // clinica.segto = convertirSiNo(row['SEGTO.']);
@@ -190,10 +192,8 @@ export class ProcesamientoService {
       row['SEGTO.'] !== null
     ) {
       esClinica = false;
-      console.log('Es Nutricion');
     } else {
       esClinica = true;
-      console.log('Es Clinica');
     }
     return esClinica;
   }
@@ -322,7 +322,7 @@ export class ProcesamientoService {
         consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(row['ESTABLECIMIENTO ESCOLAR']);
+        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Oftalmologia';
         consulta.observaciones = row['OBSERVACIONES'];
@@ -379,7 +379,7 @@ export class ProcesamientoService {
             consulta.created_at = new Date(row['FECHA']);
             consulta.curso = await this.verificarCurso(convertirCurso(row['GRADO']));
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -438,7 +438,7 @@ export class ProcesamientoService {
             consulta.created_at = new Date(anio, 1, 2);
             consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(row['INSTITUCIÓN']);
+            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -449,6 +449,7 @@ export class ProcesamientoService {
             // consulta hija  lacreo y pongo clinica.consulta = consulta
             const social = new Social();
             social.consulta = consultaNueva;
+            social.categorias = await this.convertirCategorias(row['Categorias']);
             social.articulacion = row['Articulación con:'];
             social.demanda = row['Demanda de:'];
             social.objeto_informe = row['Objeto de Informe'];
@@ -476,6 +477,34 @@ export class ProcesamientoService {
     }
     // verfico el dni
     return noCargados;
+  }
+
+  async convertirCategorias(categorias): Promise<Categoria[]> {
+    if (!categorias) return [];
+    const arrayCategorias = categorias.split(',').map((cat) =>
+      cat
+        .trim()
+        .toLowerCase()
+        .replace(/(^|\s)([a-záéíóúüñ])/g, (match) => match.toUpperCase()),
+    );
+
+    const array = [];
+    for (const cat of arrayCategorias) {
+      array.push(await this.verificarCategoria(cat, false));
+    }
+    return array;
+  }
+  async verificarCategoria(categoria: string, insertar: boolean = false): Promise<null | Categoria> {
+    //let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
+    let categoriaBd = await this.categoriaORM.createQueryBuilder('categoria').where('categoria.nombre ILIKE :nombre', { nombre: categoria }).getOne();
+    if (!categoriaBd && insertar) {
+      categoriaBd = this.categoriaORM.create({ nombre: categoria });
+      await this.categoriaORM.save(categoriaBd);
+    }
+    if (!categoriaBd) {
+      return null;
+    }
+    return categoriaBd;
   }
   // el mes viene en enero febrero
   devolverFecha(anio, mes) {
@@ -524,7 +553,7 @@ export class ProcesamientoService {
         taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
         taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
         taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
-        taller.institucion = await this.verificarInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']);
+        taller.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
         taller.created_at = new Date();
         taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER'] || row['TALLER/TEMAS desplegable']) ?? 'No definido';
         taller.observaciones = row['OBSERVACIONES'];
@@ -549,8 +578,7 @@ export class ProcesamientoService {
   }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
-    let barrioBd: any = this.barrioORM.findOneBy({ nombre: barrio });
-    //let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
+    let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
     if (!barrioBd && insertar) {
       barrioBd = this.barrioORM.create({ nombre: barrio }); // puede que le falte la localidad !!!!!!!!!!
       await this.barrioORM.save(barrioBd);
@@ -745,7 +773,8 @@ function convertirInstitucion(inst: string): string {
     'JARDIN 118': 'Jardin N° 118',
     'JARDIN 49': 'Jardín N° 49',
   };
-
+  console.log(inst);
+  console.log(conversiones[inst], ' O ESTO: ', inst);
   return conversiones[inst] || inst;
 }
 

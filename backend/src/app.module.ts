@@ -18,12 +18,19 @@ import { ProcesamientoModule } from './procesamiento/procesamiento.module';
 import { TallerModule } from './taller/taller.module';
 import { MarcoModule } from './marco/marco.module';
 import { EspecialidadModule } from './especialidad/especialidad.module';
+import { CategoriaModule } from './categoria/categoria.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'frontend', 'browser'), // Ruta a la carpeta con el build de Angular
-    }),
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, '..', 'frontend', 'browser'), // Para el build de Angular
+      },
+      {
+        rootPath: join(__dirname, '..', 'public'), // Para los archivos estáticos
+        serveRoot: '/files', // Opcional: Define el prefijo de la URL
+      },
+    ),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './.env' }),
     DatabaseModule,
     RolModule,
@@ -40,6 +47,7 @@ import { EspecialidadModule } from './especialidad/especialidad.module';
     TallerModule,
     EspecialidadModule,
     MarcoModule,
+    CategoriaModule,
   ],
   controllers: [],
   providers: [],

@@ -21,6 +21,7 @@ import { Marco } from '../../marco/entities/marco.entity';
 import { Taller } from '../../taller/entities/taller.entity';
 import { Social } from '../../consulta/entities/social.entity';
 import { Prevencion } from '../../consulta/entities/prevencion.entity';
+import { Categoria } from '../../categoria/entities/categoria.entity';
 
 export class DevSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -44,6 +45,7 @@ export class DevSeeder implements Seeder {
       const tallerORM = dataSource.getRepository(Taller);
       const socialOrm = dataSource.getRepository(Social);
       const prevencionOrm = dataSource.getRepository(Prevencion);
+      const categoriaORM = dataSource.getRepository(Categoria);
 
       // Factories
       const usuarioFactory = factoryManager.get(Usuario);
@@ -600,8 +602,11 @@ export class DevSeeder implements Seeder {
         }
       }
 
+      console.log('Seeding categorias...');
+      const categoriasSocial = await categoriaORM.save([{ nombre: 'Asistencial' }, { nombre: 'Interinstitucional' }, { nombre: 'Contexto Sociofamiliar' }, { nombre: 'Inasistencias' }, { nombre: 'Obra Social' }, { nombre: 'Salud Pública' }, { nombre: 'Violencia' }, { nombre: 'Otros' }]);
+
       // Consultas
-      for (let i = 0; i < 1; i++) {
+      for (let i = 1; i < 1; i++) {
         console.log('Seeding consultas...');
         const consultasSimples = await Promise.all(
           Array(1)
@@ -660,6 +665,8 @@ export class DevSeeder implements Seeder {
             case 'Social':
               const social = await SocialFactory.make({
                 consulta: consulta,
+                categorias: faker.helpers.arrayElements(categoriasSocial),
+                //           roles: [roles[0]], // Admin
               });
               await socialOrm.save(social);
               break;

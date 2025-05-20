@@ -247,7 +247,7 @@ export class ExcelService {
         const worksheetOdontologia = workbook.addWorksheet('Odontologia');
         // Encabezados
         worksheetOdontologia.addRow([]);
-        worksheetOdontologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'ULTERIOR', 'TOTAL PERMANENTES', 'TOTAL TEMPORARIOS', 'SELLADOR', 'TOPIFICACIÓN', 'ENS. CEPILLADO', 'DIENTE RECUPERABLE', 'DIENTES NO RECUPERABLE', 'CEPILLO', 'CLASIFICACIÓN', 'HÁBITOS', 'OBSERVACIONES'));
+        worksheetOdontologia.addRow(encabezadosComunes.concat('DER. EXTERNA', 'PRIMERA VEZ', 'ULTERIOR', 'TOTAL PERMANENTES', 'TOTAL TEMPORARIOS', 'SELLADOR', 'TOPIFICACIÓN', 'CANT. CEPILLADO', 'DIENTE RECUPERABLE', 'DIENTES NO RECUPERABLE', 'CEPILLO', 'CLASIFICACIÓN', 'HÁBITOS', 'OBSERVACIONES'));
         // Datos
         this.consultasOdontologia.forEach((consulta) => {
           worksheetOdontologia.addRow(Object.values(consulta));
@@ -291,7 +291,7 @@ export class ExcelService {
         const worksheetSocial = workbook.addWorksheet('Social');
         // Encabezados
         worksheetSocial.addRow([]);
-        worksheetSocial.addRow(encabezadosComunes.concat('DER. EXTERNA', 'DEMANDA', 'OBJ. INFORME', 'ARTICULACION', 'SEGUIMIENTO', 'OBSERVACIONES'));
+        worksheetSocial.addRow(encabezadosComunes.concat('DER. EXTERNA', 'DEMANDA', 'OBJ. INFORME', 'ARTICULACION', 'SEGUIMIENTO', 'CATEGORIA', 'OBSERVACIONES'));
         // Datos
         this.consultasSocial.forEach((consulta) => {
           worksheetSocial.addRow(Object.values(consulta));
@@ -527,7 +527,7 @@ export class ExcelService {
             dientesTemporales: datosEspecificos.odontologia.dientes_temporales,
             sellador: datosEspecificos.odontologia.sellador,
             topificacion: datosEspecificos.odontologia.topificacion ? 'Si' : 'No',
-            cepillado: datosEspecificos.odontologia.cepillado ? 'Si' : 'No',
+            cepillado: datosEspecificos.odontologia.cant_cepillado,
             dientesRecuperables: datosEspecificos.odontologia.dientes_recuperables,
             dientesIrecuperables: datosEspecificos.odontologia.dientes_irecuperables,
             cepillo: datosEspecificos.odontologia.cepillo ? 'Si' : 'No',
@@ -575,12 +575,14 @@ export class ExcelService {
           this.consultasPrevencion.push(Object.assign({}, generales, especificos));
           break;
         case 'Social':
+          const categorias = datosEspecificos.social.categorias.map((cat) => cat.nombre).join(', ');
           especificos = {
             derivacionExterna: datosEspecificos.derivacion_externa ? 'Si' : 'No',
             demanda: datosEspecificos.social.demanda,
             objetoInforme: datosEspecificos.social.objeto_informe,
             articulacion: existeItem(datosEspecificos.social.articulacion) ? '-' : datosEspecificos.social.articulacion,
             seguimiento: existeItem(datosEspecificos.social.seguimiento) ? '-' : datosEspecificos.social.seguimiento,
+            categorias: categorias,
             observaciones: observaciones || '-',
           };
           this.consultasSocial.push(Object.assign({}, generales, especificos));

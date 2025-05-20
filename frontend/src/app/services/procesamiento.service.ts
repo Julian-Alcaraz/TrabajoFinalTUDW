@@ -38,7 +38,7 @@ export class ProcesamientoService {
   procesarSocial(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/social', formData);
   }
-  
+
   procesarTalleres(formData: FormData): Observable<any> {
     return this._http.post(this.url + 'procesamiento/talleres', formData);
   }
@@ -60,6 +60,12 @@ export class ProcesamientoService {
 
   exportarTalleres(filtros: any): Observable<HttpResponse<any>> {
     return this._http.post(this.url + 'procesamiento/export/talleres', filtros, {
+      observe: 'response',
+      responseType: 'blob',
+    });
+  }
+  downloadManual() {
+    return this._http.get(this.url + 'procesamiento/downloadManual', {
       observe: 'response',
       responseType: 'blob',
     });

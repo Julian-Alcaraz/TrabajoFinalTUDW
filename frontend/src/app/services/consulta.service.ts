@@ -178,4 +178,8 @@ export class ConsultaService {
   porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
     return this._http.get(`${this.url}consulta/porcentajeDiagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
   }
+  // Social
+  countConsultasByCategoria(year: number, id_curso: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/countConsultasByCategoria/${year}/curso/${id_curso}/${porcentaje}`);
+  }
 }

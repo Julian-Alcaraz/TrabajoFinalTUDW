@@ -8,10 +8,11 @@ import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import * as con from '../../../common/const/const';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 @Component({
   selector: 'app-clinica',
   standalone: true,
-  imports: [CommonModule, PieGraphComponent, BarGraphComponent, YearGradoFormComponent, GridChangerComponent],
+  imports: [CommonModule, PieGraphComponent, BarGraphComponent, YearGradoFormComponent, GridChangerComponent, ExpandCompressButtonComponent],
   templateUrl: './clinica.component.html',
 })
 export class ClinicaComponent implements OnInit {
@@ -57,8 +58,8 @@ export class ClinicaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+  actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -66,6 +67,11 @@ export class ClinicaComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+  }
+
   async obtenerGraficos() {
     const promesas = [
       this.obtenerGraficoTensionArterial(),

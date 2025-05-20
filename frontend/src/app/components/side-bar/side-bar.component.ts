@@ -12,6 +12,10 @@ import { MenuService } from '@services/menu.service';
 import { Usuario } from '@models/usuario.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CambiarContraseniaComponent } from '../../pages/usuarios/components/cambioContrasenia/cambio-contrasenia.component';
+import { ProcesamientoService } from '@app/services/procesamiento.service';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;
@@ -48,6 +52,8 @@ export class NavBarComponent implements OnInit {
     private _route: ActivatedRoute,
     private _sessionService: SessionService,
     private _menuService: MenuService,
+    private _procesamientoService: ProcesamientoService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -135,5 +141,24 @@ export class NavBarComponent implements OnInit {
 
   eventoHijo() {
     this.toggleCollapsed();
+  }
+  
+  download() {
+    this._procesamientoService.downloadManual().subscribe({
+      next: (res: any) => {
+        const nombreArchivo = res.headers.get('Content-Disposition').match(/filename="(.+)"/)[1];
+        const blob = res.body;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombreArchivo;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        MostrarNotificacion.mensajeExito(this.snackBar, 'Manual de usuarios descargado.');
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 }

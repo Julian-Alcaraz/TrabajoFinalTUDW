@@ -7,11 +7,12 @@ import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion
 import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { CommonModule } from '@angular/common';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 
 @Component({
   selector: 'app-odontologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, CommonModule, GridChangerComponent],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, CommonModule, GridChangerComponent, ExpandCompressButtonComponent],
   templateUrl: './odontologia.component.html',
 })
 export class OdontologiaComponent implements OnInit {
@@ -51,8 +52,9 @@ export class OdontologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -60,6 +62,11 @@ export class OdontologiaComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+  }
+
   async obtenerGraficos() {
     const promesas = [
       this.obtenerGraficoCepillado(),

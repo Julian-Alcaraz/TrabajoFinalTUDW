@@ -36,11 +36,12 @@ import { LoadingComponent } from '@components/loading/loading.component';
 import { PaginatedTableService } from '@app/services/paginated-table.service';
 import { CamposPrevencionComponent } from './components/campos-prevencion/campos-prevencion.component';
 import { CamposSocialComponent } from './components/campos-social/campos-social.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-personalizada',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule, CamposPrevencionComponent, CamposSocialComponent],
+  imports: [CommonModule, ReactiveFormsModule, LoadingComponent, DatePickerModule, FloatLabelModule, MultiSelectModule, TooltipModule, SelectButtonModule, InputGroupModule, InputGroupAddonModule, InputNumberModule, SelectModule, ButtonModule, IftaLabelModule, KeyFilterModule, CamposClinicaComponent, CamposOftalmologiaComponent, CamposFonoaudiologiaComponent, CamposOdontologiaComponent, PanelModule, CamposPrevencionComponent, CamposSocialComponent],
   templateUrl: './personalizada.component.html',
 })
 export class PersonalizadaComponent implements OnInit, OnDestroy {
@@ -324,6 +325,10 @@ function prepararData(data: any): any {
     const fechaFin = new Date(data.generales.rangoFechas[1]);
     fechaFin.setHours(23, 59, 59, 999);
     data.generales.rangoFechas[1] = fechaFin;
+  }
+  if (data.especificas?.categoriasSeleccionadas) {
+    data.especificas.categorias = data.especificas.categoriasSeleccionadas;
+    delete data.especificas.categoriasSeleccionadas;
   }
   return data;
 }

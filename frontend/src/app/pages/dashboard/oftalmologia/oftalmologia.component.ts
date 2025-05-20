@@ -8,10 +8,11 @@ import { PieGraphComponent } from '../components/graphs/pie-graph.component';
 import { DemandaEnum } from '../../../common/const/const';
 import { GridChangerComponent } from '../components/grid-changer/grid-changer.component';
 import { CommonModule } from '@angular/common';
+import { ExpandCompressButtonComponent } from '../components/expand-compress-button/expand-compress-button.component';
 @Component({
   selector: 'app-oftalmologia',
   standalone: true,
-  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule],
+  imports: [YearGradoFormComponent, BarGraphComponent, PieGraphComponent, GridChangerComponent, CommonModule, ExpandCompressButtonComponent],
   templateUrl: './oftalmologia.component.html',
 })
 export class OftalmologiaComponent implements OnInit {
@@ -44,8 +45,9 @@ export class OftalmologiaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
-  setearGrid(event: any) {
-    this.grid = event;
+
+  actualizarGraficos() {
+    if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
       graph.actualizarSets(); // Llama al método del hijo
     });
@@ -53,6 +55,11 @@ export class OftalmologiaComponent implements OnInit {
       graph.actualizarSets(); // Llama al método del hijo
     });
   }
+
+  setearGrid(event: any) {
+    this.grid = event;
+  }
+
   async obtenerGraficos() {
     const promesas = [this.obtenerGraficosDemanda(), this.obtenerGraficosAnteojos(), this.graficoCountAnteojos(), this.graficoCountADemanda()];
     Promise.all(promesas).then(() => (this.loading = false));

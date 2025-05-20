@@ -4,18 +4,18 @@
   </div>
   <div class="card-body">
     <h2 class="fs-10">Cargue el archivo de consultas que desee</h2>
-    <app-select-file [control]="clinicaFileControl" [type]="'Clinica'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <app-select-file [loading]="loading" [control]="clinicaFileControl" [type]="'Clinica'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <app-select-file [control]="odontologiaFileControl" [type]="'Odontologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <app-select-file [loading]="loading" [control]="odontologiaFileControl" [type]="'Odontologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <app-select-file [control]="fonoaudiologiaFileControl" [type]="'Fonoaudiologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <app-select-file [loading]="loading" [control]="fonoaudiologiaFileControl" [type]="'Fonoaudiologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
-    <app-select-file [control]="oftalmologiaFileControl" [type]="'Oftalmologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <app-select-file [loading]="loading" [control]="oftalmologiaFileControl" [type]="'Oftalmologia'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
     <!-- <app-select-file [control]="prevencionFileControl" [type]="'Prevencion'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" /> -->
     <hr />
-    <app-select-file [control]="socialFileControl" [type]="'Social'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
-     <hr />
-    <app-select-file [control]="talleresFileControl" [type]="'Talleres'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <app-select-file [loading]="loading" [control]="socialFileControl" [type]="'Social'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <hr />
+    <app-select-file [loading]="loading" [control]="talleresFileControl" [type]="'Talleres'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
   </div>
 </div>
