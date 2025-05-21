@@ -140,6 +140,8 @@ export class CamposComunesComponent implements OnInit {
         if (response.success) {
           this.form.patchValue({
             id_institucion: response.data.id_institucion,
+            obra_social: response.data.obra_social,
+            turno: response.data.turno,
           });
           // setTimeout
           this.onChangeInstitucion();

@@ -65,7 +65,7 @@ export class ChicoService {
   async findOneByDniAndEstudios(dni: number) {
     const consultaEstudios = await this.consultaOrm.findOne({ where: { chico: { dni }, deshabilitado: false }, order: { created_at: 'DESC' }, relations: ['chico', 'institucion', 'curso'] });
     if (consultaEstudios) {
-      return { id_institucion: consultaEstudios.institucion.id, id_curso: consultaEstudios.curso.id };
+      return { id_institucion: consultaEstudios.institucion.id, id_curso: consultaEstudios.curso.id, turno: consultaEstudios.turno, obra_social: consultaEstudios.obra_social };
     }
 
     return consultaEstudios;
