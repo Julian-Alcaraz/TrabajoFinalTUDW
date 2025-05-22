@@ -645,7 +645,7 @@ export class ProcesamientoService {
       if (!chico.barrio) {
         throw new Error('Barrio no existente ni cargado por el sistema ' + row['BARRIO']);
       }
-      chico.direccion = row['DIRECCIÓN'];
+      chico.direccion = row['DIRECCIÓN'] ? (row['DIRECCIÓN'].trim() ?? 'No hay dato') : 'No hay dato';
       chico.fe_nacimiento = row['FECHA DE NACIMIENTO'];
       chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
