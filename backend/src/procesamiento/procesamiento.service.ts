@@ -103,7 +103,7 @@ export class ProcesamientoService {
           clinica.consumo_tabaco = !!row['CP-TBQ'];
           clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
           clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-          clinica.vacunas = convertirVacunas(row.VACUNAS);
+          clinica.vacunas = convertirVacunas(row.VACUNAS) === null || convertirVacunas(row.VACUNAS) === undefined ? 'Desconocido' : convertirVacunas(row.VACUNAS);
           // clinica.peso = pasarAnumero(row['PESO (Kg)']);
           // clinica.talla = pasarAnumero(row['TALLA (cm)']);
           // clinica.pct = pasarAnumero(row['PCT (T/E)']);
@@ -118,26 +118,17 @@ export class ProcesamientoService {
           clinica.pcta = pasarAnumero(row.PCTA) === 0 ? 1 : pasarAnumero(row.PCTA);
           clinica.examen_visual = row['EX.VISUAL'] ?? 'Desconocido';
           clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
-          // A veces esta en nulo.
-          /* CON ESTE IF: 379 CONSULTAS:
-            - 30 NUT.
-            - 349 CLI.
-            */
           if (row.LENGUAJE) {
             clinica.lenguaje = row.LENGUAJE;
           } else {
             throw new Error('No se envio el lenguaje');
           }
-
-          /*
-          SIN EL IF: 383 CONSULTAS:
-            - 30 NUT.
-            - 353 CLI.
-
-          clinica.lenguaje = row.LENGUAJE;
-          */
           // clinica.segto = convertirSiNo(row['SEGTO.']);
-          clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          if (row['ALIMENTACIÓN']) {
+            clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          } else {
+            throw new Error('No se envio la alimentacion');
+          }
           clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
           clinica.leche = convertirSiNo(row['TOMA LECHE']);
           clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
