@@ -196,6 +196,7 @@ export class NuevaClinicaComponent implements OnInit {
 
   //  ver y modificar
   completarCampos() {
+    this.cambiarValidaciones(this.consulta!.clinica!.es_clinica);
     // const derivacion_externa = this.consulta?.derivacion_externa ? true : false;
     const derivacion_odontologia = this.consulta?.derivacion_odontologia ? true : false;
     const derivacion_prevencion = this.consulta?.derivacion_prevencion ? true : false;

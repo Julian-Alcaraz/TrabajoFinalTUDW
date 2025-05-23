@@ -19,6 +19,7 @@ import { Taller } from 'src/taller/entities/taller.entity';
 import { Marco } from 'src/marco/entities/marco.entity';
 import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
 import { Categoria } from 'src/categoria/entities/categoria.entity';
+import { Localidad } from 'src/localidad/entities/localidad.entity';
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -35,6 +36,7 @@ export class ProcesamientoService {
     @InjectRepository(Barrio) private readonly barrioORM: Repository<Barrio>,
     @InjectRepository(Chico) private readonly chicoORM: Repository<Chico>,
     @InjectRepository(Categoria) private readonly categoriaORM: Repository<Categoria>,
+    @InjectRepository(Localidad) private readonly localidadORM: Repository<Localidad>,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
   // se va a ir
@@ -101,21 +103,32 @@ export class ProcesamientoService {
           clinica.consumo_tabaco = !!row['CP-TBQ'];
           clinica.antecedentes_perinatal = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
           clinica.enfermedades_previas = convertirSiNo(row['ANTECEDENTES PERINATALES Y DE  ENF. PREVIAS']);
-          clinica.vacunas = convertirVacunas(row.VACUNAS);
+          clinica.vacunas = convertirVacunas(row.VACUNAS) === null || convertirVacunas(row.VACUNAS) === undefined ? 'Desconocido' : convertirVacunas(row.VACUNAS);
           // clinica.peso = pasarAnumero(row['PESO (Kg)']);
           // clinica.talla = pasarAnumero(row['TALLA (cm)']);
           // clinica.pct = pasarAnumero(row['PCT (T/E)']);
           // clinica.cc = pasarAnumero(row['CC(cm)']);
           // clinica.pcimc = row.PCIMC;
           // clinica.imc = pasarAnumero(row.IMC);
-          clinica.tas = pasarAnumero(row.TAS);
-          clinica.tad = pasarAnumero(row.TAD);
-          clinica.pcta = pasarAnumero(row.PCTA);
+
+          // NO ES LA MEJOR SOLUCION:
+
+          clinica.tas = pasarAnumero(row.TAS) === 0 ? 1 : pasarAnumero(row.TAS);
+          clinica.tad = pasarAnumero(row.TAD) === 0 ? 1 : pasarAnumero(row.TAD);
+          clinica.pcta = pasarAnumero(row.PCTA) === 0 ? 1 : pasarAnumero(row.PCTA);
           clinica.examen_visual = row['EX.VISUAL'] ?? 'Desconocido';
           clinica.ortopedia_traumatologia = converitirTrauma(row['O Y T']);
-          clinica.lenguaje = row.LENGUAJE;
+          if (row.LENGUAJE) {
+            clinica.lenguaje = row.LENGUAJE;
+          } else {
+            throw new Error('No se envio el lenguaje');
+          }
           // clinica.segto = convertirSiNo(row['SEGTO.']);
-          clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          if (row['ALIMENTACIÓN']) {
+            clinica.alimentacion = convertirAlimentacion(row['ALIMENTACIÓN']);
+          } else {
+            throw new Error('No se envio la alimentacion');
+          }
           clinica.hidratacion = convertirHidratacion(capitalize(row['HIDRATACIÓN']));
           clinica.leche = convertirSiNo(row['TOMA LECHE']);
           clinica.infusiones = row['INFUSIÓN'] ? capitalize(row['INFUSIÓN']) : 'Otras';
@@ -219,7 +232,7 @@ export class ProcesamientoService {
         consulta.observaciones = row['OBSERVACIONES'];
         consulta.turno = capitalize(row['TURNO']);
         consulta.usuario = usuario;
-        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
+        consulta.derivacion_externa = row['DERIVACIÓN'] === 1 ? true : false;
         const consultaNueva = queryRunner.manager.create(Consulta, consulta);
         await queryRunner.manager.save(consultaNueva);
         // const consultaNueva = this.consultaORM.create(consulta);
@@ -228,13 +241,33 @@ export class ProcesamientoService {
         odontologia.consulta = consultaNueva;
         odontologia.primera_vez = !!row['1RA VEZ'];
         odontologia.ulterior = !!row['ULTERIOR'];
-        odontologia.dientes_permanentes = row['TOTAL PERMANENTES'];
-        odontologia.dientes_temporales = row['TOTAL TEMPORALES'];
-        odontologia.sellador = row['SELLADOR'];
+
+        if (row['TOTAL PERMANENTES'] !== null && row['TOTAL PERMANENTES'] !== undefined) {
+          odontologia.dientes_permanentes = row['TOTAL PERMANENTES'];
+        } else {
+          throw new Error('Falta dientes_permanentes');
+        }
+        if (row['TOTAL TEMPORARIOS'] !== null && row['TOTAL TEMPORARIOS'] !== undefined) {
+          odontologia.dientes_temporales = row['TOTAL TEMPORARIOS'];
+        } else {
+          throw new Error('Falta dientes_temporales');
+        }
+
+        odontologia.sellador = row['SELLADOR'] === null || row['SELLADOR'] === undefined ? 0 : row['SELLADOR'];
         odontologia.topificacion = !!row['TOPICACION'];
-        // odontologia.cant_cepillado = !!row['ENS. CEPILLADO']; // !!!!!!!!!!!! VER LO descarto
-        odontologia.dientes_irecuperables = row['DIENTE RECUPERABLE'];
-        odontologia.dientes_recuperables = row['DIENTE IRRECUPERABLE'];
+        odontologia.cant_cepillado = 0;
+
+        if (row['DIENTE RECUPERABLE'] !== null && row['DIENTE RECUPERABLE'] !== undefined) {
+          odontologia.dientes_recuperables = row['DIENTE RECUPERABLE'];
+        } else {
+          throw new Error('Falta dientes_recuperables');
+        }
+        if (row['DIENTE NO RECUPERABLE'] !== null && row['DIENTE NO RECUPERABLE'] !== undefined) {
+          odontologia.dientes_irecuperables = row['DIENTE NO RECUPERABLE'];
+        } else {
+          throw new Error('Falta dientes_irecuperables');
+        }
+
         odontologia.cepillo = !!row['CEPILLO'];
         odontologia.habitos = row['HÁBITOS'];
         odontologia.clasificacion = clasificacionDental(odontologia.dientes_recuperables, odontologia.dientes_irecuperables); //row['CLASIFICACIÓN'];
@@ -540,7 +573,11 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         const taller = new Taller();
-        taller.marco = await this.verificarMarco(row['MARCO'], row['ESPECIALIDAD']); // !!!!!! REVISAR
+        if (row['MARCO']) {
+          taller.marco = await this.verificarMarco(row['MARCO'], row['ESPECIALIDAD']); // !!!!!! REVISAR
+        } else {
+          throw new Error('No se envio el marco');
+        }
         taller.especialidad = await this.especialidadORM.findOneBy({ nombre: 'Prevencion' }); // !!!!!! REVISAR
         taller.cant_encuentros = row['CANT ENCUENTROS'] || row['ENCUENTROS'];
         // taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
@@ -550,10 +587,14 @@ export class ProcesamientoService {
         taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'Otros';
         taller.destinatarios = verificarDestinatarios(row['DESTINATARIOS']);
         taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato. USO 0 SI NO ESTA, NO SE USA EN GRAFICOS NO ES TAN IMPORTANTE
-        taller.entrega_cepillos = convertirSiNo(row['CEPILLOS']);
+        taller.entrega_cepillos = false; // Es false porque solo importo de prevencion
         taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
         taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
-        taller.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
+        if (row['INSTITUCIÓN'] || row['INSTITUCION']) {
+          taller.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
+        } else {
+          throw new Error('No hay institucion');
+        }
         taller.created_at = new Date();
         taller.nombre = (row['NOMBRE'] || row['NOMBRE TALLER'] || row['TALLER/TEMAS desplegable']) ?? 'No definido';
         taller.observaciones = row['OBSERVACIONES'];
@@ -580,7 +621,8 @@ export class ProcesamientoService {
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
     let barrioBd = await this.barrioORM.createQueryBuilder('barrio').where('barrio.nombre ILIKE :nombre', { nombre: barrio }).getOne();
     if (!barrioBd && insertar) {
-      barrioBd = this.barrioORM.create({ nombre: barrio }); // puede que le falte la localidad !!!!!!!!!!
+      // const neuquen = await this.localidadORM.findOneBy({ id: 1 });
+      barrioBd = this.barrioORM.create({ nombre: barrio /*, localidad: neuquen*/ }); // puede que le falte la localidad !!!!!!!!!!
       await this.barrioORM.save(barrioBd);
     }
     if (!barrioBd) {
@@ -645,7 +687,7 @@ export class ProcesamientoService {
       if (!chico.barrio) {
         throw new Error('Barrio no existente ni cargado por el sistema ' + row['BARRIO']);
       }
-      chico.direccion = row['DIRECCIÓN'];
+      chico.direccion = row['DIRECCIÓN'] ? (row['DIRECCIÓN'].trim() ?? 'No hay dato') : 'No hay dato';
       chico.fe_nacimiento = row['FECHA DE NACIMIENTO'];
       chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
@@ -773,8 +815,6 @@ function convertirInstitucion(inst: string): string {
     'JARDIN 118': 'Jardin N° 118',
     'JARDIN 49': 'Jardín N° 49',
   };
-  console.log(inst);
-  console.log(conversiones[inst], ' O ESTO: ', inst);
   return conversiones[inst] || inst;
 }
 
@@ -878,6 +918,7 @@ function convertirBarrios(barrio: string): string {
     'Luis Pierda Buena': 'Luis Piedra Buena',
     'parque industrial': 'Parque Industrial',
     'Parque industrial': 'Parque Industrial',
+    'Ciudad de laPaz': 'Ciudad de la Paz',
   };
   return conversiones[barrio] || barrio;
 }

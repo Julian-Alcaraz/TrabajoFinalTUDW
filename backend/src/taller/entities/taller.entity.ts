@@ -9,7 +9,7 @@ import { DuracionEnum, DuracionType, DestinatariosEnum, DestinatariosType, Turno
 
 @Entity({ name: 'taller' })
 export class Taller extends EntidadBasica {
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 500 })
   nombre: string;
 
   @Column({ type: 'date' })

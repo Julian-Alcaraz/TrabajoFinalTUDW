@@ -65,7 +65,7 @@ export class FormTallerComponent implements OnInit {
     private _marcoService: MarcoService,
   ) {
     this.tallerForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(500), ValidarCadenaSinEspacios]],
       fecha: ['', [Validators.required]],
       duracion: ['', [Validators.required]],
       recursos: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100), ValidarCadenaSinEspacios]],

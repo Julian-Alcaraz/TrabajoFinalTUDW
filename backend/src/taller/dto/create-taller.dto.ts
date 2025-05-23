@@ -7,7 +7,7 @@ import { ConjuntoConEnum, ConjuntoConType, DestinatariosEnum, DestinatariosType,
 export class CreateTallerDto {
   @ApiProperty({ description: 'Nombre del taller' })
   @IsString({ message: 'El nombre del taller debe ser un string' })
-  @Length(1, 300, { message: 'El nombre debe tener entre 1 y 300 caracteres' })
+  @Length(1, 500, { message: 'El nombre debe tener entre 1 y 500 caracteres' })
   @Transform(({ value }) => (value ? value.trim() : value))
   readonly nombre: string;
 
