@@ -11,11 +11,11 @@
     'grid-cols-3  ': grid === 3,
   }"
 >
-  <div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
     <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <app-pie-graph [loading]="loading" [titulo]="tituloAnteojos" [subTitulo]="subTitulo + cursoLabel" [labels]="['Si', 'No']" [set]="{ label: '', data: countAnteojos }" />
   </div>
-  <div>
+  <div class="border sm:p-4 z-2 bg-gray-100 rounded-lg shadow-md">
     <app-expand-compress-button [grid]="grid" (actualizarGraficos)="actualizarGraficos()"></app-expand-compress-button>
     <app-pie-graph [loading]="loading" [titulo]="tituloDemanda" [subTitulo]="subTitulo + cursoLabel" [labels]="arrayDemanda" [set]="{ label: '', data: countDemanda }" />
   </div>
