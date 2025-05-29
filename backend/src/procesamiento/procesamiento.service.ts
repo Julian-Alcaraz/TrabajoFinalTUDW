@@ -872,6 +872,7 @@ function convertirBarrios(barrio: string): string {
     '10 de ferbrero': '10 de febrero',
     '10 de Febrero': '10 de febrero',
     'Antartida argentina': 'Antartida Argentina',
+    '2 febrero': '2 de Febrero',
     '02 de Feebrero': '2 de Febrero',
     '2 de Febrero': '2 de Febrero',
     '2 de fefrero': '2 de Febrero',
