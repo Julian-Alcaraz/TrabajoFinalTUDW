@@ -448,6 +448,15 @@ export class DevSeeder implements Seeder {
         { nombre: 'Cinco Saltos', localidad: neuquen },
         { nombre: 'Anahi Mapu', localidad: neuquen },
         { nombre: 'Dvn', localidad: neuquen },
+        // Barrios de planilla odontologia
+        { nombre: 'San Sebastian', localidad: neuquen },
+        { nombre: 'Antartida', localidad: neuquen },
+        { nombre: '22 de febrero', localidad: neuquen },
+        { nombre: 'Ana Mapu', localidad: neuquen },
+        { nombre: 'Bouquet Roldan', localidad: neuquen },
+        { nombre: 'Patagonia', localidad: neuquen },
+        { nombre: 'distrito vecinal', localidad: neuquen },
+        { nombre: 'Paraje El 30', localidad: neuquen },
       ]);
       console.log('Seeding cursos...');
       const cursos = await cursoORM.save([
