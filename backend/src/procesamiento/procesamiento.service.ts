@@ -298,34 +298,42 @@ export class ProcesamientoService {
       await queryRunner.startTransaction(); // Iniciar la transacción
       const row = data[i];
       try {
-        const chico = await this.procesarChico(row, queryRunner);
-        const consulta = new Consulta();
-        consulta.chico = chico;
-        consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
-        // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
-        consulta.edad = typeof row.EDAD == 'number' ? row.EDAD : 0; //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
-        consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-        consulta.type = 'Fonoaudiologia';
-        consulta.observaciones = row['OBSERVACIÓN'];
-        consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
-        consulta.usuario = usuario;
-        consulta.turno = capitalize(row['TURNO']);
-        const consultaNueva = queryRunner.manager.create(Consulta, consulta);
-        await queryRunner.manager.save(consultaNueva);
-        // const consultaNueva = this.consultaORM.create(consulta);
-        // await this.consultaORM.save(consultaNueva);
-        const fonoaudiologia = new Fonoaudiologia();
-        fonoaudiologia.consulta = consultaNueva;
-        fonoaudiologia.asistencia = convertirSiNo(row['ASISTENCIA']);
-        fonoaudiologia.causas = row['CAUSAS'] ?? 'Otras';
-        fonoaudiologia.diagnostico_presuntivo = convertirDiagnostico(row['DIAGNÓSTICO PRESUNTIVO']);
-        // const fonoaudiologiaNueva = await this.fonoaudiologiaORM.create(fonoaudiologia);
-        // await this.fonoaudiologiaORM.save(fonoaudiologiaNueva);
-        const fonoaudiologiaNueva = queryRunner.manager.create(Fonoaudiologia, fonoaudiologia);
-        await queryRunner.manager.save(fonoaudiologiaNueva);
-        await queryRunner.commitTransaction();
+        if (row.DNI) {
+          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          if (chico !== null) {
+            const consulta = new Consulta();
+            consulta.chico = chico;
+            consulta.created_at = new Date(row['FECHA']);
+            consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+            // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
+            consulta.edad = typeof row.EDAD == 'number' ? row.EDAD : 0; //pero hay que trabajar el dato
+            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+            consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
+            consulta.type = 'Fonoaudiologia';
+            consulta.observaciones = row['OBSERVACIÓN'];
+            consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
+            consulta.usuario = usuario;
+            consulta.turno = capitalize(row['TURNO']);
+            const consultaNueva = queryRunner.manager.create(Consulta, consulta);
+            await queryRunner.manager.save(consultaNueva);
+            // const consultaNueva = this.consultaORM.create(consulta);
+            // await this.consultaORM.save(consultaNueva);
+            const fonoaudiologia = new Fonoaudiologia();
+            fonoaudiologia.consulta = consultaNueva;
+            fonoaudiologia.asistencia = convertirSiNo(row['ASISTENCIA']);
+            fonoaudiologia.causas = row['CAUSAS'] ?? 'Otras';
+            fonoaudiologia.diagnostico_presuntivo = convertirDiagnostico(row['DIAGNÓSTICO PRESUNTIVO']);
+            // const fonoaudiologiaNueva = await this.fonoaudiologiaORM.create(fonoaudiologia);
+            // await this.fonoaudiologiaORM.save(fonoaudiologiaNueva);
+            const fonoaudiologiaNueva = queryRunner.manager.create(Fonoaudiologia, fonoaudiologia);
+            await queryRunner.manager.save(fonoaudiologiaNueva);
+            await queryRunner.commitTransaction();
+          } else {
+            throw new Error('No hay chico cargado con ese DNI. Cargarlo antes.');
+          }
+        } else {
+          throw new Error('No se envio el DNI');
+        }
       } catch (error) {
         console.error(`Error al procesar la fila ${i + 1}:`, error.message);
         row.posicionExcel = i + 1;
@@ -894,6 +902,7 @@ function convertirBarrios(barrio: string): string {
     'obrero A': 'Obrero A',
     'obreo A': 'Obrero A',
     Antartida: 'Antartida Argentina',
+    'Antartida argrentina': 'Antartida Argentina',
     'antartida argentina': 'Antartida Argentina',
     'La Esperanza': 'Nueva Esperanza',
     'La esperanza': 'Nueva Esperanza',
@@ -909,6 +918,7 @@ function convertirBarrios(barrio: string): string {
     DVN: 'Dvn',
     'puente 83': 'Puente 83',
     'San Sebastian D': 'San Sebastian',
+    'San Sebastian B' : 'San Sebastian',
     'la esperanza': 'Nueva Esperanza',
     'B° San Sebastian A': 'San Sebastian',
     'Anai Mpau': 'Anahi Mapu',
