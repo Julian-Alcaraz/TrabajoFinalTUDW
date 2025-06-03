@@ -306,7 +306,6 @@ export class ProcesamientoService {
           if (chico !== null) {
             const consulta = new Consulta();
             consulta.chico = chico;
-            console.log(consulta.chico);
             consulta.created_at = new Date(row['FECHA']);
             const curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
             if (curso === null || curso === undefined) {
@@ -435,7 +434,8 @@ export class ProcesamientoService {
             consulta.created_at = new Date(row['FECHA']);
             consulta.curso = await this.verificarCurso(convertirCurso(row['GRADO']));
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
+            const institucion = await this.institucionORM.findOneBy({ nombre: 'Esc. N°294' });
+            consulta.institucion = institucion;
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Prevencion';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -446,7 +446,12 @@ export class ProcesamientoService {
             // consulta hija  lacreo y pongo clinica.consulta = consulta
             const prevencion = new Prevencion();
             prevencion.consulta = consultaNueva;
-            prevencion.otra_problematica = row['OTRAS PROBLEMÁTICAS'];
+            const otra_problematica = row['OTRAS PROBLEMÁTICAS'] === 'Depresión' ? 'Depresion' : row['OTRAS PROBLEMÁTICAS'];
+            if (otra_problematica === null || otra_problematica === undefined) {
+              throw new Error('No se envio otra_problematica');
+            } else {
+              prevencion.otra_problematica = otra_problematica;
+            }
             prevencion.consumo_problematico = row['CONSUMO PROBLEMATICO'] ?? 'Otras';
             prevencion.edad_inicio_consumo = row['EDAD DE INICIO DE CONSUMO'];
             prevencion.frecuencia = convertirFrecuenciaConsumo(row['FRECUENCIA']);
