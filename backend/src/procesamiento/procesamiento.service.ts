@@ -20,6 +20,8 @@ import { Marco } from 'src/marco/entities/marco.entity';
 import { Especialidad } from 'src/especialidad/entities/especialidad.entity';
 import { Categoria } from 'src/categoria/entities/categoria.entity';
 import { Localidad } from 'src/localidad/entities/localidad.entity';
+import { faker } from '@faker-js/faker/locale/es';
+
 @Injectable()
 export class ProcesamientoService {
   constructor(
@@ -299,7 +301,8 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         if (row.DNI) {
-          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          const chico = await this.procesarChico(row, queryRunner, true);
+          //  const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
           if (chico !== null) {
             const consulta = new Consulta();
             consulta.chico = chico;
@@ -313,7 +316,7 @@ export class ProcesamientoService {
             consulta.observaciones = row['OBSERVACIÓN'];
             consulta.derivacion_externa = convertirSiNo(row['DERIVACIÓN']);
             consulta.usuario = usuario;
-            consulta.turno = capitalize(row['TURNO']);
+            consulta.turno = capitalize(row['TURNO']) == 'No hay dato' ? 'Tarde' : capitalize(row['TURNO']);
             const consultaNueva = queryRunner.manager.create(Consulta, consulta);
             await queryRunner.manager.save(consultaNueva);
             // const consultaNueva = this.consultaORM.create(consulta);
@@ -411,7 +414,8 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         if (row.DNI) {
-          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          const chico = await this.procesarChico(row, queryRunner, true);
+          // const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
           if (chico !== null) {
             const consulta = new Consulta();
             consulta.chico = chico;
@@ -425,7 +429,7 @@ export class ProcesamientoService {
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
             consulta.derivacion_externa = false;
-            consulta.turno = capitalize(row['TURNO']);
+            consulta.turno = capitalize(row['TURNO']) == 'No hay dato' ? 'Tarde' : capitalize(row['TURNO']);
             const consultaNueva = queryRunner.manager.create(Consulta, consulta);
             await queryRunner.manager.save(consultaNueva);
             // consulta hija  lacreo y pongo clinica.consulta = consulta
@@ -470,7 +474,8 @@ export class ProcesamientoService {
       const row = data[i];
       try {
         if (row.DNI) {
-          const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          // const chico = await this.chicoORM.findOneBy({ dni: row.DNI });
+          const chico = await this.procesarChico(row, queryRunner, true);
           if (chico !== null) {
             const consulta = new Consulta();
             consulta.chico = chico;
@@ -484,7 +489,7 @@ export class ProcesamientoService {
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
             consulta.derivacion_externa = false;
-            consulta.turno = capitalize(row['TURNO']);
+            consulta.turno = capitalize(row['TURNO']) == 'No hay dato' || capitalize(row['TURNO']) == 'Jornada Completa' ? 'Tarde' : capitalize(row['TURNO']);
             const consultaNueva = queryRunner.manager.create(Consulta, consulta);
             await queryRunner.manager.save(consultaNueva);
             // consulta hija  lacreo y pongo clinica.consulta = consulta
@@ -535,6 +540,7 @@ export class ProcesamientoService {
     }
     return array;
   }
+
   async verificarCategoria(categoria: string, insertar: boolean = false): Promise<null | Categoria> {
     //let institucionBd: any = this.institucionORM.findOneBy({ nombre: institucion });
     let categoriaBd = await this.categoriaORM.createQueryBuilder('categoria').where('categoria.nombre ILIKE :nombre', { nombre: categoria }).getOne();
@@ -679,12 +685,40 @@ export class ProcesamientoService {
     return cursoBd;
   }
 
-  async procesarChico(row: any, queryRunner: QueryRunner): Promise<Chico> {
+  async procesarChico(row: any, queryRunner: QueryRunner, inventarDatos: boolean = false): Promise<Chico> {
     if (!row.DNI) {
       throw new Error('Dni no enviado');
     }
     let chico = await this.chicoORM.findOneBy({ dni: row.DNI });
     if (!chico) {
+      if (inventarDatos) {
+        const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO'] || row['Nombre y Apellido'] || row['Apellido y Nombre']);
+        // chico = new Chico();
+        // const chicoFactory = this.factoryManager.get(Chico);
+        const barrio = await this.barrioORM.find({
+          order: { id: 'ASC' }, // Puedes cambiar a 'DESC' si quieres el último barrio
+          take: 1,
+        });
+
+        const chico = Object.assign(new Chico(), {
+          dni: row['DNI'],
+          fe_nacimiento: faker.date.between({
+            from: '2006-01-01T00:00:00.000Z',
+            to: '2017-01-01T00:00:00.000Z',
+          }),
+          nombre_padre: null,
+          nombre_madre: null,
+          direccion: faker.location.streetAddress(),
+          telefono: faker.phone.number().replace(/[.\s-]+/g, ''),
+          sexo: 'Masculino',
+          nombre: arrayApyNo[1],
+          apellido: arrayApyNo[0],
+          created_at: new Date(),
+          barrio,
+          deshabilitado: false,
+        });
+        return chico;
+      }
       chico = new Chico();
       chico.dni = row.DNI;
       const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO'] || row['Nombre y Apellido']);
@@ -918,7 +952,7 @@ function convertirBarrios(barrio: string): string {
     DVN: 'Dvn',
     'puente 83': 'Puente 83',
     'San Sebastian D': 'San Sebastian',
-    'San Sebastian B' : 'San Sebastian',
+    'San Sebastian B': 'San Sebastian',
     'la esperanza': 'Nueva Esperanza',
     'B° San Sebastian A': 'San Sebastian',
     'Anai Mpau': 'Anahi Mapu',
