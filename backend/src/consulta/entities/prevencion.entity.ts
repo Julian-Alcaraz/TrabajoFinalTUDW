@@ -15,10 +15,10 @@ export class Prevencion {
   @Column({ type: 'int', nullable: true })
   edad_inicio_consumo: number;
 
-  @Column({ type: 'enum', enum: MotivoConsumoEnum, nullable: false })
+  @Column({ type: 'enum', enum: MotivoConsumoEnum, nullable: true })
   motivo_consumo: MotivoConsumoType;
 
-  @Column({ type: 'enum', enum: FrecuenciaPrevencionEnum, nullable: false })
+  @Column({ type: 'enum', enum: FrecuenciaPrevencionEnum, nullable: true })
   frecuencia: FrecuenciaPrevencionType;
 
   @Column({ type: 'enum', enum: ConsumoProblematicoEnum, nullable: true })
