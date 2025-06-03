@@ -306,11 +306,22 @@ export class ProcesamientoService {
           if (chico !== null) {
             const consulta = new Consulta();
             consulta.chico = chico;
+            console.log(consulta.chico);
             consulta.created_at = new Date(row['FECHA']);
-            consulta.curso = await this.verificarCurso(convertirCurso(row['CURSO']));
+            const curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+            if (curso === null || curso === undefined) {
+              throw new Error('No se envio curso');
+            } else {
+              consulta.curso = curso;
+            }
             // consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
             consulta.edad = typeof row.EDAD == 'number' ? row.EDAD : 0; //pero hay que trabajar el dato
-            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+            const institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+            if (institucion === null || institucion === undefined) {
+              throw new Error('No se envio Institucion');
+            } else {
+              consulta.institucion = institucion;
+            }
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Fonoaudiologia';
             consulta.observaciones = row['OBSERVACIÓN'];
@@ -426,7 +437,7 @@ export class ProcesamientoService {
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
             consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
-            consulta.type = 'Social';
+            consulta.type = 'Prevencion';
             consulta.observaciones = row['OBSERVACIONES'];
             consulta.derivacion_externa = false;
             consulta.turno = capitalize(row['TURNO']) == 'No hay dato' ? 'Tarde' : capitalize(row['TURNO']);
@@ -482,9 +493,19 @@ export class ProcesamientoService {
             consulta.usuario = usuario;
             const anio = Number(row.fecha);
             consulta.created_at = new Date(anio, 1, 2);
-            consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+            const curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+            if (curso === null || curso === undefined) {
+              throw new Error('No se envio curso');
+            } else {
+              consulta.curso = curso;
+            }
             consulta.edad = calcularEdad(chico.fe_nacimiento, consulta.created_at);
-            consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
+            const institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN']));
+            if (institucion === null || institucion === undefined) {
+              throw new Error('No se envio institucion');
+            } else {
+              consulta.institucion = institucion;
+            }
             consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
             consulta.type = 'Social';
             consulta.observaciones = row['OBSERVACIONES'];
@@ -496,10 +517,10 @@ export class ProcesamientoService {
             const social = new Social();
             social.consulta = consultaNueva;
             social.categorias = await this.convertirCategorias(row['Categorias']);
-            social.articulacion = row['Articulación con:'];
-            social.demanda = row['Demanda de:'];
-            social.objeto_informe = row['Objeto de Informe'];
-            social.seguimiento = row['Seguimiento'];
+            social.articulacion = row['Articulación con:'] === null ? 'No hay dato' : row['Articulación con:'];
+            social.demanda = row['Demanda de:'] === null ? 'No hay dato' : row['Demanda de:'];
+            social.objeto_informe = row['Objeto de Informe'] === null ? 'No hay dato' : row['Objeto de Informe'];
+            social.seguimiento = row['Seguimiento'] === null ? 'No hay dato' : row['Seguimiento'];
 
             const socialNueva = queryRunner.manager.create(Social, social);
             await queryRunner.manager.save(socialNueva);
@@ -695,10 +716,7 @@ export class ProcesamientoService {
         const arrayApyNo = separarNombre(row['NOMBRE Y APELLIDO'] || row['Nombre y Apellido'] || row['Apellido y Nombre']);
         // chico = new Chico();
         // const chicoFactory = this.factoryManager.get(Chico);
-        const barrio = await this.barrioORM.find({
-          order: { id: 'ASC' }, // Puedes cambiar a 'DESC' si quieres el último barrio
-          take: 1,
-        });
+        const barrio = await this.barrioORM.findOne({ where: { id: 1 } });
 
         const chico = Object.assign(new Chico(), {
           dni: row['DNI'],
@@ -708,8 +726,8 @@ export class ProcesamientoService {
           }),
           nombre_padre: null,
           nombre_madre: null,
-          direccion: faker.location.streetAddress(),
-          telefono: faker.phone.number().replace(/[.\s-]+/g, ''),
+          direccion: 'No hay dato', // CAMBIADO
+          telefono: 11111111, // CAMBIADO
           sexo: 'Masculino',
           nombre: arrayApyNo[1],
           apellido: arrayApyNo[0],
@@ -717,7 +735,9 @@ export class ProcesamientoService {
           barrio,
           deshabilitado: false,
         });
-        return chico;
+        const chicoInv = queryRunner.manager.create(Chico, chico);
+        await queryRunner.manager.save(chicoInv);
+        return chicoInv;
       }
       chico = new Chico();
       chico.dni = row.DNI;
@@ -734,7 +754,11 @@ export class ProcesamientoService {
       chico.nombre_madre = row['NOMBRE Y APELLIDO MADRE'];
       chico.nombre_padre = row['NOMBRE Y APELLIDO PADRE'];
       chico.sexo = capitalize(row['SEXO']);
-      chico.telefono = row['TELÉFONO'] || row['TELEFONO']; // !! Puede no ser un numero
+      if (row['TELEFONO'] === 'no tiene' || row['TELÉFONO'] === 'no tiene' || row['TELEFONO'] === 'No tiene' || row['TELÉFONO'] === 'No tiene' || row['TELEFONO'] === null || row['TELÉFONO'] === null) {
+        chico.telefono = '11111111';
+      } else {
+        chico.telefono = row['TELÉFONO'] || row['TELEFONO']; // !! Puede no ser un numero
+      }
       // chico = this.chicoORM.create(chico);
       // await this.chicoORM.save(chico);
       chico = queryRunner.manager.create(Chico, chico);
