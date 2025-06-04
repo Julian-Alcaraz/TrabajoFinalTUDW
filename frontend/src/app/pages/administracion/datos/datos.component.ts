@@ -4,6 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notificacion';
+import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
@@ -128,5 +129,18 @@ export class DatosComponent {
         console.log('Tipo de evento no reconocido:', event.type);
         break;
     }
+  }
+
+  deshabilitarDatos() {
+    this._procesamientoService.deshabilitarDatos().subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          MostrarNotificacion.mensajeExito(this.snackBar, 'Opcion de datos deshabilitada.');
+        }
+      },
+      error: (err: any) => {
+        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
   }
 }

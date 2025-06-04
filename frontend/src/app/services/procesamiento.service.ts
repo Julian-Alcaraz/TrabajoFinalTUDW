@@ -13,6 +13,10 @@ export class ProcesamientoService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
+  deshabilitarDatos() {
+    return this._http.post(this.url + 'menu', 13);
+  }
+
   // ============ IMPORTS ============
 
   procesarClinica(formData: FormData): Observable<any> {

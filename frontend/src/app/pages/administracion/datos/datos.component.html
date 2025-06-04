@@ -17,5 +17,7 @@
     <app-select-file [loading]="loading" [control]="socialFileControl" [type]="'Social'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
     <app-select-file [loading]="loading" [control]="talleresFileControl" [type]="'Talleres'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
+    <hr />
+    <button (click)="deshabilitarDatos()">Deshabilitar datos</button>
   </div>
 </div>

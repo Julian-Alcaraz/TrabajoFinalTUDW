@@ -66,9 +66,9 @@ export class MenuController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Borrado logico de un barrio' })
-  @ApiResponse({ status: 200, description: 'Barrio borrado logicamente con exito' })
-  @ApiResponse({ status: 404, description: 'Barrio no encontrado' })
+  @ApiOperation({ summary: 'Borrado logico de un menu' })
+  @ApiResponse({ status: 200, description: 'menu borrado logicamente con exito' })
+  @ApiResponse({ status: 404, description: 'menu no encontrado' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const menuBorrado = await this.menuService.remove(id);
     return {
