@@ -68,7 +68,7 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarFonoaudiologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (procesamiento) {
+    if (!procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarFonoaudiologia(data, req.user);
       return { succes: true, data: noCargados, message: 'fono' };
