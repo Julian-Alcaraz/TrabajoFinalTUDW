@@ -22,10 +22,12 @@ import { Taller } from '../../taller/entities/taller.entity';
 import { Social } from '../../consulta/entities/social.entity';
 import { Prevencion } from '../../consulta/entities/prevencion.entity';
 import { Categoria } from '../../categoria/entities/categoria.entity';
+import * as dotenv from 'dotenv';
 
 export class DevSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
     try {
+      dotenv.config();
       // Repositories
       const rolORM = dataSource.getRepository(Rol);
       const usuarioORM = dataSource.getRepository(Usuario);
@@ -223,7 +225,7 @@ export class DevSeeder implements Seeder {
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
-
+      const procesamiento = process.env.PROCESAMIENTO === 'true';
       const menusAdmin = await menuORM.save([
         {
           url: 'administracion/usuarios',
@@ -272,7 +274,7 @@ export class DevSeeder implements Seeder {
           icon: 'fa-solid fa-file-import',
           roles: [roles[0]],
           menu_padre: menus[4],
-          deshabilitado: true,
+          deshabilitado: procesamiento ? true : false,
         },
       ]);
       await menuORM.save(menusAdmin);
