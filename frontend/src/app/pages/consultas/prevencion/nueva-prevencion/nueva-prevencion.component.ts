@@ -134,6 +134,12 @@ export class NuevaPrevencionComponent implements OnInit {
         ...prevencionValues,
       },
     };
+    if (data.otra_problematica !== 'Consumo problematico') {
+      delete data.prevencion.motivo_consumo;
+      delete data.prevencion.edad_inicio_consumo;
+      delete data.prevencion.frecuencia;
+      delete data.prevencion.consumo_problematico;
+    }
     return data;
   }
 

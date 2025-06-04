@@ -11,6 +11,6 @@ export class Prevencion {
   ) {}
 
   static overload_constructor() {
-    return new Prevencion(0, 0, 'Otro', 'Otro', 'Otra', 'Otra');
+    return new Prevencion(0, 0, 'Otro', 'Otro', 'Otras', 'Otras');
   }
 }
