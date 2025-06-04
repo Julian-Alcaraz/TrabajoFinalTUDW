@@ -131,8 +131,8 @@ export class DatosComponent {
     }
   }
 
-  deshabilitarDatos() {
-    this._procesamientoService.deshabilitarDatos().subscribe({
+  deshabilitarDatos(id: number) {
+    this._procesamientoService.deshabilitarDatos(id).subscribe({
       next: (response: any) => {
         if (response.success) {
           MostrarNotificacion.mensajeExito(this.snackBar, 'Opcion de datos deshabilitada.');

@@ -13,9 +13,8 @@ export class ProcesamientoService {
     this.url = GLOBAL.URL_BACKEND;
   }
 
-  deshabilitarDatos() {
-    //return this._http.delete(this.url + 'menu', 13);
-    return this._http.delete(`${this.url}/menu/${13}`);
+  deshabilitarDatos(id: number) {
+    return this._http.delete(`${this.url}/menu/${id}`);
   }
 
   // ============ IMPORTS ============
