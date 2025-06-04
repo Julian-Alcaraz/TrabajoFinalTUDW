@@ -12,10 +12,12 @@ import { Curso } from '../../curso/entities/curso.entity';
 import { Especialidad } from '../../especialidad/entities/especialidad.entity';
 import { Marco } from '../../marco/entities/marco.entity';
 import { Categoria } from '../../categoria/entities/categoria.entity';
+import * as dotenv from 'dotenv';
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
     try {
+      dotenv.config();
       // Repositories
       const rolORM = dataSource.getRepository(Rol);
       const usuarioORM = dataSource.getRepository(Usuario);
@@ -96,7 +98,7 @@ export class MainSeeder implements Seeder {
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
-
+      const procesamiento = process.env.PROCESAMIENTO === 'true';
       const menusAdmin = await menuORM.save([
         {
           url: 'administracion/usuarios',
@@ -145,7 +147,7 @@ export class MainSeeder implements Seeder {
           icon: 'fa-solid fa-file-import',
           roles: [roles[0]],
           menu_padre: menus[4],
-          deshabilitado: true,
+          deshabilitado: procesamiento ? true : false,
         },
       ]);
       await menuORM.save(menusAdmin);
