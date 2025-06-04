@@ -145,6 +145,7 @@ export class MainSeeder implements Seeder {
           icon: 'fa-solid fa-file-import',
           roles: [roles[0]],
           menu_padre: menus[4],
+          deshabilitado: true,
         },
       ]);
       await menuORM.save(menusAdmin);
