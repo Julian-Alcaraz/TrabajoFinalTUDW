@@ -14,7 +14,7 @@ export class ProcesamientoService {
   }
 
   deshabilitarDatos(id: number) {
-    return this._http.delete(`${this.url}/menu/${id}`);
+    return this._http.delete(`${this.url}menu/${id}`);
   }
 
   // ============ IMPORTS ============

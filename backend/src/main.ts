@@ -15,7 +15,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     // Origenes permitidos: ['http://localhost:4200', 'http://localhost:4500', 'http://localhost:4300', '**']
-    origin: ['https://solpatagonia.com.ar'],
+    origin: ['http://localhost:3000', 'http://localhost:4200'],
     methods: 'GET, POST, PUT, DELETE, PATCH, OPTIONS', // Metodos HTTP permitidos
     allowedHeaders: 'Content-Type, Authorization, Content-Disposition', // Encabezados permitidos
     credentials: true, // Permitir el uso de credenciales (cookies, headers de autenticación)
