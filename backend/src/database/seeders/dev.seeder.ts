@@ -214,14 +214,6 @@ export class DevSeeder implements Seeder {
           roles: [roles[0], roles[1], roles[2]],
           deshabilitado: true,
         },
-        {
-          url: 'menuDeshabilitado',
-          label: 'menuDeshabilitado',
-          orden: 0,
-          icon: 'menuDeshabilitado',
-          roles: [roles[0], roles[1], roles[2]],
-          deshabilitado: true,
-        },
       ]);
       await menuORM.save(menus);
       // Menus que tienen padres
