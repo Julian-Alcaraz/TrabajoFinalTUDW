@@ -32,3 +32,7 @@ backend/.env.prod
 # nodemodules
 frontend/node_modules
 backend/node_modules
+
+# para produccion
+data/
+letsencrypt/

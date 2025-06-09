@@ -8,7 +8,7 @@ import { InstitucionesComponent } from '@pages/administracion/instituciones/inst
 import { CursosComponent } from '@pages/administracion/cursos/cursos.component';
 import { adminGuard } from '../guards/auth.guard';
 import { DatosComponent } from '@app/pages/administracion/datos/datos.component';
-
+import { GLOBAL } from '@app/config/global';
 const routes: Routes = [
   {
     path: 'localidades',
@@ -30,11 +30,14 @@ const routes: Routes = [
     path: 'usuarios',
     children: [{ path: '', component: ListaUsuarioComponent, canActivate: [adminGuard] }],
   },
-  {
+];
+
+if (GLOBAL.DATOS) {
+  routes.push({
     path: 'datos',
     children: [{ path: '', component: DatosComponent, canActivate: [adminGuard] }],
-  },
-];
+  });
+}
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

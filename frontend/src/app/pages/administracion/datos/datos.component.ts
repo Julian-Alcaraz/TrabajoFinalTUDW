@@ -4,7 +4,6 @@ import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notificacion';
-import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
 
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
@@ -68,19 +67,25 @@ export class DatosComponent {
 
   controlResponse = {
     next: (response: any) => {
-      Swal.fire({
-        title: 'El proceso termino.',
-        text: `Hay ${response.data.length} filas no cargadas`,
-        icon: 'success',
-        showConfirmButton: true,
-        confirmButtonText: 'Descargar',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.exportar(response.data);
-        }
-      });
-      this.loading = false;
-      this.eliminarValorLoading();
+      if (response.success) {
+        Swal.fire({
+          title: 'El proceso termino.',
+          text: `Hay ${response.data.length} filas no cargadas`,
+          icon: 'success',
+          showConfirmButton: true,
+          confirmButtonText: 'Descargar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.exportar(response.data);
+          }
+        });
+        this.loading = false;
+        this.eliminarValorLoading();
+      } else {
+        mensajeErrorServicio(this.snackBar, 'hola');
+        this.loading = false;
+        this.eliminarValorLoading();
+      }
     },
     error: (err: any) => {
       mensajeErrorServicio(this.snackBar, err);
@@ -129,18 +134,5 @@ export class DatosComponent {
         console.log('Tipo de evento no reconocido:', event.type);
         break;
     }
-  }
-
-  deshabilitarDatos(id: number) {
-    this._procesamientoService.deshabilitarDatos(id).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          MostrarNotificacion.mensajeExito(this.snackBar, 'Opcion de datos deshabilitada.');
-        }
-      },
-      error: (err: any) => {
-        MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
-      },
-    });
   }
 }

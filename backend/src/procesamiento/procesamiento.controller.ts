@@ -29,12 +29,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarClinica(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarClinica(data, req.user);
-      return { succes: true, data: noCargados, message: 'clinic' };
+      return { success: true, data: noCargados, message: 'clinic' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -42,12 +42,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarOdontologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarOdontologia(data, req.user);
-      return { succes: true, data: noCargados, message: 'odon' };
+      return { success: true, data: noCargados, message: 'odon' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -55,12 +55,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarOftalmologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarOftalmologia(data, req.user);
-      return { succes: true, data: noCargados, message: 'ofta' };
+      return { success: true, data: noCargados, message: 'ofta' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -68,12 +68,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarFonoaudiologia(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarFonoaudiologia(data, req.user);
-      return { succes: true, data: noCargados, message: 'fono' };
+      return { success: true, data: noCargados, message: 'fono' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -81,12 +81,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarPrevencion(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarPrevencion(data, req.user);
-      return { succes: true, data: noCargados, message: 'preve' };
+      return { success: true, data: noCargados, message: 'preve' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -94,12 +94,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarSocial(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarSocial(data, req.user);
-      return { succes: true, data: noCargados, message: 'soc' };
+      return { success: true, data: noCargados, message: 'soc' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
 
@@ -107,12 +107,12 @@ export class ProcesamientoController {
   @UseInterceptors(FileInterceptor('archivo')) // nombre del campo del archivo en el append
   async procesarTalleres(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
-    if (!procesamiento) {
+    if (procesamiento) {
       const data = await this.excelService.leerArchivoExcel(file);
       const noCargados = await this.procesamientoService.procesarTalleres(data, req.user);
-      return { succes: true, data: noCargados, message: 'tall' };
+      return { success: true, data: noCargados, message: 'tall' };
     } else {
-      return { succes: false, message: 'Opcion deshabilitada' };
+      return { success: false, message: 'Opcion deshabilitada' };
     }
   }
   // ============ EXPORTS ============
