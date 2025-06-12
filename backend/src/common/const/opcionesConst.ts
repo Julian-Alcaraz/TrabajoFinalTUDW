@@ -54,7 +54,7 @@ export const opcionesDuracion = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const opcionesDestinatarios = ['Alumnos', 'Docentes', 'Familias', 'PSA', 'Todos'];
 export const opcionesTurnoTalleres = ['Mañana', 'Tarde', 'M y T', 'JC'];
 // Pasa lo mismo con 'Otros' de conjunto con.
-export const opcionesConjuntoCon = ['Odontologia', 'Nutricion', 'Medicina', 'Trabajo Social', 'Psicologia', 'Equipo tecnico de apoyo', 'Sin compania', 'Pasantes', 'Otros'];
+export const opcionesConjuntoCon = ['Equipo Profesionales Sol Mapu', 'Equipo tecnico de apoyo', 'Sin compañía', 'Pasantes', 'Otros'];
 export const opcionesFrecuencia = ['Única vez', 'Diaria', 'Semanal', 'Mensual'];
 
 // Especialidad

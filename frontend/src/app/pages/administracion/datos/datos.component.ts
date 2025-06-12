@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProcesamientoService } from '@app/services/procesamiento.service';
 import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notificacion';
@@ -8,13 +8,13 @@ import { mensajeErrorServicio } from '@app/utils/notificaciones/mostrar-notifica
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { SelectFileComponent } from './select-file/select-file.component';
+import { InputSelectEnumComponent } from '../../../components/inputs/input-select-enum.component';
 
 @Component({
   selector: 'app-datos',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectFileComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectFileComponent, InputSelectEnumComponent],
   templateUrl: './datos.component.html',
-  styleUrl: './datos.component.css',
 })
 export class DatosComponent {
   clinicaFileControl: FormControl = new FormControl('', [Validators.required]);
@@ -37,11 +37,17 @@ export class DatosComponent {
   };
   formData: FormData = new FormData();
   fileName = '';
-
+  tallerForm: FormGroup;
+  opcionesTipoTaller = ['Fonoaudiologia', 'Clinica', 'Prevencion', 'Nutricion', 'Odontologia'];
   constructor(
     private _procesamientoService: ProcesamientoService,
     private snackBar: MatSnackBar,
-  ) {}
+    private fb: FormBuilder,
+  ) {
+    this.tallerForm = this.fb.group({
+      tipoTaller: [''],
+    });
+  }
 
   updateFormData() {
     if (this.ultimoArchivo) {
@@ -103,6 +109,9 @@ export class DatosComponent {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
     XLSX.writeFile(workbook, `${this.fileName}.xlsx`);
   }
+  get controlDeInput(): (input: string) => FormControl {
+    return (input: string) => this.tallerForm.get(input) as FormControl;
+  }
 
   cargarArchivo(event: any) {
     // this.loading = true;
@@ -128,7 +137,7 @@ export class DatosComponent {
         this._procesamientoService.procesarSocial(this.formData).subscribe(this.controlResponse);
         break;
       case 'Talleres':
-        this._procesamientoService.procesarTalleres(this.formData).subscribe(this.controlResponse);
+        this._procesamientoService.procesarTalleres(this.formData, this.tallerForm.get('tipoTaller')?.value).subscribe(this.controlResponse);
         break;
       default:
         console.log('Tipo de evento no reconocido:', event.type);

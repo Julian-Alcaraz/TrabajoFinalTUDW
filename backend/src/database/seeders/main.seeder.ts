@@ -360,13 +360,13 @@ export class MainSeeder implements Seeder {
       console.log('Seeding marcos...');
       const marcosFonoaudiologia = await marcoORM.save([
         { nombre: 'Prevención y promoción', especialidad: especialidades[0] },
-        { nombre: 'Deteccion', especialidad: especialidades[0] },
+        { nombre: 'Detección', especialidad: especialidades[0] },
         { nombre: 'Higiene y Salud', especialidad: especialidades[0] },
-        { nombre: 'Indroducción Lectoescritura', especialidad: especialidades[0] },
+        { nombre: 'Introducción Lectoescritura', especialidad: especialidades[0] },
       ]);
 
       const marcosClinica = await marcoORM.save([
-        { nombre: 'Prevencion y Promoción Integral', especialidad: especialidades[1] },
+        { nombre: 'Prevención y Promoción Integral', especialidad: especialidades[1] },
         { nombre: 'Educación para la Salud', especialidad: especialidades[1] },
         { nombre: 'Promoción de Salud', especialidad: especialidades[1] },
         { nombre: 'Participación y Bienestar Infantil', especialidad: especialidades[1] },

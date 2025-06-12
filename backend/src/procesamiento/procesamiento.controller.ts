@@ -108,8 +108,9 @@ export class ProcesamientoController {
   async procesarTalleres(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
     const procesamiento = this.secretService.readSecret('PROCESAMIENTO') === 'true';
     if (procesamiento) {
+      console.log(body.tipoTaller)
       const data = await this.excelService.leerArchivoExcel(file);
-      const noCargados = await this.procesamientoService.procesarTalleres(data, req.user);
+      const noCargados = await this.procesamientoService.procesarTalleres(data, req.user, body.tipoTaller);
       return { success: true, data: noCargados, message: 'tall' };
     } else {
       return { success: false, message: 'Opcion deshabilitada' };

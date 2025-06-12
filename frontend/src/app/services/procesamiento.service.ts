@@ -43,7 +43,9 @@ export class ProcesamientoService {
     return this._http.post(this.url + 'procesamiento/social', formData);
   }
 
-  procesarTalleres(formData: FormData): Observable<any> {
+  procesarTalleres(formData: FormData, tipoTaller: string): Observable<any> {
+    formData.delete('tipoTaller');
+    formData.append('tipoTaller', tipoTaller.toString());
     return this._http.post(this.url + 'procesamiento/talleres', formData);
   }
   // ============ EXPORTS ============

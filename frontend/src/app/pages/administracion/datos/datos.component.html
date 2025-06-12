@@ -16,6 +16,10 @@
     <hr />
     <app-select-file [loading]="loading" [control]="socialFileControl" [type]="'Social'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
     <hr />
+    <app-input-select-enum label="Tipo de taller" [control]="controlDeInput('tipoTaller')" idInput="tipoTaller" [opciones]="opcionesTipoTaller" [valores]="opcionesTipoTaller"/>
+
+    <!-- <app-input-select label="Tipo de taller" [control]="controlDeInput('tipoTaller')" idInput="tipoTaller" [opciones]="opcionesTipoTaller" (change)="onChangeInstitucion()" /> -->
+    <hr />
     <app-select-file [loading]="loading" [control]="talleresFileControl" [type]="'Talleres'" (cargarArchivo)="cargarArchivo($event)" (fileSelected)="onFileSelected($event)" />
   </div>
 </div>

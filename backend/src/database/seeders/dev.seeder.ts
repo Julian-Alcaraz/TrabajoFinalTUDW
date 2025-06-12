@@ -518,6 +518,9 @@ export class DevSeeder implements Seeder {
         { nombre: 'CEM N° 147', tipo: 'Secundario' },
         { nombre: 'CI Municipal N°3', tipo: 'Primario' },
         { nombre: 'Otros', tipo: 'Primario' },
+        // escuelas planilla talleres nutricion
+        { nombre: 'Jardin N°50', tipo: 'Primario' },
+        { nombre: 'Esc. N° 142', tipo: 'Primario' },
       ]);
       // Chicos
       console.log('Seeding chicos...');
@@ -681,13 +684,13 @@ export class DevSeeder implements Seeder {
       console.log('Seeding marcos...');
       const marcosFonoaudiologia = await marcoORM.save([
         { nombre: 'Prevención y promoción', especialidad: especialidades[0] },
-        { nombre: 'Deteccion', especialidad: especialidades[0] },
+        { nombre: 'Detección', especialidad: especialidades[0] },
         { nombre: 'Higiene y Salud', especialidad: especialidades[0] },
-        { nombre: 'Indroducción Lectoescritura', especialidad: especialidades[0] },
+        { nombre: 'Introducción Lectoescritura', especialidad: especialidades[0] },
       ]);
 
       const marcosClinica = await marcoORM.save([
-        { nombre: 'Prevencion y Promoción Integral', especialidad: especialidades[1] },
+        { nombre: 'Prevención y Promoción Integral', especialidad: especialidades[1] },
         { nombre: 'Educación para la Salud', especialidad: especialidades[1] },
         { nombre: 'Promoción de Salud', especialidad: especialidades[1] },
         { nombre: 'Participación y Bienestar Infantil', especialidad: especialidades[1] },

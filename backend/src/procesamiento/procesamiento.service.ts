@@ -225,10 +225,25 @@ export class ProcesamientoService {
         const consulta = new Consulta();
         consulta.chico = chico;
         consulta.created_at = new Date(row['FECHA']);
-        consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        // consulta.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+
+        const curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
+        if (curso === null || curso === undefined) {
+          throw new Error('No se envio curso');
+        } else {
+          consulta.curso = curso;
+        }
+
         consulta.edad = calcularEdad(new Date(row['FECHA DE NACIMIENTO']), consulta.created_at);
         // consulta.edad = row.EDAD //pero hay que trabajar el dato
-        consulta.institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+
+        const institucion = await this.verificarInstitucion(convertirInstitucion(row['ESTABLECIMIENTO ESCOLAR']));
+        if (institucion === null || institucion === undefined) {
+          throw new Error('No se envio Institucion');
+        } else {
+          consulta.institucion = institucion;
+        }
+
         consulta.obra_social = convertirSiNo(row['OBRA SOCIAL']);
         consulta.type = 'Odontologia';
         consulta.observaciones = row['OBSERVACIONES'];
@@ -603,8 +618,7 @@ export class ProcesamientoService {
     return new Date(anio, meses[mes.toLowerCase()], 1); // Primer día del mes
   }
 
-  // Ejemplo de uso:
-  async procesarTalleres(data, usuario) {
+  async procesarTalleres(data, usuario, tipoTaller) {
     const noCargados = [];
     for (let i = 0; i < data.length; i++) {
       const queryRunner = this.dataSource.createQueryRunner(); // Crear un QueryRunner para manejar la transacción
@@ -614,21 +628,21 @@ export class ProcesamientoService {
       try {
         const taller = new Taller();
         if (row['MARCO']) {
-          taller.marco = await this.verificarMarco(row['MARCO'], row['ESPECIALIDAD']); // !!!!!! REVISAR
+          taller.marco = await this.verificarMarco(row['MARCO'], tipoTaller);
         } else {
           throw new Error('No se envio el marco');
         }
-        taller.especialidad = await this.especialidadORM.findOneBy({ nombre: 'Prevencion' }); // !!!!!! REVISAR
+        taller.especialidad = await this.especialidadORM.findOneBy({ nombre: tipoTaller });
         taller.cant_encuentros = row['CANT ENCUENTROS'] || row['ENCUENTROS'];
         // taller.fecha = row['FECHA DE REALIZACIÓN'] === undefined && row['FECHA '] === undefined ? this.devolverFecha(row['AÑO'], row['MES']) : row['FECHA DE REALIZACIÓN'] || row['FECHA '];
-        taller.fecha = row['FECHA DE REALIZACIÓN'];
+        taller.fecha = row['FECHA'];
         taller.cant_participantes = row['CANT. DE PARTICIPANTES'] || row['Nº DE ASISTENTES'] || row['ASISTENTES'] || row['Nº de ASISTENTES'];
         taller.es_taller = row['TALLER'] ? convertirSiNo(row['TALLER']) : convertirSiNo(row['ES TALLER?']);
-        taller.conjunto_con = row['EN CONJUNTO CON'] ?? 'Otros';
+        taller.conjunto_con = await this.verificarConjuntoCon(row['EN CONJUNTO CON']);
         taller.destinatarios = verificarDestinatarios(row['DESTINATARIOS']);
-        taller.duracion = row['DURACION (HS)'] ?? 0; // !!!!!! casi ninguno tiene el dato. USO 0 SI NO ESTA, NO SE USA EN GRAFICOS NO ES TAN IMPORTANTE
-        taller.entrega_cepillos = false; // Es false porque solo importo de prevencion
-        taller.frecuencia = verificarFrecuencia(row['FRECUENCIA']); // no viene en todos. ESTA EN EL MAS GRANDE
+        taller.duracion = row['DURACION (HS)'] ?? 1;
+        taller.entrega_cepillos = false; // Es false porque solo importo de prevencion!!!!!!!!!!!!!!!!!!!!!
+        taller.frecuencia = row['FRECUENCIA'] ? verificarFrecuencia(row['FRECUENCIA']) : 'Semanal';
         taller.curso = await this.verificarCurso(convertirCurso(row['SALA/GRADO']));
         if (row['INSTITUCIÓN'] || row['INSTITUCION']) {
           taller.institucion = await this.verificarInstitucion(convertirInstitucion(row['INSTITUCIÓN'] || row['INSTITUCION']));
@@ -656,6 +670,15 @@ export class ProcesamientoService {
     }
     // verfico el dni
     return noCargados;
+  }
+
+  async verificarConjuntoCon(params) {
+    const conversiones: { [key: string]: any } = {
+      '- (sin compañia)': 'Sin compañía',
+      Odontología: 'Equipo Profesionales Sol Mapu',
+    };
+
+    return conversiones[params] ?? 'Otros';
   }
   // verificaciones
   async verificarBarrio(barrio: string, insertar: boolean = false): Promise<null | Barrio> {
@@ -733,7 +756,7 @@ export class ProcesamientoService {
           nombre_madre: null,
           direccion: 'No hay dato', // CAMBIADO
           telefono: 11111111, // CAMBIADO
-          sexo: 'Masculino',
+          sexo: row['SEXO'] ? capitalize(row['SEXO']) : 'Masculino',
           nombre: arrayApyNo[1],
           apellido: arrayApyNo[0],
           created_at: new Date(),
@@ -885,6 +908,9 @@ function convertirInstitucion(inst: string): string {
     'ESC. 294': 'Esc. N°294',
     'JARDIN 118': 'Jardin N° 118',
     'JARDIN 49': 'Jardín N° 49',
+    'Jardin 50': 'Jardin N° 50', // FALTA
+
+    Otras: 'Otros',
   };
   return conversiones[inst] || inst;
 }
@@ -1060,9 +1086,11 @@ function convertirHorasSuenio(params: string) {
 }
 function verificarDestinatarios(destinatario) {
   const equivalencias = {
+    ESTUDIANTES: 'Alumnos',
     ALUMNOS: 'Alumnos',
     DOCENTES: 'Docentes',
     FAMILIAS: 'Familias',
+    Familias: 'Familias',
   };
 
   return equivalencias[destinatario];
@@ -1072,6 +1100,7 @@ function verificarTurno(destinatario) {
     MAÑANA: 'Mañana',
     TARDE: 'Tarde',
     'M y T': 'M y T',
+    MyT: 'M y T',
     JC: 'JC',
   };
 
