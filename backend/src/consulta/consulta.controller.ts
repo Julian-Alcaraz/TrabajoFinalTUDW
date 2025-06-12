@@ -186,10 +186,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('estadoNutricionalPorAnio/:year/curso/:id')
+  @Get('estadoNutricionalPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async estadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async estadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.estadoNutricionalData(year, id);
     return {
       success: true,
@@ -198,10 +198,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('tensionArterialPorAnio/:year/curso/:id')
+  @Get('tensionArterialPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async tensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async tensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.tensionArterialData(year, id);
     return {
       success: true,
@@ -210,10 +210,10 @@ export class ConsultaController {
     };
   }
 
-  @Post('tensionxEstadoPorAnio/:year/curso/:id')
+  @Post('tensionxEstadoPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async tensionxEstado(@Body() data: any, @Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async tensionxEstado(@Body() data: any, @Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const estado = data.estado;
     const cantByYearList = await this.graficosService.tensionxEstadoData(year, id, estado);
     return {
@@ -223,10 +223,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeEstadoNutricionalPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeEstadoNutricionalPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeEstadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeEstadoNutricional(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeEstadoNutricional(year, id, porcentaje);
     return {
       success: true,
@@ -235,10 +235,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeTensionArterialPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeTensionArterialPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeTensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeTensionArterial(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeTensionArterialData(year, id, porcentaje);
     return {
       success: true,
@@ -247,10 +247,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeExamenVisualPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeExamenVisualPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeExamenVisual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeExamenVisual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeExamenVisualData(year, id, porcentaje);
     return {
       success: true,
@@ -258,10 +258,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeVacunacionPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeVacunacionPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeVacunacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeVacunacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeVacunacionData(year, id, porcentaje);
     return {
       success: true,
@@ -269,10 +269,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeOrtopediaPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeOrtopediaPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeOrtopedia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeOrtopedia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeOrtopediaData(year, id, porcentaje);
     return {
       success: true,
@@ -280,10 +280,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeLenguajePorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeLenguajePorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeLenguaje(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeLenguaje(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeLenguajeData(year, id, porcentaje);
     return {
       success: true,
@@ -305,10 +305,10 @@ export class ConsultaController {
   //   };
   // }
 
-  @Get('countCepilladoPorAnio/:year/curso/:id')
+  @Get('countCepilladoPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.cepilladoData(year, id);
     return {
       success: true,
@@ -316,10 +316,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('countTopificacionPorAnio/:year/curso/:id')
+  @Get('countTopificacionPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.topificacionData(year, id);
     return {
       success: true,
@@ -327,10 +327,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('countSituacionBucalPorAnio/:year/curso/:id')
+  @Get('countSituacionBucalPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.situacionBucalData(year, id);
     return {
       success: true,
@@ -339,10 +339,10 @@ export class ConsultaController {
     };
   }
   // A preguntar
-  @Get('countSelladoPorAnio/:year/curso/:id')
+  @Get('countSelladoPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.selladoData(year, id);
     return {
       success: true,
@@ -351,10 +351,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeCepilladoPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeCepilladoPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeCepillado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeCepilladoData(year, id, porcentaje);
     return {
       success: true,
@@ -362,10 +362,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeTopificacionPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeTopificacionPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeTopificacion(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeTopificacionData(year, id, porcentaje);
     return {
       success: true,
@@ -373,10 +373,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeSituacionBucalPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeSituacionBucalPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeSituacionBucal(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeSituacionBucalData(year, id, porcentaje);
     return {
       success: true,
@@ -385,10 +385,10 @@ export class ConsultaController {
     };
   }
   // A preguntar
-  @Get('porcentajeSelladoPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeSelladoPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeSellado(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeSelladoData(year, id, porcentaje);
     return {
       success: true,
@@ -398,10 +398,10 @@ export class ConsultaController {
   }
 
   // !!!!!!!!!! OFTALMOLOGIA
-  @Get('countAnteojosPorAnio/:year/curso/:id')
+  @Get('countAnteojosPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.anteojosData(year, id);
     return {
       success: true,
@@ -409,10 +409,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('countDemandaPorAnio/:year/curso/:id')
+  @Get('countDemandaPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async countDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.demandaData(year, id);
     return {
       success: true,
@@ -421,10 +421,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeAnteojosPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeAnteojosPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeAnteojos(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeAnteojosData(year, id, porcentaje);
     return {
       success: true,
@@ -432,10 +432,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeDemandaPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeDemandaPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeDemanda(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeDemandaData(year, id, porcentaje);
     return {
       success: true,
@@ -445,10 +445,10 @@ export class ConsultaController {
   }
 
   // PREVENCION
-  @Get('drogaHabitualPorAnio/:year/curso/:id')
+  @Get('drogaHabitualPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async drogaHabitual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async drogaHabitual(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.drogasHabituales(year, id);
     return {
       success: true,
@@ -456,10 +456,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('problematicaPorAnio/:year/curso/:id')
+  @Get('problematicaPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async problematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async problematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.problematica(year, id);
     return {
       success: true,
@@ -467,10 +467,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('frecuenciaPorAnio/:year/curso/:id')
+  @Get('frecuenciaPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async frecuencia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async frecuencia(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.frecuenciaConsumo(year, id);
     return {
       success: true,
@@ -478,10 +478,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('motivoPorAnio/:year/curso/:id')
+  @Get('motivoPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async motivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async motivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.motivoConsumo(year, id);
     return {
       success: true,
@@ -490,10 +490,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('porcentajeFrecuenciaConsumoPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeFrecuenciaConsumoPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeFrecuenciaConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeFrecuenciaConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeFrecuenciaConsumo(year, id, porcentaje);
     return {
       success: true,
@@ -501,10 +501,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeMotivoConsumoPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeMotivoConsumoPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeMotivoConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeMotivoConsumo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeMotivoConsumo(year, id, porcentaje);
     return {
       success: true,
@@ -512,10 +512,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeDrogasHabitualesPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeDrogasHabitualesPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeDrogasHabituales(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeDrogasHabituales(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeDrogasHabituales(year, id, porcentaje);
     return {
       success: true,
@@ -523,10 +523,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeProblematicaPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeProblematicaPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeProblematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeProblematica(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeProblematica(year, id, porcentaje);
     return {
       success: true,
@@ -535,10 +535,10 @@ export class ConsultaController {
     };
   }
   // FONOAUDIOLOGIA
-  @Get('porcentajeCausasPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeCausasPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeCausa(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeCausa(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeCausas(year, id, porcentaje);
     return {
       success: true,
@@ -546,7 +546,7 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('causasPorAnio/:year/curso/:id')
+  @Get('causasPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
   async causas(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
@@ -557,10 +557,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('porcentajeDiagnosticoPresuntivoPorAnio/:year/curso/:id/:porcentaje')
+  @Get('porcentajeDiagnosticoPresuntivoPorAnio/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async porcentajeDiagnosticoPresuntivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async porcentajeDiagnosticoPresuntivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const cantByYearList = await this.graficosService.porcentajeDiagnosticoPresuntivo(year, id, porcentaje);
     return {
       success: true,
@@ -568,10 +568,10 @@ export class ConsultaController {
       message: 'Datos obtenidos con exito.',
     };
   }
-  @Get('diagnosticoPresuntivoPorAnio/:year/curso/:id')
+  @Get('diagnosticoPresuntivoPorAnio/:year/curso/:id/institucion/:id_inst')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async diagnosticoPresuntivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number) {
+  async diagnosticoPresuntivo(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number) {
     const cantByYearList = await this.graficosService.diagnosticoPresuntivo(year, id);
     return {
       success: true,
@@ -580,10 +580,10 @@ export class ConsultaController {
     };
   }
 
-  @Get('countConsultasByCategoria/:year/curso/:id/:porcentaje')
+  @Get('countConsultasByCategoria/:year/curso/:id/institucion/:id_inst/:porcentaje')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 201, description: 'Datos obtenidos con exito' })
-  async countConsultasByCategoria(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
+  async countConsultasByCategoria(@Param('year', ParseIntPipe) year: number, @Param('id', ParseIntPipe) id: number, @Param('id_inst', ParseIntPipe) id_inst: number, @Param('porcentaje', ParseIntPipe) porcentaje: number) {
     const resultado = await this.graficosService.countConsultasByCategoria(year, id, porcentaje);
     return {
       success: true,

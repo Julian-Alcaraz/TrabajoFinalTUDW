@@ -35,6 +35,7 @@ export class ClinicaComponent implements OnInit {
   tensionXestado = [];
   year = 0;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   selectedEstadoNutricional = this.estadosNutricional[2];
   lastFourYears: number[];
@@ -47,6 +48,8 @@ export class ClinicaComponent implements OnInit {
   porcentajesLenguaje: any = [];
 
   cursoLabel = '';
+  cursoInstitucionLabel = '';
+  institucionLabel = '';
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -58,6 +61,7 @@ export class ClinicaComponent implements OnInit {
   ngOnInit() {
     this.obtenerGraficos();
   }
+
   actualizarGraficos() {
     if (!this.barGraphs || !this.pieGraphs) return;
     this.barGraphs.forEach((graph) => {
@@ -95,9 +99,10 @@ export class ClinicaComponent implements OnInit {
       this.loading = false;
     }
   }
+
   obtenerGraficoTensionArterial() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countTensionArterialByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countTensionArterialByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.tensionArterial = response.data;
@@ -110,9 +115,10 @@ export class ClinicaComponent implements OnInit {
       });
     });
   }
+
   obtenerGraficoEstadoNutricional() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countEstadoNutricionalByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countEstadoNutricionalByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.estadoNutricional = response.data;
@@ -128,7 +134,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoTensionxEstado() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countTensionxEstadoByYearAndCurso(this.year, this.id_curso, this.selectedEstadoNutricional).subscribe({
+      this._consultaService.countTensionxEstadoByYearAndCurso(this.year, this.id_curso, this.id_institucion, this.selectedEstadoNutricional).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.tensionXestado = response.data;
@@ -144,7 +150,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeTensionArterial() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeTensionArterialByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeTensionArterialByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesTensionArterial = [];
@@ -166,7 +172,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeEstadoNutricional() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeEstadoNutricionalByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeEstadoNutricionalByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeEstadoNutricional = [];
@@ -188,7 +194,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeExamenVisual() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeExamenVisualByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeExamenVisualByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesExamenVisual = [];
@@ -210,7 +216,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeVacunacion() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeVacunacionByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeVacunacionByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesVacunas = [];
@@ -232,7 +238,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeOrtopedia() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeOrtopediaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesOrtopedia = [];
@@ -254,7 +260,7 @@ export class ClinicaComponent implements OnInit {
 
   obtenerGraficoPorcentajeLenguaje() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeLenguajePorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeLenguajePorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesLenguaje = [];
@@ -278,6 +284,7 @@ export class ClinicaComponent implements OnInit {
     this.selectedEstadoNutricional = '' + event.target.value;
     this.obtenerGraficoTensionxEstado();
   }
+
   cambioForm(event: any) {
     this.setearLabels(event);
     this.obtenerGraficos();
@@ -289,6 +296,7 @@ export class ClinicaComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -303,7 +311,16 @@ export class ClinicaComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

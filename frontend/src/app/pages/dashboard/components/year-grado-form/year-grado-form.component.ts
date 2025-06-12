@@ -10,6 +10,8 @@ import { Select } from 'primeng/select';
 // import { SelectButton } from 'primeng/selectbutton';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { InstitucionService } from '@app/services/institucion.service';
+import { Institucion } from '@app/models/institucion.model';
 
 @Component({
   selector: 'app-year-grado-form',
@@ -24,8 +26,10 @@ export class YearGradoFormComponent implements OnInit {
 
   optionForm: FormGroup;
   cursos: Curso[] = [];
+  instituciones: Institucion[] = [];
   maxDate: Date;
   searchingCursos = false;
+  searchingInstituciones = false;
   textoBoton = 'Porcentajes';
   /*
   porcentajeOptions = [
@@ -36,11 +40,13 @@ export class YearGradoFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private _cursoService: CursoService,
+    private _institucionesService: InstitucionService,
   ) {
     this.maxDate = new Date();
     this.optionForm = this.fb.group({
       year: ['', []],
       id_curso: [null, [Validators.required]],
+      id_institucion: [null, [Validators.required]],
       porcentaje: ['0', [Validators.required]],
       participantes: ['0', [Validators.required]],
     });
@@ -48,6 +54,7 @@ export class YearGradoFormComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerCursos();
+    this.obtenerInstituciones();
     this.traerDatosGraficos();
   }
   get controlDeInput(): (input: string) => FormControl {
@@ -65,6 +72,19 @@ export class YearGradoFormComponent implements OnInit {
     }
   }
   */
+  obtenerInstituciones() {
+    this.searchingInstituciones = true;
+    this._institucionesService.obtenerInstituciones().subscribe({
+      next: (response: any) => {
+        this.searchingInstituciones = false;
+        this.instituciones = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+        // MostrarNotificacion.mensajeErrorServicio(this.snackBar, err);
+      },
+    });
+  }
   obtenerCursos(): any {
     this.searchingCursos = true;
     this._cursoService.obtenerCursos().subscribe({
@@ -81,8 +101,10 @@ export class YearGradoFormComponent implements OnInit {
 
   traerDatosGraficos() {
     const id_curso = +this.optionForm.value.id_curso;
+    const id_institucion = +this.optionForm.value.id_institucion;
     const year = this.optionForm.value.year ? this.optionForm.value.year.getFullYear() : 0;
     let nombreCurso = '';
+    let nombreInstitucion = '';
     if (id_curso) {
       const cursoSeleccionado = this.cursos.filter((curso) => {
         if (curso.id === id_curso) {
@@ -93,12 +115,23 @@ export class YearGradoFormComponent implements OnInit {
       });
       nombreCurso = cursoSeleccionado[0].nombre;
     }
+    if (id_institucion) {
+      const institucionSeleccionada = this.instituciones.filter((institucion) => {
+        if (institucion.id === id_institucion) {
+          return institucion;
+        } else {
+          return;
+        }
+      });
+      console.log(institucionSeleccionada)
+      nombreInstitucion = institucionSeleccionada[0].nombre;
+    }
     const porcentaje = this.optionForm.value.porcentaje;
     if (this.esTaller) {
       const participantes = this.optionForm.value.participantes;
-      this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje, participantes });
+      this.cambioForm.emit({ id_curso, id_institucion, year, nombreCurso, nombreInstitucion, porcentaje, participantes });
     } else {
-      this.cambioForm.emit({ id_curso, year, nombreCurso, porcentaje });
+      this.cambioForm.emit({ id_curso, id_institucion, year, nombreCurso, nombreInstitucion, porcentaje });
     }
   }
 

@@ -22,9 +22,12 @@ export class OftalmologiaComponent implements OnInit {
   grid = 3;
   year = 0;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   subTitulo = '';
   cursoLabel = '';
+  institucionLabel = '';
+  cursoInstitucionLabel = '';
   currentYear: number;
   lastFourYears: number[];
   tituloDemanda = 'Demanda';
@@ -74,7 +77,7 @@ export class OftalmologiaComponent implements OnInit {
 
   graficoCountAnteojos() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countAnteojosByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countAnteojosByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countAnteojos = [];
           if (response.success) {
@@ -91,7 +94,7 @@ export class OftalmologiaComponent implements OnInit {
 
   graficoCountADemanda() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countDemandaByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countDemandaByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countDemanda = [];
           if (response.success) {
@@ -107,7 +110,7 @@ export class OftalmologiaComponent implements OnInit {
   }
   obtenerGraficosDemanda() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeDemandaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeDemandaPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeDemanda = [];
@@ -128,7 +131,7 @@ export class OftalmologiaComponent implements OnInit {
   }
   obtenerGraficosAnteojos() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeAnteojosPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeAnteojosPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeAnteojos = [];
@@ -158,6 +161,7 @@ export class OftalmologiaComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -172,7 +176,16 @@ export class OftalmologiaComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

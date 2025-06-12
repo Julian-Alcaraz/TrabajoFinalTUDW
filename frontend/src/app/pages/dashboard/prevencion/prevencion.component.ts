@@ -23,9 +23,12 @@ export class PrevencionComponent implements OnInit {
   grid = 3;
   year = 0;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   subTitulo = '';
   cursoLabel = '';
+  institucionLabel = '';
+  cursoInstitucionLabel = '';
   currentYear: number;
   lastFourYears: number[];
 
@@ -99,7 +102,7 @@ export class PrevencionComponent implements OnInit {
 
   obtenerGraficosFrecuenciaConsumo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeFrecuenciaCosumo = [];
@@ -121,7 +124,7 @@ export class PrevencionComponent implements OnInit {
 
   obtenerGraficosMotivoConsumo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeMotivoaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeMotivoaConsumoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeMotivoConsumo = [];
@@ -142,7 +145,7 @@ export class PrevencionComponent implements OnInit {
   }
   obtenerGraficosDrogasHabituales() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeDrogasHabitualesPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeDrogasHabitualesPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeDrogaHabitual = [];
@@ -163,7 +166,7 @@ export class PrevencionComponent implements OnInit {
   }
   obtenerGraficosProblematica() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeProblematicaByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeProblematicaByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeProblematica = [];
@@ -185,7 +188,7 @@ export class PrevencionComponent implements OnInit {
 
   obtenerGraficosCountProblematica() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countProblematicaByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countProblematicaByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countProblematica = response.data;
@@ -200,7 +203,7 @@ export class PrevencionComponent implements OnInit {
   }
   obtenerGraficosCountFrecuenciaConsumo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countFrecuenciaConsumoByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countFrecuenciaConsumoByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countFrecuenciaCosumo = response.data;
@@ -215,7 +218,7 @@ export class PrevencionComponent implements OnInit {
   }
   obtenerGraficosCountMotivoConsumo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countMotivoConsumoByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countMotivoConsumoByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countMotivoConsumo = response.data;
@@ -230,7 +233,7 @@ export class PrevencionComponent implements OnInit {
   }
   obtenerGraficosCountDrogasHabituales() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countDrogasHabitualesByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countDrogasHabitualesByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countDrogaHabitual = response.data;
@@ -254,6 +257,7 @@ export class PrevencionComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -268,7 +272,16 @@ export class PrevencionComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

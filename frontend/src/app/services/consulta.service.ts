@@ -68,118 +68,118 @@ export class ConsultaService {
     return this._http.get(`${this.url}consulta/contarTipoXanios/${year}/institucion/${id_institucion}`);
   }
   // clinica
-  countTensionArterialByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}`);
+  countTensionArterialByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/tensionArterialPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
-  countEstadoNutricionalByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/estadoNutricionalPorAnio/${year}/curso/${id_curso}`);
+  countEstadoNutricionalByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/estadoNutricionalPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
-  countTensionxEstadoByYearAndCurso(year: number, id_curso: number, estadoNutricional: string) {
-    return this._http.post(`${this.url}consulta/tensionxEstadoPorAnio/${year}/curso/${id_curso}`, { estado: estadoNutricional });
+  countTensionxEstadoByYearAndCurso(year: number, id_curso: number, id_institucion: number, estadoNutricional: string) {
+    return this._http.post(`${this.url}consulta/tensionxEstadoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`, { estado: estadoNutricional });
   }
 
-  porcentajeTensionArterialByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeTensionArterialPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeTensionArterialByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeTensionArterialPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
 
-  porcentajeEstadoNutricionalByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeEstadoNutricionalPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeEstadoNutricionalByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeEstadoNutricionalPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeExamenVisualByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeExamenVisualPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeExamenVisualByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeExamenVisualPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeVacunacionByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeVacunacionPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeVacunacionByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeVacunacionPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeOrtopediaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeOrtopediaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeOrtopediaPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeOrtopediaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeLenguajePorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeLenguajePorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeLenguajePorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeLenguajePorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
   // odontologia
-  porcentajeCepilladoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeCepilladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeCepilladoPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeCepilladoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeTopificacionPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeTopificacionPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeTopificacionPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeTopificacionPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeSituacionBucalPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeSituacionBucalPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeSelladoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeSelladorPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeSelladoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  countCepilladoPorAnioByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countCepilladoPorAnio/${year}/curso/${id_curso}`);
+  countCepilladoPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countCepilladoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countTopificacionPorAnioByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countTopificacionPorAnio/${year}/curso/${id_curso}`);
+  countTopificacionPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countTopificacionPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countSituacionBucalPorAnio/${year}/curso/${id_curso}`);
+  countSituacionBucalPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countSituacionBucalPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countSelladorPorAnioByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countSelladoPorAnio/${year}/curso/${id_curso}`);
+  countSelladorPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countSelladoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
   // Ofatlmologia
-  porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeAnteojosPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeAnteojosPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeAnteojosPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeDemandaPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDemandaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  countAnteojosByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countAnteojosPorAnio/${year}/curso/${id_curso}`);
+  countAnteojosByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countAnteojosPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countDemandaByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/countDemandaPorAnio/${year}/curso/${id_curso}`);
+  countDemandaByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/countDemandaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
   // Prevencion
-  countProblematicaByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/problematicaPorAnio/${year}/curso/${id_curso}`);
+  countProblematicaByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/problematicaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countFrecuenciaConsumoByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/frecuenciaPorAnio/${year}/curso/${id_curso}`);
+  countFrecuenciaConsumoByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/frecuenciaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countMotivoConsumoByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/motivoPorAnio/${year}/curso/${id_curso}`);
+  countMotivoConsumoByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/motivoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  countDrogasHabitualesByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/drogaHabitualPorAnio/${year}/curso/${id_curso}`);
+  countDrogasHabitualesByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/drogaHabitualPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
-  porcentajeProblematicaByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeProblematicaPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeProblematicaByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeProblematicaPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeDrogasHabitualesPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeDrogasHabitualesPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeDrogasHabitualesPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDrogasHabitualesPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeMotivoaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeMotivoConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeMotivoaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeMotivoConsumoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeFrecuenciaConsumoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeFrecuenciaConsumoPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeFrecuenciaConsumoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
   // Fonouadiologia
-  countCausasByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/causasPorAnio/${year}/curso/${id_curso}`);
+  countCausasByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/causasPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  porcentajeCausasPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeCausasPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeCausasPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeCausasPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
-  countDaignosticoPresuntivoByYearAndCurso(year: number, id_curso: number) {
-    return this._http.get(`${this.url}consulta/diagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}`);
+  countDaignosticoPresuntivoByYearAndCurso(year: number, id_curso: number, id_institucion: number) {
+    return this._http.get(`${this.url}consulta/diagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
-  porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/porcentajeDiagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/${porcentaje}`);
+  porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/porcentajeDiagnosticoPresuntivoPorAnio/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
   // Social
-  countConsultasByCategoria(year: number, id_curso: number, porcentaje: number) {
-    return this._http.get(`${this.url}consulta/countConsultasByCategoria/${year}/curso/${id_curso}/${porcentaje}`);
+  countConsultasByCategoria(year: number, id_curso: number, id_institucion: number, porcentaje: number) {
+    return this._http.get(`${this.url}consulta/countConsultasByCategoria/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
 }

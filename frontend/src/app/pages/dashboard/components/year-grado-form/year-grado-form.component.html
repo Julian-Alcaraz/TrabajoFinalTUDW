@@ -7,6 +7,18 @@
       </p-iftaLabel>
     </div>
     <div class="w-100">
+      @if (searchingInstituciones) {
+        <app-loading />
+      } @else {
+        <div class="w-100">
+          <p-iftaLabel class="w-100">
+            <p-select [options]="instituciones" optionLabel="nombre" optionValue="id" [checkmark]="true" [showClear]="true" [formControl]="controlDeInput('id_institucion')" idInput="id_institucion" class="w-52 md:w-" />
+            <label for="id_institucion">Instituciones</label>
+          </p-iftaLabel>
+        </div>
+      }
+    </div>
+    <div class="w-100">
       @if (searchingCursos) {
         <app-loading />
       } @else {
@@ -18,6 +30,7 @@
         </div>
       }
     </div>
+
     <!--
     <div class="flex-2">
       <p-selectbutton [options]="porcentajeOptions" [formControl]="controlDeInput('porcentaje')" optionLabel="nombre" optionValue="valor" aria-labelledby="basic" required />

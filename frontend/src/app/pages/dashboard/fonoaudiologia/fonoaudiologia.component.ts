@@ -23,9 +23,12 @@ export class FonoaudiologiaComponent implements OnInit {
   grid = 3;
   year = 0;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   subTitulo = '';
   cursoLabel = '';
+  cursoInstitucionLabel = '';
+  insttucionLabel = '';
   currentYear: number;
   lastFourYears: number[];
   tituloCausas = 'Causas';
@@ -63,6 +66,7 @@ export class FonoaudiologiaComponent implements OnInit {
   setearGrid(event: any) {
     this.grid = event;
   }
+
   async obtenerGraficos() {
     const promesas = [this.obtenerGraficosPorcentajesCausas(), this.obtenerGraficosPorcentajesDiagnosticoPresuntivo(), this.obtenerGraficosCausas(), this.obtenerGraficosDiagnosticoPresuntivo()];
     Promise.all(promesas).then(() => (this.loading = false));
@@ -78,7 +82,7 @@ export class FonoaudiologiaComponent implements OnInit {
 
   obtenerGraficosPorcentajesCausas() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeCausasPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeCausasPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeCausas = [];
@@ -97,9 +101,10 @@ export class FonoaudiologiaComponent implements OnInit {
       });
     });
   }
+
   obtenerGraficosPorcentajesDiagnosticoPresuntivo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeDiagnosticoPresuntivoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajeDiagnosticoPresuntivo = [];
@@ -118,9 +123,10 @@ export class FonoaudiologiaComponent implements OnInit {
       });
     });
   }
+
   obtenerGraficosCausas() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countCausasByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countCausasByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countCausas = response.data;
@@ -133,9 +139,10 @@ export class FonoaudiologiaComponent implements OnInit {
       });
     });
   }
+
   obtenerGraficosDiagnosticoPresuntivo() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countDaignosticoPresuntivoByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countDaignosticoPresuntivoByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.countDiagnosticoPresuntivo = response.data;
@@ -148,6 +155,7 @@ export class FonoaudiologiaComponent implements OnInit {
       });
     });
   }
+
   cambioForm(event: any) {
     this.setearLabels(event);
     this.obtenerGraficos();
@@ -159,6 +167,7 @@ export class FonoaudiologiaComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -173,7 +182,16 @@ export class FonoaudiologiaComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.insttucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

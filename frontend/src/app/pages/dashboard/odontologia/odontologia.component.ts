@@ -22,9 +22,12 @@ export class OdontologiaComponent implements OnInit {
   year = 0;
   grid = 3;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   subTitulo = '';
   cursoLabel = '';
+  institucionLabel = '';
+  cursoInstitucionLabel = '';
   currentYear: number;
   lastFourYears: number[];
   labelVeces = ['Ninguna', 'Una vez', 'Dos veces', 'Tres veces', ' Cuatro veces', 'Cinco veces'];
@@ -41,6 +44,7 @@ export class OdontologiaComponent implements OnInit {
   countSituacionBucal: any = [];
   countTopificacion: any = [];
   countSellador: any = [];
+
   constructor(
     private _consultaService: ConsultaService,
     private snackBar: MatSnackBar,
@@ -91,7 +95,7 @@ export class OdontologiaComponent implements OnInit {
   }
   graficoCountCepillado() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countCepilladoPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countCepilladoPorAnioByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countCepillado = [];
           if (response.success) {
@@ -107,7 +111,7 @@ export class OdontologiaComponent implements OnInit {
   }
   graficoCountSituacionBucal() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countSituacionBucalPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countSituacionBucalPorAnioByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countSituacionBucal = [];
           if (response.success) {
@@ -123,7 +127,7 @@ export class OdontologiaComponent implements OnInit {
   }
   graficoCountTopificacion() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countTopificacionPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countTopificacionPorAnioByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countTopificacion = [];
           if (response.success) {
@@ -139,7 +143,7 @@ export class OdontologiaComponent implements OnInit {
   }
   graficoCountSellador() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countSelladorPorAnioByYearAndCurso(this.year, this.id_curso).subscribe({
+      this._consultaService.countSelladorPorAnioByYearAndCurso(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.countSellador = [];
           if (response.success) {
@@ -155,7 +159,7 @@ export class OdontologiaComponent implements OnInit {
   }
   obtenerGraficoCepillado() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeCepilladoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeCepilladoPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesCepillado = [];
@@ -176,7 +180,7 @@ export class OdontologiaComponent implements OnInit {
   }
   obtenerGraficoTopificacion() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeTopificacionPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeTopificacionPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesTopificacion = [];
@@ -197,7 +201,7 @@ export class OdontologiaComponent implements OnInit {
   }
   obtenerGraficoSitaucionBucal() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeSituacionBucalPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeSituacionBucalPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesSituacionBucal = [];
@@ -219,7 +223,7 @@ export class OdontologiaComponent implements OnInit {
 
   obtenerGraficoSellador() {
     return new Promise((resolve, reject) => {
-      this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.porcentajeSelladorPorAnioByYearAndCurso(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.porcentajesSellador = [];
@@ -250,6 +254,7 @@ export class OdontologiaComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -264,7 +269,16 @@ export class OdontologiaComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

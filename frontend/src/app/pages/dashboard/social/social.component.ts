@@ -24,9 +24,12 @@ export class SocialComponent implements OnInit {
   grid = 3;
   year = 0;
   id_curso = 0;
+  id_institucion = 0;
   porcentaje = 0;
   subTitulo = '';
   cursoLabel = '';
+  institucionLabel = '';
+  cursoInstitucionLabel = '';
   currentYear: number;
   lastFourYears: number[];
 
@@ -75,7 +78,7 @@ export class SocialComponent implements OnInit {
 
   obtenerGraficoConsultasxCategoria() {
     return new Promise((resolve, reject) => {
-      this._consultaService.countConsultasByCategoria(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._consultaService.countConsultasByCategoria(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.dataTipoConsultaPorCategoria = [];
@@ -102,7 +105,7 @@ export class SocialComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           this.categorias = response.data;
-          this.categorias = response.data.map((cat: Categoria) => cat.nombre)
+          this.categorias = response.data.map((cat: Categoria) => cat.nombre);
         }
         this.loading = false;
       },
@@ -124,6 +127,7 @@ export class SocialComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -138,7 +142,16 @@ export class SocialComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
+    }
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 }

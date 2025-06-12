@@ -34,8 +34,11 @@ export class TalleresComponent implements OnInit {
   public porcentaje = 0;
   public year = 0;
   public id_curso = 0;
+  public id_institucion = 0;
   public subTitulo = '';
   public cursoLabel = '';
+  public institucionLabel = '';
+  public cursoInstitucionLabel = '';
   public lastFourYears: number[];
   public currentYear: number;
   public participantes = 0;
@@ -232,6 +235,7 @@ export class TalleresComponent implements OnInit {
     }
     let yearLabel;
     let cursoLabel;
+    let institucionLabel;
     if (event.year) {
       this.year = event.year;
       yearLabel = ' (' + this.year + ')';
@@ -246,16 +250,17 @@ export class TalleresComponent implements OnInit {
       this.id_curso = 0;
       cursoLabel = '';
     }
-    if (event.participantes !== '') {
-      this.participantes = +event.participantes;
-      if (this.participantes === 1) {
-        this.participantesOEncuentros = 'Participantes';
-      } else if (this.participantes === 0) {
-        this.participantesOEncuentros = 'Encuentros';
-      }
+    if (event.id_institucion) {
+      this.id_institucion = event.id_institucion;
+      institucionLabel = ' ' + event.nombreInstitucion;
+    } else {
+      this.id_institucion = 0;
+      institucionLabel = '';
     }
-    this.subTitulo = '' + yearLabel + cursoLabel;
+    this.subTitulo = [yearLabel, cursoLabel, institucionLabel].filter(Boolean).join(', ');
     this.cursoLabel = cursoLabel;
+    this.institucionLabel = institucionLabel;
+    this.cursoInstitucionLabel = [institucionLabel, cursoLabel].filter(Boolean).join(', ');
   }
 
   getMarcos(especialidad: string): string[] {
