@@ -424,7 +424,7 @@ export class DevSeeder implements Seeder {
         { nombre: 'Villa Dolores-Posadas-Misiones', localidad: misiones },
         { nombre: 'Villarino', localidad: cipolletti },
         { nombre: 'El treinta', localidad: cipolletti },
-        { nombre: 'Rincon de los sauces-pehuenches (neuquen)', localidad: cipolletti },
+        { nombre: 'Rincon de los sauces-pehuenches (neuquen)', localidad: neuquen },
         { nombre: '2 de Febrero', localidad: cipolletti },
         { nombre: '20 de Febrero', localidad: cipolletti },
         { nombre: '10 de febrero', localidad: cipolletti },
