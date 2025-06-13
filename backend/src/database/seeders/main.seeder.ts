@@ -340,16 +340,20 @@ export class MainSeeder implements Seeder {
         { nivel: 'Primario', nombre: 'Quinto Grado' },
         { nivel: 'Primario', nombre: 'Sexto Grado' },
         { nivel: 'Primario', nombre: 'Septimo Grado' },
+        { nivel: 'Primario', nombre: 'Todos' },
       ]);
       console.log('Seeding instituciones...');
       await institucionORM.save([
         // escuelas planilla clinica
         { nombre: 'Esc. N°294', tipo: 'Primario' },
-        { nombre: 'Jardin N° 118', tipo: 'Jardin' },
-        { nombre: 'Jardín N° 49', tipo: 'Jardin' },
+        { nombre: 'Jardín N°118', tipo: 'Jardin' },
+        { nombre: 'Jardín N°49', tipo: 'Jardin' },
         { nombre: 'CEM N° 147', tipo: 'Secundario' },
         { nombre: 'CI Municipal N°3', tipo: 'Primario' },
         { nombre: 'Otros', tipo: 'Primario' },
+        // escuelas planilla talleres nutricion
+        { nombre: 'Jardín N°50', tipo: 'Jardin' },
+        { nombre: 'Esc. N° 142', tipo: 'Primario' },
       ]);
       // Especialidades
       console.log('Seeding especialidades...');
@@ -382,7 +386,7 @@ export class MainSeeder implements Seeder {
 
       const marcosOdontologia = await marcoORM.save([
         { nombre: 'Motivación', especialidad: especialidades[3] },
-        { nombre: 'Prevención de Caries', especialidad: especialidades[3] },
+        { nombre: 'Prevención de caries', especialidad: especialidades[3] },
         { nombre: 'Prevención', especialidad: especialidades[3] },
         { nombre: 'Teórico', especialidad: especialidades[3] },
       ]);

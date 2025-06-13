@@ -906,11 +906,20 @@ function convertirHidratacion(params: any) {
 function convertirInstitucion(inst: string): string {
   const conversiones: { [key: string]: string } = {
     'ESC. 294': 'Esc. N°294',
-    'JARDIN 118': 'Jardin N° 118',
-    'JARDIN 49': 'Jardín N° 49',
-    'Jardin 50': 'Jardin N° 50', // FALTA
+    'JARDIN 118': 'Jardín N°118',
+    'Jardin N° 118': 'Jardín N°118',
+
+    'JARDIN 49': 'Jardín N°49',
+    'Jardín N° 49': 'Jardín N°49',
+
+    'Jardin 50': 'Jardín N°50',
+    'Jardin N°50': 'Jardín N°50',
+
+    'Esc N°142': 'Esc. N°142',
+    'ESTRATEGIA Esc. 142': 'Esc. N°142',
 
     Otras: 'Otros',
+    OTROS: 'Otros',
   };
   return conversiones[inst] || inst;
 }
@@ -924,6 +933,8 @@ function convertirCurso(curso: string): string {
     '5to Grado': 'Quinto Grado',
     '6to Grado': 'Sexto Grado',
     '7mo Grado': 'Septimo Grado',
+    todos: 'Todos',
+    TODOS: 'Todos',
   };
 
   return conversiones[curso] || curso;
@@ -1102,6 +1113,7 @@ function verificarTurno(destinatario) {
     'M y T': 'M y T',
     MyT: 'M y T',
     JC: 'JC',
+    AMBOS: 'M y T',
   };
 
   return equivalencias[destinatario];
