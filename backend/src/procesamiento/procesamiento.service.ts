@@ -536,7 +536,9 @@ export class ProcesamientoService {
             // consulta hija  lacreo y pongo clinica.consulta = consulta
             const social = new Social();
             social.consulta = consultaNueva;
-            social.categorias = await this.convertirCategorias(row['Categorias']);
+            console.log(row['CATEGORÍAS']);
+            social.categorias = await this.convertirCategorias(row['CATEGORÍAS']);
+            console.log(social.categorias);
             social.articulacion = row['Articulación con:'] === null ? 'No hay dato' : row['Articulación con:'];
             social.demanda = row['Demanda de:'] === null ? 'No hay dato' : row['Demanda de:'];
             social.objeto_informe = row['Objeto de Informe'] === null ? 'No hay dato' : row['Objeto de Informe'];
@@ -577,7 +579,7 @@ export class ProcesamientoService {
 
     const array = [];
     for (const cat of arrayCategorias) {
-      array.push(await this.verificarCategoria(cat, false));
+      array.push(await this.verificarCategoria(cat));
     }
     return array;
   }
@@ -906,6 +908,7 @@ function convertirHidratacion(params: any) {
 function convertirInstitucion(inst: string): string {
   const conversiones: { [key: string]: string } = {
     'ESC. 294': 'Esc. N°294',
+
     'JARDIN 118': 'Jardín N°118',
     'Jardin N° 118': 'Jardín N°118',
 

@@ -40,6 +40,15 @@ export class MainSeeder implements Seeder {
         {
           nombre: 'Admin',
           apellido: 'Admin',
+          email: 'dev@gmail.com',
+          contrasenia: codificarContrasenia('11111111'),
+          dni: 11111111,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+        },
+        {
+          nombre: 'Admin',
+          apellido: 'Admin',
           email: 'Admin@gmail.com',
           contrasenia: codificarContrasenia('11111111'),
           dni: 11111112,
@@ -353,7 +362,8 @@ export class MainSeeder implements Seeder {
         { nombre: 'Otros', tipo: 'Primario' },
         // escuelas planilla talleres nutricion
         { nombre: 'Jardín N°50', tipo: 'Jardin' },
-        { nombre: 'Esc. N° 142', tipo: 'Primario' },
+        // escuelas planilla talleres odontologia
+        { nombre: 'Esc. N°142', tipo: 'Primario' },
       ]);
       // Especialidades
       console.log('Seeding especialidades...');

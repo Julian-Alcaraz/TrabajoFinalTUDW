@@ -151,6 +151,15 @@ export class DevSeeder implements Seeder {
           fe_nacimiento: '2000-01-01',
           roles: [roles[0]], // admin
         },
+        {
+          nombre: 'Admin',
+          apellido: 'Admin',
+          email: 'dev@gmail.com',
+          contrasenia: codificarContrasenia('11111111'),
+          dni: 11111111,
+          fe_nacimiento: '2000-01-01',
+          roles: [roles[0]], // admin
+        },
       ]);
 
       // Crea 50 usuarios con 1 rol cada uno, puede ser profesional o administrador pero no ambos

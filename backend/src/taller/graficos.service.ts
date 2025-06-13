@@ -18,12 +18,12 @@ export class GraficosService {
   async countByYear(year: number, id_curso: number, id_inst: number) {
     const respuesta = [];
     for (let i = 0; i < 4; i++) {
-      const countTalleres = this.tallerORM.createQueryBuilder('taller').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year });
+      const countTalleres = this.tallerORM.createQueryBuilder('taller').innerJoin('taller.institucion', 'institucion').innerJoin('taller.curso', 'curso').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year });
       if (id_curso !== 0) {
         countTalleres.andWhere('taller.id_curso = :id_curso', { id_curso });
       }
       if (id_inst !== 0) {
-        countTalleres.andWhere('taller.id_curso = :id_inst', { id_inst });
+        countTalleres.andWhere('taller.id_institucion = :id_inst', { id_inst });
       }
       const data = await countTalleres.getCount();
       respuesta.push(data);
@@ -39,13 +39,13 @@ export class GraficosService {
       const currentYear = year - (3 - i);
       const counts = await Promise.all(
         types.map(async (type) => {
-          let query = this.tallerORM.createQueryBuilder('taller').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
+          let query = this.tallerORM.createQueryBuilder('taller').innerJoin('taller.curso', 'curso').innerJoin('taller.institucion', 'institucion').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
 
           if (id_curso !== 0) {
             query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
           }
           if (id_inst !== 0) {
-            query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+            query = query.andWhere('taller.id_institucion = :id_inst', { id_inst });
           }
           return query.getCount();
         }),
@@ -76,16 +76,16 @@ export class GraficosService {
       for (const type of types) {
         let query;
         if (participantes === 1) {
-          query = this.tallerORM.createQueryBuilder('taller').select('SUM(taller.cant_participantes)', 'total').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado = false').andWhere('taller.es_taller = true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
+          query = this.tallerORM.createQueryBuilder('taller').select('SUM(taller.cant_participantes)', 'total').innerJoin('taller.curso', 'curso').innerJoin('taller.institucion', 'institucion').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado = false').andWhere('taller.es_taller = true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
         } else {
-          query = this.tallerORM.createQueryBuilder('taller').select('SUM(taller.cant_encuentros)', 'total').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado = false').andWhere('taller.es_taller = true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
+          query = this.tallerORM.createQueryBuilder('taller').select('SUM(taller.cant_encuentros)', 'total').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').innerJoin('taller.institucion', 'institucion').where('taller.deshabilitado = false').andWhere('taller.es_taller = true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year: currentYear }).andWhere('especialidad.nombre = :type', { type });
         }
 
         if (id_curso !== 0) {
           query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
         }
         if (id_inst !== 0) {
-          query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+          query = query.andWhere('taller.id_institucion = :id_inst', { id_inst });
         }
         const result = await query.getRawOne();
         arrayData.push(parseInt(result.total || 0));
@@ -138,6 +138,7 @@ export class GraficosService {
           .select('marco.nombre', 'marco')
           .addSelect('SUM(taller.cant_participantes)', 'total')
           .innerJoin('taller.curso', 'curso')
+          .innerJoin('taller.institucion', 'institucion')
           .innerJoin('taller.especialidad', 'especialidad')
           .innerJoin('taller.marco', 'marco')
           .where('taller.deshabilitado = false')
@@ -153,6 +154,7 @@ export class GraficosService {
           .select('marco.nombre', 'marco')
           .addSelect('SUM(taller.cant_encuentros)', 'total')
           .innerJoin('taller.curso', 'curso')
+          .innerJoin('taller.institucion', 'institucion')
           .innerJoin('taller.especialidad', 'especialidad')
           .innerJoin('taller.marco', 'marco')
           .where('taller.deshabilitado = false')
@@ -168,7 +170,7 @@ export class GraficosService {
         query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
       }
       if (id_inst !== 0) {
-        query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+        query = query.andWhere('taller.id_institucion = :id_inst', { id_inst });
       }
       const result = await query.getRawMany();
 
@@ -197,7 +199,7 @@ export class GraficosService {
     const types = EspecialidadEnum;
     const respuesta = await Promise.all(
       types.map(async (type) => {
-        let query = this.tallerORM.createQueryBuilder('taller').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('especialidad.nombre = :nombreEspecialidad', {
+        let query = this.tallerORM.createQueryBuilder('taller').innerJoin('taller.curso', 'curso').innerJoin('taller.especialidad', 'especialidad').innerJoin('taller.institucion', 'institucion').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('especialidad.nombre = :nombreEspecialidad', {
           nombreEspecialidad: type,
         });
         if (year !== 0) {
@@ -207,7 +209,7 @@ export class GraficosService {
           query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
         }
         if (id_inst !== 0) {
-          query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+          query = query.andWhere('taller.id_institucion = :id_inst', { id_inst });
         }
         return await query.getCount();
       }),
