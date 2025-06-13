@@ -320,7 +320,7 @@ export class MainSeeder implements Seeder {
         { nombre: 'Ciudad de la Paz', localidad: cipolletti },
         { nombre: 'Santo Domingo', localidad: cipolletti },
         { nombre: 'distrito noreste', localidad: neuquen },
-        { nombre: 'Las Cabañitas', localidad: neuquen },
+        { nombre: 'Las Cabañitas', localidad: cipolletti },
         { nombre: 'Parque Industrial', localidad: cipolletti },
         { nombre: 'Cinco Saltos', localidad: cipolletti },
         { nombre: 'Anahi Mapu', localidad: cipolletti },
@@ -353,6 +353,8 @@ export class MainSeeder implements Seeder {
       ]);
       console.log('Seeding instituciones...');
       await institucionORM.save([
+        { nombre: 'Jardin N° 14', tipo: 'Jardin' },
+        { nombre: 'Escuela N° 125', tipo: 'Primario' },
         // escuelas planilla clinica
         { nombre: 'Esc. N°294', tipo: 'Primario' },
         { nombre: 'Jardín N°118', tipo: 'Jardin' },
