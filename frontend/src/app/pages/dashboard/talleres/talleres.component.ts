@@ -138,7 +138,7 @@ export class TalleresComponent implements OnInit {
 
   countTypeTalleresxanio() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countTypeByYear(this.currentYear, this.id_curso, this.porcentaje).subscribe({
+      this._tallerService.countTypeByYear(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje).subscribe({
         next: (response: any) => {
           this.dataTalleresxAnioxEspecialidad = [];
           if (response.success) {
@@ -155,7 +155,7 @@ export class TalleresComponent implements OnInit {
 
   countTalleresxAnio() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countTallerLastYears(this.currentYear).subscribe({
+      this._tallerService.countTallerLastYears(this.currentYear, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.dataTalleresxAnio = [];
           if (response.success) {
@@ -175,7 +175,7 @@ export class TalleresComponent implements OnInit {
 
   countParticipantesxEspecialidad() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countParticipantesxEspecialidad(this.currentYear, this.id_curso, this.porcentaje, this.participantes).subscribe({
+      this._tallerService.countParticipantesxEspecialidad(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje, this.participantes).subscribe({
         next: (response: any) => {
           this.dataParticipantesTalleresxAnio = [];
           if (response.success) {
@@ -192,7 +192,7 @@ export class TalleresComponent implements OnInit {
 
   countCantEncuentrosxMarco() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countCantEncuentrosxMarco(this.currentYear, this.id_curso, this.porcentaje, this.participantes).subscribe({
+      this._tallerService.countCantEncuentrosxMarco(this.currentYear, this.id_curso, this.id_institucion, this.porcentaje, this.participantes).subscribe({
         next: (response: any) => {
           this.dataCantEncuentrosxMarco = [];
           if (response.success) {
@@ -209,7 +209,7 @@ export class TalleresComponent implements OnInit {
 
   countCantTalleresxTipo() {
     return new Promise((resolve, reject) => {
-      this._tallerService.countCantTalleresxTipo(this.year, this.id_curso).subscribe({
+      this._tallerService.countCantTalleresxTipo(this.year, this.id_curso, this.id_institucion).subscribe({
         next: (response: any) => {
           this.dataTipoTaller = [];
           if (response.success) {

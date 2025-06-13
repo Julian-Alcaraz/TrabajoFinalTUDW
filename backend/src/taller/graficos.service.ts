@@ -15,17 +15,24 @@ export class GraficosService {
     @InjectRepository(Especialidad) private readonly especialidadORM: Repository<Marco>,
   ) {}
 
-  async countByYear(year: number) {
+  async countByYear(year: number, id_curso: number, id_inst: number) {
     const respuesta = [];
     for (let i = 0; i < 4; i++) {
-      const countTalleres = await this.tallerORM.createQueryBuilder('taller').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year }).getCount();
-      respuesta.push(countTalleres);
+      const countTalleres = this.tallerORM.createQueryBuilder('taller').where('taller.deshabilitado=false').andWhere('taller.es_taller=true').andWhere('EXTRACT(YEAR FROM taller.fecha) = :year', { year });
+      if (id_curso !== 0) {
+        countTalleres.andWhere('taller.id_curso = :id_curso', { id_curso });
+      }
+      if (id_inst !== 0) {
+        countTalleres.andWhere('taller.id_curso = :id_inst', { id_inst });
+      }
+      const data = await countTalleres.getCount();
+      respuesta.push(data);
       year--;
     }
     return respuesta.reverse();
   }
 
-  async countTypeByYear(year: number, id_curso: number, porcentaje: number) {
+  async countTypeByYear(year: number, id_curso: number, id_inst: number, porcentaje: number) {
     const types = EspecialidadEnum;
     const resultado = [];
     for (let i = 0; i < 4; i++) {
@@ -37,7 +44,9 @@ export class GraficosService {
           if (id_curso !== 0) {
             query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
           }
-
+          if (id_inst !== 0) {
+            query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+          }
           return query.getCount();
         }),
       );
@@ -56,7 +65,7 @@ export class GraficosService {
     return resultado;
   }
 
-  async countParticipantesxEspecialidad(year: number, id_curso: number, porcentaje: number, participantes: number) {
+  async countParticipantesxEspecialidad(year: number, id_curso: number, id_inst: number, porcentaje: number, participantes: number) {
     const types = EspecialidadEnum;
     const resultado = [];
 
@@ -74,6 +83,9 @@ export class GraficosService {
 
         if (id_curso !== 0) {
           query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
+        }
+        if (id_inst !== 0) {
+          query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
         }
         const result = await query.getRawOne();
         arrayData.push(parseInt(result.total || 0));
@@ -94,16 +106,16 @@ export class GraficosService {
     return resultado;
   }
 
-  async countCantEncuentrosxMarco(year: number, id_curso: number, porcentaje: number, participantes: number) {
+  async countCantEncuentrosxMarco(year: number, id_curso: number, id_inst: number, porcentaje: number, participantes: number) {
     const especialidades = await this.especialidadORM.find({ where: { deshabilitado: false } });
     const resultados: { [nombre: string]: any } = {};
     for (const especialidad of especialidades) {
-      resultados[especialidad.nombre.toLowerCase()] = await this.countCantEncuentrosxMarcoInterno(year, id_curso, porcentaje, participantes, especialidad.nombre);
+      resultados[especialidad.nombre.toLowerCase()] = await this.countCantEncuentrosxMarcoInterno(year, id_curso, id_inst, porcentaje, participantes, especialidad.nombre);
     }
     return resultados;
   }
 
-  async countCantEncuentrosxMarcoInterno(year: number, id_curso: number, porcentaje: number, participantes: number, nombreEspecialidad: string) {
+  async countCantEncuentrosxMarcoInterno(year: number, id_curso: number, id_inst: number, porcentaje: number, participantes: number, nombreEspecialidad: string) {
     const resultado: { label: string; data: number[] }[] = [];
 
     const marcos = await this.marcoORM
@@ -155,7 +167,9 @@ export class GraficosService {
       if (id_curso !== 0) {
         query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
       }
-
+      if (id_inst !== 0) {
+        query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
+      }
       const result = await query.getRawMany();
 
       const mapMarcoTotal = new Map<string, number>();
@@ -179,7 +193,7 @@ export class GraficosService {
     return resultado;
   }
 
-  async countCantTalleresxTipo(year: number, id_curso: number) {
+  async countCantTalleresxTipo(year: number, id_curso: number, id_inst: number) {
     const types = EspecialidadEnum;
     const respuesta = await Promise.all(
       types.map(async (type) => {
@@ -191,6 +205,9 @@ export class GraficosService {
         }
         if (id_curso !== 0) {
           query = query.andWhere('taller.id_curso = :id_curso', { id_curso });
+        }
+        if (id_inst !== 0) {
+          query = query.andWhere('taller.id_curso = :id_inst', { id_inst });
         }
         return await query.getCount();
       }),

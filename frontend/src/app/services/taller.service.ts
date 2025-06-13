@@ -35,23 +35,23 @@ export class TallerService {
 
   // ============================ Graficos ============================
 
-  countTypeByYear(year: number, id_curso: number, porcentaje: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countTypeByYear/${year}/curso/${id_curso}/${porcentaje}`);
+  countTypeByYear(year: number, id_curso: number, id_institucion: number, porcentaje: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countTypeByYear/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}`);
   }
 
-  countTallerLastYears(year: number): Observable<any> {
-    return this._http.get(`${this.url}taller/contarxAnios/${year}`);
+  countTallerLastYears(year: number, id_curso: number, id_institucion: number): Observable<any> {
+    return this._http.get(`${this.url}taller/contarxAnios/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 
-  countParticipantesxEspecialidad(year: number, id_curso: number, porcentaje: number, participantes: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countParticipantesxEspecialidad/${year}/curso/${id_curso}/${porcentaje}/${participantes}`);
+  countParticipantesxEspecialidad(year: number, id_curso: number, id_institucion: number, porcentaje: number, participantes: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countParticipantesxEspecialidad/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}/${participantes}`);
   }
 
-  countCantEncuentrosxMarco(year: number, id_curso: number, porcentaje: number, participantes: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countCantEncuentrosxMarco/${year}/curso/${id_curso}/${porcentaje}/${participantes}`);
+  countCantEncuentrosxMarco(year: number, id_curso: number, id_institucion: number, porcentaje: number, participantes: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countCantEncuentrosxMarco/${year}/curso/${id_curso}/institucion/${id_institucion}/${porcentaje}/${participantes}`);
   }
 
-  countCantTalleresxTipo(year: number, id_curso: number): Observable<any> {
-    return this._http.get(`${this.url}taller/countCantTalleresxTipo/${year}/curso/${id_curso}`);
+  countCantTalleresxTipo(year: number, id_curso: number, id_institucion: number): Observable<any> {
+    return this._http.get(`${this.url}taller/countCantTalleresxTipo/${year}/curso/${id_curso}/institucion/${id_institucion}`);
   }
 }
