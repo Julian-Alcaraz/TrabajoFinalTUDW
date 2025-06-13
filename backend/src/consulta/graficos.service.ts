@@ -43,7 +43,7 @@ export class GraficosService {
           query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
         }
         if (id_institucion !== 0) {
-          query = query.andWhere('consulta.id_institucion = :id_institucion', { id_institucion });
+          query = query.andWhere('consulta.id_institucion = :id_inst', { id_institucion });
         }
         return query.getCount();
       }),
@@ -53,7 +53,7 @@ export class GraficosService {
   }
 
   // CLINICA
-  async tensionxEstadoData(year: number, id: number, estado: string) {
+  async tensionxEstadoData(year: number, id: number, id_inst: number, estado: string) {
     const types = Constantes.TensionArterialEnum;
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false').andWhere('clinica.es_clinica = true').andWhere('clinica.estado_nutricional = :estado AND clinica.tension_arterial = :type', { estado, type });
@@ -62,6 +62,9 @@ export class GraficosService {
       }
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
       }
       return query.getCount();
     };
@@ -73,7 +76,7 @@ export class GraficosService {
     return counts;
   }
 
-  async estadoNutricionalData(year: number, id: number) {
+  async estadoNutricionalData(year: number, id: number, id_inst: number) {
     const types = Constantes.EstadoNutricionalEnum;
     // const types = ['B Bajo peso/Desnutrido', 'A Riesgo Nutricional', 'C Eutrófico', 'D Sobrepeso', 'E Obesidad'];
     const createQuery = (type: string) => {
@@ -84,6 +87,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -94,10 +100,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeEstadoNutricional(year: number, id: number, porcentaje: number) {
+  async porcentajeEstadoNutricional(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.estadoNutricionalData(year, id);
+      const data = await this.estadoNutricionalData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -109,7 +115,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async tensionArterialData(year: number, id: number) {
+  async tensionArterialData(year: number, id: number, id_inst: number) {
     const types = Constantes.TensionArterialEnum;
     // const types = ['Normotenso', 'Riesgo', 'Hipertenso'];
     const createQuery = (type: string) => {
@@ -120,6 +126,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -130,10 +139,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeTensionArterialData(year: number, id: number, porcentaje: number) {
+  async porcentajeTensionArterialData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.tensionArterialData(year, id);
+      const data = await this.tensionArterialData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -144,7 +153,7 @@ export class GraficosService {
     }
     return respuesta;
   }
-  async examenVisualData(year: number, id: number) {
+  async examenVisualData(year: number, id: number, id_inst: number) {
     const types = Constantes.ExamenVisualEnum;
     // const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
@@ -155,6 +164,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -164,10 +176,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeExamenVisualData(year: number, id: number, porcentaje: number) {
+  async porcentajeExamenVisualData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.examenVisualData(year, id);
+      const data = await this.examenVisualData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -179,7 +191,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async vacunacionData(year: number, id: number) {
+  async vacunacionData(year: number, id: number, id_inst: number) {
     const types = Constantes.VacunasEnum;
     // const types = ['Completo', 'Incompleto', 'Desconocido'];
     const createQuery = (type: string) => {
@@ -190,6 +202,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -200,10 +215,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeVacunacionData(year: number, id: number, porcentaje: number) {
+  async porcentajeVacunacionData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.vacunacionData(year, id);
+      const data = await this.vacunacionData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -215,7 +230,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async ortopediaData(year: number, id: number) {
+  async ortopediaData(year: number, id: number, id_inst: number) {
     const types = Constantes.OrtopediaYTraumatologiaEnum;
     // const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
@@ -231,6 +246,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -241,10 +259,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeOrtopediaData(year: number, id: number, porcentaje: number) {
+  async porcentajeOrtopediaData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.ortopediaData(year, id);
+      const data = await this.ortopediaData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -256,7 +274,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async lenguajeData(year: number, id: number) {
+  async lenguajeData(year: number, id: number, id_inst: number) {
     const types = Constantes.LenguajeEnum;
     // const types = ['Adecuado', 'Inadecuado'];
     const createQuery = (type: string) => {
@@ -266,6 +284,9 @@ export class GraficosService {
       }
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
       }
       return query.getCount();
     };
@@ -277,10 +298,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeLenguajeData(year: number, id: number, porcentaje: number) {
+  async porcentajeLenguajeData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.lenguajeData(year, id);
+      const data = await this.lenguajeData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -294,7 +315,7 @@ export class GraficosService {
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ODONOTOLOGIA
 
-  async cepilladoData(year: number, id: number) {
+  async cepilladoData(year: number, id: number, id_inst: number) {
     const types = [0, 1, 2, 3, 4, 5];
     const createQuery = (type: number) => {
       // const cepilladoBoolean = type === 'Si';
@@ -305,6 +326,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -315,10 +339,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeCepilladoData(year: number, id: number, porcentaje: number) {
+  async porcentajeCepilladoData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.cepilladoData(year, id);
+      const data = await this.cepilladoData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -330,7 +354,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async topificacionData(year: number, id: number) {
+  async topificacionData(year: number, id: number, id_inst: number) {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       const topificacionBoolean = type === 'Si';
@@ -341,6 +365,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -351,10 +378,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeTopificacionData(year: number, id: number, porcentaje: number) {
+  async porcentajeTopificacionData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.topificacionData(year, id);
+      const data = await this.topificacionData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -366,7 +393,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async situacionBucalData(year: number, id: number) {
+  async situacionBucalData(year: number, id: number, id_inst: number) {
     const types = ['Bajo índice de caries', 'Moderado índice de caries', 'Alto índice de caries', 'Boca sana', 'Sin clasificación'];
     const createQuery = (type: string) => {
       const clasificacion = type;
@@ -377,6 +404,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -387,10 +417,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeSituacionBucalData(year: number, id: number, porcentaje: number) {
+  async porcentajeSituacionBucalData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.situacionBucalData(year, id);
+      const data = await this.situacionBucalData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -402,7 +432,7 @@ export class GraficosService {
     return respuesta;
   }
 
-  async selladoData(year: number, id: number) {
+  async selladoData(year: number, id: number, id_inst: number) {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.odontologia', 'odontologia').where('consulta.deshabilitado=false ');
@@ -418,6 +448,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -428,10 +461,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeSelladoData(year: number, id: number, porcentaje: number) {
+  async porcentajeSelladoData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.selladoData(year, id);
+      const data = await this.selladoData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -444,7 +477,7 @@ export class GraficosService {
   }
 
   // !!!!!!!!!! OFTALMOLIGA
-  async anteojosData(year: number, id: number) {
+  async anteojosData(year: number, id: number, id_inst: number) {
     const types = ['Si', 'No'];
     const createQuery = (type: string) => {
       const clasificacion = type === 'Si';
@@ -454,6 +487,9 @@ export class GraficosService {
       }
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
+      }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
       }
       return query.getCount();
     };
@@ -465,10 +501,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeAnteojosData(year: number, id: number, porcentaje: number) {
+  async porcentajeAnteojosData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.anteojosData(year, id);
+      const data = await this.anteojosData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -479,7 +515,7 @@ export class GraficosService {
     }
     return respuesta;
   }
-  async demandaData(year: number, id: number) {
+  async demandaData(year: number, id: number, id_inst: number) {
     const types = Constantes.DemandaEnum;
     // const types = ['Control niño sano', 'Docente', 'Familiar', 'Otro'];
     const createQuery = (type: string) => {
@@ -491,6 +527,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -501,10 +540,10 @@ export class GraficosService {
     return counts;
   }
 
-  async porcentajeDemandaData(year: number, id: number, porcentaje: number) {
+  async porcentajeDemandaData(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.demandaData(year, id);
+      const data = await this.demandaData(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -517,7 +556,7 @@ export class GraficosService {
   }
 
   // FONOAUDIOLOGIA
-  async diagnosticoPresuntivo(year: number, id: number) {
+  async diagnosticoPresuntivo(year: number, id: number, id_inst: number) {
     const types = Constantes.DiagnosticoPresuntivoEnum;
     // const types = ['TEL', 'TEA', 'Retraso en el lenguaje, dislalias funcionales', 'Respirador bucal', 'Anquiloglosia', 'Ortodoncia: Protrusión lingual, paladar hendido', 'Síndromes', 'Otras patologías que dificulten el lenguaje y la comunicación'] as const;
 
@@ -530,6 +569,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -539,10 +581,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeDiagnosticoPresuntivo(year: number, id: number, porcentaje: number) {
+  async porcentajeDiagnosticoPresuntivo(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.diagnosticoPresuntivo(year, id);
+      const data = await this.diagnosticoPresuntivo(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -553,7 +595,7 @@ export class GraficosService {
     }
     return respuesta;
   }
-  async causas(year: number, id: number) {
+  async causas(year: number, id: number, id_inst: number) {
     const types = Constantes.CausasEnum;
     // const types = ['Prenatal', 'Postnatal', 'ACV', 'Respiratorias', 'Audición', 'Patologías clínicas', 'Síndromes', 'Inflamación de amígdalas o adenoides', 'Prematurez', 'Otras'] as const;
 
@@ -566,6 +608,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -575,10 +620,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeCausas(year: number, id: number, porcentaje: number) {
+  async porcentajeCausas(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.causas(year, id);
+      const data = await this.causas(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -590,7 +635,7 @@ export class GraficosService {
     return respuesta;
   }
   // PREVENCION
-  async problematica(year: number, id: number) {
+  async problematica(year: number, id: number, id_inst: number) {
     const types = Constantes.OtraProblematicaEnum;
     // const types = ['Consumo problematico', 'Bajo rendimiento', 'Violencia familiar', 'Depresion', 'Bullying', 'Otra'];
     const createQuery = (type: string) => {
@@ -602,6 +647,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -611,10 +659,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeProblematica(year: number, id: number, porcentaje: number) {
+  async porcentajeProblematica(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.problematica(year, id);
+      const data = await this.problematica(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -627,7 +675,7 @@ export class GraficosService {
   }
 
   // cosumo problematico
-  async drogasHabituales(year: number, id: number) {
+  async drogasHabituales(year: number, id: number, id_inst: number) {
     const types = Constantes.ConsumoProblematicoEnum;
     // const types = ['Alchol', 'Marihuana', 'Cocaina', 'Tabaco', 'Otra'];
     const createQuery = (type: string) => {
@@ -640,6 +688,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -649,10 +700,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeDrogasHabituales(year: number, id: number, porcentaje: number) {
+  async porcentajeDrogasHabituales(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.drogasHabituales(year, id);
+      const data = await this.drogasHabituales(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -664,7 +715,7 @@ export class GraficosService {
     return respuesta;
   }
   // frecuencia consumo
-  async frecuenciaConsumo(year: number, id: number) {
+  async frecuenciaConsumo(year: number, id: number, id_inst: number) {
     const types = Constantes.FrecuenciaPrevencionEnum;
     // const types = ['Todos los dias', '2 veces por semana', '3 veces por semana', 'Fines de semana', 'Exporadico', 'Otro'];
     const createQuery = (type: string) => {
@@ -677,6 +728,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -686,10 +740,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeFrecuenciaConsumo(year: number, id: number, porcentaje: number) {
+  async porcentajeFrecuenciaConsumo(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.frecuenciaConsumo(year, id);
+      const data = await this.frecuenciaConsumo(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -701,7 +755,7 @@ export class GraficosService {
     return respuesta;
   }
   // motivo consumo
-  async motivoConsumo(year: number, id: number) {
+  async motivoConsumo(year: number, id: number, id_inst: number) {
     const types = Constantes.MotivoConsumoEnum;
     // const types = ['Curiosidad', 'Presion de grupo', 'Ritos Familiar', 'Otro'];
     const createQuery = (type: string) => {
@@ -715,6 +769,9 @@ export class GraficosService {
       if (id) {
         query = query.andWhere('consulta.id_curso = :id', { id });
       }
+      if (id_inst !== 0) {
+        query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst });
+      }
       return query.getCount();
     };
     const counts = await Promise.all(
@@ -724,10 +781,10 @@ export class GraficosService {
     );
     return counts;
   }
-  async porcentajeMotivoConsumo(year: number, id: number, porcentaje: number) {
+  async porcentajeMotivoConsumo(year: number, id: number, id_inst: number, porcentaje: number) {
     const respuesta = {};
     for (let i = 0; i < 4; i++) {
-      const data = await this.motivoConsumo(year, id);
+      const data = await this.motivoConsumo(year, id, id_inst);
       if (porcentaje === 1) {
         const porcentajes = calcularPorcentaje(data);
         respuesta[year] = porcentajes;
@@ -739,16 +796,22 @@ export class GraficosService {
     return respuesta;
   }
   // TRABAJO SOCIAL
-  async countConsultasByCategoria(year: number, id: number, porcentaje: number) {
+  async countConsultasByCategoria(year: number, id: number, id_inst: number, porcentaje: number) {
     const categorias = await this.categoriaORM.find();
     const respuesta = {};
 
     for (let i = 0; i < 4; i++) {
       const counts = await Promise.all(
         categorias.map((categoria) => {
-          const qb = this.consultaORM.createQueryBuilder('consulta').innerJoin('consulta.social', 'social').innerJoin('social.categorias', 'categoria').where('consulta.deshabilitado = false').andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year }).andWhere('categoria.id = :idCategoria', { idCategoria: categoria.id });
+          const qb = this.consultaORM.createQueryBuilder('consulta').innerJoin('consulta.social', 'social').innerJoin('social.categorias', 'categoria').where('consulta.deshabilitado = false').andWhere('categoria.id = :idCategoria', { idCategoria: categoria.id });
+          if (year) {
+            qb.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
+          }
           if (id) {
             qb.andWhere('consulta.id_curso = :id', { id });
+          }
+          if (id_inst !== 0) {
+            qb.andWhere('consulta.id_institucion = :id_inst', { id_inst });
           }
           return qb.getCount();
         }),
