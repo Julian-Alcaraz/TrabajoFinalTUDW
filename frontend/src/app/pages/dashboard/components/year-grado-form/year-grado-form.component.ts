@@ -123,7 +123,6 @@ export class YearGradoFormComponent implements OnInit {
           return;
         }
       });
-      console.log(institucionSeleccionada)
       nombreInstitucion = institucionSeleccionada[0].nombre;
     }
     const porcentaje = this.optionForm.value.porcentaje;

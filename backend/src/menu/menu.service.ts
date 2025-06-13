@@ -106,7 +106,6 @@ export class MenuService {
     if (!menu) throw new NotFoundException(`Menu con id ${id} no encontrado`);
     else if (menu.deshabilitado) throw new BadRequestException(`El menu con id ${id} ya esta deshabilitado`);
     menu.deshabilitado = true;
-    console.log('El menu borrado fue: ', menu);
     return this.menuORM.save(menu);
   }
 }

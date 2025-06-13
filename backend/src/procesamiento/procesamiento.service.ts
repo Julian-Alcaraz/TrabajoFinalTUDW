@@ -536,9 +536,7 @@ export class ProcesamientoService {
             // consulta hija  lacreo y pongo clinica.consulta = consulta
             const social = new Social();
             social.consulta = consultaNueva;
-            console.log(row['CATEGORÍAS']);
             social.categorias = await this.convertirCategorias(row['CATEGORÍAS']);
-            console.log(social.categorias);
             social.articulacion = row['Articulación con:'] === null ? 'No hay dato' : row['Articulación con:'];
             social.demanda = row['Demanda de:'] === null ? 'No hay dato' : row['Demanda de:'];
             social.objeto_informe = row['Objeto de Informe'] === null ? 'No hay dato' : row['Objeto de Informe'];

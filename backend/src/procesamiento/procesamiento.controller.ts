@@ -167,7 +167,7 @@ export class ProcesamientoController {
   async downloadManual(@Res() res): Promise<void> {
     const filePath = path.join(__dirname, '..', '..', 'public', 'files', 'manual.pdf'); // Ruta del archivo estático
     const stream = createReadStream(filePath);
-    console.log(stream);
+    // console.log(stream);
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename="Manual_Usuarios_SolPatagonia.pdf"`,
