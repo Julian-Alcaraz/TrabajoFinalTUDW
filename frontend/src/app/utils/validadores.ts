@@ -43,6 +43,16 @@ export function ValidarDni(control: AbstractControl) {
   }
 }
 
+export function ValidarDniUsuario(control: AbstractControl) {
+  const dni = control?.value;
+  console.log("a")
+  if (String(dni).length != 8 && String(dni).length != 7) {
+    return { ValidarDniUsuario: 'El dni tiene que ser de 7 o 8 numeros.' };
+  } else {
+    return null;
+  }
+}
+
 // Validador personalizado para verificar que el campo solo contenga números
 export function ValidarSoloNumeros(control: AbstractControl) {
   const NUMERIC_REGEXP = /^\d+$/;
@@ -100,17 +110,17 @@ export function ValidarHora(control: AbstractControl): ValidationErrors | null {
   }
   return null;
 }
-export function validarRango (campoMin: string, campoMax: string) : ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      // const formGroup = control as FormGroup;
-      const valorMin = control.get(campoMin)?.value;
-      const valorMax = control.get(campoMax)?.value;
-      if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
-        return null;
-      }
-      if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
-        return null;
-      }
-      return { rangoInvalido: true };
-    };
+export function validarRango(campoMin: string, campoMax: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    // const formGroup = control as FormGroup;
+    const valorMin = control.get(campoMin)?.value;
+    const valorMax = control.get(campoMax)?.value;
+    if (valorMin === '' || valorMax === '' || valorMin === null || valorMax === null) {
+      return null;
+    }
+    if (valorMin !== '' && valorMax !== '' && valorMin <= valorMax) {
+      return null;
+    }
+    return { rangoInvalido: true };
   };
+}

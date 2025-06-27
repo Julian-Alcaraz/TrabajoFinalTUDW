@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
 import * as MostrarNotificacion from '@utils/notificaciones/mostrar-notificacion';
-import { ValidarCadenaSinEspacios, ValidarDni, ValidarEmail } from '@utils/validadores';
+import { ValidarCadenaSinEspacios, ValidarDniUsuario, ValidarEmail } from '@utils/validadores';
 import { UsuarioService } from '@services/usuario.service';
 import { RolesService } from '@services/roles.service';
 import { Rol } from '@models/rol.model';
@@ -52,7 +52,7 @@ export class FormUsuarioComponent implements OnInit {
     this.userForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
       apellido: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), ValidarCadenaSinEspacios]],
-      dni: ['', [Validators.required, ValidarDni]],
+      dni: ['', [Validators.required, ValidarDniUsuario]],
       email: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255), ValidarEmail, ValidarCadenaSinEspacios]],
       fe_nacimiento: ['', [Validators.required]],
       roles_ids: ['', Validators.required], // FormArray para role

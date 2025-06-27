@@ -21,8 +21,8 @@ export class CreateUsuarioDto {
   @IsNotEmpty({ message: 'El dni no puede estar vacio' })
   @IsInt({ message: 'El dni debe ser un entero' })
   @IsPositive({ message: 'El dni debe ser un numero positivo' })
-  @Min(10000000, { message: 'El dni debe tener 8 digitos' })
-  @Max(99999999, { message: 'El dni debe tener 8 digitos' })
+  @Min(1000000, { message: 'El dni debe tener como mínimo 7 dígitos' })
+  @Max(99999999, { message: 'El dni debe tener como máximo 8 dígitos' })
   readonly dni: number;
 
   @ApiProperty({ description: 'Email del usuario' })
