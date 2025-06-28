@@ -45,7 +45,6 @@ export function ValidarDni(control: AbstractControl) {
 
 export function ValidarDniUsuario(control: AbstractControl) {
   const dni = control?.value;
-  console.log("a")
   if (String(dni).length != 8 && String(dni).length != 7) {
     return { ValidarDniUsuario: 'El dni tiene que ser de 7 o 8 numeros.' };
   } else {
