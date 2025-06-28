@@ -31,6 +31,7 @@ export class ErroresCampoComponent {
       ValidarCadenaSinEspacios: 'El campo no puede estar en blanco.',
       ValidarHora: 'La hora debe estar en formato HH:mm.',
       ValidarDni: 'Debe tener 8 dígitos.',
+      ValidarDniUsuario: 'Debe tener 7 o 8 dígitos.',
       ValidarSoloNumeros: 'Este campo solo permite números.',
       invalidDni: 'El documento esta en uso',
     };
