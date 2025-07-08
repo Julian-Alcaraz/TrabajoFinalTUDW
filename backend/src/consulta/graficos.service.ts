@@ -43,7 +43,7 @@ export class GraficosService {
           query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
         }
         if (id_institucion !== 0) {
-          query = query.andWhere('consulta.id_institucion = :id_inst', { id_institucion });
+          query = query.andWhere('consulta.id_institucion = :id_inst', { id_inst: id_institucion });
         }
         return query.getCount();
       }),
