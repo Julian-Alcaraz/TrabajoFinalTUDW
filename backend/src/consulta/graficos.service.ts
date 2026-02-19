@@ -234,12 +234,13 @@ export class GraficosService {
     const types = Constantes.OrtopediaYTraumatologiaEnum;
     // const types = ['Normal', 'Anormal'];
     const createQuery = (type: string) => {
-      let query = this.consultaORM.createQueryBuilder('consulta').where('consulta.deshabilitado=false').leftJoin('consulta.clinica', 'clinica');
+      let query = this.consultaORM.createQueryBuilder('consulta').leftJoin('consulta.clinica', 'clinica').where('consulta.deshabilitado=false AND clinica.es_clinica = true');
       if (type === 'Normal') {
-        query.andWhere('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
-      } else if (type === 'Anormal') {
-        query.andWhere('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' }).andWhere('clinica.es_clinica = true');
+        query.andWhere('clinica.ortopedia_traumatologia = :ortopedia', { ortopedia: 'Normal' });
+      } else if (type !== 'Normal') {
+        query.andWhere('clinica.ortopedia_traumatologia != :ortopedia', { ortopedia: 'Normal' });
       }
+      query.andWhere('clinica.es_clinica = true');
       if (year) {
         query = query.andWhere('EXTRACT(YEAR FROM consulta.created_at) = :year', { year });
       }
